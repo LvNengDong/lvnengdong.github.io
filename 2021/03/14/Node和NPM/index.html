@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="前端开发模式发展前端开发模式的发展：   静态页面   最初的网页以HTML为主，是纯静态的网页。网页是只读的，数据只能从服务端到客户端单向流通。前端开发人员只关心数据和页面的展示样式即可。   动态页面   随着 JavaScript 的诞生，前端开发人员可以操作页面的 DOM 元素及样式，页面有了一些动态的效果，但仍以静态为主。   异步请求：Ajax    2005年开始，Ajax 逐渐被前">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node和NPM">
+<meta property="og:url" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前端开发模式发展前端开发模式的发展：   静态页面   最初的网页以HTML为主，是纯静态的网页。网页是只读的，数据只能从服务端到客户端单向流通。前端开发人员只关心数据和页面的展示样式即可。   动态页面   随着 JavaScript 的诞生，前端开发人员可以操作页面的 DOM 元素及样式，页面有了一些动态的效果，但仍以静态为主。   异步请求：Ajax    2005年开始，Ajax 逐渐被前">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1525825983230.png">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1525828854056.png">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1529594451775.png">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1529595770482.png">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1529595810923.png">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1529596099952.png">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1529596219439.png">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1529596312671.png">
+<meta property="og:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1529596566134.png">
+<meta property="article:published_time" content="2021-03-14T09:04:34.000Z">
+<meta property="article:modified_time" content="2021-03-14T09:13:03.039Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/03/14/Node%E5%92%8CNPM/1525825983230.png">
+
+
+<link rel="canonical" href="http://example.com/2021/03/14/Node%E5%92%8CNPM/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Node和NPM | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E5%8F%91%E5%B1%95"><span class="nav-number">1.</span> <span class="nav-text">前端开发模式发展</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Node%E5%92%8CNPM"><span class="nav-number">2.</span> <span class="nav-text">Node和NPM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD-Node-js"><span class="nav-number">2.1.</span> <span class="nav-text">下载 Node.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NPM"><span class="nav-number">2.2.</span> <span class="nav-text">NPM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-NRM"><span class="nav-number">2.2.1.</span> <span class="nav-text">安装 NRM</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/14/Node%E5%92%8CNPM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Node和NPM
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-03-14 17:04:34 / Modified: 17:13:03" itemprop="dateCreated datePublished" datetime="2021-03-14T17:04:34+08:00">2021-03-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前端开发模式发展"><a href="#前端开发模式发展" class="headerlink" title="前端开发模式发展"></a>前端开发模式发展</h1><p>前端开发模式的发展：</p>
+<blockquote>
+<ol>
+<li>静态页面</li>
+</ol>
+</blockquote>
+<p>最初的网页以HTML为主，是纯静态的网页。网页是只读的，<strong>数据只能从服务端到客户端单向流通</strong>。前端开发人员只关心数据和页面的展示样式即可。</p>
+<blockquote>
+<ol start="2">
+<li>动态页面</li>
+</ol>
+</blockquote>
+<p>随着 JavaScript 的诞生，前端开发人员可以操作页面的 DOM 元素及样式，页面有了一些动态的效果，但仍以静态为主。</p>
+<blockquote>
+<ol start="3">
+<li>异步请求：Ajax</li>
+</ol>
+</blockquote>
+<ul>
+<li>2005年开始，Ajax 逐渐被前端开发人员所重视，因为不用刷新页面就可以更新页面的数据和渲染效果。</li>
+<li>此时的<strong>开发人员不仅仅要编写HTML样式，还要懂ajax与后端交互，然后通过JS操作Dom元素来实现页面动态效果</strong>。</li>
+<li>比较流行的框架如Jquery就是典型代表。</li>
+</ul>
+<blockquote>
+<ol start="4">
+<li>MVVM：关注模型和视图</li>
+</ol>
+</blockquote>
+<ul>
+<li><p>2008年，Google 的 Chrome 发布，随后就以极快的速度占领市场，超过 IE 成为浏览器市场的主导者。</p>
+</li>
+<li><p>2009年，Ryan Dahl 在谷歌的 Chrome V8 引擎基础上，打造了基于事件循环的异步IO框架：<code>Node.js</code></p>
+<ul>
+<li>基于事件循环的异步IO</li>
+<li>单线程运行，避免多线程的变量同步问题</li>
+<li>Js 可以编写后台代码，前后台统一编程语言</li>
+</ul>
+<p>node.js的伟大之处不在于让 Js 迈向了后端开发，而是构建了一个庞大的生态系统。</p>
+</li>
+<li><p>2010年，NPM 作为 node.js 的包管理系统首次发布，开发人员可以遵循 Common.js 规范来编写 Node.js 模块，然后发布到NPM上供其他开发人员使用。目前已经是世界最大的包模块管理系统。</p>
+</li>
+</ul>
+<p>随后，在node的基础上，涌现出了一大批的前端框架：</p>
+<p> <img src="/2021/03/14/Node%E5%92%8CNPM/1525825983230.png" alt="1525825983230"></p>
+<blockquote>
+<ol start="5">
+<li>MVVM模式</li>
+</ol>
+</blockquote>
+<ul>
+<li>M：即Model，模型，包括数据和一些基本操作</li>
+<li>V：即View，视图，页面渲染结果</li>
+<li>VM：即View-Model，模型与视图间的双向操作（无需开发人员干涉）</li>
+</ul>
+<p>在 MVVM 之前，前端开发人员从后端获取需要的数据模型，然后要通过 DOM 操作 Model 渲染到 View 中。而后当用户操作视图，我们还需要通过 DOM 获取 View 中的数据，然后同步到 Model 中。</p>
+<p>而 MVVM 中的 VM 要做的事情就是把 DOM 操作完全封装起来，开发人员不用再关心 Model 和 View 之间是如何互相影响的：</p>
+<ul>
+<li>只要我们Model发生了改变，View上自然就会表现出来。</li>
+<li>当用户修改了View，Model中的数据也会跟着改变。</li>
+</ul>
+<p>把开发人员从繁琐的DOM操作中解放出来，把关注点放在如何操作Model上。</p>
+<p> <img src="/2021/03/14/Node%E5%92%8CNPM/1525828854056.png" alt="1525828854056"></p>
+<h1 id="Node和NPM"><a href="#Node和NPM" class="headerlink" title="Node和NPM"></a>Node和NPM</h1><blockquote>
+<p>NPM 是 Node 提供的模块管理工具，可以非常方便的下载安装很多前端框架，包括Jquery、AngularJS、VueJs 等等。</p>
+</blockquote>
+<h2 id="下载-Node-js"><a href="#下载-Node-js" class="headerlink" title="下载 Node.js"></a>下载 Node.js</h2><ul>
+<li>下载地址：<a target="_blank" rel="noopener" href="https://nodejs.org/en/">https://nodejs.org/en/</a></li>
+<li>推荐下载LTS版本。</li>
+</ul>
+<p><img src="/2021/03/14/Node%E5%92%8CNPM/1529594451775.png" alt="1529594451775"></p>
+<ul>
+<li>完成以后，在控制台输入：</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node <span class="literal">-v</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>就能看到版本信息：</li>
+</ul>
+<p><img src="/2021/03/14/Node%E5%92%8CNPM/1529595770482.png" alt="1529595770482"></p>
+<h2 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h2><p>Node自带了NPM了，在控制台输入<code>npm -v</code>查看：</p>
+<p><img src="/2021/03/14/Node%E5%92%8CNPM/1529595810923.png" alt="1529595810923"></p>
+<h3 id="安装-NRM"><a href="#安装-NRM" class="headerlink" title="安装 NRM"></a>安装 NRM</h3><p>npm 默认的仓库地址是在国外网站，速度较慢，所以我们需要设置到淘宝镜像。</p>
+<p>但是切换镜像是比较麻烦的，我在这里使用一款切换镜像的工具：nrm</p>
+<ol>
+<li>首先安装nrm。[<code>-g</code>代表全局安装]</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install nrm -g</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/03/14/Node%E5%92%8CNPM/1529596099952.png" alt="1529596099952"></p>
+<ol start="2">
+<li>然后通过<code>nrm ls</code>命令查看 npm 的仓库列表，带 <code>*</code> 的就是当前选中的镜像仓库：</li>
+</ol>
+<p><img src="/2021/03/14/Node%E5%92%8CNPM/1529596219439.png" alt="1529596219439"></p>
+<ol start="3">
+<li>通过 <code>nrm use taobao</code> 来指定要使用的镜像源：</li>
+</ol>
+<p><img src="/2021/03/14/Node%E5%92%8CNPM/1529596312671.png" alt="1529596312671"></p>
+<ol start="4">
+<li>最后通过<code>nrm test npm </code>来测试速度：</li>
+</ol>
+<p><img src="/2021/03/14/Node%E5%92%8CNPM/1529596566134.png" alt="1529596566134"></p>
+<blockquote>
+<p>Tip：</p>
+</blockquote>
+<ul>
+<li>使用 cnpm 有时会有bug，不推荐使用 cnpm 命令！</li>
+<li>安装完成请一定要重启下电脑！！！</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/13/Vue/" rel="prev" title="Vue">
+                  <i class="fa fa-chevron-left"></i> Vue
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,849 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/10/13/IO%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">IO系统</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-10-13 09:45:28 / Modified: 21:56:16" itemprop="dateCreated datePublished" datetime="2020-10-13T09:45:28+08:00">2020-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="1、File类"><a href="#1、File类" class="headerlink" title="1、File类"></a>1、File类</h1><h2 id="1-1、File类概述"><a href="#1-1、File类概述" class="headerlink" title="1.1、File类概述"></a>1.1、File类概述</h2><ul>
+<li><p><code>java.io.File</code>类是<strong>文件</strong>和<strong>目录路径</strong>名的抽象表示形式。    主要用于<strong>文件</strong>和<strong>目录</strong>的创建、查找和删除等操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.File;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">File</span></span>;</span><br><span class="line">extends Object;</span><br><span class="line">implements Serializable, Comparable&lt;File&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="1-2、File类中的方法"><a href="#1-2、File类中的方法" class="headerlink" title="1.2、File类中的方法"></a>1.2、File类中的方法</h2><h3 id="1-2-0-绝对路径和相对路径"><a href="#1-2-0-绝对路径和相对路径" class="headerlink" title="1.2.0    绝对路径和相对路径"></a>1.2.0    绝对路径和相对路径</h3><ul>
+<li><strong>绝对路径</strong>：从盘符开始的路径。</li>
+<li><strong>相对路径</strong>：相对于项目的路径。</li>
+</ul>
+<h3 id="1-2-1、构造方法"><a href="#1-2-1、构造方法" class="headerlink" title="1.2.1、构造方法"></a>1.2.1、构造方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>File(File parent, String child)</code></td>
+<td align="center">根据 parent 抽象路径名和 child 路径名字符串创建一个新 <code>File</code> 实例。</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>File(String parent, String child)</code></td>
+<td align="center">根据 parent 路径名字符串和 child 路径名字符串创建一个新 <code>File</code> 实例</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>File(String pathname)</code></td>
+<td align="center">通过将给定路径名字符串转换为抽象路径名来创建一个新 <code>File</code> 实例。</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>File(URL uri)</code></td>
+<td align="center">通过将给定的 <code>file:</code> URI 转换为一个抽象路径名来创建一个新的 <code>File</code> 实例</td>
+</tr>
+</tbody></table>
+<ul>
+<li><em>每一个File对象代表硬盘中真实存在的一个<strong>文件</strong>或<strong>目录</strong>。[也就是说File实例可以是一个文件，也可以是一个目录]</em></li>
+<li><em>无论该路径下是否存在文件或目录，都不影响File对象的创建。</em></li>
+<li><strong>创建File实例并不等价于创建了文件/文件夹。</strong>    <em>只调用构造方时，并不会在硬盘上创建一个真实的文件或文件夹。只有继续调用<code>mkdir()</code>、<code>mkdirs()</code>或<code>createNewFile()</code>方法才能真正在硬盘上创建出文件/文件夹。</em></li>
+</ul>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件路径名</span></span><br><span class="line">String pathname2 = <span class="string">&quot;D:\\aaa\\bbb.txt&quot;</span>;</span><br><span class="line">File file2 = <span class="keyword">new</span> File(pathname2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过父路径和子路径字符串</span></span><br><span class="line">String parent = <span class="string">&quot;d:\\aaa&quot;</span>;</span><br><span class="line">String child = <span class="string">&quot;bbb.txt&quot;</span>;</span><br><span class="line">File file3 = <span class="keyword">new</span> File(parent, child);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过父级File对象和子路径字符串</span></span><br><span class="line">File parentDir = <span class="keyword">new</span> File(<span class="string">&quot;d:\\aaa&quot;</span>);</span><br><span class="line">String child = <span class="string">&quot;bbb.txt&quot;</span>;</span><br><span class="line">File file4 = <span class="keyword">new</span> File(parentDir, child);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-2-3、成员方法"><a href="#1-2-3、成员方法" class="headerlink" title="1.2.3、成员方法"></a>1.2.3、成员方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center"><strong>获取功能：</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><code>getAbsolutePath()</code></td>
+<td align="center"><code>String</code></td>
+<td align="center">返回此File的绝对路径字符串</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>getPath()</code></td>
+<td align="center"><code>String</code></td>
+<td align="center">将此File转换为路径名字符串</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>getName()</code></td>
+<td align="center"><code>String</code></td>
+<td align="center">返回此File表示的文件或目录名称。</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>length()</code></td>
+<td align="center"><code>long</code></td>
+<td align="center">返回此File表示的文件的长度[字节]。</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><strong>判断功能：</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"><code>exists()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断此File表示的文件或目录是否存在</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center"><code>isDirectory()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断此File表示的是否为目录。</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center"><code>isFile()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断此File表示的是否为文件</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><strong>创建/删除功能</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center"><code>createNewFile()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">当且仅当具有该名称的文件尚不存在时，创建一个新的文件。</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center"><code>delete()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">删除此File表示的文件或目录。【如果此File表示目录，则目录必须为空才能被删除】</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center"><code>mkdir()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">创建此File表示的目录</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="center"><code>mkdirs()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">创建此File表示的目录，包括任何必需但不存在的父目录。</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><strong>目录的遍历</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="center"><code>list()</code></td>
+<td align="center"><code>String[]</code></td>
+<td align="center">返回一个String数组，返回该File<strong>目录中</strong>的所有子文件或目录。</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="center"><code>listFiles()</code></td>
+<td align="center"><code>File[]</code></td>
+<td align="center">返回一个File数组，表示该File<strong>目录中</strong>的所有子文件或目录。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>调用<code>list</code>或<code>listFiles</code>方法遍历File对象，此时File对象必须是<strong>目录</strong>，且<strong>真实存在</strong>，否则会返回空指针异常，无法进行遍历。</li>
+</ul>
+<hr>
+<h1 id="2、IO概述"><a href="#2、IO概述" class="headerlink" title="2、IO概述"></a>2、IO概述</h1><h2 id="2-1、IO的分类"><a href="#2-1、IO的分类" class="headerlink" title="2.1、IO的分类"></a>2.1、IO的分类</h2><p><img src="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/IO%E5%88%86%E7%B1%BB.png"></p>
+<h3 id="2-1-1、顶级的父类们"><a href="#2-1-1、顶级的父类们" class="headerlink" title="2.1.1、顶级的父类们"></a>2.1.1、顶级的父类们</h3><table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">输入流</th>
+<th align="center">输出流</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>字节流</strong></td>
+<td align="center"><code>inputStream</code></td>
+<td align="center"><code>outputStream</code></td>
+</tr>
+<tr>
+<td align="center"><strong>字符流</strong></td>
+<td align="center"><code>Reader</code></td>
+<td align="center"><code>Writer</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="3、字节流"><a href="#3、字节流" class="headerlink" title="3、字节流"></a>3、字节流</h1><h2 id="3-0、一切皆为字节流"><a href="#3-0、一切皆为字节流" class="headerlink" title="3.0、一切皆为字节流"></a>3.0、一切皆为字节流</h2><p>​    一切文件数据（文本、图片、视频等）在存储时，都是以二进制数字的形式保存的，都是一个一个的字节，传输时同样如此。    所以，字节流可以传输任意文件数据。    在操作流时，我们要时刻明确，无论使用什么样的流对象，底层传输的始终是二进制数据。</p>
+<h2 id="3-1、OutputStream"><a href="#3-1、OutputStream" class="headerlink" title="3.1、OutputStream"></a>3.1、OutputStream</h2><h3 id="3-1-1、概述"><a href="#3-1-1、概述" class="headerlink" title="3.1.1、概述"></a>3.1.1、概述</h3><ul>
+<li><code>java.io.OutputStream</code>是<strong>抽象类</strong> 表示字节输出流的所有类的超类。</li>
+<li> 将指定的字节信息写出到目的地。</li>
+<li> 它定义了字节输出流的基本的公共的方法。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.OutputStream</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">OutputStream</span></span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">OutputStream</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-1-2-构造方法"><a href="#3-1-2-构造方法" class="headerlink" title="3.1.2    构造方法"></a>3.1.2    构造方法</h3><ul>
+<li>无</li>
+</ul>
+<h3 id="3-1-3-成员方法"><a href="#3-1-3-成员方法" class="headerlink" title="3.1.3    成员方法"></a>3.1.3    成员方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>close()</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">关闭此输出流并释放与此流相关的任何系统资源</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>flush()</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">刷新此输出流并强制任何缓冲的输出字节流被写出。</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>write(byte[] b)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">将<code>b</code>数组的内容写入此输出流。</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>write(byte[] b, int off, int len)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">从指定的字节数组写入len字节，从偏移量off开始输出到此输出流</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><code>write()[abstract]</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">将该字节输出流写出到目的地。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>当完成流的操作时，必须调用<code>close()</code>方法，释放系统资源。</li>
+</ul>
+<h2 id="3-2、FileOutputStream"><a href="#3-2、FileOutputStream" class="headerlink" title="3.2、FileOutputStream"></a>3.2、FileOutputStream</h2><h3 id="3-2-1、概述"><a href="#3-2-1、概述" class="headerlink" title="3.2.1、概述"></a>3.2.1、概述</h3><ul>
+<li><code>FileOutputStream</code>类是文件输出流，用于将数据<strong>写出到文件</strong>。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.OutputStream</span><br><span class="line">      继承者 java.io.FileOutputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileOutputStream</span></span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">OutputStream</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-2、构造方法"><a href="#3-2-2、构造方法" class="headerlink" title="3.2.2、构造方法"></a>3.2.2、构造方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>FileOutputStream(File file)</code></td>
+<td align="center">创建文件输出流，并指定写出的目标文件。</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>FileOutputStream(String name)</code></td>
+<td align="center">创建文件输出流，并指定写出的目标地址。</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>FileOutputStream(File file, boolean append)</code></td>
+<td align="center">数据可追加续写</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>FileOutputStream(String name, boolean append)</code></td>
+<td align="center">数据可追加续写</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<ul>
+<li><em>当你创建一个<code>FileOutputStream</code>对象时，必须传入一个文件路径。    该路径下，如果没有这个文件，会自动创建该文件；如果有这个文件，会清空这个文件的数据。</em></li>
+</ul>
+<h3 id="3-2-3、成员方法"><a href="#3-2-3、成员方法" class="headerlink" title="3.2.3、成员方法"></a>3.2.3、成员方法</h3><h4 id="1、写出字节数据"><a href="#1、写出字节数据" class="headerlink" title="1、写出字节数据"></a>1、写出字节数据</h4><p>​    <em>把要输出的数据根据编码表转换成字节数据，再使用<code>write()</code>方法输出到指定位置，输出的结果不是字节数据，而是经过转码后的正常数据。</em></p>
+<table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>write(int b)</code></td>
+<td align="center"></td>
+<td align="center">通过编码表将其它类型的数据转换为字节数据，每次可以写出一个字节数据到指定文件中。</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>write(byte[] b)</code></td>
+<td align="center"></td>
+<td align="center">通过编码表将其它类型的数据转换为字节数据列表，每次可以写出一个字节列表的数据到指定文件中。</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>write(byte[] b, int off, int len)</code></td>
+<td align="center"></td>
+<td align="center">写出指定长度的字节数组</td>
+</tr>
+</tbody></table>
+<h4 id="2、写出换行"><a href="#2、写出换行" class="headerlink" title="2、写出换行"></a>2、写出换行</h4><ul>
+<li><p>Windows系统里，换行符号是<code>/r/n</code>；</p>
+</li>
+<li><p>Unix系统里，每行结尾只有<strong>换行</strong>，即<code>/n</code>。</p>
+</li>
+<li><p>回车符<code>/r</code>：回到一行的开头（return）；</p>
+<p>换行符<code>/n</code>：下一行（newline）</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FOSWrite</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 使用文件名称创建流对象</span></span><br><span class="line">        FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">&quot;fos.txt&quot;</span>);</span><br><span class="line">        <span class="comment">// 定义字节数组</span></span><br><span class="line">        <span class="keyword">byte</span>[] words = &#123;<span class="number">97</span>,<span class="number">98</span>,<span class="number">99</span>,<span class="number">100</span>,<span class="number">101</span>&#125;;</span><br><span class="line">        <span class="comment">// 遍历数组</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; words.length; i++) &#123;</span><br><span class="line">            <span class="comment">// 写出一个字节</span></span><br><span class="line">            fos.write(words[i]);</span><br><span class="line">            <span class="comment">// 每写出一个就换行一次, 换行符号转成数组写出</span></span><br><span class="line">            fos.write(<span class="string">&quot;\r\n&quot;</span>.getBytes());</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="comment">// 关闭资源</span></span><br><span class="line">        fos.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出结果：</span><br><span class="line">    a</span><br><span class="line">    b</span><br><span class="line">    c</span><br><span class="line">    d</span><br><span class="line">    e</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-3、InputStream"><a href="#3-3、InputStream" class="headerlink" title="3.3、InputStream"></a>3.3、InputStream</h2><h3 id="3-3-1、概述"><a href="#3-3-1、概述" class="headerlink" title="3.3.1、概述"></a>3.3.1、概述</h3><ol>
+<li> <code>java.io.InputStream</code>是抽象类，是字节输入流的所有类的超类。</li>
+<li>可以读取字节信息到内存中。</li>
+<li>它定义了字节输入流的基本的公共的方法。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.InputStream</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">InputStream</span></span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">InputStream</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><em>当完成了流的操作时，必须调用<code>close()</code>方法，释放系统资源</em></li>
+</ul>
+<h3 id="3-3-2、构造方法"><a href="#3-3-2、构造方法" class="headerlink" title="3.3.2、构造方法"></a>3.3.2、构造方法</h3><ul>
+<li>无</li>
+</ul>
+<h3 id="3-3-3、成员方法"><a href="#3-3-3、成员方法" class="headerlink" title="3.3.3、成员方法"></a>3.3.3、成员方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>close()</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">关闭流，释放相关资源</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>read()[abstract]</code></td>
+<td align="center"><code>int</code></td>
+<td align="center">从输入流中读取数据的下一个字节</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>read(byte[] b)</code></td>
+<td align="center"><code>int</code></td>
+<td align="center">从输入流中读取一些字节数，并把它们存储到字节数组b中</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-4、FileInputStream"><a href="#3-4、FileInputStream" class="headerlink" title="3.4、FileInputStream"></a>3.4、FileInputStream</h2><h3 id="3-4-1、概述"><a href="#3-4-1、概述" class="headerlink" title="3.4.1、概述"></a>3.4.1、概述</h3><ul>
+<li><code>FileInputStream</code>类是文件输入流，用于从文件中读取字节。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.InputStream</span><br><span class="line">      继承者 java.io.FileInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileInputStream</span></span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">InputStream</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-2、构造方法"><a href="#3-4-2、构造方法" class="headerlink" title="3.4.2、构造方法"></a>3.4.2、构造方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>FileInputStream(File file)</code></td>
+<td align="center">通过打开与实际文件的连接来创建一个FileInputStream</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>FileInputStream(String name)</code></td>
+<td align="center">通过打开与实际文件的连接来创建一个FileInputStream</td>
+</tr>
+</tbody></table>
+<ul>
+<li><em>当你创建一个<code>FileInputStream</code>流对象时，必须传入一个文件路径。    该路径下，如果没有该文件，会抛出<code>FileNotFoundException</code></em></li>
+</ul>
+<h3 id="3-4-3、成员方法"><a href="#3-4-3、成员方法" class="headerlink" title="3.4.3、成员方法"></a>3.4.3、成员方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><strong>读取字节数据</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>read()</code></td>
+<td align="center"><code>int</code></td>
+<td align="center">每次可以读取一个字节的数据，并自动提升为<code>int</code>类型，读取到文件末尾，返回-1</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>read(byte[] b)</code></td>
+<td align="center"><code>int</code></td>
+<td align="center">每次读取<code>b.length</code>个长度的字节到数组中，返回读取到的有效字节<strong>个数</strong>，读取到末尾时，返回-1</td>
+</tr>
+</tbody></table>
+<h3 id="3-4-4、练习"><a href="#3-4-4、练习" class="headerlink" title="3.4.4、练习"></a>3.4.4、练习</h3><ol>
+<li><p>图片复制</p>
+<p>从已有文件中读取字节，将该字节写出到另一个文件中。</p>
+</li>
+<li><p>代码实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    图片复制</span></span><br><span class="line"><span class="comment">    分析：先读后写</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 1.读</span></span><br><span class="line">        FileInputStream inputStream = <span class="keyword">new</span> FileInputStream(<span class="string">&quot;E:\\u盘\\CZ\\福蛋蛋.jpg&quot;</span>);</span><br><span class="line">        FileOutputStream outputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">&quot;./福蛋蛋.jpg&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">66</span>];</span><br><span class="line">        <span class="keyword">int</span> len;</span><br><span class="line">        <span class="keyword">while</span> ((len = inputStream.read(b)) != -<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">// 2.写</span></span><br><span class="line">            outputStream.write(b);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3.释放资源</span></span><br><span class="line">        outputStream.close();</span><br><span class="line">        inputStream.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>流的关闭原则：先开后关，后开先关。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="4、字符流"><a href="#4、字符流" class="headerlink" title="4、字符流"></a>4、字符流</h1><h2 id="4-1、Reader"><a href="#4-1、Reader" class="headerlink" title="4.1、Reader"></a>4.1、Reader</h2><h3 id="4-1-1、概述"><a href="#4-1-1、概述" class="headerlink" title="4.1.1、概述"></a>4.1.1、概述</h3><ol>
+<li><code>java.io.Reader</code>是抽象类，是所有读取字符流类的超类。可以读取字符信息到内存中。</li>
+<li>它定义了字符输入流的共性方法。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.Reader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Reader</span></span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">Object</span></span></span><br><span class="line"><span class="class"><span class="keyword">implements</span> <span class="title">Readable</span>, <span class="title">Closeable</span></span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p><em>字符流只能操作文本文件，不能操作图片、视频等非文本文件。</em></p>
+<p><em>当使用<strong>字节流</strong>读取文本文件时，可能会出现一个小问题。那就是遇到中文字符时，可能不会显示完整的字符。因为一个中文字符可能占用多个字节存储，而字节流读取是以单个字节为单位的，所以可能会出现一个中文字符占了3个字节，使用字节流读取时则把这3个字节分开来展示，这样就会出现乱码现象。    所以Java提供一些字符流类，以字符为单位读写数据，专门用于处理文本文件。</em></p>
+</li>
+</ol>
+<h3 id="4-1-2、构造方法"><a href="#4-1-2、构造方法" class="headerlink" title="4.1.2、构造方法"></a>4.1.2、构造方法</h3><ul>
+<li>无</li>
+</ul>
+<h3 id="4-1-3、成员方法"><a href="#4-1-3、成员方法" class="headerlink" title="4.1.3、成员方法"></a>4.1.3、成员方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>close()</code></td>
+<td align="center"><code>void</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>read()</code></td>
+<td align="center"><code>int</code></td>
+<td align="center">从输入流中读取一个<strong>字符</strong></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>read(char[] cbuf)</code></td>
+<td align="center"><code>int</code></td>
+<td align="center">从输入流中读取一些字符，并将它们存储到字符数组<code>cbuf</code>中。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-2、FileReader"><a href="#4-2、FileReader" class="headerlink" title="4.2、FileReader"></a>4.2、FileReader</h2><h3 id="4-2-1、概述"><a href="#4-2-1、概述" class="headerlink" title="4.2.1、概述"></a>4.2.1、概述</h3><ol>
+<li>构造时使用系统默认的字符编码和默认字节缓冲区。<ul>
+<li><em>字符编码：字节与字符的对应规则。Windows系统的中文编码默认是GBK编码表；IDEA中默认<code>UTF-8</code></em></li>
+<li><em>字节缓冲区：一个字节数组，用来临时存储字节数据。</em></li>
+</ul>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.Reader</span><br><span class="line">      继承者 java.io.InputStreamReader</span><br><span class="line">          继承者 java.io.FileReader;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileReader</span></span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">InputStreamReader</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-2-2、构造方法"><a href="#4-2-2、构造方法" class="headerlink" title="4.2.2、构造方法"></a>4.2.2、构造方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">构造方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>FileReader(File file)</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>FileReader(String fileName)</code></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<ul>
+<li>当你创建一个<code>FileReader</code>流对象时，必须传入一个文件路径。</li>
+</ul>
+<h3 id="4-2-3、成员方法"><a href="#4-2-3、成员方法" class="headerlink" title="4.2.3、成员方法"></a>4.2.3、成员方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center"><strong>读取字符数据</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>read()</code></td>
+<td align="center"><code>int</code></td>
+<td align="center">每次读取一个字符的数据，提升为int型，读到文件末尾返回-1</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>read(char[] cbuf)</code></td>
+<td align="center"><code>int</code></td>
+<td align="center">每次读取<code>cbuf.length</code>个字符到数组中，返回读取到的字符个数，读取到末尾时返回-1.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-3、Writer"><a href="#4-3、Writer" class="headerlink" title="4.3、Writer"></a>4.3、Writer</h2><h3 id="4-3-1、概述"><a href="#4-3-1、概述" class="headerlink" title="4.3.1、概述"></a>4.3.1、概述</h3><ol>
+<li><code>java.io.Writer</code>是一个抽象类，是所有写出字符流的超类。负责将指定的字符信息写出到目的地。</li>
+<li>定义了字符输出流的基本的共性的方法。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.Writer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Writer</span></span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">Object</span></span></span><br><span class="line"><span class="class"><span class="keyword">implements</span> <span class="title">Appendable</span>, <span class="title">Closeable</span>, <span class="title">Flushable</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-2、构造方法"><a href="#4-3-2、构造方法" class="headerlink" title="4.3.2、构造方法"></a>4.3.2、构造方法</h3><ul>
+<li>无</li>
+</ul>
+<h3 id="4-3-3、成员方法"><a href="#4-3-3、成员方法" class="headerlink" title="4.3.3、成员方法"></a>4.3.3、成员方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>write(int c)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">写入单个字符</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>write(char[] cbuf)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">写入字符数组</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>write(char[] cbuf, int off, int len)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">写入字符数组的某一部分</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>write(String str)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">写入字符串</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><code>write(String str, int off, int len)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">写入字符串的某一部分</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"><code>flush()</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">刷新该流的缓冲</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center"><code>close()</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">关闭此流，关闭前先刷新一次</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-4、FileWriter类"><a href="#4-4、FileWriter类" class="headerlink" title="4.4、FileWriter类"></a>4.4、FileWriter类</h2><h3 id="4-4-1、概述"><a href="#4-4-1、概述" class="headerlink" title="4.4.1、概述"></a>4.4.1、概述</h3><ol>
+<li><code>java.io.FileWriter</code>类是写出字符到文件的类，构造时使用系统默认的字符编码和默认字节缓冲区。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.io.Writer</span><br><span class="line">      继承者 java.io.OutputStreamWriter</span><br><span class="line">          继承者 java.io.FileWriter</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileWriter</span></span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">OutputStreamWriter</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-4-2、构造方法"><a href="#4-4-2、构造方法" class="headerlink" title="4.4.2、构造方法"></a>4.4.2、构造方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>FileWriter(File file)</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>FileWriter(String fileName)</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>FileWriter(File file, boolean append)</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>FileWriter(String fileName, boolean append)</code></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h3 id="4-4-3、成员方法"><a href="#4-4-3、成员方法" class="headerlink" title="4.4.3、成员方法"></a>4.4.3、成员方法</h3><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"></td>
+<td align="center"><strong>写出数据</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>write(int b)</code></td>
+<td align="center"></td>
+<td align="center">每次可以写出一个字符数据</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>write(char[] cbuf)</code></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>write(char[] cbuf, int off, int len)</code></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>write(String str)</code></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>write(String str, int off, int len)</code></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><strong>关闭和刷新</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>flush()</code></td>
+<td align="center"></td>
+<td align="center">刷新缓冲区，流对象可以继续使用</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>close()</code></td>
+<td align="center"></td>
+<td align="center">先刷新缓冲区，然后通知系统释放资源</td>
+</tr>
+</tbody></table>
+<h3 id="4-4-4、关闭和刷新"><a href="#4-4-4、关闭和刷新" class="headerlink" title="4.4.4、关闭和刷新"></a>4.4.4、关闭和刷新</h3><p>​    因为<code>FileWriter</code>类内置缓冲区的原因，写出数据时首先会被写出到缓冲区中，如果不进行刷新的话，是无法写入到文件中的。</p>
+<ul>
+<li><code>flush()</code>：刷新缓冲区，流对象可以继续使用；</li>
+<li><code>close()</code>：先刷新缓冲区，然后通知系统释放资源。流对象不可以再被使用了。</li>
+</ul>
+<hr>
+<h1 id="5、Properties类"><a href="#5、Properties类" class="headerlink" title="5、Properties类"></a>5、Properties类</h1><h2 id="5-1、包"><a href="#5-1、包" class="headerlink" title="5.1、包"></a>5.1、包</h2><ol>
+<li><code>Properties</code>类表示一个持久的属性集。</li>
+<li>它使用<strong>键值对</strong>结构存储数据，每个键及其对应的值都是一个字符串。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">  继承者 java.util.Dictionary&lt;K,V&gt;</span><br><span class="line">      继承者 java.util.Hashtable&lt;Object,Object&gt;</span><br><span class="line">          继承者 java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Properties</span></span>;</span><br><span class="line">extends Hashtable&lt;Object,Object&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-2、构造方法"><a href="#5-2、构造方法" class="headerlink" title="5.2、构造方法"></a>5.2、构造方法</h2><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">构造方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>Properties()</code></td>
+<td align="center">创建一个空的属性列表</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>Properties(Properties default)</code></td>
+<td align="center">创建一个带有指定默认值的空属性列表</td>
+</tr>
+</tbody></table>
+<h2 id="5-3、成员方法"><a href="#5-3、成员方法" class="headerlink" title="5.3、成员方法"></a>5.3、成员方法</h2><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>setProperties(String key, String value)</code></td>
+<td align="center"><code>Object</code></td>
+<td align="center">保存一对属性</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>getProperties(String key)</code></td>
+<td align="center"><code>String</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>stringPropertyNames()</code></td>
+<td align="center"><code>Set&lt;String&gt;</code></td>
+<td align="center">获取所有键的名称的集合</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>load(InputStream inStream)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">从字节输入流中获取键值对</td>
+</tr>
+</tbody></table>
+<h3 id="与流相关的方法"><a href="#与流相关的方法" class="headerlink" title="与流相关的方法"></a>与流相关的方法</h3><ul>
+<li><p><code>public void load(InputStream inputStream)</code>：从字节输入流中读取键值对。</p>
+<p>​    <em>字节数据流中的数据是从外部存储设备读取到内存中的，而<code>Properties</code>类又可以读取<code>InputStream</code>中的数据，这样<code>Properties</code>就可以间接的加载外部存储设备中的文本数据了。</em></p>
+<p>​    <em>但是要求文本数据的格式符合键值对的形式，一般使用<code>.properties</code>或<code>.yml</code>格式。</em></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -4162,263 +5005,6 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTest</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 比较两个学生对象，根据规则选出较大的一个</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> st1   学生1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> st2   学生2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Student <span class="title">getMax</span><span class="params">(Student st1, Student st2)</span></span>&#123;</span><br><span class="line">        StudentComparator sc = <span class="keyword">new</span> StudentComparator();</span><br><span class="line">        <span class="keyword">int</span> result = sc.compare(st1, st2);</span><br><span class="line">        <span class="keyword">if</span> (result&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> st1;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> st2;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 主方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Student st1 = <span class="keyword">new</span> Student();</span><br><span class="line">        st1.setUsername(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        st1.setAge(<span class="number">23</span>);</span><br><span class="line">        Student st2 = <span class="keyword">new</span> Student();</span><br><span class="line">        st2.setUsername(<span class="string">&quot;李四&quot;</span>);</span><br><span class="line">        st2.setAge(<span class="number">18</span>);</span><br><span class="line">        Student maxStu = getMax(st1, st2);</span><br><span class="line">        System.out.println(maxStu);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/09/07/%E9%80%9A%E7%94%A8Mapper%E7%9A%84%E8%AF%A6%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/09/07/%E9%80%9A%E7%94%A8Mapper%E7%9A%84%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">通用Mapper的详解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-09-07 10:35:42" itemprop="dateCreated datePublished" datetime="2020-09-07T10:35:42+08:00">2020-09-07</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-01-22 20:32:29" itemprop="dateModified" datetime="2021-01-22T20:32:29+08:00">2021-01-22</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <ol>
-<li>集成通用Mapper</li>
-<li>对象关系映射</li>
-<li>配置介绍</li>
-<li>代码生成器</li>
-<li>扩展通用接口</li>
-<li>Example用法</li>
-<li>其它配置和用法</li>
-</ol>
-<h1 id="1、集成通用Mapper"><a href="#1、集成通用Mapper" class="headerlink" title="1、集成通用Mapper"></a>1、集成通用Mapper</h1><h2 id="1-1-Java编码方式"><a href="#1-1-Java编码方式" class="headerlink" title="1.1    Java编码方式"></a>1.1    Java编码方式</h2><h2 id="1-2-和Spring集成"><a href="#1-2-和Spring集成" class="headerlink" title="1.2    和Spring集成"></a>1.2    和Spring集成</h2><h2 id="1-3-和SpringBoot集成"><a href="#1-3-和SpringBoot集成" class="headerlink" title="1.3    和SpringBoot集成"></a>1.3    和SpringBoot集成</h2><blockquote>
-<p>和MyBatis一样，SpringBoot集成通用Mapper和的方式可分为2种：</p>
-<ol>
-<li><code>@Mapper</code>注解</li>
-<li><code>@MapperScan</code>注解的手动配置</li>
-</ol>
-</blockquote>
-<h3 id="1-3-1-Mapper"><a href="#1-3-1-Mapper" class="headerlink" title="1.3.1    @Mapper"></a>1.3.1    @Mapper</h3><blockquote>
-<p><strong>如果没有使用<code>@MapperScan</code>注解，就必须在Mapper/Dao接口上添加<code>@Mapper</code>注解，否则Spring容器无法判断扫描装配哪些接口。</strong></p>
-</blockquote>
-<h3 id="1-3-2-MapperScan"><a href="#1-3-2-MapperScan" class="headerlink" title="1.3.2    @MapperScan"></a>1.3.2    @MapperScan</h3><blockquote>
-<p><strong>或者可以在带有<code>@Configuration</code>的类上添加<code>@MapperScan</code>注解</strong>，或直接配置到SpringBoot的启动类上，如：</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@tk</span>.mybatis.spring.annotation.MapperScan(basePackages = <span class="string">&quot;扫描包&quot;</span>)</span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SampleMapperApplication</span> <span class="keyword">implements</span> <span class="title">CommandLineRunner</span> </span>&#123;</span><br></pre></td></tr></table></figure>
-
-<p><em>Tip：与SpringBoot整合MyBatis不同的是：通用Mapper使用<code>tk.mybatis.spring.annotation.MapperScan</code>包下的<code>@MapperScan</code>注解，MyBatis的<code>org.mybatis.spring.annotation.MapperScan</code>包下的<code>@MapperScan</code>注解。</em></p>
-<h3 id="1-3-3-实现步骤"><a href="#1-3-3-实现步骤" class="headerlink" title="1.3.3    实现步骤"></a>1.3.3    实现步骤</h3><ol>
-<li><p>创建项目，添加通用Mapper依赖</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>tk.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mapper-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>版本号<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>使用<code>@Mapper/@MapperScan</code>注解</p>
-</li>
-<li><p>如果需要覆盖通用Mapper的默认配置，可以在<code>application.yml</code>文件中进行。如：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mapper:</span></span><br><span class="line">  <span class="attr">mappers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">tk.mybatis.mapper.common.Mapper</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">tk.mybatis.mapper.common.Mapper2</span></span><br><span class="line">  <span class="attr">notEmpty:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h1 id="2、对象关系映射"><a href="#2、对象关系映射" class="headerlink" title="2、对象关系映射"></a>2、对象关系映射</h1><h2 id="2-1-简单入门"><a href="#2-1-简单入门" class="headerlink" title="2.1    简单入门"></a>2.1    简单入门</h2><ol>
-<li><p>数据库表（MySQL）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE &#96;country&#96; (</span><br><span class="line">    &#96;id&#96; int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;主键&#39;,</span><br><span class="line">    &#96;countryname&#96; varchar(255) DEFAULT NULL COMMENT &#39;名称&#39;,</span><br><span class="line">    &#96;countrycode&#96; varchar(255) DEFAULT NULL COMMENT &#39;代码&#39;,</span><br><span class="line">    PRIMARY KEY (&#96;Id&#96;)</span><br><span class="line">) ENGINE&#x3D;InnoDB AUTO_INCREMENT&#x3D;10011 DEFAULT CHARSET&#x3D;utf8 COMMENT&#x3D;&#39;国家信息&#39;;</span><br></pre></td></tr></table></figure></li>
-<li><p>对应的Java实体类型如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Country</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String  countryname;</span><br><span class="line">    <span class="keyword">private</span> String  countrycode;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//省略 getter 和 setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最简单的情况下，数据库中的字段名和是JavaBean中的属性名是完全相同的，可以直接产生一一映射关系，只需要添加一个<code>@Id</code>注解标记当前属性为主键数据库中的主键字段即可。</p>
-<blockquote>
-<p><strong>Tip：如果实体类中没有一个标记为<code>@Id</code>的字段，当你使用带有<code>ByPrimaryKey</code>的方法时，所有的字段会作为联合主键来使用。</strong></p>
-</blockquote>
-</li>
-<li><p>通用Mapper接口提供了大量已封装好的方法，我们自定义的Mapper接口只需要继承该接口就能调用这些方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tk.mybatis.mapper.common.Mapper;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	前提：该接口必须实现 @Mapper 或 @MapperScan  注解</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CountryMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">Country</span>&gt; </span>&#123;	<span class="comment">// 继承通用Mapper接口必须指定接口的泛型类型是与数据库表对应的实体类的类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>通用Mapper接口中常见的方法：</p>
-<ul>
-<li><code>selectOne</code></li>
-<li><code>select</code></li>
-<li><code>selectAll</code></li>
-<li><code>selectCount</code></li>
-<li><code>selectByPrimaryKey</code></li>
-<li><code>...</code></li>
-</ul>
-</blockquote>
-</li>
-<li><p>使用该接口的类对象调用接口中的方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取 countryMapper 对象，并调用 selectAll 方法</span></span><br><span class="line">List&lt;Country&gt; countries = countryMapper.selectAll();</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据主键查询</span></span><br><span class="line">Country country = countryMapper.selectByPrimaryKey(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者使用对象传参，适用于1个字段或者多个字段联合主键使用。通用Mapper的会把对象中的所有非空属性联合起来作为一个主键查询</span></span><br><span class="line">Country query = <span class="keyword">new</span> Country();</span><br><span class="line">query.setId(<span class="number">1</span>);</span><br><span class="line">country = countryMapper.selectByPrimaryKey(query);</span><br></pre></td></tr></table></figure></li>
-<li><p>如果想要自定义操作数据库的方法，可以直接在<code>CountryMapper</code>中增加。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Select;</span><br><span class="line"><span class="keyword">import</span> tk.mybatis.mapper.common.Mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CountryMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">Country</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Select(&quot;select * from country where countryname = #&#123;countryname&#125;&quot;)</span></span><br><span class="line">    <span class="function">Country <span class="title">selectByCountryName</span><span class="params">(String countryname)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="2-2-数据库映射"><a href="#2-2-数据库映射" class="headerlink" title="2.2    数据库映射"></a>2.2    数据库映射</h2><blockquote>
-<p>在2.1中看到的是最简单的情况，实际使用过程中也不会更复杂，下面是更详细的映射配置。</p>
-</blockquote>
-<ul>
-<li><p>通用Mapper中，默认情况下是将实体类字段按照<strong>驼峰转下划线</strong>的形式与数据库表中的列名进行映射。</p>
-<p>如：实体类的<code>userName</code>可以映射到表的<code>user_name</code>上。</p>
-<p>如果想要修改默认的转换方式，可以在后续的配置中，修改<code>style</code>全局配置；</p>
-<p>也可以使用通用Mapper提供的一些注解进行修改。</p>
-</li>
-</ul>
-<h3 id="2-2-1-NameStyle注解"><a href="#2-2-1-NameStyle注解" class="headerlink" title="2.2.1    @NameStyle注解"></a>2.2.1    <code>@NameStyle</code>注解</h3><ul>
-<li><p>这个注解可以在类上进行配置，优先级高于对应的<code>style</code>全局配置。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">normal,                     <span class="comment">//原值</span></span><br><span class="line">camelhump,                  <span class="comment">//驼峰转下划线</span></span><br><span class="line">uppercase,                  <span class="comment">//转换为大写</span></span><br><span class="line">lowercase,                  <span class="comment">//转换为小写</span></span><br><span class="line">camelhumpAndUppercase,      <span class="comment">//驼峰转下划线大写形式</span></span><br><span class="line">camelhumpAndLowercase,      <span class="comment">//驼峰转下划线小写形式</span></span><br></pre></td></tr></table></figure></li>
-<li><p>使用时，直接在类上配置即可。例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@NameStyle(Style.camelhumpAndUppercase)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Country</span></span></span><br></pre></td></tr></table></figure>
-
-<p>配置该注解后，对该类和其中的字段进行转换时，会将形如<code>userName</code>的字段转换为表中的<code>user_name</code>字段。</p>
-</li>
-</ul>
-<h3 id="2-2-2-Table注解"><a href="#2-2-2-Table注解" class="headerlink" title="2.2.2    @Table注解"></a>2.2.2    <code>@Table</code>注解</h3><ul>
-<li><p><code>@Table</code>注解可以配置<code>name</code>、<code>catalog</code>和<code>schema</code>三个属性，配置<code>name</code>属性后，直接使用提供的表名，不再根据实体类名进行转换。其它的2个属性中，同时配置时，<code>catalog</code>优先级高于<code>scheam</code>，也就是说只有<code>catalog</code>会生效。</p>
-</li>
-<li><p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Table(name = &quot;sys_user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span></span></span><br></pre></td></tr></table></figure>
-
-<p>将<code>User</code>实体类映射到<code>sys_user</code>表。</p>
-</li>
-</ul>
-<h3 id="2-2-3-Column注解"><a href="#2-2-3-Column注解" class="headerlink" title="2.2.3    @Column注解"></a>2.2.3    <code>@Column</code>注解</h3><ul>
-<li><p><code>@Colum</code>注解支持<code>name</code>、<code>insertable</code>和<code>updateable</code>3个属性。</p>
-<p><code>name</code>配置映射的列名。</p>
-<p><code>insertable</code>对提供的<code>insert</code>方法有效，如果设置为<code>false</code>后就不会出现在SQL中。</p>
-<p><code>updateable</code>对提供的<code>update</code>方法有效，如果设置为<code>false</code>后就不会出现在SQL中。</p>
-</li>
-<li><p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Column(name = &quot;user_name&quot;)</span></span><br><span class="line"><span class="keyword">private</span> String name;</span><br></pre></td></tr></table></figure>
-
-<p>直接映射<code>name</code>到<code>user_name</code>。</p>
-</li>
-</ul>
-<h3 id="2-2-4-ColumnType注解"><a href="#2-2-4-ColumnType注解" class="headerlink" title="2.2.4    @ColumnType注解"></a>2.2.4    <code>@ColumnType</code>注解</h3><ul>
-<li><p>这个注解提供的<code>column</code>属性和<code>@Column</code>中的<code>name</code>作用相同，但是<code>@Column</code>的优先级更高。除了<code>name</code>属性外，这个注解主要提供了<code>jdbcType</code>属性和<code>typeHandler</code>属性。</p>
-<p><code>jdbcType</code>用于设置特殊数据库类型时指定数据库中的<code>jdbcType</code>。</p>
-<p><code>typeHandler</code>用于设置特殊类型处理器，常见的是枚举。</p>
-</li>
-<li><p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ColumnType(</span></span><br><span class="line"><span class="meta">        column = &quot;countryname&quot;,</span></span><br><span class="line"><span class="meta">        jdbcType = JdbcType.VARCHAR,</span></span><br><span class="line"><span class="meta">        typeHandler = StringTypeHandler.class)</span></span><br><span class="line"><span class="keyword">private</span> String  countryname;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="2-2-5-Transient注解"><a href="#2-2-5-Transient注解" class="headerlink" title="2.2.5    @Transient注解"></a>2.2.5    <code>@Transient</code>注解</h3><ul>
-<li><p>一般情况下，实体中的字段和数据库中的字段是一一对应的，但是有时候我们会在实体类中定义一些额外的属性并希望这些属性不会与数据库表中的字段产生映射，这种情况下，就需要使用<code>@Transient</code>注解来告诉通用Mapper这不是表中的字段。</p>
-</li>
-<li><p>默认情况下，只有简单类型会被自动认为是表中的字段（可以通过配置中的<code>useSimpleType</code>控制）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> 这里说的简单类型不包含Java中的8种类基本型：</span><br><span class="line">byte、short、int、long、float、double、char、boolean</span><br><span class="line"> 这是因为在类中，基本类型会有默认值，而MyBatis中经常会要判断属性值是否为空，所以不要在类中使用基本类型，否则会遇到莫名其妙的错误。</span><br><span class="line"> 如果要使用基本类型的数据，应该使用其包装类。	</span><br></pre></td></tr></table></figure>
-
-<p>对于类中的复杂对象，以及<code>Map</code>、<code>List</code>等属性不需要配置这个注解。</p>
-<p>对于枚举类型作为数据库字段的情况，需要看配置中的<code>enumAsSimpleType</code>参数</p>
-</li>
-<li><p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transient</span></span><br><span class="line"><span class="keyword">private</span> String otherThings; <span class="comment">//非数据库表中字段</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="2-2-6-Id注解"><a href="#2-2-6-Id注解" class="headerlink" title="2.2.6    @Id注解"></a>2.2.6    <code>@Id</code>注解</h3><ul>
-<li><p>上面的几个注解都涉及到映射。<code>@Id</code>注解和映射无关，它是一个特殊的标记，用于标识数据库中的主键字段。</p>
-</li>
-<li><p>正常情况下，一个实体类中至少需要一个标记<code>@Id</code>注解的字段，存在联合主键时可以标记多个。</p>
-</li>
-<li><p>如果表中没有主键，类中就可以不标记。</p>
-</li>
-<li><p>当类中没有存在标记了<code>@Id</code>注解的字段时，你可以理解为类中的所有字段是联合主键。使用所有的<code>ByPrimaryKey</code>相关的方法时，有<code>where</code>条件的地方，会将所有列作为条件。</p>
-</li>
-<li><p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> Integer id;</span><br></pre></td></tr></table></figure>
-
-<p>或联合主键：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> Integer userId;</span><br><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> Integer roleId;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="2-2-7-KeySql注解"><a href="#2-2-7-KeySql注解" class="headerlink" title="2.2.7    @KeySql注解"></a>2.2.7    <code>@KeySql</code>注解</h3><ul>
-<li>主键策略注解，用于配置如何生成主键。</li>
-<li>这是通用Mapper的自定义注解，该注解的目的就是替换<code>@GenerateValue</code>注解。</li>
-<li>详见<strong>2.3主键策略</strong>。</li>
-</ul>
-<h3 id="2-2-8-GenerateValue注解"><a href="#2-2-8-GenerateValue注解" class="headerlink" title="2.2.8    @GenerateValue注解"></a>2.2.8    <code>@GenerateValue</code>注解</h3><ul>
-<li>主键策略注解，用于配置如何生成主键。</li>
-<li>不同数据库的配置不同，详见<strong>2.3主键策略</strong>。</li>
-</ul>
-<h3 id="2-2-9-Version注解"><a href="#2-2-9-Version注解" class="headerlink" title="2.2.9    @Version注解"></a>2.2.9    <code>@Version</code>注解</h3><ul>
-<li><code>@Version</code>是实现乐观锁的一个注解，大多数人都不需要。</li>
-<li>详见<strong>2.4乐观锁</strong>。</li>
-</ul>
-<h3 id="2-2-10-RegisterMapper注解"><a href="#2-2-10-RegisterMapper注解" class="headerlink" title="2.2.10    @RegisterMapper注解"></a>2.2.10    <code>@RegisterMapper</code>注解</h3><ul>
-<li>为了解决通用Mapper中最常见的一个错误而增加的注解标记，该注解仅用于开发用用接口，不是实体类上使用的，这里和其它注解一起介绍了。</li>
-<li>4.0 版本提供的所有通用接口上都标记了该注解，因此自带的通用接口时，不需要配置 <code>mappers</code> 参数，该注解的具体用法会在 <strong>第五章 扩展通用接口</strong> 中介绍。</li>
-</ul>
-<hr>
-<h2 id="2-3-主键策略"><a href="#2-3-主键策略" class="headerlink" title="2.3    主键策略"></a>2.3    主键策略</h2><p>​    在2.2中介绍了所有其它注解的作用和用法，由于主键策略比较复杂，单独用一节来阐述。</p>
-<p>​    首先主键策略和数据库关系很大，有些数据库支持主键自增，而有些数据库只能通过序列来获得主键。</p>
-<p>​    新增的<code>@KeySql</code>注解用于替换<code>@GeneratedValue</code>注解，因此<code>@KeySql</code>能以更简单的方式实现原来的功能。下面的示例都先使用<code>@KeySql</code>进行配置，然后再使用<code>@GeneratedValue</code>，大家可以自行选择。</p>
-<h3 id="2-3-1-JDBC支持通过getGeneratedValue方法取回主键的情况"><a href="#2-3-1-JDBC支持通过getGeneratedValue方法取回主键的情况" class="headerlink" title="2.3.1    JDBC支持通过getGeneratedValue方法取回主键的情况"></a>2.3.1    JDBC支持通过<code>getGeneratedValue</code>方法取回主键的情况</h3><ul>
-<li><p>这种情况首先需要数据库支持自增长，其次数据库提供的JDBC支持<code>getGeneratedKeys</code>方法。</p>
-</li>
-<li><p>常见的如MySql、SqlServer支持这种模式。</p>
-</li>
-<li><p>这种情况下，配置主键策略最简单。用法如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="meta">@KeySql(useGeneratedKeys = true)</span></span><br><span class="line"><span class="keyword">private</span> Long id;</span><br></pre></td></tr></table></figure>
-
-<p>或：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line"><span class="keyword">private</span> Long id;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>SqlServer中使用时，需要设置<code>id</code>的<code>insertable=false</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="2-4-乐观锁"><a href="#2-4-乐观锁" class="headerlink" title="2.4    乐观锁"></a>2.4    乐观锁</h2><h2 id="2-5-全局主键"><a href="#2-5-全局主键" class="headerlink" title="2.5    全局主键"></a>2.5    全局主键</h2>
       
     </div>
 
