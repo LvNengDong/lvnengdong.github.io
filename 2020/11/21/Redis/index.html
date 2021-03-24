@@ -23,16 +23,16 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="NOSQL NoSQL（Not Only SQL）：意思是”不仅仅是SQL”，是一种全新的数据库理念，泛指非关系型数据库。  NoSQL  vs.  SQL随着互联网Web2.0网站的兴起，传统的关系型数据库在应付超大规模和高并发的SNS类型的WEB2.0纯动态网站的开发已经显得力不从心，暴露了很多难以克服的问题，而非关系型数据库则由于其本身的特点得到了非常迅速的发展。NoSQL数据库的产生就是为">
+<meta name="description" content="Redis  Redis 是一款高性能的NOSQL系列的非关系型数据库。 Redis 是用C语言开发的一个开源的高性能键值对&lt;K, V&gt;数据库！ 比 SQL 数据库具有更快的读写速度和高并发处理能力！   1    下载安装 官网 官方中文网   Windows   下载得到一个压缩文件，解压直接可以使用。文件中包含：  redis.windows.conf：配置文件 redis-cl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis">
 <meta property="og:url" content="http://example.com/2020/11/21/Redis/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="NOSQL NoSQL（Not Only SQL）：意思是”不仅仅是SQL”，是一种全新的数据库理念，泛指非关系型数据库。  NoSQL  vs.  SQL随着互联网Web2.0网站的兴起，传统的关系型数据库在应付超大规模和高并发的SNS类型的WEB2.0纯动态网站的开发已经显得力不从心，暴露了很多难以克服的问题，而非关系型数据库则由于其本身的特点得到了非常迅速的发展。NoSQL数据库的产生就是为">
+<meta property="og:description" content="Redis  Redis 是一款高性能的NOSQL系列的非关系型数据库。 Redis 是用C语言开发的一个开源的高性能键值对&lt;K, V&gt;数据库！ 比 SQL 数据库具有更快的读写速度和高并发处理能力！   1    下载安装 官网 官方中文网   Windows   下载得到一个压缩文件，解压直接可以使用。文件中包含：  redis.windows.conf：配置文件 redis-cl">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2020/11/21/Redis/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png">
 <meta property="article:published_time" content="2020-11-21T11:03:59.000Z">
-<meta property="article:modified_time" content="2020-12-07T13:46:06.000Z">
+<meta property="article:modified_time" content="2021-03-24T16:42:00.815Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2020/11/21/Redis/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png">
@@ -149,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NOSQL"><span class="nav-number">1.</span> <span class="nav-text">NOSQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NoSQL-vs-SQL"><span class="nav-number">1.1.</span> <span class="nav-text">NoSQL  vs.  SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NOSQL%E5%92%8C%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%AF%94%E8%BE%83"><span class="nav-number">1.1.1.</span> <span class="nav-text">NOSQL和关系型数据库比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">1.1.2.</span> <span class="nav-text">非关系型数据库的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">1.1.3.</span> <span class="nav-text">关系型数据库的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E6%B5%81%E7%9A%84NoSQL%E4%BA%A7%E5%93%81"><span class="nav-number">1.2.</span> <span class="nav-text">主流的NoSQL产品</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%AE%E5%80%BC%E5%AF%B9%EF%BC%88key-value%EF%BC%89%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.2.1.</span> <span class="nav-text">键值对（key-value）存储数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%97%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.2.2.</span> <span class="nav-text">列存储数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.2.3.</span> <span class="nav-text">文档型数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.2.4.</span> <span class="nav-text">图形数据库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis"><span class="nav-number">2.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">Redis中的数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E5%91%BD%E4%BB%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">2.3.</span> <span class="nav-text">Redis命令操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B%E2%80%93String"><span class="nav-number">2.3.1.</span> <span class="nav-text">字符串类型–String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B%E2%80%93Hash"><span class="nav-number">2.3.2.</span> <span class="nav-text">哈希类型–Hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E7%B1%BB%E5%9E%8B%E2%80%93List"><span class="nav-number">2.3.3.</span> <span class="nav-text">列表类型–List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E2%80%93Set"><span class="nav-number">2.3.4.</span> <span class="nav-text">集合类型–Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E2%80%93SortedSet"><span class="nav-number">2.3.5.</span> <span class="nav-text">有序集合类型–SortedSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.3.6.</span> <span class="nav-text">通用命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">2.4.</span> <span class="nav-text">持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6"><span class="nav-number">2.4.1.</span> <span class="nav-text">持久化机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RDB"><span class="nav-number">2.4.1.1.</span> <span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOF"><span class="nav-number">2.4.1.2.</span> <span class="nav-text">AOF</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.5.</span> <span class="nav-text">Redis的应用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jedis"><span class="nav-number">3.</span> <span class="nav-text">Jedis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.1.</span> <span class="nav-text">使用步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Jedis%E4%B8%AD%E6%93%8D%E4%BD%9CRedis%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">3.2.</span> <span class="nav-text">在Jedis中操作Redis中的数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B%E2%80%93String-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">字符串类型–String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B%E2%80%93Hash-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">哈希类型–Hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E7%B1%BB%E5%9E%8B%E2%80%93List-1"><span class="nav-number">3.2.3.</span> <span class="nav-text">列表类型–List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E2%80%93Set-1"><span class="nav-number">3.2.4.</span> <span class="nav-text">集合类型–Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%E2%80%93SortedSet-1"><span class="nav-number">3.2.5.</span> <span class="nav-text">有序集合类型–SortedSet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jedis%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="nav-number">3.3.</span> <span class="nav-text">Jedis连接池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.3.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96"><span class="nav-number">3.3.2.</span> <span class="nav-text">代码优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">3.3.3.</span> <span class="nav-text">Redis中常见的配置信息</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">4.</span> <span class="nav-text">案例</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis"><span class="nav-number">1.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85"><span class="nav-number">1.1.</span> <span class="nav-text">1    下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Redis%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">2    Redis中的数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Redis%E5%91%BD%E4%BB%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.</span> <span class="nav-text">3    Redis命令操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B%EF%BC%88String%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1    字符串类型（String）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B%EF%BC%88Hash%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2    哈希类型（Hash）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%88%97%E8%A1%A8%E7%B1%BB%E5%9E%8B%EF%BC%88List%EF%BC%89"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3    列表类型（List）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%EF%BC%88Set%EF%BC%89"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4    集合类型（Set）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%EF%BC%88SortedSet%EF%BC%89"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5    有序集合类型（SortedSet）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E9%80%9A%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.6.</span> <span class="nav-text">3.6    通用命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">4    持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB"><span class="nav-number">1.4.1.</span> <span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF"><span class="nav-number">1.4.2.</span> <span class="nav-text">AOF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Redis%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.5.</span> <span class="nav-text">5    Redis的应用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jedis"><span class="nav-number">2.</span> <span class="nav-text">Jedis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Jedis-%E5%85%A5%E9%97%A8"><span class="nav-number">2.1.</span> <span class="nav-text">1    Jedis 入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Jedis-%E6%93%8D%E4%BD%9C-Redis-%E5%B8%B8%E7%94%A8%E7%9A%84-API"><span class="nav-number">2.2.</span> <span class="nav-text">2    Jedis 操作 Redis 常用的 API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B%EF%BC%88String%EF%BC%89"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1    字符串类型（String）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%93%88%E5%B8%8C%E7%B1%BB%E5%9E%8B%EF%BC%88Hash%EF%BC%89"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2    哈希类型（Hash）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%88%97%E8%A1%A8%E7%B1%BB%E5%9E%8B%EF%BC%88List%EF%BC%89"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3    列表类型（List）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%EF%BC%88Set%EF%BC%89"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.4    集合类型（Set）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B%EF%BC%88SortedSet%EF%BC%89"><span class="nav-number">2.2.5.</span> <span class="nav-text">2.5    有序集合类型（SortedSet）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jedis%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="nav-number">2.3.</span> <span class="nav-text">Jedis连接池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.3.1.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96"><span class="nav-number">2.3.2.</span> <span class="nav-text">代码优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E9%85%8D%E7%BD%AE%E4%BF%A1%E6%81%AF"><span class="nav-number">2.3.3.</span> <span class="nav-text">Redis中常见的配置信息</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-%E6%95%B4%E5%90%88-Redis"><span class="nav-number">4.</span> <span class="nav-text">SpringBoot 整合 Redis</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -162,13 +162,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-count">76</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -242,7 +242,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-12-07 21:46:06" itemprop="dateModified" datetime="2020-12-07T21:46:06+08:00">2020-12-07</time>
+        <time title="Modified: 2021-03-25 00:42:00" itemprop="dateModified" datetime="2021-03-25T00:42:00+08:00">2021-03-25</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -250,7 +250,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+          <a href="/categories/NoSQL/" itemprop="url" rel="index"><span itemprop="name">NoSQL</span></a>
         </span>
     </span>
 
@@ -264,183 +264,20 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="NOSQL"><a href="#NOSQL" class="headerlink" title="NOSQL"></a>NOSQL</h1><blockquote>
-<p>NoSQL（Not Only SQL）：意思是”不仅仅是SQL”，是一种全新的数据库理念，泛指非关系型数据库。</p>
+        <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><blockquote>
+<ul>
+<li>Redis 是一款高性能的NOSQL系列的非关系型数据库。</li>
+<li>Redis 是用C语言开发的一个开源的高性能键值对&lt;K, V&gt;数据库！</li>
+<li><strong>比 SQL 数据库具有更快的读写速度和高并发处理能力！</strong></li>
+</ul>
 </blockquote>
-<h2 id="NoSQL-vs-SQL"><a href="#NoSQL-vs-SQL" class="headerlink" title="NoSQL  vs.  SQL"></a>NoSQL  vs.  SQL</h2><p>随着互联网Web2.0网站的兴起，传统的关系型数据库在应付超大规模和高并发的SNS类型的WEB2.0纯动态网站的开发已经显得力不从心，暴露了很多难以克服的问题，而非关系型数据库则由于其本身的特点得到了非常迅速的发展。NoSQL数据库的产生就是为了解决大型规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题。</p>
-<h3 id="NOSQL和关系型数据库比较"><a href="#NOSQL和关系型数据库比较" class="headerlink" title="NOSQL和关系型数据库比较"></a>NOSQL和关系型数据库比较</h3><h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ol>
-<li>成本低。<ul>
-<li>NOSQL数据库简单易部署，基本都是开源软件，无需购买即可使用。</li>
-</ul>
-</li>
-<li>查询速度快。<ul>
-<li>NOSQL数据库将数据存储在缓存中，关系型数据库将数据存储在硬盘中。自然NOSQL数据库查询速度要更快。</li>
-</ul>
-</li>
-<li>存储数据的格式多样化。<ul>
-<li>NOSQL的存储格式是<code>&#123;key,value&#125;</code>形式、文档形式、图片形式等等，所以可以存储基础类型以及对象或者是集合等各种格式，而数据库则只支持基础类型。</li>
-</ul>
-</li>
-<li>扩展性好。<ul>
-<li>关系型数据库有类似于join这样的多表查询机制的限制导致扩展很难。</li>
-</ul>
-</li>
-</ol>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ol>
-<li>因为NOSQL数据库的历史较短，所以维护的工具和资料有限。</li>
-<li>没有标准的SQL（结构化查询语句）的支持。    没有一个统一的标准去限定NOSQL语句的书写，也就是说，不同的NOSQL数据库的查询、增删改等语句可能迥然不同，将增加用户的学习和使用成本。</li>
-<li>不提供关系型数据库对事务的处理</li>
-</ol>
-<h3 id="非关系型数据库的优势"><a href="#非关系型数据库的优势" class="headerlink" title="非关系型数据库的优势"></a>非关系型数据库的优势</h3><ol>
-<li>性能：<ul>
-<li>因为NoSQL是基于键值对的，而且不需要经过SQL层的解析，所以性能非常高。</li>
-</ul>
-</li>
-<li>可扩展性：<ul>
-<li>同样也是因为基于键值对，数据之间没有耦合，所以非常容易水平扩展。</li>
-</ul>
-</li>
-</ol>
-<h3 id="关系型数据库的优势"><a href="#关系型数据库的优势" class="headerlink" title="关系型数据库的优势"></a>关系型数据库的优势</h3><ol>
-<li>复杂查询：<ul>
-<li>可以用SQL语句方便的在一个表以及多个表之间做非常复杂的数据查询</li>
-</ul>
-</li>
-<li>事务支持<ul>
-<li>事务支持使得对于安全性能要求很高的数据访问需求得以实现。</li>
-</ul>
-</li>
-</ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
-<li>关系型数据库与NOSQL数据库并非对立而是互补的关系。即通常情况下使用关系型数据库，在适合使用NOSQL的时候使用NOSQL数据库。</li>
-<li>一般情况下，会将数据存储在关系型数据库中，在NoSQL数据库中存储关系型数据库中数据的备份。</li>
-</ol>
-<hr>
-<h2 id="主流的NoSQL产品"><a href="#主流的NoSQL产品" class="headerlink" title="主流的NoSQL产品"></a>主流的NoSQL产品</h2><h3 id="键值对（key-value）存储数据库"><a href="#键值对（key-value）存储数据库" class="headerlink" title="键值对（key-value）存储数据库"></a>键值对（key-value）存储数据库</h3><table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">相关产品</td>
-<td align="center"><code>Tokyo Cabinet、Tyrant、Redis、Voldemort、Berkeley DB</code></td>
-</tr>
-<tr>
-<td align="center">典型应用</td>
-<td align="center">内容缓存，主要用于处理大量数据的高访问负载</td>
-</tr>
-<tr>
-<td align="center">数据模型</td>
-<td align="center">键值对</td>
-</tr>
-<tr>
-<td align="center">优势</td>
-<td align="center">快速查询</td>
-</tr>
-<tr>
-<td align="center">劣势</td>
-<td align="center">存储的数据缺少结构化</td>
-</tr>
-</tbody></table>
-<h3 id="列存储数据库"><a href="#列存储数据库" class="headerlink" title="列存储数据库"></a>列存储数据库</h3><table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">相关产品</td>
-<td align="center"><code>Cassandra、Hbase、Riak</code></td>
-</tr>
-<tr>
-<td align="center">典型应用</td>
-<td align="center">分布式的文件系统</td>
-</tr>
-<tr>
-<td align="center">数据模型</td>
-<td align="center">以列簇式存储，将同一列数据存在一起</td>
-</tr>
-<tr>
-<td align="center">优势</td>
-<td align="center">查找速度快，可扩展性强，更容易进行分布式扩展</td>
-</tr>
-<tr>
-<td align="center">劣势</td>
-<td align="center">功能相对局限</td>
-</tr>
-</tbody></table>
-<h3 id="文档型数据库"><a href="#文档型数据库" class="headerlink" title="文档型数据库"></a>文档型数据库</h3><table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">相关产品</td>
-<td align="center"><code>CouchDB、MongoDB</code></td>
-</tr>
-<tr>
-<td align="center">典型应用</td>
-<td align="center">Web应用（与key-value类似）</td>
-</tr>
-<tr>
-<td align="center">数据模型</td>
-<td align="center">键值对</td>
-</tr>
-<tr>
-<td align="center">优势</td>
-<td align="center">数据结构要求不严格</td>
-</tr>
-<tr>
-<td align="center">劣势</td>
-<td align="center">查询性能不高，而且缺乏统一的查询语法</td>
-</tr>
-</tbody></table>
-<h3 id="图形数据库"><a href="#图形数据库" class="headerlink" title="图形数据库"></a>图形数据库</h3><table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">相关产品</td>
-<td align="center"><code>Neo4J、InfoGrid、Infinite Graph</code></td>
-</tr>
-<tr>
-<td align="center">典型应用</td>
-<td align="center">社交网络</td>
-</tr>
-<tr>
-<td align="center">数据模型</td>
-<td align="center">图结构</td>
-</tr>
-<tr>
-<td align="center">优势</td>
-<td align="center">利用图结构的相关算法</td>
-</tr>
-<tr>
-<td align="center">劣势</td>
-<td align="center">需要对整个图做计算才能得出结果，不容易做分布式的集群方案</td>
-</tr>
-</tbody></table>
-<hr>
-<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><ol>
-<li>命令操作</li>
-<li>持久化操作</li>
-<li>Jedis</li>
-</ol>
-<blockquote>
-<p>Redis是一款高性能的NOSQL系列的非关系型数据库。</p>
-</blockquote>
-<h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><ul>
+<h2 id="1-下载安装"><a href="#1-下载安装" class="headerlink" title="1    下载安装"></a>1    下载安装</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://redis.io/">官网</a></li>
 <li><a target="_blank" rel="noopener" href="http://www.redis.net.cn/">官方中文网</a></li>
 </ul>
+<blockquote>
+<p>Windows </p>
+</blockquote>
 <p>下载得到一个压缩文件，解压直接可以使用。文件中包含：</p>
 <ul>
 <li><code>redis.windows.conf</code>：配置文件</li>
@@ -448,20 +285,26 @@
 <li><code>redis-server.exe</code>：redis服务器端</li>
 <li>……</li>
 </ul>
-<p>Redis服务器端的默认端口号是：<strong>6379</strong></p>
-<h2 id="Redis中的数据类型"><a href="#Redis中的数据类型" class="headerlink" title="Redis中的数据类型"></a>Redis中的数据类型</h2><p>Redis是用C语言开发的一个开源的高性能键值对（key-value）数据库，官方提供测试数据，50个并发执行100000个请求，读的速度是110000次/s，写的速度是81000次/s，且Redis通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据类型如下：</p>
 <blockquote>
-<p>Redis在内存中以<strong>键值对</strong>的形式存储数据。其中所有<code>键（key）</code>都是String类型，而<code>值（value）</code>有5种不同的数据结构，我们常说的Redis的数据类型其实是指Redis键值对中<code>值（value）</code>的数据类型。</p>
-<ul>
+<p>Linux</p>
+</blockquote>
+<p>直接使用宝塔面板安装即可！</p>
+<blockquote>
+<p><strong>Redis服务器端的默认端口号是：6379</strong></p>
+</blockquote>
+<h2 id="2-Redis中的数据类型"><a href="#2-Redis中的数据类型" class="headerlink" title="2    Redis中的数据类型"></a>2    Redis中的数据类型</h2><p>Redis通过提供多种键值数据类型来适应不同场景下的存储需求，目前为止Redis支持的键值数据类型如下：</p>
+<blockquote>
+<p>Redis在内存中以<strong>键值对</strong>的形式存储数据。其中所有<code>键（key）</code>都是String类型，而<code>值（value）</code>有<strong>5种不同的数据结构</strong>，<em>我们常说的Redis的数据类型其实是指Redis键值对中<code>值（value）</code>的数据类型。</em></p>
+<ol>
 <li>字符串类型 <code>String</code></li>
 <li>哈希类型 <code>hash</code> ： Map格式</li>
 <li>列表类型 <code>list</code> ： LinkedList格式，支持重复元素</li>
 <li>集合类型 <code>set</code> ： LinkedList格式，不允许重复元素</li>
 <li>有序集合类型 <code>sortedset</code> ： LinkedList格式，不允许重复元素，且元素有序。</li>
-</ul>
+</ol>
 </blockquote>
 <p><img src="/2020/11/21/Redis/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png"></p>
-<h2 id="Redis命令操作"><a href="#Redis命令操作" class="headerlink" title="Redis命令操作"></a>Redis命令操作</h2><h3 id="字符串类型–String"><a href="#字符串类型–String" class="headerlink" title="字符串类型–String"></a>字符串类型–String</h3><ol>
+<h2 id="3-Redis命令操作"><a href="#3-Redis命令操作" class="headerlink" title="3    Redis命令操作"></a>3    Redis命令操作</h2><h3 id="3-1-字符串类型（String）"><a href="#3-1-字符串类型（String）" class="headerlink" title="3.1    字符串类型（String）"></a>3.1    字符串类型（String）</h3><ol>
 <li><p>存储：<code>set key value</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set name zhangsan</span><br><span class="line"># 多次为同一个key赋值会覆盖之前的值</span><br></pre></td></tr></table></figure></li>
 <li><p>获取：<code>get key</code></p>
@@ -469,23 +312,25 @@
 <li><p>删除：<code>del key</code></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">del name</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="哈希类型–Hash"><a href="#哈希类型–Hash" class="headerlink" title="哈希类型–Hash"></a>哈希类型–Hash</h3><ol>
+<hr>
+<h3 id="3-2-哈希类型（Hash）"><a href="#3-2-哈希类型（Hash）" class="headerlink" title="3.2    哈希类型（Hash）"></a>3.2    哈希类型（Hash）</h3><ol>
 <li><p>存储：<code>hset key field value</code></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hset person name zhangsan</span><br><span class="line">hset person age <span class="number">23</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hset person name zhangsan</span><br><span class="line">hset person age <span class="number">23</span></span><br><span class="line"><span class="comment">-- 等价于 </span></span><br><span class="line">hset person name zhangsan age <span class="number">23</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 在添加 Hash 类型数据时，HashMap 中可以只有一个键值对，也可以包含多个键值对</span></span><br><span class="line"><span class="comment">-- 如果 HashMap 中只包含一个键值对，且多次添加 HashMap ，这时 Redis 会先判断 HashMap 中 key 的值，如果key不同，即为追加操作；如果key相同，会直接报错</span></span><br><span class="line"><span class="comment">-- 添加的 HashMap 中可以包含多个键值对，只要 key 不同，也是符合 Redis 的语法规则的！</span></span><br></pre></td></tr></table></figure></li>
 <li><p>获取：</p>
 <ul>
-<li>获取指定field对应的值：<code>hget key field</code></li>
+<li>获取 Hash 中指定 key 的值：<code>hget key hashKey</code></li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hget person name</span><br><span class="line">hget person age</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>获取所有的filed和value：<code>hgetall key</code></li>
+<li>获取 Hash 中的所有键值对：<code>hgetall key</code></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hgetall person</span><br></pre></td></tr></table></figure></li>
-<li><p>删除：<code>hdel key field</code></p>
+<li><p>删除：<code>hdel key hashKey</code></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdel person name</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="列表类型–List"><a href="#列表类型–List" class="headerlink" title="列表类型–List"></a>列表类型–List</h3><ol>
+<hr>
+<h3 id="3-3-列表类型（List）"><a href="#3-3-列表类型（List）" class="headerlink" title="3.3    列表类型（List）"></a>3.3    列表类型（List）</h3><ol>
 <li><p>添加：可以添加一个元素到列表的头部（左边）或尾部（右边）</p>
 <ul>
 <li><code>lpush key value</code>：将元素加入列表左边</li>
@@ -494,11 +339,19 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">lpush mylist a</span><br><span class="line">lpush mylist b</span><br><span class="line">lpush mylist c</span><br><span class="line"></span><br><span class="line">rpush mylist a</span><br><span class="line">rpush mylist b</span><br><span class="line">rpush mylist c</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 最终得到的列表是： [c b a   a b c]</span></span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>List和String的区别是：当key相同时存储元素，String类型是覆盖，而List是追加</p>
+<p><strong>List和String的区别是：当key相同时存储元素，String类型是覆盖，而List是追加</strong></p>
 </blockquote>
 </li>
 <li><p>获取：<code>lrange key start end</code>，根据范围获取。<code>0 -1</code>表示获取全部元素。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lrange mylist <span class="number">0</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lrange mylist <span class="number">0</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li><strong>下标从 0 开始取，左右都是闭区间，也就是说 <code>lrange mylist 0 0</code> 也能取到第一个元素</strong></li>
+<li><strong>没有<code>rrange</code>这个命令</strong></li>
+</ul>
+</blockquote>
+</li>
 <li><p>删除：</p>
 <ul>
 <li><code>lpop key</code>：删除列表最左边的元素，并将元素返回</li>
@@ -506,7 +359,8 @@
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lpop mylist</span><br><span class="line">rpop mylist</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="集合类型–Set"><a href="#集合类型–Set" class="headerlink" title="集合类型–Set"></a>集合类型–Set</h3><blockquote>
+<hr>
+<h3 id="3-4-集合类型（Set）"><a href="#3-4-集合类型（Set）" class="headerlink" title="3.4    集合类型（Set）"></a>3.4    集合类型（Set）</h3><blockquote>
 <p>不允许重复元素</p>
 </blockquote>
 <ol>
@@ -517,43 +371,53 @@
 <li><p>删除集合中的某个元素：<code>srem key value</code></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srem myset b</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="有序集合类型–SortedSet"><a href="#有序集合类型–SortedSet" class="headerlink" title="有序集合类型–SortedSet"></a>有序集合类型–SortedSet</h3><blockquote>
-<p>不允许重复元素，且元素有序，每个元素都会关联一个double类型的<code>分数（score）</code>，Redis通过<code>分数（score）</code>来为集合中的成员<strong>从小到大</strong>排序。</p>
+<hr>
+<h3 id="3-5-有序集合类型（SortedSet）"><a href="#3-5-有序集合类型（SortedSet）" class="headerlink" title="3.5    有序集合类型（SortedSet）"></a>3.5    有序集合类型（SortedSet）</h3><blockquote>
+<p>不允许重复元素，且元素有序，每个元素都会关联一个double类型的<code>分数（score）</code>，Redis 通过<code>分数（score）</code>来为集合中的成员<strong>从小到大</strong>排序。</p>
 </blockquote>
 <ol>
 <li><p>存储：<code>zadd key score value</code></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zadd mysort <span class="number">60</span> english</span><br><span class="line">zadd mysort <span class="number">90</span> chinese</span><br><span class="line">zadd mysort <span class="number">80</span> math</span><br></pre></td></tr></table></figure></li>
 <li><p>获取：</p>
 <ul>
-<li><code>zrange key start</code>：按<code>分数（score）</code>从小到大的顺序获取<code>value</code></li>
-<li><code>zrange key start end withscores</code>：按<code>分数（score）</code>从小到大的顺序获取<code>value</code>和<code>score</code></li>
+<li><code>zrange key start end</code>：按分数从小到大的顺序获取<code>value</code></li>
+<li><code>zrange key start end withscores</code>：按分数从小到大的顺序获取<code>value</code>和<code>score</code></li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zrange <span class="number">0</span> <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">zrange key <span class="number">0</span> <span class="number">-1</span> withscores</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zrange mysort <span class="number">0</span> <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">zrange mysort <span class="number">0</span> <span class="number">-1</span> withscores</span><br></pre></td></tr></table></figure></li>
 <li><p>删除：<code>zrem key value</code></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zrem mysort english</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="通用命令"><a href="#通用命令" class="headerlink" title="通用命令"></a>通用命令</h3><ol>
+<hr>
+<h3 id="3-6-通用命令"><a href="#3-6-通用命令" class="headerlink" title="3.6    通用命令"></a>3.6    通用命令</h3><ol>
 <li>查询所有的键：<code>keys *</code></li>
-<li>获取键对应的value的数据类型：<code>type key</code></li>
+<li>获取指定键<code>key</code>对应的值<code>value</code>的数据类型：<code>type key</code></li>
 <li>删除指定的键值对：<code>del key</code></li>
 </ol>
 <hr>
-<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><blockquote>
-<p>Redis是一个内存数据库，当Redis服务器重启，或者服务器电脑重启后数据就会丢失。为了解决这个问题，我们可以将Redis内存中的数据持久化到硬盘的文件中。</p>
+<hr>
+<h2 id="4-持久化"><a href="#4-持久化" class="headerlink" title="4    持久化"></a>4    持久化</h2><blockquote>
+<p>Redis 是一个<strong>内存数据库</strong>，当Redis服务器重启，或者服务器电脑重启后数据就会丢失。为了解决这个问题，我们可以将Redis内存中的数据持久化到硬盘的文件中。</p>
 </blockquote>
-<h3 id="持久化机制"><a href="#持久化机制" class="headerlink" title="持久化机制"></a>持久化机制</h3><h4 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h4><blockquote>
+<blockquote>
+<p><strong>Redis 中的持久化机制（2种）</strong></p>
+<ol>
+<li>RDB</li>
+<li>AOF</li>
+</ol>
+</blockquote>
+<h3 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h3><blockquote>
 <p>RDB：默认方式，无需进行配置，默认就使用这种机制。</p>
-<p>这种机制的原理是：在一定的时间间隔后，检测key的变化情况，然后持久化数据。</p>
+<p>这种机制的原理是：在一定的时间间隔后，检测 key 的变化情况，然后持久化数据。</p>
 </blockquote>
 <p>在<code>redis.windows.conf</code>文件中，有如下几行数据：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60  10000</span><br><span class="line"></span><br><span class="line">其含义分别是：</span><br><span class="line">#	after 900 sec (15 min) if at least 1 key changed	900s之后至少有1个key发生变化则持久化数据</span><br><span class="line">#   after 300 sec (5 min) if at least 10 keys changed	300s之后至少有10个key发生变化则持久化数据</span><br><span class="line">#   after 60 sec if at least 10000 keys changed		60s之后至少有10000个key发生变化则持久化数据</span><br></pre></td></tr></table></figure>
 
 
 
-<p>如果想要自定义时间和key的数量，直接修改配置文件即可。</p>
+<p>如果想要自定义时间和 key 的数量，直接修改配置文件即可。</p>
 <blockquote>
 <p>修改配置文件后，需重启Redis服务器。此时，启动时需要指定配置文件名称。</p>
-<p>在服务器目录下进入CMD命令行窗口界面，输入以下命令：</p>
+<p>在服务器目录下进入 CMD 命令行窗口界面，输入以下命令：</p>
 </blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis-server.exe redis.windows.conf	</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动服务器 + 指定配置文件</span></span><br></pre></td></tr></table></figure>
 
@@ -561,15 +425,14 @@
 
 
 
-<h4 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h4><blockquote>
-<p>AOF：通过日志记录的方式持久化Redis缓存中的数据。</p>
-<p>启动步骤：</p>
+<h3 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h3><blockquote>
+<p>AOF：通过记录日志的方式持久化 Redis 缓存中的数据。</p>
 </blockquote>
+<p><strong>启动步骤：</strong></p>
 <ol>
 <li><p>编辑<code>redis.windows.conf</code>文件，设置</p>
-<p><code>appendonly no</code>（关闭AOF）</p>
-<p><code>--&gt;&gt;</code></p>
-<p><code>appendonly yes</code> （开启AOF）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">appendonly no	# 关闭AOF</span><br><span class="line">appendonly yes 	# 开启AOF</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>详细参数：</p>
 <ul>
@@ -579,11 +442,11 @@
 </ul>
 </blockquote>
 </li>
-<li><p>修改配置文件后，需重启Redis服务器。此时，启动时需要指定配置文件名称。</p>
+<li><p>修改配置文件后，需重启Redis服务器，启动时需要指定配置文件名称。</p>
 </li>
 </ol>
 <hr>
-<h2 id="Redis的应用场景"><a href="#Redis的应用场景" class="headerlink" title="Redis的应用场景"></a>Redis的应用场景</h2><blockquote>
+<h2 id="5-Redis的应用场景"><a href="#5-Redis的应用场景" class="headerlink" title="5    Redis的应用场景"></a>5    Redis的应用场景</h2><blockquote>
 <ul>
 <li>缓存（数据查询、短连接、新闻内容、商品内容等等）</li>
 <li>聊天室的在线好友列表</li>
@@ -594,17 +457,19 @@
 <li>分布式集群架构中的session分离</li>
 </ul>
 </blockquote>
+<hr>
 <h1 id="Jedis"><a href="#Jedis" class="headerlink" title="Jedis"></a>Jedis</h1><blockquote>
-<p><strong>Jedis</strong>: 一款通过Java客户端操作redis数据库的工具。</p>
+<p><strong>Jedis</strong>：一款通过Java客户端操作Redis数据库的客户端工具。</p>
 </blockquote>
-<h2 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h2><ol>
-<li><p>下载并导入Jedis的jar包。（或在Maven项目中导入Jedis的类库）</p>
+<h2 id="1-Jedis-入门"><a href="#1-Jedis-入门" class="headerlink" title="1    Jedis 入门"></a>1    Jedis 入门</h2><ol>
+<li><p>初始化项目并导入 Jedis 依赖</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>redis.clients<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jedis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>在Java代码中使用。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1. 获取连接</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis();	 <span class="comment">// 如果使用无参构造器初始化，则默认的Redis服务器的地址是：&quot;127.0.0.1&quot;,6379</span></span><br><span class="line"><span class="comment">//2. 操作</span></span><br><span class="line">jedis.set(<span class="string">&quot;username&quot;</span>,<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line"><span class="comment">//3. 关闭连接</span></span><br><span class="line">jedis.close();</span><br></pre></td></tr></table></figure></li>
+<li><p>在代码中使用 <strong>Jdeis API</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、创建Redis的客户端连接对象并绑定Redis服务器的地址（如果使用无参构造器初始化，则Redis服务器地址的缺省值是：&quot;localhost&quot;,6379）</span></span><br><span class="line">Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>);	 </span><br><span class="line"><span class="comment">// 2. 具体操作</span></span><br><span class="line">jedis.set(<span class="string">&quot;username&quot;</span>,<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line"><span class="comment">// 3. 关闭客户端与服务器的连接</span></span><br><span class="line">jedis.close();</span><br></pre></td></tr></table></figure></li>
 </ol>
-<ul>
-<li><p><code>Jedis类</code>常用的构造函数</p>
+<blockquote>
+<p><strong><code>Jedis类</code>常用的构造函数</strong></p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -614,28 +479,35 @@
 </thead>
 <tbody><tr>
 <td align="center"><code>public Jedis()</code></td>
-<td align="center">创建Jedis实例对象，并连接到地址为<code>&quot;127.0.0.1&quot;,6379</code>的服务器上</td>
+<td align="center">创建Jedis实例对象，并连接到地址为<code>&quot;127.0.0.1&quot;, 6379</code>的服务器上</td>
 </tr>
 <tr>
 <td align="center"><code>public Jedis(String host, int port)</code></td>
 <td align="center">创建Jedis实例对象，并指定Redis服务器的地址</td>
 </tr>
 </tbody></table>
-</li>
-</ul>
-<h2 id="在Jedis中操作Redis中的数据结构"><a href="#在Jedis中操作Redis中的数据结构" class="headerlink" title="在Jedis中操作Redis中的数据结构"></a>在Jedis中操作Redis中的数据结构</h2><h3 id="字符串类型–String-1"><a href="#字符串类型–String-1" class="headerlink" title="字符串类型–String"></a>字符串类型–String</h3><ol>
+<hr>
+<h2 id="2-Jedis-操作-Redis-常用的-API"><a href="#2-Jedis-操作-Redis-常用的-API" class="headerlink" title="2    Jedis 操作 Redis 常用的 API"></a>2    Jedis 操作 Redis 常用的 API</h2><blockquote>
+<p>在上面的demo中，创建客户端连接对象<code>Jdeis</code> 和 关闭<code>Jdeis</code>客户端与<code>Redis</code>服务器之间的连接 是两个固定操作，真正操作 Redis 数据库的步骤是第2步的具体操作，我们常用的 API 如下：</p>
+</blockquote>
+<p>首先，我们将获取 Jedis 客户端对象 和 释放连接 的操作提取出来！</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、建立Jedis与Redis的连接并获得客户端对象Jedis</span></span><br><span class="line"><span class="meta">@Before</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Jedis jedis = <span class="keyword">new</span> Jedis(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3、关闭Jedis与Redis之间的连接</span></span><br><span class="line"><span class="meta">@After</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span>&#123;</span><br><span class="line">    jedis.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-1-字符串类型（String）"><a href="#2-1-字符串类型（String）" class="headerlink" title="2.1    字符串类型（String）"></a>2.1    字符串类型（String）</h3><ol>
 <li>存储：<code>set key value</code></li>
 <li>获取：<code>get key</code></li>
 <li>删除：<code>del key</code></li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//1. 获取连接</span></span><br><span class="line">    Jedis jedis = <span class="keyword">new</span> Jedis();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 操作</span></span><br><span class="line">    <span class="comment">//存储</span></span><br><span class="line">    jedis.set(<span class="string">&quot;username&quot;</span>,<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">    <span class="comment">//获取</span></span><br><span class="line">    String username = jedis.get(<span class="string">&quot;username&quot;</span>);</span><br><span class="line">    System.out.println(username);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定时删除。可以使用setex()方法存储可以指定过期时间。</span></span><br><span class="line">    <span class="comment">//将&#123;activecode：6380&#125;键值对存入redis，并且20秒后自动删除该键值对</span></span><br><span class="line">    jedis.setex(<span class="string">&quot;activecode&quot;</span>,<span class="number">20</span>,<span class="string">&quot;6380&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 删除</span></span><br><span class="line">    jedis.del(<span class="string">&quot;username&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 关闭连接</span></span><br><span class="line">    jedis.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2、操作String</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 存储</span></span><br><span class="line">    jedis.set(<span class="string">&quot;username&quot;</span>,<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取</span></span><br><span class="line">    String username = jedis.get(<span class="string">&quot;username&quot;</span>);</span><br><span class="line">    System.out.println(username);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 普通删除</span></span><br><span class="line">    jedis.del(<span class="string">&quot;username&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 定时删除。使用setex()方法存储可以指定过期时间。</span></span><br><span class="line">    <span class="comment">// 将&#123;activecode：6380&#125;键值对存入redis，并且20秒后自动删除该键值对</span></span><br><span class="line">    jedis.setex(<span class="string">&quot;activecode&quot;</span>,<span class="number">20</span>,<span class="string">&quot;6380&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 
 
 <hr>
-<h3 id="哈希类型–Hash-1"><a href="#哈希类型–Hash-1" class="headerlink" title="哈希类型–Hash"></a>哈希类型–Hash</h3><ol>
+<h3 id="2-2-哈希类型（Hash）"><a href="#2-2-哈希类型（Hash）" class="headerlink" title="2.2    哈希类型（Hash）"></a>2.2    哈希类型（Hash）</h3><ol>
 <li><p>存储：<code>hset key field value</code></p>
 </li>
 <li><p>获取：</p>
@@ -649,14 +521,14 @@
 <li><p>删除：<code>hdel key field</code></p>
 </li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//1. 获取连接</span></span><br><span class="line">    Jedis jedis = <span class="keyword">new</span> Jedis();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 操作</span></span><br><span class="line">    <span class="comment">// 存储hash</span></span><br><span class="line">    jedis.hset(<span class="string">&quot;person&quot;</span>,<span class="string">&quot;name&quot;</span>,<span class="string">&quot;wangyi&quot;</span>);</span><br><span class="line">    jedis.hset(<span class="string">&quot;person&quot;</span>,<span class="string">&quot;gender&quot;</span>,<span class="string">&quot;male&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取hash</span></span><br><span class="line">    String name = jedis.hget(<span class="string">&quot;person&quot;</span>, <span class="string">&quot;name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取hash的所有map中的数据</span></span><br><span class="line">	Map&lt;String, String&gt; user = jedis.hgetAll(<span class="string">&quot;person&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//3. 关闭连接</span></span><br><span class="line">    jedis.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2、操作Hash</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test02</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 存储hash</span></span><br><span class="line">    jedis.hset(<span class="string">&quot;person&quot;</span>,<span class="string">&quot;name&quot;</span>,<span class="string">&quot;wangyi&quot;</span>);</span><br><span class="line">    jedis.hset(<span class="string">&quot;person&quot;</span>,<span class="string">&quot;gender&quot;</span>,<span class="string">&quot;male&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取hash</span></span><br><span class="line">    String name = jedis.hget(<span class="string">&quot;person&quot;</span>, <span class="string">&quot;name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取hash的所有map中的数据</span></span><br><span class="line">	Map&lt;String, String&gt; user = jedis.hgetAll(<span class="string">&quot;person&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 
 
 <hr>
-<h3 id="列表类型–List-1"><a href="#列表类型–List-1" class="headerlink" title="列表类型–List"></a>列表类型–List</h3><ol>
+<h3 id="2-3-列表类型（List）"><a href="#2-3-列表类型（List）" class="headerlink" title="2.3    列表类型（List）"></a>2.3    列表类型（List）</h3><ol>
 <li><p>添加：可以添加一个元素到列表的头部（左边）或尾部（右边）</p>
 <ul>
 <li><code>lpush key value</code>：将元素加入列表左边</li>
@@ -672,26 +544,26 @@
 </ul>
 </li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//1. 获取连接</span></span><br><span class="line">    Jedis jedis = <span class="keyword">new</span> Jedis();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 操作</span></span><br><span class="line">    <span class="comment">// list 存储</span></span><br><span class="line">    jedis.lpush(<span class="string">&quot;mylist&quot;</span>,<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;c&quot;</span>);<span class="comment">//从左边存</span></span><br><span class="line">    jedis.rpush(<span class="string">&quot;mylist&quot;</span>,<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;c&quot;</span>);<span class="comment">//从右边存</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// list 范围获取</span></span><br><span class="line">    List&lt;String&gt; mylist = jedis.lrange(<span class="string">&quot;mylist&quot;</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// list 弹出</span></span><br><span class="line">    String element1 = jedis.lpop(<span class="string">&quot;mylist&quot;</span>);<span class="comment">//c</span></span><br><span class="line">    String element2 = jedis.rpop(<span class="string">&quot;mylist&quot;</span>);<span class="comment">//c</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// list 范围获取</span></span><br><span class="line">    List&lt;String&gt; mylist2 = jedis.lrange(<span class="string">&quot;mylist&quot;</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 关闭连接</span></span><br><span class="line">    jedis.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2、操作List</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// list 存储</span></span><br><span class="line">    jedis.lpush(<span class="string">&quot;mylist&quot;</span>,<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;c&quot;</span>);<span class="comment">//从左边存</span></span><br><span class="line">    jedis.rpush(<span class="string">&quot;mylist&quot;</span>,<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;c&quot;</span>);<span class="comment">//从右边存</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// list 范围获取</span></span><br><span class="line">    List&lt;String&gt; mylist = jedis.lrange(<span class="string">&quot;mylist&quot;</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// list 弹出</span></span><br><span class="line">    String element1 = jedis.lpop(<span class="string">&quot;mylist&quot;</span>);<span class="comment">//c</span></span><br><span class="line">    String element2 = jedis.rpop(<span class="string">&quot;mylist&quot;</span>);<span class="comment">//c</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// list 范围获取</span></span><br><span class="line">    List&lt;String&gt; mylist2 = jedis.lrange(<span class="string">&quot;mylist&quot;</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 
 
 <hr>
-<h3 id="集合类型–Set-1"><a href="#集合类型–Set-1" class="headerlink" title="集合类型–Set"></a>集合类型–Set</h3><ol>
+<h3 id="2-4-集合类型（Set）"><a href="#2-4-集合类型（Set）" class="headerlink" title="2.4    集合类型（Set）"></a>2.4    集合类型（Set）</h3><ol>
 <li>存储：<code>sadd key value</code></li>
 <li>获取集合中的所有元素：<code>smembers key</code></li>
 <li>删除集合中的某个元素：<code>srem key value</code></li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//1. 获取连接</span></span><br><span class="line">    Jedis jedis = <span class="keyword">new</span> Jedis();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 操作</span></span><br><span class="line">    <span class="comment">// set 存储</span></span><br><span class="line">    jedis.sadd(<span class="string">&quot;myset&quot;</span>,<span class="string">&quot;java&quot;</span>,<span class="string">&quot;php&quot;</span>,<span class="string">&quot;c++&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set 获取</span></span><br><span class="line">    Set&lt;String&gt; myset = jedis.smembers(<span class="string">&quot;myset&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 关闭连接</span></span><br><span class="line">    jedis.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2、操作Set</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set 存储</span></span><br><span class="line">    jedis.sadd(<span class="string">&quot;myset&quot;</span>,<span class="string">&quot;java&quot;</span>,<span class="string">&quot;php&quot;</span>,<span class="string">&quot;c++&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set 获取</span></span><br><span class="line">    Set&lt;String&gt; myset = jedis.smembers(<span class="string">&quot;myset&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 
 
 <hr>
-<h3 id="有序集合类型–SortedSet-1"><a href="#有序集合类型–SortedSet-1" class="headerlink" title="有序集合类型–SortedSet"></a>有序集合类型–SortedSet</h3><ol>
+<h3 id="2-5-有序集合类型（SortedSet）"><a href="#2-5-有序集合类型（SortedSet）" class="headerlink" title="2.5    有序集合类型（SortedSet）"></a>2.5    有序集合类型（SortedSet）</h3><ol>
 <li>存储：<code>zadd key score value</code></li>
 <li>获取：<ul>
 <li><code>zrange key start</code>：按<code>分数（score）</code>从小到大的顺序获取<code>value</code></li>
@@ -700,7 +572,7 @@
 </li>
 <li>删除：<code>zrem key value</code></li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//1. 获取连接</span></span><br><span class="line">    Jedis jedis = <span class="keyword">new</span> Jedis();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 操作</span></span><br><span class="line">    <span class="comment">// sortedset 存储</span></span><br><span class="line">    jedis.zadd(<span class="string">&quot;mysortedset&quot;</span>,<span class="number">23</span>,<span class="string">&quot;詹姆斯&quot;</span>);</span><br><span class="line">    jedis.zadd(<span class="string">&quot;mysortedset&quot;</span>,<span class="number">07</span>,<span class="string">&quot;甜瓜&quot;</span>);</span><br><span class="line">    jedis.zadd(<span class="string">&quot;mysortedset&quot;</span>,<span class="number">77</span>,<span class="string">&quot;东契奇&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// sortedset 获取</span></span><br><span class="line">    Set&lt;String&gt; mysortedset = jedis.zrange(<span class="string">&quot;mysortedset&quot;</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line">    System.out.println(mysortedset);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 关闭连接</span></span><br><span class="line">    jedis.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2、操作SortedSet</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// sortedset 存储</span></span><br><span class="line">    jedis.zadd(<span class="string">&quot;mysortedset&quot;</span>,<span class="number">23</span>,<span class="string">&quot;詹姆斯&quot;</span>);</span><br><span class="line">    jedis.zadd(<span class="string">&quot;mysortedset&quot;</span>,<span class="number">07</span>,<span class="string">&quot;甜瓜&quot;</span>);</span><br><span class="line">    jedis.zadd(<span class="string">&quot;mysortedset&quot;</span>,<span class="number">77</span>,<span class="string">&quot;东契奇&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// sortedset 获取</span></span><br><span class="line">    Set&lt;String&gt; mysortedset = jedis.zrange(<span class="string">&quot;mysortedset&quot;</span>, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line">    System.out.println(mysortedset);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -780,9 +652,8 @@
 
 
 
-
-
-
+<hr>
+<h1 id="SpringBoot-整合-Redis"><a href="#SpringBoot-整合-Redis" class="headerlink" title="SpringBoot 整合 Redis"></a>SpringBoot 整合 Redis</h1>
     </div>
 
     
