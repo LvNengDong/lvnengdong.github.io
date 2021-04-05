@@ -155,13 +155,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -194,6 +194,767 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/08/HDFS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/02/08/HDFS/" class="post-title-link" itemprop="url">HDFS</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-08 19:48:38" itemprop="dateCreated datePublished" datetime="2021-02-08T19:48:38+08:00">2021-02-08</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-02-26 22:32:18" itemprop="dateModified" datetime="2021-02-26T22:32:18+08:00">2021-02-26</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Hadoop/" itemprop="url" rel="index"><span itemprop="name">Hadoop</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="HDFS-概述"><a href="#HDFS-概述" class="headerlink" title="HDFS 概述"></a>HDFS 概述</h1><hr>
+<h2 id="产生背景"><a href="#产生背景" class="headerlink" title="产生背景"></a>产生背景</h2><p>随着数据量越来越大，在一个机器上存不下所有的数据，就需要把数据分配到更多的机器中，但是这样又不方便管理和维护，所以我们迫切需要一种可以<strong>通过一台机器来管理多台机器上的文件</strong>的系统，这就是分布式文件管理系统。    </p>
+<hr>
+<h2 id="HDFS-定义"><a href="#HDFS-定义" class="headerlink" title="HDFS 定义"></a>HDFS 定义</h2><ul>
+<li>HDFS（Hadoop Distribute FileSystem）：Hadoop 的分布式文件系统，本质上还是一个<strong>文件系统</strong>。</li>
+<li><strong>文件系统</strong>即用来存储管理计算机中文件的系统。</li>
+<li>HDFS 通过目录树来定位文件；其次，它是分布式的，由很多服务器联合起来实现其功能，集群中的服务器有各自的角色。</li>
+<li>HDFS 只是分布式文件管理系统中的一种。</li>
+</ul>
+<hr>
+<h2 id="HDFS-的优缺点"><a href="#HDFS-的优缺点" class="headerlink" title="HDFS 的优缺点"></a>HDFS 的优缺点</h2><h3 id="HDFS-的使用场景"><a href="#HDFS-的使用场景" class="headerlink" title="HDFS 的使用场景"></a>HDFS 的使用场景</h3><p><strong>适合一次写入，多次读出的场景，且不支持文件的修改</strong>。适合用来做数据分析。</p>
+<hr>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ol>
+<li><p>高容错性</p>
+<p>1）数据自动保存多个副本。它通过增加副本的形式，提高容错性。【副本数量由客户端指定】</p>
+<p><img src="/2021/02/08/HDFS/image-20210219125213030.png" alt="image-20210219125213030"></p>
+<p>2）某一个副本丢失以后 ，它可以自动恢复。</p>
+<p><img src="/2021/02/08/HDFS/image-20210219125238273.png" alt="image-20210219125238273"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HDFS 的副本自动恢复机制：</span><br><span class="line">	如果集群中某个机器宕机，导致副本丢失，HDFS 会在集群中剩余的未保存该副本的机器中随机挑选一台机器保存该副本，维护副本数量与用户设定的副本数量一致或与节点数量一致。</span><br><span class="line">	每个副本在每个节点上只能保存一份，如果用户设置了10个副本，但是集群中只有3个 DN ，那么当前集群中就只会有3个副本。</span><br><span class="line">	但是当集群扩展到10台时，NM 就会自动在新的 DN 上创建新的副本，维护副本数量到10个。</span><br></pre></td></tr></table></figure></li>
+<li><p>适合处理大数据</p>
+<p>1）数据规模：能够处理数据规模达到GB、TB、甚至 PB 级别的数据；</p>
+<p>2）文件规模：能够处理百万规模以上的文件数量，数量相当之大。</p>
+</li>
+<li><p>可构建在廉价机器上，通过多副本机制，提高可靠性。</p>
+</li>
+</ol>
+<hr>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><blockquote>
+<ol>
+<li>HDFS 不支持对文件的随机写</li>
+</ol>
+</blockquote>
+<p>也就是说：仅支持数据 append（追加），不支持文件的随机修改。</p>
+<p><strong>原因</strong>：文件在 HDFS 上存储时，以 block 为基本单位存储！也就是说：</p>
+<p>（1）没有提供对文件的在线寻址/在线打开功能！</p>
+<p>（2）文件以块形式存储，如果修改了一个块中的内容，就会影响当前块之后的所有块，效率很低。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">假设有一文件 A.txt ，共100W行，200M。</span><br><span class="line">文件A在存储到 HDFS 上时按块分开存储，每块 128M 。</span><br><span class="line">200M 可分为2块存储，block1 存储0~128M，block2 存储128~200M。</span><br><span class="line">假设 block1 在 dn1 来存储，block2 在 dn2 存储，即这两块数据位于不同的磁盘中。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">现在有一需求需要修改第5W行的内容：</span><br><span class="line"><span class="code">	1、首先我们要找到第5W行在哪个位置，但是 HDFS 没有寻址的功能，HDFS 不支持在线打开，只支持下载到本地之后再打开。所以压根就找不到第5W行在哪个位置。</span></span><br><span class="line"><span class="code">	2、即使 HDFS 能找到第5W行在哪个位置。 假设第5W行在第60M的位置，我们据此找到了 block1 ，现在需求是删除4W~5W行内容，并在后面追加20W行数据。这时我们就会发现 A.txt 文件在修改后已经超过了 200M，假设我们此时的文件达到了400M。这时2块已经存储不下A.txt了，我们需要增加到4块，就需要重新分配4块来完成修改任务，每块数据都要修改，显然效率是很低的。</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">&gt; 所以 HDFS 不支持对文件的随机写。</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<blockquote>
+<ol start="2">
+<li>不适合低延时数据的访问。</li>
+</ol>
+</blockquote>
+<p>意思就是：如果我们要求能尽可能快的读取数据（即数据访问时延较低），使用 HDFS 是不合适的。比如毫秒级的存储数据，是做不到的。一般处理很小量的数据时，要求速度要快，HDFS就不适合处理这些数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">* 比如你在本机打开一个文件，打开的速度是很快的；（不涉及到网络IO，只涉及到磁盘IO）</span><br><span class="line">* 但是如果想要访问 HDFS 上存储的文件，它的速度是慢于本地打开的。（不仅涉及到网络IO，还涉及到磁盘IO）</span><br><span class="line"></span><br><span class="line">因为 HDFS 是分布式存储的，假设现在有一个 1G 的文件分为了8个block存储在 HDFS 上。</span><br><span class="line">但是这8个block可能存储在集群的多个节点上（假设为[节点1：2个块]，[节点2：3个块]，[节点3：3个块]）：</span><br><span class="line">假设我们要下载这个文件，就需要请求这3台机器将这8个块都下载下来。如果这三台机器所在的三个机房分为位于美国、上海、南极，那么客户端在请求这三台机器时首先就会涉及到网络IO，客户端在打开时又要涉及到磁盘IO。时效性较差，不适合低延时数据的访问。</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="3">
+<li>不适合存储大量的小文件。</li>
+</ol>
+</blockquote>
+<p><strong>原因</strong>：（1）如果 HDFS 存储了大量的小文件，就会降低 NN 的服务能力！</p>
+<p>​           （2）小文件存储的寻址时间会超过读取时间，它违反了 HDFS 的设计目标。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> NN 负责文件元数据的管理，NN 在运行时，必须将当前集群中存储的所有文件的元数据加载到内存。</span><br><span class="line"><span class="bullet">-</span> 存储大量小文件的话，它会占用 NN 中大量的内存来存储小文件的元数据信息。</span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> 例如：</span><br><span class="line"><span class="code">	NN 的内存是有限的，假设可以存1亿条元数据信息，</span></span><br><span class="line"><span class="code">	如果全部存储 1k 的小文件，那么这个集群最大的存储能力是 1亿 * 1k ；</span></span><br><span class="line"><span class="code">	如果全部存储 1G 的大文件，那么这个集群最大的存储能力是 1亿 * 1G ；</span></span><br><span class="line"><span class="code">	显然，存大文件时集群的存储能力呈指数级上升！</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="4">
+<li>不支持并发写入、文件随机修改</li>
+</ol>
+</blockquote>
+<p>同一文件在同一时刻只能由一个线程写入，不允许多个线程同时写；。</p>
+<p><img src="/2021/02/08/HDFS/image-20210225211305080.png" alt="image-20210225211305080"></p>
+<p>假设 线程A 正在上传<code>ss.txt</code>文件，那么在线程A 上传开始到结束之间，其它所有的线程不能再上传<code>ss.txt</code>文件</p>
+<hr>
+<h2 id="HDFS-组成架构"><a href="#HDFS-组成架构" class="headerlink" title="HDFS 组成架构"></a>HDFS 组成架构</h2><p><img src="/2021/02/08/HDFS/image-20210219130216472.png" alt="image-20210219130216472"></p>
+<ol>
+<li><p>NameNode（nn）：就是Master，它是一个主管、管理者。</p>
+<p>1）管理HDFS的名称空间；</p>
+<p>2）配置副本策略；</p>
+<p>3）管理数据块（Block）映射信息；</p>
+<p>4）处理客户端读写请求</p>
+</li>
+<li><p>DataNode（dn）：就是Slave。NameNode下达命令，DataNode执行实际的操作</p>
+<p>1）存储实际的数据块；</p>
+<p>2）执行数据块的读/写操作。</p>
+</li>
+<li><p>Client：就是客户端。</p>
+<p>1）文件切分。文件上传HDFS的时候，Client将文件切分成一个一个的Block，然后进行上传；</p>
+<p>2）与NameNode交互，获取文件的位置信息；</p>
+<p>3）与DataNode交互，读取或者写入数据；</p>
+<p>4）Client提供一些命令来管理HDFS，比如NameNode格式化；</p>
+<p>5）Client可以通过一些命令来访问HDFS，比如对HDFS增删查改操作；</p>
+</li>
+<li><p>Secondary NameNode（2nn）：并非NameNode的热备。当 NameNode 挂掉的时候，它并不能马上替换NameNode并提供服务。1）辅助NameNode，分担其工作量，比如定期合并 Fsimage 和 Edits ，并推送给 NameNode；</p>
+<p>2）在紧急情况下，可辅助恢复NameNode。</p>
+</li>
+</ol>
+<hr>
+<h2 id="HDFS-块大小"><a href="#HDFS-块大小" class="headerlink" title="HDFS 块大小"></a>HDFS 块大小</h2><ul>
+<li><p>HDFS 中的文件在物理上是分块存储（Block），块的大小由<code>hdfs-default.xml</code>配置文件中的参数 <code>dfs.blocksize</code> 来决定。</p>
+</li>
+<li><p>在 Hadoop 2.x 中，默认值是<code>134217728</code>（128M）；</p>
+<p>在 Hadoop 1.x 中，默认值是 64M 。</p>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li>Hadoop 2.x 块大小默认为 128M 的原因：基于最佳传输损耗理论！</li>
+</ol>
+</blockquote>
+<p><strong>最佳传输损耗理论</strong>：在一次传输中，寻址时间占总传输时间1%时，本次传输的损耗最小，为最佳性价比传输！</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> 不论对磁盘中的文件进行读还是写，首先要进行寻址！（寻找数据在磁盘中的哪个位置）</span><br><span class="line"><span class="bullet">-</span> 目前硬件的发展条件，普通磁盘写的速率大约为 100M/s，寻址时间大约为 10ms/次。</span><br><span class="line"><span class="code">	</span></span><br><span class="line"><span class="code">	根据 最佳传输损耗理论 ，总传输时间约为： 10ms / 1% = 1s</span></span><br><span class="line"><span class="code">	普通磁盘的传输容量大小约为： 1 * 100M = 100M</span></span><br><span class="line"><span class="code">	又因为</span></span><br><span class="line"><span class="code">		- 块的大小必须是 2^N	（文件在传输过程中，每 64K 就需要校验一次，因此块的大小必须为 2^N）</span></span><br><span class="line"><span class="code">		- 最接近 100M 的就是 128M</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">- 所以 Hadoop 2.x 规定默认块的大小为 128M 。</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">- 如果公司使用的固态硬盘写的速度是300M/S，那么就可以将块大小调整到 256M</span></span><br><span class="line"><span class="code">- 如果公司使用的固态硬盘写的速度是500M/S，那么就可以将块大小调整到 512M</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="2">
+<li>为什么块的大小不能设置太小，也不能设置太大？</li>
+</ol>
+</blockquote>
+<p>块大小需要适当的调节，既不能太大，也不能太小！</p>
+<pre><code>* 不能太大：
+    
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 在一些分块读取的场景，不够灵活，会带来额外的网络消耗。</span><br><span class="line"><span class="code">	假设当前有一文件A，大小为1G。</span></span><br><span class="line"><span class="code">		如果块大小为128M，可分8块。	[取第一块]</span></span><br><span class="line"><span class="code">		如果块大小为1G，可分1块。		[取第一块]</span></span><br><span class="line"><span class="code">	需求：需要读取A文件0~128M部分的内容。</span></span><br><span class="line"><span class="code">	完成：两种分块方式在完成需求是同样只需要取第一块，将第一块下载到本地。但块太大的时候会带来额外的网络传输消耗和本地磁盘资源的消耗。</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">2. 在上传文件时，一旦发生故障，会造成资源的浪费。</span></span><br><span class="line"><span class="code">	假设上文A文件，</span></span><br><span class="line"><span class="code">		按128M分块，在上传第5块时因网络原因传输中断了，在网络重新连接后，只需重新上传第5块即可。</span></span><br><span class="line"><span class="code">		但是如果按1G分块，在上传到999M时因网络原因传输中断了，在重新连接网络后还需要从头重写上传整个文件</span></span><br></pre></td></tr></table></figure>
+</code></pre>
+<p>​<br>​     </p>
+<ul>
+<li><p>不能太小：</p>
+  <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> 块太小，同样大小的文件，会占用 NN 过多的的元数据空间。</span><br><span class="line"><span class="code">	假设 有一文件B，大小为128M。</span></span><br><span class="line"><span class="code">		若 块大小为1M ，则保存文件需128块，需要生成128个块的映射信息。这些信息都属于元数据，都要存到NN中。</span></span><br><span class="line"><span class="code">		若 块大小为128M ，则保存文件只需1块， 只需要存储一个块的映射信息。</span></span><br><span class="line"><span class="code">2. 块太小，在进行读写操作时，会增加寻址时间，程序一直在找块的开始位置；</span></span><br><span class="line"><span class="code">    下载B文件，</span></span><br><span class="line"><span class="code">     	若 块大小为1M，共128块，需要下载全部的128个块，寻址128次，每次寻址耗时 10ms；</span></span><br><span class="line"><span class="code">     	若 块大小为128M ，共1块，只需下载1块，寻址1次</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<ol start="3">
+<li>图示</li>
+</ol>
+</blockquote>
+<p><img src="/2021/02/08/HDFS/image-20210219131335414.png" alt="image-20210219131335414"></p>
+<p><strong>总结：HDFS块的大小设置主要取决于磁盘传输速率。</strong></p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><blockquote>
+<ol>
+<li>副本数量</li>
+</ol>
+</blockquote>
+<p>副本数的概念指的是最大副本数！</p>
+<p>具体存放几个副本需要参考 DN 节点的数量，每个 DN 节点最多只能存储一个副本！</p>
+<blockquote>
+<ol start="2">
+<li>默认块大小</li>
+</ol>
+</blockquote>
+<p>默认块大小为 128M ，128M 指的是块的上限，即每个块最多存储 128M 的数据，如果当前块存储的数据不满 128M ，存了多少数据就占用多少 磁盘空间。它也是一个独立的块！</p>
+<hr>
+<h1 id="HDFS-的-Shell-操作"><a href="#HDFS-的-Shell-操作" class="headerlink" title="HDFS 的 Shell 操作"></a>HDFS 的 Shell 操作</h1><h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bin/hadoop fs 具体命令 </span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者</span></span><br><span class="line">bin/hdfs dfs 具体命令</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Tip：</p>
+</blockquote>
+<p><code>hadoop fs</code> 命令既可以在本地模式在生效，也可以在分布式模式下生效；而 <code>hdfs dfs</code> 只能在分布式模式下生效！</p>
+<h2 id="命令大全"><a href="#命令大全" class="headerlink" title="命令大全"></a>命令大全</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">[-appendToFile &lt;localsrc&gt; ... &lt;dst&gt;]</span><br><span class="line">[-cat [-ignoreCrc] &lt;src&gt; ...]</span><br><span class="line">[-checksum &lt;src&gt; ...]</span><br><span class="line">[-chgrp [-R] GROUP PATH...]</span><br><span class="line">[-chmod [-R] &lt;MODE[,MODE]... | OCTALMODE&gt; PATH...]</span><br><span class="line">[-chown [-R] [OWNER][:[GROUP]] PATH...]</span><br><span class="line">[-copyFromLocal [-f] [-p] &lt;localsrc&gt; ... &lt;dst&gt;]</span><br><span class="line">[-copyToLocal [-p] [-ignoreCrc] [-crc] &lt;src&gt; ... &lt;localdst&gt;]</span><br><span class="line">[-count [-q] &lt;path&gt; ...]</span><br><span class="line">[-cp [-f] [-p] &lt;src&gt; ... &lt;dst&gt;]</span><br><span class="line">[-createSnapshot &lt;snapshotDir&gt; [&lt;snapshotName&gt;]]</span><br><span class="line">[-deleteSnapshot &lt;snapshotDir&gt; &lt;snapshotName&gt;]</span><br><span class="line">[-df [-h] [&lt;path&gt; ...]]</span><br><span class="line">[-du [-s] [-h] &lt;path&gt; ...]</span><br><span class="line">[-expunge]</span><br><span class="line">[-get [-p] [-ignoreCrc] [-crc] &lt;src&gt; ... &lt;localdst&gt;]</span><br><span class="line">[-getfacl [-R] &lt;path&gt;]</span><br><span class="line">[-getmerge [-nl] &lt;src&gt; &lt;localdst&gt;]</span><br><span class="line">[-help [cmd ...]]</span><br><span class="line">[-ls [-d] [-h] [-R] [&lt;path&gt; ...]]</span><br><span class="line">[-mkdir [-p] &lt;path&gt; ...]</span><br><span class="line">[-moveFromLocal &lt;localsrc&gt; ... &lt;dst&gt;]</span><br><span class="line">[-moveToLocal &lt;src&gt; &lt;localdst&gt;]</span><br><span class="line">[-mv &lt;src&gt; ... &lt;dst&gt;]</span><br><span class="line">[-put [-f] [-p] &lt;localsrc&gt; ... &lt;dst&gt;]</span><br><span class="line">[-renameSnapshot &lt;snapshotDir&gt; &lt;oldName&gt; &lt;newName&gt;]</span><br><span class="line">[-rm [-f] [-r|-R] [-skipTrash] &lt;src&gt; ...]</span><br><span class="line">[-rmdir [--ignore-fail-on-non-empty] &lt;dir&gt; ...]</span><br><span class="line">[-setfacl [-R] [&#123;-b|-k&#125; &#123;-m|-x &lt;acl_spec&gt;&#125; &lt;path&gt;]|[--set &lt;acl_spec&gt; &lt;path&gt;]]</span><br><span class="line">[-setrep [-R] [-w] &lt;rep&gt; &lt;path&gt; ...]</span><br><span class="line">[-stat [format] &lt;path&gt; ...]</span><br><span class="line">[-tail [-f] &lt;file&gt;]</span><br><span class="line">[-test -[defsz] &lt;path&gt;]</span><br><span class="line">[-text [-ignoreCrc] &lt;src&gt; ...]</span><br><span class="line">[-touchz &lt;path&gt; ...]</span><br><span class="line">[-usage [cmd ...]]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="命令分类"><a href="#命令分类" class="headerlink" title="命令分类"></a>命令分类</h3><blockquote>
+<p>本地 –&gt;&gt; HDFS（上传）</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-put			# 拷贝</span><br><span class="line">-copyFromLocal	 # 可以进行多线程拷贝</span><br><span class="line">-moveFromLocal	 # 移动 </span><br><span class="line">-appendToFile	 # 追加</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>HDFS –&gt;&gt; HDFS </p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-<span class="built_in">cd</span></span><br><span class="line">-mv</span><br><span class="line">-chown</span><br><span class="line">-chmod</span><br><span class="line">-du</span><br><span class="line">-df</span><br><span class="line">-cat</span><br><span class="line">-rm</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>HDFS –&gt;&gt; 本地（下载）</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-get			<span class="comment"># 下载</span></span><br><span class="line">-copyToLocal	<span class="comment"># 下载（等价于 get）</span></span><br><span class="line">-getmerge		<span class="comment"># 合并下载。把 HDFS 上的一批可以用通配符匹配的文件先合并成一个文件，再下载到本地。合并的顺序是文件在 HDFS 上的排列顺序</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="常用命令实操"><a href="#常用命令实操" class="headerlink" title="常用命令实操"></a>常用命令实操</h3><h4 id="1、准备工作"><a href="#1、准备工作" class="headerlink" title="1、准备工作"></a>1、准备工作</h4><ol>
+<li>启动Hadoop集群（方便后续的测试）</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ sbin&#x2F;start-dfs.sh</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop103 hadoop-3.1.3]$ sbin&#x2F;start-yarn.sh</span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="2">
+<li>-help：输出这个命令参数</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -help rm</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、上传"><a href="#2、上传" class="headerlink" title="2、上传"></a>2、上传</h4><blockquote>
+<ol>
+<li><code>-moveFromLocal</code>：从本地剪切粘贴到HDFS</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ touch kongming.txt</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -moveFromLocal .&#x2F;kongming.txt &#x2F;sanguo&#x2F;shuguo</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="2">
+<li>-copyFromLocal：从本地文件系统中拷贝文件到HDFS路径去</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -copyFromLocal README.txt &#x2F;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="3">
+<li>-appendToFile：追加一个文件到已经存在的文件末尾</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ touch liubei.txt</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ vi liubei.txt</span><br><span class="line"></span><br><span class="line">输入</span><br><span class="line"></span><br><span class="line">san gu mao lu</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -appendToFile liubei.txt &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<blockquote>
+<ol start="4">
+<li>-put：等同于copyFromLocal</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -put .&#x2F;zaiyiqi.txt &#x2F;user&#x2F;atguigu&#x2F;test&#x2F;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-3-3-下载"><a href="#2-3-3-下载" class="headerlink" title="2.3.3 下载"></a>2.3.3 下载</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">1）-copyToLocal：从HDFS拷贝到本地</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -copyToLocal &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt .&#x2F;</span><br><span class="line"></span><br><span class="line">2）-get：等同于copyToLocal，就是从HDFS下载文件到本地</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -get &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt .&#x2F;</span><br><span class="line"></span><br><span class="line">3）-getmerge：合并下载多个文件，比如HDFS的目录 &#x2F;user&#x2F;atguigu&#x2F;test下有多个文件:log.1, log.2,log.3,...</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -getmerge &#x2F;user&#x2F;atguigu&#x2F;test&#x2F;* .&#x2F;zaiyiqi.txt</span><br><span class="line"></span><br><span class="line">### 2.3.4 HDFS直接操作</span><br><span class="line"></span><br><span class="line">1）-ls: 显示目录信息</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -ls &#x2F;</span><br><span class="line"></span><br><span class="line">2）-mkdir：在HDFS上创建目录</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -mkdir -p &#x2F;sanguo&#x2F;shuguo</span><br><span class="line"></span><br><span class="line">3）-cat：显示文件内容</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -cat &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt</span><br><span class="line"></span><br><span class="line">4）-chgrp 、-chmod、-chown：Linux文件系统中的用法一样，修改文件所属权限</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -chmod 666 &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -chown atguigu:atguigu  &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt</span><br><span class="line"></span><br><span class="line">5）-cp ：从HDFS的一个路径拷贝到HDFS的另一个路径</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -cp &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt &#x2F;zhuge.txt</span><br><span class="line"></span><br><span class="line">6）-mv：在HDFS目录中移动文件</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -mv &#x2F;zhuge.txt &#x2F;sanguo&#x2F;shuguo&#x2F;</span><br><span class="line"></span><br><span class="line">7）-tail：显示一个文件的末尾</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -tail &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt</span><br><span class="line"></span><br><span class="line">8）-rm：删除文件或文件夹</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -rm &#x2F;user&#x2F;atguigu&#x2F;test&#x2F;jinlian2.txt</span><br><span class="line"></span><br><span class="line">9）-rmdir：删除空目录</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -mkdir &#x2F;test</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -rmdir &#x2F;test</span><br><span class="line"></span><br><span class="line">10）-du统计文件夹的大小信息</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -du -s -h &#x2F;user&#x2F;atguigu&#x2F;test</span><br><span class="line"></span><br><span class="line">2.7 K &#x2F;user&#x2F;atguigu&#x2F;test</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -du -h &#x2F;user&#x2F;atguigu&#x2F;test</span><br><span class="line"></span><br><span class="line">1.3 K &#x2F;user&#x2F;atguigu&#x2F;test&#x2F;README.txt</span><br><span class="line"></span><br><span class="line">15   &#x2F;user&#x2F;atguigu&#x2F;test&#x2F;jinlian.txt</span><br><span class="line"></span><br><span class="line">1.4 K &#x2F;user&#x2F;atguigu&#x2F;test&#x2F;zaiyiqi.txt</span><br><span class="line"></span><br><span class="line">11）-setrep：设置HDFS中文件的副本数量</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ hadoop fs -setrep 10 &#x2F;sanguo&#x2F;shuguo&#x2F;kongming.txt</span><br><span class="line"></span><br><span class="line">这里设置的副本数只是记录在NameNode的元数据中，是否真的会有这么多副本，还得看DataNode的数量。因为目前只有3台设备，最多也就3个副本，只有节点数的增加到10台时，副本数才能达到10。</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<hr>
+<h1 id="HDFS-客户端操作"><a href="#HDFS-客户端操作" class="headerlink" title="HDFS 客户端操作"></a>HDFS 客户端操作</h1><h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>在对 HDFS（Hadoop 的分布式文件系统）进行操作时，又可分为<strong>服务端</strong>操作和<strong>客户端</strong>操作两部分。</p>
+<blockquote>
+<p>服务端：</p>
+</blockquote>
+<p>启动 NN，DN，2NN 等；</p>
+<blockquote>
+<p>客户端（可以有多种形式）：</p>
+</blockquote>
+<ul>
+<li>使用 Shell 客户端。    使用 <code>hadoop fs -命令</code> 对 HDFS 进行操作。</li>
+<li>使用 Java 客户端。    使用 JavaAPI 和方法对 HDFS 进行操作。 </li>
+<li>使用 Python 客户端。    使用 PythonAPI 和方法对 HDFS 进行操作。</li>
+<li>……</li>
+</ul>
+<hr>
+<h2 id="Java-客户端环境准备"><a href="#Java-客户端环境准备" class="headerlink" title="Java 客户端环境准备"></a>Java 客户端环境准备</h2><blockquote>
+<ol>
+<li>在 Windows 上安装 Hadoop 客户端。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>配置 HADOOP_HOME 环境变量</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li>配置 PATH 环境变量。然后重启电脑。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="4">
+<li>测试</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="5">
+<li>创建一个Maven工程</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="6">
+<li>导入相关依赖</li>
+</ol>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Hadoop 集群中的 Common工具类--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- Hadoop 客户端依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- Hadoop hdfs 依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-hdfs<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="HDFS-的-API-操作"><a href="#HDFS-的-API-操作" class="headerlink" title="HDFS 的 API 操作"></a>HDFS 的 API 操作</h2><h3 id="FileSystem"><a href="#FileSystem" class="headerlink" title="FileSystem"></a>FileSystem</h3><blockquote>
+<p><code>org.apache.hadoop.fs.FileSystem;</code></p>
+</blockquote>
+<ul>
+<li><code>FileSystem</code>：文件系统的抽象<strong>基类</strong>。它有两种实现（<code>FileSystem</code> 的实现取决于配置文件中 <code>fs.defaultFS</code> 的值）<ol>
+<li><code>LocalFileSystem</code>   本地文件系统      <code>fs.defaultFS=file:///</code>（默认值）</li>
+</ol>
+</li>
+</ul>
+<ol start="2">
+<li><code>DistributeFileSystem</code>  分布式文件系统     <code>fs.defaultFS=hdfs://IP地址:端口号</code></li>
+</ol>
+<ul>
+<li><p><code>FileSystem</code>是一个抽象类，不能直接 new ，但是可以通过静态方法 <code>FileSystem.get()</code> 方法来创建对象。<code>get</code> 方法有3个重载方法，分别是：</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>get(Configuration conf)</code></td>
+<td>创建一个FileSystem对象，<br>不指定使用的文件协议，以当前计算机的用户身份登录</td>
+</tr>
+<tr>
+<td align="center"><code>get(URI uri, Configuration conf)</code></td>
+<td>创建一个FileSystem对象，<br>指定使用的文件协议，以当前计算机的用户身份登录</td>
+</tr>
+<tr>
+<td align="center"><code>get(final URI uri, final Configuration conf, final String user)</code></td>
+<td>创建一个FileSystem对象，<br>指定使用的文件协议，并以指定身份登录</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><blockquote>
+<p><code>org.apache.hadoop.conf.Configuration</code></p>
+</blockquote>
+<ul>
+<li><p>功能：读取配置文件中的参数</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Configuration 在读取配置文件的参数时，从类路径下，根据文件名按照顺序读取配置文件:</span><br><span class="line"><span class="bullet">	1.</span> 先读取 xxx-default.xml 再读取 xxx-site.xml</span><br><span class="line"><span class="bullet">	2.</span> Configuration类一加载就会默认读取8个配置文件，将8个配置文件中所有属性读取到一个Map集合中</span><br><span class="line"><span class="bullet">	3.</span> 该类也提供了 set(name, value) 方法，支持手动设置用户自定义的参数。</span><br></pre></td></tr></table></figure></li>
+<li><p>源码解读：</p>
+<p> Configuration 类的源码中有一段静态代码块。静态代码块的作用就是随着类加载到 JVM 虚拟机， static 静态代码块中的内容就被执行。所以说静态代码块中的内容一定是在程序运行前提前执行的。</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    <span class="comment">// 加载默认的配置文件</span></span><br><span class="line">    addDefaultResource(<span class="string">&quot;core-default.xml&quot;</span>);	</span><br><span class="line">    <span class="comment">// 加载自定义的配置文件</span></span><br><span class="line">    addDefaultResource(<span class="string">&quot;core-site.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1、获取类加载器</span></span><br><span class="line">    ClassLoader cL = Thread.currentThread().getContextClassLoader();</span><br><span class="line">    <span class="keyword">if</span> (cL == <span class="keyword">null</span>) &#123;</span><br><span class="line">      cL = Configuration.class.getClassLoader();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2、如果类加载器不为空，且在类路径下发现了 hadoop-site.xml 配置文件，打印警告，并加载配置文件。</span></span><br><span class="line">    <span class="comment">//【因为 hadoop-site.xml 是 Hadoop 1.x 中使用的配置文件，将所有配置信息配置到一个配置文件中】</span></span><br><span class="line">    <span class="keyword">if</span> (cL.getResource(<span class="string">&quot;hadoop-site.xml&quot;</span>) != <span class="keyword">null</span>) &#123;</span><br><span class="line">      LOG.warn(<span class="string">&quot;DEPRECATED: hadoop-site.xml found in the classpath. &quot;</span> +</span><br><span class="line">          <span class="string">&quot;Usage of hadoop-site.xml is deprecated. Instead use core-site.xml, &quot;</span></span><br><span class="line">          + <span class="string">&quot;mapred-site.xml and hdfs-site.xml to override properties of &quot;</span> +</span><br><span class="line">          <span class="string">&quot;core-default.xml, mapred-default.xml and hdfs-default.xml &quot;</span> +</span><br><span class="line">          <span class="string">&quot;respectively&quot;</span>);</span><br><span class="line">      addDefaultResource(<span class="string">&quot;hadoop-site.xml&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>配置文件</p>
+<p> 在引入 <code>hadoop-common</code> 依赖时，已经引入了 <code>core-default.xml</code> 配置文件。</p>
+<p> 所以直接 <code>new Configuration()</code> 得到的是读取该默认配置文件的 <code>configuration</code> 对象。</p>
+<p> 但是如果想要得到读取自定义配置文件的 <code>configuration</code> 对象，就需要在当前的类路径下创建一个 <code>core-site.xml</code> 覆盖默认的配置文件。</p>
+<p> <img src="/2021/02/08/HDFS/image-20210225231220784.png" alt="image-20210225231220784"></p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">举例：</span><br><span class="line">    core-default.xml 配置文件中使用的是本地文件系统，即</span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	如果我们想要使用 HDFS 的分布式文件系统，就可以在当前类路径下创建一个 core-site.xml 文件（配置文件见下文），覆盖原先的配置。</span><br><span class="line"></span><br><span class="line">这时我们再通过 `new Configuration()` 得到的对象就是一个分布式文件系统的配置对象。</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
+<li>创建一个 HDFSClient 类用于测试。</li>
+<li>编写一个测试方法 <code>mkdir()</code> 用于在 HDFS 集群的根目录上创建文件。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mkdir</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">    <span class="comment">// 1、创建 fileSystem 对象，用于连接 HDFS 集群</span></span><br><span class="line">    FileSystem fs = FileSystem.get(conf);</span><br><span class="line">    <span class="comment">// 2、测试</span></span><br><span class="line">    System.out.println(fs);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  	分析：</span></span><br><span class="line"><span class="comment">  		1、当我们使用默认加载的配置文件（即 core-default.xml 配置文件）创建 fs 对象时，得到的是一个 本地文件系统对象 ，输出结果为：org.apache.hadoop.fs.LocalFileSystem@606e4010</span></span><br><span class="line"><span class="comment">  		2、如果我们在当前类路径下自定义一个 core-site.xml 配置文件（配置文件见下文），这时再创建 fs 对象时，自定义的配置文件就会覆盖默认的配置文件，这时得到的 fs 对象是一个 分布式文件系统对象 ，输出的结果为：DFS[DFSClient[clientName=DFSClient_NONMAPREDUCE_-53042264_1, ugi=admin (auth:SIMPLE)]]</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>调用 fs 对象的 <code>mkdir</code>方法在 HDFS 集群的根目录下创建一个文件</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mkdir</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">    <span class="comment">// 1、创建 fileSystem 对象，用于连接 HDFS 集群</span></span><br><span class="line">    FileSystem fs = FileSystem.get(conf);</span><br><span class="line">    <span class="comment">// 2、调用 mkdirs() 方法在 HDFS 集群的根路径创建一个目录</span></span><br><span class="line">    fs.mkdirs(<span class="keyword">new</span> Path(<span class="string">&quot;/IDEA&quot;</span>));</span><br><span class="line">    <span class="comment">// 3、释放资源</span></span><br><span class="line">    fs.close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	分析：</span></span><br><span class="line"><span class="comment">		程序运行失败，抛出异常。</span></span><br><span class="line"><span class="comment">		异常信息是： org.apache.hadoop.security.AccessControlException: Permission denied: user=admin, access=WRITE, inode=&quot;/&quot;:lvnengdong:supergroup:drwxr-xr-x</span></span><br><span class="line"><span class="comment">		我们可以看到这是一个访问控制异常，也就是说权限被拒绝。</span></span><br><span class="line"><span class="comment">		原因是：当前登录 HDFS 的用户是admin（这个是我Windows系统的用户名），而 Hadoop 集群所属的用户是 lvnengdong。</span></span><br><span class="line"><span class="comment">		根据权限控制信息 drwxr-xr-x 所示，非主非组用户所拥有的权限只有 r-x ，而没有写权限，所以 admin 用户不能在Hadoop集群上创建目录！</span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	解决方法：</span></span><br><span class="line"><span class="comment">    	1、修改 Hadoop 集群对游客的访问权限，赋予游客写的权限</span></span><br><span class="line"><span class="comment">    	2、用有写权限的用户（这里是 lvnengdong 用户）登录</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="4">
+<li>修改代码（方式一）：以指定用户登录（这里是拥有写权限的 lvnengdong 用户）</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mkdir</span><span class="params">()</span> <span class="keyword">throws</span> IOException, InterruptedException, URISyntaxException </span>&#123;</span><br><span class="line">    Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">    URI uri = <span class="keyword">new</span> URI(<span class="string">&quot;hdfs://hadoop102:8020&quot;</span>);</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    FileSystem fs = FileSystem.get(uri, configuration, <span class="string">&quot;lvnengdong&quot;</span>);</span><br><span class="line">    fs.mkdirs(<span class="keyword">new</span> Path(<span class="string">&quot;/IDEA &quot;</span>));</span><br><span class="line">    fs.close();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	分析：</span></span><br><span class="line"><span class="comment">		* 使用 fs 对象的 get 方法（这里是另一个重载方法），可以指定连接 HDFS 集群的用户信息（这里指定为 lvnengdong）。</span></span><br><span class="line"><span class="comment">		* 由于 Hadoop 采用一种弱权限验证，所以无需验证密码，可直接以 lvnengdong 这个身份登录。</span></span><br><span class="line"><span class="comment">		* 重载方法中的另一个参数是 URI 对象，该对象的介绍见下文。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ol start="5">
+<li>不用修改代码（方式二）</li>
+</ol>
+<p>（1）服务端操作</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">原理：</span><br><span class="line"><span class="code">	为了使用方便，我们还可以将 Hadoop 根目录的权限完全放开！即任何用户都可以对在 Hadoop 的目录下执行任何操作！</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">操作：</span></span><br><span class="line"><span class="code">	在 HDFS 服务器中的任一节点上执行 ： hadoop fs -chmod -R 777 /	 	命令，开放所有用户对该目录的操作权限！</span></span><br></pre></td></tr></table></figure>
+
+<p>（2）客户端操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这时我们再用 Windows 上的用户（或任意用户）在 HDFS 集群上进行创建目录操作时，也可以成功！</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mkdir</span><span class="params">()</span> <span class="keyword">throws</span> IOException, InterruptedException, URISyntaxException </span>&#123;</span><br><span class="line">    Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">    URI uri = <span class="keyword">new</span> URI(<span class="string">&quot;hdfs://hadoop102:8020&quot;</span>);</span><br><span class="line">    FileSystem fs = FileSystem.get(uri, conf);</span><br><span class="line">    fs.mkdirs(<span class="keyword">new</span> Path(<span class="string">&quot;/IDEA3 &quot;</span>));</span><br><span class="line">    fs.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h3 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h3><blockquote>
+<p><code>java.net.URI</code></p>
+</blockquote>
+<ul>
+<li><code>URI</code> 对象就是指 HDFS 使用的协议。</li>
+<li>可以是<strong>本地文件系统协议</strong>     <code>file:/// </code></li>
+<li>也可以是<strong>分布式文件系统协议</strong>    <code>hdfs://IP地址:端口号</code>（我的是    <code>hdfs://hadoop102:8020</code>）</li>
+</ul>
+<blockquote>
+<p><strong>Tip:</strong></p>
+</blockquote>
+<p>如果使用 <code>FileSystem.get()</code> 的重载方法中包含 URI 这一参数，且这时客户端的 <code>core-site.xml</code> 配置文件中只包含 <code>fs.defaultFS</code>这个属性，那么就可以省略配置文件。</p>
+<p>因为 URI 这个参数对应的value 实际就是<code>core-site.xml</code>配置文件中<code>fs.defaultFS</code>的值，包含了使用的协议和 NN 的地址（如果是分布式文件系统）。</p>
+<p>所以程序在加载时 URI 参数又会覆盖 <code>core-site.xml</code> 配置文件中关于 <code>fs.defaultFS</code> 的值，这时若配置文件中只包含 <code>fs.defaultFS</code> 这一配置信息则会被覆盖，所以可以省略配置文件 ！</p>
+<hr>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><ul>
+<li>我们在搭建集群时会配置很多参数，</li>
+<li>这些参数有些是由客户端来使用，有些是由服务端来使用，有些是客户端和服务端都来要使用。</li>
+<li>对于仅客户端使用的参数，在服务端可以无需配置，同理对于仅服务端使用的参数，在客户端也可以不配置。而对于客户端和服务器端都需要使用的参数，则需要在客户端和服务器端都要配置。</li>
+</ul>
+<blockquote>
+<p><strong>core-site.xml</strong></p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">        这个参数是 NN 的地址，客户端和服务端都需要使用！</span></span><br><span class="line"><span class="comment">        客户端需要知道 NN 的地址向 NN 发送请求。如上传文件时首先 NN 请求 分配资源；</span></span><br><span class="line"><span class="comment">        服务端上的 DN 节点也需要知道 NN 的地址与 NN 进行通信，如 DN 在启动时要加入到 Hadoop 集群中，也要知道 NN 的地址。</span></span><br><span class="line"><span class="comment">    --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 指定HDFS中NameNode的地址 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://hadoop102:8020<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 这个参数只在服务端使用，所以在客户端的配置文件中就可以省略！ --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 指定Hadoop运行时产生的文件保存的存储目录 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>/opt/module/hadoop-2.7.2/data/tmp<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h3 id="其它-1"><a href="#其它-1" class="headerlink" title="其它"></a>其它</h3><blockquote>
+<p>弱权限验证</p>
+</blockquote>
+<ul>
+<li>Hadoop 的权限验证是一种弱权限验证</li>
+<li><strong>弱权限验证</strong>：你告诉 Hadoop 你是谁，它就认为你是谁，它并不会检查你是谁！</li>
+</ul>
+<p>​    </p>
+<hr>
+<h3 id="增删改查"><a href="#增删改查" class="headerlink" title="增删改查"></a>增删改查</h3><h4 id="1、创建目录"><a href="#1、创建目录" class="headerlink" title="1、创建目录"></a>1、创建目录</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HDFSClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 声明一个全局变量 fs</span></span><br><span class="line">    <span class="keyword">private</span> FileSystem fs;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">     </span><br><span class="line">        Configuration conf = <span class="keyword">new</span> Configuration();</span><br><span class="line">        URI uri = <span class="keyword">new</span> URI(<span class="string">&quot;hdfs://hadoop102:8020&quot;</span>);</span><br><span class="line">        String user = <span class="string">&quot;lvnengdong&quot;</span>;</span><br><span class="line">        <span class="comment">// 1、创建 fs 对象</span></span><br><span class="line">        fs = FileSystem.get(uri,conf,user);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@After</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 3、释放资源</span></span><br><span class="line">        fs.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Shell命令：hadoop fs -mkdir /xxx</span></span><br><span class="line"><span class="comment">     * 分析：</span></span><br><span class="line"><span class="comment">     *  hadoop fs   运行一个客户端</span></span><br><span class="line"><span class="comment">     *  -mkdir  编译好的脚本</span></span><br><span class="line"><span class="comment">     *  /xxx    用户指定的参数</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     *  Java 命令（面向对象）</span></span><br><span class="line"><span class="comment">     *  1、创建一个客户端对象</span></span><br><span class="line"><span class="comment">     *  2、调用创建目录的方法</span></span><br><span class="line"><span class="comment">     *  3、路径作为方法的参数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mkdir</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 2、调用 mkdirs() 方法，创建一个文件夹</span></span><br><span class="line">        fs.mkdirs(<span class="keyword">new</span> Path(<span class="string">&quot;/IDEA3 &quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、上传文件"><a href="#2、上传文件" class="headerlink" title="2、上传文件"></a>2、上传文件</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 上传文件</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">       Path src = <span class="keyword">new</span> Path(<span class="string">&quot;C:\\Users\\admin\\Desktop\\image\\demo01.jpg&quot;</span>);</span><br><span class="line">       Path dst = <span class="keyword">new</span> Path(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">       fs.copyFromLocalFile(src, dst);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3、下载文件"><a href="#3、下载文件" class="headerlink" title="3、下载文件"></a>3、下载文件</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 下载文件</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test02</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Path src = <span class="keyword">new</span> Path(<span class="string">&quot;/README.txt&quot;</span>);</span><br><span class="line">       Path dst = <span class="keyword">new</span> Path(<span class="string">&quot;d:/&quot;</span>);</span><br><span class="line">       fs.copyToLocalFile(src, dst);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4、删除文件"><a href="#4、删除文件" class="headerlink" title="4、删除文件"></a>4、删除文件</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 删除文件</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">    */</span>	</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test03</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Path path = <span class="keyword">new</span> Path(<span class="string">&quot;/IDEA3&quot;</span>);</span><br><span class="line">       <span class="comment">// 参数1：要删除文件的路径     参数2：是否递归删除</span></span><br><span class="line">       fs.delete(path, <span class="keyword">true</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5、重命名"><a href="#5、重命名" class="headerlink" title="5、重命名"></a>5、重命名</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 重命名</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test04</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Path src = <span class="keyword">new</span> Path(<span class="string">&quot;/IDEA2&quot;</span>);</span><br><span class="line">       Path dst = <span class="keyword">new</span> Path(<span class="string">&quot;/newIDEA2&quot;</span>);</span><br><span class="line">       fs.rename(src, dst);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6、判断当前路径是否存在"><a href="#6、判断当前路径是否存在" class="headerlink" title="6、判断当前路径是否存在"></a>6、判断当前路径是否存在</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 判断当前路径是否存在</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test05</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Path path = <span class="keyword">new</span> Path(<span class="string">&quot;/IDEA&quot;</span>);</span><br><span class="line">       <span class="keyword">boolean</span> b = fs.exists(path);</span><br><span class="line">       System.out.println(b);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="7、判断当前路径是目录还是文件"><a href="#7、判断当前路径是目录还是文件" class="headerlink" title="7、判断当前路径是目录还是文件"></a>7、判断当前路径是目录还是文件</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断当前路径是目录还是文件</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test06</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Path path = <span class="keyword">new</span> Path(<span class="string">&quot;/IDEA&quot;</span>);</span><br><span class="line">        <span class="keyword">boolean</span> b1 = fs.isFile(path);</span><br><span class="line">        <span class="keyword">boolean</span> b2 = fs.isDirectory(path);</span><br><span class="line">        System.out.println(b1);</span><br><span class="line">        System.out.println(b2);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	但是不建议使用这两个方法，这两个方法已经过期。建议使用 FileStatus</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="重要：FileStatus"><a href="#重要：FileStatus" class="headerlink" title="重要：FileStatus"></a>重要：FileStatus</h4><p>代表当前路径的状态(文件/文件夹的属性信息)</p>
+<blockquote>
+<p>源码（部分）：<code>FileStatus</code> 中保存的属性信息。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileStatus</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">0x13caeae8</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> Path path;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> length;</span><br><span class="line">  <span class="keyword">private</span> Boolean isdir;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">short</span> block_replication;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> blocksize;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> modification_time;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> access_time;</span><br><span class="line">  <span class="keyword">private</span> FsPermission permission;</span><br><span class="line">  <span class="keyword">private</span> String owner;</span><br><span class="line">  <span class="keyword">private</span> String group;</span><br><span class="line">  <span class="keyword">private</span> Path symlink;</span><br><span class="line">  <span class="keyword">private</span> Set&lt;AttrFlags&gt; attr;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>测试1：判断当前路径是目录还是文件</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 判断当前路径是目录还是文件</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test07</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Path path = <span class="keyword">new</span> Path(<span class="string">&quot;/IDEA&quot;</span>);</span><br><span class="line">       <span class="comment">// 1、得到 FileStatus 对象，保存了一个文件的属性信息</span></span><br><span class="line">       FileStatus status = fs.getFileStatus(path);</span><br><span class="line">       <span class="comment">// 2、根据 status 对象判断当前路径是文件还是目录</span></span><br><span class="line">       <span class="keyword">boolean</span> b1 = status.isDirectory();</span><br><span class="line">       <span class="keyword">boolean</span> b2 = status.isFile();</span><br><span class="line">       System.out.println(b1);</span><br><span class="line">       System.out.println(b2);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="重要：ListStatus"><a href="#重要：ListStatus" class="headerlink" title="重要：ListStatus"></a>重要：ListStatus</h4><p><code>ListStatus</code> 的作用与 <code>FileStatus</code> 相似，但是 <code>ListStatus</code> 可以列出当前路径及其子路径的所有文件/文件夹的属性信息。</p>
+<blockquote>
+<p>测试：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test08</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      Path path = <span class="keyword">new</span> Path(<span class="string">&quot;/output2&quot;</span>);</span><br><span class="line">      <span class="comment">// 1、得到 FileStatus[] 对象，保存了当前路径及其子路径的属性信息</span></span><br><span class="line">      FileStatus[] listStatus = fs.listStatus(path);</span><br><span class="line">      <span class="keyword">for</span> (FileStatus status : listStatus) &#123;</span><br><span class="line">          <span class="comment">// 2、获取文件路径。Path 是完整的路径：协议+文件名</span></span><br><span class="line">          Path filePath = status.getPath();</span><br><span class="line">          <span class="comment">// 3、如果只想获取文件名，可以使用</span></span><br><span class="line">          String fileName = filePath.getName();</span><br><span class="line">          System.out.println(fileName + <span class="string">&quot;是否是目录：&quot;</span> + status.isDirectory());</span><br><span class="line">          System.out.println(fileName + <span class="string">&quot;是否是文件：&quot;</span> + status.isFile());</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/07/%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/02/07/%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">参考博客</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-02-07 18:53:08 / Modified: 21:05:58" itemprop="dateCreated datePublished" datetime="2021-02-07T18:53:08+08:00">2021-02-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E5%AE%83/" itemprop="url" rel="index"><span itemprop="name">其它</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h2><p>SSH：Secure SHell</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/diffx/p/9553587.html">https://www.cnblogs.com/diffx/p/9553587.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/30/%E5%B8%B8%E7%94%A8%E7%9A%84%E5%B7%A5%E5%85%B7%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/01/30/%E5%B8%B8%E7%94%A8%E7%9A%84%E5%B7%A5%E5%85%B7%E7%B1%BB/" class="post-title-link" itemprop="url">常用的工具类</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-01-30 13:16:25 / Modified: 14:27:02" itemprop="dateCreated datePublished" datetime="2021-01-30T13:16:25+08:00">2021-01-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="数组工具类：Arrays"><a href="#数组工具类：Arrays" class="headerlink" title="数组工具类：Arrays"></a>数组工具类：Arrays</h1><blockquote>
+<p><code>java.util.Arrays</code>：此类包含用来操作数组的各种方法。 该类中所有的方法均为静态方法。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>public static String toString（int[] a）</code></td>
+<td align="center">返回指定数组内容的字符串表示形式。</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>public static void sort（int[] a）</code></td>
+<td align="center">对<code>int[] a</code>数组进行升序排序</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>public static &lt;T&gt; List&lt;T&gt; asList(T... a)</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h2 id="3、Arrays-asList"><a href="#3、Arrays-asList" class="headerlink" title="3、Arrays.asList"></a>3、Arrays.asList</h2><blockquote>
+<p>作用</p>
+</blockquote>
+<p>该方法是将<strong>数组</strong>转换成<strong>List集合</strong>的方法。</p>
+<blockquote>
+<p>源码</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Arrays</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">List&lt;T&gt; <span class="title">asList</span><span class="params">(T... a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;(a);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	该方法是将 T 类型的数组转换成 List&lt;T&gt; 集合的方法。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意：此处返回的 ArrayList 对象不是 java.util 包下的 ArrayList 对象，而是 java.util.Arrays.ArrayList ， 它是 Arrays 类自己定义的一个静态内部类，该类继承自 AbstractList ，所以没有实现 <code>add()</code>、<code>remove()</code>等方法。而在 AbstractList 类中，调用<code>add()</code>、<code>remove()</code>方法是会直接抛出<code>java.lang.UnsupportedOperationException</code>异常的。</li>
+</ul>
+<blockquote>
+<p>示例</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Double salary;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Employee</span><span class="params">(Double salary, String name, Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.salary = salary;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Double <span class="title">getSalary</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> salary;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSalary</span><span class="params">(Double salary)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.salary = salary;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Employee&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;salary=&quot;</span> + salary +</span><br><span class="line">                <span class="string">&quot;, name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; list1 = Arrays.asList(<span class="string">&quot;aaa&quot;</span>, <span class="string">&quot;bbb&quot;</span>, <span class="string">&quot;ccc&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    List&lt;Integer&gt; list2 = Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line">    </span><br><span class="line">    Employee[] employees = &#123;</span><br><span class="line">        <span class="keyword">new</span> Employee(<span class="number">3000.00</span>, <span class="string">&quot;张三&quot;</span>, <span class="number">23</span>),</span><br><span class="line">        <span class="keyword">new</span> Employee(<span class="number">5000.00</span>, <span class="string">&quot;李四&quot;</span>, <span class="number">24</span>),</span><br><span class="line">        <span class="keyword">new</span> Employee(<span class="number">8000.00</span>, <span class="string">&quot;王五&quot;</span>, <span class="number">27</span>)</span><br><span class="line">    &#125;;</span><br><span class="line">    List&lt;Employee&gt; list3 = Arrays.asList(employees);</span><br><span class="line">    System.out.println(list1);</span><br><span class="line">    System.out.println(list2);</span><br><span class="line">    System.out.println(list3);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">输出结果：</span></span><br><span class="line"><span class="comment">    [aaa, bbb, ccc]</span></span><br><span class="line"><span class="comment">    [1, 2, 3]</span></span><br><span class="line"><span class="comment">    [Employee&#123;salary=3000.0, name=&#x27;张三&#x27;, age=23&#125;, Employee&#123;salary=5000.0, name=&#x27;李四&#x27;, age=24&#125;, Employee&#123;salary=8000.0, name=&#x27;王五&#x27;, age=27&#125;]</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Tip</p>
+</blockquote>
+<ol>
+<li><p>该方法适用于对象型数据的数组（如String、Integer、Employee等），不建议使用基本数据类型的数组（int、double等）。</p>
+</li>
+<li><p>该方法将数组与List列表连接起来；当更新其中一个时，另一个自动更新。</p>
+</li>
+<li><p>用此方法得到的List对象的长度是不可改变的，不支持写操作。如 add()、remove()、clear()等方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">boolean</span> add = list2.add(<span class="number">7</span>);</span><br><span class="line"><span class="comment">// 如果使用得到的list对象进行add()操作，就会直接抛出 java.lang.UnsupportedOperationException 异常。</span></span><br></pre></td></tr></table></figure>
+
+<p>如果使用该List对象只是用来进行读操作（遍历、读取集合中某个元素等），就可以放心的使用<code>asList()</code>方法，如果你还想进行写操作，还是要new一个<code>java.util.ArrayList</code>对象，然后进行写操作。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1849,10 +2610,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-12-27 21:58:59 / Modified: 22:06:42" itemprop="dateCreated datePublished" datetime="2020-12-27T21:58:59+08:00">2020-12-27</time>
+      <time title="Created: 2020-12-27 21:58:59" itemprop="dateCreated datePublished" datetime="2020-12-27T21:58:59+08:00">2020-12-27</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-04-03 12:13:23" itemprop="dateModified" datetime="2021-04-03T12:13:23+08:00">2021-04-03</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -1873,531 +2640,53 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="查看依赖关系"><a href="#查看依赖关系" class="headerlink" title="查看依赖关系"></a>查看依赖关系</h2><p>进入<code>pom.xml</code>文件，单击鼠标右键，出现如下提示，按图操作可进入依赖管理的图形可视化界面。</p>
+          <h1 id="查看依赖关系"><a href="#查看依赖关系" class="headerlink" title="查看依赖关系"></a>查看依赖关系</h1><p>进入<code>pom.xml</code>文件，单击鼠标右键，出现如下提示，按图操作可进入依赖管理的图形可视化界面。</p>
 <p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227195856871.png"></p>
 <p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227200057675.png"></p>
-<h2 id="进入当前项目所在的文件夹"><a href="#进入当前项目所在的文件夹" class="headerlink" title="进入当前项目所在的文件夹"></a>进入当前项目所在的文件夹</h2><p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227212659314.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/27/MyBatis%E7%9A%84XML%E6%98%A0%E5%B0%84%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/12/27/MyBatis%E7%9A%84XML%E6%98%A0%E5%B0%84%E5%99%A8/" class="post-title-link" itemprop="url">MyBatis的XML映射器</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-12-27 21:57:37" itemprop="dateCreated datePublished" datetime="2020-12-27T21:57:37+08:00">2020-12-27</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-01-17 23:51:35" itemprop="dateModified" datetime="2021-01-17T23:51:35+08:00">2021-01-17</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="MyBatis的XML映射器"><a href="#MyBatis的XML映射器" class="headerlink" title="MyBatis的XML映射器"></a>MyBatis的XML映射器</h1><h2 id="1、自动映射"><a href="#1、自动映射" class="headerlink" title="1、自动映射"></a>1、自动映射</h2><p>MyBatis的自动映射<strong>resultType</strong>可以自动映射同名的查询结果。但是如果遇到复杂的场景，还需要构建一个结果映射<strong>resultMap</strong>。实际上，这两种映射策略可以混合使用。</p>
-<p>当自动映射<strong>resultType</strong>生效时，MyBatis会获取SQL语句执行结果中返回的列名并在Domain类中查找相同名字的属性<strong>（忽略大小写）</strong>。也就是说，如果发现了<code>ID列</code>和<code>id属性</code>，MyBatis会将列<code>ID</code>的值赋给<code>id</code>属性。</p>
-<p>通常数据库列使用大写字母组成的单词命名，单词间用下划线分隔；而Java属性一般遵循驼峰命名法规定，为了在这两种命名方式之间启用自动映射，需要将==<code>mapUnderscoreToCamelCase</code>==设置为true。这种情况下，如果发现了<code>USER_NAME列</code>和<code>userName属性</code>，MyBatis会将列<code>USER_NAME</code>的值赋给<code>userName</code>属性。</p>
-<p><strong>甚至在提供了结果映射后，自动映射也能工作</strong>。处理的优先级是：手动映射 &gt; 自动映射。</p>
-<p>在下面的例子中，<code>user_password</code>列将根据<strong>resultMap</strong>进行映射，而<code>user_id</code>和<code>user_name</code>将根据<strong>resultType</strong>自动映射。</p>
+<h1 id="进入当前项目所在的文件夹"><a href="#进入当前项目所在的文件夹" class="headerlink" title="进入当前项目所在的文件夹"></a>进入当前项目所在的文件夹</h1><p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227212659314.png"></p>
+<h1 id="IDEA-SpringBoot-maven-项目文件说明"><a href="#IDEA-SpringBoot-maven-项目文件说明" class="headerlink" title="IDEA + SpringBoot + maven 项目文件说明"></a>IDEA + SpringBoot + maven 项目文件说明</h1><p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20210329181048627.png" alt="image-20210329181048627"></p>
 <blockquote>
-<p>Java实体类</p>
+<p><strong>.idea</strong>文件夹：存放项目的配置信息</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Class User&#123;</span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String userName;</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p>包括数据源，类库，项目字符编码，历史记录，版本控制信息等。</p>
+<p>（多为本地配置信息，进行版本控制时不用上传）</p>
 <blockquote>
-<p>MyBatis的XML配置文件</p>
+<p><strong>.mvn</strong> 文件夹：存放mvnw相关文件</p>
 </blockquote>
+<p>存放着 maven-wrapper.properties 和相关 jar 包以及名为 MavenWrapperDownloader 的 java 文件</p>
+<p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20210329182421482.png" alt="image-20210329182421482"></p>
+<blockquote>
+<p><strong>mvnw / mvnw.cmd</strong> 文件</p>
+</blockquote>
+<p>全名是 MavenWrapper（Maven包装器），它的作用是在 <code>maven-wrapper.properties</code> 文件中记录你要使用的 Maven 版本，当用户执行 <code>mvnw clean</code> 命令时，如果发现当前用户的 Maven 版本和期望的版本不一致，那么就下载期望的版本，然后用期望的版本来执行 <code>mvn</code> 命令，比如 <code>mvn clean</code> 命令。</p>
 <ul>
-<li>ResultMap</li>
+<li><strong>mvnw</strong> ：执行 <code>mvnw</code> 命令的 sh 入口（适配 Linux 系统）</li>
+<li><strong>mvnw.cmd</strong> ：执行 mvnw 命令的 cmd 入口（适配 Windows 系统）</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;userResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">&quot;password&quot;</span> <span class="attr">column</span>=<span class="string">&quot;user_password&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Select查询语句</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectUsers&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;userResultMap&quot;</span>&gt;</span></span><br><span class="line">    select</span><br><span class="line">        user_id             as &quot;id&quot;,</span><br><span class="line">        user_name           as &quot;username&quot;,</span><br><span class="line">        user_password</span><br><span class="line">    from user_table</span><br><span class="line">    where id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>有3种自动映射等级：</p>
-<ul>
-<li>==<code>NONE</code>==[禁用]：禁用自动映射。仅对手动映射（ResultMap）的属性进行映射</li>
-<li>==<code>PARTIAL</code>==[局部]：如果有ResultMap则使用ResultMap，如果ResultMap只映射了部分字段，则剩余字段会使用ResultType进行映射。**默认值是<code>PARTIAL</code>**。</li>
-<li>==<code>FULL</code>==[全部]：自动映射所有属性。</li>
-</ul>
-<h2 id="2、MyBatis查询返回值为集合类型"><a href="#2、MyBatis查询返回值为集合类型" class="headerlink" title="2、MyBatis查询返回值为集合类型"></a>2、MyBatis查询返回值为集合类型</h2><blockquote>
-<ol>
-<li>首先是接口中的方法，查询结果的返回值是List类型的</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mapper</span>     </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询用户列表</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">getUserList</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<ol start="2">
-<li>在映射文件中的写法。</li>
-</ol>
-<p><strong>如果返回结果是一个集合，resultType要写集合中的元素类型，而不是List！！！</strong></p>
+<p><strong>src</strong> 文件夹</p>
 </blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;cn.xsyu.dao.UserDao&quot;</span>&gt;</span> </span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--查询用户列表--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getUserList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;cn.xsyu.domain.User&quot;</span>&gt;</span></span><br><span class="line">        select * from users;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/" class="post-title-link" itemprop="url">SpringBoot整合日志</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-12-27 21:54:37 / Modified: 22:17:00" itemprop="dateCreated datePublished" datetime="2020-12-27T21:54:37+08:00">2020-12-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="1、日志框架"><a href="#1、日志框架" class="headerlink" title="1、日志框架"></a>1、日志框架</h2><blockquote>
-<p>日志的作用：</p>
-</blockquote>
-<p>记录程序运行中产生的关键数据。</p>
+<p>工作区文件夹</p>
 <blockquote>
-<p>日志的发展：</p>
+<p><strong>target</strong> 文件夹</p>
 </blockquote>
-<ol>
-<li><code>System.out.println(&quot;&quot;)；</code>，将程序运行时的关键数据打印在控制台上。</li>
-<li>日志框架，既可以将程序运行时的关键数据打印在控制台上，也可以将日志信息持久化到指定的文件夹中去。</li>
-<li>高级日志框架：在日志框架的基础上，增加了一些人性化的功能，如：<ul>
-<li>异步模式</li>
-<li>自动归档：将每天的日志单独放在一个文件中，用来做分类</li>
-<li>……</li>
-</ul>
-</li>
-</ol>
 <blockquote>
-<p>存在的问题：</p>
+<p><strong>gitignore</strong> 文件： 分布式版本控制系统 Git 的配置文件，意思为忽略提交！</p>
 </blockquote>
-<p>显而易见，日志框架是需要不断迭代的，如果我们想要使用更高级的日志框架代替原本项目中低级的日志框架，该如何实现呢？</p>
-<ol>
-<li>将以前的框架卸载下俩，换上新的框架，重新修改项目中日志相关的API。显然这是不合适的，使用这种方式的话每次更换日志框架都需要修改项目中的API。</li>
-<li>仿照JDBC数据库驱动的实现，规定一个统一的接口层，要求所有的日志框架都必须实现该接口类，在程序中调用时直接使用接口API即可，这样即使更换日志框架也不用修改源代码。</li>
-</ol>
-<h3 id="常见的日志框架"><a href="#常见的日志框架" class="headerlink" title="常见的日志框架"></a>常见的日志框架</h3><p>JUL、JCL、Jboss-logging、logback、log4j、log4j2、slf4j….</p>
-<table>
-<thead>
-<tr>
-<th align="center">日志门面  （日志的抽象层）</th>
-<th align="center">日志实现</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><strong>SLF4j</strong>（Simple  Logging Facade for Java）<br><del>JCL（Jakarta  Commons Logging）</del><br><del>jboss-logging</del></td>
-<td align="center">Log4j<br>JUL（java.util.logging）<br>  Log4j2<br><strong>Logback</strong></td>
-</tr>
-</tbody></table>
-<p>左边选一个门面（抽象层）、右边来选一个实现；</p>
-<p>日志门面：SLF4J；</p>
-<p>日志实现：Logback；</p>
-<p>SpringBoot：底层是Spring框架，Spring框架默认是用JCL；</p>
-<p><strong>==SpringBoot选用 SLF4j和logback；==</strong></p>
-<hr>
-<h2 id="2、SLF4j使用"><a href="#2、SLF4j使用" class="headerlink" title="2、SLF4j使用"></a>2、SLF4j使用</h2><ul>
-<li>Slf4j官网：<a target="_blank" rel="noopener" href="https://www.slf4j.org/">https://www.slf4j.org</a></li>
-</ul>
-<h3 id="1、如何在系统中使用SLF4j"><a href="#1、如何在系统中使用SLF4j" class="headerlink" title="1、如何在系统中使用SLF4j"></a>1、如何在系统中使用SLF4j</h3><p>我们在开发的时候调用日志框架的记录方法，不是直接调用日志框架的实现类，而是调用日志抽象层里面的方法，抽象层再去调用实现层方法。</p>
+<p>在 .gitingore 文件中，需遵循相应的语法，即在每一行指定一个忽略规则。 如：.log、/target/、.idea</p>
 <blockquote>
-<p>官方Demo</p>
+<p><strong>HELP.md</strong> 文件</p>
 </blockquote>
-<p>给系统里面导入：</p>
-<ol>
-<li><strong>slf4j的jar</strong>   </li>
-<li><strong>logback的实现jar</strong></li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Logger logger = LoggerFactory.getLogger(HelloWorld.class);		<span class="comment">// 指定记录哪一个类的日志信息</span></span><br><span class="line">    logger.info(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p>帮助文档文件！</p>
 <blockquote>
-<p>slf4j的四层结构：</p>
-<ol>
-<li>应用程序层</li>
-<li>抽象层</li>
-<li>适配层：如果使用了slf4j的抽象层，又要使用没有实现slf4j规定接口的实现类，这时候就需要使用适配层来完成一个转换的功能。适配层向上实现了slf4j的接口，向下规定了实现类，只需要在适配器中完成对同一类功能之间的相互赋值，即可实现既定的功能。</li>
-<li>实现层</li>
-</ol>
+<p><strong>xxx.iml</strong>文件：Intellij idea 的工程配置文件</p>
 </blockquote>
-<p><strong>case1：</strong></p>
-<p>通过应用程序层直接调用Slf4j的抽象层，如果没有导入抽象层的实现类，显然只能得到null。</p>
-<p><strong>case2：</strong></p>
-<p>通过应用程序层直接调用Slf4j的抽象层，并且导入抽象层的实现类，则可以正确输出日志信息。</p>
-<p><strong>case3：</strong></p>
-<p>通过应用程序层直接调用Slf4j的抽象层，并且导入抽象层的实现类，但是实现类与抽象层并不适配，这时候就需要多加一层适配层，启到承上启下的作用，加上适配器后也以正确输出日志信息。</p>
-<p>如下图所示，<code>log4j</code>的是一种日志框架的实现类，<code>slf4j</code>是日志框架的一种抽象类，但是二者之间并不兼容，这时候我们引入了<code>slf4j-log412</code>这一适配器，就可将这二者关联起来。</p>
-<p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/concrete-bindings.png"></p>
-<p>每一个日志的实现框架都有自己   的配置文件。无论使用哪一种日志门面，<strong>配置文件还是得与具体的日志实现框架的匹配</strong>。</p>
-<h3 id="2、如何让系统中所有的日志都统一到slf4j"><a href="#2、如何让系统中所有的日志都统一到slf4j" class="headerlink" title="2、如何让系统中所有的日志都统一到slf4j"></a>2、如何让系统中所有的日志都统一到slf4j</h3><p>对于一个应用程序来说，往往要使用多种框架才能实现。比如有一个A程序，实现该程序使用了Spring、Hibernate、MyBatis等技术，对于Spring框架来说，其底层默认采用了<code>commons-logging</code>日志门面，而Hibernate则采用了<code>jboss-logging</code>作为日志门面。针对同一个项目使用不同的日志输出API显然非常不方便，那么如何才能让一个项目中所有框架都能使用slf4j作为日志框架的底层实现类就能完成日志的输出呢？</p>
-<p><strong>case1</strong></p>
-<p>如下图所示，假设应用程序application采用了4个框架，而这4个框架的采用的日志框架又各不相同，分别是：<code>SLF4J</code>、<code>Commons logging</code>、<code>log4j</code>、<code>java.util.logging</code>。</p>
-<p>我们想要达到的效果：只保留<code>SLF4J</code>框架的实现类，对于非<code>SLF4J</code>的框架则替换其默认日志框架为<code>SLF4J</code>。做到可以调用多个是指框架的抽象层API，但是只配置<code>SLF4J</code>的配置文件，就能完成对日志的相关操作。</p>
-<p>做法：</p>
-<p>将不需要使用的日志框架排除出去，但是排除过后会出现一个问题就是原来框架的运行需要的jar包不存在了程序直接无法启动，这时候我们可以引入<strong>中间包</strong>来替换掉被排除的jar包，中间包中的所有类与原jar包中的所有类名字完全一样，这就保证了程序在运行过程中可以加载到需要的全限定类名，但是中间包中的类的方法的实现又去调用SLF4J的抽象类，SLF4J的抽象类则继续调用SLF4J的实现类。</p>
-<p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/legacy.png"></p>
-<ol>
-<li>==将系统中其他日志框架先排除出去；==</li>
-<li>==用中间包来替换原有的日志框架；==</li>
-<li>==我们导入slf4j的实现类==</li>
-</ol>
-<hr>
-<h2 id="3、SpringBoot日志关系"><a href="#3、SpringBoot日志关系" class="headerlink" title="3、SpringBoot日志关系"></a>3、SpringBoot日志关系</h2><p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/image-20201227200842184.png" alt="image-20201227200842184"></p>
-<p>SpringBoot项目默认依赖<code>spirng-boot-starter</code>依赖，进而依赖<code>spirng-boot-starter-logging</code>依赖，改以来用来管理日志框架。</p>
-<p>底层依赖关系</p>
-<p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE20180131220946.png"></p>
-<p>总结：</p>
-<ol>
-<li>SpringBoot底层默认使用<code>slf4j（抽象层）+ logback（实现类）</code>的方式进行日志记录；</li>
-<li>SpringBoot也把其他的日志框架的抽象层使用<strong>中间包</strong>替换，中间包再去依赖<code>slf4j</code>的抽象类；</li>
-<li><code>slf4j</code>的抽象类再去调用<code> logback（实现类）</code>实现类完成日志相关功能。</li>
-</ol>
-<p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/image-20201227203358527.png" alt="image-20201227203358527"></p>
-<p>如图所示，我们可以看到默认日志框架的包结构与中间包的包结构完全相同，这就保证了即使用中间包替换默认包，项目的加载也不会出现问题。</p>
-<p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/image-20201227203732038.png" alt="image-20201227203732038"></p>
-<p>但是我们进一步进入中间包的实现类中可以发现，在中间包的类中又调用了SLF4J的接口中的方法。完成了对SLF4J抽象层的依赖。</p>
-<ol start="4">
-<li><p>如果我们要引入其他框架，一定要把这个框架的默认日志依赖移除掉。</p>
-<p>如果不移除的话，就会出现如上图的情况，出现2个同名的jar包，产生依赖冲突。</p>
-</li>
-</ol>
-<p><strong>==SpringBoot能自动适配所有的日志，而且底层使用slf4j+logback的方式记录日志，引入其他框架的时候，只需要把这个框架依赖的日志框架排除掉即可；==</strong></p>
-<hr>
-<h2 id="4、日志使用；"><a href="#4、日志使用；" class="headerlink" title="4、日志使用；"></a>4、日志使用；</h2><h3 id="1、默认配置"><a href="#1、默认配置" class="headerlink" title="1、默认配置"></a>1、默认配置</h3><p>SpringBoot默认帮我们配置好了日志。我们只需启动一个SpringBoot项目，就会在控制台上看到如下日志信息，这就是默认日志。</p>
-<p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/image-20201227204458159.png" alt="image-20201227204458159"></p>
+<p>包含当前project的一些配置信息，如模块开发的相关信息，比如java组件，maven组件，插件组件等，还可能会存储一些模块路径信息，依赖信息以及一些别的信息。</p>
 <blockquote>
-<p>日志的级别:</p>
+<p><strong>pom.xml</strong>文件：项目对象模型（核心重要）</p>
 </blockquote>
-<ol>
-<li><p>日志级别</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">由低到高   trace &lt; debug &lt; info &lt; warn &lt; error</span><br></pre></td></tr></table></figure></li>
-<li><p>好处：</p>
-<p>使用<code>System.out.println()</code>输出日志信息，如果需求发生改变，不再需要打印日志信息，则需要在程序中把所有有日志输出的语句全部注释掉，每改一次需求都需要重新调整，非常麻烦。</p>
-<p>而使用日志级别则可以很容易的控制输出用户所需要的级别的日志信息，如果需求发生变化，只需要修改配置信息即可。</p>
-</li>
-<li><p>SpringBoot默认给我们使用的是info级别的，只会输出<code>Info</code>及以上级别的日志</p>
-</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 记录器</span></span><br><span class="line">Logger logger = LoggerFactory.getLogger(getClass());</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextLoads</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// System.out.println();</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以调整输出的日志级别；日志就只会在这个级别以以后的高级别生效</span></span><br><span class="line">    logger.trace(<span class="string">&quot;这是trace日志...&quot;</span>);</span><br><span class="line">    logger.debug(<span class="string">&quot;这是debug日志...&quot;</span>);</span><br><span class="line">    <span class="comment">// SpringBoot默认给我们使用的是info级别的</span></span><br><span class="line">    logger.info(<span class="string">&quot;这是info日志...&quot;</span>);</span><br><span class="line">    logger.warn(<span class="string">&quot;这是warn日志...&quot;</span>);</span><br><span class="line">    logger.error(<span class="string">&quot;这是error日志...&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>pom.xml主要描述了项目的maven坐标，依赖关系，开发者需要遵循的规则，缺陷管理系统，组织和licenses，以及其他所有的项目相关因素，是项目级别的配置文件。</p>
 
-<blockquote>
-<p>SpringBoot修改日志的默认配置</p>
-</blockquote>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改输出的日志级别</span></span><br><span class="line"><span class="meta">logging.level.com.atguigu</span>=<span class="string">trace</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不指定路径在当前目录下生成 springboot.log 日志文件</span></span><br><span class="line"><span class="meta">logging.file.name</span>=<span class="string">springboot.log</span></span><br><span class="line"><span class="comment"># 可以指定完整的路径；</span></span><br><span class="line"><span class="meta">logging.file</span>=<span class="string">G:/springboot.log</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在E盘生成一个 `springbootLogging` 文件夹（目录），在该目录下生成一个名为 `spring.log`[默认名字] 的日志文件</span></span><br><span class="line"><span class="meta">logging.file.path</span>=<span class="string">E:/springbootLogging</span></span><br><span class="line"><span class="comment"># 在当前磁盘的根路径下创建/springboot/logging文件夹；使用 spring.log 作为默认日志文件(在Linux中`/`就作为当前磁盘下的根路径)</span></span><br><span class="line"><span class="meta">logging.file.path</span>=<span class="string">/springboot/logging</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改在控制台输出的日志的格式</span></span><br><span class="line"><span class="meta">logging.pattern.console</span>=<span class="string">%d&#123;yyyy-MM-dd&#125; [%thread] %-5level %logger&#123;50&#125; - %msg%n</span></span><br><span class="line"><span class="comment"># 修改指定文件中日志输出的格式</span></span><br><span class="line"><span class="meta">logging.pattern.file</span>=<span class="string">%d&#123;yyyy-MM-dd&#125; 自定义1 [%thread] 自定义2 %-5level 自定义3 %logger&#123;50&#125; 自定义4 %msg%n</span></span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>日志保存的路径</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th align="center">logging.file</th>
-<th align="center">logging.path</th>
-<th align="center">Example</th>
-<th align="center">Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>-</code></td>
-<td align="center"><code>-</code></td>
-<td align="center"></td>
-<td align="center">只在控制台输出</td>
-</tr>
-<tr>
-<td align="center">指定文件名</td>
-<td align="center"><code>-</code></td>
-<td align="center">my.log</td>
-<td align="center">输出日志到my.log文件</td>
-</tr>
-<tr>
-<td align="center"><code>-</code></td>
-<td align="center">指定目录</td>
-<td align="center">/var/log</td>
-<td align="center">输出到指定目录的 spring.log 文件中</td>
-</tr>
-</tbody></table>
-<ol start="2">
-<li><p>日志输出的格式</p>
-<p>日志输出格式：</p>
-<pre><code>%d表示日期时间，
-%thread表示线程名，
-%-5level：级别从左显示5个字符宽度
-%logger&#123;50&#125; 表示logger名字最长50个字符，否则按照句点分割。 
-%msg：日志消息，
-%n是换行符
-</code></pre>
-<p>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/15/MyBatis%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81SQL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/12/15/MyBatis%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81SQL/" class="post-title-link" itemprop="url">MyBatis中的动态SQL</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-12-15 21:43:34 / Modified: 22:46:16" itemprop="dateCreated datePublished" datetime="2020-12-15T21:43:34+08:00">2020-12-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MyBatis/" itemprop="url" rel="index"><span itemprop="name">MyBatis</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>MyBatis的映射文件中，单表的增删改查语句的SQL是比较简单的，有时候业务逻辑比较复杂的时候，简单的SQL语句已经不能满足需求了，就需要使用动态SQL语句。</p>
-<blockquote>
-<ul>
-<li><code>if</code></li>
-<li><code>choose(when, otherwise)</code></li>
-<li><code>trim(where, set)</code></li>
-<li><code>foreach</code></li>
-</ul>
-</blockquote>
-<hr>
-<p>根据<code>username</code>和<code>gender</code>来查询数据，如果<code>username</code>为空，那么将只根据<code>gender</code>来查询，反之只根据<code>username</code>来查询。</p>
-<h2 id="不使用动态SQL"><a href="#不使用动态SQL" class="headerlink" title="不使用动态SQL"></a>不使用动态SQL</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;findByUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;user&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;userMap&quot;</span>&gt;</span></span><br><span class="line">    select * from user where username=#&#123;username&#125; and gender=#&#123;gender&#125;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>上述的查询语句，如果用户传递的数据<code>#&#123;username&#125;</code>为空，那么查询结果也为空，该如何解决该问题呢？使用<code>if</code>来判断！</li>
-</ul>
-<hr>
-<h2 id="1、动态SQL：if"><a href="#1、动态SQL：if" class="headerlink" title="1、动态SQL：if"></a>1、动态SQL：if</h2><p><code>if</code>是动态SQL中的判断元素，类似于Java中的if语句，不同的是MyBatis中的<code>if</code>一般要配合<code>test</code>使用。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;findByUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;user&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;userMap&quot;</span>&gt;</span></span><br><span class="line">    select * from user where</span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName!=null and userName!=&#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">        username=#&#123;username&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;gender!=null and gender!=&#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">        and gender=#&#123;gender&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">if</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>这样写我们可以看到，<strong>只有满足<code>if</code>标签中的条件，才会将<code>if</code>标签内的语句拼接到SQL语句上</strong>。</p>
-<ol>
-<li>如果<code>username</code>为空，那么查询语句为：<code>select * from user where gender=#&#123;gender&#125; </code>，OK。</li>
-<li>如果<code>gender</code>为空，那么查询语句为：<code>select * from user where and username=#&#123;username&#125; </code>，显然这是错误的，Error！</li>
-<li>如果<code>gender</code>和<code>username</code>都为空，那么查询语句为<code>select * from user where</code>，也是错误的，Error！</li>
-</ol>
-<p>该如何解决呢？可以再加上<code>where</code>语句。</p>
-</li>
-</ul>
-<hr>
-<h2 id="2、动态SQL：if-where"><a href="#2、动态SQL：if-where" class="headerlink" title="2、动态SQL：if+where"></a>2、动态SQL：if+where</h2><p><strong><code>where</code>标签的作用就是如果该标签的子标签中包含返回值的话，它就插入一个<code>&quot;where&quot;</code>，此外，如果标签返回的内容是以<code>AND</code>或<code>OR</code>开头的，它会自动进行剔除。</strong></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;findByUser&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;user&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;userMap&quot;</span>&gt;</span></span><br><span class="line">    select * from user</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span>		// 1、自动拼接&quot;where&quot;</span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName!=null and userName!=&#x27;&#x27;&quot;</span>&gt;</span>	</span><br><span class="line">            username=#&#123;username&#125;	</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;gender!=null and gender!=&#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">            and gender=#&#123;gender&#125;		// 自动剔除and（或or）</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这样写我们可以看到：</p>
-<ol>
-<li>如果<code>username</code>为空，那么查询语句为：<code>select * from user where gender=#&#123;gender&#125; </code>，OK。</li>
-<li>如果<code>gender</code>为空，那么查询语句为：<code>select * from user where username=#&#123;username&#125; </code>，OK。</li>
-<li>如果<code>gender</code>和<code>username</code>都为空，那么查询语句为<code>select * from user</code>，OK。</li>
-<li>如果<code>gender</code>和<code>username</code>都不为空，那么查询语句为<code>select * from user where username=#&#123;username&#125; ??? gender=#&#123;gender&#125;</code>，OK。</li>
-</ol>
-<h2 id="3、动态SQL：if-set"><a href="#3、动态SQL：if-set" class="headerlink" title="3、动态SQL：if+set"></a>3、动态SQL：if+set</h2><ul>
-<li>更新操作，使用<code>set</code>关键字</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;updateUserById&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;user&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;userMap&quot;</span>&gt;</span></span><br><span class="line">    update user </span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span>		// 1、自动拼接&quot;where&quot;</span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;userName!=null and userName!=&#x27;&#x27;&quot;</span>&gt;</span>	</span><br><span class="line">            username=#&#123;username&#125;	</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;gender!=null and gender!=&#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">            and gender=#&#123;gender&#125;		// 自动剔除and（或or）</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="4、动态SQL：choose（when、otherwise）"><a href="#4、动态SQL：choose（when、otherwise）" class="headerlink" title="4、动态SQL：choose（when、otherwise）"></a>4、动态SQL：choose（when、otherwise）</h2><p>有时候，我们不想用到所有的查询语句，只想选择其中的一个，查询条件有一个满足即可，使用choose可解决此类问题。类似于Java中的switch语句。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectUserByChoose&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.ys.po.User&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;com.ys.po.User&quot;</span>&gt;</span></span><br><span class="line">    select * from user</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span>	// 拼接where</span><br><span class="line">        <span class="tag">&lt;<span class="name">choose</span>&gt;</span>	// 相当于开启switch</span><br><span class="line">            <span class="tag">&lt;<span class="name">when</span> <span class="attr">test</span>=<span class="string">&quot;id !=&#x27;&#x27; and id != null&quot;</span>&gt;</span>	// 相当于case1</span><br><span class="line">                id=#&#123;id&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">when</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">when</span> <span class="attr">test</span>=<span class="string">&quot;username !=&#x27;&#x27; and username != null&quot;</span>&gt;</span>	// 相当于case2</span><br><span class="line">                and username=#&#123;username&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">when</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">otherwise</span>&gt;</span>		// 相当于default</span><br><span class="line">                and gender=#&#123;gender&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">otherwise</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">choose</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这里我们有3个条件：<code>id</code>、<code>gender</code>、<code>username</code>，只能选择一个作为条件。</p>
-<ol>
-<li>如果<code>id</code>不为空，那么查询语句为：<code>select * from user where id=#&#123;id&#125;</code>，不会再去判断后两个条件。</li>
-<li>如果<code>username</code>不为空，那么查询语句为：<code>select * from user where username=#&#123;username&#125;</code></li>
-<li>如果<code>gender</code>不为空，那么查询语句为：<code>select * from user where gender=#&#123;gender&#125;</code>，</li>
-</ol>
-<hr>
-<h2 id="5、动态SQL：trim"><a href="#5、动态SQL：trim" class="headerlink" title="5、动态SQL：trim"></a>5、动态SQL：trim</h2><p><code>trim</code>标签是一个格式化的标记，可以完成<code>set</code>或<code>where</code>标记的功能。</p>
-<h3 id="5-1、用-trim-改写上面第二点的-if-where-语句"><a href="#5-1、用-trim-改写上面第二点的-if-where-语句" class="headerlink" title="5.1、用 trim 改写上面第二点的 if+where 语句"></a>5.1、用 trim 改写上面第二点的 if+where 语句</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectUserByUsernameAndSex&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;user&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;com.ys.po.User&quot;</span>&gt;</span></span><br><span class="line">    select * from user</span><br><span class="line">    <span class="comment">&lt;!-- &lt;where&gt;</span></span><br><span class="line"><span class="comment">            &lt;if test=&quot;username != null&quot;&gt;</span></span><br><span class="line"><span class="comment">               username=#&#123;username&#125;</span></span><br><span class="line"><span class="comment">            &lt;/if&gt;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">            &lt;if test=&quot;username != null&quot;&gt;</span></span><br><span class="line"><span class="comment">               and sex=#&#123;sex&#125;</span></span><br><span class="line"><span class="comment">            &lt;/if&gt;</span></span><br><span class="line"><span class="comment">        &lt;/where&gt;  --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">trim</span> <span class="attr">prefix</span>=<span class="string">&quot;where&quot;</span> <span class="attr">prefixOverrides</span>=<span class="string">&quot;and | or&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;username != null&quot;</span>&gt;</span></span><br><span class="line">            and username=#&#123;username&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;sex != null&quot;</span>&gt;</span></span><br><span class="line">            and sex=#&#123;sex&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>prefix</code>：前缀</li>
-<li><code>prefixOverrides</code>：去掉第一个<code>and</code>或<code>or</code></li>
-</ul>
-<h3 id="5-2、用-trim-改写上面第三点的-if-set-语句"><a href="#5-2、用-trim-改写上面第三点的-if-set-语句" class="headerlink" title="5.2、用 trim 改写上面第三点的 if+set 语句"></a>5.2、用 trim 改写上面第三点的 if+set 语句</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 根据 id 更新 user 表的数据 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">&quot;updateUserById&quot;</span> <span class="attr">parameterType</span>=<span class="string">&quot;com.ys.po.User&quot;</span>&gt;</span></span><br><span class="line">        update user u</span><br><span class="line">            <span class="comment">&lt;!-- &lt;set&gt;</span></span><br><span class="line"><span class="comment">                &lt;if test=&quot;username != null and username != &#x27;&#x27;&quot;&gt;</span></span><br><span class="line"><span class="comment">                    u.username = #&#123;username&#125;,</span></span><br><span class="line"><span class="comment">                &lt;/if&gt;</span></span><br><span class="line"><span class="comment">                &lt;if test=&quot;sex != null and sex != &#x27;&#x27;&quot;&gt;</span></span><br><span class="line"><span class="comment">                    u.sex = #&#123;sex&#125;</span></span><br><span class="line"><span class="comment">                &lt;/if&gt;</span></span><br><span class="line"><span class="comment">            &lt;/set&gt; --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">trim</span> <span class="attr">prefix</span>=<span class="string">&quot;set&quot;</span> <span class="attr">suffixOverrides</span>=<span class="string">&quot;,&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;username != null and username != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">                    u.username = #&#123;username&#125;,</span><br><span class="line">                <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;sex != null and sex != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">                    u.sex = #&#123;sex&#125;,</span><br><span class="line">                <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line">         </span><br><span class="line">         where id=#&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="6、动态SQL"><a href="#6、动态SQL" class="headerlink" title="6、动态SQL"></a>6、动态SQL</h2><h2 id="7、动态SQL"><a href="#7、动态SQL" class="headerlink" title="7、动态SQL"></a>7、动态SQL</h2><h2 id="8、动态SQL"><a href="#8、动态SQL" class="headerlink" title="8、动态SQL"></a>8、动态SQL</h2>
       
     </div>
 
@@ -2416,7 +2705,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
