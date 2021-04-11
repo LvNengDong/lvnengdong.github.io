@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="Vue-cli1、是什么？通过对 WebPack 的了解，如果我们手动去设置打包相关的配置信息是非常麻烦的。因为在开发中，需要打包的东西不止是 Js、Css、HTML、image 等，还有更多的东西要处理，如果我如果我一一去添加这些插件和加载器非常耗费时间。 而作为一个开发人员，我们需要关注的往往只有项目源代码文件（即src文件）和少数几个配置文件。为了提高开发效率，Vue 官方提供了一个快速搭建">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue组件化编码">
+<meta property="og:url" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Vue-cli1、是什么？通过对 WebPack 的了解，如果我们手动去设置打包相关的配置信息是非常麻烦的。因为在开发中，需要打包的东西不止是 Js、Css、HTML、image 等，还有更多的东西要处理，如果我如果我一一去添加这些插件和加载器非常耗费时间。 而作为一个开发人员，我们需要关注的往往只有项目源代码文件（即src文件）和少数几个配置文件。为了提高开发效率，Vue 官方提供了一个快速搭建">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409232341832.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209062090.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233127399.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210404124345145.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209503007.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209769323.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233500688.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210016103.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210411076.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409234531234.png">
+<meta property="og:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/lifecycle.png">
+<meta property="article:published_time" content="2021-04-09T15:10:34.000Z">
+<meta property="article:modified_time" content="2021-04-11T03:12:56.058Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409232341832.png">
+
+
+<link rel="canonical" href="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Vue组件化编码 | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Vue-cli"><span class="nav-number">1.</span> <span class="nav-text">Vue-cli</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">1、是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">2、如何使用？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.2.2.</span> <span class="nav-text">初始化项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E6%A8%A1%E6%9D%BF%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BB%93%E6%9E%84%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">3、模板项目的结构？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#src"><span class="nav-number">1.3.1.</span> <span class="nav-text">src</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A5%E5%8F%A3%E6%96%87%E4%BB%B6%EF%BC%9Amain-js"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">入口文件：main.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E6%96%87%E4%BB%B6%E7%BB%84%E4%BB%B6%EF%BC%9A-vue"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">单文件组件：*.vue*</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E6%96%87%E4%BB%B6%E7%BB%84%E4%BB%B6"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">多文件组件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gitkeep"><span class="nav-number">1.3.2.</span> <span class="nav-text">.gitkeep</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E8%BF%90%E8%A1%8C"><span class="nav-number">1.4.</span> <span class="nav-text">4、运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81%E9%A1%B9%E7%9B%AE%E6%89%93%E5%8C%85"><span class="nav-number">1.5.</span> <span class="nav-text">5、项目打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6%E3%80%81%E9%A1%B9%E7%9B%AE%E5%8F%91%E5%B8%83"><span class="nav-number">1.6.</span> <span class="nav-text">6、项目发布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%9D%99%E6%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E5%B8%83"><span class="nav-number">1.6.1.</span> <span class="nav-text">使用静态服务器发布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%91%E5%B8%83-tomcat"><span class="nav-number">1.6.2.</span> <span class="nav-text">使用动态web服务器发布(tomcat)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%AE%9A%E4%B9%89%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">组件定义与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%84%E4%BB%B6%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">什么是组件？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vue-%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%84%E6%88%90-3-%E4%B8%AA%E9%83%A8%E5%88%86"><span class="nav-number">2.2.</span> <span class="nav-text">vue 文件的组成(3 个部分)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%A0%87%E7%AD%BE%E5%90%8D%E4%B8%8E%E6%A0%87%E7%AD%BE%E5%B1%9E%E6%80%A7%E5%90%8D%E4%B9%A6%E5%86%99%E9%97%AE%E9%A2%98"><span class="nav-number">2.4.</span> <span class="nav-text">关于标签名与标签属性名书写问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="nav-number">2.5.</span> <span class="nav-text">快速入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%88%9B%E5%BB%BA%E6%A0%B9%E7%BB%84%E4%BB%B6"><span class="nav-number">2.5.1.</span> <span class="nav-text">1、创建根组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BA%E5%85%B6%E5%AE%83%E7%BB%84%E4%BB%B6"><span class="nav-number">2.5.2.</span> <span class="nav-text">2、创建其它组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E5%9C%A8%E6%A0%B9%E7%BB%84%E4%BB%B6%E4%B8%AD%E5%BC%95%E7%94%A8%E5%85%B6%E5%AE%83%E7%BB%84%E4%BB%B6"><span class="nav-number">2.5.3.</span> <span class="nav-text">3、在根组件中引用其它组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E5%88%9B%E5%BB%BA-main-js"><span class="nav-number">2.5.4.</span> <span class="nav-text">4、创建 main.js</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">组件化编码的流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%9A%E4%BA%A4%E4%BA%92"><span class="nav-number">3.1.</span> <span class="nav-text">做交互</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue组件化编码
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-09 23:10:34" itemprop="dateCreated datePublished" datetime="2021-04-09T23:10:34+08:00">2021-04-09</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-04-11 11:12:56" itemprop="dateModified" datetime="2021-04-11T11:12:56+08:00">2021-04-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Vue-cli"><a href="#Vue-cli" class="headerlink" title="Vue-cli"></a>Vue-cli</h1><h2 id="1、是什么？"><a href="#1、是什么？" class="headerlink" title="1、是什么？"></a>1、是什么？</h2><p>通过对 WebPack 的了解，如果我们手动去设置打包相关的配置信息是非常麻烦的。因为在开发中，需要打包的东西不止是 Js、Css、HTML、image 等，还有更多的东西要处理，如果我如果我一一去添加这些插件和加载器非常耗费时间。</p>
+<p>而作为一个开发人员，我们需要关注的往往只有项目源代码文件<code>（即src文件）</code>和少数几个配置文件。为了提高开发效率，Vue 官方提供了一个快速搭建 Vue Web项目的脚手架：<strong>vue-cli</strong>，使用它能快速的构建一个web工程模板。类似于 Java 中的 SpringBoot 等框架，我们只需在这个脚手架上进行二次开发即可！</p>
+<h2 id="2、如何使用？"><a href="#2、如何使用？" class="headerlink" title="2、如何使用？"></a>2、如何使用？</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><blockquote>
+<p>GitHub 地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-cli">https://github.com/vuejs/vue-cli</a></p>
+</blockquote>
+<blockquote>
+<p>安装命令（全局安装）：</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>测试是否安装成功：在控制台输出以下命令看是否有响应。</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><blockquote>
+<ol>
+<li>创建一个空文件夹，在当前文件夹下进入控制台窗口。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>初始化模板项目。</li>
+</ol>
+</blockquote>
+<ul>
+<li>vue-cli 给我们提供了多个项目模板，我们最常使用的就是 webpack 模板（即初始化一个使用 webpack 打包的 vue web 项目）。</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法： vue init 模板名 [项目名称]</span></span><br><span class="line">vue init webpack</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目名称可以先不指定，在稍后的提示选项中指定！</span></span><br></pre></td></tr></table></figure>
+
+<p>初始化项目的选项根据需要自行选择：</p>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409232341832.png" alt="image-20210409232341832"></p>
+<blockquote>
+<ol start="3">
+<li>使用<code>npm install</code>安装依赖。（如果在第二步中使用 NPM 自动安装的话，就无需进行手动安装这一步了！）</li>
+</ol>
+</blockquote>
+<p>安装成功！提示我们可以使用<code>npm run dev</code>命令启动。</p>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209062090.png" alt="1530209062090"></p>
+<h2 id="3、模板项目的结构？"><a href="#3、模板项目的结构？" class="headerlink" title="3、模板项目的结构？"></a>3、模板项目的结构？</h2><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233127399.png" alt="image-20210409233127399"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">|—— build 				&#x2F;&#x2F; webpack 相关的配置文件夹(基本不需要修改)</span><br><span class="line">	|—— dev-server.js 	 &#x2F;&#x2F; 通过express 启动后台服务器</span><br><span class="line">|—— config				&#x2F;&#x2F; webpack 相关的配置文件夹(基本不需要修改)</span><br><span class="line">	|—— index.js		&#x2F;&#x2F; 指定的后台服务的端口号和静态资源文件夹</span><br><span class="line">|—— node_modules		&#x2F;&#x2F; 依赖包文件夹</span><br><span class="line">|—— src 				&#x2F;&#x2F; 源码文件夹</span><br><span class="line">	|—— components		&#x2F;&#x2F; vue 组件及其相关资源文件夹</span><br><span class="line">	|—— App.vue			&#x2F;&#x2F; 应用根组件</span><br><span class="line">	|—— main.js			&#x2F;&#x2F; 应用入口js</span><br><span class="line">|—— static				&#x2F;&#x2F; 静态资源文件夹</span><br><span class="line">|—— .babelrc			&#x2F;&#x2F; babel 的配置文件（babel runtime control）</span><br><span class="line">|—— .eslintignore		&#x2F;&#x2F; eslint 检查忽略的配置</span><br><span class="line">|—— .eslintrc.js		&#x2F;&#x2F; eslint 的配置文件（eslint runtime control）</span><br><span class="line">|—— .editorcconfig</span><br><span class="line">|—— .gitignore			&#x2F;&#x2F; Git 版本控制忽略文件配置</span><br><span class="line">|—— .postcssrc.js</span><br><span class="line">|—— index.html			&#x2F;&#x2F; 主页面文件</span><br><span class="line">|—— package.json		&#x2F;&#x2F; 应用包配置文件</span><br><span class="line">|—— package-lock.json</span><br><span class="line">|—— README.md			&#x2F;&#x2F; 应用描述说明的readme 文件</span><br></pre></td></tr></table></figure>
+
+<h3 id="src"><a href="#src" class="headerlink" title="src"></a>src</h3><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210404124345145.png" alt="image-20210404124345145"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">├── assets 			&#x2F;&#x2F; 图片等资源 </span><br><span class="line">├── components 		&#x2F;&#x2F; 各种公共组件，非公共组件在各自view下维护 </span><br><span class="line">├── router 			&#x2F;&#x2F; 路由表 </span><br><span class="line">├── App.vue 		&#x2F;&#x2F; 项目根组件</span><br><span class="line">├── main.js 		&#x2F;&#x2F; 项目入口文件</span><br></pre></td></tr></table></figure>
+
+<h4 id="入口文件：main-js"><a href="#入口文件：main-js" class="headerlink" title="入口文件：main.js"></a>入口文件：<code>main.js</code></h4><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209503007.png" alt="1525913687860"></p>
+<h4 id="单文件组件：-vue"><a href="#单文件组件：-vue" class="headerlink" title="单文件组件：*.vue*"></a>单文件组件：<code>*.vue*</code></h4><p>我们称后缀名为<code>.vue</code>的文件为单文件组件。每一个<code>.vue</code>文件，就是一个独立的vue组件。而 <strong>App.vue</strong> 是整个项目的根组件。</p>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209769323.png" alt="1530209769323"></p>
+<p>单文件组件中包含三部分内容：</p>
+<ul>
+<li><code>&lt;template/&gt;</code>：<strong>Html 模板</strong></li>
+<li><code>&lt;script/&gt;</code>：<strong>Js 脚本</strong>，这里编写的就是vue的组件对象，还可以有data(){}等</li>
+<li><code>&lt;style/&gt;</code>：<strong>Css 样式</strong>，支持CSS语法高亮和提示</li>
+</ul>
+<p>每个组件都有自己独立的html、JS、CSS，互不干扰，真正做到可独立复用。</p>
+<h4 id="多文件组件"><a href="#多文件组件" class="headerlink" title="多文件组件"></a>多文件组件</h4><p>既然有单文件组件，那么就一定有多文件组件。多文件组件一般是一个文件夹，这个文件夹中除了包含一些单文件组件之外，还可以包含一些 image 等静态资源。所有这些资源形成一个大的组件对外暴露，我们把这个大的组件就叫做多文件组件！！！</p>
+<h3 id="gitkeep"><a href="#gitkeep" class="headerlink" title=".gitkeep"></a>.gitkeep</h3><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233500688.png" alt="image-20210409233500688"></p>
+<p><code>.gitkeep</code> 是作用于 Git 进行版本管理的文件。</p>
+<p>Git 进行版本控制时有一个特点就是如果某个文件夹为空就会自动忽略（即不对该文件夹进行版本控制），但是如果我们不想该文件夹被忽略的话，就可以在该文件夹下创建一个<code>.gitkeep</code>的文件（文件内容为空），这样Git在进行版本管理时就不会忽略该文件夹了！！！</p>
+<h2 id="4、运行"><a href="#4、运行" class="headerlink" title="4、运行"></a>4、运行</h2><blockquote>
+<p>查看项目文件的配置信息：<code>package.json</code></p>
+</blockquote>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210016103.png" alt="1530210016103"></p>
+<ul>
+<li>可以看到这里引入了非常多的依赖，绝大多数都是开发期依赖，比如大量的加载器。</li>
+<li>运行时依赖只有 vue 和 vue-router</li>
+<li>脚本有三个：<ul>
+<li>dev：使用了webpack-dev-server命令，开发时热部署使用</li>
+<li>start：使用了npm run dev命令，与上面的dev效果完全一样，当脚本名为“start”时，可以省略“run”。 </li>
+<li>build：等同于webpack的打包功能，会打包到dist目录下。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>启动项目</p>
+</blockquote>
+<p>我们执行<code>npm run dev</code> 或者 <code>npm start</code> 都可以启动项目：</p>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210411076.png" alt="1530210411076"></p>
+<blockquote>
+<p>检查页面元素</p>
+</blockquote>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409234531234.png" alt="image-20210409234531234"></p>
+<h2 id="5、项目打包"><a href="#5、项目打包" class="headerlink" title="5、项目打包"></a>5、项目打包</h2><blockquote>
+<p>打包命令</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6、项目发布"><a href="#6、项目发布" class="headerlink" title="6、项目发布"></a>6、项目发布</h2><h3 id="使用静态服务器发布"><a href="#使用静态服务器发布" class="headerlink" title="使用静态服务器发布"></a>使用静态服务器发布</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install -g serve</span><br><span class="line">serve dist</span><br><span class="line">访问: http:&#x2F;&#x2F;localhost:5000</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用动态web服务器发布-tomcat"><a href="#使用动态web服务器发布-tomcat" class="headerlink" title="使用动态web服务器发布(tomcat)"></a>使用动态web服务器发布(tomcat)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">修改配置: webpack.prod.conf.js</span><br><span class="line">output: &#123;</span><br><span class="line">publicPath: &#39;&#x2F;xxx&#x2F;&#39; &#x2F;&#x2F;打包文件夹的名称</span><br><span class="line">&#125;</span><br><span class="line">重新打包:</span><br><span class="line">npm run build</span><br><span class="line">修改dist 文件夹为项目名称: xxx</span><br><span class="line">将xxx 拷贝到运行的tomcat 的webapps 目录下</span><br><span class="line">访问: http:&#x2F;&#x2F;localhost:8080&#x2F;xxx</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h1 id="组件定义与使用"><a href="#组件定义与使用" class="headerlink" title="组件定义与使用"></a>组件定义与使用</h1><h2 id="什么是组件？"><a href="#什么是组件？" class="headerlink" title="什么是组件？"></a>什么是组件？</h2><ul>
+<li><strong>组件就是一个局部功能界面。包含要实现这个功能界面所有的相关资源，包括 html、css、js、image 等。</strong></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The Vue build version to load with the `import` command</span></span><br><span class="line"><span class="comment">// (runtime-only or standalone) has been set in webpack.base.conf with an alias.</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App&#x27;</span>   <span class="comment">// 引入一个组件</span></span><br><span class="line"></span><br><span class="line">Vue.config.productionTip = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* eslint-disable no-new */</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&#x27;#app&#x27;</span>,</span><br><span class="line">  components: &#123; App &#125;,    <span class="comment">// 将组建映射成指定名称的标签（这里利用ES6语法省略&lt;K,V&gt;为K）</span></span><br><span class="line">  template: <span class="string">&#x27;&lt;App/&gt;&#x27;</span>    <span class="comment">// 模板。模板最终会嵌入到 el 匹配到的页面中去。所以我们最终在 index.html 中渲染的内容就是 &lt;App/&gt; 组件中的内容</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="vue-文件的组成-3-个部分"><a href="#vue-文件的组成-3-个部分" class="headerlink" title="vue 文件的组成(3 个部分)"></a>vue 文件的组成(3 个部分)</h2><p><strong>一个 Vue 文件就是一个单文件组件！！！</strong></p>
+<blockquote>
+<ol>
+<li>模板页面</li>
+<li>JS 模块对象</li>
+<li>样式</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	页面模板</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">        data() &#123;return &#123;&#125;&#125;,</span><br><span class="line">        methods: &#123;&#125;,</span><br><span class="line">        computed: &#123;&#125;,</span><br><span class="line">        components: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">    样式定义</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><blockquote>
+<ol>
+<li>引入组件</li>
+<li>映射成标签</li>
+<li>使用组件标签</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;HelloWorld&gt;&lt;&#x2F;HelloWorld&gt;</span><br><span class="line">    &lt;hello-world&gt;&lt;&#x2F;hello-world&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    import HelloWorld from &#39;.&#x2F;components&#x2F;HelloWorld&#39;</span><br><span class="line">    export default &#123;</span><br><span class="line">        components: &#123;</span><br><span class="line">            HelloWorld</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="关于标签名与标签属性名书写问题"><a href="#关于标签名与标签属性名书写问题" class="headerlink" title="关于标签名与标签属性名书写问题"></a>关于标签名与标签属性名书写问题</h2><ol>
+<li>写法一: 一模一样</li>
+<li>写法二: 大写变小写, 并用-连接</li>
+</ol>
+<h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><h3 id="1、创建根组件"><a href="#1、创建根组件" class="headerlink" title="1、创建根组件"></a>1、创建根组件</h3><blockquote>
+<p>因为Vue项目是一个单页面应用，我们一般在这个单页面中会引入一个根组件（所有组件的祖宗），一般命名为<strong>App.vue</strong>。所以第二步我们要创建一个 App.vue 组件</p>
+</blockquote>
+<ol>
+<li>先创建组件基本结构（固定写法）。包括写 html  的 <code>&lt;template/&gt;</code> ， 写 js 的 <code>&lt;script/&gt;</code> ，写 css 的 <code>&lt;style/&gt;</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;  &#x2F;&#x2F; 配置对象（能配置的属性&#x2F;方法与Vue一致）</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="2、创建其它组件"><a href="#2、创建其它组件" class="headerlink" title="2、创建其它组件"></a>2、创建其它组件</h3><blockquote>
+<p>其它组件都是根组件的子孙组件。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;p class&#x3D;&quot;myClass&quot;&gt;&#123;&#123;msg&#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;  &#x2F;&#x2F; 配置对象（能配置的属性&#x2F;方法与Vue一致）</span><br><span class="line">  name: &quot;HelloWorld&quot;,</span><br><span class="line">  data()&#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      msg: &quot;Hello Vue&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">  .myClass&#123;</span><br><span class="line">    color: red;</span><br><span class="line">    font-size: 30px;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以看到在一个组件内部，html 部分可以直接调用 script 中的数据model以及 style中的css样式</li>
+</ul>
+<h3 id="3、在根组件中引用其它组件"><a href="#3、在根组件中引用其它组件" class="headerlink" title="3、在根组件中引用其它组件"></a>3、在根组件中引用其它组件</h3><blockquote>
+<ol>
+<li>引入子组件：<code>import HelloWorld from &quot;./components/HelloWorld&quot;;</code></li>
+<li>将引入的子组件映射成一个标签：<code>component</code></li>
+<li>使用（组件）标签</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;img class&#x3D;&quot;logo&quot; src&#x3D;&quot;src&#x2F;assets&#x2F;logo.png&quot;&#x2F;&gt;</span><br><span class="line">&lt;!--    3、使用（组件）标签  --&gt;</span><br><span class="line">    &lt;HelloWorld&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">  &#x2F;&#x2F; 1、引入组件</span><br><span class="line">  import HelloWorld from &quot;.&#x2F;components&#x2F;HelloWorld&quot;;</span><br><span class="line">  export default &#123;</span><br><span class="line">    components: &#123;HelloWorld&#125;,</span><br><span class="line">    data()&#123;</span><br><span class="line">      return&#123;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#x2F;&#x2F; 2、将引入的组件映射成标签</span><br><span class="line">    comments:&#123;</span><br><span class="line">      HelloWorld,   &#x2F;&#x2F; 采用ES6语法，简化&lt;K,V&gt;的书写</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">  .logo&#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    height: 200px;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、创建-main-js"><a href="#4、创建-main-js" class="headerlink" title="4、创建 main.js"></a>4、创建 main.js</h3><blockquote>
+<p>在<code>main.js</code>中创建一个Vue对象，用于将根组件<code>&lt;App/&gt;</code>渲染到<code>index.html</code>中去！！</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 入口js：创建Vue实例</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入 vue 依赖</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// （1）引入 App 组件（根组件）</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&quot;./App&quot;</span>;</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  components:&#123;</span><br><span class="line">    App,  <span class="comment">// （2）将 App 组件映射成标签</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//（3）将组件标签渲染到指定的页面中去</span></span><br><span class="line">  template:<span class="string">&#x27;&lt;App/&gt;&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/lifecycle.png" alt="Vue 实例生命周期"></p>
+<h1 id="组件化编码的流程"><a href="#组件化编码的流程" class="headerlink" title="组件化编码的流程"></a>组件化编码的流程</h1><p>拆分组件–&gt;&gt;静态组件–&gt;&gt;动态组件</p>
+<h2 id="做交互"><a href="#做交互" class="headerlink" title="做交互"></a>做交互</h2><p>绑定事件监听</p>
+<p>–&gt;&gt;</p>
+<p>自动收集数据</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="prev" title="跨域问题常见的解决方案">
+                  <i class="fa fa-chevron-left"></i> 跨域问题常见的解决方案
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/11/Vue%E8%B7%AF%E7%94%B1/" rel="next" title="Vue路由">
+                  Vue路由 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
