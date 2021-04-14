@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-count">86</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,556 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/11/Jsp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/11/11/Jsp/" class="post-title-link" itemprop="url">Jsp</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-11-11 11:42:39" itemprop="dateCreated datePublished" datetime="2020-11-11T11:42:39+08:00">2020-11-11</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-11-16 17:54:00" itemprop="dateModified" datetime="2020-11-16T17:54:00+08:00">2020-11-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaWeb/" itemprop="url" rel="index"><span itemprop="name">JavaWeb</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h1><h2 id="JSP概念"><a href="#JSP概念" class="headerlink" title="JSP概念"></a>JSP概念</h2><blockquote>
+<p><strong>JSP</strong>：Java Server Pages，Java服务器端页面</p>
+<ul>
+<li>JSP是一个特殊的页面，其中既可以定义HTML标签，又可以定义Java代码</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="JSP执行原理"><a href="#JSP执行原理" class="headerlink" title="JSP执行原理"></a>JSP执行原理</h2><blockquote>
+<p><strong>JSP本质上是一个Servlet</strong></p>
+</blockquote>
+<p><img src="/2020/11/11/Jsp/jsp%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png"></p>
+<blockquote>
+<p>执行流程：</p>
+<ol>
+<li>客户端向服务器发送请求，访问<code>localhost:80/day16/index.jsp</code>资源。</li>
+<li>服务器解析请求消息，查找是否存在<code>index.jsp</code>资源。</li>
+<li>如果存在，服务器会先将<code>index.jsp</code>资源转换为<code>.java</code>文件。[转换成的<code>.java</code>文件内部结构和Servlet相同]</li>
+<li>再将<code>.java</code>文件编译为二进制的<code>.class</code>文件。</li>
+<li>最后服务器返回该二进制文件给客户端。</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="JSP脚本"><a href="#JSP脚本" class="headerlink" title="JSP脚本"></a>JSP脚本</h2><blockquote>
+<p><strong>JSP的脚本</strong>：JSP内定义Java代码的方式（3种方式）</p>
+</blockquote>
+<ol>
+<li><p>该脚本中定义的Java代码，转换为<code>.java</code>文件后在service方法中执行。service方法中可以定义什么，该脚本中就可以定义什么。</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;% java代码 %&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>该脚本中定义的Java代码，转换为<code>.java</code>文件后充当Java类的成员变量/成员方法。</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%! java代码 %&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>该脚本中定义的Java代码，会直接被输出到页面上，输出语句中可以定义什么，该脚本就可以定义什么</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%= java代码 %&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="JSP指令"><a href="#JSP指令" class="headerlink" title="JSP指令"></a>JSP指令</h2><ul>
+<li>作用：</li>
+</ul>
+<blockquote>
+<p><strong>JSP指令</strong>：用于配置JSP页面，导入资源文件</p>
+</blockquote>
+<ul>
+<li>格式：</li>
+</ul>
+<blockquote>
+<p><code>&lt;%@ 指令名称 属性名1=属性值1 属性名2=属性值2 ...%&gt;</code></p>
+</blockquote>
+<h3 id="JSP指令分类"><a href="#JSP指令分类" class="headerlink" title="JSP指令分类"></a>JSP指令分类</h3><h4 id="page"><a href="#page" class="headerlink" title="page"></a>page</h4><blockquote>
+<p>page指令的作用：配置当前JSP页面。</p>
+</blockquote>
+<p><strong>page指令中常见的属性</strong>：</p>
+<ul>
+<li><code>contentType</code>：等同于<code>response.setContentType()</code></li>
+</ul>
+<blockquote>
+<ol>
+<li>设置响应体的mime类型以及字符集</li>
+<li>设置当前jsp页面的编码（只能在高级的IDE才能生效，如果使用低级的开发工具，则需要通过pageEncoding属性设置当前页面的字符集）</li>
+</ol>
+</blockquote>
+<ul>
+<li><p><code>import</code>：导包。在jsp中书写Java代码时，用<code>import</code>导入Java代码需要的依赖。</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.util.List&quot;</span>%&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p><code>errorPage</code>：当前页面发生异常后，会自动跳转到指定的错误页面</p>
+</li>
+<li><p><code>isErrorPage</code>：标识当前页面是否是错误页面。</p>
+<blockquote>
+<p><code>true</code>：是，可以使用内置对象exception</p>
+<p><code>false</code>：否，默认值。不可以使用内置对象exception</p>
+</blockquote>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page errorPage=<span class="string">&quot;index.jsp&quot;</span> isErrorPage=<span class="string">&quot;true&quot;</span> %&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p><code>language</code>：语言，目前只支持Java</p>
+</li>
+<li><p><code>buffer</code>：缓冲区的大小</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> pageEncoding=<span class="string">&quot;utf-8&quot;</span> language=<span class="string">&quot;java&quot;</span> buffer=<span class="string">&quot;8kb&quot;</span>%&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h4 id="include"><a href="#include" class="headerlink" title="include"></a>include</h4><ul>
+<li><p><code>include</code>：导入外部的<code>.jsp页面</code>资源文件，<strong>实现页面复用</strong>。</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 在当前页面导入`top.jsp`页面 --&gt;</span><br><span class="line">&lt;%<span class="meta">@include</span> file=<span class="string">&quot;top.jsp&quot;</span>%&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="taglib"><a href="#taglib" class="headerlink" title="taglib"></a>taglib</h4><ul>
+<li><p><code>taglib</code>：导入资源，一般是导入标签库</p>
+<blockquote>
+<ul>
+<li><code>prefix</code>: 别名，为导入的资源定义一个唯一标识。</li>
+<li><code>uri</code>:导入的jar包所在的位置</li>
+</ul>
+</blockquote>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ taglib prefix=<span class="string">&quot;c&quot;</span> uri=<span class="string">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> %&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="JSP注释"><a href="#JSP注释" class="headerlink" title="JSP注释"></a>JSP注释</h2><h3 id="HTML注释"><a href="#HTML注释" class="headerlink" title="HTML注释"></a>HTML注释</h3><blockquote>
+<ul>
+<li>只能注释JSP页面中的HTML代码片段</li>
+<li><code>&lt;!--HTML注释--&gt;</code></li>
+</ul>
+</blockquote>
+<h3 id="JSP特有的注释：推荐使用"><a href="#JSP特有的注释：推荐使用" class="headerlink" title="JSP特有的注释：推荐使用"></a>JSP特有的注释：推荐使用</h3><blockquote>
+<ul>
+<li>可以注释JSP页面中的所有内容</li>
+<li><code>&lt;%--JSP注释--%&gt;</code></li>
+</ul>
+</blockquote>
+<h2 id="JSP内置对象"><a href="#JSP内置对象" class="headerlink" title="JSP内置对象"></a>JSP内置对象</h2><blockquote>
+<p>在JSP页面中，不需要获取和创建，直接可以使用的对象</p>
+</blockquote>
+<p>JSP一共有9个内置对象</p>
+<table>
+<thead>
+<tr>
+<th align="center">变量名</th>
+<th align="center">真实类型</th>
+<th align="center">作用</th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>pageContext</code></td>
+<td align="center"><code>PageContext</code></td>
+<td align="center">1.当前页面内共享数据  2.还可以获取其它8个内置对象</td>
+<td align="center">域对象</td>
+</tr>
+<tr>
+<td align="center"><code>request</code></td>
+<td align="center"><code>HttpServletRequest</code></td>
+<td align="center">一次请求访问的多个资源（转发）间共享数据</td>
+<td align="center">域对象</td>
+</tr>
+<tr>
+<td align="center"><code>session</code></td>
+<td align="center"><code>HttpSession</code></td>
+<td align="center">一次会话的多个请求间共享数据</td>
+<td align="center">域对象</td>
+</tr>
+<tr>
+<td align="center"><code>application</code></td>
+<td align="center"><code>ServletContext</code></td>
+<td align="center">所有用户间共享数据</td>
+<td align="center">域对象</td>
+</tr>
+<tr>
+<td align="center"><code>response</code></td>
+<td align="center"><code>HttpServletResponse</code></td>
+<td align="center">响应对象</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center"><code>page</code></td>
+<td align="center"><code>Object</code></td>
+<td align="center">当前页面（Servlet）对象（==this）</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center"><code>out</code></td>
+<td align="center"><code>JspWriter</code></td>
+<td align="center">输出对象，把数据输出到页面上</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center"><code>config</code></td>
+<td align="center"><code>ServletConfig</code></td>
+<td align="center">Servlet的配置对象</td>
+<td align="center">/</td>
+</tr>
+<tr>
+<td align="center"><code>exception</code></td>
+<td align="center"><code>Throwable</code></td>
+<td align="center">异常对象</td>
+<td align="center">/</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Tip：真实类型的含义就是JSP转换为Servlet后的数据类型，最终会被响应给客户端。</p>
+</blockquote>
+<p><code>out</code>：字符输出流对象，可以将数据输出到页面上。和<code>response.getWriter()</code>类似.</p>
+<blockquote>
+<p><code>response.getWriter()</code>和<code>out.write()</code>的区别：</p>
+<ul>
+<li>在TomCat服务器给客户端作出响应之前，会先在<code>response</code>缓冲区查找数据，之后再到<code>out</code>缓冲区查找数据</li>
+<li>所以，<code>response.getWriter()</code>数据输出永远在<code>out.write()</code>之前。</li>
+</ul>
+</blockquote>
+<hr>
+<h1 id="MVC开发模式"><a href="#MVC开发模式" class="headerlink" title="MVC开发模式"></a>MVC开发模式</h1><h2 id="MVC发展的几个阶段"><a href="#MVC发展的几个阶段" class="headerlink" title="MVC发展的几个阶段"></a>MVC发展的几个阶段</h2><blockquote>
+<ol>
+<li>第一阶段，服务器上只有Servlet程序，如果想要给客户端响应一些动态的页面（包含静态的HTML页面和程序获取的动态的数据），我们只能通过Response对象输出标签数据，非常麻烦。</li>
+<li>第二阶段出现了JSP，可以在JSP页面中编写Java代码，简化了Servlet的开发。但是如果过度使用JSP，在开发大型项目时，会出现HTML标签与Java代码混合的开发程序难以阅读和维护。</li>
+<li>第三阶段，前后端分离，JavaWeb开发借鉴了MVC开发模式，使得程序的设计更加合理。</li>
+</ol>
+</blockquote>
+<h2 id="MVC开发模式-1"><a href="#MVC开发模式-1" class="headerlink" title="MVC开发模式"></a>MVC开发模式</h2><blockquote>
+<ol>
+<li><p>M（Model）</p>
+<ul>
+<li>完成具体的业务操作。如：查询数据库、封装对象等</li>
+</ul>
+</li>
+<li><p>V（View）</p>
+<ul>
+<li>展示数据</li>
+</ul>
+</li>
+<li><p>C（Controller）</p>
+<ul>
+<li>获取用户的输入</li>
+<li>调用模型</li>
+<li>将数据交给视图进行展示</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<p><img src="/2020/11/11/Jsp/MVC%E6%A8%A1%E5%9E%8B.png"></p>
+<p>执行流程：</p>
+<blockquote>
+<ol>
+<li>首先，客户端向服务器发送请求<code>request</code>。</li>
+<li>服务器收到<code>request</code>请求后，首先经过<code>控制器Controller</code>。</li>
+<li>再由<code>控制器</code>转发转发到<code>Model</code>中，完成具体的业务逻辑。</li>
+<li>Model把响应结果先返回给<code>控制器</code>，由<code>控制器</code>统一调度。</li>
+<li><code>控制器</code>再把数据渲染到<code>视图（View）</code>上。</li>
+<li>最后，<code>View</code>把数据发送给客户端，客户端浏览器解析数据并展示。</li>
+</ol>
+</blockquote>
+<p>MVC开发模式的优缺点：</p>
+<blockquote>
+<p>优点：</p>
+<ul>
+<li>耦合性低、方便维护、利于分工协作</li>
+<li>重用性高</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>使项目的架构变得很复杂，对开发人员要求高、</li>
+<li>开发成本高</li>
+</ul>
+</blockquote>
+<hr>
+<h1 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h1><blockquote>
+<p><strong>EL</strong>（Expression Language）：表达式语言</p>
+<p><strong>作用</strong>：替换和简化JSP页面中Java代码的编写，将Java代码执行的结果渲染到页面上。</p>
+<p><strong>使用格式</strong>：<code>$&#123;表达式&#125;</code></p>
+</blockquote>
+<p><strong>Tip</strong>：JSP文件中默认支持EL表达式。如果要忽略el表达式：</p>
+<ol>
+<li>在JSP的page指令中设置<code>isELIgnored=&quot;true&quot;</code> 忽略当前JSP页面中所有的EL表达式</li>
+<li><code>\$&#123;表达式&#125; </code>：忽略当前这个EL表达式</li>
+</ol>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">如果在jsp文件中输入：</span><br><span class="line">$&#123;<span class="number">3</span>&gt;<span class="number">4</span>&#125;		</span><br><span class="line">就会在浏览器页面上返回<span class="keyword">false</span>。</span><br><span class="line"></span><br><span class="line">如果想要屏蔽这种效果，有<span class="number">2</span>种方法：</span><br><span class="line"><span class="number">1.</span>在jsp的page指令中设置属性 isELIgnored为<span class="keyword">true</span>。但是这种设置是全局设置</span><br><span class="line">	&lt;@ page isELIgnored=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line"><span class="number">2.</span>在EL表达式前面加上反斜杠。这种设置是局部设置。</span><br><span class="line">	\$&#123;<span class="number">3</span>&gt;<span class="number">4</span>&#125;   &lt;%--反斜杠可以或略EL表达式--%&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><table>
+<thead>
+<tr>
+<th align="center">分类</th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">算术运算符</td>
+<td align="center"><code> + - * / div % mod</code></td>
+</tr>
+<tr>
+<td align="center">比较运算符</td>
+<td align="center"><code>&gt; &lt; == &gt;= &lt;= !=</code></td>
+</tr>
+<tr>
+<td align="center">逻辑运算符</td>
+<td align="center">`&amp;&amp;/and</td>
+</tr>
+<tr>
+<td align="center">空运算符</td>
+<td align="center"><code>empty</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><code>empty</code>用于判断字符串、集合、数组对象：</p>
+<ul>
+<li>是否为null，</li>
+<li>或者长度是否为0</li>
+</ul>
+<p>格式：</p>
+<ul>
+<li><code>$&#123;empty list&#125;</code></li>
+<li><code>$&#123;not empty list&#125;</code></li>
+</ul>
+</blockquote>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;h3&gt;空运算符&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">&lt;%</span><br><span class="line">	<span class="comment">// 添加字符串到request共享域</span></span><br><span class="line">    String str1 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">    String str2 = <span class="keyword">null</span>;</span><br><span class="line">    String str3 = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    request.setAttribute(<span class="string">&quot;str1&quot;</span>,str1);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;str2&quot;</span>,str2);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;str3&quot;</span>,str3);</span><br><span class="line">%&gt;</span><br><span class="line">&lt;%--EL表达式--%&gt;</span><br><span class="line">$&#123;empty str1&#125;&lt;br&gt;   &lt;%--<span class="keyword">false</span>--%&gt;</span><br><span class="line">$&#123;empty str2&#125;&lt;br&gt;   &lt;%--<span class="keyword">true</span>--%&gt;</span><br><span class="line">$&#123;empty str3&#125;&lt;br&gt;   &lt;%--<span class="keyword">true</span>--%&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h3><blockquote>
+<p><strong>EL表达式只能从域对象中获取值</strong></p>
+</blockquote>
+<h4 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h4><ol>
+<li><code>$&#123;域名.键名&#125;</code>：从指定域中获取指定的键值对</li>
+<li><code>$&#123;键名&#125;</code>：表示从小到大依次从共享域中查找是否有该键对应的值，直到找到为止。</li>
+<li>获取对象、List集合、Map集合的值</li>
+</ol>
+<h5 id="域名-键名"><a href="#域名-键名" class="headerlink" title="${域名.键名}"></a>${域名.键名}</h5><blockquote>
+<p>域名：</p>
+<ol>
+<li><p><code>pageScope  --&gt;&gt;  pageContext</code></p>
+</li>
+<li><p><code>requestScope  --&gt;&gt;  request</code></p>
+</li>
+<li><p><code>sessionScope  --&gt;&gt;  session</code></p>
+</li>
+<li><p><code>applicationScope  --&gt;&gt;  application(servletContext)</code></p>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 如：在request域中储存了 name=zhangsan --&gt;</span><br><span class="line">&lt;!--获取：--&gt;</span><br><span class="line">$&#123;requestScope.name&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Tip</strong>：如果EL没有从域中获取到值，那么它什么都不会显示，不会打乱页面布局</p>
+</blockquote>
+<h5 id="域名-键名-XXX"><a href="#域名-键名-XXX" class="headerlink" title="${域名.键名.XXX}"></a>${域名.键名.XXX}</h5><ul>
+<li><p>获取对象：<code>$&#123;域名.键名.属性名&#125;</code></p>
+<ul>
+<li>本质上会调用对象的 <code>getter()</code>方法</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    <span class="comment">// 在域中储存数据（对象）</span></span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setName(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">    user.setAge(<span class="number">23</span>);</span><br><span class="line">    user.setBirthday(<span class="keyword">new</span> Date());</span><br><span class="line"></span><br><span class="line">    request.setAttribute(<span class="string">&quot;user&quot;</span>,user);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;h3&gt;EL获取域中的值(对象)&lt;/h3&gt;</span><br><span class="line">    $&#123;requestScope.user&#125;&lt;br&gt;        &lt;%--获取的是地址值--%&gt;</span><br><span class="line">    </span><br><span class="line">	&lt;%--</span><br><span class="line">        通过对象的属性来获取具体的值：</span><br><span class="line">          * setter/getter方法，去掉set/get,再将剩余部分首字母变为小写。</span><br><span class="line">          * setName --&gt;&gt; Name --&gt;&gt; name</span><br><span class="line">    --%&gt;</span><br><span class="line">    $&#123;requestScope.user.name&#125;&lt;br&gt;</span><br><span class="line">    $&#123;requestScope.user.age&#125;&lt;br&gt;</span><br><span class="line">    $&#123;requestScope.user.birthday&#125;&lt;br&gt;</span><br><span class="line">    $&#123;requestScope.user.birthday.month&#125;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">    &lt;%--自定义的getter方法(逻辑视图)--%&gt;</span><br><span class="line">    $&#123;requestScope.user.birStr&#125;&lt;br&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 逻辑视图</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> 返回值是格式化之后的日期字符串</span></span><br><span class="line"><span class="comment">*/</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getBirStr</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (birthday != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="comment">// 1.格式化日期对象</span></span><br><span class="line">            SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd HH：mm：ss&quot;</span>);</span><br><span class="line">            <span class="comment">// 2.返回字符串</span></span><br><span class="line">            <span class="keyword">return</span> sdf.format(birthday);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+</li>
+<li><p>获取List集合：<code>$&#123;域名.键名[索引]&#125;</code></p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    <span class="comment">// 在域中存储List集合</span></span><br><span class="line">    ArrayList list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="string">&quot;aaa&quot;</span>);	<span class="comment">// List中添加字符串</span></span><br><span class="line">    list.add(<span class="string">&quot;bbb&quot;</span>);</span><br><span class="line">    list.add(user);		<span class="comment">// List中添加对象</span></span><br><span class="line">    request.setAttribute(<span class="string">&quot;list&quot;</span>,list);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;EL获取域中的List集合&lt;/h3&gt;</span><br><span class="line">$&#123;requestScope.list[<span class="number">0</span>]&#125;&lt;br&gt;</span><br><span class="line">$&#123;requestScope.list[<span class="number">1</span>]&#125;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">$&#123;requestScope.list[<span class="number">10</span>]&#125;&lt;br&gt;	&lt;%--下标越界则浏览器什么都不会打印--%&gt;</span><br><span class="line"></span><br><span class="line">$&#123;requestScope.list[<span class="number">2</span>].name&#125;&lt;br&gt;	&lt;%--获取user对象中的属性--%&gt;</span><br><span class="line">$&#123;requestScope.list[<span class="number">2</span>].birthday&#125;&lt;br&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+</li>
+<li><p>获取Map集合：</p>
+<ol>
+<li><code>$&#123;域名.键名.key名称&#125;</code></li>
+<li><code>$&#123;域名.键名[&quot;key名称&quot;]&#125;</code></li>
+</ol>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;%    </span><br><span class="line">    <span class="comment">// 在域中存储Map集合</span></span><br><span class="line">    Map map = <span class="keyword">new</span> HashMap();</span><br><span class="line">    map.put(<span class="string">&quot;id&quot;</span>,<span class="number">1</span>);</span><br><span class="line">    map.put(<span class="string">&quot;gender&quot;</span>,<span class="string">&quot;男&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;user&quot;</span>,user);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;map&quot;</span>,map);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;EL获取域中的Map集合&lt;/h3&gt;</span><br><span class="line">$&#123;requestScope.map.id&#125;&lt;br&gt;</span><br><span class="line">$&#123;requestScope.map.gender&#125;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">$&#123;requestScope.map[<span class="string">&quot;gender&quot;</span>]&#125;&lt;br&gt;</span><br><span class="line">$&#123;requestScope.map[<span class="string">&quot;user&quot;</span>].name&#125;&lt;br&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="隐式对象"><a href="#隐式对象" class="headerlink" title="隐式对象"></a>隐式对象</h2><blockquote>
+<p>在EL表达式中，无需创建/获取，可以直接使用的对象。</p>
+</blockquote>
+<p>EL表达式中共有11个隐式对象：</p>
+<blockquote>
+<ul>
+<li><code>pageContext</code>：获取JSP中的其它8个内置对象</li>
+</ul>
+</blockquote>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;h4&gt;在JSP页面获取request对象&lt;/h4&gt;</span><br><span class="line">$&#123;pageContext.request&#125;</span><br><span class="line">&lt;h5&gt;在JSP页面动态获取工程路径&lt;/h5&gt;</span><br><span class="line">$&#123;pageContext.request.contextPath&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<hr>
+<h1 id="JSTL"><a href="#JSTL" class="headerlink" title="JSTL"></a>JSTL</h1><blockquote>
+<p><strong>JSTL</strong>（Java Server Pages Tag Library）：JSP标准标签库</p>
+<p><strong>作用</strong>：用于简化和替换JSP页面上的Java代码</p>
+</blockquote>
+<h2 id="使用步骤："><a href="#使用步骤：" class="headerlink" title="使用步骤："></a>使用步骤：</h2><blockquote>
+<ol>
+<li>导入JSTL相关的jar包</li>
+<li>引入标签库：通过JSP的指令：<code>&lt;% taglib %&gt;</code></li>
+<li>使用标签</li>
+</ol>
+</blockquote>
+<h2 id="常用的JSTL标签"><a href="#常用的JSTL标签" class="headerlink" title="常用的JSTL标签"></a>常用的JSTL标签</h2><ol>
+<li><p><code>if</code>：相当于Java中的if语句。</p>
+<ul>
+<li><p><code>&lt;c:if test=&quot;&quot;&gt;</code>标签：</p>
+<blockquote>
+<p>属性：</p>
+<ol>
+<li>test属性是必需属性。</li>
+<li>该属性可以接收boolean类型的表达式：<ul>
+<li>如果值为true，则显示标签体内容。</li>
+<li>如果值为false，则不显示标签体内容</li>
+</ul>
+</li>
+<li>一般情况下，test属性值会结合EL表达式一起使用。</li>
+</ol>
+<p>注意：</p>
+<ul>
+<li><code>&lt;c:if test=&quot;&quot;&gt;</code>标签没有else语句，如果需要使用else逻辑，则需要再定义一个新的 <code>&lt;c:if test=&quot;&quot;&gt;</code>标签</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line">    &lt;h2&gt;test属性值为true：会显示&lt;/h2&gt;</span><br><span class="line">&lt;/c:if&gt;</span><br><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">&quot;false&quot;</span>&gt;</span><br><span class="line">    &lt;h2&gt;test属性值为false：不会显示&lt;/h2&gt;</span><br><span class="line">&lt;/c:if&gt;</span><br><span class="line">&lt;hr&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>案例：需求：判断request与中的一个list集合是否为空，如果不为空则遍历集合</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">List&lt;Object&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;bbb&quot;</span>);</span><br><span class="line">request.setAttribute(<span class="string">&quot;list&quot;</span>, list);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;not empty list&#125;&quot;</span>&gt;</span><br><span class="line">    $&#123;list[<span class="number">0</span>]&#125;&lt;br&gt;</span><br><span class="line">    $&#123;list[<span class="number">1</span>]&#125;&lt;br&gt;</span><br><span class="line">&lt;/c:if&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p><code>choose...when...otherwise</code>：相当于Java中的switch语句。</p>
+<blockquote>
+<p>案例：</p>
+<p>需求：完成数字编号对应星期几的案例</p>
+<ol>
+<li>共享域中存储一个数字编号</li>
+<li>使用choose标签取出数字              相当于switch</li>
+<li>使用<code>when</code>标签对数字进行判断           相当于case</li>
+<li>使用<code>otherwise</code>标签做其它情况的声明     相当于default</li>
+</ol>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    request.setAttribute(<span class="string">&quot;number&quot;</span>, <span class="number">3</span>);</span><br><span class="line">%&gt;</span><br><span class="line">&lt;c:choose&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==1&#125;&quot;&gt;星期1&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==2&#125;&quot;&gt;星期2&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==3&#125;&quot;&gt;星期3&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==4&#125;&quot;&gt;星期4&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==5&#125;&quot;&gt;星期5&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==6&#125;&quot;&gt;星期6&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==7&#125;&quot;&gt;星期7&lt;/c:when&gt;</span><br><span class="line"></span><br><span class="line">    &lt;c:otherwise&gt;数字有误，请重新输入！&lt;/c:otherwise&gt;</span><br><span class="line">&lt;/c:choose&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p><code>foreach</code> ：相当于Java中的for语句</p>
+<blockquote>
+<ol>
+<li><p>完成重复的操作。</p>
+<p>属性：</p>
+<ol>
+<li>begin：开始值</li>
+<li>end：结束值</li>
+<li>var：临时变量</li>
+<li>step：步长</li>
+<li>varStatus：循环状态对象<ul>
+<li>属性：index：容器中元素的索引（从0开始）</li>
+<li>属性：count：循环的次数（从1开始）</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>遍历容器</p>
+<p>属性：</p>
+<ol>
+<li>items：容器对象</li>
+<li>var：容器中元素的临时变量</li>
+<li>varStatus：循环状态对象<ul>
+<li>属性：index：容器中元素的索引（从0开始）</li>
+<li>属性：count：循环的次数（从1开始）</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">    循环打印<span class="number">1</span>~<span class="number">10</span></span><br><span class="line">--&gt;</span><br><span class="line">&lt;c:forEach begin=<span class="string">&quot;1&quot;</span> end=<span class="string">&quot;10&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;i&quot;</span> step=<span class="string">&quot;2&quot;</span> varStatus=<span class="string">&quot;s&quot;</span>&gt;</span><br><span class="line">    $&#123;i&#125; $&#123;s.index&#125; $&#123;s.count&#125;&lt;br&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--</span><br><span class="line">    遍历List集合</span><br><span class="line">--&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">    list.add(<span class="string">&quot;bbb&quot;</span>);</span><br><span class="line">    list.add(<span class="string">&quot;ccc&quot;</span>);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;list&quot;</span>, list);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;c:forEach items=<span class="string">&quot;$&#123;list&#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;one&quot;</span> varStatus=<span class="string">&quot;s&quot;</span>&gt;</span><br><span class="line">    $&#123;s.count&#125; $&#123;s.index&#125; $&#123;one&#125;&lt;br&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="JSTL练习"><a href="#JSTL练习" class="headerlink" title="JSTL练习"></a>JSTL练习</h2><blockquote>
+<p>需求：</p>
+<ul>
+<li>在request域中有一个存有User对象的List集合。</li>
+<li>使用JSTL+EL将List集合中的数据展示到JSP页面的表格Table中。</li>
+<li>隔行变色</li>
+</ul>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    <span class="comment">// 1.把User信息保存到request域中</span></span><br><span class="line">    ArrayList&lt;User&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">&quot;张三&quot;</span>,<span class="number">23</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">&quot;李四&quot;</span>,<span class="number">24</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">&quot;王五&quot;</span>,<span class="number">25</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    request.setAttribute(<span class="string">&quot;list&quot;</span>,list);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--    <span class="number">2.</span>把User信息输出到页面上 --&gt;</span><br><span class="line">&lt;table border=<span class="string">&quot;1px&quot;</span>&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;th&gt;编号&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;姓名&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;年龄&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;生日&lt;/th&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">    &lt;!--</span><br><span class="line">        数据行，要求数据行是动态的，有多少User对象，就可以自自动生成多少行。</span><br><span class="line">          遍历列表：&lt;foreach&gt;标签</span><br><span class="line">    --&gt;</span><br><span class="line">    &lt;c:forEach items=<span class="string">&quot;$&#123;list&#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;user&quot;</span> varStatus=<span class="string">&quot;s&quot;</span>&gt;</span><br><span class="line">        &lt;!--</span><br><span class="line">            <span class="number">3.</span>奇数行设为粉色，偶数行设为灰色</span><br><span class="line">        --&gt;</span><br><span class="line">        &lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;s.count%2!=0&#125;&quot;</span>&gt;</span><br><span class="line">            &lt;tr bgcolor=<span class="string">&quot;#ffc0cb&quot;</span>&gt;</span><br><span class="line">                &lt;td&gt;$&#123;s.count&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.name&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.age&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.birStr&#125;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/c:if&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;s.count%2==0&#125;&quot;</span>&gt;</span><br><span class="line">            &lt;tr bgcolor=<span class="string">&quot;gray&quot;</span>&gt;</span><br><span class="line">                &lt;td&gt;$&#123;s.count&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.name&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.age&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.birStr&#125;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/c:if&gt;</span><br><span class="line">    &lt;/c:forEach&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -3538,10 +4088,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-11-03 21:56:34 / Modified: 22:19:28" itemprop="dateCreated datePublished" datetime="2020-11-03T21:56:34+08:00">2020-11-03</time>
+      <time title="Created: 2020-11-03 21:56:34" itemprop="dateCreated datePublished" datetime="2020-11-03T21:56:34+08:00">2020-11-03</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-04-13 23:13:09" itemprop="dateModified" datetime="2021-04-13T23:13:09+08:00">2021-04-13</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -3579,7 +4135,7 @@
 <li><p>HTTP协议的特点：</p>
 <blockquote>
 <ol>
-<li>HTTP协议是基于TCP/IP的高级协议</li>
+<li>HTTP协议是基于 TCP/IP的高级协议</li>
 <li>默认端口号：80</li>
 <li>基于请求/响应模型：一次请求对应一次响应。<ul>
 <li>客户端浏览器访问服务器端的网页，假设一个页面上有很多内容，如图片、CSS样式、HTML静态资源、JS样式等。这些内容不是一次请求就全部响应加载出来的，而是多次请求多次响应的过程。</li>
@@ -3658,7 +4214,9 @@
 <p><img src="/2020/11/03/HTTP%E5%8D%8F%E8%AE%AE/image-20200519091906540-1597652154013.png" alt="image-20200519091906540"></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/login.html</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>localhost</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate</span><br><span class="line"><span class="attribute">Referer</span><span class="punctuation">: </span>http://localhost/login.html</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span><span class="punctuation">: </span>1</span><br><span class="line"># 请求空行</span><br><span class="line"># 请求体</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h2 id="2-3、常用的请求头说明"><a href="#2-3、常用的请求头说明" class="headerlink" title="2.3、常用的请求头说明"></a>2.3、常用的请求头说明</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">1.Host:浏览器告诉服务器：我的主机IP地址。</span><br><span class="line"><span class="code">    </span></span><br><span class="line"><span class="code">2.User-Agent：浏览器告诉服务器：我访问你使用的浏览器版本信息【包括浏览器的名称、版本等】【用户代理】</span></span><br><span class="line"><span class="code">    * 可以在服务器端获取请求头的信息，解决浏览器的兼容性问题</span></span><br><span class="line"><span class="code">    </span></span><br><span class="line"><span class="code">3.Accept:浏览器告诉服务器：我可以解析的文件类型有哪些</span></span><br><span class="line"><span class="code">    </span></span><br><span class="line"><span class="code">4.Accept-Language:浏览器告诉服务器：我可以解析哪些语言类型</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">5.Accept-Encoding:浏览器告诉服务器：我可以解析哪些压缩/编码格式</span></span><br><span class="line"><span class="code">    </span></span><br><span class="line"><span class="code">6.Referer：浏览器告诉服务器，我（当前请求）从哪里来？【请求发起时，浏览器地址栏中的地址】</span></span><br><span class="line"><span class="code">    * 作用：</span></span><br><span class="line"><span class="code">      1.防盗链</span></span><br><span class="line"><span class="code">      2.统计工作</span></span><br><span class="line"><span class="code">    </span></span><br><span class="line"><span class="code">7.Connection: keep-alive 	浏览器告诉服务器：我当前的状态是每次响应后保持连接状态</span></span><br><span class="line"><span class="code">  </span></span><br><span class="line"><span class="code">8.Upgrade-Insecure-Requests: 1		升级相关</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">9.Content-Type：表示发送的数据类型</span></span><br><span class="line"><span class="code">    application/x-www-form-urlencoded</span></span><br><span class="line"><span class="code">    	// 表示提交的数据（数据封装在请求体中）格式是：name=value&amp;name=value，然后对其进行url编码</span></span><br><span class="line"><span class="code">    	// url编码是把非英文的内容转换为：%xx%xxx 的格式</span></span><br><span class="line"><span class="code">    multipart/form-data</span></span><br><span class="line"><span class="code">    	// 表示以多段的形式提交数据给服务器（以流的形式提交，用于上传）</span></span><br><span class="line"><span class="code">    </span></span><br><span class="line"><span class="code">10.Content-Length：表示发送的数据的长度</span></span><br><span class="line"><span class="code">    </span></span><br><span class="line"><span class="code">11.Cache-Control：表示如何控制缓存 no-cache不缓存</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-3、常用的请求头说明"><a href="#2-3、常用的请求头说明" class="headerlink" title="2.3、常用的请求头说明"></a>2.3、常用的请求头说明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">1.Host: &quot;发起请求的浏览器所在的主机的IP地址&quot;</span><br><span class="line">    </span><br><span class="line">2.User-Agent：&quot;发起请求的浏览器的版本信息[包括浏览器的名称、版本等]&quot;</span><br><span class="line">    -- 在服务器端获取该信息，可以针对不同的浏览器的进行不同的适配处理</span><br><span class="line">    </span><br><span class="line">3.Accept: &quot;告诉服务器可以接收的返回值的数据类型有哪些&quot;</span><br><span class="line">    </span><br><span class="line">4.Accept-Language: &quot;告诉服务器可以接收的语言类型有哪些&quot;</span><br><span class="line"></span><br><span class="line">5.Accept-Encoding: &quot;告诉服务器可以解析哪些压缩&#x2F;编码格式&quot;</span><br><span class="line">    </span><br><span class="line">6.Referer：&quot;告诉服务器，当前请求从哪里来？[请求发起时，浏览器地址栏中的地址]&quot;</span><br><span class="line">    -- 作用：1、防盗链		2、统计工作</span><br><span class="line">    </span><br><span class="line">7.Connection: keep-alive 	-- 告诉服务器：当前的状态是每次响应后保持连接状态</span><br><span class="line">  </span><br><span class="line">8.Upgrade-Insecure-Requests: 1		-- 升级相关</span><br><span class="line"></span><br><span class="line">9.Content-Type：&quot;表示发送的数据类型（MIME类型）&quot;</span><br><span class="line">    -- application&#x2F;x-www-form-urlencoded</span><br><span class="line">    	# 表示以键值对的格式发送请求数据（数据封装在请求体中）。如：name1&#x3D;value1&amp;name2&#x3D;value2，然后对其进行url编码</span><br><span class="line">    	# url编码是把非英文的内容转换为：%xx%xxx 的格式</span><br><span class="line">    -- multipart&#x2F;form-data</span><br><span class="line">    	# 表示以多段的形式提交数据给服务器（以流的形式提交，用于上传）</span><br><span class="line">    </span><br><span class="line">10.Content-Length：&quot;表示发送的数据的长度&quot;</span><br><span class="line">    </span><br><span class="line">11.Cache-Control：&quot;表示如何控制缓存&quot; </span><br><span class="line">	-- no-cache 不缓存</span><br></pre></td></tr></table></figure>
+
+
 
 
 
@@ -3684,55 +4242,46 @@
 <h1 id="3、响应"><a href="#3、响应" class="headerlink" title="3、响应"></a>3、响应</h1><h2 id="3-1、HTTP协议响应消息的格式"><a href="#3-1、HTTP协议响应消息的格式" class="headerlink" title="3.1、HTTP协议响应消息的格式"></a>3.1、HTTP协议响应消息的格式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>响应行</span><br><span class="line">    （<span class="number">1</span>）响应的协议/版本号	<span class="comment">// HTTP/1.1</span></span><br><span class="line">    （<span class="number">2</span>）响应状态码		<span class="comment">// 200(成功)</span></span><br><span class="line">    （<span class="number">3</span>）响应状态描述符		<span class="comment">// OK</span></span><br><span class="line"><span class="number">2.</span>响应头</span><br><span class="line">    [key：value]		<span class="comment">// 不同的响应头，有不同的含义</span></span><br><span class="line">    </span><br><span class="line"><span class="number">3.</span>响应空行</span><br><span class="line">    </span><br><span class="line"><span class="number">4.</span>响应体		<span class="comment">// 就是回传给客户端的数据</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="/2020/11/03/HTTP%E5%8D%8F%E8%AE%AE/image-20200519100620160-1597652154014.png" alt="image-20200519100620160"></p>
-<h2 id="3-2、常见的响应状态码"><a href="#3-2、常见的响应状态码" class="headerlink" title="3.2、常见的响应状态码"></a>3.2、常见的响应状态码</h2><blockquote>
-<p><strong>响应状态码</strong>：服务器告诉客户端本次<u>请求和响应</u>的状态。</p>
-<ul>
-<li>状态码都是3位数字</li>
-</ul>
+<h2 id="3-2、常见的响应状态码"><a href="#3-2、常见的响应状态码" class="headerlink" title="3.2、常见的响应状态码"></a>3.2、常见的响应状态码</h2><p><strong>状态码分类（5大类）：</strong></p>
+<blockquote>
+<p><strong>1xx：</strong></p>
 </blockquote>
-<h3 id="1、状态码分类（5大类）："><a href="#1、状态码分类（5大类）：" class="headerlink" title="1、状态码分类（5大类）："></a>1、状态码分类（5大类）：</h3><ul>
-<li><p>1xx：</p>
 <ul>
-<li>服务器接收到了客户端的请求，但是没有接收完成，等待一段时间之后，发送1xx状态码给客户端。【客户端发送的请求消息不完整或者在传输过程中部分数据丢失，导致服务器继续等待后续的请求命令，如果等待时间大于超时时间，就会给客户端发送1xx状态码表示请求数据不完整】</li>
+<li>服务器接收到了客户端的请求，但是没有接收完整，等待一段时间之后，发送1xx状态码给客户端。</li>
+<li>客户端发送的请求数据不完整或者在传输过程中部分数据丢失，导致服务器一直处于等待请求数据的状态。直到等待的时间大于超时时间后，就会给向客户端响应 1xx 状态码表示请求数据不完整。</li>
 </ul>
-</li>
-<li><p>2xx：</p>
+<blockquote>
+<p><strong>2xx：</strong></p>
+</blockquote>
 <ul>
 <li>客户端请求消息和服务器端响应消息都成功时返回2xx状态码表示成功。</li>
-<li>这个状态码普通用户是看不到的，只有使用抓包工具才能看到.</li>
-<li>代表：200</li>
 </ul>
-</li>
-<li><p>3xx</p>
+<blockquote>
+<p><strong>3xx</strong></p>
+</blockquote>
 <ul>
 <li>重定向</li>
 <li>代表：302（重定向）、304（访问缓存）</li>
 </ul>
-</li>
-<li><p>4xx</p>
+<blockquote>
+<p><strong>4xx</strong></p>
+</blockquote>
 <ul>
-<li>客户端发生了错误</li>
-<li>代表：<ul>
-<li>404：请求路径没有对应的资源</li>
-<li>405：请求方式没有对应的doXxx()方法。<ul>
-<li>如：用户以post()的方式提交一张表单，但是服务器中没有doPost()方法就会出现405错误</li>
-</ul>
+<li><p>客户端发生了错误</p>
+</li>
+<li><p>代表：</p>
+<p>404：请求路径没有对应的资源</p>
+<p>405：客户端发送请求的方式与服务器规定的请求方式不一致！    如：在服务器中规定某个请求的请求方式是 POST 请求，而客户端却已 GET 的方式提交请求，这时就会出现405错误。</p>
 </li>
 </ul>
-</li>
-</ul>
-</li>
-<li><p>5xx</p>
+<blockquote>
+<p><strong>5xx</strong></p>
+</blockquote>
 <ul>
 <li>服务器端发生了错误</li>
-<li>代表：<ul>
-<li>500：服务器内部出现异常。</li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-3、常见的响应头"><a href="#3-3、常见的响应头" class="headerlink" title="3.3、常见的响应头"></a>3.3、常见的响应头</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>Content-Type	<span class="comment"># 服务器告诉客户端本次响应体的数据格式以及编码格式</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>Content-Length	<span class="comment"># 服务器告诉客户端本次响应体的长度</span></span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>Content-disposition	<span class="comment"># 服务器告诉客户端以什么格式打开响应体数据</span></span><br><span class="line">  <span class="comment"># 值：</span></span><br><span class="line">	<span class="comment"># 1. in-line	：默认值，在当前页面打开</span></span><br><span class="line">	<span class="comment"># 2. attachment；filename=xxx	：以附件形式打开响应体。【文件下载】</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-3、常见的响应头"><a href="#3-3、常见的响应头" class="headerlink" title="3.3、常见的响应头"></a>3.3、常见的响应头</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1.Content-Type: &quot;服务器告诉客户端本次响应体的响应数据类型（MIME类型）&quot;</span><br><span class="line"></span><br><span class="line">2.Content-Length: &quot;服务器告诉客户端本次响应体的长度&quot;</span><br><span class="line"></span><br><span class="line">3.Content-disposition: &quot;服务器告诉客户端以什么格式打开响应体数据&quot;</span><br><span class="line">  -- props:</span><br><span class="line">  -- 	1. in-line	：默认值，在当前页面打开</span><br><span class="line">  -- 	2. attachment；filename&#x3D;xxx	：以附件形式打开响应体。【文件下载】</span><br></pre></td></tr></table></figure>
 
 
 
@@ -3742,462 +4291,109 @@
 <li><p>传输的数据【最终被浏览器解析展示在页面上】</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">title</span>&gt;</span>$Title$<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    	hello , response</span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="post-title-link" itemprop="url">计算机网络</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-10-29 10:21:52" itemprop="dateCreated datePublished" datetime="2020-10-29T10:21:52+08:00">2020-10-29</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-11-23 11:07:00" itemprop="dateModified" datetime="2020-11-23T11:07:00+08:00">2020-11-23</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="计算机网络体系结构"><a href="#计算机网络体系结构" class="headerlink" title="计算机网络体系结构"></a>计算机网络体系结构</h1><h2 id="计算机网络概念"><a href="#计算机网络概念" class="headerlink" title="计算机网络概念"></a>计算机网络概念</h2><blockquote>
-<p>将<code>多个计算机系统</code>通过<code>通信设备</code>连接起来，由<code>软件</code>实现<code>资源共享和信息传递</code>的系统。</p>
+<h1 id="4、MINE-类型数据"><a href="#4、MINE-类型数据" class="headerlink" title="4、MINE 类型数据"></a>4、MINE 类型数据</h1><blockquote>
+<p>通过上面的学习，我们会发现无论是在请求头中还是响应头中都有一个 <strong>Content-Type</strong> 属性，这个属性在开发中非常有用。比较常见的文件上传就是利用这个属性来实现的。[文件下载则通过响应头中的另一个属性 <strong>Content-disposition</strong> 来实现。]</p>
 </blockquote>
-<h2 id="计算机网络的组成"><a href="#计算机网络的组成" class="headerlink" title="计算机网络的组成"></a>计算机网络的组成</h2><blockquote>
-<p><strong>硬件 + 软件 + 协议</strong></p>
-</blockquote>
-<ol>
-<li>硬件：<ul>
-<li>主机</li>
-<li>通信链路（双绞线、光纤等）</li>
-<li>交换设备（路由器、交换机等）</li>
-<li>……</li>
-</ul>
-</li>
-<li>软件：实现资源共享的软件。</li>
-<li>协议：规定了通过网络传输数据时需要遵循的规范。<ul>
-<li>是两个(或多个)<strong>对等实体</strong>间通信的规则的集合，不对等的实体间是没有协议的。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="计算机网络的功能"><a href="#计算机网络的功能" class="headerlink" title="计算机网络的功能"></a>计算机网络的功能</h2><blockquote>
-<p><strong>数据通信 + 资源共享 + 分布式处理 + 提高可靠性 + 负载均衡</strong></p>
-</blockquote>
-<ol>
-<li>数据通信</li>
-<li>资源共享</li>
-<li>分布式处理：<ul>
-<li>当计算机网络中的某个计算机负荷过重时，可以将其处理的任务分配给其它计算机系统，从而提高整个系统的利用率。</li>
-</ul>
-</li>
-<li>提高可靠性：<ul>
-<li>整个计算机网络系统就是一个大的集群，计算机网络中的各台计算机可以互为替代机。</li>
-</ul>
-</li>
-<li>负载均衡<ul>
-<li>将工作任务均衡的分配给计算机网络中的各台计算机。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="计算机网络的分类"><a href="#计算机网络的分类" class="headerlink" title="计算机网络的分类"></a>计算机网络的分类</h2><blockquote>
-<ol>
-<li><strong>WAN + MAN + LAN + PAN</strong></li>
-<li><strong>广播式网络 + 点对点网络</strong></li>
-<li><strong>有线网络 + 无线网络</strong></li>
-</ol>
-</blockquote>
-<h3 id="按分布范围分类"><a href="#按分布范围分类" class="headerlink" title="按分布范围分类"></a>按分布范围分类</h3><ol>
-<li>广域网（WAN）</li>
-<li>城域网（MAN）</li>
-<li>局域网（LAN）</li>
-<li>个人区域网（PAN）</li>
-</ol>
-<h3 id="按传输技术分类"><a href="#按传输技术分类" class="headerlink" title="按传输技术分类"></a>按传输技术分类</h3><ol>
-<li>广播式网络</li>
-<li>点对点网络</li>
-</ol>
-<h3 id="按传输介质分类"><a href="#按传输介质分类" class="headerlink" title="按传输介质分类"></a>按传输介质分类</h3><ol>
-<li>有线网络</li>
-<li>无线网络</li>
-</ol>
-<h2 id="协议数据单元-PDU"><a href="#协议数据单元-PDU" class="headerlink" title="协议数据单元(PDU)"></a>协议数据单元(PDU)</h2><ul>
-<li><code>PDU（Protocol Data Unit）</code>：协议数据单元</li>
-<li><code>PCI（Protocol Control Information）</code>：协议控制信息</li>
-<li><code>SDU（Service Data Unit）</code>：服务数据单元</li>
-</ul>
 <blockquote>
-<p>对等层之间传递数据的单位称为该层的PDU。</p>
+<p>请求头/响应头都是通过键值对来保存数据的，<code>Content-Type</code> 作为一个键值对的 Key ，而它对应的 Value 就是我们下面要讲的 MIME 类型数据！！！</p>
 </blockquote>
-<p>在实际的网络中，每层的PDU都有一个别名，分别是：</p>
-<table>
-<thead>
-<tr>
-<th align="center">层</th>
-<th align="center">PDU的别名</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">物理层</td>
-<td align="center">比特</td>
-</tr>
-<tr>
-<td align="center">数据链路层</td>
-<td align="center">帧</td>
-</tr>
-<tr>
-<td align="center">网络层</td>
-<td align="center">分组(/IP数据报)</td>
-</tr>
-<tr>
-<td align="center">传输层</td>
-<td align="center">报文段(TCP)/用户数据报(UDP)</td>
-</tr>
-</tbody></table>
-<h2 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h2><blockquote>
-<p><code>服务</code>是垂直的，是指：<strong>下层为<u>紧邻的</u>上层提供的功能调用。</strong></p>
+<h2 id="MIME类型说明"><a href="#MIME类型说明" class="headerlink" title="MIME类型说明"></a>MIME类型说明</h2><blockquote>
+<p>MIME：</p>
 </blockquote>
-<h3 id="服务原语"><a href="#服务原语" class="headerlink" title="服务原语"></a>服务原语</h3><p>上层要使用下层所提供的服务，必须和下层进行交互，这些交互的命令在OSI中被称为<strong>服务原语</strong>。OSI将服务原语划分为4类：</p>
+<p>Multipurpose Internet Mail Extensions</p>
 <blockquote>
-<ol>
-<li><code>请求(Request)</code>：服务用户–&gt;&gt;服务提供者，请求完成某项工作。</li>
-<li><code>指示(Indication)</code>：服务提供者–&gt;&gt;服务用户，指示用户做某事。</li>
-<li><code>响应(Response)</code>：服务用户–&gt;&gt;服务提供者，作为对<code>指示</code>的响应。</li>
-<li><code>证实(Conformation)</code>：服务提供者–&gt;&gt;服务用户，作为对<code>请求</code>的证实。</li>
-</ol>
+<p>概念：</p>
 </blockquote>
-<h3 id="服务的分类"><a href="#服务的分类" class="headerlink" title="服务的分类"></a>服务的分类</h3><blockquote>
-<ol>
-<li><strong>面向连接服务&amp;无连接服务</strong></li>
-<li><strong>可靠服务&amp;不可靠服务</strong></li>
-<li><strong>有应答服务&amp;无应答服务</strong></li>
-</ol>
+<p>MIME 是<strong>描述消息内容类型的因特网标准</strong>。MIME 消息类型包含文本、图像、音频、视频以及其他应用程序专用的数据。</p>
+<blockquote>
+<p>格式：</p>
 </blockquote>
-<h4 id="1、面向连接服务-amp-无连接服务"><a href="#1、面向连接服务-amp-无连接服务" class="headerlink" title="1、面向连接服务&amp;无连接服务"></a>1、面向连接服务&amp;无连接服务</h4><blockquote>
-<ul>
-<li>面向连接服务：<code>建立连接 --&gt;&gt;数据传输 --&gt;&gt; 连接释放 </code></li>
-<li>无连接服务：尽最大努力交付，是不可靠的服务</li>
-</ul>
+<p>MIME类型的格式：<strong>大类型/小类型</strong>，并与某一种文件扩展名相对应。</p>
+<blockquote>
+<p>常见的MIME类型：</p>
 </blockquote>
 <table>
 <thead>
 <tr>
-<th></th>
-<th align="center">面向连接服务</th>
-<th align="center">无连接服务</th>
-<th></th>
-<th></th>
+<th align="center"></th>
+<th align="center">文件</th>
+<th align="center">文件后缀名</th>
+<th align="center">MIME类型</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>1. 通信前是否建立连接</td>
-<td align="center">是</td>
-<td align="center">否</td>
-<td></td>
-<td></td>
+<td align="center">1</td>
+<td align="center">超文本标记语言</td>
+<td align="center">.html || .htm</td>
+<td align="center">text/html</td>
 </tr>
 <tr>
-<td>2. 通信前是否分配相应的资源（如内存空间）</td>
-<td align="center">是</td>
-<td align="center">否</td>
-<td></td>
-<td></td>
+<td align="center">2</td>
+<td align="center">普通文本</td>
+<td align="center">.txt</td>
+<td align="center">text/plain</td>
 </tr>
 <tr>
-<td>3. 传输结束后是否释放连接</td>
-<td align="center">是</td>
-<td align="center">否</td>
-<td></td>
-<td></td>
+<td align="center">3</td>
+<td align="center">RTF文本（类似于Word文档）</td>
+<td align="center">.rtf</td>
+<td align="center">application/rtf</td>
 </tr>
 <tr>
-<td>4. 常见的例子</td>
-<td align="center">TCP</td>
-<td align="center">IP/UDP</td>
-<td></td>
-<td></td>
+<td align="center">4</td>
+<td align="center">GIF图形</td>
+<td align="center">.gif</td>
+<td align="center">image/img</td>
 </tr>
 <tr>
-<td></td>
-<td align="center"></td>
-<td align="center"></td>
-<td></td>
-<td></td>
+<td align="center">5</td>
+<td align="center">JPEG图形</td>
+<td align="center">.jpeg || .jpg</td>
+<td align="center">image/jpeg</td>
 </tr>
-</tbody></table>
-<h4 id="2、可靠服务-amp-不可靠服务"><a href="#2、可靠服务-amp-不可靠服务" class="headerlink" title="2、可靠服务&amp;不可靠服务"></a>2、可靠服务&amp;不可靠服务</h4><blockquote>
-<ul>
-<li><p>可靠服务：网络具有纠错、检错、应答机制，能保证数据正确、可靠的传送到目的地。</p>
-</li>
-<li><p>不可靠服务：网络只是尽量正确、可靠的传送，但不能保证数据正确、完整地传送到目的地。</p>
-<p>对于不可靠服务，其数据的正确性只能靠用户来保障。</p>
-</li>
-</ul>
-</blockquote>
-<h4 id="3、有应答服务-amp-无应答服务"><a href="#3、有应答服务-amp-无应答服务" class="headerlink" title="3、有应答服务&amp;无应答服务"></a>3、有应答服务&amp;无应答服务</h4><blockquote>
-<ul>
-<li>有应答服务：接收方在收到数据后向发送方给出相应的应答。</li>
-<li>无应答服务：接收方收到数据后不自动给出应答。若需要应答，则交给高层实现。</li>
-</ul>
-</blockquote>
-<h1 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h1><h1 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h1><h2 id="数据链路层的功能"><a href="#数据链路层的功能" class="headerlink" title="数据链路层的功能"></a>数据链路层的功能</h2><blockquote>
-<p>提供<code>点到点(不同IP地址之间)</code>的通信</p>
-<ol>
-<li>为网络层提供服务。</li>
-<li><strong>成帧</strong>：将网络层传递的IP数据报封装成帧。(为上层提供服务)</li>
-<li><strong>差错控制</strong></li>
-<li><strong>流量控制</strong></li>
-<li><strong>链路管理</strong></li>
-</ol>
-</blockquote>
-<h3 id="为网络层提供服务"><a href="#为网络层提供服务" class="headerlink" title="为网络层提供服务"></a>为网络层提供服务</h3><blockquote>
-<p>对网络层而言，数据链路层的功能就是将源机器中来自网络层的数据传送到目标机器的网络层中去。</p>
-</blockquote>
-<p>数据链路层为网络层提供的服务有：</p>
-<ol>
-<li>无确认的无连接服务</li>
-<li>有确认的无连接服务</li>
-<li>有确认的面向连接服务</li>
-</ol>
-<h3 id="链路管理"><a href="#链路管理" class="headerlink" title="链路管理"></a>链路管理</h3><blockquote>
-<p>数据链路层连接的建立、维持和释放过程就称为<code>链路管理</code>。</p>
-</blockquote>
-<h3 id="差错控制"><a href="#差错控制" class="headerlink" title="差错控制"></a>差错控制</h3><blockquote>
-<p>差错控制是通信的2个节点之间约定好的特定的检错规则。如奇偶校验码，接收方根据约定好的规则去检测接收到的数据是否正确。如果出了差错，能纠错就纠错，不能纠错就丢弃，确保向上层提交的数据都是无误的。</p>
-</blockquote>
-<h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><blockquote>
-<p>在2个节点之间传送数据时，由于2个节点的性能不同，可能节点A的发送速度远大于B节点的接收速度，如果不加以控制，那么节点B就会丢弃很多来不及接收的数据。流量控制就是想办法协调2个节点的速度，使A节点的发送速度与B节点的接收速度达到一个平衡状态。</p>
-</blockquote>
-<h4 id="可靠传输机制"><a href="#可靠传输机制" class="headerlink" title="可靠传输机制"></a>可靠传输机制</h4><h5 id="1、停止-等待协议"><a href="#1、停止-等待协议" class="headerlink" title="1、停止-等待协议"></a>1、停止-等待协议</h5><h5 id="2、后退N帧协议"><a href="#2、后退N帧协议" class="headerlink" title="2、后退N帧协议"></a>2、后退N帧协议</h5><h5 id="3、选择重传协议"><a href="#3、选择重传协议" class="headerlink" title="3、选择重传协议"></a>3、选择重传协议</h5><h5 id="4、56"><a href="#4、56" class="headerlink" title="4、56"></a>4、56</h5><h1 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h1><blockquote>
-<p>网络层的主要任务是将网络层的数据报从源端传递到目的端，为网络上的不同主机提供通信服务。[分层结构中下层服务对于上层是“透明”的，所以网络层的功能是描述两个对等层之间的，不考虑物理层和数据链路层]</p>
-</blockquote>
-<h2 id="网络层的功能"><a href="#网络层的功能" class="headerlink" title="网络层的功能"></a>网络层的功能</h2><blockquote>
-<ol>
-<li>为传输层提供服务</li>
-<li>异构网络互联</li>
-<li>数据通信</li>
-<li>路由与转发</li>
-<li>流量控制</li>
-<li>拥塞控制</li>
-<li>差错控制</li>
-<li>…</li>
-</ol>
-</blockquote>
-<h3 id="异构网络互联"><a href="#异构网络互联" class="headerlink" title="异构网络互联"></a>异构网络互联</h3><blockquote>
-<p>所谓<code>网络的互联</code>就是指：将2个以上的计算机网络，通过一定的方法，用<strong>一种或多种</strong>通信处理设备（即中间设备）连接起来，以构成更大的网络系统。中间设备又称为中间系统或中继系统。</p>
-</blockquote>
-<ul>
-<li><p>根据中继系统所在的层次，有以下4种不同的中继系统：</p>
-<ol>
-<li>物理层中的中继系统：<strong>中继器、集线器</strong></li>
-<li>数据链路层中的中继系统：<strong>网桥、交换机</strong></li>
-<li>网络层中的中继系统：<strong>路由器</strong></li>
-<li>网络层以上的中继系统：<strong>网关</strong></li>
-</ol>
-<blockquote>
-<p>​    <em>要实现网络的互联，每层的中继系统都必不可少。比如，我们在计算机A的浏览器上通过<code>网关</code>访问X资源，首先要把我们的请求信息由上到下一层层封装，最后封装为比特流，通过电信号的形式一层层的传递给存放A资源的计算机B，计算机B再把接收到的比特流逐级解封装为请求信息，作出响应。</em></p>
-<p>​    <em>这一过程中，我们在每一层都可能使用了中继系统。</em></p>
-</blockquote>
-</li>
-</ul>
-<h3 id="路由与转发"><a href="#路由与转发" class="headerlink" title="路由与转发"></a>路由与转发</h3><blockquote>
-<p>路由器主要完成2个功能：</p>
-<ol>
-<li>路由选择：</li>
-<li>分组转发：路由器根据转发表将用户的IP数据报从合适的端口转发出去。</li>
-</ol>
-</blockquote>
-<h4 id="分组转发"><a href="#分组转发" class="headerlink" title="分组转发"></a>分组转发</h4><p>路由器仅根据目的主机所在的网络号来转发分组（IP数据报），从而减少了路由表所占的存储空间。</p>
-<h3 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h3><blockquote>
-<p>数据传输一般要经过多个节点，如果某些节点接收的数据量特别大（相较于该节点接收数据的能力而言，传递的数据贼多，该节点来不及接收），那么就说网络处于<strong>拥塞状态</strong>，采取一定的方法缓解这种状况就叫<code>拥塞控制</code>。</p>
-</blockquote>
-<h2 id="网络层常见的协议"><a href="#网络层常见的协议" class="headerlink" title="网络层常见的协议"></a>网络层常见的协议</h2><blockquote>
-<ol>
-<li>IP</li>
-<li>ICMP</li>
-<li>IGMP</li>
-</ol>
-</blockquote>
-<h2 id="IPv4"><a href="#IPv4" class="headerlink" title="IPv4"></a>IPv4</h2><blockquote>
-<p>版本为4的IP协议</p>
-</blockquote>
-<h3 id="IP数据报"><a href="#IP数据报" class="headerlink" title="IP数据报"></a>IP数据报</h3><h4 id="IP数据报的分片"><a href="#IP数据报的分片" class="headerlink" title="IP数据报的分片"></a>IP数据报的分片</h4><h3 id="IPv4地址"><a href="#IPv4地址" class="headerlink" title="IPv4地址"></a>IPv4地址</h3><blockquote>
-<ul>
-<li><p>连接在Internet中的每一台主机（或路由器）都分配一个<code>32位</code>的全球唯一的标识符，即IP地址。</p>
-</li>
-<li><p>IP地址可分为5类：ABCDE</p>
-</li>
-<li><p><code>IP地址 = &#123;&lt;网络号&gt;, &lt;主机号&gt;&#125;</code></p>
-<p>其中，网络号标志主机(或路由器)连接到的网络，一个网络号在因特网范围内必须是唯一的；</p>
-<p>主机号标志该主机(或路由器)，一个主机号在网络号所指明的网络范围内是唯一的。</p>
-</li>
-</ul>
-</blockquote>
-<ol>
-<li>IP地址分为5类，这5类分别对应着5种网络号的开头</li>
-</ol>
-<table>
-<thead>
 <tr>
-<th align="center">分类</th>
-<th align="center">网络号中对应的标示</th>
-<th align="center">网络号在IP地址中占的位数</th>
+<td align="center">6</td>
+<td align="center">au声音文件</td>
+<td align="center">.au</td>
+<td align="center">auto/basic</td>
 </tr>
-</thead>
-<tbody><tr>
-<td align="center">A</td>
-<td align="center">0</td>
+<tr>
+<td align="center">7</td>
+<td align="center">MIDI音乐文件</td>
+<td align="center">.mid || .midi</td>
+<td align="center">audio/midi || audio/x-midi</td>
+</tr>
+<tr>
 <td align="center">8</td>
+<td align="center">RealAudio音乐文件</td>
+<td align="center">.ra || .ram</td>
+<td align="center">video/mpeg</td>
 </tr>
 <tr>
-<td align="center">B</td>
+<td align="center">9</td>
+<td align="center">MPEG文件</td>
+<td align="center">.mpg || .mpeg</td>
+<td align="center">video/mpeg</td>
+</tr>
+<tr>
 <td align="center">10</td>
-<td align="center">16</td>
+<td align="center">AVI文件</td>
+<td align="center">.avi</td>
+<td align="center">video/x-msvideo</td>
 </tr>
 <tr>
-<td align="center">C</td>
-<td align="center">110</td>
-<td align="center">24</td>
+<td align="center">11</td>
+<td align="center">GZIP文件</td>
+<td align="center">.gz</td>
+<td align="center">application/x-gzip</td>
 </tr>
 <tr>
-<td align="center">D</td>
-<td align="center">1110</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="center">E</td>
-<td align="center">1111</td>
-<td align="center">-</td>
+<td align="center">12</td>
+<td align="center">TAR文件</td>
+<td align="center">.tar</td>
+<td align="center">application/x-tar</td>
 </tr>
 </tbody></table>
-<ol start="2">
-<li><p>在各类IP地址中，有一些IP地址表示特殊用途，不可以当做某台主机的的IP地址。</p>
-<blockquote>
-<ul>
-<li>主机号全为0表示本网络本身</li>
-<li>主机号全为1表示本网络的广播地址</li>
-<li>127.0.0.0表示主机本身</li>
-<li>32为全为0表示本网络上的本主机。</li>
-<li>32位全为1表示整个网络的广播地址。</li>
-</ul>
-</blockquote>
-</li>
-<li></li>
-</ol>
-<h2 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h2><h1 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h1><blockquote>
-<p>负责不同主机中两个进程之间的通信。</p>
-<p>使用传输层的服务，高层用户就可以直接进行端到端的数据传输，从而忽略通信子网的存在。</p>
-</blockquote>
-<h2 id="传输层的功能"><a href="#传输层的功能" class="headerlink" title="传输层的功能"></a>传输层的功能</h2><blockquote>
-<ol>
-<li><p>传输层为运行在不同主机上的进程之间提供了<strong>逻辑通信</strong>（即端到端的通信）。</p>
-<p>[网络层提供的是<strong>主机</strong>之间的<strong>逻辑通信</strong>（即<code>点到点</code>的通信）。数据链路层提供的也是<code>点到点</code>的<strong>逻辑通信</strong>。] [<code>逻辑通信</code>是指2个对等层之间好像是沿水平方向传送数据，实际上并不是。真正的<strong>物理通信</strong>只有物理层上的比特流的传输]</p>
-</li>
-<li><p>流量控制</p>
-</li>
-<li><p>差错控制</p>
-</li>
-<li><p>服务治理</p>
-</li>
-<li><p>数据传输管理</p>
-</li>
-</ol>
-</blockquote>
-<h2 id="传输层常见协议"><a href="#传输层常见协议" class="headerlink" title="传输层常见协议"></a>传输层常见协议</h2><blockquote>
-<ol>
-<li>TCP</li>
-<li>UDP</li>
-</ol>
-</blockquote>
-<h2 id="TCP协议的三次握手-amp-四次挥手"><a href="#TCP协议的三次握手-amp-四次挥手" class="headerlink" title="TCP协议的三次握手&amp;四次挥手"></a>TCP协议的三次握手&amp;四次挥手</h2><h3 id="TCP连接的建立"><a href="#TCP连接的建立" class="headerlink" title="TCP连接的建立"></a>TCP连接的建立</h3><p>TCP连接的建立要经过3个步骤，通常称为“三次握手”。</p>
-<blockquote>
-<ul>
-<li>step1：客户机的TCP首先向服务器的TCP发送一个连接请求报文段，这个特殊的报文段中不包含应用层数据。</li>
-<li>step2：服务器的TCP接收到连接请求报文段后，如果同意建立连接，就向客户机发回确认，并为该TCP连接分配TCP缓存和变量。</li>
-<li>step3：当客户机收到确认报文段后，还要想服务器给出确认，并且也要给连接分配缓存和变量。该报文段可以携带数据，如果不携带数据则不消耗序列号。</li>
-</ul>
-</blockquote>
-<p>在成功进行了以上三步后，TCP连接就建立了，接下来就可以传递应用层数据了。</p>
-<h3 id="TCP连接的释放"><a href="#TCP连接的释放" class="headerlink" title="TCP连接的释放"></a>TCP连接的释放</h3><p>参与TCP连接的两个进程中的任何一个都能终止该连接，TCP连接的释放过程通常称为“四次挥手”。</p>
-<blockquote>
-<ul>
-<li>step1：客户机打算关闭连接，就向服务器TCP发送一个连接释放报文段，并停止再发送数据，主动关闭TCP连接。</li>
-<li>step2：服务器收到连接释放报文段后发出确认。</li>
-<li>step3：若服务器已经没有要向客户机发送的数据，就通知TCP释放连接，发出连接释放报文段。</li>
-<li>step4：客户机收到连接释放报文段后，向服务器发出确认报文段。</li>
-</ul>
-</blockquote>
-<h1 id="会话层"><a href="#会话层" class="headerlink" title="会话层"></a>会话层</h1><blockquote>
-<p>会话层利用传输层提供的端到端的服务，并对该服务进行增强。</p>
-</blockquote>
-<h1 id="表示层"><a href="#表示层" class="headerlink" title="表示层"></a>表示层</h1><blockquote>
-<p><code>表示层</code>主要用于处理2个系统中交换信息的表示方式。</p>
-</blockquote>
-<h1 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h1><blockquote>
-<p>面向用户，是用户与计算机网络的界面</p>
-</blockquote>
 
       
     </div>
