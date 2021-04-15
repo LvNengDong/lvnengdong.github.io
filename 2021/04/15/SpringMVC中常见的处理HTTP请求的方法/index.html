@@ -23,26 +23,20 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="查看依赖关系进入pom.xml文件，单击鼠标右键，出现如下提示，按图操作可进入依赖管理的图形可视化界面。   进入当前项目所在的文件夹 IDEA + SpringBoot + maven 项目文件说明  .idea文件夹：存放项目的配置信息  包括数据源，类库，项目字符编码，历史记录，版本控制信息等。 （多为本地配置信息，进行版本控制时不用上传）  .mvn 文件夹：存放mvnw相关文件  存放着">
+<meta name="description" content="自动绑定 SpringMVC 绑定请求参数是自动实现的，但是想要使用，必须遵循使用要求。  使用情况较少！！！  @RequestParam 支持POST和GET请求。 只支持Content-Type：为application&#x2F;x-www-form-urlencoded编码的内容。Http协议中，如果不指定Content-Type，则默认传递的参数就是application&#x2F;x-www-form-">
 <meta property="og:type" content="article">
-<meta property="og:title" content="IDEA常用功能">
-<meta property="og:url" content="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/index.html">
+<meta property="og:title" content="SpringMVC中常见的处理HTTP请求的方法">
+<meta property="og:url" content="http://example.com/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="查看依赖关系进入pom.xml文件，单击鼠标右键，出现如下提示，按图操作可进入依赖管理的图形可视化界面。   进入当前项目所在的文件夹 IDEA + SpringBoot + maven 项目文件说明  .idea文件夹：存放项目的配置信息  包括数据源，类库，项目字符编码，历史记录，版本控制信息等。 （多为本地配置信息，进行版本控制时不用上传）  .mvn 文件夹：存放mvnw相关文件  存放着">
+<meta property="og:description" content="自动绑定 SpringMVC 绑定请求参数是自动实现的，但是想要使用，必须遵循使用要求。  使用情况较少！！！  @RequestParam 支持POST和GET请求。 只支持Content-Type：为application&#x2F;x-www-form-urlencoded编码的内容。Http协议中，如果不指定Content-Type，则默认传递的参数就是application&#x2F;x-www-form-">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227195856871.png">
-<meta property="og:image" content="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227200057675.png">
-<meta property="og:image" content="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227212659314.png">
-<meta property="og:image" content="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20210329181048627.png">
-<meta property="og:image" content="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20210329182421482.png">
-<meta property="article:published_time" content="2020-12-27T13:58:59.000Z">
-<meta property="article:modified_time" content="2021-04-03T04:13:23.054Z">
+<meta property="article:published_time" content="2021-04-15T15:58:00.000Z">
+<meta property="article:modified_time" content="2021-04-15T16:18:59.493Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227195856871.png">
 
 
-<link rel="canonical" href="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/">
+<link rel="canonical" href="http://example.com/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/">
 
 
 <script class="page-configurations">
@@ -54,7 +48,7 @@
     lang   : 'en'
   };
 </script>
-<title>IDEA常用功能 | Hexo</title>
+<title>SpringMVC中常见的处理HTTP请求的方法 | Hexo</title>
   
 
 
@@ -153,7 +147,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB"><span class="nav-number">1.</span> <span class="nav-text">查看依赖关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%BD%93%E5%89%8D%E9%A1%B9%E7%9B%AE%E6%89%80%E5%9C%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">2.</span> <span class="nav-text">进入当前项目所在的文件夹</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IDEA-SpringBoot-maven-%E9%A1%B9%E7%9B%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="nav-number">3.</span> <span class="nav-text">IDEA + SpringBoot + maven 项目文件说明</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E7%BB%91%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text">自动绑定</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RequestParam"><span class="nav-number">2.</span> <span class="nav-text">@RequestParam</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RequestBody"><span class="nav-number">3.</span> <span class="nav-text">@RequestBody</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PathVaribale"><span class="nav-number">4.</span> <span class="nav-text">@PathVaribale</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ModelAttribute"><span class="nav-number">5.</span> <span class="nav-text">@ModelAttribute</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -215,7 +209,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -228,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          IDEA常用功能
+          SpringMVC中常见的处理HTTP请求的方法
         </h1>
 
         <div class="post-meta-container">
@@ -239,14 +233,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2020-12-27 21:58:59" itemprop="dateCreated datePublished" datetime="2020-12-27T21:58:59+08:00">2020-12-27</time>
+      <time title="Created: 2021-04-15 23:58:00" itemprop="dateCreated datePublished" datetime="2021-04-15T23:58:00+08:00">2021-04-15</time>
     </span>
       <span class="post-meta-item">
         <span class="post-meta-item-icon">
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-03 12:13:23" itemprop="dateModified" datetime="2021-04-03T12:13:23+08:00">2021-04-03</time>
+        <time title="Modified: 2021-04-16 00:18:59" itemprop="dateModified" datetime="2021-04-16T00:18:59+08:00">2021-04-16</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -254,7 +248,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+          <a href="/categories/SpringMVC/" itemprop="url" rel="index"><span itemprop="name">SpringMVC</span></a>
         </span>
     </span>
 
@@ -268,53 +262,34 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="查看依赖关系"><a href="#查看依赖关系" class="headerlink" title="查看依赖关系"></a>查看依赖关系</h1><p>进入<code>pom.xml</code>文件，单击鼠标右键，出现如下提示，按图操作可进入依赖管理的图形可视化界面。</p>
-<p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227195856871.png"></p>
-<p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227200057675.png"></p>
-<h1 id="进入当前项目所在的文件夹"><a href="#进入当前项目所在的文件夹" class="headerlink" title="进入当前项目所在的文件夹"></a>进入当前项目所在的文件夹</h1><p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227212659314.png"></p>
-<h1 id="IDEA-SpringBoot-maven-项目文件说明"><a href="#IDEA-SpringBoot-maven-项目文件说明" class="headerlink" title="IDEA + SpringBoot + maven 项目文件说明"></a>IDEA + SpringBoot + maven 项目文件说明</h1><p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20210329181048627.png" alt="image-20210329181048627"></p>
-<blockquote>
-<p><strong>.idea</strong>文件夹：存放项目的配置信息</p>
+        <h1 id="自动绑定"><a href="#自动绑定" class="headerlink" title="自动绑定"></a>自动绑定</h1><blockquote>
+<p><em>SpringMVC 绑定请求参数是自动实现的，但是想要使用，必须遵循使用要求。</em></p>
 </blockquote>
-<p>包括数据源，类库，项目字符编码，历史记录，版本控制信息等。</p>
-<p>（多为本地配置信息，进行版本控制时不用上传）</p>
-<blockquote>
-<p><strong>.mvn</strong> 文件夹：存放mvnw相关文件</p>
-</blockquote>
-<p>存放着 maven-wrapper.properties 和相关 jar 包以及名为 MavenWrapperDownloader 的 java 文件</p>
-<p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20210329182421482.png" alt="image-20210329182421482"></p>
-<blockquote>
-<p><strong>mvnw / mvnw.cmd</strong> 文件</p>
-</blockquote>
-<p>全名是 MavenWrapper（Maven包装器），它的作用是在 <code>maven-wrapper.properties</code> 文件中记录你要使用的 Maven 版本，当用户执行 <code>mvnw clean</code> 命令时，如果发现当前用户的 Maven 版本和期望的版本不一致，那么就下载期望的版本，然后用期望的版本来执行 <code>mvn</code> 命令，比如 <code>mvn clean</code> 命令。</p>
-<ul>
-<li><strong>mvnw</strong> ：执行 <code>mvnw</code> 命令的 sh 入口（适配 Linux 系统）</li>
-<li><strong>mvnw.cmd</strong> ：执行 mvnw 命令的 cmd 入口（适配 Windows 系统）</li>
+<p>使用情况较少！！！</p>
+<hr>
+<h1 id="RequestParam"><a href="#RequestParam" class="headerlink" title="@RequestParam"></a>@RequestParam</h1><ul>
+<li>支持POST和GET请求。</li>
+<li>只支持Content-Type：为application/x-www-form-urlencoded编码的内容。Http协议中，如果不指定Content-Type，则默认传递的参数就是application/x-www-form-urlencoded类型</li>
 </ul>
-<blockquote>
-<p><strong>src</strong> 文件夹</p>
-</blockquote>
-<p>工作区文件夹</p>
-<blockquote>
-<p><strong>target</strong> 文件夹</p>
-</blockquote>
-<blockquote>
-<p><strong>gitignore</strong> 文件： 分布式版本控制系统 Git 的配置文件，意思为忽略提交！</p>
-</blockquote>
-<p>在 .gitingore 文件中，需遵循相应的语法，即在每一行指定一个忽略规则。 如：.log、/target/、.idea</p>
-<blockquote>
-<p><strong>HELP.md</strong> 文件</p>
-</blockquote>
-<p>帮助文档文件！</p>
-<blockquote>
-<p><strong>xxx.iml</strong>文件：Intellij idea 的工程配置文件</p>
-</blockquote>
-<p>包含当前project的一些配置信息，如模块开发的相关信息，比如java组件，maven组件，插件组件等，还可能会存储一些模块路径信息，依赖信息以及一些别的信息。</p>
-<blockquote>
-<p><strong>pom.xml</strong>文件：项目对象模型（核心重要）</p>
-</blockquote>
-<p>pom.xml主要描述了项目的maven坐标，依赖关系，开发者需要遵循的规则，缺陷管理系统，组织和licenses，以及其他所有的项目相关因素，是项目级别的配置文件。</p>
+<p>@RequestParam案例<br>使用@RequestParm用于绑定controller上的参数，可以是多个参数，也可以是一个Map集合，GET，POST均可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestParam&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Boolean <span class="title">requestParam</span><span class="params">(<span class="meta">@RequestParam(name = &quot;code&quot;,required = false)</span> String code)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;code:&quot;</span>+code);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>@RequestParm中name属性是指定参数名，required属性默认为ture，表示必传。若为false则为非必传。属性有defaultValue默认值选项，若该参数为null时，会将默认值填充到参数上。<br>在项目中还可以使用map来接收多个参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestParam</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>@RequestBody案例<br>@RequestBody绑定一个实体。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestBody&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">requestBody</span><span class="params">(<span class="meta">@RequestBody</span>  User user)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;user:&quot;</span>+user.getName());</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>@RequestBody也能采用map来接收多个参数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestBody</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="RequestBody"><a href="#RequestBody" class="headerlink" title="@RequestBody"></a>@RequestBody</h1><ul>
+<li>不支持GET请求。</li>
+<li>必须要在请求头中申明 content-Type（如application/json）。springMvc通过HandlerAdapter配置的HttpMessageConverters解析httpEntity的数据，并绑定到相应的bean上。</li>
+</ul>
+<h1 id="PathVaribale"><a href="#PathVaribale" class="headerlink" title="@PathVaribale"></a>@PathVaribale</h1><h1 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h1>
     </div>
 
     
@@ -327,14 +302,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/12/27/MyBatis%E7%9A%84XML%E6%98%A0%E5%B0%84%E5%99%A8/" rel="prev" title="MyBatis的XML映射器">
-                  <i class="fa fa-chevron-left"></i> MyBatis的XML映射器
+                <a href="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" rel="prev" title="文件的上传与下载">
+                  <i class="fa fa-chevron-left"></i> 文件的上传与下载
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/01/09/Swagger/" rel="next" title="Swagger">
-                  Swagger <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

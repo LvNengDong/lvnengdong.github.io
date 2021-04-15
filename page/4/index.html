@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">87</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,138 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/18/SpringBoot-Restful%E5%B7%A5%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/01/18/SpringBoot-Restful%E5%B7%A5%E7%A8%8B/" class="post-title-link" itemprop="url">SpringBoot-Restful工程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-01-18 10:09:08 / Modified: 12:39:22" itemprop="dateCreated datePublished" datetime="2021-01-18T10:09:08+08:00">2021-01-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="RESTful-API"><a href="#RESTful-API" class="headerlink" title="RESTful API"></a>RESTful API</h2><table>
+<thead>
+<tr>
+<th align="center">请求类型</th>
+<th align="center">URL</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">GET</td>
+<td align="center">/users</td>
+<td align="center">查询用户列表</td>
+</tr>
+<tr>
+<td align="center">POST</td>
+<td align="center">/users</td>
+<td align="center">创建一个用户</td>
+</tr>
+<tr>
+<td align="center">GET</td>
+<td align="center">/users/{id}</td>
+<td align="center">根据id查询一个用户</td>
+</tr>
+<tr>
+<td align="center">PUT</td>
+<td align="center">/users/{id}</td>
+<td align="center">根据id更新一个用户</td>
+</tr>
+<tr>
+<td align="center">DELETE</td>
+<td align="center">/users/{id}</td>
+<td align="center">根据id删除一个用户</td>
+</tr>
+</tbody></table>
+<h2 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> cn.xsyu.domain.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/users&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建线程安全的Map。[用于模拟数据库，保存user数据][全局变量]</span></span><br><span class="line">    <span class="keyword">static</span> Map&lt;Long, User&gt; users = Collections.synchronizedMap(<span class="keyword">new</span> HashMap&lt;Long, User&gt;());</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">getUserList</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">// 处理“/users/”的GET请求，用来获取用户列表</span></span><br><span class="line">        <span class="comment">/*-- 还可以通过 @RequestParam 接收从页面中传递的参数来进行查询条件筛选或分页信息等 --*/</span></span><br><span class="line">        ArrayList&lt;User&gt; userArrayList = <span class="keyword">new</span> ArrayList&lt;&gt;(users.values());</span><br><span class="line">        <span class="keyword">return</span> userArrayList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/&quot;, method = RequestMethod.POST)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">postUser</span><span class="params">(<span class="meta">@ModelAttribute</span> User user)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 处理“/users/”的POST请求，用来创建User</span></span><br><span class="line">        <span class="comment">/*-- 除了 @ModelAttribute 绑定请求参数之外，还可以通过 @RequestParam 接收从页面中传递的参数*/</span></span><br><span class="line">        users.put(user.getId(), user);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;sucess&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/&#123;id&#125;&quot;, method = RequestMethod.GET)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(<span class="meta">@PathVariable</span> Long id)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 处理“/users/&#123;id&#125;”的GET请求，用来获取url中id值的User信息</span></span><br><span class="line">        <span class="comment">/* -- url中的id可通过 @PathVariable 注解绑定到函数的参数中--*/</span></span><br><span class="line">        <span class="keyword">return</span> users.get(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/&#123;id&#125;&quot;, method = RequestMethod.PUT)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">putUser</span><span class="params">(<span class="meta">@PathVariable</span> Long id, <span class="meta">@ModelAttribute</span> User user)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 处理“/users/&#123;id&#125;”的PUT请求，用来更新User信息</span></span><br><span class="line">        User u = users.get(id);</span><br><span class="line">        u.setName(user.getName());</span><br><span class="line">        u.setAge(user.getAge());</span><br><span class="line">        users.put(id, u);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;sucess&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(value = &quot;/&#123;id&#125;&quot;, method = RequestMethod.DELETE)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">deleteUser</span><span class="params">(<span class="meta">@PathVariable</span> Long id)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 处理“users/&#123;id&#125;”的DELETE请求，用来删除User</span></span><br><span class="line">        users.remove(id);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;sucess&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可使用PostMan等软件提交请求进行验证。</p>
+</blockquote>
+<hr>
+<h2 id="运行SpringBoot-RESTful工程"><a href="#运行SpringBoot-RESTful工程" class="headerlink" title="运行SpringBoot-RESTful工程"></a>运行SpringBoot-RESTful工程</h2><blockquote>
+<ol>
+<li>数据库准备。<ul>
+<li>创建数据库</li>
+<li>创建表</li>
+<li>插入数据</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="2">
+<li></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span> 处理请求地址映射。</span><br><span class="line">method - 指定请求的⽅法类型：POST/GET/DELETE/PUT 等</span><br><span class="line">value - 指定实际的请求地址</span><br><span class="line">consumes - 指定处理请求的提交内容类型，例如 Content-Type 头部设置application/json,</span><br><span class="line">text/html</span><br><span class="line">produces - 指定返回的内容类型</span><br><span class="line"><span class="meta">@PathVariable</span> URL 映射时，⽤于绑定请求参数到⽅法参数</span><br><span class="line"><span class="meta">@RequestBody</span> 这⾥注解⽤于读取请求体 boy 的数据，通过 HttpMessageConverter 解析绑定到对象</span><br><span class="line">中</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2117,135 +2249,6 @@
 
 
 <h2 id="Valid-注解"><a href="#Valid-注解" class="headerlink" title="@Valid 注解"></a>@Valid 注解</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/keyset-%E5%92%8Centryset-%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/12/08/keyset-%E5%92%8Centryset-%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">keyset()和entryset()的区别</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-12-08 21:25:02 / Modified: 22:23:28" itemprop="dateCreated datePublished" datetime="2020-12-08T21:25:02+08:00">2020-12-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <ol>
-<li><p>方法</p>
-<table>
-<thead>
-<tr>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>map.keySet()</code></td>
-<td align="center">获取Map集合中的所有key，并加入到Set集合中</td>
-</tr>
-<tr>
-<td align="center"><code>Iterator.hasNext()</code></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"><code>Iterator.next()</code></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"><code>Map.get(key)</code></td>
-<td align="center">Map集合中通过key获取value的方法</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-</li>
-</ol>
-<h2 id="keySet-方法"><a href="#keySet-方法" class="headerlink" title="keySet()方法"></a>keySet()方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Map map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;01&quot;</span>, <span class="string">&quot;派大星&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;02&quot;</span>, <span class="string">&quot;海绵宝宝&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;03&quot;</span>, <span class="string">&quot;痞老板&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Map.keySet()方法：</span></span><br><span class="line">    <span class="comment">// 1、先获取map集合的所有键的Set集合</span></span><br><span class="line">    Set keySet = map.keySet();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2、有了Set集合，就可以获取其迭代器。(因为Set集合实现了Iterable接口)</span></span><br><span class="line">    Iterator iterator = keySet.iterator();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">while</span> (iterator.hasNext())&#123;</span><br><span class="line">        <span class="comment">// 获取Map集合中的每个键</span></span><br><span class="line">        String key = (String) iterator.next();</span><br><span class="line">        <span class="comment">//有了键可以通过map集合的get方法获取其对应的值。</span></span><br><span class="line">        String value = (String) map.get(key);</span><br><span class="line">        <span class="comment">// 打印输出</span></span><br><span class="line">        System.out.println(<span class="string">&quot;&#123;&quot;</span>+key+<span class="string">&quot;：&quot;</span>+value+<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="entrySet方法"><a href="#entrySet方法" class="headerlink" title="entrySet方法"></a>entrySet方法</h2><ul>
-<li><code>Map.entrySet()</code>得到一个Set集合，该集合的泛型是一个<strong>内部类</strong>，即为<code>Map.Entry类</code>，该内部类包含了Map集合的映射关系（一个关系就是一个键值对），就是把(key-value)作为一个整体一对一对地存放到Set集合当中的。</li>
-<li><code>Map.Entry类</code>里面包含<code>getKey()</code>和<code>getValue()</code>方法</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Map map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;01&quot;</span>, <span class="string">&quot;派大星&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;02&quot;</span>, <span class="string">&quot;海绵宝宝&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;03&quot;</span>, <span class="string">&quot;痞老板&quot;</span>);</span><br><span class="line">	<span class="comment">// </span></span><br><span class="line">    Set&lt;Map.Entry&lt;String, String&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">    Iterator&lt;Map.Entry&lt;String, String&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line">    <span class="keyword">while</span> (iterator.hasNext())&#123;</span><br><span class="line">        Map.Entry&lt;String, String&gt; entry = iterator.next();</span><br><span class="line">        String key = entry.getKey();</span><br><span class="line">        String value = entry.getValue();</span><br><span class="line">        System.out.println(<span class="string">&quot;&#123;&quot;</span>+key+<span class="string">&quot;：&quot;</span>+value+<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
       
     </div>
 
