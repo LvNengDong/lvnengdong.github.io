@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="下载 &amp; 安装 使用宝塔的一键安装！   远端访问在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：    是否放开了服务器的防火墙。   MongoDB 对外开放的端口号是 27017，必须放开此端口的防火墙。    设置允许所有地址访问。   MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB下载与安装">
+<meta property="og:url" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="下载 &amp; 安装 使用宝塔的一键安装！   远端访问在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：    是否放开了服务器的防火墙。   MongoDB 对外开放的端口号是 27017，必须放开此端口的防火墙。    设置允许所有地址访问。   MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505103207460.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504220804360.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505105819882.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221215610.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221640941.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504222318840.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111109060.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111159182.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111544758.png">
+<meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111829513.png">
+<meta property="article:published_time" content="2021-05-05T03:46:13.000Z">
+<meta property="article:modified_time" content="2021-05-05T03:49:53.806Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505103207460.png">
+
+
+<link rel="canonical" href="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>MongoDB下载与安装 | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD-amp-%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">下载 &amp; 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%AB%AF%E8%AE%BF%E9%97%AE"><span class="nav-number">1.1.</span> <span class="nav-text">远端访问</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MongoDB-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8A%A0%E5%AF%86"><span class="nav-number">2.</span> <span class="nav-text">MongoDB 数据库加密</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E8%BF%9B%E5%85%A5-MongoDB-%E7%8E%AF%E5%A2%83"><span class="nav-number">2.1.</span> <span class="nav-text">1、在服务器端进入 MongoDB 环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-MongoDB-%E5%AE%89%E8%A3%85%E5%9C%A8-Docker-%E4%B8%AD"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1    MongoDB 安装在 Docker 中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%80%9A%E8%BF%87%E5%AE%9D%E5%A1%94%E5%AE%89%E8%A3%85%E7%9A%84-MongoDB"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.2    通过宝塔安装的 MongoDB</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81%E5%88%87%E6%8D%A2%E5%88%B0-%E2%80%98admin%E2%80%99-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.2.</span> <span class="nav-text">2、切换到 ‘admin’ 数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E8%AE%BE%E7%BD%AE%E8%B6%85%E7%BA%A7%E7%AE%A1%E7%90%86%E5%91%98%E7%94%A8%E6%88%B7"><span class="nav-number">2.3.</span> <span class="nav-text">3、设置超级管理员用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E7%BB%99%E7%89%B9%E5%AE%9A%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E7%BD%AE%E6%9D%83%E9%99%90"><span class="nav-number">2.4.</span> <span class="nav-text">4、给特定的数据库设置权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%88%87%E6%8D%A2%E5%88%B0-beauty-dev-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.4.1.</span> <span class="nav-text">4.1    切换到 beauty_dev 数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7"><span class="nav-number">2.4.2.</span> <span class="nav-text">4.2    添加用户</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81%E9%87%8D%E5%90%AF"><span class="nav-number">2.5.</span> <span class="nav-text">5、重启</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%AE%9D%E5%A1%94%E5%8F%AF%E8%A7%86%E5%8C%96%E7%95%8C%E9%9D%A2%E4%BF%AE%E6%94%B9"><span class="nav-number">2.5.1.</span> <span class="nav-text">5.1    宝塔可视化界面修改</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6%E3%80%81%E6%95%88%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">2.6.</span> <span class="nav-text">6、效果展示</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">92</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MongoDB下载与安装
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-05 11:46:13 / Modified: 11:49:53" itemprop="dateCreated datePublished" datetime="2021-05-05T11:46:13+08:00">2021-05-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MongoDB/" itemprop="url" rel="index"><span itemprop="name">MongoDB</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="下载-amp-安装"><a href="#下载-amp-安装" class="headerlink" title="下载 &amp; 安装"></a>下载 &amp; 安装</h1><ul>
+<li>使用宝塔的一键安装！</li>
+</ul>
+<hr>
+<h2 id="远端访问"><a href="#远端访问" class="headerlink" title="远端访问"></a>远端访问</h2><p>在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：</p>
+<blockquote>
+<ol>
+<li> 是否放开了服务器的防火墙。</li>
+</ol>
+</blockquote>
+<p>MongoDB 对外开放的端口号是 <strong>27017</strong>，必须放开此端口的防火墙。</p>
+<blockquote>
+<ol start="2">
+<li> 设置允许所有地址访问。</li>
+</ol>
+</blockquote>
+<p>MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需要修改配置文件。（下图是默认配置文件的配置信息）</p>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505103207460.png" alt="image-20210505103207460"></p>
+<ul>
+<li><p>可直接设置配置文件为 <code>bindIpAll: true</code>，即允许所有的IPv4和IPv6地址访问</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIpAll</span>: <span class="string">true</span></span><br></pre></td></tr></table></figure></li>
+<li><p>也可以将 bindIp 修改为 <code>0.0.0.0</code></p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIp</span>: <span class="string">0.0.0.0</span></span><br></pre></td></tr></table></figure></li>
+<li><p>注意事项：<br><strong>net.bindIp</strong> 和 <strong>net.bindIpAll</strong> 是互斥的。也就是说，你可以指定其中一个，但不能同时指定两者。</p>
+</li>
+</ul>
+<hr>
+<h1 id="MongoDB-数据库加密"><a href="#MongoDB-数据库加密" class="headerlink" title="MongoDB 数据库加密"></a>MongoDB 数据库加密</h1><blockquote>
+<p>  MongoDB 的用户名和密码是基于特定数据库的，而不是基于整个系统的，所以所有的数据库都需要设置密码。</p>
+</blockquote>
+<p>如果需要给 MongoDB 数据库使用安全验证，则需要用 <code>--auth</code> 开启安全性检查，只有认证通过的用户才能对数据库执行读写操作。</p>
+<h2 id="1、在服务器端进入-MongoDB-环境"><a href="#1、在服务器端进入-MongoDB-环境" class="headerlink" title="1、在服务器端进入 MongoDB 环境"></a>1、在服务器端进入 MongoDB 环境</h2><h3 id="1-1-MongoDB-安装在-Docker-中"><a href="#1-1-MongoDB-安装在-Docker-中" class="headerlink" title="1.1    MongoDB 安装在 Docker 中"></a>1.1    MongoDB 安装在 Docker 中</h3><blockquote>
+<p>  如果 MongoDB 安装在 Docker 中，首先进入 Docker 的 MongoDB 环境中！</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it [容器id&#x2F;容器名] mongo</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504220804360.png" alt="image-20210504220804360"></p>
+<h3 id="1-2-通过宝塔安装的-MongoDB"><a href="#1-2-通过宝塔安装的-MongoDB" class="headerlink" title="1.2    通过宝塔安装的 MongoDB"></a>1.2    通过宝塔安装的 MongoDB</h3><blockquote>
+<p>  如果是通过宝塔安装的 MongoDB ，其默认的安装位置为：<code>/www/server/mongodb</code> （通过宝塔安装的所有应用都保存在 <strong>/www/server</strong> 目录下）</p>
+</blockquote>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505105819882.png" alt="image-20210505105819882"></p>
+<ol>
+<li> 进入 MongoDB 的安装目录：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /www/server/mongodb/bin</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li> 输入命令 <code>mongo</code> ，进入 MongoDB 环境</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="2、切换到-‘admin’-数据库"><a href="#2、切换到-‘admin’-数据库" class="headerlink" title="2、切换到 ‘admin’ 数据库"></a>2、切换到 ‘admin’ 数据库</h2><blockquote>
+<p>  <strong>admin</strong> 数据库是 MongoDB 初始化时创建的，用于管理用户角色。</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221215610.png" alt="image-20210504221215610"></p>
+<h2 id="3、设置超级管理员用户"><a href="#3、设置超级管理员用户" class="headerlink" title="3、设置超级管理员用户"></a>3、设置超级管理员用户</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user: <span class="string">&#x27;superPanda&#x27;</span>, <span class="built_in">pwd</span>: <span class="string">&#x27;pandaMaster&#x27;</span>, roles:[<span class="string">&#x27;root&#x27;</span>]&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>  user：超级管理员的用户名</li>
+<li>  pwd：超级管理员的用户密码</li>
+<li>  roles：用于设置用户的权限，如：读、写等等。<strong>root</strong> 代表所有权限</li>
+</ul>
+</blockquote>
+<p>验证是否添加成功：如果返回 “1” 表示添加成功，返回 “0” 表示添加失败。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.auth(<span class="string">&#x27;用户名&#x27;</span>, <span class="string">&#x27;用户密码&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221640941.png" alt="image-20210504221640941"></p>
+<h2 id="4、给特定的数据库设置权限"><a href="#4、给特定的数据库设置权限" class="headerlink" title="4、给特定的数据库设置权限"></a>4、给特定的数据库设置权限</h2><blockquote>
+<p>  第3步是给超级管理员设置账号和密码，现在要给特定的库设置权限。我这里以 <strong>beauty_dev</strong> 库为例。</p>
+</blockquote>
+<h3 id="4-1-切换到-beauty-dev-数据库"><a href="#4-1-切换到-beauty-dev-数据库" class="headerlink" title="4.1    切换到 beauty_dev 数据库"></a>4.1    切换到 beauty_dev 数据库</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use beauty_dev</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-添加用户"><a href="#4-2-添加用户" class="headerlink" title="4.2    添加用户"></a>4.2    添加用户</h3><blockquote>
+<p>  为 beauty_dev 库添加一个用户，并赋予权限。</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user:<span class="string">&#x27;用户名&#x27;</span>, <span class="built_in">pwd</span>:<span class="string">&#x27;密码&#x27;</span>, roles: [&#123;role: <span class="string">&#x27;readWrite&#x27;</span>, db: <span class="string">&#x27;beauty_dev&#x27;</span>&#125;]&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  这段命令的意思是：创建一个普通用户，并给予读写权限，<code>db</code> 表示用户可操作的数据库名。</li>
+</ul>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504222318840.png" alt="image-20210504222318840"></p>
+<blockquote>
+<p>  <strong>常见的权限类型：</strong></p>
+<p>  Read：允许用户读取指定数据库</p>
+<p>  readWrite：允许用户读写指定数据库</p>
+<p>  dbAdmin：允许用户在指定数据库中执行管理函数，如索引创建、删除，查看统计或访问system.profile</p>
+<p>  userAdmin：允许用户向system.users集合写入，可以找指定数据库里创建、删除和管理用户</p>
+<p>  clusterAdmin：只在admin数据库中可用，赋予用户所有分片和复制集相关函数的管理权限。</p>
+<p>  readAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读权限</p>
+<p>  readWriteAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读写权限</p>
+<p>  userAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的userAdmin权限</p>
+<p>  dbAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的dbAdmin权限。</p>
+<p>  root：只在admin数据库中可用。超级账号，超级权限</p>
+</blockquote>
+<h2 id="5、重启"><a href="#5、重启" class="headerlink" title="5、重启"></a>5、重启</h2><blockquote>
+<p>  配置完成后，重启 MongoDB。</p>
+<p>  MongoDB 默认不开启访问控制，我们要通过 <code>--auth</code> 参数开启安全登录。<code>--auth</code> 一旦开启了，用户连接 MongoDB 的数据库时必须制定用户名和密码。</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo --dbpath 存放数据库文件夹路径 --auth</span><br><span class="line"></span><br><span class="line">mongod --dbpath /www/server/mongodb/data --auth		<span class="comment"># 宝塔中存放数据库数据的文件路径</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-1-宝塔可视化界面修改"><a href="#5-1-宝塔可视化界面修改" class="headerlink" title="5.1    宝塔可视化界面修改"></a>5.1    宝塔可视化界面修改</h3><ul>
+<li>  修改前</li>
+</ul>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111109060.png" alt="image-20210505111109060"></p>
+<ul>
+<li>  修改后</li>
+</ul>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111159182.png" alt="image-20210505111159182"></p>
+<ul>
+<li>  重启即可完成加密登录</li>
+</ul>
+<h2 id="6、效果展示"><a href="#6、效果展示" class="headerlink" title="6、效果展示"></a>6、效果展示</h2><p>此时通过无密登录已经无法正常访问数据库了。</p>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111544758.png" alt="image-20210505111544758"></p>
+<p>只有通过用户认证（账号密码登录）后才能正常访问数据库。</p>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111829513.png" alt="image-20210505111829513"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/" rel="prev" title="SpringBoot处理json格式的请求数据">
+                  <i class="fa fa-chevron-left"></i> SpringBoot处理json格式的请求数据
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
