@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,600 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/MapReduce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/02/19/MapReduce/" class="post-title-link" itemprop="url">MapReduce</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-19 15:10:17" itemprop="dateCreated datePublished" datetime="2021-02-19T15:10:17+08:00">2021-02-19</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-02-23 23:09:59" itemprop="dateModified" datetime="2021-02-23T23:09:59+08:00">2021-02-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Hadoop/" itemprop="url" rel="index"><span itemprop="name">Hadoop</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="MapReduce概述"><a href="#MapReduce概述" class="headerlink" title="MapReduce概述"></a>MapReduce概述</h1><h2 id="MapReduce定义"><a href="#MapReduce定义" class="headerlink" title="MapReduce定义"></a>MapReduce定义</h2><p>MapReduce 是一个分布式运算程序的编程框架，是用户开发“基于Hadoop的数据分析应用”的核心框架。</p>
+<p>MapReduce核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个Hadoop集群上。</p>
+<h2 id="MapReduce优缺点"><a href="#MapReduce优缺点" class="headerlink" title="MapReduce优缺点"></a>MapReduce优缺点</h2><h3 id="优点——简单"><a href="#优点——简单" class="headerlink" title="优点——简单"></a>优点——简单</h3><h3 id="缺点——慢"><a href="#缺点——慢" class="headerlink" title="缺点——慢"></a>缺点——慢</h3><hr>
+<blockquote>
+<p>如何对数据进行切片？</p>
+</blockquote>
+<h2 id="Shuffle"><a href="#Shuffle" class="headerlink" title="Shuffle"></a>Shuffle</h2><p>shuffle：洗牌</p>
+<p>从 Mapper 出去到 Reducer 接收之前全部都是 Shuffle 的范围。</p>
+<blockquote>
+<p>Shuffle 阶段数据发生了关键的变化：</p>
+</blockquote>
+<ol>
+<li>从 Mapper 出去的 &lt;K，V&gt; 值是无序的，而到了 Reducer 中数据则是有分组的。 也就是说，在 Shuffle 阶段会将数据整理、分组。</li>
+<li>Mapper 出来的数据是无序的，在 Shuffle 阶段首先对数据进行排序，排完序之后，相等的数据就挨在一起了，再进行分组就相对容易了。</li>
+<li>排序方法：快排 + 归并<ul>
+<li>对于快速排序来说，需要将所有的数据全部加载进内存中然后再进行比较；但是对于大数据而言，显然是不合理的。所以会先将大数据的切分，对每一块数据进行快排。</li>
+<li>然后再将多个有序块再进行归并排序。</li>
+</ul>
+</li>
+<li>数据会被分片（逻辑上），每一个片对应一个 MapTask 。每个 MapTask 都会进行排序，最终形成一个归并排序后的有序数据块，这些数据块最终又会汇总到一个 Reducer 中。Reducer 在拿到多个有序文件后，再进行一次归并让多个有序文件变成一个有序文件，最终输入到 Reducer 中。</li>
+<li>这就是 Shuffle 阶段如何把数据进行排序、分组的过程。</li>
+</ol>
+<ul>
+<li>三次排序：<ol>
+<li>快排</li>
+<li>归并</li>
+<li>再次归并</li>
+</ol>
+</li>
+</ul>
+<h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/10/Hadoop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/02/10/Hadoop/" class="post-title-link" itemprop="url">Hadoop</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-10 10:49:09" itemprop="dateCreated datePublished" datetime="2021-02-10T10:49:09+08:00">2021-02-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-02-26 11:12:03" itemprop="dateModified" datetime="2021-02-26T11:12:03+08:00">2021-02-26</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Hadoop/" itemprop="url" rel="index"><span itemprop="name">Hadoop</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="大数据"><a href="#大数据" class="headerlink" title="大数据"></a>大数据</h1><blockquote>
+<p>大数据（Big Data）：</p>
+</blockquote>
+<p>大数据指<strong>无法在一定时间范围内</strong>用常规软件工具进行捕捉、管理和处理的数据集合。是需要新处理模式才能具有更强的决策力、洞察发现力和流程优化能力的<strong>海量、高增长率和多样化的信息资产</strong>。</p>
+<ul>
+<li><strong>多样化</strong>：传统的数据库如 MySQL 只能处理结构化的数据类型，而大数据不仅可以处理结构化的数据，还可以处理非结构化、半结构化的数据。</li>
+</ul>
+<blockquote>
+<p>大数据技术/大数据框架：</p>
+</blockquote>
+<p>主要解决，海量数据的<strong>存储</strong>和海量数据的<strong>分析计算</strong>问题。</p>
+<blockquote>
+<p>大数据特点：</p>
+</blockquote>
+<ol>
+<li><p>Volume（大量）  </p>
+</li>
+<li><p>Velocity（高速）</p>
+</li>
+<li><p>Variety（多样）</p>
+</li>
+<li><p>Value（低价值密度）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">因为低价值密度的特点，所以需要：</span><br><span class="line">    （1）我们的计算机有足够好的算力；</span><br><span class="line">    （2）优良的算法。</span><br></pre></td></tr></table></figure></li>
+</ol>
+<blockquote>
+<p>大数据应用场景</p>
+</blockquote>
+<hr>
+<h1 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h1><blockquote>
+<p>Hadoop 设计的初衷是采用大量廉价的机器，组成一个集群！完成大数据的存储和计算！[通过数量的堆叠来提高算力]</p>
+</blockquote>
+<h2 id="Hadoop-是什么"><a href="#Hadoop-是什么" class="headerlink" title="Hadoop 是什么"></a>Hadoop 是什么</h2><ul>
+<li>Hadoop 是一个由 Apache 基金会所开发的<strong>分布式系统基础架构</strong>。</li>
+<li>主要解决，海量数据的<strong>存储</strong>和海量数据的<strong>分析计算</strong>问题。</li>
+<li>狭义上来说，单指 Hadoop 技术。</li>
+<li>广义上来说，Hadoop 通常是指一个更广泛的概念——<strong>Hadoop 生态圈</strong></li>
+</ul>
+<p><img src="/2021/02/10/Hadoop/image-20210210110619991.png" alt="image-20210210110619991"></p>
+<hr>
+<h2 id="Hadoop-的优点（4高）"><a href="#Hadoop-的优点（4高）" class="headerlink" title="Hadoop 的优点（4高）"></a>Hadoop 的优点（4高）</h2><blockquote>
+<ol>
+<li>高可靠性</li>
+</ol>
+</blockquote>
+<p>Hadoop 底层维护多个数据副本，所以即使 Hadoop 某个计算元素或存储出现故障（即使 Hadoop 集群中的某个数据副本所在的节点出现故障），也不会导致数据的丢失。</p>
+<p>而且 Hadoop 会实时动态的监测集群中的副本，如果集群中的某个节点发生故障导致副本数小于集群预设的副本数，那么 Hadoop 就会自动创建一个新的副本，维护副本数量等于预设的副本数量。</p>
+<blockquote>
+<ol start="2">
+<li>高扩展性</li>
+</ol>
+</blockquote>
+<p>在集群间分配任务数据，可方便的扩展数以千计的节点。</p>
+<p>在处理数据时如果发现集群中的节点不够使用了，可以很方便的增加一些节点扩展整个 Hadoop 集群。</p>
+<blockquote>
+<ol start="3">
+<li>高效性</li>
+</ol>
+</blockquote>
+<p>在 MapReduce 的思想下，Hadoop 是并行工作的，以加快任务处理速度。</p>
+<blockquote>
+<ol start="4">
+<li>高容错性</li>
+</ol>
+</blockquote>
+<p>能够自动将失败的任务重新分配。</p>
+<p>Hadoop 在 Map 阶段会将大的任务分成若干个小的任务进行运算，如果在运算过程中某个小的任务因某些不可抗力因素发生失败，那么 Hadoop  就会重新分配一个线程来运行未成功的任务，直至成功。</p>
+<hr>
+<h2 id="Hadoop-中的组件"><a href="#Hadoop-中的组件" class="headerlink" title="Hadoop 中的组件"></a>Hadoop 中的组件</h2><p><img src="/2021/02/10/Hadoop/image-20210210111631179.png" alt="image-20210210111631179"></p>
+<ul>
+<li>在 Hadoop1.x 时代，Hadoop 中的 MapReduce 同时处理业务逻辑运算和资源的调度，耦合性较大；</li>
+<li><strong>在Hadoop2.x时代，增加了 Yarn 。Yarn 只负责资源的调度，MapReduce 只负责运算。</strong></li>
+</ul>
+<h3 id="Hadoop-1-0"><a href="#Hadoop-1-0" class="headerlink" title="Hadoop 1.0"></a>Hadoop 1.0</h3><ul>
+<li>HDFS：负责大数据的存储</li>
+<li>Common：HDFS 和 MR 共有的常用的工具包模块。</li>
+<li>MapReduce：<ol>
+<li>负责计算。</li>
+<li>负责计算资源的申请和调度。</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">完成Java程序运行 vs. 完成大数据的计算</span><br><span class="line"></span><br><span class="line">1、写程序，程序需要复合计算框架的要求！</span><br><span class="line">		java----&gt;main-----&gt;运行</span><br><span class="line">		MapReduce(编程模型)-----&gt;Map--Reducer</span><br><span class="line">2、运行程序，申请计算资源(cpu+内存，磁盘IO，网络IO)</span><br><span class="line">		java-----&gt;JVM------&gt;OS-----&gt;申请计算资源</span><br><span class="line">		1.0: MapReduce(编程模型)----&gt;JobTracker-----&gt;JVM-----&gt;申请计算资源</span><br><span class="line">		2.0: MapReduce(编程模型)----&gt;jar------&gt;运行时，将jar包中的任务，提交给YARN，和YARN进行通信，由YARN中的组件-----&gt;JVM------&gt;申请计算资源</span><br><span class="line">				</span><br><span class="line">	1.x和2.x的区别是将资源调度和管理进行分离！由同一的资源调度平台YARN进行大数据计算资源的调度！</span><br><span class="line">    提升了Hadoop的通用性！Hadoop搭建的集群中的计算资源，不仅可以运行 Hadoop 中的 MR 程序！</span><br><span class="line">    也可以运行其他计算框架的程序！</span><br><span class="line">	在hadoop不久之后，由于MR的低效性，出现了许多更为高效的计算框架！</span><br><span class="line">	例如： Tez，Storm,Spark，Flink</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Hadoop-2-0"><a href="#Hadoop-2-0" class="headerlink" title="Hadoop 2.0"></a>Hadoop 2.0</h3><ul>
+<li>HDFS（框架）：负责大数据的存储</li>
+<li>YARN（框架）：负责大数据的资源调度。[只有在计算时才会用到 YRAN ，因为在计算时需要申请很多资源，由 YARN 统一分配]</li>
+<li>Common：HDFS 和 MR 共有的常用的工具包模块。</li>
+<li>MapReduce（编程模型）：使用 Hadoop 制定的编程规范要求，来编写程序，完成大数据的计算。</li>
+</ul>
+<h3 id="Hadoop-1-x-和-Hadoop-2-x-的区别"><a href="#Hadoop-1-x-和-Hadoop-2-x-的区别" class="headerlink" title="Hadoop 1.x 和 Hadoop 2.x 的区别"></a>Hadoop 1.x 和 Hadoop 2.x 的区别</h3><p>在 1.x 版本中，MR 既负责运行 MR 程序还负责为 MR 程序申请资源！Hadoop 只能为自身的 MR 程序提供服务！</p>
+<p>在 2.x 版本中，MR 只负责 MR 程序的计算，资源的调度和管理由 YARN 负责！Hadoop 集群不仅能为自身的 MR 程序提供服务，还可以为第三方计算引擎，例如 TeZ，Spark，Flink 等提供计算资源的调度服务！</p>
+<hr>
+<h2 id="HDFS-架构概述"><a href="#HDFS-架构概述" class="headerlink" title="HDFS 架构概述"></a>HDFS 架构概述</h2><p>HDFS（Hadoop Distribute File System）：负责大数据的存储。</p>
+<p>![](Hadoop/HDFS 核心进程.png)</p>
+<blockquote>
+<ol>
+<li>NameNode（nn）：负责存储文件的<strong>元数据</strong>。。</li>
+</ol>
+</blockquote>
+<p><strong>元数据</strong>：文件的属性信息。如<strong>文件名、文件目录结构、文件属性</strong>（生成时间、副本数、文件权限），以及每个文件的<strong>块列表</strong>和<strong>块所在的DataNode</strong>等。</p>
+<ul>
+<li><strong>职责</strong>：<ol>
+<li>接收客户端的请求。</li>
+<li>接收 DN 的请求。[DN 会向 NN 上报当前节点中数据的变化情况]</li>
+<li>向 DN 分配任务</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<ol start="2">
+<li>DataNode（dn）：负责文件中数据的存储。</li>
+</ol>
+</blockquote>
+<p>在本地文件系统中<strong>存储文件块数据</strong>，以及<strong>块数据的校验和</strong>。</p>
+<ul>
+<li>职责：<ol>
+<li>负责接收 NM 分配的任务。</li>
+<li>负责数据块（block）的管理（读、写）</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<ol start="3">
+<li>Secondary NameNode（2nn）：负责辅助 NameNode 工作！</li>
+</ol>
+</blockquote>
+<p><strong>每隔一段时间对NameNode元数据备份</strong>。</p>
+<blockquote>
+<p>HDFS 详情页链接</p>
+</blockquote>
+<hr>
+<h2 id="MapReduce-架构概述"><a href="#MapReduce-架构概述" class="headerlink" title="MapReduce 架构概述"></a>MapReduce 架构概述</h2><ul>
+<li>MapReduce 是一种<strong>编程规范</strong>，要求程序中有 Mapper（简单处理） 和 Reducer（合并）。</li>
+<li>遵循 MapReduce 编程规范编写的程序，打包后，称为一个 <strong>Job</strong>（任务）。</li>
+<li>Job 需要提交到 YARN 上，向 YARN 申请计算资源，运行 Job 中的 Task（进程）！</li>
+<li>Job 会先创建一个进程 MrAppMaster（MapReduce 应用管理者）， 由 MrAppMaster 向 YARN 申请资源！</li>
+<li>MrAppMaster 还负责监控 Job 中各个 Task 运行情况，进行容错管理！</li>
+</ul>
+<p>MapReduce将计算过程分为两个阶段：Map和Reduce</p>
+<ul>
+<li>Map阶段并行处理输入数据</li>
+<li>Reduce阶段对Map结果进行汇总</li>
+</ul>
+<hr>
+<h2 id="Yarn-架构概述"><a href="#Yarn-架构概述" class="headerlink" title="Yarn 架构概述"></a>Yarn 架构概述</h2><p>Yarn 负责集群中所有计算资源的管理和调度。</p>
+<p><strong>核心进程</strong></p>
+<blockquote>
+<ol>
+<li>ResourceManager（1个）：负责整个集群所有资源的管理！</li>
+</ol>
+</blockquote>
+<ul>
+<li>职责<ol>
+<li>负责接收客户端提交的 Job 请求</li>
+<li>负责向  NM 分配任务。</li>
+<li>负责接收 NM 上报的信息。</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<ol start="2">
+<li>NodeManager（N个）：负责单台计算机所有资源的管理 ！</li>
+</ol>
+</blockquote>
+<ul>
+<li>职责：<ol>
+<li>负责和 RM 进行通信，上报本机中的可用资源</li>
+<li>负责领取 RM 分配的任务！</li>
+<li>负责为 Job 中的每个 Task 分配计算资源！</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">计算资源：内存、CPU、硬盘等等。</span><br><span class="line"></span><br><span class="line">1、NM 负责单台计算机所有计算资源的管理调度。	</span><br><span class="line">	* 即 NM 会统计出当前计算机已经使用了多少计算资源。</span><br><span class="line">2、RM 负责整个集群所有计算资源的管理调度。	</span><br><span class="line">	* 即每台 NM 统计出自己已使用和可使用的计算资源后，都会上报给 RM 。</span><br><span class="line">	* RM 接收并统计集群中所有已使用和可使用计算资源。	</span><br><span class="line">	* 这样当客户端提交 Job 请求时，RM 就可宏观调控根据需求分配具体的计算资源到每台机器上。 </span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>概念</strong>：</p>
+<blockquote>
+<p>Container（容器）：</p>
+</blockquote>
+<p>比如：NodeManager 为 Job 的某个 Task 分配了 2 个 CPU 和 2G 内存的计算资源！</p>
+<p>为了防止当前 Task 在使用这些资源期间，被其他的 Task 抢占资源。 Hadoop 框架就会将这些计算资源，封装到一个 Container 中，在 Container 中的资源，会被暂时隔离，无法被其它进程所抢占。</p>
+<p>当前 Task 运行结束后，当前 Container 中的资源就会被释放！允许其它 task 来 使用！</p>
+<p><img src="/2021/02/10/Hadoop/image-20210210113413297.png" alt="image-20210210113413297"></p>
+<blockquote>
+<ol>
+<li>ResourceManager（RM）</li>
+</ol>
+</blockquote>
+<ol>
+<li>处理客户端请求</li>
+<li>监控NodeManager</li>
+<li>启动或监控ApplicationMaster</li>
+<li>资源的分配与调度</li>
+</ol>
+<blockquote>
+<ol start="2">
+<li>NodeManager（NM）</li>
+</ol>
+</blockquote>
+<ol>
+<li>管理单个节点上的资源</li>
+<li>处理来自ResourceManager的命令</li>
+<li>处理来自ApplicationMaster的命令</li>
+</ol>
+<blockquote>
+<ol start="3">
+<li>ApplicationMaster（AM）</li>
+</ol>
+</blockquote>
+<ol>
+<li>负责数据的切分</li>
+<li>为应用程序申请资源并分配给内部的任务</li>
+<li>任务的监控与容错</li>
+</ol>
+<blockquote>
+<ol start="4">
+<li>Container</li>
+</ol>
+</blockquote>
+<p>Container 是YARN中的资源抽象，它封装了某个节点上的多维度资源，<strong>如内存、CPU、磁盘、网络等</strong>。</p>
+<hr>
+<h2 id="大数据技术生态体系"><a href="#大数据技术生态体系" class="headerlink" title="大数据技术生态体系"></a>大数据技术生态体系</h2><p><img src="/2021/02/10/Hadoop/image-20210210114157414.png" alt="image-20210210114157414"></p>
+<p>图中涉及的技术名词解释如下：</p>
+<ol>
+<li>Sqoop：Sqoop 是一款开源的工具，主要用于在 Hadoop、Hive 与传统的数据库（MySql）间进行数据的传递，可以将一个关系型数据库（例如 ：MySQL，Oracle 等）中的数据导进到 Hadoop 的 HDFS 中，也可以将 HDFS 的数据导进到关系型数据库中。</li>
+<li>Flume：Flume 是一个高可用的，高可靠的，分布式的海量日志采集、聚合和传输的系统，Flume 支持在日志系统中定制各类数据发送方，用于收集数据； </li>
+<li>Kafka：Kafka 是一种高吞吐量的分布式发布订阅消息系统； </li>
+<li>Storm：Storm 用于“连续计算”，对数据流做连续查询，在计算时就将结果以流的形式输出给用户。</li>
+<li>Spark：Spark 是当前最流行的开源大数据内存计算框架。可以基于 Hadoop 上存储的大数据进行计算。</li>
+<li>Flink：Flink 是当前最流行的开源大数据内存计算框架。用于实时计算的场景较多。</li>
+<li>Oozie：Oozie 是一个管理 Hdoop 作业（job）的工作流程调度管理系统。</li>
+<li>Hbase：HBase 是一个分布式的、面向列的开源数据库。HBase 不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。</li>
+<li>Hive：Hive 是基于 Hadoop 的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供简单的 SQL 查询功能，可以将 SQL 语句转换为 MapReduce 任务进行运行。 其优点是学习成本低，可以通过类 SQL 语句快速实现简单的 MapReduce 统计，不必开发专门的 MapReduce 应用，十分适合数据仓库的统计分析。</li>
+<li>ZooKeeper：它是一个针对大型分布式系统的可靠协调系统，提供的功能包括：配置维护、名字服务、分布式同步、组服务等。</li>
+</ol>
+<h1 id="Hadoop-的安装"><a href="#Hadoop-的安装" class="headerlink" title="Hadoop 的安装"></a>Hadoop 的安装</h1><h2 id="安装前的注意事项"><a href="#安装前的注意事项" class="headerlink" title="安装前的注意事项"></a>安装前的注意事项</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1. Hadoop 运行的前提是本机已经安装了 JDK ，并且配置了 JAVA_HOME 变量。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. 在 Hadoop 中需要启动多种不同类型的进程，如：NN，DN，RM，NM 等，这些进程之间需要进行通信，在通信时，常用主机名进行通信。</span><br><span class="line">   需求：在 192.168.1.100 机器上的 DN 进程，希望访问 192.168.1.104 机器上的 NN 进程。</span><br><span class="line">   实现：那么就需要在集群的每台机器上，配置集群中所有机器的 host 映射。</span><br><span class="line">   配置：</span><br><span class="line">       &gt; Linux：&#96;&#x2F;etc&#x2F;hosts&#96;</span><br><span class="line">       &gt; Windows：&#96;C:\Windows\System32\drivers\etc\hosts&#96;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3. 注意权限</span><br><span class="line">   Hadoop 框架在运行时会产生很多数据（日志），对于数据保存的目录，必须让当前启动 Hadoop 进程的用户拥有写权限。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4. 关闭防火墙，并且关闭开机自启。</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用普通用户操作-Hadoop"><a href="#使用普通用户操作-Hadoop" class="headerlink" title="使用普通用户操作 Hadoop"></a>使用普通用户操作 Hadoop</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 创建普通用户 Xxx</span><br><span class="line">2. 为 Xxx 设置密码</span><br><span class="line">3. 赋予 Xxx 用户 root 权限</span><br><span class="line">4. 将 &#x2F;opt 目录下创建的 software 目录和 module 目录的所属主改为 Xxx</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hadoop-的目录介绍"><a href="#Hadoop-的目录介绍" class="headerlink" title="Hadoop 的目录介绍"></a>Hadoop 的目录介绍</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- bin ：使用 HDFS 和 MR 运算时，常用命令所在的目录！</span><br><span class="line"></span><br><span class="line">- sbin ：管理员启动和停止集群时使用的命令所在的目录。</span><br><span class="line"></span><br><span class="line">- etc ：Hadoop 配置文件所在的目录。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用-HDFS"><a href="#使用-HDFS" class="headerlink" title="使用 HDFS"></a>使用 HDFS</h2><ul>
+<li>HDFS 的运行模式：取决于参数<code>fs.defaultFS</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. 本地模式</span><br><span class="line">	概念：在本机上使用 HDFS ，使用的是本机的文件系统。</span><br><span class="line">	参数：fs.defaultFS&#x3D;file:&#x2F;&#x2F;&#x2F;	（默认）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. 分布式模式</span><br><span class="line">	概念：要使用的文件系统是一个分布式的文件系统！一个分布式的文件系统，必须由 NN,DN 等若干进程共同运行完成文件系统的读写操作！</span><br><span class="line">	参数：fs.defaultFS&#x3D;hdfs:&#x2F;&#x2F; 	代表一种分布式协议</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3. 如何判断 HDFS 的运行模式？</span><br><span class="line">* 取决于参数：fs.defaultFS&#x3D;file:&#x2F;&#x2F;&#x2F;	（默认值，表示本地模式。 file 代表文件系统。 :&#x2F;&#x2F; 是一种协议，代表本地文件系统协议）</span><br><span class="line">* fs.defaultFS 参数的默认值在 core-default.xml 配置文件中！</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动 Hadoop 中的进程</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在 sbin 目录中的脚本【sbin 已经被添加到环境变量中了】</span><br><span class="line"></span><br><span class="line">启动 NN：hadoop-daemon.sh start namenode</span><br><span class="line">停止 NN：hadoop-daemon.sh stop namenod</span><br><span class="line">启动 DN：hadoop-daemon.sh start datanode</span><br><span class="line">停止 DN：hadoop-daemon.sh stop datanode</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用：hadoop fs 命令 文件路径</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="运行-MapReduce"><a href="#运行-MapReduce" class="headerlink" title="运行 MapReduce"></a>运行 MapReduce</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. 按照 MR 的规范编写一个程序</span><br><span class="line">2. 将程序打包为 jar</span><br><span class="line">3. 运行 jar 中的程序。(运行 jar 包有两种模式)</span><br><span class="line">   取决于参数：mapreduce.framework.name&#x3D;local	（默认值，在本地运行）</span><br><span class="line">   </span><br><span class="line">   1. 本地模式	（在本机上运行 MR）在本机运行MR！在本机使用多线程的方式，运行多个Task!</span><br><span class="line">      参数：mapreduce.framework.name&#x3D;local</span><br><span class="line"></span><br><span class="line">   2. 在 YARN 上运行   （需要启动YARN，YARN 由 RM 和 NM 进程组成！即需要启动 RM 和 NM）</span><br><span class="line">      将 MR 提交给 YARN ，由 YARN 将 Job 中的多个 Task 分配到多台机器中，启动 Container 运行 Task!</span><br><span class="line">      参数：mapreduce.framework.name&#x3D;yarn</span><br><span class="line"></span><br><span class="line">* fs.defaultFS 参数的默认值在 core-default.xml 配置文件中！</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h2 id="Hadoop-的配置文件"><a href="#Hadoop-的配置文件" class="headerlink" title="Hadoop 的配置文件"></a>Hadoop 的配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">4个用户可以自定义的配置文件： xxx-site.xml</span><br><span class="line">		core-site.xml： 用户自定义的设置hadoop最核心的参数！</span><br><span class="line">		hdfs-site.xml   用户自定义的保存的是hdfs相关的参数！</span><br><span class="line">		</span><br><span class="line">		mapred-site.xml: 用户自定义的MR程序在运行时，需要使用的参数！</span><br><span class="line">		yarn-site.xml: 用户自定义的yarn在启动时，需要的参数！</span><br><span class="line"></span><br><span class="line">用户自定义的配置文件，可以覆盖默认配置文件中同名的参数的值！</span><br><span class="line"></span><br><span class="line">Hadoop在启动时，先加载4个默认的配置文件，再加载用户自定义的配置文件，如果用户自定义的配置文件</span><br><span class="line">中有和4个默认配置文件中门的参数，可以覆盖之前已经加载的值！</span><br></pre></td></tr></table></figure>
+
+
+
+<p>Hadoop 安装后，Hadoop 的性能和表现取决于用户的配置！</p>
+<blockquote>
+<p>4 个默认的配置文件：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">位置：</span><br><span class="line">	HADOOP_HOME&#x2F;share	该目录下保存着 Hadoop 启动时需要加载的所有 jar 包。</span><br><span class="line">	HADOOP_HOME&#x2F;share&#x2F;xxx.jar&#x2F;xxx-default.xml	配置文件的保存路径，4个配置文件分别保存在4个不同的 jar 包的类路径下</span><br><span class="line"></span><br><span class="line">配置文件：</span><br><span class="line">    - core-default.xml	保存 Hadoop 最核心的设置参数</span><br><span class="line">    - hdfs-default.xml	保存 HDFS 相关的参数</span><br><span class="line">    - mapred-default.xml	保存 MR 在运行时，需要使用的参数</span><br><span class="line">    - yarn-default.xml	保存 YARN 在启动时需要的参数</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>4 个用户可以自定义的配置文件：<code>xxx-site.xml</code></p>
+</blockquote>
+<ul>
+<li>用户自定义的配置文件，可以覆盖默认配置文件中同名参数的值！</li>
+<li>Hadoop 在启动时，首先加载 4 个默认的配置文件，再加载用户自定义的配置文件，如果用户自定义的配置文件中有和 4 个默认配置文件中重名的参数，可以覆盖之前已经加载的值！</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">配置文件：</span><br><span class="line">	- core-site.xml	保存用户自定义的 Hadoop 最核心的参数</span><br><span class="line">    - hdfs-site.xml	保存用户自定义的 HDFS 相关的参数</span><br><span class="line">    - mapred-site.xml	保存用户自定义的 MR 在运行时，需要使用的参数</span><br><span class="line">    - yarn-site.xml	保存用户自定义的 YARN 在启动时需要的参数</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="在使用-Hadoop-命令时"><a href="#在使用-Hadoop-命令时" class="headerlink" title="在使用 Hadoop 命令时"></a>在使用 Hadoop 命令时</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1、可以使用自定义配置文件的目录：	</span><br><span class="line">	通过：&#96;hadoop --config 配置文件的目录&#96; 命令来指定配置文件的目录</span><br><span class="line"></span><br><span class="line">2、如果不特别指定自定义配置文件的目录，默认读取	&#96;HADOOP_HOME&#x2F;etc&#x2F;hadoop&#96; 目录下对应的配置文件！</span><br><span class="line"></span><br><span class="line">3、如：hadoop-daemon.sh start namenode 脚本在执行时，只会去默认的目录中读取配置文件。因为该命令没有 &#96;--config&#96; 参数来指定配置文件的目录</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h1 id="分布式-HDFS-配置总结"><a href="#分布式-HDFS-配置总结" class="headerlink" title="分布式 HDFS 配置总结"></a>分布式 HDFS 配置总结</h1><p>分布式HDFS的安装和启动</p>
+<blockquote>
+<ol>
+<li>配置<code>$HADOOP_HOME/etc/hadoop/core-site.xml</code>文件</li>
+</ol>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">	1、使用分布式文件存储系统</span></span><br><span class="line"><span class="comment">	2、告知NN在哪个机器，NN使用哪个端口号接收客户端和DN的RPC请求.</span></span><br><span class="line"><span class="comment">	[Hadoop 集群中的各个进程之间需要互相通信，通过 RPC 方式通信：</span></span><br><span class="line"><span class="comment">		（1）客户端与 NN 直接通信；</span></span><br><span class="line"><span class="comment">		（2）DN 与 NN 也要进行通信。</span></span><br><span class="line"><span class="comment">	所以我们必须在集群中每台机器的配置文件 core-site.xml 中配置 NN 的通信地址]</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://mypc:9000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">	配置 Hadoop 框架在运行时产生的数据的存储地址。</span></span><br><span class="line"><span class="comment">		Hadoop 在运行时产生的日志信息，NN 上保存的元数据等信息都保存在该地址下。</span></span><br><span class="line"><span class="comment"> --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>/opt/module/hadoop-2.7.2/data<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="2">
+<li>格式化Namenode（只需要格式化一次）</li>
+</ol>
+</blockquote>
+<p>在上面的配置文件中，我们规定了 Hadoop 产生的数据要保存的位置。所以我们就需要在 NN 节点的电脑上创建对应的目录来保存 Hadoop 运行产生的数据。但如果我们直接手动创建对应的目录的话，会发现我们的 NN 还是无法正常运行，这是因为我们手动创建目录的是一个空文件夹，而对于 Hadoop 来说，它还需要该文件夹中有一些验证文件来证明这就是自定义的保存数据的文件，所以我们需要借助格式化这一操作来让 Hadoop 框架自动帮我们创建保存数据的目录（文件夹）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">命令： </span><br><span class="line">	hadoop namenode -format</span><br><span class="line">目的：  </span><br><span class="line">	1、生成&#x2F;opt&#x2F;module&#x2F;hadoop-2.7.2&#x2F;data&#x2F;tmp目录</span><br><span class="line">	2、在目录中生成一些文件。如：fsimage_0000000000000000000文件等</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="3">
+<li>启动</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* 启动Namenode</span><br><span class="line">	hadoop-daemon.sh start namenode</span><br><span class="line"></span><br><span class="line">* 启动datanode</span><br><span class="line">	hadoop-daemon.sh start datanode</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="4">
+<li>查看</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1、Jps</span><br><span class="line">2、通过浏览器访问  http:&#x2F;&#x2F;NameNode 所在的主机名或者ip:50070</span><br></pre></td></tr></table></figure>
+
+<p>如果 NN 和 DN 都在一台机器，且只有一个 DN 节点，称为伪分布式！</p>
+<hr>
+<h1 id="在-YARN-上运行-MR"><a href="#在-YARN-上运行-MR" class="headerlink" title="在 YARN 上运行 MR"></a>在 YARN 上运行 MR</h1><blockquote>
+<ol>
+<li><p>修改 MapReduce 的运行模式：</p>
+<p>修改 <code>$HADOOP_HOME/etc/hadoop/mapred-site.xml</code> 文件</p>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">	将 MapReduce 从本地模式改为在 YARN 上运行</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="2">
+<li><p>启动YARN</p>
+<p>配置RM到底在哪个机器启动</p>
+<p>修改 <code>$HADOOP_HOME/etc/hadoop/yarn-site.xml</code> 文件</p>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">	配置 RM 在哪个机器上运行</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>mypc<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">	配置 Reducer 获取数据的方式</span></span><br><span class="line"><span class="comment"> 	Map 阶段处理好的数据最后要传递到 Reducer 上使用。</span></span><br><span class="line"><span class="comment">	而传递数据的方式称为 shuffle ，所以 YARN 中必须配置shuffle 才能正常运行</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="3">
+<li>启动</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、启动 RM</span><br><span class="line">yarn-daemon.sh start resourcemanager</span><br><span class="line"></span><br><span class="line">2、启动 NM</span><br><span class="line">yarn-daemon.sh start nodemanager</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="4">
+<li>查看</li>
+</ol>
+</blockquote>
+<pre><code>1、jps
+
+2、http://RM所运行的机器主机名/ip:8088    
+</code></pre>
+<h1 id="提交任务"><a href="#提交任务" class="headerlink" title="提交任务"></a>提交任务</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar  jar包  主类名 参数&#123;多个输入目录，一个输出目录&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>输入目录中必须全部是文件！</li>
+<li>输出目录必须不存在！</li>
+</ul>
+<h1 id="完全分布式集群的搭建"><a href="#完全分布式集群的搭建" class="headerlink" title="完全分布式集群的搭建"></a>完全分布式集群的搭建</h1><h2 id="进程规划"><a href="#进程规划" class="headerlink" title="进程规划"></a>进程规划</h2><blockquote>
+<p>进程规划原则：</p>
+</blockquote>
+<ol>
+<li>核心进程尽量分散。</li>
+<li>同质进程尽量分散。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">解析：</span><br><span class="line">	1、核心进程尽量分散：</span><br><span class="line">		在 Hadoop 集群中，HDFS 中的 NM 和 YARN 中的 RM 都属于核心进程，一个集群中只能有一个。	</span><br><span class="line">		对于这些进程来说，一旦集群中的某个节点上的机器突然宕机，整个集群就会立即停止运转，所以我们在进程规划时尽量会把 NM 和 RM 分配到不同的节点上，这样能有效的避免单点故障。</span><br><span class="line">		</span><br><span class="line">	2、同质进程尽量分散：</span><br><span class="line">		所谓同质进程，就是指 运行某两个进程需求的相同或类似的资源。</span><br><span class="line">		比如 NN 和 2NN ，在运行时都需要分配大量的内存空间，所以我们一般把这两个进程分配到不同的节点上去，这样可以提高内存资源的利用率。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="执行群起"><a href="#执行群起" class="headerlink" title="执行群起"></a>执行群起</h2><ul>
+<li><code>start-dfs.sh</code> 命令可以在集群中的任意一台机器上执行。</li>
+<li><code>start-yarn.sh</code> 如果在没有配置 RM 的机器上执行，那么不会启动 RM，只能启动 NM！</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Tip：</span><br><span class="line">	1、建议所有的群起脚本都在 RM 所在的机器上执行！</span><br><span class="line">	2、只需要配置 RM 所在的机器到集群中其它机器的 SSH 免密登录即可。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在执行群起脚本时，默认读取当前机器中的 <code>$HADOOP_HOME/etc/hadoop/slaves</code> 文件，所以要在该文件中配置当前集群中所有的主机IP地址。</li>
+</ul>
+<h2 id="集群的时间同步"><a href="#集群的时间同步" class="headerlink" title="集群的时间同步"></a>集群的时间同步</h2><blockquote>
+<p>一个集群中，每台机器的时间必须保证是同步的！</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2245,473 +2839,6 @@
 
 
 <h1 id="4、整合SpringData-JPA"><a href="#4、整合SpringData-JPA" class="headerlink" title="4、整合SpringData JPA"></a>4、整合SpringData JPA</h1>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/09/Swagger/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/01/09/Swagger/" class="post-title-link" itemprop="url">Swagger</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-01-09 17:24:11" itemprop="dateCreated datePublished" datetime="2021-01-09T17:24:11+08:00">2021-01-09</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-06 23:22:28" itemprop="dateModified" datetime="2021-04-06T23:22:28+08:00">2021-04-06</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Swagger-概述"><a href="#Swagger-概述" class="headerlink" title="Swagger 概述"></a>Swagger 概述</h1><ul>
-<li>Swagger号称世界上最流行的API框架</li>
-<li>RestFul文档在线自动生成工具=&gt; API文档与API定义同步更新</li>
-<li>直接运行，可以在线测试API接口</li>
-</ul>
-<blockquote>
-<p>API接口：Controller/Mapping</p>
-</blockquote>
-<ul>
-<li>支持多种语言（Java、PHP等）</li>
-</ul>
-<p>官网：<a target="_blank" rel="noopener" href="https://swagger.io/">https://swagger.io/</a></p>
-<p>在项目中使用Swagger需要使用SpringBox</p>
-<ul>
-<li>swagger2</li>
-<li>UI：提供给后端人员一个UI界面，用于测试接口</li>
-</ul>
-<hr>
-<h1 id="SpringBoot集成Swagger"><a href="#SpringBoot集成Swagger" class="headerlink" title="SpringBoot集成Swagger"></a>SpringBoot集成Swagger</h1><ol>
-<li><p>新建一个SpringBootWeb项目</p>
-</li>
-<li><p>导入相关依赖</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--swagger核心依赖（swagger是老版本，swagger2是新版本）--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--swagger-ui，swagger提供的可视化访问页面--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>编写一个<code>HelloController</code>工程</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.controller;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/hello&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;HelloWorld&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>创建一个Swagger配置类：<code>config/SwaggerConfig</code></p>
-<ul>
-<li>设置当前类为配置类</li>
-<li>开启Swagger2：<code>EnableSwagger2</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.config;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span>		<span class="comment">// 设置当前类为配置类</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span>		<span class="comment">// 开启Swagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 此时Swagger已经可以使用了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>测试运行。</p>
-<ul>
-<li><p>访问地址（本地环境）：<a target="_blank" rel="noopener" href="http://localhost:8080/swagger-ui.html">http://localhost:8080/swagger-ui.html</a></p>
-<p>为什么使用<code>swagger-ui.html</code>作为访问地址？因为在我们导入的<code>springfox-swagger-ui</code>依赖中配置了一个<code>swagger-ui.html</code>页面提供给我们访问。</p>
-</li>
-</ul>
-<p><img src="/2021/01/09/Swagger/image-20201217163726161.png"></p>
-<ul>
-<li>访问结果如下：</li>
-</ul>
-</li>
-</ol>
-<p><img src="/2021/01/09/Swagger/image-20201217162840840-1610184493859.png" alt="image-20201217162840840"></p>
-<p>我们可以看到，在接口信息部分有2个接口，其中<code>hello-controller</code>是我们自己写的接口，而<code>basic-error-controller</code>是默认错误结果会跳转到的接口。</p>
-<hr>
-<h2 id="配置Swagger"><a href="#配置Swagger" class="headerlink" title="配置Swagger"></a>配置Swagger</h2><p>Docket类是Swagger中的核心配置类，那么如何在Swagger的配置类<code>SwaggerConfig</code>中配置Docket实例呢？（Docket是Swagger内部的类）</p>
-<blockquote>
-<ol>
-<li>在创建<code>Docket对象</code>时，构造函数中需要传入一个<code>DocumentationType对象</code>；</li>
-<li><code>DocumentationType.SWAGGER_2</code>的作用是获得一个<code>DocumentationType对象</code>(可查看源码)；</li>
-<li><code>Docket对象</code>中有一个<code>apiInfo()方法</code>，可以<strong>配置</strong>Swagger默认的启动信息，即上面图片中的Swagger信息；</li>
-<li><code>apiInfo()方法</code>需要接收一个参数，该参数就是一个<code>ApiInfo对象</code>。我们可以将自定义的配置信息保存在这个对象中，当然也可以使用默认的配置信息。<ul>
-<li><code>ApiInfo对象</code>的构造器中需要接收一些属性、一个<code>Contact对象</code>、和一个<code>ArrayList对象</code>，可以查看下面的构造函数。<ul>
-<li><code>Contact对象</code>中保存了一些作者信息。</li>
-<li><code>ArrayList对象</code>默认为空。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.config;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置Swagger的Docket实例</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">getDocket</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">            .apiInfo(<span class="keyword">this</span>.getApiInfo());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    	自定义一个方法，该方法的作用是返回一个ApiInfo对象</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ApiInfo <span class="title">getApiInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Contact contact = <span class="keyword">new</span> Contact(<span class="string">&quot;lnd&quot;</span>, <span class="string">&quot;www.baidu.com&quot;</span>, <span class="string">&quot;1979347443@qq.com&quot;</span>);</span><br><span class="line">        ApiInfo apiInfo = <span class="keyword">new</span> ApiInfo(</span><br><span class="line">            <span class="string">&quot;LND的API文档&quot;</span>,                <span class="comment">// 标题</span></span><br><span class="line">            <span class="string">&quot;Swagger使用测试&quot;</span>,      <span class="comment">// 描述</span></span><br><span class="line">            <span class="string">&quot;L/1.0.0&quot;</span>,              <span class="comment">// 版本号</span></span><br><span class="line">            <span class="string">&quot;urn:tos&quot;</span>,      <span class="comment">// 开发团队的服务地址</span></span><br><span class="line">            contact,                        <span class="comment">// 作者信息</span></span><br><span class="line">            <span class="string">&quot;Apache 2.0&quot;</span>,           <span class="comment">// 许可证</span></span><br><span class="line">            <span class="string">&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;</span>,   <span class="comment">// 地址</span></span><br><span class="line">            <span class="keyword">new</span> ArrayList&lt;VendorExtension&gt;());      <span class="comment">// 默认为空的ArrayList</span></span><br><span class="line">        <span class="keyword">return</span> apiInfo;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>修改后的结果如下：</p>
-<p><img src="/2021/01/09/Swagger/image-20201217155834966.png" alt="image-20201217155834966"></p>
-<hr>
-<ul>
-<li><p><code>Docket对象</code>的构造方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Docket对象需要传入一个DocumentationType对象</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Docket</span><span class="params">(DocumentationType documentationType)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.documentationType = documentationType;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>ApiInfo对象</code>的构造方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建ApiInfo对象需要下面一些属性，Contact对象和默认为空的ArrayList对象</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Deprecated</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ApiInfo</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    String title,</span></span></span><br><span class="line"><span class="function"><span class="params">    String description,</span></span></span><br><span class="line"><span class="function"><span class="params">    String version,</span></span></span><br><span class="line"><span class="function"><span class="params">    String termsOfServiceUrl,</span></span></span><br><span class="line"><span class="function"><span class="params">    String contactName,</span></span></span><br><span class="line"><span class="function"><span class="params">    String license,</span></span></span><br><span class="line"><span class="function"><span class="params">    String licenseUrl)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(title, description, version, termsOfServiceUrl, <span class="keyword">new</span> Contact(contactName, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>), license, licenseUrl, <span class="keyword">new</span> ArrayList&lt;VendorExtension&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>查看源码可知，ApiInfo的一个构造函数如上，可以在创建对象时自定义对象中的属性。（ApiInfo类中没有get/set方法，所以只能在构造函数中定义这些属性）。</p>
-<p>ApiInfo的默认配置信息如下，我们可以自己选择是否更改这些信息。</p>
-<p><img src="/2021/01/09/Swagger/image-20201217153644561.png" alt="image-20201217153644561"></p>
-</li>
-<li><p><code>Contact对象</code>的构造方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Contact是一个用于保存作者信息的对象，无get/set方法，只能通过构造函数设置对象中的属性。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Contact</span><span class="params">(String name, String url, String email)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.url = url;</span><br><span class="line">    <span class="keyword">this</span>.email = email;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<p>在<code>hello-controller接口</code>中，我们可以看到7种请求方式全部被展示出来了，原因是我们在Controller中使用了<code>@RequestMapping(&quot;/hello&quot;)</code>注解，如果想要只显示某种具体的请求方式，应该使用<code>@GetMapping()</code>或<code>@PostMapping()</code>等注解。</p>
-<p><img src="/2021/01/09/Swagger/image-20201217163207420.png" alt="image-20201217163207420"></p>
-<p>Models中包含ModelAndView和View两个对象。<img src="/2021/01/09/Swagger/image-20201217163226474.png" alt="image-20201217163226474"></p>
-<hr>
-<h3 id="配置Swagger要扫描的接口"><a href="#配置Swagger要扫描的接口" class="headerlink" title="配置Swagger要扫描的接口"></a>配置Swagger要扫描的接口</h3><p>修改配置类（新增）</p>
-<p><code>Docket.select</code></p>
-<table>
-<thead>
-<tr>
-<th align="center">对象</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>Docket</code></td>
-<td align="center"><code>select()</code></td>
-<td align="center">Docket对象中有一个select()方法，返回值是一个ApiSelectorBuilder对象，<br>用于配置Swagger要扫描的接口</td>
-</tr>
-<tr>
-<td align="center"><code>ApiSelectorBuilder</code></td>
-<td align="center"><code>build()</code></td>
-<td align="center">ApiSelectorBuilder对象中有一个build()方法,返回值是一个Docket对象</td>
-</tr>
-</tbody></table>
-<p>我们可以<strong>在<code>select()</code>和<code>build()</code>方法之间</strong>添加<strong>扫描条件/过滤条件等</strong>，自定义配置要扫描的接口。</p>
-<table>
-<thead>
-<tr>
-<th align="center">对象</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>ApiSelectorBuilder</code></td>
-<td align="center"><code>.apis(RequestHandlerSelectors.basePackage())</code></td>
-<td align="center">指定要扫描的包</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.apis(RequestHandlerSelectors.any())</code></td>
-<td align="center">扫描全部</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.apis(RequestHandlerSelectors.none())</code></td>
-<td align="center">全都不扫描</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))</code></td>
-<td align="center">扫描类上的注解，参数是一个注解的反射对象。<br>效果：只有加了特定注解的类才能被扫描到。</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.apis(RequestHandlerSelectors.withMethodAnnotation(GetMapping.class))</code></td>
-<td align="center">扫描方法上的注解，参数是一个注解的反射对象</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.paths(PathSelectors.ant(&quot;com.nengdong.swaggerdemo&quot;))</code></td>
-<td align="center">过滤，被配置到过滤中的路径不能被扫描到（过滤的优先级高于扫描）</td>
-</tr>
-</tbody></table>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置了Swagger的Docket实例</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">getDocket</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">        .apiInfo(<span class="keyword">this</span>.getApiInfo())</span><br><span class="line"></span><br><span class="line">        .select()</span><br><span class="line">        .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.nengdong.swaggerdemo.controller&quot;</span>))    </span><br><span class="line">        .build();	<span class="comment">// RequestHandlerSelectors，工具类，配置要扫描接口的方式</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>.select() ...... .build()</code>包含扫描/过滤条件，是一个整体，两个方法之间只能使用<code>.apis()</code>和<code>.paths()</code>方法，其它方法需要在这个整体之外</p>
-<hr>
-<h3 id="配置是否启动Swagger"><a href="#配置是否启动Swagger" class="headerlink" title="配置是否启动Swagger"></a>配置是否启动Swagger</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置了Swagger的Docket实例</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">getDocket</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">        .apiInfo(<span class="keyword">this</span>.getApiInfo())</span><br><span class="line"></span><br><span class="line">        .select()</span><br><span class="line">        .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.nengdong.swaggerdemo.controller&quot;</span>))   </span><br><span class="line">        .build()</span><br><span class="line"></span><br><span class="line">        .enable(<span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<table>
-<thead>
-<tr>
-<th align="center">对象</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>Docket</code></td>
-<td align="center"><code>enable(false)</code></td>
-<td align="center">是否启用Swagger，默认为true（启用），如果为false，则Swagger的访问地址失效</td>
-</tr>
-</tbody></table>
-<p><strong>问题：如何做到只Swagger在生产环境中使用，在发布后不使用？</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(生产环境)&#123;</span><br><span class="line">    使用</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(发布环境)&#123;</span><br><span class="line">    使用</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<hr>
-<h3 id="配置API文档的分组"><a href="#配置API文档的分组" class="headerlink" title="配置API文档的分组"></a>配置API文档的分组</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">getDocket</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">        .apiInfo(<span class="keyword">this</span>.getApiInfo())</span><br><span class="line"></span><br><span class="line">        .select()</span><br><span class="line">        .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.nengdong.swaggerdemo.controller&quot;</span>))  </span><br><span class="line">        .build()</span><br><span class="line"></span><br><span class="line">        .groupName(<span class="string">&quot;派大星&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><img src="/2021/01/09/Swagger/image-20201217180145087.png" alt="image-20201217180145087"></p>
-<p><img src="/2021/01/09/Swagger/image-20201218102545852.png" alt="image-20201218102545852"></p>
-<blockquote>
-<p>在使用链式编程时，IDEA会给出自动提示，上一行结尾的对象调用下一行中的方法，例如在上图中的调用关系如下：<code>Docket.select()</code>、<code>ApiSelectorBuilder.apis()</code>、<code>Docket.groupName()</code></p>
-</blockquote>
-<ul>
-<li>如何配置多个分组？创建多个Docket实例即可！</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">docket1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">docket2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">docket3</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;C&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h2 id="实体类配置"><a href="#实体类配置" class="headerlink" title="实体类配置"></a>实体类配置</h2><p>创建<code>pojo/User</code>实体类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> String gender;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(Integer id, String name, String gender)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.gender = gender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>Swagger不能得到私有的属性，所以我们必须提供公共的get/set方法，否则Swagger只能得到一个空的对象。</strong></p>
-<p><strong>或者直接设置User属性为public也可。</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.controller;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/getUser&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="number">13</span>, <span class="string">&quot;海绵宝宝&quot;</span>, <span class="string">&quot;male&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 只要我们的接口的返回值中存在实体类，它就会被扫描到Swagger中。</span></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/postUser&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">postUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="number">13</span>, <span class="string">&quot;海绵宝宝&quot;</span>, <span class="string">&quot;male&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/01/09/Swagger/image-20201217184552860.png" alt="image-20201217184552860"></p>
-<hr>
-<h1 id="常见的注解"><a href="#常见的注解" class="headerlink" title="常见的注解"></a>常见的注解</h1><h3 id="作用在实体类上"><a href="#作用在实体类上" class="headerlink" title="作用在实体类上"></a>作用在实体类上</h3><h4 id="1、-ApiModel"><a href="#1、-ApiModel" class="headerlink" title="1、@ApiModel"></a>1、@ApiModel</h4><ul>
-<li>作用在<strong>实体类</strong>上</li>
-</ul>
-<h4 id="2、-ApiModelProperty"><a href="#2、-ApiModelProperty" class="headerlink" title="2、@ApiModelProperty"></a>2、@ApiModelProperty</h4><ul>
-<li>作用在实体类的<strong>字段</strong>上。只用于注释，如果不加的话，返回的是实体类的属性，加上之后返回实体类的属性和注释。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.pojo;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ApiModel(&quot;用户实体类&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@ApiModelProperty(&quot;唯一id&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="meta">@ApiModelProperty(&quot;用户名&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="meta">@ApiModelProperty(&quot;性别&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String gender;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(Integer id, String name, String gender)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.gender = gender;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/01/09/Swagger/image-20201217184926007.png" alt="image-20201217184926007"></p>
-<h3 id="作用在Controller上"><a href="#作用在Controller上" class="headerlink" title="作用在Controller上"></a>作用在Controller上</h3><h4 id="3、-ApiOperation"><a href="#3、-ApiOperation" class="headerlink" title="3、@ApiOperation"></a>3、@ApiOperation</h4><ul>
-<li><p>作用在<strong>接口(Controller)上</strong></p>
-</li>
-<li><p>接口源码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span>		</span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> ApiOperation &#123;</span><br><span class="line">    <span class="comment">// 接口说明</span></span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;		</span><br><span class="line">    <span class="comment">// 接口发布说明</span></span><br><span class="line">    <span class="function">String <span class="title">notes</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    String[] tags() <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// 接口返回参数类型</span></span><br><span class="line">    Class&lt;?&gt; response() <span class="keyword">default</span> Void.class;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">responseContainer</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">responseReference</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// 接口请求方式</span></span><br><span class="line">    <span class="function">String <span class="title">httpMethod</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="meta">@Deprecated</span> <span class="function"><span class="keyword">int</span> <span class="title">position</span><span class="params">()</span> <span class="keyword">default</span> 0</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">nickname</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">produces</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">consumes</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">protocols</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    Authorization[] authorizations() <span class="keyword">default</span> <span class="meta">@Authorization(value = &quot;&quot;)</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">hidden</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    ResponseHeader[] responseHeaders() <span class="keyword">default</span> <span class="meta">@ResponseHeader(name = &quot;&quot;, response = Void.class)</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">code</span><span class="params">()</span> <span class="keyword">default</span> 200</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    Extension[] extensions() <span class="keyword">default</span> <span class="meta">@Extension(properties = @ExtensionProperty(name = &quot;&quot;, value = &quot;&quot;))</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">ignoreJsonView</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p>例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/getUser&quot;)</span></span><br><span class="line"><span class="meta">@ApiOperation(value = &quot;接口说明&quot;, httpMethod = &quot;请求方式：Get&quot;, response = User.class, notes = &quot;接口发布说明&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(<span class="meta">@ApiParam(value = &quot;用户ID&quot;)</span> Integer id)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> User(id, <span class="string">&quot;海绵宝宝&quot;</span>, <span class="string">&quot;male&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/01/09/Swagger/image-20201218111820647.png" alt="image-20201218111820647"></p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Api</span>：用在请求的类上，表示对类的说明</span><br><span class="line">    tags=<span class="string">&quot;说明该类的作用，可以在UI界面上看到的注解&quot;</span></span><br><span class="line">    value=<span class="string">&quot;该参数没什么意义，在UI界面上也看到，所以不需要配置&quot;</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@ApiOperation</span>：用在请求的方法上，说明方法的用途、作用</span><br><span class="line">    value=<span class="string">&quot;说明方法的用途、作用&quot;</span></span><br><span class="line">    notes=<span class="string">&quot;方法的备注说明&quot;</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@ApiImplicitParams</span>：用在请求的方法上，表示一组参数说明</span><br><span class="line">    <span class="meta">@ApiImplicitParam</span>：用在<span class="meta">@ApiImplicitParams</span>注解中，指定一个请求参数的各个方面</span><br><span class="line">        name：参数名</span><br><span class="line">        value：参数的汉字说明、解释</span><br><span class="line">        required：参数是否必须传</span><br><span class="line">        paramType：参数放在哪个地方</span><br><span class="line">            · header --&gt; 请求参数的获取：<span class="meta">@RequestHeader</span></span><br><span class="line">            · query --&gt; 请求参数的获取：<span class="meta">@RequestParam</span></span><br><span class="line">            · path（用于restful接口）--&gt; 请求参数的获取：<span class="meta">@PathVariable</span></span><br><span class="line">            · body 以流的形式提交 仅支持POST <span class="meta">@RequestBody</span>接收注解</span><br><span class="line">            · form (不常用)    </span><br><span class="line">        dataType：参数类型，默认String，其它值dataType=<span class="string">&quot;Integer&quot;</span>       </span><br><span class="line">        defaultValue：参数的默认值</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@ApiResponses</span>：用在请求的方法上，表示一组响应</span><br><span class="line">    <span class="meta">@ApiResponse</span>：用在<span class="meta">@ApiResponses</span>中，一般用于表达一个错误的响应信息</span><br><span class="line">        code：数字，例如<span class="number">400</span></span><br><span class="line">        message：信息，例如<span class="string">&quot;请求参数没填好&quot;</span></span><br><span class="line">        response：抛出异常的类</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@ApiModel</span>：用于响应类上，表示一个返回响应数据的信息</span><br><span class="line">            （这种一般用在post创建的时候，使用<span class="meta">@RequestBody</span>这样的场景，</span><br><span class="line">            请求参数无法使用<span class="meta">@ApiImplicitParam</span>注解进行描述的时候）</span><br><span class="line">    <span class="meta">@ApiModelProperty</span>：用在属性上，描述响应类的属性</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ApiImplicitParams(&#123;</span></span><br><span class="line"><span class="meta">    @ApiImplicitParam(name=&quot;mobile&quot;,value=&quot;手机号&quot;,required=true,paramType=&quot;form&quot;),</span></span><br><span class="line"><span class="meta">    @ApiImplicitParam(name=&quot;password&quot;,value=&quot;密码&quot;,required=true,paramType=&quot;form&quot;),</span></span><br><span class="line"><span class="meta">    @ApiImplicitParam(name=&quot;age&quot;,value=&quot;年龄&quot;,required=true,paramType=&quot;form&quot;,dataType=&quot;Integer&quot;)</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@ApiOperation(value = &quot;select1请求&quot;,notes = &quot;多个参数，多种的查询参数类型&quot;)</span></span><br><span class="line"><span class="meta">@ApiResponses(&#123;</span></span><br><span class="line"><span class="meta">    @ApiResponse(code=400,message=&quot;请求参数没填好&quot;),</span></span><br><span class="line"><span class="meta">    @ApiResponse(code=404,message=&quot;请求路径没有或页面跳转路径不对&quot;)</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h1 id="Swagger错误"><a href="#Swagger错误" class="headerlink" title="Swagger错误"></a>Swagger错误</h1><blockquote>
-<p>每次访问SwaggerUI界面时，出现<strong>java.lang.NumberFormatException</strong>异常。即使不做任何操作</p>
-</blockquote>
-<p>解决方案：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--swagger核心依赖（swagger是老版本，swagger2是新版本）--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.swagger<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>swagger-models:1.5.20<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.swagger<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>swagger-models<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.21<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--swagger-ui，swagger提供的可视化访问页面--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/csdn_lwq/article/details/109094931">https://blog.csdn.net/csdn_lwq/article/details/109094931</a></p>
-<h1 id="SpringBoot-集成-Knife4j"><a href="#SpringBoot-集成-Knife4j" class="headerlink" title="SpringBoot 集成 Knife4j"></a>SpringBoot 集成 Knife4j</h1><p>Knife4j 是一个 Swagger-UI 界面，作用同 Swagger-UI 一样，只不过比原来界面更加好看。安装步骤如下：</p>
-<h2 id="1、添加-Maven-依赖"><a href="#1、添加-Maven-依赖" class="headerlink" title="1、添加 Maven 依赖"></a>1、添加 Maven 依赖</h2><ul>
-<li><code>knife4j-spring-boot-starter</code>的作用同上面讲的 <code>springfox-swagger-ui</code> 作用是完全一样的，所以安装该依赖时最好将 <code>swagger-ui</code>依赖注释掉，当然不注释也没有关系，因为这两个UI的访问地址不同，所以理论上也不会产生冲突。</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--knife4j--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.xiaoymin<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>knife4j-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="2、添加配置类"><a href="#2、添加配置类" class="headerlink" title="2、添加配置类"></a>2、添加配置类</h2><blockquote>
-<p>在启动类或自定义的 Swagger 配置类上添加 <strong>@EnableKnife4j</strong> 注解启用 knife4j ！</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="meta">@EnableKnife4j</span>	<span class="comment">// 启用 knife4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Swagger2Config</span> </span>&#123;</span><br><span class="line">	<span class="comment">// TODO</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3、启动项目"><a href="#3、启动项目" class="headerlink" title="3、启动项目"></a>3、启动项目</h2><blockquote>
-<p>knife4j 默认的访问地址是：<code>http://ip:port/doc.html</code></p>
-</blockquote>
-<p><img src="/2021/01/09/Swagger/image-20210406232226453.png" alt="image-20210406232226453"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/" class="post-title-link" itemprop="url">IDEA常用功能</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-12-27 21:58:59" itemprop="dateCreated datePublished" datetime="2020-12-27T21:58:59+08:00">2020-12-27</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-03 12:13:23" itemprop="dateModified" datetime="2021-04-03T12:13:23+08:00">2021-04-03</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="查看依赖关系"><a href="#查看依赖关系" class="headerlink" title="查看依赖关系"></a>查看依赖关系</h1><p>进入<code>pom.xml</code>文件，单击鼠标右键，出现如下提示，按图操作可进入依赖管理的图形可视化界面。</p>
-<p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227195856871.png"></p>
-<p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227200057675.png"></p>
-<h1 id="进入当前项目所在的文件夹"><a href="#进入当前项目所在的文件夹" class="headerlink" title="进入当前项目所在的文件夹"></a>进入当前项目所在的文件夹</h1><p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20201227212659314.png"></p>
-<h1 id="IDEA-SpringBoot-maven-项目文件说明"><a href="#IDEA-SpringBoot-maven-项目文件说明" class="headerlink" title="IDEA + SpringBoot + maven 项目文件说明"></a>IDEA + SpringBoot + maven 项目文件说明</h1><p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20210329181048627.png" alt="image-20210329181048627"></p>
-<blockquote>
-<p><strong>.idea</strong>文件夹：存放项目的配置信息</p>
-</blockquote>
-<p>包括数据源，类库，项目字符编码，历史记录，版本控制信息等。</p>
-<p>（多为本地配置信息，进行版本控制时不用上传）</p>
-<blockquote>
-<p><strong>.mvn</strong> 文件夹：存放mvnw相关文件</p>
-</blockquote>
-<p>存放着 maven-wrapper.properties 和相关 jar 包以及名为 MavenWrapperDownloader 的 java 文件</p>
-<p><img src="/2020/12/27/IDEA%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD/image-20210329182421482.png" alt="image-20210329182421482"></p>
-<blockquote>
-<p><strong>mvnw / mvnw.cmd</strong> 文件</p>
-</blockquote>
-<p>全名是 MavenWrapper（Maven包装器），它的作用是在 <code>maven-wrapper.properties</code> 文件中记录你要使用的 Maven 版本，当用户执行 <code>mvnw clean</code> 命令时，如果发现当前用户的 Maven 版本和期望的版本不一致，那么就下载期望的版本，然后用期望的版本来执行 <code>mvn</code> 命令，比如 <code>mvn clean</code> 命令。</p>
-<ul>
-<li><strong>mvnw</strong> ：执行 <code>mvnw</code> 命令的 sh 入口（适配 Linux 系统）</li>
-<li><strong>mvnw.cmd</strong> ：执行 mvnw 命令的 cmd 入口（适配 Windows 系统）</li>
-</ul>
-<blockquote>
-<p><strong>src</strong> 文件夹</p>
-</blockquote>
-<p>工作区文件夹</p>
-<blockquote>
-<p><strong>target</strong> 文件夹</p>
-</blockquote>
-<blockquote>
-<p><strong>gitignore</strong> 文件： 分布式版本控制系统 Git 的配置文件，意思为忽略提交！</p>
-</blockquote>
-<p>在 .gitingore 文件中，需遵循相应的语法，即在每一行指定一个忽略规则。 如：.log、/target/、.idea</p>
-<blockquote>
-<p><strong>HELP.md</strong> 文件</p>
-</blockquote>
-<p>帮助文档文件！</p>
-<blockquote>
-<p><strong>xxx.iml</strong>文件：Intellij idea 的工程配置文件</p>
-</blockquote>
-<p>包含当前project的一些配置信息，如模块开发的相关信息，比如java组件，maven组件，插件组件等，还可能会存储一些模块路径信息，依赖信息以及一些别的信息。</p>
-<blockquote>
-<p><strong>pom.xml</strong>文件：项目对象模型（核心重要）</p>
-</blockquote>
-<p>pom.xml主要描述了项目的maven坐标，依赖关系，开发者需要遵循的规则，缺陷管理系统，组织和licenses，以及其他所有的项目相关因素，是项目级别的配置文件。</p>
-
       
     </div>
 

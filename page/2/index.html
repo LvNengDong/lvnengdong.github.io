@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,432 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/11/Vue%E8%B7%AF%E7%94%B1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/04/11/Vue%E8%B7%AF%E7%94%B1/" class="post-title-link" itemprop="url">Vue路由</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-11 11:12:35" itemprop="dateCreated datePublished" datetime="2021-04-11T11:12:35+08:00">2021-04-11</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-05-09 15:51:20" itemprop="dateModified" datetime="2021-05-09T15:51:20+08:00">2021-05-09</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="什么是路由"><a href="#什么是路由" class="headerlink" title="什么是路由"></a>什么是路由</h1><p>路由就是一组映射关系，即<code>&lt;K, V&gt;</code>键值对。</p>
+<p>K 是 Path，</p>
+<p>V 是 通过这个 Path 要访问的路径！</p>
+<ul>
+<li>在后端中，V 一般是处理请求的回调函数。</li>
+<li>在前端（Vue）中：V 就是一个组件。</li>
+</ul>
+<hr>
+<h1 id="Vue-Router-概述"><a href="#Vue-Router-概述" class="headerlink" title="Vue-Router 概述"></a>Vue-Router 概述</h1><ul>
+<li>Vue-Router 是官方提供的用来实现 SPA 的 vue 插件</li>
+<li>GitHub地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-router">https://github.com/vuejs/vue-router</a></li>
+<li>官方文档（中文）：<a target="_blank" rel="noopener" href="http://router.vuejs.org/zh-cn/">http://router.vuejs.org/zh-cn/</a></li>
+<li>下载：<code>npm install vue-router --save</code></li>
+</ul>
+<hr>
+<h1 id="Vue-Router-相关-API"><a href="#Vue-Router-相关-API" class="headerlink" title="Vue-Router 相关 API"></a>Vue-Router 相关 API</h1><h2 id="1、创建路由器"><a href="#1、创建路由器" class="headerlink" title="1、创建路由器"></a>1、创建路由器</h2><blockquote>
+<p>**VueRouter()**：用于创建路由器的构造函数</p>
+</blockquote>
+<p>路由器 &amp; 路由：路由器是路由信息的集合，路由器是一个构造函数，在路由器的构造函数中可以配置多个路有信息！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">	<span class="comment">// 多个配置项</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2、在路由器中配置路由信息"><a href="#2、在路由器中配置路由信息" class="headerlink" title="2、在路由器中配置路由信息"></a>2、在路由器中配置路由信息</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">routes: [</span><br><span class="line">    &#123; </span><br><span class="line">        <span class="comment">// 一般路由</span></span><br><span class="line">        path: <span class="string">&#x27;/about&#x27;</span>,</span><br><span class="line">        component: About</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123; </span><br><span class="line">        <span class="comment">// 自动跳转路由</span></span><br><span class="line">        path: <span class="string">&#x27;/&#x27;</span>,</span><br><span class="line">        redirect: <span class="string">&#x27;/about&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3、注册路由器"><a href="#3、注册路由器" class="headerlink" title="3、注册路由器"></a>3、注册路由器</h2><blockquote>
+<ul>
+<li><p><em>注册路由器就是声明使用路由器，我们创建好了 Vue-Router 实例后如果不告诉 Vue 的话 Vue 在启动项目时也不会去加载Vue-Router这个路由器实例。声明使用类似于 SpringBoot 中的 @Component 注解，只有声明使用后项目才会去加载该类中的信息。</em></p>
+</li>
+<li><p><em>Vue 一般是一个单页面应用，只会绑定一个 Vue 对象（当然这个 Vue 对象可以有任意多个子级配置对象），我们需要在这个 Vue 实例中声明使用路由器，项目在加载时才会去加载路由器中配置的路由信息。</em></p>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// import router from &#x27;./router/index.js&#x27;	// 引入路由器模块，（这个模块的配置下文会将到），由于 router 中的Js文件名为 index.js，所以我们可以将引入路径简写为下面的配置！！！</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router&#x27;</span>	</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    router		<span class="comment">// 1、router 就是 Vue-Router 实例对象。	 2、配置对象的属性名都是一些固定的名称，不能随便修改</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4、使用路由组件标签"><a href="#4、使用路由组件标签" class="headerlink" title="4、使用路由组件标签"></a>4、使用路由组件标签</h2><ol>
+<li><code>&lt;router-link&gt;</code>：用来生成路由链接</li>
+<li><code>&lt;router-view&gt;</code>：用来显示当前路由组件界面</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--  1、用来生成路由链接  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">to</span>=<span class="string">&quot;/xxx&quot;</span>&gt;</span>Go to XXX<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--  2、用来显示当前路由组件界面  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h1 id="快速入门（基本路由）"><a href="#快速入门（基本路由）" class="headerlink" title="快速入门（基本路由）"></a>快速入门（基本路由）</h1><p>在实际开发中，组件可分为两大类：</p>
+<ol>
+<li>路由组件：路由组件一般放在 <strong>views/pages</strong> 目录下</li>
+<li>非路由组件：非路由组件一般放在 <strong>components</strong> 目录下</li>
+</ol>
+<p>在实际开发中，一般会专门创建一个 <strong>src/router/index.js</strong> 文件用于定义路由器模块！</p>
+<p><img src="/2021/04/11/Vue%E8%B7%AF%E7%94%B1/image-20210411113552483.png" alt="image-20210411113552483"></p>
+<blockquote>
+<p><strong>src/router/index.js</strong></p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 路由器模块</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="comment">// 2、引入 vue 插件</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="comment">// 1、引入 vue-router 插件</span></span><br><span class="line"><span class="keyword">import</span> VueRouter <span class="keyword">from</span> <span class="string">&quot;vue-router&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3、声明使用 VueRouter 实例</span></span><br><span class="line">Vue.use(VueRouter)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 6、在路由信息中需要映射到Vue组件，所以在这里引入Vue组件</span></span><br><span class="line"><span class="keyword">import</span> About <span class="keyword">from</span> <span class="string">&quot;../views/About&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> Home <span class="keyword">from</span> <span class="string">&quot;../views/Home&quot;</span>;</span><br><span class="line"><span class="comment">// 4、路由器模块应该向外暴露一个路由器对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  <span class="comment">// 5、配置路由信息（多个）: 用数组 `[]` 保存；   数组中的每个路由配置信息都是一个对象：用 `&#123;&#125;` 保存对象</span></span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">&#x27;/about&#x27;</span>,</span><br><span class="line">      component: <span class="string">&#x27;About&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">&#x27;/home&#x27;</span>,</span><br><span class="line">      component: <span class="string">&#x27;Home&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>src/main.js</strong></p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 入口js：创建Vue实例</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router/index.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// （1）引入 App 组件（根组件）</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&quot;./App&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  components:&#123;</span><br><span class="line">    App,  <span class="comment">// （2）将 App 组件映射成标签</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//（3）使用组件标签</span></span><br><span class="line">  template:<span class="string">&#x27;&lt;App/&gt;&#x27;</span>,</span><br><span class="line"></span><br><span class="line">  router,   <span class="comment">// 配置对象的属性名都是一些固定的名称，不能随便修改</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="嵌套路由"><a href="#嵌套路由" class="headerlink" title="嵌套路由"></a>嵌套路由</h1><h1 id="缓存路由组件"><a href="#缓存路由组件" class="headerlink" title="缓存路由组件"></a>缓存路由组件</h1><h1 id="向路由组件传递数据"><a href="#向路由组件传递数据" class="headerlink" title="向路由组件传递数据"></a>向路由组件传递数据</h1><h2 id="方式1：路由路径携带参数-param-query"><a href="#方式1：路由路径携带参数-param-query" class="headerlink" title="方式1：路由路径携带参数(param/query)"></a>方式1：路由路径携带参数(param/query)</h2><ol>
+<li><p>配置路由</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">routes: [</span><br><span class="line">    &#123;</span><br><span class="line">        path: <span class="string">&#x27;/aaa/bbb/:id&#x27;</span>,		<span class="comment">// :id 就是传递过去的参数，id 可变</span></span><br><span class="line">        component: MessageDetail</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></li>
+<li><p>路由路径</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">&quot;`/aaa/bbb/$&#123;m.id&#125;`&quot;</span>&gt;</span>&#123;&#123;m.title&#125;&#125;<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>在路由组件中读取请求参数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">this</span>.$route.params.id</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="方式2-lt-router-view-gt-属性携带数据"><a href="#方式2-lt-router-view-gt-属性携带数据" class="headerlink" title="方式2: &lt;router-view&gt;属性携带数据"></a>方式2: <code>&lt;router-view&gt;</code>属性携带数据</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">router-view</span> <span class="attr">:msg</span>=<span class="string">&quot;msg&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="编程式路由导航"><a href="#编程式路由导航" class="headerlink" title="编程式路由导航"></a>编程式路由导航</h1><ul>
+<li>JS 中实现页面跳转</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.location.href = <span class="string">&#x27;要跳转的url地址&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Vue 编程式路由导航</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">this.$router.push(&quot;要跳转的url地址&quot;)</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/" class="post-title-link" itemprop="url">Vue组件化编码</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-09 23:10:34" itemprop="dateCreated datePublished" datetime="2021-04-09T23:10:34+08:00">2021-04-09</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-05-05 14:46:36" itemprop="dateModified" datetime="2021-05-05T14:46:36+08:00">2021-05-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Vue-cli"><a href="#Vue-cli" class="headerlink" title="Vue-cli"></a>Vue-cli</h1><h2 id="1、是什么？"><a href="#1、是什么？" class="headerlink" title="1、是什么？"></a>1、是什么？</h2><p>通过对 WebPack 的了解，如果我们手动去设置打包相关的配置信息是非常麻烦的。因为在开发中，需要打包的东西不止是 Js、Css、HTML、image 等，还有更多的东西要处理，如果我如果我一一去添加这些插件和加载器非常耗费时间。</p>
+<p>而作为一个开发人员，我们需要关注的往往只有项目源代码文件<code>（即src文件）</code>和少数几个配置文件。为了提高开发效率，Vue 官方提供了一个快速搭建 Vue Web项目的脚手架：<strong>vue-cli</strong>，使用它能快速的构建一个web工程模板。类似于 Java 中的 SpringBoot 等框架，我们只需在这个脚手架上进行二次开发即可！</p>
+<h2 id="2、如何使用？"><a href="#2、如何使用？" class="headerlink" title="2、如何使用？"></a>2、如何使用？</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><blockquote>
+<p>GitHub 地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-cli">https://github.com/vuejs/vue-cli</a></p>
+</blockquote>
+<blockquote>
+<p>安装命令（全局安装）：</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>测试是否安装成功：在控制台输出以下命令看是否有响应。</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><blockquote>
+<ol>
+<li>创建一个空文件夹，在当前文件夹下进入控制台窗口。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>初始化模板项目。</li>
+</ol>
+</blockquote>
+<ul>
+<li>vue-cli 给我们提供了多个项目模板，我们最常使用的就是 webpack 模板（即初始化一个使用 webpack 打包的 vue web 项目）。</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法： vue init 模板名 [项目名称]</span></span><br><span class="line">vue init webpack</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目名称可以先不指定，在稍后的提示选项中指定！</span></span><br></pre></td></tr></table></figure>
+
+<p>初始化项目的选项根据需要自行选择：</p>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409232341832.png" alt="image-20210409232341832"></p>
+<blockquote>
+<ol start="3">
+<li>使用<code>npm install</code>安装依赖。（如果在第二步中使用 NPM 自动安装的话，就无需进行手动安装这一步了！）</li>
+</ol>
+</blockquote>
+<p>安装成功！提示我们可以使用<code>npm run dev</code>命令启动。</p>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209062090.png" alt="1530209062090"></p>
+<h2 id="3、模板项目的结构？"><a href="#3、模板项目的结构？" class="headerlink" title="3、模板项目的结构？"></a>3、模板项目的结构？</h2><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233127399.png" alt="image-20210409233127399"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">|—— build 				&#x2F;&#x2F; webpack 相关的配置文件夹(基本不需要修改)</span><br><span class="line">	|—— dev-server.js 	 &#x2F;&#x2F; 通过express 启动后台服务器</span><br><span class="line">|—— config				&#x2F;&#x2F; webpack 相关的配置文件夹(基本不需要修改)</span><br><span class="line">	|—— index.js		&#x2F;&#x2F; 指定的后台服务的端口号和静态资源文件夹</span><br><span class="line">|—— node_modules		&#x2F;&#x2F; 依赖包文件夹</span><br><span class="line">|—— src 				&#x2F;&#x2F; 源码文件夹</span><br><span class="line">	|—— components		&#x2F;&#x2F; vue 组件及其相关资源文件夹</span><br><span class="line">	|—— App.vue			&#x2F;&#x2F; 应用根组件</span><br><span class="line">	|—— main.js			&#x2F;&#x2F; 应用入口js</span><br><span class="line">|—— static				&#x2F;&#x2F; 静态资源文件夹</span><br><span class="line">|—— .babelrc			&#x2F;&#x2F; babel 的配置文件（babel runtime control）</span><br><span class="line">|—— .eslintignore		&#x2F;&#x2F; eslint 检查忽略的配置</span><br><span class="line">|—— .eslintrc.js		&#x2F;&#x2F; eslint 的配置文件（eslint runtime control）</span><br><span class="line">|—— .editorcconfig</span><br><span class="line">|—— .gitignore			&#x2F;&#x2F; Git 版本控制忽略文件配置</span><br><span class="line">|—— .postcssrc.js</span><br><span class="line">|—— index.html			&#x2F;&#x2F; 主页面文件</span><br><span class="line">|—— package.json		&#x2F;&#x2F; 应用包配置文件</span><br><span class="line">|—— package-lock.json</span><br><span class="line">|—— README.md			&#x2F;&#x2F; 应用描述说明的readme 文件</span><br></pre></td></tr></table></figure>
+
+<h3 id="src"><a href="#src" class="headerlink" title="src"></a>src</h3><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210404124345145.png" alt="image-20210404124345145"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">├── assets 			&#x2F;&#x2F; 图片等资源 </span><br><span class="line">├── components 		&#x2F;&#x2F; 各种公共组件，非公共组件在各自view下维护 </span><br><span class="line">├── router 			&#x2F;&#x2F; 路由表 </span><br><span class="line">├── App.vue 		&#x2F;&#x2F; 项目根组件</span><br><span class="line">├── main.js 		&#x2F;&#x2F; 项目入口文件</span><br></pre></td></tr></table></figure>
+
+<h4 id="入口文件：main-js"><a href="#入口文件：main-js" class="headerlink" title="入口文件：main.js"></a>入口文件：<code>main.js</code></h4><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209503007.png" alt="1525913687860"></p>
+<h4 id="单文件组件：-vue"><a href="#单文件组件：-vue" class="headerlink" title="单文件组件：*.vue*"></a>单文件组件：<code>*.vue*</code></h4><p>我们称后缀名为<code>.vue</code>的文件为单文件组件。每一个<code>.vue</code>文件，就是一个独立的vue组件。而 <strong>App.vue</strong> 是整个项目的根组件。</p>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209769323.png" alt="1530209769323"></p>
+<p>单文件组件中包含三部分内容：</p>
+<ul>
+<li><code>&lt;template/&gt;</code>：<strong>Html 模板</strong></li>
+<li><code>&lt;script/&gt;</code>：<strong>Js 脚本</strong>，这里编写的就是vue的组件对象，还可以有data(){}等</li>
+<li><code>&lt;style/&gt;</code>：<strong>Css 样式</strong>，支持CSS语法高亮和提示</li>
+</ul>
+<p>每个组件都有自己独立的html、JS、CSS，互不干扰，真正做到可独立复用。</p>
+<h4 id="多文件组件"><a href="#多文件组件" class="headerlink" title="多文件组件"></a>多文件组件</h4><p>既然有单文件组件，那么就一定有多文件组件。多文件组件一般是一个文件夹，这个文件夹中除了包含一些单文件组件之外，还可以包含一些 image 等静态资源。所有这些资源形成一个大的组件对外暴露，我们把这个大的组件就叫做多文件组件！！！</p>
+<h3 id="gitkeep"><a href="#gitkeep" class="headerlink" title=".gitkeep"></a>.gitkeep</h3><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233500688.png" alt="image-20210409233500688"></p>
+<p><code>.gitkeep</code> 是作用于 Git 进行版本管理的文件。</p>
+<p>Git 进行版本控制时有一个特点就是如果某个文件夹为空就会自动忽略（即不对该文件夹进行版本控制），但是如果我们不想该文件夹被忽略的话，就可以在该文件夹下创建一个<code>.gitkeep</code>的文件（文件内容为空），这样Git在进行版本管理时就不会忽略该文件夹了！！！</p>
+<h2 id="4、运行"><a href="#4、运行" class="headerlink" title="4、运行"></a>4、运行</h2><blockquote>
+<p>查看项目文件的配置信息：<code>package.json</code></p>
+</blockquote>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210016103.png" alt="1530210016103"></p>
+<ul>
+<li>可以看到这里引入了非常多的依赖，绝大多数都是开发期依赖，比如大量的加载器。</li>
+<li>运行时依赖只有 vue 和 vue-router</li>
+<li>脚本有三个：<ul>
+<li>dev：使用了webpack-dev-server命令，开发时热部署使用</li>
+<li>start：使用了npm run dev命令，与上面的dev效果完全一样，当脚本名为“start”时，可以省略“run”。 </li>
+<li>build：等同于webpack的打包功能，会打包到dist目录下。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>启动项目</p>
+</blockquote>
+<p>我们执行<code>npm run dev</code> 或者 <code>npm start</code> 都可以启动项目：</p>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210411076.png" alt="1530210411076"></p>
+<blockquote>
+<p>检查页面元素</p>
+</blockquote>
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409234531234.png" alt="image-20210409234531234"></p>
+<h2 id="5、项目打包"><a href="#5、项目打包" class="headerlink" title="5、项目打包"></a>5、项目打包</h2><blockquote>
+<p>打包命令</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6、项目发布"><a href="#6、项目发布" class="headerlink" title="6、项目发布"></a>6、项目发布</h2><h3 id="使用静态服务器发布"><a href="#使用静态服务器发布" class="headerlink" title="使用静态服务器发布"></a>使用静态服务器发布</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install -g serve</span><br><span class="line">serve dist</span><br><span class="line">访问: http:&#x2F;&#x2F;localhost:5000</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用动态web服务器发布-tomcat"><a href="#使用动态web服务器发布-tomcat" class="headerlink" title="使用动态web服务器发布(tomcat)"></a>使用动态web服务器发布(tomcat)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">修改配置: webpack.prod.conf.js</span><br><span class="line">output: &#123;</span><br><span class="line">publicPath: &#39;&#x2F;xxx&#x2F;&#39; &#x2F;&#x2F;打包文件夹的名称</span><br><span class="line">&#125;</span><br><span class="line">重新打包:</span><br><span class="line">npm run build</span><br><span class="line">修改dist 文件夹为项目名称: xxx</span><br><span class="line">将xxx 拷贝到运行的tomcat 的webapps 目录下</span><br><span class="line">访问: http:&#x2F;&#x2F;localhost:8080&#x2F;xxx</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h1 id="组件定义与使用"><a href="#组件定义与使用" class="headerlink" title="组件定义与使用"></a>组件定义与使用</h1><h2 id="什么是组件？"><a href="#什么是组件？" class="headerlink" title="什么是组件？"></a>什么是组件？</h2><ul>
+<li><strong>组件就是一个局部功能界面。包含要实现这个功能界面所有的相关资源，包括 html、css、js、image 等。</strong></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The Vue build version to load with the `import` command</span></span><br><span class="line"><span class="comment">// (runtime-only or standalone) has been set in webpack.base.conf with an alias.</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App&#x27;</span>   <span class="comment">// 引入一个组件</span></span><br><span class="line"></span><br><span class="line">Vue.config.productionTip = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* eslint-disable no-new */</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&#x27;#app&#x27;</span>,</span><br><span class="line">  components: &#123; App &#125;,    <span class="comment">// 将组件映射成指定名称的标签（这里利用ES6语法省略&lt;K,V&gt;为K）</span></span><br><span class="line">  template: <span class="string">&#x27;&lt;App/&gt;&#x27;</span>    <span class="comment">// 模板。模板最终会嵌入到 el 匹配到的页面中去。所以我们最终在 index.html 中渲染的内容就是 &lt;App/&gt; 组件中的内容</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="vue-文件的组成-3-个部分"><a href="#vue-文件的组成-3-个部分" class="headerlink" title="vue 文件的组成(3 个部分)"></a>vue 文件的组成(3 个部分)</h2><p><strong>一个 Vue 文件就是一个单文件组件！！！</strong></p>
+<blockquote>
+<ol>
+<li>模板页面</li>
+<li>JS 模块对象</li>
+<li>样式</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	页面模板</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">        data() &#123;return &#123;&#125;&#125;,</span><br><span class="line">        methods: &#123;&#125;,</span><br><span class="line">        computed: &#123;&#125;,</span><br><span class="line">        components: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">    样式定义</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><blockquote>
+<ol>
+<li>引入组件</li>
+<li>映射成标签</li>
+<li>使用组件标签</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;HelloWorld&gt;&lt;&#x2F;HelloWorld&gt;</span><br><span class="line">    &lt;hello-world&gt;&lt;&#x2F;hello-world&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    import HelloWorld from &#39;.&#x2F;components&#x2F;HelloWorld&#39;</span><br><span class="line">    export default &#123;</span><br><span class="line">        components: &#123;</span><br><span class="line">            HelloWorld</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="关于标签名与标签属性名书写问题"><a href="#关于标签名与标签属性名书写问题" class="headerlink" title="关于标签名与标签属性名书写问题"></a>关于标签名与标签属性名书写问题</h2><ol>
+<li>写法一: 一模一样</li>
+<li>写法二: 大写变小写, 并用-连接</li>
+</ol>
+<h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><h3 id="1、创建根组件"><a href="#1、创建根组件" class="headerlink" title="1、创建根组件"></a>1、创建根组件</h3><blockquote>
+<p>因为Vue项目是一个单页面应用，我们一般在这个单页面中会引入一个根组件（所有组件的祖宗），一般命名为<strong>App.vue</strong>。所以第二步我们要创建一个 App.vue 组件</p>
+</blockquote>
+<ol>
+<li>先创建组件基本结构（固定写法）。包括写 html  的 <code>&lt;template/&gt;</code> ， 写 js 的 <code>&lt;script/&gt;</code> ，写 css 的 <code>&lt;style/&gt;</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;  &#x2F;&#x2F; 配置对象（能配置的属性&#x2F;方法与Vue一致）</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="2、创建其它组件"><a href="#2、创建其它组件" class="headerlink" title="2、创建其它组件"></a>2、创建其它组件</h3><blockquote>
+<p>其它组件都是根组件的子孙组件。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;p class&#x3D;&quot;myClass&quot;&gt;&#123;&#123;msg&#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;  &#x2F;&#x2F; 配置对象（能配置的属性&#x2F;方法与Vue一致）</span><br><span class="line">  name: &quot;HelloWorld&quot;,</span><br><span class="line">  data()&#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      msg: &quot;Hello Vue&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">  .myClass&#123;</span><br><span class="line">    color: red;</span><br><span class="line">    font-size: 30px;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以看到在一个组件内部，html 部分可以直接调用 script 中的数据model以及 style中的css样式</li>
+</ul>
+<h3 id="3、在根组件中引用其它组件"><a href="#3、在根组件中引用其它组件" class="headerlink" title="3、在根组件中引用其它组件"></a>3、在根组件中引用其它组件</h3><blockquote>
+<ol>
+<li>引入子组件：<code>import HelloWorld from &quot;./components/HelloWorld&quot;;</code></li>
+<li>将引入的子组件映射成一个标签：<code>component</code></li>
+<li>使用（组件）标签</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;img class&#x3D;&quot;logo&quot; src&#x3D;&quot;src&#x2F;assets&#x2F;logo.png&quot;&#x2F;&gt;</span><br><span class="line">&lt;!--    3、使用（组件）标签  --&gt;</span><br><span class="line">    &lt;HelloWorld&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">  &#x2F;&#x2F; 1、引入组件</span><br><span class="line">  import HelloWorld from &quot;.&#x2F;components&#x2F;HelloWorld&quot;;</span><br><span class="line">  export default &#123;</span><br><span class="line">    components: &#123;HelloWorld&#125;,</span><br><span class="line">    data()&#123;</span><br><span class="line">      return&#123;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#x2F;&#x2F; 2、将引入的组件映射成标签</span><br><span class="line">    comments:&#123;</span><br><span class="line">      HelloWorld,   &#x2F;&#x2F; 采用ES6语法，简化&lt;K,V&gt;的书写</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">  .logo&#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    height: 200px;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、创建-main-js"><a href="#4、创建-main-js" class="headerlink" title="4、创建 main.js"></a>4、创建 main.js</h3><blockquote>
+<p>在<code>main.js</code>中创建一个Vue对象，用于将根组件<code>&lt;App/&gt;</code>渲染到<code>index.html</code>中去！！</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 入口js：创建Vue实例</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入 vue 依赖</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// （1）引入 App 组件（根组件）</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&quot;./App&quot;</span>;</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  components:&#123;</span><br><span class="line">    App,  <span class="comment">// （2）将 App 组件映射成标签</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//（3）将组件标签渲染到指定的页面中去</span></span><br><span class="line">  template:<span class="string">&#x27;&lt;App/&gt;&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/lifecycle.png" alt="Vue 实例生命周期"></p>
+<h1 id="组件化编码的流程"><a href="#组件化编码的流程" class="headerlink" title="组件化编码的流程"></a>组件化编码的流程</h1><p>拆分组件–&gt;&gt;静态组件–&gt;&gt;动态组件</p>
+<h2 id="做交互"><a href="#做交互" class="headerlink" title="做交互"></a>做交互</h2><p>绑定事件监听</p>
+<p>–&gt;&gt;</p>
+<p>自动收集数据</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2074,1046 +2500,6 @@
 <td align="center">需要对整个图做计算才能得出结果，不容易做分布式的集群方案</td>
 </tr>
 </tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/23/Git/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/23/Git/" class="post-title-link" itemprop="url">Git</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-23 23:44:24" itemprop="dateCreated datePublished" datetime="2021-03-23T23:44:24+08:00">2021-03-23</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-03-27 17:32:02" itemprop="dateModified" datetime="2021-03-27T17:32:02+08:00">2021-03-27</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">版本控制工具</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Git-介绍"><a href="#Git-介绍" class="headerlink" title="Git 介绍"></a>Git 介绍</h1><p>Git是<strong>分布式版本控制系统</strong>，那么它就没有中央服务器的，每个人的电脑就是一个完整的版本库，这样，工作的时候就不需要联网了，因为版本都是在自己的电脑上。既然每个人的电脑都有一个完整的版本库，那多个人如何协作呢？比如说自己在电脑上改了文件A，其他人也在电脑上改了文件A，这时，你们两之间只需把各自的修改推送给对方，就可以互相看到对方的修改了。</p>
-<p>下图就是分布式版本控制工具管理方式：</p>
-<p><img src="/2021/03/23/Git/Git%5Cimage-20210326134303413.png" alt="image-20210326134303413"></p>
-<h2 id="git-工作流程"><a href="#git-工作流程" class="headerlink" title="git 工作流程"></a>git 工作流程</h2><p>一般工作流程如下：</p>
-<p>1．从远程仓库中克隆 Git 资源作为本地仓库。</p>
-<p>2．从本地仓库中checkout代码然后进行代码修改</p>
-<p>3．在提交前先将代码提交到暂存区。</p>
-<p>4．提交修改。提交到本地仓库。本地仓库中保存修改的各个历史版本。</p>
-<p>5．在修改完成后，需要和团队成员共享代码时，可以将代码push到远程仓库。</p>
-<p>下图展示了 Git 的工作流程：</p>
-<p><img src="/2021/03/23/Git/Git%5Cclip_image002.jpg" alt="0df9740f9b41522ab12c14dbbf6bbad4_r"></p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="Git-安装"><a href="#Git-安装" class="headerlink" title="Git 安装"></a>Git 安装</h2><p>下载地址：<a target="_blank" rel="noopener" href="https://git-scm.com/download">https://git-scm.com/download</a></p>
-<p>下载完成后安装，一路“下一步”使用默认选项即可。</p>
-<h2 id="安装-TortoiseGit"><a href="#安装-TortoiseGit" class="headerlink" title="安装 TortoiseGit"></a>安装 TortoiseGit</h2><p>下载地址：<a target="_blank" rel="noopener" href="https://tortoisegit.org/download/">https://tortoisegit.org/download/</a></p>
-<p>配置 git.exe，在4.2.1中已经安装过git-for-windows了所以在此找到git.exe所在的目录。</p>
-<p><img src="/2021/03/23/Git/Git%5Cimage-20210326135454050.png" alt="image-20210326135454050"></p>
-<p>配置开发者姓名及邮箱，每次提交代码时都会把此信息包含到提交的信息中。</p>
-<p><img src="/2021/03/23/Git/Git%5Cimage-20210326135657510.png" alt="image-20210326135657510"></p>
-<p>使用默认配置，点击“完成”按钮完成配置。</p>
-<p><img src="/2021/03/23/Git/Git%5Cimage-20210326135749350.png" alt="image-20210326135749350"></p>
-<p>完整完毕后在系统右键菜单中会出现git的菜单项。</p>
-<p><img src="/2021/03/23/Git/Git%5Cimage-20210326135913266.png" alt="image-20210326135913266"></p>
-<h2 id="安装中文语言包"><a href="#安装中文语言包" class="headerlink" title="安装中文语言包"></a>安装中文语言包</h2><p>下载地址：<a target="_blank" rel="noopener" href="https://tortoisegit.org/download/">https://tortoisegit.org/download/</a></p>
-<p>直接“下一步”完整完毕。</p>
-<p>语言包安装完毕后可以在TortoiseGit的设置中调整语言</p>
-<p><img src="/2021/03/23/Git/Git%5Cimage-20210326155003079.png" alt="image-20210326155003079"></p>
-<p>​    </p>
-<h1 id="使用-Git-管理文件版本"><a href="#使用-Git-管理文件版本" class="headerlink" title="使用 Git 管理文件版本"></a>使用 Git 管理文件版本</h1><h2 id="1-创建版本库"><a href="#1-创建版本库" class="headerlink" title="1    创建版本库"></a>1    创建版本库</h2><blockquote>
-<p><strong>版本库（repository）</strong></p>
-</blockquote>
-<p>版本库就是仓库，可以简单理解成一个目录，这个目录里面的所有文件都可以被Git管理起来，每个文件的修改、删除，Git都能跟踪，以便任何时刻都可以追踪历史，或者在将来某个时刻可以“还原”。</p>
-<blockquote>
-<p><strong>创建版本库</strong></p>
-</blockquote>
-<p>创建一个版本库非常简单，可以使用 <code>git bash</code> ，也可以使用 <code>tortoiseGit</code>。</p>
-<ol>
-<li><p>首先，选择任意位置创建一个空目录，如 <code>E:\temp\git\repo</code></p>
-</li>
-<li><p>在当前目录中点击右键中选择 <strong>Git Bash</strong> 启动，输入 <code>git init</code> 命令进行初始化后该目录就变成一个本地版本库了！</p>
-<p>或者使用 TortoiseGit ，只需要在目录中点击右键菜单选择“在这里创建版本库”即可创建本地版本库！</p>
-<p><img src="/2021/03/23/Git/image-20210327130955505.png" alt="image-20210327130955505"></p>
-<p><img src="/2021/03/23/Git/image-20210327131114601.png" alt="image-20210327131114601"></p>
-</li>
-<li><p>版本库创建成功，会在当前目录下创建一个 <code>.git</code> 的隐藏目录！</p>
-</li>
-</ol>
-<blockquote>
-<p><strong>概念</strong></p>
-</blockquote>
-<p><strong>版本库</strong>：“<code>.git</code>” 目录就是版本库，将来文件都需要保存到版本库中。</p>
-<p><strong>工作目录</strong>：包含“ <code>.git</code> ”目录的目录，也就是<code>.git</code>目录的上一级目录就是工作目录。只有工作目录中的文件才能保存到版本库中。</p>
-<h2 id="2-添加文件"><a href="#2-添加文件" class="headerlink" title="2    添加文件"></a>2    添加文件</h2><ol>
-<li><p>在 <code>E:\temp\git\repo</code>目录下创建一个<code>mytest.txt</code>文件</p>
-<p><img src="/2021/03/23/Git/image-20210327132001998.png" alt="image-20210327132001998"></p>
-<p><img src="/2021/03/23/Git/image-20210327132018703.png" alt="image-20210327132018703"></p>
-<p>文本文件变为带“+”号的图标：</p>
-<p><img src="/2021/03/23/Git/image-20210327132054758.png" alt="image-20210327132054758"></p>
-</li>
-<li><p>提交文件：在mytest.txt上再次点击右键选择“提交”，此时将文件保存至版本库中。</p>
-<p><img src="/2021/03/23/Git/image-20210327132211404.png" alt="image-20210327132211404"></p>
-<p><img src="/2021/03/23/Git/image-20210327132227172.png" alt="image-20210327132227172"></p>
-<p><img src="/2021/03/23/Git/image-20210327132337915.png" alt="image-20210327132337915"></p>
-</li>
-</ol>
-<h3 id="工作区和暂存区"><a href="#工作区和暂存区" class="headerlink" title="工作区和暂存区"></a>工作区和暂存区</h3><p>Git 和其他版本控制系统如 SVN 的一个不同之处就是有暂存区的概念。</p>
-<blockquote>
-<p>什么是工作区（Working Directory）？</p>
-</blockquote>
-<ul>
-<li>工作区就是你在电脑里能看到的目录，比如<code>E:\temp\git\repo</code> 文件夹就是一个工作区。</li>
-<li><code>repo</code> 目录是<strong>工作区</strong>，在这个目录中的 <code>.git</code> 隐藏文件夹是<strong>版本库</strong>。</li>
-<li>Git 的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的<strong>暂存区</strong>，还有Git为我们自动创建的第一个<strong>分支</strong>master，以及指向master的一个指针叫HEAD。</li>
-</ul>
-<p><img src="/2021/03/23/Git/clip_image001.jpg" alt="IMG_256"></p>
-<blockquote>
-<p>我们把文件往 Git 版本库里添加的时候，是分两步执行的：</p>
-</blockquote>
-<ol>
-<li>第一步是用 <code>git add</code> 把文件添加进去，实际上就是把文件修改添加到暂存区；</li>
-<li>第二步是用 <code>git commit</code> 提交更改，实际上就是把暂存区的所有内容提交到当前分支。</li>
-</ol>
-<blockquote>
-<p>说明</p>
-</blockquote>
-<ul>
-<li>因为我们创建 Git 版本库时，Git 自动为我们创建了唯一一个 master 分支，所以 <code>git commit</code> 就是往master分支上提交更改。</li>
-<li>可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。</li>
-</ul>
-<h2 id="3-修改文件"><a href="#3-修改文件" class="headerlink" title="3    修改文件"></a>3    修改文件</h2><h3 id="提交修改"><a href="#提交修改" class="headerlink" title="提交修改"></a>提交修改</h3><p>被版本库管理的文件不可避免的要发生修改，此时只需要直接对文件修改即可。修改完毕后需要将修改后的文件提交到版本库。</p>
-<p>在<code>mytest.txt</code>文件上点击右键，然后选择“提交”</p>
-<p><img src="/2021/03/23/Git/image-20210327133648607.png" alt="image-20210327133648607"> </p>
-<p><img src="/2021/03/23/Git/image-20210327133731241.png" alt="image-20210327133731241"></p>
-<p><img src="/2021/03/23/Git/image-20210327133738077.png" alt="image-20210327133738077"></p>
-<h3 id="查看修改历史"><a href="#查看修改历史" class="headerlink" title="查看修改历史"></a>查看修改历史</h3><p>在开发过程中可能会经常查看代码的修改历史，或者叫做修改日志。来查看某个版本是谁修改的，什么时间修改的，修改了哪些内容。</p>
-<p>可以在文件上点击右键选择“显示日志”来查看文件的修改历史。</p>
-<p><img src="/2021/03/23/Git/image-20210327133836905.png" alt="image-20210327133836905"></p>
-<p><img src="/2021/03/23/Git/image-20210327133847160.png" alt="image-20210327133847160"></p>
-<h3 id="差异比较"><a href="#差异比较" class="headerlink" title="差异比较"></a>差异比较</h3><p>当文件内容修改后，需要和修改之前对比一下修改了哪些内容此时可以使用“<strong>比较差异功能</strong>”</p>
-<p><img src="/2021/03/23/Git/image-20210327133922884.png" alt="image-20210327133922884"></p>
-<p><img src="/2021/03/23/Git/image-20210327134014492.png" alt="image-20210327134014492"></p>
-<h3 id="还原修改"><a href="#还原修改" class="headerlink" title="还原修改"></a>还原修改</h3><p>当文件修改后不想把修改的内容提交，还想还原到未修改之前的状态。此时可以使用“<strong>还原</strong>”功能</p>
-<p><img src="/2021/03/23/Git/image-20210327134135519.png" alt="image-20210327134135519"></p>
-<p><img src="/2021/03/23/Git/image-20210327134143489.png" alt="image-20210327134143489"></p>
-<p><img src="/2021/03/23/Git/image-20210327134154307.png" alt="image-20210327134154307"></p>
-<blockquote>
-<p><strong>Tip：</strong></p>
-</blockquote>
-<ul>
-<li>此操作会撤销所有<strong>未提交</strong>的修改，所以当做还原操作是需要慎重慎重！！！</li>
-<li>如果修改已提交就不能还原了！！！</li>
-</ul>
-<h2 id="4-删除文件"><a href="#4-删除文件" class="headerlink" title="4    删除文件"></a>4    删除文件</h2><p>需要删除无用的文件时可以使用git提供的删除功能直接将文件从版本库中删除。</p>
-<p><img src="/2021/03/23/Git/image-20210327134451557.png" alt="image-20210327134451557"></p>
-<h1 id="将-Java-工程提交到版本库"><a href="#将-Java-工程提交到版本库" class="headerlink" title="将 Java 工程提交到版本库"></a>将 Java 工程提交到版本库</h1><blockquote>
-<ol>
-<li>创建一个 Java 项目并添加到工作目录中（包含<code>.git</code>的目录）</li>
-</ol>
-</blockquote>
-<p><img src="/2021/03/23/Git/image-20210327134819549.png" alt="image-20210327134819549"></p>
-<blockquote>
-<ol start="2">
-<li>将工程添加到暂存区。</li>
-</ol>
-</blockquote>
-<p><img src="/2021/03/23/Git/image-20210327134826342.png" alt="image-20210327134826342"></p>
-<p><img src="/2021/03/23/Git/image-20210327135002014.png" alt="image-20210327135002014"></p>
-<p>未受版本控制的文件就是指还没有被版本控制器管理，我们想要做的就是把这些未受版本控制的文件变为受版本控制的文件！</p>
-<p><img src="/2021/03/23/Git/image-20210327135140841.png" alt="image-20210327135140841"></p>
-<p>点击确定完成暂存区添加。</p>
-<blockquote>
-<ol start="3">
-<li>忽略文件或文件夹</li>
-</ol>
-</blockquote>
-<ul>
-<li>在此工程中，并不是所有文件都需要保存到版本库中的，例如“<code>bin</code>”目录及目录下的文件就可以忽略。</li>
-<li>这个问题解决起来也很简单，在 Git 工作区的根目录下创建一个特殊的 <code>.gitignore</code> 文件，然后把要忽略的文件名填进去，Git就会自动忽略这些文件。</li>
-<li>如果使用TortoiseGit的话可以使用菜单项直接进行忽略。</li>
-</ul>
-<p><img src="/2021/03/23/Git/image-20210327135439205.png" alt="image-20210327135439205"></p>
-<p><img src="/2021/03/23/Git/image-20210327135503431.png" alt="image-20210327135503431"></p>
-<ul>
-<li>选择保留本地文件。完成后在此文件夹内会多出一个<code>.gitignore</code>文件，这个文件就是文件忽略文件。</li>
-<li>当然也可以手工编辑。其中的内容就是把<code>bin</code>目录忽略掉。</li>
-</ul>
-<p><img src="/2021/03/23/Git/image-20210327135811371.png" alt="image-20210327135811371"></p>
-<blockquote>
-<ol start="4">
-<li>提交代码</li>
-</ol>
-</blockquote>
-<ul>
-<li>将代码添加到master分支上，其中<code>.gitignore</code>文件也需要添加到暂存区，然后提交到版本库。</li>
-</ul>
-<h2 id="忽略文件语法规范"><a href="#忽略文件语法规范" class="headerlink" title="忽略文件语法规范"></a>忽略文件语法规范</h2><ul>
-<li>空行 或 以 # 开头的行即注释行。</li>
-<li>可以在前面添加正斜杠 / 来避免递归。</li>
-<li>可以在后面添加正斜杠 / 来忽略文件夹，例如 build/ 即忽略build文件夹。</li>
-<li>可以使用 ! 来否定忽略，即比如在前面用了 *.apk ，然后使用 !a.apk ，则这个a.apk不会被忽略。</li>
-<li>* 用来匹配零个或多个字符，如 <em>.[oa] 忽略所有以”.o”或”.a”结尾</em></li>
-<li>~ 忽略所有以 ~ 结尾的文件（这种文件通常被许多编辑器标记为临时文件）； </li>
-<li>[] 用来匹配括号内的任一字符，如 [abc] ，也可以在括号内加连接符，如 [0-9] 匹配0至9的数； </li>
-<li>? 用来匹配单个字符。 </li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 忽略 .a 文件</span></span><br><span class="line">*.a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件</span></span><br><span class="line">!lib.a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅在当前目录下忽略 TODO 文件， 但不包括子目录下的 subdir/TODO</span></span><br><span class="line">/TODO</span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略 build/ 文件夹下的所有文件</span></span><br><span class="line">build/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略 doc/notes.txt, 不包括 doc/server/arch.txt</span></span><br><span class="line">doc/*.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略所有的 .pdf 文件 在 doc/ directory 下的</span></span><br><span class="line">doc/**/*.pdf</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h1 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h1><h2 id="1-添加远程库"><a href="#1-添加远程库" class="headerlink" title="1    添加远程库"></a>1    添加远程库</h2><blockquote>
-<p>常用的远程仓库有：GitHub、Gitee 等。国内我们一般选择Gitee ！</p>
-</blockquote>
-<h3 id="1-1-创建远程仓库"><a href="#1-1-创建远程仓库" class="headerlink" title="1.1    创建远程仓库"></a>1.1    创建远程仓库</h3><p>首先我们在 Gitee 上创建一个空的远程仓库！</p>
-<p>Gitee 支持两种同步方式 <strong>https</strong> 和 <strong>SSH</strong> 。</p>
-<ul>
-<li>使用 <strong>https</strong> 很简单基本不需要配置就可以使用，但是每次提交代码和下载代码时都需要输入用户名和密码。</li>
-<li>使用 <strong>SSH</strong> 方式需要先再客户端生成一个密钥对，然后把公钥放到 <strong>Gitee</strong> 的服务器上。</li>
-</ul>
-<h3 id="1-2-使用-SSH-创建连接远程仓库"><a href="#1-2-使用-SSH-创建连接远程仓库" class="headerlink" title="1.2    使用 SSH  创建连接远程仓库"></a>1.2    使用 SSH  创建连接远程仓库</h3><h4 id="SSH-基本原理"><a href="#SSH-基本原理" class="headerlink" title="SSH 基本原理"></a>SSH 基本原理</h4><blockquote>
-<p>超链接</p>
-</blockquote>
-<h4 id="SSH-秘钥生成（windows）"><a href="#SSH-秘钥生成（windows）" class="headerlink" title="SSH 秘钥生成（windows）"></a>SSH 秘钥生成（windows）</h4><p>在 Windows下我们可以使用 <strong>Git Bash</strong> 来生成密钥。</p>
-<ol>
-<li><p>首先我们通过开始菜单或者右键打开Git Bash</p>
-</li>
-<li><p>在 git bash 中执行下面的命令生成秘钥对</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/03/23/Git/image-20210327151542089.png" alt="image-20210327151542089"></p>
-<p>执行命令完成后，在 <code>C:\Users\用户名\.ssh</code> 目录下就会生成如下名称的公钥和私钥：</p>
-<p><img src="/2021/03/23/Git/image-20210327154503841.png" alt="image-20210327154503841"></p>
-</li>
-</ol>
-<h4 id="SSH-秘钥配置"><a href="#SSH-秘钥配置" class="headerlink" title="SSH 秘钥配置"></a>SSH 秘钥配置</h4><p>密钥生成后需要将公钥上传到 Gitee 上并配置后，本地才可以顺利访问。</p>
-<p><img src="/2021/03/23/Git/image-20210327144350181.png" alt="image-20210327144350181"></p>
-<p><img src="/2021/03/23/Git/image-20210327144639965.png" alt="image-20210327144639965"></p>
-<ul>
-<li><strong>标题</strong>为自定义的公钥标题，可以是任意名称</li>
-<li>在<strong>公钥</strong>部分将 <code>id_rsa.pub</code> 文件内容添加进去，然后点击确定完成配置。</li>
-</ul>
-<h3 id="1-3-同步到远程仓库"><a href="#1-3-同步到远程仓库" class="headerlink" title="1.3    同步到远程仓库"></a>1.3    同步到远程仓库</h3><blockquote>
-<p>同步到远程仓库可以使用 <strong>git bash</strong> 也可以使用 <strong>tortoiseGit</strong></p>
-</blockquote>
-<p><strong>在连接远程仓库时一定要注意区分HTTPS 和 SSH 的远程仓库地址路径！！！</strong> </p>
-<p><img src="/2021/03/23/Git/image-20210327163204082.png" alt="image-20210327163204082"></p>
-<h4 id="使用-Git-Bash-同步"><a href="#使用-Git-Bash-同步" class="headerlink" title="使用 Git Bash 同步"></a>使用 Git Bash 同步</h4><ol>
-<li>在仓库所在的目录<code>E:\tmp\git\repo</code> 中点击右键选择“Git Bash Here”，启动git bash程序。</li>
-</ol>
-<p><img src="/2021/03/23/Git/image-20210327141914532.png" alt="image-20210327141914532"></p>
-<ol start="2">
-<li><p>然后在<strong>git bash</strong>中执行如下语句：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 与远程仓库建立连接</span></span><br><span class="line">git remote add origin git@gitee.com:lv_neng_dong/demo00.git</span><br><span class="line"><span class="comment"># 将本地仓库中的内容推送到远程仓库中</span></span><br><span class="line">git push -u origin master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意：远程仓库的地址要换成自己制定的远程仓库地址</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>命令解析(重要！！！)</strong></p>
-<ol>
-<li><code>git remote add origin git@gitee.com:xxx/xx.git</code></li>
-</ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`origin git@gitee.com:lv_neng_dong/demo00.git` 是绑定在一起的，`git@gitee.com:xxx/xx.git` 是远程仓库在网络上真实的地址，而 `origin` 是一个别名，也就是远程仓库在本地的一个代号，可以是任意名称，比如我就把它起名为 `origintest` 也是可以的，当然我们一般不太修改这个属性！</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><code>git push -u origin master</code></li>
-</ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">这条命令中的 `origin` 参数被本地计算机读取，然后根据这个参数得到远程仓库在网络上的真实地址！	</span><br><span class="line">但是我在上面将远程仓库地址的别名设置为 `origintest` ，所以我在推送到远端仓库时也要使用 `origintest` 来检索远端仓库的真实地址！</span><br><span class="line"></span><br><span class="line">`master` 用于指定远程仓库的分支，Git 会默认帮我们创建一个名为 `master` 的分支！由于我在这里没有自己创建爱你其它的分支，所以直接使用默认分支即可！</span><br><span class="line">当然如果你创建了自己的分支，将分支名换为自定义的分支名即可！</span><br><span class="line"></span><br><span class="line">所以本条命令的具体含义就是：</span><br><span class="line">git push -u [远程仓库在本地的代号] [远程仓库的分支名]</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意事项</strong></p>
-<ul>
-<li><p>在与远程仓库建立连接的过程中，如果出现下面的错误，则说明你本地已经有一个代号为<strong>origin</strong>的远程仓库地址了。主要由两种解决办法：</p>
-<p><img src="/2021/03/23/Git/image-20210327161349405.png" alt="image-20210327161349405"></p>
-<ol>
-<li><p>为你的远程仓库地址更换一个新的本地不存在的代号，如：</p>
-<p><img src="/2021/03/23/Git/image-20210327161632988.png" alt="image-20210327161632988"></p>
-</li>
-<li><p>删除本地中代号为<strong>origin</strong>的远程仓库地址</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先执行删除本地代号为 `origin` 的远程仓库</span></span><br><span class="line">git remote rm origin</span><br><span class="line"><span class="comment"># 再重新执行与远程仓库建立连接的代码</span></span><br><span class="line">git remote add origin git@gitee.com:lv_neng_dong/demo00.git</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-<li><p>在使用 SSH 同步本地仓库中的数据到远程仓库时，会出现下图所示的一段提示，大致意思是说“无法确定主机“gitee.com(180.97.125.228)”的真实性，但是发现了一段秘钥信息，是否继续建立连接？”  我们直接选择”yes”就好！</p>
-</li>
-</ul>
-<p><img src="/2021/03/23/Git/image-20210327161243212.png" alt="image-20210327161243212"></p>
-</li>
-<li><p>出现下图琐事信息即为执行成功！</p>
-<p><img src="/2021/03/23/Git/image-20210327162902864.png" alt="image-20210327162902864"></p>
-</li>
-</ol>
-<hr>
-<h4 id="使用-TortoiseGit-同步"><a href="#使用-TortoiseGit-同步" class="headerlink" title="使用 TortoiseGit 同步"></a>使用 TortoiseGit 同步</h4><ol>
-<li><p>由于 TortoiseGit 默认使用的 SSH 工具是 <strong>PuTTY</strong>，而我们使用 Git Bash 生成的秘钥使用的 SSH 工具是 <strong>openSSH</strong>。所以如果想让TortoiseGit 也能使用上面生成的密钥就需要将 TortoiseGit 使用的 SSH 解析工具修改为 openSSH！</p>
-<p><img src="/2021/03/23/Git/image-20210327164112185.png" alt="image-20210327164112185"></p>
-</li>
-<li><p>配置远端仓库的信息</p>
-<p><img src="/2021/03/23/Git/image-20210327164451017.png" alt="image-20210327164451017"></p>
-</li>
-<li><p>同步。在本地仓库的文件夹中单击右键，选择<strong>Git同步</strong></p>
-<p><img src="/2021/03/23/Git/image-20210327165039911.png" alt="image-20210327165039911"></p>
-<p><img src="/2021/03/23/Git/image-20210327165048543.png" alt="image-20210327165048543"></p>
-</li>
-<li><p>推送成功！</p>
-<p><img src="/2021/03/23/Git/image-20210327165316280.png" alt="image-20210327165316280"></p>
-</li>
-</ol>
-<h2 id="2-从远程仓库克隆"><a href="#2-从远程仓库克隆" class="headerlink" title="2    从远程仓库克隆"></a>2    从远程仓库克隆</h2><blockquote>
-<p>克隆远程仓库也就是从远程把仓库复制一份到本地，克隆后会创建一个新的本地仓库。</p>
-</blockquote>
-<h3 id="2-1-使用-git-bash-克隆"><a href="#2-1-使用-git-bash-克隆" class="headerlink" title="2.1    使用 git bash 克隆"></a>2.1    使用 git bash 克隆</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法：git clone [远程仓库地址]</span></span><br><span class="line">git <span class="built_in">clone</span> git@gitee.com:lv_neng_dong/demo01.git</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-使用-TortoiseGit-克隆"><a href="#2-2-使用-TortoiseGit-克隆" class="headerlink" title="2.2    使用 TortoiseGit 克隆"></a>2.2    使用 TortoiseGit 克隆</h3><ol>
-<li>在任意目录点击右键：</li>
-</ol>
-<p><img src="/2021/03/23/Git/image-20210327170145785.png" alt="image-20210327170145785"></p>
-<ol start="2">
-<li>添加远程仓库的地址，选择克隆到本地的保存位置即可！</li>
-</ol>
-<p><img src="/2021/03/23/Git/image-20210327170059376.png" alt="image-20210327170059376"></p>
-<hr>
-<h2 id="3-从远程仓库取代码"><a href="#3-从远程仓库取代码" class="headerlink" title="3    从远程仓库取代码"></a>3    从远程仓库取代码</h2><h3 id="使用-git-bash-拉取代码"><a href="#使用-git-bash-拉取代码" class="headerlink" title="使用 git bash 拉取代码"></a>使用 git bash 拉取代码</h3><p>Git 从远程仓库的分支中获取最新版本的数据到本地有 2 个命令：</p>
-<ol>
-<li><strong>git fetch</strong>：相当于是从远程获取最新版本到本地，不会自动 merge（合并代码）</li>
-<li><strong>git pull</strong>：相当于是从远程获取最新版本并 merge 到本地</li>
-</ol>
-<h3 id="使用-TortoiseGit-拉取代码"><a href="#使用-TortoiseGit-拉取代码" class="headerlink" title="使用 TortoiseGit 拉取代码"></a>使用 TortoiseGit 拉取代码</h3><p><code>右键 --&gt;&gt; TortoiseGit(T) --&gt;&gt; 点击“拉取”（pull）或者“获取”（fetch）</code></p>
-<p><img src="/2021/03/23/Git/image-20210327170730236.png" alt="image-20210327170730236"></p>
-<hr>
-<h1 id="搭建-Git-私服"><a href="#搭建-Git-私服" class="headerlink" title="搭建 Git 私服"></a>搭建 Git 私服</h1><blockquote>
-<p>更新ing…</p>
-</blockquote>
-<h1 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h1><blockquote>
-<p>更新ing…</p>
-</blockquote>
-<h1 id="Git-常见命令"><a href="#Git-常见命令" class="headerlink" title="Git 常见命令"></a>Git 常见命令</h1><blockquote>
-<p>查看 Git 的配置信息</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy <span class="comment">#查看git的http代理配置</span></span><br><span class="line">git config --global https.proxy <span class="comment">#查看git的https代理配置</span></span><br><span class="line">git config --global -l <span class="comment">#查看git的所有配置</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>设置 Git 使用代理（端口号是代理软件开启代理时占用的端口号，可在计算机的设置中查看）</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy 127.0.0.1:7890</span><br><span class="line">git config --global https.proxy 127.0.0.1:7890</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>取消使用 Git 代理</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global --<span class="built_in">unset</span> http.proxy</span><br><span class="line">git config --global --<span class="built_in">unset</span> https.proxy</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/18/MongoDB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/03/18/MongoDB/" class="post-title-link" itemprop="url">MongoDB</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-03-18 00:04:49" itemprop="dateCreated datePublished" datetime="2021-03-18T00:04:49+08:00">2021-03-18</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-05 11:56:02" itemprop="dateModified" datetime="2021-05-05T11:56:02+08:00">2021-05-05</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MongoDB/" itemprop="url" rel="index"><span itemprop="name">MongoDB</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><ul>
-<li>MongoDB 是由 C++ 语言编写的一个基于分布式文件存储的开源<strong>数据库系统</strong>。</li>
-<li>在高负载的情况下，添加更多的节点，可以保证服务器性能。</li>
-<li>MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。</li>
-<li>MongoDB 将数据存储为一个文档，数据结构由键值对(<code>key: value</code>)组成。</li>
-<li>MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。</li>
-</ul>
-<p><img src="/2021/03/18/MongoDB/image-20210318210640539.png" alt="image-20210318210640539"></p>
-<h2 id="MongoDB-特点"><a href="#MongoDB-特点" class="headerlink" title="MongoDB 特点"></a>MongoDB 特点</h2><ul>
-<li>MongoDB 是一个面向文档存储的数据库，操作起来比较简单和容易。</li>
-<li>你可以在MongoDB记录中设置任何属性的索引 (如：FirstName=”Sameer”,Address=”8 Gandhi Road”)来实现更快的排序。</li>
-<li>你可以通过本地或者网络创建数据镜像，这使得MongoDB有更强的扩展性。</li>
-<li>如果负载的增加（需要更多的存储空间和更强的处理能力） ，它可以分布在计算机网络中的其他节点上这就是所谓的分片。</li>
-<li>Mongo支持丰富的查询表达式。查询指令使用JSON形式的标记，可轻易查询文档中内嵌的对象及数组。</li>
-<li>MongoDb 使用update()命令可以实现替换完成的文档（数据）或者一些指定的数据字段 。</li>
-<li>Mongodb中的Map/reduce主要是用来对数据进行批量处理和聚合操作。</li>
-<li>Map和Reduce。Map函数调用emit(key,value)遍历集合中所有的记录，将key与value传给Reduce函数进行处理。</li>
-<li>Map函数和Reduce函数是使用Javascript编写的，并可以通过db.runCommand或mapreduce命令来执行MapReduce操作。</li>
-<li>GridFS是MongoDB中的一个内置功能，可以用于存放大量小文件。</li>
-<li>MongoDB允许在服务端执行脚本，可以用Javascript编写某个函数，直接在服务端执行，也可以把函数的定义存储在服务端，下次直接调用即可。</li>
-<li>MongoDB支持各种编程语言:RUBY，PYTHON，JAVA，C++，PHP，C#等多种语言。</li>
-<li>MongoDB安装简单。</li>
-</ul>
-<ul>
-<li></li>
-</ul>
-<h2 id="MongoDB-概念解析"><a href="#MongoDB-概念解析" class="headerlink" title="MongoDB 概念解析"></a>MongoDB 概念解析</h2><p>在 MongoDB 中基本的概念是<strong>文档、集合、数据库</strong></p>
-<p>与 SQL 中概念的对比关系如下：</p>
-<table>
-<thead>
-<tr>
-<th>SQL术语</th>
-<th>MongoDB术语</th>
-<th>解释/说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>database</td>
-<td>database</td>
-<td>数据库</td>
-</tr>
-<tr>
-<td>table</td>
-<td>collection</td>
-<td>数据库表/集合</td>
-</tr>
-<tr>
-<td>row</td>
-<td>document</td>
-<td>数据记录行/文档</td>
-</tr>
-<tr>
-<td>column</td>
-<td>field</td>
-<td>数据字段/域</td>
-</tr>
-<tr>
-<td>index</td>
-<td>index</td>
-<td>索引</td>
-</tr>
-<tr>
-<td>table joins</td>
-<td></td>
-<td>表连接，MongoDB不支持</td>
-</tr>
-<tr>
-<td>primary key</td>
-<td>primary key</td>
-<td>主键，MongoDB自动将<code>_id</code>字段设置为主键</td>
-</tr>
-</tbody></table>
-<p>通过下图实例，我们也可以更直观的的了解Mongo中的一些概念：</p>
-<p><img src="/2021/03/18/MongoDB/image-20210318212244435.png" alt="image-20210318212244435"></p>
-<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p>一个 MongoDB 服务器中可以建立多个数据库。</p>
-<p>常用操作：</p>
-<blockquote>
-<ol>
-<li>Help 查看命令提示   </li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.help()</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>2、 切换/创建数据库  </p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">语法： use 数据库名</span><br><span class="line">示例： use test  </span><br><span class="line"><span class="comment">// 如果数据库不存在，则创建数据库；如果数据库存在，则切换到指定数据库</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>3、 查询所有数据库   </p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show dbs</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="4">
-<li>删除当前使用数据库   </li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.dropDatabase()</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="5">
-<li>查看当前使用的数据库   </li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.getName()</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="6">
-<li>显示当前db状态   </li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.stats()</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="7">
-<li>查看当前db版本   </li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.version()</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol start="8">
-<li>查看当前db的连接的机器地址</li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.getMong()</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Tip：<ol>
-<li>所有的命令都采用驼峰式命名法。</li>
-</ol>
-</li>
-</ul>
-<hr>
-<h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><ul>
-<li><strong>文档</strong>是一组键值对<code>（key-value）</code>，也叫做 Bson，是一种类 Json 的数据格式。</li>
-<li>MongoDB 的多个文档之间不需要设置相同的字段，并且相同的字段也不需要相同的数据类型，这与关系型数据库有很大的区别，也是 MongoDB 非常突出的特点。</li>
-<li>下面列出了 RDBMS 与 MongoDB 对应的术语：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>RDBMS</th>
-<th>MongoDB</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>数据库</td>
-<td>数据库</td>
-</tr>
-<tr>
-<td>表格</td>
-<td>集合</td>
-</tr>
-<tr>
-<td>行</td>
-<td>文档</td>
-</tr>
-<tr>
-<td>列</td>
-<td>字段</td>
-</tr>
-<tr>
-<td>表联合</td>
-<td>嵌入文档</td>
-</tr>
-<tr>
-<td>主键</td>
-<td>主键 (MongoDB 提供了  key 为 _id )</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>RDBMS</strong>（Relational Database Management System）：关系数据库管理系统：</p>
-</blockquote>
-<p><strong>Tips：</strong></p>
-<ol>
-<li>文档中的键/值对是有序的。</li>
-<li>文档中的值不仅可以是在双引号里面的字符串，还可以是其他几种数据类型（甚至可以是整个嵌入的文档)。</li>
-<li>MongoDB 区分类型和大小写。</li>
-<li>MongoDB 的文档不能有重复的键。</li>
-<li>文档的键是字符串。除了少数例外情况，键可以使用任意UTF-8字符。</li>
-</ol>
-<p><strong>文档键命名规范：</strong></p>
-<ol>
-<li>键不能含有<code>\0</code> (空字符)。这个字符用来表示键的结尾。</li>
-<li><code>.</code> 和 <code>$</code> 有特别的意义，只有在特定环境下才能使用。</li>
-<li>以下划线 <code>_</code> 开头的键是保留的(不是严格要求的)。</li>
-</ol>
-<hr>
-<h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><ul>
-<li>集合就是 MongoDB 文档组（文档的集合），类似于 RDBMS 中的表格。</li>
-<li>集合存在于数据库中，集合没有固定的结构，这意味着你可以向集合中插入不同格式和类型的数据，但通常情况下我们插入集合的数据都会有一定的关联性。</li>
-</ul>
-<p><strong>常用命令：</strong></p>
-<blockquote>
-<ol>
-<li>创建一个集合（table)  </li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createCollection(&quot;collName&quot;); </span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="2">
-<li>得到指定名称的集合（table ) </li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.getCollection(&quot;user&quot;);  </span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="MongoDB-数据类型"><a href="#MongoDB-数据类型" class="headerlink" title="MongoDB 数据类型"></a>MongoDB 数据类型</h2><blockquote>
-<p>MongoDB 中常用的数据类型：</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>数据类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>String</td>
-<td>字符串。存储数据常用的数据类型。在 MongoDB 中，UTF-8 编码的字符串才是合法的。</td>
-</tr>
-<tr>
-<td>Integer</td>
-<td>整型数值。用于存储数值。根据你所采用的服务器，可分为 32 位或 64 位。</td>
-</tr>
-<tr>
-<td>Boolean</td>
-<td>布尔值。用于存储布尔值（真/假）。</td>
-</tr>
-<tr>
-<td>Double</td>
-<td>双精度浮点值。用于存储浮点值。</td>
-</tr>
-<tr>
-<td>Min/Max keys</td>
-<td>将一个值与 BSON（二进制的  JSON）元素的最低值和最高值相对比。</td>
-</tr>
-<tr>
-<td>Arrays</td>
-<td>用于将数组或列表或多个值存储为一个键。</td>
-</tr>
-<tr>
-<td>Timestamp</td>
-<td>时间戳。记录文档修改或添加的具体时间。</td>
-</tr>
-<tr>
-<td>Object</td>
-<td>用于内嵌文档。</td>
-</tr>
-<tr>
-<td>Null</td>
-<td>用于创建空值。</td>
-</tr>
-<tr>
-<td>Symbol</td>
-<td>符号。该数据类型基本上等同于字符串类型，但不同的是，它一般用于采用特殊符号类型的语言。</td>
-</tr>
-<tr>
-<td>Date</td>
-<td>日期时间。用 UNIX 时间格式来存储当前日期或时间。你可以指定自己的日期时间：创建 Date 对象，传入年月日信息。</td>
-</tr>
-<tr>
-<td>Object ID</td>
-<td>对象 ID。用于创建文档的  ID。</td>
-</tr>
-<tr>
-<td>Binary Data</td>
-<td>二进制数据。用于存储二进制数据。</td>
-</tr>
-<tr>
-<td>Code</td>
-<td>代码类型。用于在文档中存储 JavaScript 代码。</td>
-</tr>
-<tr>
-<td>Regular expression</td>
-<td>正则表达式类型。用于存储正则表达式。</td>
-</tr>
-</tbody></table>
-<h2 id="MongoDB-适用场景"><a href="#MongoDB-适用场景" class="headerlink" title="MongoDB 适用场景"></a>MongoDB 适用场景</h2><blockquote>
-<p><strong>适用场景</strong></p>
-</blockquote>
-<ol>
-<li>网站数据：Mongo 非常适合实时的插入，更新与查询，并具备网站实时数据存储所需的复制及高度伸缩性。</li>
-<li>缓存：由于性能很高，Mongo 也适合作为信息基础设施的缓存层。在系统重启之后，由 Mongo 搭建的持久化缓存层可以避免下层的数据源过载。</li>
-<li>大尺寸，低价值的数据：使用传统的关系型数据库存储一些数据时可能会比较昂贵， 在此之前，很多时候程序员往往会选择传统的文件进行存储。</li>
-<li>高伸缩性的场景：Mongo 非常适合由数十或数百台服务器组成的数据库。Mongo的路线图中已经包含对 Map Reduce 引擎的内置支持。</li>
-<li>用于对象及 Json 数据的存储：Mongo 的 Bson 数据格式非常适合文档化格式的存储及查询。</li>
-</ol>
-<blockquote>
-<p><strong>不适用场景</strong></p>
-</blockquote>
-<p>1、高度事务性的系统：例如银行或会计系统。传统的关系型数据库目前还是更适用于需要大量原子性复杂事务的应用程序。</p>
-<p>2、传统的商业智能应用：针对特定问题的BI数据库会对产生高度优化的查询方式。对于此类应用，数据仓库可能是更合适的选择。</p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ul>
-<li>超链接</li>
-</ul>
-<h1 id="MongoDB-常用操作"><a href="#MongoDB-常用操作" class="headerlink" title="MongoDB 常用操作"></a>MongoDB 常用操作</h1><h2 id="INSERT"><a href="#INSERT" class="headerlink" title="INSERT"></a>INSERT</h2><blockquote>
-<p>新增数据</p>
-</blockquote>
- <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 语法：db.数据库名.save(&#123;json格式的数据&#125;)</span></span><br><span class="line">&gt; db.User.save(&#123;name:&#x27;zhangsan&#x27;,age:21,sex:true&#125;)  </span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Query"><a href="#Query" class="headerlink" title="Query"></a>Query</h2><blockquote>
-<ol>
-<li>基本查询</li>
-</ol>
-</blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">User</span>			<span class="comment">-- SQL</span></span><br><span class="line"><span class="operator">&gt;</span> db.User.find()				<span class="comment">-- MongoDB</span></span><br><span class="line">&gt; &#123;&quot;_id&quot;:  Objectld(&quot;4f69e680c9106ee2ec95da66&quot;), &quot;name&quot;:  &quot;zhangsan&quot;, &quot;age&quot;: 21,  &quot;sex&quot;: true&#125;</span><br><span class="line"><span class="comment">-- 可以看到，在查询得到的数据中存在主键 _id ，但是我们在上面插入的时候并没有设置这个值，这个主键是Mongo帮我们自动生成的唯一标识</span></span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="2">
-<li>WHERE</li>
-</ol>
-</blockquote>
- <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">where</span> name <span class="operator">=</span>  <span class="string">&#x27;zhangsan&#x27;</span>  	</span><br><span class="line"><span class="operator">&gt;</span> db.User.find(</span><br><span class="line">    &#123;name:&quot;zhangsan&quot;&#125;		-- where </span><br><span class="line">  )  			</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="3">
-<li>FIELDS</li>
-</ol>
-</blockquote>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> name, age <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">where</span> age  <span class="operator">=</span> <span class="number">21</span>  </span><br><span class="line"><span class="operator">&gt;</span> db.User.find(</span><br><span class="line">    &#123;age:21&#125;,				-- where  </span><br><span class="line">    &#123;&#x27;name&#x27;:1, &#x27;age&#x27;:1&#125;		 -- fields</span><br><span class="line">  )  </span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="4">
-<li>SORT</li>
-</ol>
-</blockquote>
-<p>在 MongoDB 中使用 <code>sort()</code> 方法对数据进行排序，<code>sort()</code> 方法可以通过参数指定排序的字段，并使用 1 和 -1 来指定排序的方式（1升序，-1降序）</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">order</span> <span class="keyword">by</span> age  </span><br><span class="line">&gt; db.User.find().sort(&#123;age:1&#125;)  </span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol start="5">
-<li>SUCE</li>
-</ol>
-</blockquote>
-<p>在 MongoDB 中使用 <code>limit()</code> 方法来读取指定数量的数据，使用 <code>skip()</code> 方法来跳过指定数量的数据</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">skip</span> <span class="number">2</span> limit <span class="number">3</span>  </span><br><span class="line"><span class="operator">&gt;</span> db.User.find().<span class="keyword">skip</span>(<span class="number">0</span>).limit(<span class="number">3</span>)  </span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="6">
-<li>IN</li>
-</ol>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">where</span> age <span class="keyword">in</span> (<span class="number">21</span>,  <span class="number">26</span>, <span class="number">32</span>)  </span><br><span class="line">&gt; db.User.find(&#123;age:&#123;$in:[21,26,32]&#125;&#125;)  </span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="7">
-<li>COUNT</li>
-</ol>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">where</span> age<span class="operator">&gt;</span><span class="number">20</span>  </span><br><span class="line">&gt; db.User.find(&#123;age:&#123;$gt:20&#125;&#125;).count()  </span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="8">
-<li>OR</li>
-</ol>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">where</span> age <span class="operator">=</span> <span class="number">21</span> <span class="keyword">or</span>  age <span class="operator">=</span> <span class="number">28</span>  </span><br><span class="line">&gt; db.User.find(&#123;$or:[&#123;age:21&#125;, &#123;age:28&#125;]&#125;)  </span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Update"><a href="#Update" class="headerlink" title="Update"></a>Update</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> update <span class="keyword">User</span> <span class="keyword">set</span> age <span class="operator">=</span> <span class="number">100</span>, sex <span class="operator">=</span> <span class="number">0</span>  <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;user1&#x27;</span>  </span><br><span class="line">&gt; db.User.update(&#123;name:&quot;zhangsan&quot;&#125;,  &#123;$set:&#123;age:100, sex:0&#125;&#125;)  </span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-- update() 方法有几个参数需要注意：</span><br><span class="line">&gt; db.collection.update(criteria, objNew, upsert, mult)</span><br><span class="line">	# criteria:需要更新的条件表达式	[where]</span><br><span class="line">	# objNew:更新表达式	[set xxx]</span><br><span class="line">	# upsert:如FI标记录不存在，是否插入新文档。 </span><br><span class="line">	# multi:是否更新多个文档。</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<h2 id="Remove"><a href="#Remove" class="headerlink" title="Remove"></a>Remove</h2><p><code>remove()</code>用于删除单个或全部文档，删除后的文档无法恢复。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 移除对应id的行(Document)</span></span><br><span class="line"><span class="operator">&gt;</span> db.User.remove(id)</span><br><span class="line"><span class="comment">-- 移除所有（即不限制任何条件的删除）</span></span><br><span class="line">&gt; db.User.remove(&#123;&#125;)   </span><br></pre></td></tr></table></figure>
-
-<h2 id="aggregate"><a href="#aggregate" class="headerlink" title="aggregate"></a>aggregate</h2><ul>
-<li>MongoDB 中聚合(aggregate)主要用于处理数据(诸如统计平均值,求和等)，并返回计算后的数据结果。</li>
-<li>有点类似sql语句中的 count(*)</li>
-</ul>
-<blockquote>
-<p>插入数据</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.article.insert(&#123;</span><br><span class="line">                    title: <span class="string">&#x27;MongoDB Overview&#x27;</span>, </span><br><span class="line">                    description: <span class="string">&#x27;MongoDB is no sql database&#x27;</span>, </span><br><span class="line">                    by_user: <span class="string">&#x27;runoob.com&#x27;</span>, </span><br><span class="line">                    url: <span class="string">&#x27;http://www.runoob.com&#x27;</span>, </span><br><span class="line">                    tags: [<span class="string">&#x27;mongodb&#x27;</span>, <span class="string">&#x27;database&#x27;</span>, <span class="string">&#x27;NoSQL&#x27;</span>], </span><br><span class="line">                    likes: <span class="number">100</span></span><br><span class="line">                    &#125;)  </span><br><span class="line"></span><br><span class="line">&gt; db.article.insert(&#123;</span><br><span class="line">                   title: <span class="string">&#x27;NoSQL Overview&#x27;</span>,</span><br><span class="line">                   description: <span class="string">&#x27;No sql database is very fast&#x27;</span>,</span><br><span class="line">                   by_user: <span class="string">&#x27;runoob.com&#x27;</span>,</span><br><span class="line">                   url: <span class="string">&#x27;http://www.runoob.com&#x27;</span>,</span><br><span class="line">                   tags: [<span class="string">&#x27;mongodb&#x27;</span>, <span class="string">&#x27;database&#x27;</span>, <span class="string">&#x27;NoSQL&#x27;</span>],</span><br><span class="line">                   likes: <span class="number">10</span></span><br><span class="line">                   &#125;)</span><br><span class="line">                   </span><br><span class="line">&gt; db.article.insert(&#123;</span><br><span class="line">                    title: <span class="string">&#x27;Neo4j Overview&#x27;</span>,</span><br><span class="line">                    description: <span class="string">&#x27;Neo4j is no sql database&#x27;</span>,</span><br><span class="line">                    by_user: <span class="string">&#x27;Neo4j&#x27;</span>,     url: <span class="string">&#x27;http://www.neo4j.com&#x27;</span>,</span><br><span class="line">                    tags: [<span class="string">&#x27;neo4j&#x27;</span>, <span class="string">&#x27;database&#x27;</span>, <span class="string">&#x27;NoSQL&#x27;</span>],</span><br><span class="line">                    likes: <span class="number">750</span></span><br><span class="line">                    &#125;)</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="统计-sum"><a href="#统计-sum" class="headerlink" title="统计 sum"></a>统计 sum</h3><p>现在我们通过以上集合计算每个作者所写的文章数</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span> <span class="keyword">select</span> by_user, <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> article  <span class="keyword">group</span> <span class="keyword">by</span> by_user  </span><br><span class="line">&gt; db.article.aggregate([&#123;$group: &#123;_id: &quot;$by_user&quot;, num_tutorial: &#123;$sum : 1&#125;&#125;&#125;])     </span><br><span class="line"></span><br><span class="line">&gt; &#123;&quot;result&quot;: [&#123;&quot;_id&quot;: &quot;runoob.com&quot;, &quot;num_tutorial&quot;: 2&#125;,</span><br><span class="line">              &#123;&quot;_id&quot;: &quot;Neo4j&quot;, &quot;num_tutorial&quot;: 1&#125;],  </span><br><span class="line">              &quot;ok&quot; : 1  &#125;  </span><br></pre></td></tr></table></figure>
-
-<p>在上面的例子中，我们通过字段 by_user 字段对数据进行分组，并计算 by_user 字段相同值的总和。</p>
-<h3 id="常见的聚合表达式"><a href="#常见的聚合表达式" class="headerlink" title="常见的聚合表达式"></a>常见的聚合表达式</h3><table>
-<thead>
-<tr>
-<th align="left"><strong>表达式</strong></th>
-<th><strong>描述</strong></th>
-<th><strong>实例</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code> $sum </code></td>
-<td>计算总和。</td>
-<td>db.mycol.aggregate([{$group  : {_id : “$by_user”, num_tutorial : {$sum : “$likes”}}}])</td>
-</tr>
-<tr>
-<td align="left"><code> $avg </code></td>
-<td>计算平均值</td>
-<td>db.mycol.aggregate([{$group  : {_id : “$by_user”, num_tutorial : {$avg : “$likes”}}}])</td>
-</tr>
-<tr>
-<td align="left"><code> $min</code></td>
-<td>获取集合中所有文档对应值得最小值。</td>
-<td>db.mycol.aggregate([{$group  : {_id : “$by_user”, num_tutorial : {$min : “$likes”}}}])</td>
-</tr>
-<tr>
-<td align="left"><code> $max </code></td>
-<td>获取集合中所有文档对应值得最大值。</td>
-<td>db.mycol.aggregate([{$group  : {_id : “$by_user”, num_tutorial : {$max : “$likes”}}}])</td>
-</tr>
-<tr>
-<td align="left"><code> $push </code></td>
-<td>在结果文档中插入值到一个数组中。</td>
-<td>db.mycol.aggregate([{$group  : {_id : “$by_user”, url : {$push: “$url”}}}])</td>
-</tr>
-<tr>
-<td align="left"><code>$addToSet</code></td>
-<td>在结果文档中插入值到一个数组中，但不创建副本。</td>
-<td>db.mycol.aggregate([{$group  : {_id : “$by_user”, url : {$addToSet : “$url”}}}])</td>
-</tr>
-<tr>
-<td align="left"><code>$first</code></td>
-<td>根据资源文档的排序获取第一个文档数据。</td>
-<td>db.mycol.aggregate([{$group  : {_id : “$by_user”, first_url : {$first : “$url”}}}])</td>
-</tr>
-<tr>
-<td align="left"><code> $last </code></td>
-<td>根据资源文档的排序获取最后一个文档数据</td>
-<td>db.mycol.aggregate([{$group  : {_id : “$by_user”, last_url : {$last : “$url”}}}])</td>
-</tr>
-</tbody></table>
-<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><ul>
-<li>索引通常能够极大的提高查询的效率，如果没有索引，MongoDB 在读取数据时必须扫描集合中的每个文件并选取那些符合查询条件的记录。这种扫描全集合的查询效率是非常低的，特别在处理大量的数据时，查询可以要花费几十秒甚至几分钟，这对网站的性能是非常致命的。</li>
-<li>索引是特殊的数据结构，索引存储在一个易于遍历读取的数据集合中，索引是对数据库表中一列或多列的值进行排序的一种结构。</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.User.createIndex(&#123;&quot;name&quot;:1&#125;)  </span><br><span class="line"><span class="comment">-- 语法中 name 值为你要创建的索引字段，1 为指定按升序创建索引，如果你想按降序来创建索引指定为 -1 即可</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Spring-boot-集成-MongoDB"><a href="#Spring-boot-集成-MongoDB" class="headerlink" title="Spring boot 集成 MongoDB"></a>Spring boot 集成 MongoDB</h1><h2 id="1、集成简介"><a href="#1、集成简介" class="headerlink" title="1、集成简介"></a>1、集成简介</h2><ul>
-<li>spring-data-mongodb 提供了 <strong>MongoTemplate</strong> 与 <strong>MongoRepository</strong> 两种方式访问 MongoDB。</li>
-<li>MongoRepository 操作简单，缺点是不够灵活；</li>
-<li>MongoTemplate操作灵活，但操作复杂；</li>
-<li>我们在项目中可以灵活适用这两种方式操作 MongoDB ！</li>
-</ul>
-<h2 id="2、搭建开发环境"><a href="#2、搭建开发环境" class="headerlink" title="2、搭建开发环境"></a>2、搭建开发环境</h2><h3 id="2-1-初始化工程，引入依赖"><a href="#2-1-初始化工程，引入依赖" class="headerlink" title="2.1 初始化工程，引入依赖"></a>2.1 初始化工程，引入依赖</h3><blockquote>
-<ol>
-<li>使用 Spring Initializr 快速初始化一个 Spring Boot 工程</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol start="2">
-<li>添加 MongoDB 依赖</li>
-</ol>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- MongoDB 的SpringBoot 启动依赖--&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-mongodb<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>joda-time<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>joda-time<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.10.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-2-添加配置"><a href="#2-2-添加配置" class="headerlink" title="2.2    添加配置"></a>2.2    添加配置</h3><blockquote>
-<ol start="3">
-<li>在application.properties文件添加配置</li>
-</ol>
-</blockquote>
-<h4 id="MongoDB-数据库无加密"><a href="#MongoDB-数据库无加密" class="headerlink" title="MongoDB 数据库无加密"></a>MongoDB 数据库无加密</h4><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置 MongoDB 中某个数据库所在的URL</span></span><br><span class="line"><span class="meta">spring.data.mongodb.uri</span> = <span class="string">mongodb://192.0.0.1:27017/test</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="MongoDB-数据库有加密"><a href="#MongoDB-数据库有加密" class="headerlink" title="MongoDB 数据库有加密"></a>MongoDB 数据库有加密</h4><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.data.mongodb.uri</span>=<span class="string">mongodb://用户名:密码@192.0.0.1:27017/?authSource=数据库名</span></span><br><span class="line"><span class="meta">spring.data.mongodb.database</span>=<span class="string">数据库名</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3、-基于-MongoTemplate-开发"><a href="#3、-基于-MongoTemplate-开发" class="headerlink" title="3、 基于 MongoTemplate  开发"></a>3、 基于 MongoTemplate  开发</h2><h3 id="3-1-添加实体"><a href="#3-1-添加实体" class="headerlink" title="3.1 添加实体"></a>3.1 添加实体</h3><p>添加com.atguigu.mongodb.entity.User类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Document(&quot;User&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="meta">@Id</span></span><br><span class="line"> <span class="keyword">private</span> String id;</span><br><span class="line"> <span class="keyword">private</span> String name;</span><br><span class="line"> <span class="keyword">private</span> Integer age;</span><br><span class="line"> <span class="keyword">private</span> String email;</span><br><span class="line"> <span class="keyword">private</span> String createDate;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-2-实现"><a href="#3-2-实现" class="headerlink" title="3.2 实现"></a>3.2 实现</h3><p><strong>常用方法</strong></p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>mongoTemplate.findAll(User.class)</code></td>
-<td>查询User文档的全部数据</td>
-</tr>
-<tr>
-<td><code>mongoTemplate.findById(&lt;id&gt;, User.class)</code></td>
-<td>查询User文档中指定id的数据</td>
-</tr>
-<tr>
-<td><code>mongoTemplate.find(query, User.class)</code></td>
-<td>根据query内的查询条件查询<br>[query是一个条件查询对象]</td>
-</tr>
-<tr>
-<td><code>mongoTemplate.upsert(query, update, User.class)</code></td>
-<td>修改</td>
-</tr>
-<tr>
-<td><code>mongoTemplate.remove(query, User.class)</code></td>
-<td>删除</td>
-</tr>
-<tr>
-<td><code>mongoTemplate.insert(User)</code></td>
-<td>新增</td>
-</tr>
-</tbody></table>
-<p><strong>Query对象</strong></p>
-<ol>
-<li>创建一个<strong>query对象</strong>（用来封装所有条件的对象)，再创建一个<strong>criteria对象</strong>（用来构建条件的对象）</li>
-<li>精准条件：criteria.and(“key”).is(“条件”)<br>模糊条件：criteria.and(“key”).regex(“条件”)</li>
-<li>封装条件：query.addCriteria(criteria)</li>
-<li>大于（创建新的criteria）：Criteria gt = Criteria.where(“key”).gt（“条件”）<br>小于（创建新的criteria）：Criteria lt = Criteria.where(“key”).lt（“条件”）</li>
-<li>Query.addCriteria(new Criteria().andOperator(gt,lt));</li>
-<li>一个query中只能有一个andOperator()。其参数也可以是Criteria数组。</li>
-<li>排序 ：query.with（new Sort(Sort.Direction.ASC, “age”). and(new Sort(Sort.Direction.DESC, “date”)))</li>
-</ol>
-<h3 id="3-3-添加测试类"><a href="#3-3-添加测试类" class="headerlink" title="3.3 添加测试类"></a>3.3 添加测试类</h3><blockquote>
-<p>在/test/java下面添加测试类：</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemomogoApplicationTests</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MongoTemplate mongoTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//添加</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line">        user.setAge(<span class="number">20</span>);</span><br><span class="line">        user.setName(<span class="string">&quot;test&quot;</span>);</span><br><span class="line">        user.setEmail(<span class="string">&quot;4932200@qq.com&quot;</span>);</span><br><span class="line">        User user1 = mongoTemplate.insert(user);</span><br><span class="line">        System.out.println(user1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//查询所有</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List&lt;User&gt; userList = mongoTemplate.findAll(User.class);</span><br><span class="line">        System.out.println(userList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//根据id查询</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getById</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User user = </span><br><span class="line">            mongoTemplate.findById(<span class="string">&quot;5ffbfa2ac290f356edf9b5aa&quot;</span>, User.class);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//条件查询</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Query query = <span class="keyword">new</span> Query(Criteria</span><br><span class="line">                                .where(<span class="string">&quot;name&quot;</span>).is(<span class="string">&quot;test&quot;</span>)</span><br><span class="line">                                .and(<span class="string">&quot;age&quot;</span>).is(<span class="number">20</span>));</span><br><span class="line">        List&lt;User&gt; userList = mongoTemplate.find(query, User.class);</span><br><span class="line">        System.out.println(userList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//模糊查询</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUsersLikeName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String name = <span class="string">&quot;est&quot;</span>;</span><br><span class="line">        String regex = String.format(<span class="string">&quot;%s%s%s&quot;</span>, <span class="string">&quot;^.*&quot;</span>, name, <span class="string">&quot;.*$&quot;</span>);</span><br><span class="line">        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);</span><br><span class="line">        Query query = <span class="keyword">new</span> Query(Criteria.where(<span class="string">&quot;name&quot;</span>).regex(pattern));</span><br><span class="line">        List&lt;User&gt; userList = mongoTemplate.find(query, User.class);</span><br><span class="line">        System.out.println(userList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//分页查询</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUsersPage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String name = <span class="string">&quot;est&quot;</span>;</span><br><span class="line">        <span class="keyword">int</span> pageNo = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> pageSize = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">        Query query = <span class="keyword">new</span> Query();</span><br><span class="line">        String regex = String.format(<span class="string">&quot;%s%s%s&quot;</span>, <span class="string">&quot;^.*&quot;</span>, name, <span class="string">&quot;.*$&quot;</span>);</span><br><span class="line">        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);</span><br><span class="line">        query.addCriteria(Criteria.where(<span class="string">&quot;name&quot;</span>).regex(pattern));</span><br><span class="line">        <span class="keyword">int</span> totalCount = (<span class="keyword">int</span>) mongoTemplate.count(query, User.class);</span><br><span class="line">        List&lt;User&gt; userList = mongoTemplate.find(query.skip((pageNo - <span class="number">1</span>) * pageSize).limit(pageSize), User.class);</span><br><span class="line"></span><br><span class="line">        Map&lt;String, Object&gt; pageMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        pageMap.put(<span class="string">&quot;list&quot;</span>, userList);</span><br><span class="line">        pageMap.put(<span class="string">&quot;totalCount&quot;</span>,totalCount);</span><br><span class="line">        System.out.println(pageMap);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//修改</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User user = mongoTemplate.findById(<span class="string">&quot;5ffbfa2ac290f356edf9b5aa&quot;</span>, User.class);</span><br><span class="line">        user.setName(<span class="string">&quot;test_1&quot;</span>);</span><br><span class="line">        user.setAge(<span class="number">25</span>);</span><br><span class="line">        user.setEmail(<span class="string">&quot;493220990@qq.com&quot;</span>);</span><br><span class="line">        Query query = <span class="keyword">new</span> Query(Criteria.where(<span class="string">&quot;_id&quot;</span>).is(user.getId()));</span><br><span class="line">        Update update = <span class="keyword">new</span> Update();</span><br><span class="line">        update.set(<span class="string">&quot;name&quot;</span>, user.getName());</span><br><span class="line">        update.set(<span class="string">&quot;age&quot;</span>, user.getAge());</span><br><span class="line">        update.set(<span class="string">&quot;email&quot;</span>, user.getEmail());</span><br><span class="line">        UpdateResult result = mongoTemplate.upsert(query, update, User.class);</span><br><span class="line">        <span class="keyword">long</span> count = result.getModifiedCount();</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除操作</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Query query = </span><br><span class="line">            <span class="keyword">new</span> Query(Criteria.where(<span class="string">&quot;_id&quot;</span>).is(<span class="string">&quot;5ffbfa2ac290f356edf9b5aa&quot;</span>));</span><br><span class="line">        DeleteResult result = mongoTemplate.remove(query, User.class);</span><br><span class="line">        <span class="keyword">long</span> count = result.getDeletedCount();</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="4、-基于-MongoRepository-开发"><a href="#4、-基于-MongoRepository-开发" class="headerlink" title="4、 基于 MongoRepository 开发"></a>4、 基于 MongoRepository 开发</h2><h3 id="4-1-实现"><a href="#4-1-实现" class="headerlink" title="4.1 实现"></a>4.1 实现</h3><p>Spring Data提供了对mongodb数据访问的支持，我们只需要继承MongoRepository类，按照Spring Data规范就可以使用了</p>
-<p>SpringData 方法定义规范</p>
-<p><img src="/2021/03/18/MongoDB/clip_image002.gif" alt="IMG_256"></p>
-<p><img src="/2021/03/18/MongoDB/clip_image004.jpg" alt="IMG_256"></p>
-<ol>
-<li>不是随便声明的，而需要符合一定的规范</li>
-<li>查询方法以find | read | get开头</li>
-<li>涉及条件查询时，条件的属性用条件关键字连接</li>
-<li>要注意的是：条件属性首字母需要大写</li>
-<li>支持属性的级联查询，但若当前类有符合条件的属性则优先使用，而不使用级联属性,若需要使用级联属性，则属性之间使用_强制进行连接</li>
-</ol>
-<h3 id="4-2-添加Repository类"><a href="#4-2-添加Repository类" class="headerlink" title="4.2 添加Repository类"></a>4.2 添加Repository类</h3><p>添加com.atguigu.mongodb.repository.UserRepository类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.mongodb.repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.atguigu.mongodb.entity.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.mongodb.repository.MongoRepository;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserRepository</span> <span class="keyword">extends</span> <span class="title">MongoRepository</span>&lt;<span class="title">User</span>, <span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-3-添加测试类"><a href="#4-3-添加测试类" class="headerlink" title="4.3 添加测试类"></a>4.3 添加测试类</h3><p>在/test/java下面添加测试类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemomogoApplicationTests1</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserRepository userRepository;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//添加</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line">        user.setAge(<span class="number">20</span>);</span><br><span class="line">        user.setName(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        user.setEmail(<span class="string">&quot;3332200@qq.com&quot;</span>);</span><br><span class="line">        User user1 = userRepository.save(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//查询所有</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List&lt;User&gt; userList = userRepository.findAll();</span><br><span class="line">        System.out.println(userList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//id查询</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getById</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User user = userRepository.findById(<span class="string">&quot;5ffbfe8197f24a07007bd6ce&quot;</span>).get();</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//条件查询</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line">        user.setName(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        user.setAge(<span class="number">20</span>);</span><br><span class="line">        Example&lt;User&gt; userExample = Example.of(user);</span><br><span class="line">        List&lt;User&gt; userList = userRepository.findAll(userExample);</span><br><span class="line">        System.out.println(userList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//模糊查询</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUsersLikeName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建匹配器，即如何使用查询条件</span></span><br><span class="line">        ExampleMatcher matcher = ExampleMatcher.matching() <span class="comment">//构建对象</span></span><br><span class="line">            .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) <span class="comment">//改变默认字符串匹配方式：模糊查询</span></span><br><span class="line">            .withIgnoreCase(<span class="keyword">true</span>); <span class="comment">//改变默认大小写忽略方式：忽略大小写</span></span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line">        user.setName(<span class="string">&quot;三&quot;</span>);</span><br><span class="line">        Example&lt;User&gt; userExample = Example.of(user, matcher);</span><br><span class="line">        List&lt;User&gt; userList = userRepository.findAll(userExample);</span><br><span class="line">        System.out.println(userList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//分页查询</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUsersPage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Sort sort = Sort.by(Sort.Direction.DESC, <span class="string">&quot;age&quot;</span>);</span><br><span class="line">        <span class="comment">//0为第一页</span></span><br><span class="line">        Pageable pageable = PageRequest.of(<span class="number">0</span>, <span class="number">10</span>, sort);</span><br><span class="line">        <span class="comment">//创建匹配器，即如何使用查询条件</span></span><br><span class="line">        ExampleMatcher matcher = ExampleMatcher.matching() <span class="comment">//构建对象</span></span><br><span class="line">            .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) <span class="comment">//改变默认字符串匹配方式：模糊查询</span></span><br><span class="line">            .withIgnoreCase(<span class="keyword">true</span>); <span class="comment">//改变默认大小写忽略方式：忽略大小写</span></span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line">        user.setName(<span class="string">&quot;三&quot;</span>);</span><br><span class="line">        Example&lt;User&gt; userExample = Example.of(user, matcher);</span><br><span class="line">        <span class="comment">//创建实例</span></span><br><span class="line">        Example&lt;User&gt; example = Example.of(user, matcher);</span><br><span class="line">        Page&lt;User&gt; pages = userRepository.findAll(example, pageable);</span><br><span class="line">        System.out.println(pages);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//修改</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateUser</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        User user = userRepository.findById(<span class="string">&quot;5ffbfe8197f24a07007bd6ce&quot;</span>).get();</span><br><span class="line">        user.setName(<span class="string">&quot;张三_1&quot;</span>);</span><br><span class="line">        user.setAge(<span class="number">25</span>);</span><br><span class="line">        user.setEmail(<span class="string">&quot;883220990@qq.com&quot;</span>);</span><br><span class="line">        User save = userRepository.save(user);</span><br><span class="line">        System.out.println(save);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        userRepository.deleteById(<span class="string">&quot;5ffbfe8197f24a07007bd6ce&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
 
       
     </div>
