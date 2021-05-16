@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">95</span>
+          <span class="site-state-item-count">96</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,164 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/07/VO%E3%80%81DTO%E3%80%81DO%E3%80%81PO%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/12/07/VO%E3%80%81DTO%E3%80%81DO%E3%80%81PO%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/" class="post-title-link" itemprop="url">VO、DTO、DO、PO的区别与联系</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-07 21:52:18" itemprop="dateCreated datePublished" datetime="2020-12-07T21:52:18+08:00">2020-12-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-04-11 23:28:41" itemprop="dateModified" datetime="2021-04-11T23:28:41+08:00">2021-04-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="应用分层"><a href="#应用分层" class="headerlink" title="应用分层"></a>应用分层</h1><p>推荐分层结构如下图所示，默认上层依赖于下层，箭头关系表示<strong>可</strong>直接依赖。如：开放API层可以依赖于Web层（Controller层），也可以直接依赖于Service层。</p>
+<p><img src="/2020/12/07/VO%E3%80%81DTO%E3%80%81DO%E3%80%81PO%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/%E3%80%8AJava%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E5%B5%A9%E5%B1%B1%E7%89%88%EF%BC%89%E3%80%8B.jpg"></p>
+<blockquote>
+<p>开放API层</p>
+</blockquote>
+<ul>
+<li>可通过Web层封装成HTTP接口；</li>
+<li>可直接封装Service层接口暴露成RPC接口；</li>
+</ul>
+<blockquote>
+<p>终端显示层</p>
+</blockquote>
+<ul>
+<li>各个端的模板渲染并执行显示的层。如JS渲染，JSP渲染，移动端展示等。</li>
+</ul>
+<blockquote>
+<p>Web层</p>
+</blockquote>
+<ul>
+<li>主要是对访问控制进行转发，各类基本参数校验，或者不复用的业务简单处理等。</li>
+</ul>
+<blockquote>
+<p>Service层</p>
+</blockquote>
+<ul>
+<li>相对具体的业务逻辑服务层</li>
+</ul>
+<blockquote>
+<p>Manager层</p>
+</blockquote>
+<ul>
+<li>通用业务层，它有如下特征：<ol>
+<li>是对Service层通用能力的下沉，如缓存方案、中间件通用处理等；</li>
+<li>与Dao层交互，对多个Dao的组合复用；</li>
+<li>是对第三方平台封装的层。</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>Dao层</p>
+</blockquote>
+<ul>
+<li>数据访问层，与底层MySql、Hbase、OB等进行数据交互。</li>
+</ul>
+<blockquote>
+<p>第三方服务</p>
+</blockquote>
+<ul>
+<li>包括其他部门的RPC服务接口，其他公司的HTTP接口等。如淘宝开放平台、支付宝付款等。</li>
+</ul>
+<blockquote>
+<p>外部数据接口</p>
+</blockquote>
+<ul>
+<li>外部应用数据存储服务提供的接口，多用于数据迁移场景中。</li>
+</ul>
+<hr>
+<h1 id="分层领域的模型规约"><a href="#分层领域的模型规约" class="headerlink" title="分层领域的模型规约"></a>分层领域的模型规约</h1><ul>
+<li><strong>DO</strong>（Data Object）：此对象与数据库表结构一一对应，通过Dao层向上传输数据源对象。</li>
+<li><strong>DTO</strong>（Data Transfer Object）：数据传输对象，Service层或Manager层向外传输的对象。</li>
+<li><strong>BO</strong>（Business Object）：业务对象，可以由Service层输出的封装业务逻辑的对象。</li>
+<li><strong>VO</strong>（View Object）：显示层对象，通常是Web层向模板渲染引擎层传输的对象。</li>
+<li><strong>Query</strong>：数据查询对象，各层接收上层的查询请求。注意超过2个参数的查询封装，禁止使用Map类来传输。</li>
+</ul>
+<h2 id="VO-与-DTO-的区别"><a href="#VO-与-DTO-的区别" class="headerlink" title="VO 与 DTO 的区别"></a>VO 与 DTO 的区别</h2><blockquote>
+<p>既然DTO是Service/Manager层向上层（Web层/开放API层）传递的数据对象，为什么还需要一个VO呢？</p>
+</blockquote>
+<p>对于绝大部分的应用场景来说，DTO和VO的属性值基本上是一致的，而且他们统称都是POJO，因此没有必要多此一举，但不要忘记这是实现层的思维，对于设计层面来说，概念上还是应该存在VO和DTO，因为两者有着本质上的区别，<strong>DTO是Service层与其直接上层（Web层和开放API层）进行数据交互的对象，而VO是Web层与其直接上层（终端显示层和开放API层）进行数据交互的对象</strong>。</p>
+<blockquote>
+<p>例1：</p>
+</blockquote>
+<p>Service层有一个<code>getUser()</code>方法返回一个用户，其中有一个属性是<code>gender</code>，对于服务层来说，只是从语义上定义：1-男性、2-女性、3-未指定，而对于Web层而言，他可能需要用“帅哥”代表男性，“美女”代表女性，“秘密”代表未指定。当然，也可以直接在service返回“帅哥美女”就可实现这一功能。对于大部分的应用来说，这是可以的，但是如果需求客户可以定制化风格，而不同风格对于“性别”的表现方式不一样，又或者这个服务同时供多个客户端使用，而不同的客户端对于表现层的要求有所不同，那么问题就来了。再者，回到设计层面上分析，<strong>从职责单一原则来看，服务层只负责业务，与业务的表现形式无关，因此，它返回的DTO，不应该表现出与表现形式的耦合。</strong></p>
+<h3 id="VO与DTO的应用"><a href="#VO与DTO的应用" class="headerlink" title="VO与DTO的应用"></a>VO与DTO的应用</h3><p>上面只是用了一个简单的例子来说明VO与DTO在概念上的区别，接下来我将会告诉你如何在应用中做出正确的选择。</p>
+<blockquote>
+<p>在以下场景中，我们可以考虑把VO与DTO二合为一（注意：是实现层面）：</p>
+</blockquote>
+<ul>
+<li>当需求非常清晰稳定，而且客户端很明确只有一个的时候，没有必要把VO和DTO区分开来，这时候VO可以退隐，只使用DTO即可。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2787,556 +2945,6 @@
 
 </li>
 </ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/11/Jsp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/11/11/Jsp/" class="post-title-link" itemprop="url">Jsp</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-11-11 11:42:39" itemprop="dateCreated datePublished" datetime="2020-11-11T11:42:39+08:00">2020-11-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-11-16 17:54:00" itemprop="dateModified" datetime="2020-11-16T17:54:00+08:00">2020-11-16</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JavaWeb/" itemprop="url" rel="index"><span itemprop="name">JavaWeb</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h1><h2 id="JSP概念"><a href="#JSP概念" class="headerlink" title="JSP概念"></a>JSP概念</h2><blockquote>
-<p><strong>JSP</strong>：Java Server Pages，Java服务器端页面</p>
-<ul>
-<li>JSP是一个特殊的页面，其中既可以定义HTML标签，又可以定义Java代码</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="JSP执行原理"><a href="#JSP执行原理" class="headerlink" title="JSP执行原理"></a>JSP执行原理</h2><blockquote>
-<p><strong>JSP本质上是一个Servlet</strong></p>
-</blockquote>
-<p><img src="/2020/11/11/Jsp/jsp%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png"></p>
-<blockquote>
-<p>执行流程：</p>
-<ol>
-<li>客户端向服务器发送请求，访问<code>localhost:80/day16/index.jsp</code>资源。</li>
-<li>服务器解析请求消息，查找是否存在<code>index.jsp</code>资源。</li>
-<li>如果存在，服务器会先将<code>index.jsp</code>资源转换为<code>.java</code>文件。[转换成的<code>.java</code>文件内部结构和Servlet相同]</li>
-<li>再将<code>.java</code>文件编译为二进制的<code>.class</code>文件。</li>
-<li>最后服务器返回该二进制文件给客户端。</li>
-</ol>
-</blockquote>
-<hr>
-<h2 id="JSP脚本"><a href="#JSP脚本" class="headerlink" title="JSP脚本"></a>JSP脚本</h2><blockquote>
-<p><strong>JSP的脚本</strong>：JSP内定义Java代码的方式（3种方式）</p>
-</blockquote>
-<ol>
-<li><p>该脚本中定义的Java代码，转换为<code>.java</code>文件后在service方法中执行。service方法中可以定义什么，该脚本中就可以定义什么。</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;% java代码 %&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>该脚本中定义的Java代码，转换为<code>.java</code>文件后充当Java类的成员变量/成员方法。</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%! java代码 %&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>该脚本中定义的Java代码，会直接被输出到页面上，输出语句中可以定义什么，该脚本就可以定义什么</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%= java代码 %&gt;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="JSP指令"><a href="#JSP指令" class="headerlink" title="JSP指令"></a>JSP指令</h2><ul>
-<li>作用：</li>
-</ul>
-<blockquote>
-<p><strong>JSP指令</strong>：用于配置JSP页面，导入资源文件</p>
-</blockquote>
-<ul>
-<li>格式：</li>
-</ul>
-<blockquote>
-<p><code>&lt;%@ 指令名称 属性名1=属性值1 属性名2=属性值2 ...%&gt;</code></p>
-</blockquote>
-<h3 id="JSP指令分类"><a href="#JSP指令分类" class="headerlink" title="JSP指令分类"></a>JSP指令分类</h3><h4 id="page"><a href="#page" class="headerlink" title="page"></a>page</h4><blockquote>
-<p>page指令的作用：配置当前JSP页面。</p>
-</blockquote>
-<p><strong>page指令中常见的属性</strong>：</p>
-<ul>
-<li><code>contentType</code>：等同于<code>response.setContentType()</code></li>
-</ul>
-<blockquote>
-<ol>
-<li>设置响应体的mime类型以及字符集</li>
-<li>设置当前jsp页面的编码（只能在高级的IDE才能生效，如果使用低级的开发工具，则需要通过pageEncoding属性设置当前页面的字符集）</li>
-</ol>
-</blockquote>
-<ul>
-<li><p><code>import</code>：导包。在jsp中书写Java代码时，用<code>import</code>导入Java代码需要的依赖。</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.util.List&quot;</span>%&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>errorPage</code>：当前页面发生异常后，会自动跳转到指定的错误页面</p>
-</li>
-<li><p><code>isErrorPage</code>：标识当前页面是否是错误页面。</p>
-<blockquote>
-<p><code>true</code>：是，可以使用内置对象exception</p>
-<p><code>false</code>：否，默认值。不可以使用内置对象exception</p>
-</blockquote>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page errorPage=<span class="string">&quot;index.jsp&quot;</span> isErrorPage=<span class="string">&quot;true&quot;</span> %&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>language</code>：语言，目前只支持Java</p>
-</li>
-<li><p><code>buffer</code>：缓冲区的大小</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> pageEncoding=<span class="string">&quot;utf-8&quot;</span> language=<span class="string">&quot;java&quot;</span> buffer=<span class="string">&quot;8kb&quot;</span>%&gt;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h4 id="include"><a href="#include" class="headerlink" title="include"></a>include</h4><ul>
-<li><p><code>include</code>：导入外部的<code>.jsp页面</code>资源文件，<strong>实现页面复用</strong>。</p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 在当前页面导入`top.jsp`页面 --&gt;</span><br><span class="line">&lt;%<span class="meta">@include</span> file=<span class="string">&quot;top.jsp&quot;</span>%&gt;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="taglib"><a href="#taglib" class="headerlink" title="taglib"></a>taglib</h4><ul>
-<li><p><code>taglib</code>：导入资源，一般是导入标签库</p>
-<blockquote>
-<ul>
-<li><code>prefix</code>: 别名，为导入的资源定义一个唯一标识。</li>
-<li><code>uri</code>:导入的jar包所在的位置</li>
-</ul>
-</blockquote>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ taglib prefix=<span class="string">&quot;c&quot;</span> uri=<span class="string">&quot;http://java.sun.com/jsp/jstl/core&quot;</span> %&gt;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h2 id="JSP注释"><a href="#JSP注释" class="headerlink" title="JSP注释"></a>JSP注释</h2><h3 id="HTML注释"><a href="#HTML注释" class="headerlink" title="HTML注释"></a>HTML注释</h3><blockquote>
-<ul>
-<li>只能注释JSP页面中的HTML代码片段</li>
-<li><code>&lt;!--HTML注释--&gt;</code></li>
-</ul>
-</blockquote>
-<h3 id="JSP特有的注释：推荐使用"><a href="#JSP特有的注释：推荐使用" class="headerlink" title="JSP特有的注释：推荐使用"></a>JSP特有的注释：推荐使用</h3><blockquote>
-<ul>
-<li>可以注释JSP页面中的所有内容</li>
-<li><code>&lt;%--JSP注释--%&gt;</code></li>
-</ul>
-</blockquote>
-<h2 id="JSP内置对象"><a href="#JSP内置对象" class="headerlink" title="JSP内置对象"></a>JSP内置对象</h2><blockquote>
-<p>在JSP页面中，不需要获取和创建，直接可以使用的对象</p>
-</blockquote>
-<p>JSP一共有9个内置对象</p>
-<table>
-<thead>
-<tr>
-<th align="center">变量名</th>
-<th align="center">真实类型</th>
-<th align="center">作用</th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>pageContext</code></td>
-<td align="center"><code>PageContext</code></td>
-<td align="center">1.当前页面内共享数据  2.还可以获取其它8个内置对象</td>
-<td align="center">域对象</td>
-</tr>
-<tr>
-<td align="center"><code>request</code></td>
-<td align="center"><code>HttpServletRequest</code></td>
-<td align="center">一次请求访问的多个资源（转发）间共享数据</td>
-<td align="center">域对象</td>
-</tr>
-<tr>
-<td align="center"><code>session</code></td>
-<td align="center"><code>HttpSession</code></td>
-<td align="center">一次会话的多个请求间共享数据</td>
-<td align="center">域对象</td>
-</tr>
-<tr>
-<td align="center"><code>application</code></td>
-<td align="center"><code>ServletContext</code></td>
-<td align="center">所有用户间共享数据</td>
-<td align="center">域对象</td>
-</tr>
-<tr>
-<td align="center"><code>response</code></td>
-<td align="center"><code>HttpServletResponse</code></td>
-<td align="center">响应对象</td>
-<td align="center">/</td>
-</tr>
-<tr>
-<td align="center"><code>page</code></td>
-<td align="center"><code>Object</code></td>
-<td align="center">当前页面（Servlet）对象（==this）</td>
-<td align="center">/</td>
-</tr>
-<tr>
-<td align="center"><code>out</code></td>
-<td align="center"><code>JspWriter</code></td>
-<td align="center">输出对象，把数据输出到页面上</td>
-<td align="center">/</td>
-</tr>
-<tr>
-<td align="center"><code>config</code></td>
-<td align="center"><code>ServletConfig</code></td>
-<td align="center">Servlet的配置对象</td>
-<td align="center">/</td>
-</tr>
-<tr>
-<td align="center"><code>exception</code></td>
-<td align="center"><code>Throwable</code></td>
-<td align="center">异常对象</td>
-<td align="center">/</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>Tip：真实类型的含义就是JSP转换为Servlet后的数据类型，最终会被响应给客户端。</p>
-</blockquote>
-<p><code>out</code>：字符输出流对象，可以将数据输出到页面上。和<code>response.getWriter()</code>类似.</p>
-<blockquote>
-<p><code>response.getWriter()</code>和<code>out.write()</code>的区别：</p>
-<ul>
-<li>在TomCat服务器给客户端作出响应之前，会先在<code>response</code>缓冲区查找数据，之后再到<code>out</code>缓冲区查找数据</li>
-<li>所以，<code>response.getWriter()</code>数据输出永远在<code>out.write()</code>之前。</li>
-</ul>
-</blockquote>
-<hr>
-<h1 id="MVC开发模式"><a href="#MVC开发模式" class="headerlink" title="MVC开发模式"></a>MVC开发模式</h1><h2 id="MVC发展的几个阶段"><a href="#MVC发展的几个阶段" class="headerlink" title="MVC发展的几个阶段"></a>MVC发展的几个阶段</h2><blockquote>
-<ol>
-<li>第一阶段，服务器上只有Servlet程序，如果想要给客户端响应一些动态的页面（包含静态的HTML页面和程序获取的动态的数据），我们只能通过Response对象输出标签数据，非常麻烦。</li>
-<li>第二阶段出现了JSP，可以在JSP页面中编写Java代码，简化了Servlet的开发。但是如果过度使用JSP，在开发大型项目时，会出现HTML标签与Java代码混合的开发程序难以阅读和维护。</li>
-<li>第三阶段，前后端分离，JavaWeb开发借鉴了MVC开发模式，使得程序的设计更加合理。</li>
-</ol>
-</blockquote>
-<h2 id="MVC开发模式-1"><a href="#MVC开发模式-1" class="headerlink" title="MVC开发模式"></a>MVC开发模式</h2><blockquote>
-<ol>
-<li><p>M（Model）</p>
-<ul>
-<li>完成具体的业务操作。如：查询数据库、封装对象等</li>
-</ul>
-</li>
-<li><p>V（View）</p>
-<ul>
-<li>展示数据</li>
-</ul>
-</li>
-<li><p>C（Controller）</p>
-<ul>
-<li>获取用户的输入</li>
-<li>调用模型</li>
-<li>将数据交给视图进行展示</li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<p><img src="/2020/11/11/Jsp/MVC%E6%A8%A1%E5%9E%8B.png"></p>
-<p>执行流程：</p>
-<blockquote>
-<ol>
-<li>首先，客户端向服务器发送请求<code>request</code>。</li>
-<li>服务器收到<code>request</code>请求后，首先经过<code>控制器Controller</code>。</li>
-<li>再由<code>控制器</code>转发转发到<code>Model</code>中，完成具体的业务逻辑。</li>
-<li>Model把响应结果先返回给<code>控制器</code>，由<code>控制器</code>统一调度。</li>
-<li><code>控制器</code>再把数据渲染到<code>视图（View）</code>上。</li>
-<li>最后，<code>View</code>把数据发送给客户端，客户端浏览器解析数据并展示。</li>
-</ol>
-</blockquote>
-<p>MVC开发模式的优缺点：</p>
-<blockquote>
-<p>优点：</p>
-<ul>
-<li>耦合性低、方便维护、利于分工协作</li>
-<li>重用性高</li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li>使项目的架构变得很复杂，对开发人员要求高、</li>
-<li>开发成本高</li>
-</ul>
-</blockquote>
-<hr>
-<h1 id="EL表达式"><a href="#EL表达式" class="headerlink" title="EL表达式"></a>EL表达式</h1><blockquote>
-<p><strong>EL</strong>（Expression Language）：表达式语言</p>
-<p><strong>作用</strong>：替换和简化JSP页面中Java代码的编写，将Java代码执行的结果渲染到页面上。</p>
-<p><strong>使用格式</strong>：<code>$&#123;表达式&#125;</code></p>
-</blockquote>
-<p><strong>Tip</strong>：JSP文件中默认支持EL表达式。如果要忽略el表达式：</p>
-<ol>
-<li>在JSP的page指令中设置<code>isELIgnored=&quot;true&quot;</code> 忽略当前JSP页面中所有的EL表达式</li>
-<li><code>\$&#123;表达式&#125; </code>：忽略当前这个EL表达式</li>
-</ol>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">如果在jsp文件中输入：</span><br><span class="line">$&#123;<span class="number">3</span>&gt;<span class="number">4</span>&#125;		</span><br><span class="line">就会在浏览器页面上返回<span class="keyword">false</span>。</span><br><span class="line"></span><br><span class="line">如果想要屏蔽这种效果，有<span class="number">2</span>种方法：</span><br><span class="line"><span class="number">1.</span>在jsp的page指令中设置属性 isELIgnored为<span class="keyword">true</span>。但是这种设置是全局设置</span><br><span class="line">	&lt;@ page isELIgnored=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line"><span class="number">2.</span>在EL表达式前面加上反斜杠。这种设置是局部设置。</span><br><span class="line">	\$&#123;<span class="number">3</span>&gt;<span class="number">4</span>&#125;   &lt;%--反斜杠可以或略EL表达式--%&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><table>
-<thead>
-<tr>
-<th align="center">分类</th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">算术运算符</td>
-<td align="center"><code> + - * / div % mod</code></td>
-</tr>
-<tr>
-<td align="center">比较运算符</td>
-<td align="center"><code>&gt; &lt; == &gt;= &lt;= !=</code></td>
-</tr>
-<tr>
-<td align="center">逻辑运算符</td>
-<td align="center">`&amp;&amp;/and</td>
-</tr>
-<tr>
-<td align="center">空运算符</td>
-<td align="center"><code>empty</code></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><code>empty</code>用于判断字符串、集合、数组对象：</p>
-<ul>
-<li>是否为null，</li>
-<li>或者长度是否为0</li>
-</ul>
-<p>格式：</p>
-<ul>
-<li><code>$&#123;empty list&#125;</code></li>
-<li><code>$&#123;not empty list&#125;</code></li>
-</ul>
-</blockquote>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;h3&gt;空运算符&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">&lt;%</span><br><span class="line">	<span class="comment">// 添加字符串到request共享域</span></span><br><span class="line">    String str1 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">    String str2 = <span class="keyword">null</span>;</span><br><span class="line">    String str3 = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    request.setAttribute(<span class="string">&quot;str1&quot;</span>,str1);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;str2&quot;</span>,str2);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;str3&quot;</span>,str3);</span><br><span class="line">%&gt;</span><br><span class="line">&lt;%--EL表达式--%&gt;</span><br><span class="line">$&#123;empty str1&#125;&lt;br&gt;   &lt;%--<span class="keyword">false</span>--%&gt;</span><br><span class="line">$&#123;empty str2&#125;&lt;br&gt;   &lt;%--<span class="keyword">true</span>--%&gt;</span><br><span class="line">$&#123;empty str3&#125;&lt;br&gt;   &lt;%--<span class="keyword">true</span>--%&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="获取值"><a href="#获取值" class="headerlink" title="获取值"></a>获取值</h3><blockquote>
-<p><strong>EL表达式只能从域对象中获取值</strong></p>
-</blockquote>
-<h4 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h4><ol>
-<li><code>$&#123;域名.键名&#125;</code>：从指定域中获取指定的键值对</li>
-<li><code>$&#123;键名&#125;</code>：表示从小到大依次从共享域中查找是否有该键对应的值，直到找到为止。</li>
-<li>获取对象、List集合、Map集合的值</li>
-</ol>
-<h5 id="域名-键名"><a href="#域名-键名" class="headerlink" title="${域名.键名}"></a>${域名.键名}</h5><blockquote>
-<p>域名：</p>
-<ol>
-<li><p><code>pageScope  --&gt;&gt;  pageContext</code></p>
-</li>
-<li><p><code>requestScope  --&gt;&gt;  request</code></p>
-</li>
-<li><p><code>sessionScope  --&gt;&gt;  session</code></p>
-</li>
-<li><p><code>applicationScope  --&gt;&gt;  application(servletContext)</code></p>
-</li>
-</ol>
-</blockquote>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 如：在request域中储存了 name=zhangsan --&gt;</span><br><span class="line">&lt;!--获取：--&gt;</span><br><span class="line">$&#123;requestScope.name&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>Tip</strong>：如果EL没有从域中获取到值，那么它什么都不会显示，不会打乱页面布局</p>
-</blockquote>
-<h5 id="域名-键名-XXX"><a href="#域名-键名-XXX" class="headerlink" title="${域名.键名.XXX}"></a>${域名.键名.XXX}</h5><ul>
-<li><p>获取对象：<code>$&#123;域名.键名.属性名&#125;</code></p>
-<ul>
-<li>本质上会调用对象的 <code>getter()</code>方法</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    <span class="comment">// 在域中储存数据（对象）</span></span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setName(<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line">    user.setAge(<span class="number">23</span>);</span><br><span class="line">    user.setBirthday(<span class="keyword">new</span> Date());</span><br><span class="line"></span><br><span class="line">    request.setAttribute(<span class="string">&quot;user&quot;</span>,user);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;h3&gt;EL获取域中的值(对象)&lt;/h3&gt;</span><br><span class="line">    $&#123;requestScope.user&#125;&lt;br&gt;        &lt;%--获取的是地址值--%&gt;</span><br><span class="line">    </span><br><span class="line">	&lt;%--</span><br><span class="line">        通过对象的属性来获取具体的值：</span><br><span class="line">          * setter/getter方法，去掉set/get,再将剩余部分首字母变为小写。</span><br><span class="line">          * setName --&gt;&gt; Name --&gt;&gt; name</span><br><span class="line">    --%&gt;</span><br><span class="line">    $&#123;requestScope.user.name&#125;&lt;br&gt;</span><br><span class="line">    $&#123;requestScope.user.age&#125;&lt;br&gt;</span><br><span class="line">    $&#123;requestScope.user.birthday&#125;&lt;br&gt;</span><br><span class="line">    $&#123;requestScope.user.birthday.month&#125;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">    &lt;%--自定义的getter方法(逻辑视图)--%&gt;</span><br><span class="line">    $&#123;requestScope.user.birStr&#125;&lt;br&gt;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 逻辑视图</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> 返回值是格式化之后的日期字符串</span></span><br><span class="line"><span class="comment">*/</span> </span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getBirStr</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (birthday != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="comment">// 1.格式化日期对象</span></span><br><span class="line">            SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">&quot;yyyy-MM-dd HH：mm：ss&quot;</span>);</span><br><span class="line">            <span class="comment">// 2.返回字符串</span></span><br><span class="line">            <span class="keyword">return</span> sdf.format(birthday);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-</li>
-<li><p>获取List集合：<code>$&#123;域名.键名[索引]&#125;</code></p>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    <span class="comment">// 在域中存储List集合</span></span><br><span class="line">    ArrayList list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="string">&quot;aaa&quot;</span>);	<span class="comment">// List中添加字符串</span></span><br><span class="line">    list.add(<span class="string">&quot;bbb&quot;</span>);</span><br><span class="line">    list.add(user);		<span class="comment">// List中添加对象</span></span><br><span class="line">    request.setAttribute(<span class="string">&quot;list&quot;</span>,list);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;EL获取域中的List集合&lt;/h3&gt;</span><br><span class="line">$&#123;requestScope.list[<span class="number">0</span>]&#125;&lt;br&gt;</span><br><span class="line">$&#123;requestScope.list[<span class="number">1</span>]&#125;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">$&#123;requestScope.list[<span class="number">10</span>]&#125;&lt;br&gt;	&lt;%--下标越界则浏览器什么都不会打印--%&gt;</span><br><span class="line"></span><br><span class="line">$&#123;requestScope.list[<span class="number">2</span>].name&#125;&lt;br&gt;	&lt;%--获取user对象中的属性--%&gt;</span><br><span class="line">$&#123;requestScope.list[<span class="number">2</span>].birthday&#125;&lt;br&gt;</span><br></pre></td></tr></table></figure>
-
-<hr>
-</li>
-<li><p>获取Map集合：</p>
-<ol>
-<li><code>$&#123;域名.键名.key名称&#125;</code></li>
-<li><code>$&#123;域名.键名[&quot;key名称&quot;]&#125;</code></li>
-</ol>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;%    </span><br><span class="line">    <span class="comment">// 在域中存储Map集合</span></span><br><span class="line">    Map map = <span class="keyword">new</span> HashMap();</span><br><span class="line">    map.put(<span class="string">&quot;id&quot;</span>,<span class="number">1</span>);</span><br><span class="line">    map.put(<span class="string">&quot;gender&quot;</span>,<span class="string">&quot;男&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;user&quot;</span>,user);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;map&quot;</span>,map);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;h3&gt;EL获取域中的Map集合&lt;/h3&gt;</span><br><span class="line">$&#123;requestScope.map.id&#125;&lt;br&gt;</span><br><span class="line">$&#123;requestScope.map.gender&#125;&lt;br&gt;</span><br><span class="line"></span><br><span class="line">$&#123;requestScope.map[<span class="string">&quot;gender&quot;</span>]&#125;&lt;br&gt;</span><br><span class="line">$&#123;requestScope.map[<span class="string">&quot;user&quot;</span>].name&#125;&lt;br&gt;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h2 id="隐式对象"><a href="#隐式对象" class="headerlink" title="隐式对象"></a>隐式对象</h2><blockquote>
-<p>在EL表达式中，无需创建/获取，可以直接使用的对象。</p>
-</blockquote>
-<p>EL表达式中共有11个隐式对象：</p>
-<blockquote>
-<ul>
-<li><code>pageContext</code>：获取JSP中的其它8个内置对象</li>
-</ul>
-</blockquote>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;h4&gt;在JSP页面获取request对象&lt;/h4&gt;</span><br><span class="line">$&#123;pageContext.request&#125;</span><br><span class="line">&lt;h5&gt;在JSP页面动态获取工程路径&lt;/h5&gt;</span><br><span class="line">$&#123;pageContext.request.contextPath&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<hr>
-<h1 id="JSTL"><a href="#JSTL" class="headerlink" title="JSTL"></a>JSTL</h1><blockquote>
-<p><strong>JSTL</strong>（Java Server Pages Tag Library）：JSP标准标签库</p>
-<p><strong>作用</strong>：用于简化和替换JSP页面上的Java代码</p>
-</blockquote>
-<h2 id="使用步骤："><a href="#使用步骤：" class="headerlink" title="使用步骤："></a>使用步骤：</h2><blockquote>
-<ol>
-<li>导入JSTL相关的jar包</li>
-<li>引入标签库：通过JSP的指令：<code>&lt;% taglib %&gt;</code></li>
-<li>使用标签</li>
-</ol>
-</blockquote>
-<h2 id="常用的JSTL标签"><a href="#常用的JSTL标签" class="headerlink" title="常用的JSTL标签"></a>常用的JSTL标签</h2><ol>
-<li><p><code>if</code>：相当于Java中的if语句。</p>
-<ul>
-<li><p><code>&lt;c:if test=&quot;&quot;&gt;</code>标签：</p>
-<blockquote>
-<p>属性：</p>
-<ol>
-<li>test属性是必需属性。</li>
-<li>该属性可以接收boolean类型的表达式：<ul>
-<li>如果值为true，则显示标签体内容。</li>
-<li>如果值为false，则不显示标签体内容</li>
-</ul>
-</li>
-<li>一般情况下，test属性值会结合EL表达式一起使用。</li>
-</ol>
-<p>注意：</p>
-<ul>
-<li><code>&lt;c:if test=&quot;&quot;&gt;</code>标签没有else语句，如果需要使用else逻辑，则需要再定义一个新的 <code>&lt;c:if test=&quot;&quot;&gt;</code>标签</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">&quot;true&quot;</span>&gt;</span><br><span class="line">    &lt;h2&gt;test属性值为true：会显示&lt;/h2&gt;</span><br><span class="line">&lt;/c:if&gt;</span><br><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">&quot;false&quot;</span>&gt;</span><br><span class="line">    &lt;h2&gt;test属性值为false：不会显示&lt;/h2&gt;</span><br><span class="line">&lt;/c:if&gt;</span><br><span class="line">&lt;hr&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>案例：需求：判断request与中的一个list集合是否为空，如果不为空则遍历集合</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">List&lt;Object&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;bbb&quot;</span>);</span><br><span class="line">request.setAttribute(<span class="string">&quot;list&quot;</span>, list);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;not empty list&#125;&quot;</span>&gt;</span><br><span class="line">    $&#123;list[<span class="number">0</span>]&#125;&lt;br&gt;</span><br><span class="line">    $&#123;list[<span class="number">1</span>]&#125;&lt;br&gt;</span><br><span class="line">&lt;/c:if&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>choose...when...otherwise</code>：相当于Java中的switch语句。</p>
-<blockquote>
-<p>案例：</p>
-<p>需求：完成数字编号对应星期几的案例</p>
-<ol>
-<li>共享域中存储一个数字编号</li>
-<li>使用choose标签取出数字              相当于switch</li>
-<li>使用<code>when</code>标签对数字进行判断           相当于case</li>
-<li>使用<code>otherwise</code>标签做其它情况的声明     相当于default</li>
-</ol>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    request.setAttribute(<span class="string">&quot;number&quot;</span>, <span class="number">3</span>);</span><br><span class="line">%&gt;</span><br><span class="line">&lt;c:choose&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==1&#125;&quot;&gt;星期1&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==2&#125;&quot;&gt;星期2&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==3&#125;&quot;&gt;星期3&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==4&#125;&quot;&gt;星期4&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==5&#125;&quot;&gt;星期5&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==6&#125;&quot;&gt;星期6&lt;/c:when&gt;</span><br><span class="line">    &lt;c:when test=&quot;$&#123;number==7&#125;&quot;&gt;星期7&lt;/c:when&gt;</span><br><span class="line"></span><br><span class="line">    &lt;c:otherwise&gt;数字有误，请重新输入！&lt;/c:otherwise&gt;</span><br><span class="line">&lt;/c:choose&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>foreach</code> ：相当于Java中的for语句</p>
-<blockquote>
-<ol>
-<li><p>完成重复的操作。</p>
-<p>属性：</p>
-<ol>
-<li>begin：开始值</li>
-<li>end：结束值</li>
-<li>var：临时变量</li>
-<li>step：步长</li>
-<li>varStatus：循环状态对象<ul>
-<li>属性：index：容器中元素的索引（从0开始）</li>
-<li>属性：count：循环的次数（从1开始）</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><p>遍历容器</p>
-<p>属性：</p>
-<ol>
-<li>items：容器对象</li>
-<li>var：容器中元素的临时变量</li>
-<li>varStatus：循环状态对象<ul>
-<li>属性：index：容器中元素的索引（从0开始）</li>
-<li>属性：count：循环的次数（从1开始）</li>
-</ul>
-</li>
-</ol>
-</li>
-</ol>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">    循环打印<span class="number">1</span>~<span class="number">10</span></span><br><span class="line">--&gt;</span><br><span class="line">&lt;c:forEach begin=<span class="string">&quot;1&quot;</span> end=<span class="string">&quot;10&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;i&quot;</span> step=<span class="string">&quot;2&quot;</span> varStatus=<span class="string">&quot;s&quot;</span>&gt;</span><br><span class="line">    $&#123;i&#125; $&#123;s.index&#125; $&#123;s.count&#125;&lt;br&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br><span class="line">&lt;hr&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--</span><br><span class="line">    遍历List集合</span><br><span class="line">--&gt;</span><br><span class="line">&lt;%</span><br><span class="line">    List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">    list.add(<span class="string">&quot;bbb&quot;</span>);</span><br><span class="line">    list.add(<span class="string">&quot;ccc&quot;</span>);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;list&quot;</span>, list);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;c:forEach items=<span class="string">&quot;$&#123;list&#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;one&quot;</span> varStatus=<span class="string">&quot;s&quot;</span>&gt;</span><br><span class="line">    $&#123;s.count&#125; $&#123;s.index&#125; $&#123;one&#125;&lt;br&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="JSTL练习"><a href="#JSTL练习" class="headerlink" title="JSTL练习"></a>JSTL练习</h2><blockquote>
-<p>需求：</p>
-<ul>
-<li>在request域中有一个存有User对象的List集合。</li>
-<li>使用JSTL+EL将List集合中的数据展示到JSP页面的表格Table中。</li>
-<li>隔行变色</li>
-</ul>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;%</span><br><span class="line">    <span class="comment">// 1.把User信息保存到request域中</span></span><br><span class="line">    ArrayList&lt;User&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">&quot;张三&quot;</span>,<span class="number">23</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">&quot;李四&quot;</span>,<span class="number">24</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    list.add(<span class="keyword">new</span> User(<span class="string">&quot;王五&quot;</span>,<span class="number">25</span>,<span class="keyword">new</span> Date()));</span><br><span class="line">    request.setAttribute(<span class="string">&quot;list&quot;</span>,list);</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--    <span class="number">2.</span>把User信息输出到页面上 --&gt;</span><br><span class="line">&lt;table border=<span class="string">&quot;1px&quot;</span>&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">        &lt;th&gt;编号&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;姓名&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;年龄&lt;/th&gt;</span><br><span class="line">        &lt;th&gt;生日&lt;/th&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">    &lt;!--</span><br><span class="line">        数据行，要求数据行是动态的，有多少User对象，就可以自自动生成多少行。</span><br><span class="line">          遍历列表：&lt;foreach&gt;标签</span><br><span class="line">    --&gt;</span><br><span class="line">    &lt;c:forEach items=<span class="string">&quot;$&#123;list&#125;&quot;</span> <span class="keyword">var</span>=<span class="string">&quot;user&quot;</span> varStatus=<span class="string">&quot;s&quot;</span>&gt;</span><br><span class="line">        &lt;!--</span><br><span class="line">            <span class="number">3.</span>奇数行设为粉色，偶数行设为灰色</span><br><span class="line">        --&gt;</span><br><span class="line">        &lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;s.count%2!=0&#125;&quot;</span>&gt;</span><br><span class="line">            &lt;tr bgcolor=<span class="string">&quot;#ffc0cb&quot;</span>&gt;</span><br><span class="line">                &lt;td&gt;$&#123;s.count&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.name&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.age&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.birStr&#125;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/c:if&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;c:<span class="keyword">if</span> test=<span class="string">&quot;$&#123;s.count%2==0&#125;&quot;</span>&gt;</span><br><span class="line">            &lt;tr bgcolor=<span class="string">&quot;gray&quot;</span>&gt;</span><br><span class="line">                &lt;td&gt;$&#123;s.count&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.name&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.age&#125;&lt;/td&gt;</span><br><span class="line">                &lt;td&gt;$&#123;user.birStr&#125;&lt;/td&gt;</span><br><span class="line">            &lt;/tr&gt;</span><br><span class="line">        &lt;/c:if&gt;</span><br><span class="line">    &lt;/c:forEach&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       
     </div>
