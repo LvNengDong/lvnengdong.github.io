@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">96</span>
+          <span class="site-state-item-count">97</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -203,6 +203,113 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/20/JVM%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/20/JVM%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/" class="post-title-link" itemprop="url">JVM——本地方法库</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-20 21:19:19 / Modified: 23:27:43" itemprop="dateCreated datePublished" datetime="2021-05-20T21:19:19+08:00">2021-05-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="本地方法接口"><a href="#本地方法接口" class="headerlink" title="本地方法接口"></a>本地方法接口</h1><h2 id="什么是本地方法？"><a href="#什么是本地方法？" class="headerlink" title="什么是本地方法？"></a>什么是本地方法？</h2><p>使用 <strong>native</strong> 关键字修饰的Java方法。</p>
+<p><strong>一个 <code>Native Metho</code> 就是一个Java调用非Java代码的接口</strong>。</p>
+<p>一个 <code>Native Method</code> 是这样一个Java方法，该方法由非Java语言实现，比如C。</p>
+<p>这个特征并非Java所特有，很多其它的编程语言都有这一机制，比如在 C++ 中，就可以用 <code>extern &quot;C&quot;</code> 告知 C++ 编译期去调用一个 C 的函数。</p>
+<p>在定义一个 Native Method 时，并不提供实现体（有点像定义一个 Java Interface），因为其实现体是由非Java语言在外面实现的。</p>
+<p>本地接口的作用是融合不同的编程语言为Java所用，它的初衷是融合 C/C++ 程序。</p>
+<p>标识符 native 可以与所有其它的 java 标识符连用，但 abstract 除外。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">native 关键字表明调用了本地方法，是有实现体的，但是是采用非Java语言实现的；</span><br><span class="line">而 abstract 关键字表明无无方法实现体。</span><br><span class="line">这两个关键字是相互矛盾的。</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="为什么要使用-Native-Method-？"><a href="#为什么要使用-Native-Method-？" class="headerlink" title="为什么要使用 Native Method ？"></a>为什么要使用 Native Method ？</h2><p>Java 语言使用起来非常方便，然而有些层次的任务用 Java 实现起来不容易，或者我们对程序的效率很在意时，问题就来了。</p>
+<blockquote>
+<ol>
+<li>与Java环境外交互</li>
+</ol>
+</blockquote>
+<p><strong>有时Java应用需要与Java外面的环境交互，这是本地方法存在的主要原因</strong>。有时Java需要与一些底层系统，如操作系统或某些硬件交换信息，本地方法正是这样的一种交流机制，它为我们提供了一个非常简洁的接口，类似于一个黑盒，我们无需去了解Java应用之外的繁琐的细节。</p>
+<blockquote>
+<ol start="2">
+<li>与操作系统交互</li>
+</ol>
+</blockquote>
+<p>JVM 支持着 Java语言本身和运行时库，它是Java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。然而不管怎样，它毕竟不是一个完成的系统，它经常需要依赖一些底层系统的支持。这些底层系统常常是强大的操作系统。<strong>通过使用本地方法，我们得以用Java实现了jre与底层的交互，甚至JVM的一些部分就是用C写的</strong>。还有，如果我们要使用一些Java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</p>
+<blockquote>
+<ol start="3">
+<li>Sun’s Java</li>
+</ol>
+</blockquote>
+<p><strong>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互</strong>。jre大部分是用Java实现的，它也通过一些本地方法与外界交互。例如：java.lamg.Thread 的 <code>setPriority()</code> 方法是用Java实现的，但是它的具体实现调用的是该类里的本地方法<code>setPriority0()</code>。这个本地方法是用C实现的，并被植入JVM内部。</p>
+<h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><p><strong>目前该方法的使用越来越少了，除非是与硬件有关的应用</strong>，比如通过Java程序驱动打印机或者Java系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/14/JVM-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -234,7 +341,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-19 22:34:53" itemprop="dateModified" datetime="2021-05-19T22:34:53+08:00">2021-05-19</time>
+        <time title="Modified: 2021-05-21 00:00:13" itemprop="dateModified" datetime="2021-05-21T00:00:13+08:00">2021-05-21</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -350,7 +457,15 @@
 </ul>
 <p>由于 CPU 时间片轮限制，众多线程在并发执行过程中，任何一个确定的时刻，一个处理器或者多核处理器的一个内核，只会执行某个线程中的一条指令。</p>
 <p>在多线程并发执行过程中，这样必然导致线程经常中断或回复，如何保证每次切换线程都能准确续到上次执行的位置呢？每个线程在创建后，都会产生自己的程序计数器和栈帧，程序计数器在各个线程之间互不影响。</p>
-<h1 id="2、虚拟机栈"><a href="#2、虚拟机栈" class="headerlink" title="2、虚拟机栈"></a>2、虚拟机栈</h1><h2 id="2-1-虚拟机栈概述"><a href="#2-1-虚拟机栈概述" class="headerlink" title="2.1    虚拟机栈概述"></a>2.1    虚拟机栈概述</h2><h3 id="2-1-1-虚拟机栈出现的背景"><a href="#2-1-1-虚拟机栈出现的背景" class="headerlink" title="2.1.1    虚拟机栈出现的背景"></a>2.1.1    虚拟机栈出现的背景</h3><p>由于跨平台的设计，Java的指令都是根据栈来设计的。不同平台CPU架构不同，所以不能设计为基于寄存器的。</p>
+<h1 id="2、虚拟机栈"><a href="#2、虚拟机栈" class="headerlink" title="2、虚拟机栈"></a>2、虚拟机栈</h1><blockquote>
+<p>虚拟机栈内存结构简图</p>
+</blockquote>
+<p><img src="/2021/05/14/JVM-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png" alt="虚拟机栈内存结构"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">局部变量表：存储基本数据</span><br><span class="line">操作数栈：存储对数据的操作（字节码指令）</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-1-虚拟机栈概述"><a href="#2-1-虚拟机栈概述" class="headerlink" title="2.1    虚拟机栈概述"></a>2.1    虚拟机栈概述</h2><h3 id="2-1-1-虚拟机栈出现的背景"><a href="#2-1-1-虚拟机栈出现的背景" class="headerlink" title="2.1.1    虚拟机栈出现的背景"></a>2.1.1    虚拟机栈出现的背景</h3><p>由于跨平台的设计，Java的指令都是根据栈来设计的。不同平台CPU架构不同，所以不能设计为基于寄存器的。</p>
 <p><strong>优点是跨平台，指令集小，编译器容易实现，缺点是性能下降，实现同样的功能需要更多的指令。</strong></p>
 <h3 id="2-1-2-内存中的栈与堆"><a href="#2-1-2-内存中的栈与堆" class="headerlink" title="2.1.2    内存中的栈与堆"></a>2.1.2    内存中的栈与堆</h3><ul>
 <li><p><strong>栈是运行时的单位，而堆是存储的单位。</strong></p>
@@ -571,7 +686,8 @@
 <h2 id="2-5-栈顶缓存技术（Top-of-Stack-Cashing）"><a href="#2-5-栈顶缓存技术（Top-of-Stack-Cashing）" class="headerlink" title="2.5    栈顶缓存技术（Top-of-Stack Cashing）"></a>2.5    栈顶缓存技术（Top-of-Stack Cashing）</h2><p>基于栈式架构的虚拟机所使用的<strong>零地址指令</strong>更加紧凑，但完成一项操作的时候必然需要使用更多的入栈和出栈指令，这同时也就意味着将需要使用更多的指令分派（instruction dispatch）次数和内存读写次数。</p>
 <p>由于操作数是存储在内存中的，因此频繁的读/写操作必然会影响执行速度。为了解决这个问题，HotSpot JVM 的设计者提出了 栈顶缓存技术（Tos，Top-of-Stack Cashing）技术，<strong>将栈顶元素全部缓存在物理CPU的寄存器中，以此降低对内存的读/写次数，提升执行引擎的执行效率</strong>。</p>
 <hr>
-<h2 id="2-6-动态链接（Dynamic-Linking）"><a href="#2-6-动态链接（Dynamic-Linking）" class="headerlink" title="2.6    动态链接（Dynamic Linking）"></a>2.6    动态链接（Dynamic Linking）</h2><ul>
+<h2 id="2-6-动态链接（Dynamic-Linking）"><a href="#2-6-动态链接（Dynamic-Linking）" class="headerlink" title="2.6    动态链接（Dynamic Linking）"></a>2.6    动态链接（Dynamic Linking）</h2><p><img src="/2021/05/14/JVM-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5-1621514293202.png" alt="动态链接"></p>
+<ul>
 <li><p><strong>动态链接：指向运行时常量池的方法引用</strong></p>
 <blockquote>
 <p>大部分字节码指令在使用时都需要访问常量池，在帧数据区就保存着一个能够访问常量池的指针，方便程序访问常量池。</p>
@@ -662,9 +778,144 @@
 <li>JVM 字节码指令集一直比较稳定，一直到 Java7 中才增加了一个 <code>invokedynamic</code> 指令，这是 Java 为了实现动态类型语言支持而做的一种改进。</li>
 <li>但是在 Java7 中并没有提供直接生成 <code>invokedynamic</code> 指令的方法，需要借助 ASM 这种底层字节码工具来产生 <code>invokedynamic</code> 指令。<strong>直到 Java8 的 Lambda 表达式的出现，invokedynamic指令才在 Java 中有了直接的生成方式</strong>。</li>
 <li>Java7 中增加的动态语言类型支持的本质是对 Java 虚拟机规范的修改，而不是对Java语言规则的修改，这一块相对来讲比较复杂，增加了虚拟机中的方法调用，最直接的受益者就是运行在Java平台的动态语言的编译器。</li>
+</ul>
+<h4 id="动态类型语言和静态类型语言"><a href="#动态类型语言和静态类型语言" class="headerlink" title="动态类型语言和静态类型语言"></a>动态类型语言和静态类型语言</h4><ul>
+<li>动态类型语言和静态类型语言两者的区别就在于对类型的检查是在编译期还是在运行期。满足前者就是静态类型语言，反之就是动态类型语言。 </li>
+<li>也就是说，<strong>静态类型语言是判断变量自身的类型信息；动态类型语言是判断变量值的类型信息。变量没有类型信息，变量才有类型信息</strong>。这是动态语言的一个重要特性。</li>
+<li>Java 是一种静态类型语言，静态类型语言就是强类型语言，动态类型语言就是弱类型语言，如：Js、Python 等。</li>
+</ul>
+<h4 id="Java语言中方法重写的本质"><a href="#Java语言中方法重写的本质" class="headerlink" title="Java语言中方法重写的本质"></a>Java语言中方法重写的本质</h4><ol>
+<li><p>找到<strong>操作数栈</strong>栈顶的第一个元素，即执行方法的对象的实际类型，记做 C 。</p>
+</li>
+<li><p>如果在类型 C 中能找到与被调用方法 返回值、名称 和 请求参数 都相符的方法，则继续进行访问权限校验，如果校验通过则返回这个方法的直接引用，查找过程结束；如果不通过，则返回 java.lang.IllegalAccessError 异常。</p>
+</li>
+<li><p>否则，按照继承关系从下往上依次对 C 的父类进行第2步的搜索和验证过程。</p>
+</li>
+<li><p>如果始终没有找到合适的方法，则抛出 <code>java.lang.AbstractMethodError</code> 异常。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、当我们调用一个对象的方法的时候，首先会将这个对象的实际类型压入操作数栈。</span><br><span class="line">2、然后 JVM 就会去这个类型对应的 Class 中去查找是否含有 返回值、名称和请求参数 都相同的方法；</span><br><span class="line">3、如果找到了，则继续进行访问权限校验，若校验通过，就返回该方法的直接引用；若校验失败，则返回 java.lang.IllegalAccessError 异常。</span><br><span class="line">4、如果在 类型C 中找不到对应的方法，则按照继承关系从下往上依次对 C 的父类进行第2、3步的检索和验证过程。</span><br><span class="line">4、如果始终没有找到对应的方法，则抛出 java.lang.AbstractMethodError 异常。</span><br></pre></td></tr></table></figure>
+
+<h4 id="IllegalAccessError-介绍"><a href="#IllegalAccessError-介绍" class="headerlink" title="IllegalAccessError 介绍"></a>IllegalAccessError 介绍</h4><p>程序试图访问或修改一个属性或调用一个方法，如果这个属性或方法，你没有权限访问，一般的，这就会引起编译期异常。这个错误如果发生在运行时，就说明一个类发生了不兼容的改变。</p>
+<h4 id="虚方法表"><a href="#虚方法表" class="headerlink" title="虚方法表"></a>虚方法表</h4><ul>
+<li>在面向对象的编程中，会很频繁的使用到动态分派，如果在每次动态分派的过程中都要重新在类的方法元数据中搜索合适的目标的话可能影响到执行效率。因此，为了提高性能，JVM 采用在类的方法区建立一个虚方法表（virtual method table）（非虚方法不会出现在表中）来实现，虚方法表中的每个虚方法通过索引来代替递归查找。</li>
+<li>每个类中都有一个虚方法表，表中存放着各个方法的实际入口。</li>
+<li>那么虚方法表什么时候创建呢？</li>
+</ul>
+<p>虚方法表会在类加载的链接阶段被创建并开始初始化，类的变量初始值准备完成之后，JVM 会把该类的虚方法表也初始化完毕。</p>
+<hr>
+<h2 id="方法的调用：解析与委派"><a href="#方法的调用：解析与委派" class="headerlink" title="方法的调用：解析与委派"></a>方法的调用：解析与委派</h2><hr>
+<h2 id="方法返回地址（Return-Address）"><a href="#方法返回地址（Return-Address）" class="headerlink" title="方法返回地址（Return Address）"></a>方法返回地址（Return Address）</h2><blockquote>
+<p>方法返回地址是栈帧中的一块内存地址。</p>
+</blockquote>
+<ul>
+<li>存放调用该方法的 PC寄存器 的值。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">假设现有一JVM栈，首先调用了 A方法 ，A方法 中又调用了 B方法（B方法 有返回值）；</span><br><span class="line">1、A 方法首先入栈，</span><br><span class="line">2、在 A方法 的某一行代码中调用了 B方法，B方法 入栈，B方法在执行完毕后，返回值中保存着 PC寄存器 的值，即 下一条JVM指令的地址，这样执行引擎就能根据这个地址跳转回 A方法 中去，继续执行 A方法 中的代码。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>一个方法的结束，有两种方式：</p>
+</li>
+<li><ul>
+<li>正常执行完成</li>
+<li>出现未处理的异常，非正常退出</li>
+</ul>
+</li>
+<li><p>无论通过哪种方式退出，在方法退出后都返回到该方法被调用的位置。  </p>
+</li>
+<li><ul>
+<li>方法正常退出时，<strong>调用者的PC计数器的值作为返回地址，即调用该方法的指令的下一条指令的地址</strong>。</li>
+<li>而通过异常退出的，返回地址要通过异常表来确定，栈帧中一般不会保存这部分信息。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>当一个方法开始执行后，只有两种方式可以退出这个方法：</li>
+</ul>
+<ol>
+<li><p>执行引擎收到任意一个方法返回的字节码指令（return），会有返回值传递给上层的方法调用者，简称<strong>正常完成出口</strong>。</p>
+</li>
+<li><ol>
+<li>一个方法在正常调用完成之后究竟需要使用哪一个返回指令还需要根据方法返回值的实际数据类型而定。</li>
+<li>在字节码指令中，返回指令包含 <code>ireturn</code> （当返回值是 boolean、byte、char、short 和 int 类型时使用）、 <code>lreturn</code> 、 <code>freturn</code> 、 <code>dreturn</code> 以及 <code>areturn</code> ，另外还有一个 <code>return</code> 指令供声明为 void 的方法、实例构造方法（ <code>&lt;init&gt;</code> ）、类和接口的构造方法（ <code>&lt;clinit&gt;</code> ）使用。</li>
+</ol>
+</li>
+<li><p>在方法执行的过程中遇到了异常，并且这个异常没有在方法内进行处理，也就是只要在本方法的异常表中没有搜索到匹配的异常处理器，就会导致方法退出。简称<strong>异常完成出口</strong>。</p>
+</li>
+<li><ol>
+<li>方法执行过程中抛出异常时的异常处理方案，存储在一个异常处理表，方便在发生异常时找到处理异常的代码。</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>本质上，方法的退出就是当前栈帧出栈的过程。此时，需要恢复上一个栈帧中方法的局部变量表、操作数栈、将返回值压入调用者的操作数栈、设置PC寄存器值等，让调用者的方法能继续执行下去。</li>
+<li>正常完成出口和异常完成出口的区别在于：<strong>通过异常完成出口退出的程序不会给它的上层调用者产生任何的返回值</strong>。</li>
+</ul>
+<hr>
+<h2 id="一些附加信息"><a href="#一些附加信息" class="headerlink" title="一些附加信息"></a>一些附加信息</h2><p>栈帧中还允许携带与Java虚拟机实现相关的一些附加信息。例如：对程序调试提供支持的信息。</p>
+<hr>
+<h2 id="栈的相关面试题"><a href="#栈的相关面试题" class="headerlink" title="栈的相关面试题"></a>栈的相关面试题</h2><ul>
+<li>举例栈溢出的情况？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">栈溢出：StackOverflowError</span><br><span class="line">内存溢出：OutOfMemoryError</span><br><span class="line"></span><br><span class="line">1、如果设置栈帧内存为自适应的话，假设某个方法入栈时需要占用的内存为2M，那么这时候JVM就会自动分配栈帧内存大于等于2M的空间给方法使用。这种情况下不会出现 StackOverflowError ，但是会当栈的内存不足以满足新的栈帧需要的内存时，就会出现OutOfMemoryError。</span><br><span class="line">2、如果设置栈帧内存为手动指定的话，假设某个方法入栈时需要占用的内存为2M，但是我们手动设置的栈帧的最大内存为1M，那么这时就会出现 StackOverflowError。</span><br><span class="line">【待定】</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>调整栈大小，就能保证不出现溢出吗？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答：不能。</span><br><span class="line"></span><br><span class="line">如果入栈的方法是一个死循环的递归方法，那么增加栈的内存只能保证栈溢出的时间出现的晚一些，最终还是会出现栈溢出</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>分配的栈内存越大越好吗？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答：不是</span><br><span class="line"></span><br><span class="line">挤占其它内存空间</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>垃圾回收是否会涉及到虚拟机栈？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">答：不会。</span><br><span class="line"></span><br><span class="line">程序计数器：不存在Error，不存在GC</span><br><span class="line">虚拟机栈：存在Error，不存在GC（通过出栈的方式来完成类似于垃圾回收的功能）</span><br><span class="line">本地方法栈：存在Error，不存在GC（类似于虚拟机栈）</span><br><span class="line">堆：存在Error，存在GC</span><br><span class="line">方法区：存在Error，存在GC</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法中定义的局部变量是否线程安全？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：不一定。具体问题具体分析。</span><br></pre></td></tr></table></figure>
+
+<p>​    </p>
+<hr>
+<h1 id="3、本地方法栈（Native-Method-Stack）"><a href="#3、本地方法栈（Native-Method-Stack）" class="headerlink" title="3、本地方法栈（Native Method Stack）"></a>3、本地方法栈（Native Method Stack）</h1><ul>
+<li><p><strong>Java虚拟机栈用于管理Java方法的调用，而本地方法栈用于管理本地方法的调用。</strong></p>
+</li>
+<li><p>本地方法栈，也是线程私有的。</p>
+</li>
+<li><p>本地方法栈允许被实现成固定或者是可动态扩展的内存大小。（在内存溢出方面和Java虚拟机栈是相同的）</p>
+<blockquote>
+<ul>
+<li>如果线程请求分配的栈容量超过本地方法栈允许的最大容量，JVM将会抛出一个 <code>StackOverflowError</code> 异常。</li>
+<li>如果本地方法栈设置为允许动态扩展，并且在尝试扩展的时候无法申请到足够的内存，或者在创建新的线程时没有足够的内存区创建对应的本地方法栈，那么Java虚拟机将会抛出一个 <code>OutofMemoryError</code> 异常。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>本地方法是使用C语言实现的。</p>
+</li>
+<li><p>它的具体做法是在 Native Method Stack 中登记 native 方法，在 Execution Engine 执行时加载本地方法库。</p>
+</li>
+<li><p><strong>当某个线程调用一个本地方法时，它就进入了一个全新的并且不再受虚拟机限制的世界。它和虚拟机拥有同样的权限。</strong></p>
+<blockquote>
+<ul>
+<li>本地方法可以通过本地方法接口来<strong>访问虚拟机内部的运行时数据区</strong>。</li>
+<li>它甚至可以直接使用本地处理器中的寄存器。</li>
+<li>直接从本地内存的堆中分配任意数量的内存。</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、Java线程调用本地方法，</span><br><span class="line">2、本地方法是用C语言实现的；</span><br><span class="line">3、C语言可以直接与操作系统或硬件进行交互；</span><br><span class="line">4、所以 Java语言可以通过本地方法直接与操作系统交互，而JVM正是直接与操作系统交互的，所以说本地方法和虚拟机拥有同样的权限。</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p><strong>并不是所有的JVM都支持本地方法。因为Java虚拟机规范并没有明确要求本地方法栈使用的语言、具体实现方式、数据结构等</strong>。如果JVM产品不打算支持 native 方法，也可以无需实现本地方法栈。</p>
+</li>
+<li><p>在 HotSpot JVM 中，直接将本地方法栈和虚拟机栈合二为一了。</p>
+</li>
 <li></li>
 </ul>
-<h2 id="方法的调用：解析与委派"><a href="#方法的调用：解析与委派" class="headerlink" title="方法的调用：解析与委派"></a>方法的调用：解析与委派</h2><h2 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h2><h2 id="一些附加信息"><a href="#一些附加信息" class="headerlink" title="一些附加信息"></a>一些附加信息</h2><h2 id="栈的相关面试题"><a href="#栈的相关面试题" class="headerlink" title="栈的相关面试题"></a>栈的相关面试题</h2>
+
       
     </div>
 
@@ -721,7 +972,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-17 23:57:32" itemprop="dateModified" datetime="2021-05-17T23:57:32+08:00">2021-05-17</time>
+        <time title="Modified: 2021-05-20 20:34:26" itemprop="dateModified" datetime="2021-05-20T20:34:26+08:00">2021-05-20</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -769,11 +1020,10 @@
 <li>在 .class 文件 –&gt; JVM –&gt; 最终成为元数据模板，此过程就需要一个运输工具（类加载器 Class Loader），扮演一个快递员的角色。</li>
 </ol>
 <p><img src="/2021/05/14/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F/ClassLoader-1621267020284.png" alt="ClassLoader"></p>
-<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p><img src="/2021/05/14/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B-1621267020284.png" alt="类的加载过程"></p>
+<h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p><img src="/2021/05/14/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B.png" alt="类的加载过程"></p>
 <p><img src="/2021/05/14/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F/%E7%AC%AC02%E7%AB%A0_%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B-1621267020284.jpg" alt="第02章_类的加载过程"></p>
 <h2 id="阶段1：加载"><a href="#阶段1：加载" class="headerlink" title="阶段1：加载"></a>阶段1：加载</h2><ol>
-<li><p>通过一个类的全限定类名获取定义此类的二进制字节流。</p>
-<p>（字节码文件以二进制格式保存，加载到内存中时要以流的形式传输数据）</p>
+<li><p>通过一个类的全限定类名获取定义此类的二进制字节流。（字节码文件以二进制格式保存，加载到内存中时要以流的形式传输数据）</p>
 </li>
 <li><p>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。</p>
 </li>
@@ -808,7 +1058,7 @@
 <h2 id="阶段3：初始化"><a href="#阶段3：初始化" class="headerlink" title="阶段3：初始化"></a>阶段3：初始化</h2><ul>
 <li><p><strong>初始化就是执行类构造器方法<code>&lt;clinit&gt;()</code> 的过程。</strong></p>
 <blockquote>
-<p><strong>类构造器方法</strong> 不同于 <strong>类的构造器</strong>，这个方法名已经被定义好了，就叫做 <code>clinit()</code> ，可以理解为 Class init 。</p>
+<p><strong>类构造器方法</strong> 不同于 <strong>类的构造器</strong>，这个方法名已经被定义好了，就叫做 <code>clinit()</code> ，可以理解为 Class Init 。</p>
 </blockquote>
 </li>
 <li><p>此方法不需要定义，是 javac 编译器自动收集类中的所有类变量的赋值动作和静态代码块中的语句合并而来。</p>
@@ -824,10 +1074,15 @@
 </li>
 <li><p>虚拟机必须保证一个类的 <code>&lt;clinit&gt;()</code> 方法在多线程下被同步加锁。 </p>
 <blockquote>
+<p>原因：静态变量保存在方法区中，而方法区中的数据是多线程共享的，所以需要保证一个类的方法在多线程下要同步加锁。</p>
 <p><strong>clinit()</strong> 方法本质上就是初始化静态变量，但是静态变量在理论上只能被初始化一次。在不加锁的情况下，如果有多个线程同时执行 <strong>clinit()</strong> 方法，就会创建出多个相同的静态变量，但是如果加了同步锁，那么无论有多少个线程，每个静态变量都只会被初始化一次。</p>
 </blockquote>
 </li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">静态存储结构（.class文件中）</span><br><span class="line">运行时数据结构（内存中的方法区中）</span><br><span class="line">符号引用 vs. 直接引用</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="类的加载器分类"><a href="#类的加载器分类" class="headerlink" title="类的加载器分类"></a>类的加载器分类</h1><ul>
 <li>JVM 支持两种类型的加载器，分别为 <strong>引导类加载器（BootStrap ClassLoader）</strong> 和 <strong>自定义类加载器（User-Defined ClassLoader）</strong>。</li>
 <li>自定义类加载器并不是开发人员自定义的类加载器，而是 <strong>将所有派生于抽象类 ClassLoader 的类加载器都划分为自定义类加载器。</strong></li>
@@ -1825,7 +2080,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-14 21:53:48" itemprop="dateModified" datetime="2021-05-14T21:53:48+08:00">2021-05-14</time>
+        <time title="Modified: 2021-05-21 00:00:42" itemprop="dateModified" datetime="2021-05-21T00:00:42+08:00">2021-05-21</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1847,7 +2102,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="JVM与Java体系结构"><a href="#JVM与Java体系结构" class="headerlink" title="JVM与Java体系结构"></a>JVM与Java体系结构</h1><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/image-20210416102603356.png" alt="image-20210416102603356"></p>
+          <h1 id="JVM与Java体系结构"><a href="#JVM与Java体系结构" class="headerlink" title="JVM与Java体系结构"></a>JVM与Java体系结构</h1><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/image-20210416102603356.png"></p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_141&quot;</span>	</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_141-b15)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)</span><br></pre></td></tr></table></figure>
 
 <blockquote>
@@ -1855,7 +2110,7 @@
 </blockquote>
 <p>JVM 是一个概念，而 <code>Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)</code> 是 JVM 虚拟机的一个落地产品，HotSpot 是 Orecle平台默认的 Java 虚拟机</p>
 <p>常见的 JVM 的落地产品还有：JRockit、J9 等</p>
-<h2 id="Java——跨平台的语言"><a href="#Java——跨平台的语言" class="headerlink" title="Java——跨平台的语言"></a>Java——跨平台的语言</h2><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC01%E7%AB%A0_Java%E8%AF%AD%E8%A8%80%E7%9A%84%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%80%A7.jpg" alt="第01章_Java语言的跨平台性"></p>
+<h2 id="Java——跨平台的语言"><a href="#Java——跨平台的语言" class="headerlink" title="Java——跨平台的语言"></a>Java——跨平台的语言</h2><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC01%E7%AB%A0_Java%E8%AF%AD%E8%A8%80%E7%9A%84%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%80%A7.jpg"></p>
 <p>Java 语言的跨平台性！</p>
 <blockquote>
 <p><strong>write once，run anywhere</strong>：一次编译，到处运行。</p>
@@ -1928,7 +2183,7 @@
 </blockquote>
 </li>
 </ul>
-<h2 id="JVM-的位置"><a href="#JVM-的位置" class="headerlink" title="JVM 的位置"></a>JVM 的位置</h2><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5C%E7%AC%AC01%E7%AB%A0_JVM%E6%89%80%E5%A4%84%E4%BD%8D%E7%BD%AE.jpg" alt="第01章_JVM所处位置"></p>
+<h2 id="JVM-的位置"><a href="#JVM-的位置" class="headerlink" title="JVM 的位置"></a>JVM 的位置</h2><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5C%E7%AC%AC01%E7%AB%A0_JVM%E6%89%80%E5%A4%84%E4%BD%8D%E7%BD%AE.jpg"></p>
 <ul>
 <li>JVM 是运行在操作系统之上的，它与硬件没有直接的交互。</li>
 </ul>
@@ -1936,7 +2191,7 @@
 <li>HotSpot VM 是目前市面上高性能虚拟机的代表作之一。</li>
 <li>它采用解释器与即时编译期并存的架构。</li>
 </ul>
-<p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5C%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E7%AE%80%E5%9B%BE.jpg" alt="第02章_JVM架构-简图"></p>
+<p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5C%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E7%AE%80%E5%9B%BE.jpg"></p>
 <h3 id="Class-Loader-Subsystem"><a href="#Class-Loader-Subsystem" class="headerlink" title="Class Loader Subsystem"></a>Class Loader Subsystem</h3><blockquote>
 <p>类加载器子系统，</p>
 </blockquote>
@@ -1956,7 +2211,7 @@
 <ul>
 <li>主要作用就是将内存中 JVM 字节码文件形成的 Class 对象编译成底层机器能够识别的机器指令。</li>
 </ul>
-<h2 id="Java-代码的执行流程"><a href="#Java-代码的执行流程" class="headerlink" title="Java 代码的执行流程"></a>Java 代码的执行流程</h2><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5Cimage-20210416190414894.png" alt="image-20210416190414894"></p>
+<h2 id="Java-代码的执行流程"><a href="#Java-代码的执行流程" class="headerlink" title="Java 代码的执行流程"></a>Java 代码的执行流程</h2><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5Cimage-20210416190414894.png"></p>
 <h2 id="JVM-的架构模型"><a href="#JVM-的架构模型" class="headerlink" title="JVM 的架构模型"></a>JVM 的架构模型</h2><p>Java 编译器输入的指令流基本上是一种基于栈的指令集架构，另一种指令集架构则是基于寄存器的指令集架构。</p>
 <blockquote>
 <p>基于栈的指令集架构的优缺点：</p>
@@ -1978,114 +2233,8 @@
 <li>某线程调用 Runtime 类或 System 类的 exist 方法，或 Runtime 类的 halt 方法，并且 Java 安全管理器也允许这次 exit 或 halt 操作。</li>
 <li>除此之外，JNI（Java Native Interface）规范描述了用 JNI Invocation API 来加载或写在 Java 虚拟机时，Java 虚拟机的退出情况。</li>
 </ol>
-<p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5C%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E8%8B%B1.jpg" alt="第02章_JVM架构-英"></p>
+<p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5C%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E8%8B%B1.jpg"></p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">SpringMVC中常见的处理HTTP请求的方法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-15 23:58:00" itemprop="dateCreated datePublished" datetime="2021-04-15T23:58:00+08:00">2021-04-15</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-16 00:18:59" itemprop="dateModified" datetime="2021-04-16T00:18:59+08:00">2021-04-16</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringMVC/" itemprop="url" rel="index"><span itemprop="name">SpringMVC</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="自动绑定"><a href="#自动绑定" class="headerlink" title="自动绑定"></a>自动绑定</h1><blockquote>
-<p><em>SpringMVC 绑定请求参数是自动实现的，但是想要使用，必须遵循使用要求。</em></p>
-</blockquote>
-<p>使用情况较少！！！</p>
-<hr>
-<h1 id="RequestParam"><a href="#RequestParam" class="headerlink" title="@RequestParam"></a>@RequestParam</h1><ul>
-<li>支持POST和GET请求。</li>
-<li>只支持Content-Type：为application/x-www-form-urlencoded编码的内容。Http协议中，如果不指定Content-Type，则默认传递的参数就是application/x-www-form-urlencoded类型</li>
-</ul>
-<p>@RequestParam案例<br>使用@RequestParm用于绑定controller上的参数，可以是多个参数，也可以是一个Map集合，GET，POST均可。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestParam&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Boolean <span class="title">requestParam</span><span class="params">(<span class="meta">@RequestParam(name = &quot;code&quot;,required = false)</span> String code)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;code:&quot;</span>+code);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>@RequestParm中name属性是指定参数名，required属性默认为ture，表示必传。若为false则为非必传。属性有defaultValue默认值选项，若该参数为null时，会将默认值填充到参数上。<br>在项目中还可以使用map来接收多个参数：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestParam</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>@RequestBody案例<br>@RequestBody绑定一个实体。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestBody&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">requestBody</span><span class="params">(<span class="meta">@RequestBody</span>  User user)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;user:&quot;</span>+user.getName());</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>@RequestBody也能采用map来接收多个参数。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestBody</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="RequestBody"><a href="#RequestBody" class="headerlink" title="@RequestBody"></a>@RequestBody</h1><ul>
-<li>不支持GET请求。</li>
-<li>必须要在请求头中申明 content-Type（如application/json）。springMvc通过HandlerAdapter配置的HttpMessageConverters解析httpEntity的数据，并绑定到相应的bean上。</li>
-</ul>
-<h1 id="PathVaribale"><a href="#PathVaribale" class="headerlink" title="@PathVaribale"></a>@PathVaribale</h1><h1 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h1>
       
     </div>
 
