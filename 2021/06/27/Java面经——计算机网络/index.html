@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="1    什么是通信协议？通信协议就是通信的双方共同规定的都要实现的标准。 2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？2.1    TCP 和 UDP 的区别： TCP（Transfer Control Protocol）是一种 面向连接的、可靠的 传输层通信协议。   类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多   UDP（U">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java面经——计算机网络">
+<meta property="og:url" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1    什么是通信协议？通信协议就是通信的双方共同规定的都要实现的标准。 2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？2.1    TCP 和 UDP 的区别： TCP（Transfer Control Protocol）是一种 面向连接的、可靠的 传输层通信协议。   类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多   UDP（U">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP%E4%B8%A4%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98.png">
+<meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/BIO.png">
+<meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/NIO.png">
+<meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/AIO.png">
+<meta property="article:published_time" content="2021-06-27T13:46:04.000Z">
+<meta property="article:modified_time" content="2021-06-27T14:12:52.789Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP%E4%B8%A4%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98.png">
+
+
+<link rel="canonical" href="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Java面经——计算机网络 | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">1    什么是通信协议？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-TCP-%E5%92%8C-UDP-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB-%EF%BC%9FTCP-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E4%B8%A4%E6%AC%A1%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-TCP-%E5%92%8C-UDP-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">2.1    TCP 和 UDP 的区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-TCP-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E4%B8%A4%E6%AC%A1"><span class="nav-number">2.2.</span> <span class="nav-text">2.2    TCP 为什么是三次握手，而不是两次</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Java-%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D-IO-%E6%A8%A1%E5%9E%8B-%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">3    Java 有哪几种 IO 模型 ？有什么区别？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%8C%E6%AD%A5%EF%BC%9F%E4%BB%80%E4%B9%88%E6%98%AF%E5%BC%82%E6%AD%A5%EF%BC%9F%E4%BB%80%E4%B9%88%E6%98%AF%E9%98%BB%E5%A1%9E%EF%BC%9F%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%9E%E9%98%BB%E5%A1%9E%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">3.1    什么是同步？什么是异步？什么是阻塞？什么是非阻塞？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3%E3%80%81Java-NIO-%E7%9A%84%E5%87%A0%E4%B8%AA%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%88%86%E5%88%AB%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8-%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">3、Java NIO 的几个核心组件是什么？分别有什么作用 ？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E3%80%81select%EF%BC%8Cpoll-%E5%92%8C-epoll-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB-%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">4、select，poll 和 epoll 有什么区别 ？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5%E3%80%81%E6%8F%8F%E8%BF%B0-HTTP-%E5%92%8C-HTTPS-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">6.</span> <span class="nav-text">5、描述 HTTP 和 HTTPS 的区别</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java面经——计算机网络
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-06-27 21:46:04 / Modified: 22:12:52" itemprop="dateCreated datePublished" datetime="2021-06-27T21:46:04+08:00">2021-06-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">Java面经</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-什么是通信协议？"><a href="#1-什么是通信协议？" class="headerlink" title="1    什么是通信协议？"></a>1    什么是通信协议？</h1><p>通信协议就是通信的双方共同规定的都要实现的标准。</p>
+<h1 id="2-TCP-和-UDP-有什么区别-？TCP-为什么是三次握手，而不是两次？"><a href="#2-TCP-和-UDP-有什么区别-？TCP-为什么是三次握手，而不是两次？" class="headerlink" title="2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？"></a>2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？</h1><h2 id="2-1-TCP-和-UDP-的区别："><a href="#2-1-TCP-和-UDP-的区别：" class="headerlink" title="2.1    TCP 和 UDP 的区别："></a>2.1    TCP 和 UDP 的区别：</h2><ul>
+<li>TCP（Transfer Control Protocol）是一种 <strong>面向连接的、可靠的</strong> 传输层通信协议。<ul>
+<li>  类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多</li>
+</ul>
+</li>
+<li>UDP（User Datagram Protocol）是一种 <strong>无连接的、不可靠的</strong> 传输层通信协议<ul>
+<li>  类似于 广播，不需要建立连接，发送方不管接收方有没有准备好，直接发送消息；可以进行广播发送。传输不可靠，有可能丢失消息。效率比较高；协议比较简单，占用的系统资源比较少。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2-2-TCP-为什么是三次握手，而不是两次"><a href="#2-2-TCP-为什么是三次握手，而不是两次" class="headerlink" title="2.2    TCP 为什么是三次握手，而不是两次"></a>2.2    TCP 为什么是三次握手，而不是两次</h2><p>答：如果是两次握手，可能会造成连接资源浪费的情况。</p>
+<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP%E4%B8%A4%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98.png" alt="TCP两次握手存在的问题"></p>
+<p>网络是一种非常不稳定的资源，TCP 建立连接三次握手，断开连接四次挥手。</p>
+<p>假设只有两次握手，</p>
+<ul>
+<li>第一次握手：客户端向服务器端发送消息，请求建立连接；</li>
+<li>第二次握手：服务端同意/拒绝建立连接，并将同意/拒绝消息发送给客户端；</li>
+</ul>
+<p>​        此时若服务器同意与客户端建立连接，就会将“同意建立连接”的消息发送给客户端并建立服务器与客户端之间的网络通道。由于网络是一种非常不稳定的资源，假设这个在过程中由于网络波动服务器发出的“同意建立连接”消息丢失了，客户端就无法收到服务器“同意建立连接”的消息，也就不会知道其实它与服务器间通信的信道已经建立好了。客户端在这次请求超时后，会做出两种选择：</p>
+<ol>
+<li> 重新发送请求与服务器建立连接；</li>
+<li> 不再发送请求放弃与服务器建立连接。</li>
+</ol>
+<p>​        假设请求超时后客户端放弃与服务器建立连接：我们可以看到，此时服务器与客户端之间的网络通道其实是存在的，只不过客户端没并不知道这个网络通道的存在，就不会去用这个通道与服务器交互。在无其它操作的情况下，这个网络通道就会一直存在并浪费客户端和服务器的资源。</p>
+<hr>
+<h1 id="3-Java-有哪几种-IO-模型-？有什么区别？"><a href="#3-Java-有哪几种-IO-模型-？有什么区别？" class="headerlink" title="3    Java 有哪几种 IO 模型 ？有什么区别？"></a>3    Java 有哪几种 IO 模型 ？有什么区别？</h1><h2 id="3-1-什么是同步？什么是异步？什么是阻塞？什么是非阻塞？"><a href="#3-1-什么是同步？什么是异步？什么是阻塞？什么是非阻塞？" class="headerlink" title="3.1    什么是同步？什么是异步？什么是阻塞？什么是非阻塞？"></a>3.1    什么是同步？什么是异步？什么是阻塞？什么是非阻塞？</h2><blockquote>
+<p>  <strong>同步</strong></p>
+</blockquote>
+<ul>
+<li>指的是用户进程触发 IO 操作等待并轮询的去查看 IO 操作是否就绪。</li>
+</ul>
+<blockquote>
+<p>  <strong>异步</strong></p>
+</blockquote>
+<ul>
+<li>异步指的是用户进程触发IO操作后便开始做自己的事情，而当IO操作已经完成的时候会得到IO完成的通知（异步的特点就是通知）。</li>
+</ul>
+<blockquote>
+<p>  <strong>阻塞</strong></p>
+</blockquote>
+<ul>
+<li>所谓阻塞方式的意思是指, 当试图对该文件描述符进行读写时, 如果当时没有东西可读,或者暂时不可写, 程序就进入等待状态, 直到有东西可读或者可写为止。</li>
+</ul>
+<blockquote>
+<p>  <strong>非阻塞</strong></p>
+</blockquote>
+<ul>
+<li>非阻塞状态下, 如果没有东西可读, 或者不可写, 读写函数马上返回, 而不会等待。</li>
+</ul>
+<blockquote>
+<p>同步 和 异步 最大的区别是是否有 <strong>通知</strong> 。</p>
+<p>而 阻塞 和 非阻塞 最大的区别就是是否 <strong>等待</strong> 。</p>
+</blockquote>
+<ol>
+<li>同步阻塞IO（BIO）<ul>
+<li>同步并阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程进行处理，如果这个连接不做任何事情会造成不必要的线程开销，当然可以通过线程池机制改善。</li>
+</ul>
+</li>
+<li>同步非阻塞IO（NIO）<ul>
+<li>同步非阻塞，服务器实现模式为一个请求一个线程，即客户端发送的连接请求都会注册到多路复用器上，多路复用器轮询到连接有I/O请求时才启动一个线程进行处理。用户进程也需要时不时的询问IO操作是否就绪，这就要求用户进程不停的去询问。</li>
+</ul>
+</li>
+<li>异步阻塞IO（NIO）<ul>
+<li>此种方式下是指应用发起一个IO操作以后，不等待内核IO操作的完成，等内核完成IO操作以后会通知应用程序，这其实就是同步和异步最关键的区别，同步必须等待或者主动的去询问IO是否完成，那么为什么说是阻塞的呢？因为此时是通过select系统调用来完成的，而select函数本身的实现方式是阻塞的，而采用select函数有个好处就是它可以同时监听多个文件句柄（如果从UNP的角度看，select属于同步操作。因为select之后，进程还需要读写数据），从而提高系统的并发性！</li>
+</ul>
+</li>
+<li>异步非阻塞IO（AIO）<ul>
+<li>在此种模式下，用户进程只需要发起一个IO操作然后立即返回，等IO操作真正的完成以后，应用程序会得到IO操作完成的通知，此时用户进程只需要对数据进行处理就好了，不需要进行实际的IO读写操作，因为真正的IO读取或者写入操作已经由内核完成了。</li>
+</ul>
+</li>
+</ol>
+<p>BIO    同步阻塞IO</p>
+<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/BIO.png"></p>
+<ol>
+<li><p>当有一个客户端向服务器发起请求时，服务器就调用一个线程去处理这个请求。</p>
+</li>
+<li><p>存在的问题：</p>
+<p> 当有多个客户端同时访问服务器时，每个客户端请求都会占用一个进程，服务器就需要启动多个线程处理这些请求。当一次进入服务器的请求非常多时，对服务器的压力就会非常大。</p>
+</li>
+</ol>
+<blockquote>
+<p>缺点：</p>
+<ol>
+<li>可靠性差，当线程丢失时，请求就会丢失。</li>
+<li>吞吐量低。线程不能建立太多，线程太多服务器容易崩溃。</li>
+<li>适用于连接比较少的场景。</li>
+<li>在 JDK 1.4 之前，BIO 是唯一的IO模型。</li>
+</ol>
+</blockquote>
+<p>NIO    同步非阻塞IO</p>
+<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/NIO.png"></p>
+<p>为了解决服务器一次开启多个线程压力过大的问题。JDK 1.4 中新增了 <strong>Selector</strong>，用于接收多个请求，并决定处理这些请求的优先级。这样就可以实现服务端线程与客户端请求的一对多关系，在一定程度上解决了BIO模式下服务器压力过大的问题。</p>
+<blockquote>
+<p>可靠性比较好</p>
+<p>吞吐量比较高</p>
+<p>适用于连接比较多并且连接比较短的场景（轻操作）</p>
+</blockquote>
+<p>AIO    异步非阻塞IO</p>
+<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/AIO.png"></p>
+<p>AIO 又解决了 NIO 模型服务端需要一直守着线程的这个问题。可靠性最好，吞吐量也是非常高的，适用于连接比较多，并且连接比较长的场景（重操作）。例如：相册服务器。从JDK 7版本开始支持。</p>
+<p>客户端在发送完请求后，可以执行任何操作，不需要一直等待或每隔一段时间来询问服务器请求是否处理完毕。相应的服务器在处理完请求后，会将处理结果保存到一个队列中，并逐一发送通知给请求的客户端，客户端在接收到通知后获取返回消息即可。</p>
+<blockquote>
+<p>可靠性是最好的</p>
+<p>吞吐量也非常高</p>
+<p>适用于连接比较多，并且连接比较长的的操作（重操作）</p>
+</blockquote>
+<p>同步 &amp; 异步：针对请求</p>
+<p>阻塞 &amp; 非阻塞：针对客户端</p>
+<p>在一个网络请求中，客户端会发送一个请求到服务端：</p>
+<ol>
+<li>客户端发送请求后，就一直等待服务端的响应。<ul>
+<li>客户端：阻塞！  请求：同步</li>
+</ul>
+</li>
+<li>客户端在发送请求后，就去干别的事情了。但是还需要时不时的过来检查服务器端是否给出了响应。<ul>
+<li>客户端：非阻塞！  请求：同步</li>
+</ul>
+</li>
+<li>客户端在发送请求后，就歇下了，也不会去干别的事，但是也不会一直监听服务器的响应。服务器在处理完数据后，会发送给客户端一个通知，告诉客户端该接收响应了。<ul>
+<li>客户端：阻塞    请求：异步</li>
+</ul>
+</li>
+</ol>
+<h1 id="3、Java-NIO-的几个核心组件是什么？分别有什么作用-？"><a href="#3、Java-NIO-的几个核心组件是什么？分别有什么作用-？" class="headerlink" title="3、Java NIO 的几个核心组件是什么？分别有什么作用 ？"></a>3、Java NIO 的几个核心组件是什么？分别有什么作用 ？</h1><p>Channel</p>
+<p>Buffer</p>
+<p>Selector</p>
+<h1 id="4、select，poll-和-epoll-有什么区别-？"><a href="#4、select，poll-和-epoll-有什么区别-？" class="headerlink" title="4、select，poll 和 epoll 有什么区别 ？"></a>4、select，poll 和 epoll 有什么区别 ？</h1><blockquote>
+<p>waiting…</p>
+</blockquote>
+<h1 id="5、描述-HTTP-和-HTTPS-的区别"><a href="#5、描述-HTTP-和-HTTPS-的区别" class="headerlink" title="5、描述 HTTP 和 HTTPS 的区别"></a>5、描述 HTTP 和 HTTPS 的区别</h1><p>HTTP：是互联网上应用最为广泛的一种网络通信协议，基于 TCP，可以使浏览器工作更为高效，减少网络传输。</p>
+<p>HTTPS：是 HTTP 的加强版，可以认为是 HTTP + SSL（Secure Socket Layer）。在 HTTP 的基础上增加了一系列的安全机制。一方面保证了数据在网络中传输的安全性，另一方面对访问者增加了验证机制。是目前现行架构下，最为安全的解决方案。</p>
+<p>主要区别：</p>
+<ol>
+<li>HTTP 的连接是简单无状态的，HTTPS 的数据传输是经过证书加密的，安全性更更高。</li>
+<li>HTTP 是免费的，而 HTTPS 需要申请证书，而证书通常是需要收费的。</li>
+<li>它们的传输协议不同，所以它们使用的端口也是不一样的，HTTP 默认使用 80 端口，而 HTTPS 默认使用 443 端口</li>
+</ol>
+<blockquote>
+<p>HTTPS 的缺点：</p>
+</blockquote>
+<ul>
+<li><p>HTTPS 的握手协议比较费时，所以会影响服务的响应速度及吞吐量。</p>
+<p>  （HTTP 协议是基于 TCP 的“三次握手，四次挥手”，而 HTTPS 则是再 HTTP 的基础上，又增加了一系列证书校验的操作，所以耗时更长）</p>
+</li>
+<li><p>HTTPS 也并不是完全安全的。它的证书体系其实并不是完全安全的，并且 HTTPS 在面对 DDOS 这样的攻击时，几乎起不到任何作用。</p>
+</li>
+<li><p>证书需要收费，并且功能越强大的证书费用越高。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="prev" title="Java面经——多线程">
+                  <i class="fa fa-chevron-left"></i> Java面经——多线程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/27/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E6%A6%82%E8%BF%B0/" rel="next" title="设计模式——概述">
+                  设计模式——概述 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
