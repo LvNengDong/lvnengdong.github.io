@@ -3890,10 +3890,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2021-06-10 17:26:39 / Modified: 20:33:43" itemprop="dateCreated datePublished" datetime="2021-06-10T17:26:39+08:00">2021-06-10</time>
+      <time title="Created: 2021-06-10 17:26:39" itemprop="dateCreated datePublished" datetime="2021-06-10T17:26:39+08:00">2021-06-10</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-07-01 11:23:05" itemprop="dateModified" datetime="2021-07-01T11:23:05+08:00">2021-07-01</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -3915,146 +3921,314 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1    概述"></a>1    概述</h1><blockquote>
-<p>  <strong>类加载就是将 <code>.class</code> 文件中保存的类型信息加载到虚拟机中。</strong></p>
+<p>  <strong>什么是类加载机制？</strong></p>
 </blockquote>
-<p>​        在 <code>.class</code> 文件中保存的描述类型的信息，最终都需要被加载到虚拟机之后才能被运行和使用。而虚拟机如何加载这些 <code>.class</code> 文件，<code>.class</code> 文件中的信息进入到虚拟机后会发生什么变化，都是接下来要讲的内容。</p>
-<hr>
-<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><blockquote>
-<p>ClassLoader：类加载器子系统</p>
-<p>Execution Engine：执行引擎</p>
-</blockquote>
-<p>（<code>.class</code> 文件需要在文件开头有特定的文件标识）</p>
-<p>​        ClassLoader 只负责从文件系统或网络中加载 <code>.class</code> 文件到虚拟机中，至于该字节码文件是否可以运行，则由 Execution Engine 决定。加载到 JVM 的类信息存放在方法区。除了类本身的信息外，方法区中还会存放运行时常量池信息，可能还包括字符串字面量和数字常量（这部分常量信息是 Class 文件中常量池部分的内存映射）。</p>
+<p>在 <code>.class</code> 文件中保存的描述类型的信息，最终都需要被加载到虚拟机之后才能被运行和使用。而</p>
+<ol>
+<li> <strong>虚拟机如何将 <code>.class</code> 文件加载到内存中？</strong></li>
+<li> <strong><code>.class</code> 文件中的信息进入到虚拟机后会发生什么变化？</strong></li>
+</ol>
+<p>就是类加载机制关注的内容。简而言之，<strong>类加载机制就是将 <code>.class</code> 文件中的信息按照虚拟机的制定规范加载到内存中保存</strong>。</p>
+<h2 id="1-1-类的主动使用和被动使用"><a href="#1-1-类的主动使用和被动使用" class="headerlink" title="1.1    类的主动使用和被动使用"></a>1.1    类的主动使用和被动使用</h2><p>JVM 对 <code>.class</code> 文件采用的是<strong>懒加载</strong>的方式，也就是说只有需要使用某个类的时候才会将该类对应的 <code>.class</code> 文件加载到内存中生成 Class 对象。所以 Java 程序对类的使用方式又可分为：主动使用和被动使用。<strong>主动使用会导致类的初始化，而被动使用则不会导致类的初始化</strong>。</p>
+<p><strong>主动使用</strong>，又分7种情况：</p>
 <blockquote>
-<p>运行时常量池对应 Class 中的常量池，通过对字节码文件的反编译我们发现字节码文件中存在常量池。常量池在程序运行时首先会被加载到内存中，这时候就变成了运行时常量池。</p>
+<ol>
+<li>创建类的实例</li>
+<li>读取或设置某个类或接口中的静态字段时（常量除外，被 final static 修饰的字段也视为常量）。</li>
+<li>调用类的静态方法。</li>
+<li>使用 java.lang.reflect 包的方法被类型进行反射调用的时候，如果类型没有进行过初始化，则需要先触发其初始化（比如：Class.forName(“com.example.Test”)）</li>
+<li>当初始化类时，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</li>
+<li>当虚拟机启动时，用户需要指定一个要执行的主类（包含 <code>main()</code> 方法的那个类），虚拟机会先初始化这个类。</li>
+<li>JDK7 开始提供的动态语言支持：</li>
+</ol>
 </blockquote>
-<h1 id="类加载器-ClassLoader-对象"><a href="#类加载器-ClassLoader-对象" class="headerlink" title="类加载器 ClassLoader 对象"></a>类加载器 ClassLoader 对象</h1><ol>
+<p>类的主动使用情况下，都会先判断类是否被加载，如果没有被加载，则会触发其进行加载。</p>
+<ul>
+<li>除了以上7种情况，其它使用 Java 类的方式都被看做是 <strong>类的被动使用</strong>，都<strong>不会导致类的初始化</strong>。</li>
+</ul>
+<hr>
+<h2 id="1-2-类加载器"><a href="#1-2-类加载器" class="headerlink" title="1.2    类加载器"></a>1.2    类加载器</h2><p>类加载器（ClassLoader）负责从文件系统或网络中加载二进制字节流（如<code>.class</code>二进制字节码文件）到方法区中，至于该二进制字节流是否可以运行，则由执行引擎（Execution Engine）决定。</p>
+<p>加载到 JVM 内存中的类信息存放在方法区。除了类本身的信息外，方法区中还会存放运行时常量池信息，可能还包括字符串字面量和数字常量（这部分常量信息是 Class 文件中常量池部分的内存映射）。</p>
+<blockquote>
+<p>运行时常量池对应 <code>.class</code> 文件中的常量池，通过对字节码文件的反编译我们发现字节码文件中存在常量池。常量池在程序运行时首先会被加载到内存中，这时候就变成了运行时常量池。</p>
+</blockquote>
+<p>类在被加载到内存中时依赖于运行时常量池（类中定义了的常量、存在的符号引用都保存在常量值中，在加载类到内存中时就保存在运行时常量池中了）。</p>
+<h3 id="1-2-1-类加载器-ClassLoader-对象"><a href="#1-2-1-类加载器-ClassLoader-对象" class="headerlink" title="1.2.1    类加载器 ClassLoader 对象"></a>1.2.1    类加载器 ClassLoader 对象</h3><ol>
 <li><code>.class</code> 字节码文件一般保存在本地硬盘上，可以理解为实例对象的模板，这个模板首先要加载到虚拟机中，然后在创建实例对象的时候才能根据这个模板创建出 n 个实例对象。</li>
-<li>字节码文件被加载到虚拟机中时，会在方法区中划分一块内存保存这部分数据，我们称之为<strong>DNA 元数据模板</strong>。</li>
+<li><code>.class</code> 字节码文件被加载到虚拟机中时，会在方法区中划分一块内存保存这部分类数据，我们称之为<strong>DNA 元数据模板</strong>。</li>
 <li>从 <code>.class字节码文件 --&gt; 元数据模板</code> 的过程中，需要一个运输工具承担一个快递员的角色完成这一过程，这个工具就是<strong>类加载器 （Class Loader）</strong>。</li>
 </ol>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/ClassLoader.png" alt="ClassLoader"></p>
-<h1 id="2-类加载的过程"><a href="#2-类加载的过程" class="headerlink" title="2    类加载的过程"></a>2    类加载的过程</h1><p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B.png" alt="类的加载过程"></p>
+<p>–</p>
+<h1 id="2-类的生命周期"><a href="#2-类的生命周期" class="headerlink" title="2    类的生命周期"></a>2    类的生命周期</h1><h2 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1    概述"></a>2.1    概述</h2><p>一个类型从被加载到虚拟机内存中开始，到卸载出内存为止。整个生命周期将会经历七个阶段。这七个阶段发生的顺序如下图所示。</p>
+<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="类的生命周期"></p>
+<p>这七个阶段按照生命周期可分为：<strong>类加载阶段 –&gt; 类使用阶段 –&gt; 类卸载阶段</strong>。类加载阶段中的验证、准备、解析三个阶段合称为连接（Linking）。</p>
+<p>其中，加载、验证、准备、初始化和卸载这五个阶段的顺序是可以确定的，类型的加载过程必须按部就班地按照这种顺序开始。而解析阶段则不一定（解析阶段主要负责将符号引用转换为直接引用），它在某些情况下可以在初始化阶段之后再开始，这是为了支持 Java 语言的运行时绑定特性。</p>
+<p>// TODO：图片移动到初始化阶段</p>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%AC%AC02%E7%AB%A0_%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B-1621267020284.jpg" alt="第02章_类的加载过程"></p>
-<h2 id="阶段1：加载"><a href="#阶段1：加载" class="headerlink" title="阶段1：加载"></a>阶段1：加载</h2><ol>
+<h2 id="2-2-类加载阶段"><a href="#2-2-类加载阶段" class="headerlink" title="2.2    类加载阶段"></a>2.2    类加载阶段</h2><h3 id="阶段1：Loading"><a href="#阶段1：Loading" class="headerlink" title="阶段1：Loading"></a>阶段1：Loading</h3><p>“加载（Loading）”是整个“类加载（Class_Loading）”过程中的一个阶段，这两个概念比较容易混淆。</p>
+<ol>
 <li>通过类的全限定类名获取定义此类的二进制字节流。<ul>
 <li>  说明：字节码文件以二进制格式保存，通过IO方式将<code>.class</code>字节码文件中的内容传输到JVM内存中以字节流形式保存。</li>
 </ul>
 </li>
 <li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。<ul>
-<li>  说明：加载阶段结束之后，Java虚拟机外部的二进制字节码文件就会按照虚拟机所规定的格式存储在方法区中了。</li>
+<li>  说明：加载阶段结束之后，Java虚拟机外部的二进制字节码文件对应的内容就会按照虚拟机规定的格式存储在方法区中了。</li>
 </ul>
 </li>
-<li><strong>在内存中生成一个代表这个类的 java.lang.Class 对象</strong>，作为方法区中这个类的各种数据的访问入口。<ul>
+<li><strong>在方法区生成一个代表这个类的 java.lang.Class 对象</strong>，作为方法区中这个类的各种数据的访问入口。<ul>
 <li>  说明：类型数据妥善安置在方法区之后，就会在Java堆内存中实例化一个<code>java.lang.Class</code>类的对象，这个对象将作为程序访问方法区中的类型数据的外部接口。</li>
 </ul>
 </li>
 </ol>
-<h3 id="补充：加载-class-文件的方式"><a href="#补充：加载-class-文件的方式" class="headerlink" title="补充：加载 .class 文件的方式"></a>补充：加载 .class 文件的方式</h3><ul>
+<h4 id="补充：加载-class-文件的方式"><a href="#补充：加载-class-文件的方式" class="headerlink" title="补充：加载 .class 文件的方式"></a>补充：加载 .class 文件的方式</h4><p>《Java虚拟机规范》对这三点要求并不是特别具体。例如“通过一个全限定类名来获取定义此类的二进制字节流”这条规则，并没有指明二进制字节流必须要从某个 <code>.class</code> 文件中获取。基于此发展出了各种各样的获取二进制字节流的方式，如：</p>
+<ul>
 <li>从本地系统中直接加载</li>
-<li>通过网络获取，典型场景：Web Applet</li>
-<li>从 zip 压缩包中读取，成为日后 jar、war 格式的基础</li>
+<li>通过网络获取。典型场景：Web Applet</li>
+<li>从 zip 压缩包中读取。这很常见，是常见的 jar、war 格式的基础</li>
 <li>运行时计算生成，使用最多的是：动态代理技术</li>
-<li>由其他文件生成，典型场景：JSP 应用</li>
-<li>从专有数据库中提取 .class 文件，比较少见</li>
-<li>从加密文件中获取，典型的防 Class 文件被反编译的保护措施。</li>
+<li>由其他文件生成，典型的场景就是 JSP 应用，由 JSP 文件生成对应的 Class 文件。</li>
+<li>从专有数据库中提取。</li>
+<li>从加密文件中获取。典型的防止 Class 文件被反编译的保护措施。</li>
 </ul>
 <hr>
-<h2 id="阶段2：链接"><a href="#阶段2：链接" class="headerlink" title="阶段2：链接"></a>阶段2：链接</h2><h3 id="2-1-验证（verify）"><a href="#2-1-验证（verify）" class="headerlink" title="2.1    验证（verify）"></a>2.1    验证（verify）</h3><p>​        <strong>验证</strong>是链接阶段的第一步，这一阶段的目的是确保 Class 文件的字节流中包含的信息符合当前虚拟机的全部约束要求，确保这些信息被当做代码运行后不会危害虚拟机自身的安全。    验证阶段大致上会完成以下4个阶段的检验动作：1、文件格式验证    2、c 3、字节码验证    4、符号引用验证</p>
-<blockquote>
+<h3 id="阶段2：Verify"><a href="#阶段2：Verify" class="headerlink" title="阶段2：Verify"></a>阶段2：Verify</h3><p><strong>验证</strong>是连接阶段的第一步，这一阶段的目的是确保从<code>.class</code> 文件加载到方法区中的二进制字节流数据信息符合当前虚拟机的全部约束要求，确保这些信息被当做代码运行后不会危害虚拟机自身的安全。</p>
+<p>Java 语言是相对安全的编程语言，当代码发生语法层面的错误时（前端）编译器会拒绝编译，并抛出异常。但是 <code>.class</code> 文件并不是只能由 Java 语言编译而来，它可以使用包括靠键盘 0  和 1 直接在二进制编辑器中敲出 Class 文件在内的任何途径产生。Java 虚拟机如果不检查输出的字节流，对其完全信任的话，很可能会因为载入了有错误或者有恶意企图的字节码流而导致整个系统受攻击甚至崩溃，所以验证字节码是 Java 虚拟机保护自身的一项必要措施。</p>
+<p>验证阶段大致上会完成以下4个阶段的检验动作：</p>
 <ol>
-<li> <strong>文件格式验证</strong></li>
+<li><p><strong>文件格式验证</strong>：验证二进制字节流是否符合 Class 文件格式规范，并且能被当前版本的虚拟机处理。主要包括：</p>
+<ul>
+<li>  是否以魔数 <code>0xCAFEBABE</code> 开头</li>
+<li>  主、次版本号是否在当前 Java 虚拟机接受的范围之内</li>
+<li>  常量池中的常量是否有不被支持的常量类型（检查常量 tag 标志）</li>
+<li>  指向常量的各种索引值中是否有指向不存在的常量或者不符合类型的常量</li>
+<li>  ……</li>
+</ul>
+</li>
+<li><p><strong>元数据验证</strong>：对字节码描述的信息进行语义分析，以保证其信息符合《Java虚拟机规范》的要求。包括：</p>
+<ul>
+<li>  这个类是否有父类</li>
+<li>  这个类的父类是否继承了不允许被继承的类（被 final 修饰的类）</li>
+<li>  如果这个类不是抽象类，是否实现了其父类或接口之中要求实现的所有方法</li>
+<li>  类中的字段、方法是否与父类产生矛盾（例如覆盖了父类中的 final 字段，或者出现了不符合规则的方法重载）</li>
+<li>  ……</li>
+</ul>
+</li>
+<li><p> <strong>字节码验证</strong>：通过对数据流分析和控制流分析，确定语义是合法的。</p>
+</li>
+<li><p><strong>符号引用验证</strong>：发生在虚拟机将符号引用转化为直接引用的时候。这个转化动作将在 Linking 的第三阶段——解析阶段中发生。符号引用验证可以看做是对类自身以外的各类信息进行匹配性校验。即检验该类是否缺少或者被禁止访问它依赖的某些外部类、方法、字段等资源。主要校验的内容有：</p>
+<ul>
+<li><p>  符号引用中通过字面量描述的全限定类名是否能找到对应的类。</p>
+</li>
+<li><p>找到对应的类后，在指定类中是否存在符合方法的字段描述及简单名称所描述的方法和字段。</p>
+<p>  就是 A 类依赖了 B 类，并调用了 B 类中的 test() 方法，首先要检查通过符号引用转化成的直接引用能不能找到 B，找到 B 之后还要检查 B 中有没有一个叫做 test() 的方法。</p>
+</li>
+<li><p>  符号引用中的类、字段、方法的可访问性，是否可被当前类访问。</p>
+</li>
+<li><p>  ……</p>
+</li>
+</ul>
+</li>
 </ol>
-</blockquote>
-<p>​        </p>
+<p>如果无法通过符号引用的验证，Java 虚拟机将会抛出一个 <strong>java.lang.IncompatibleClassChangeError</strong> 的子类异常，典型的如：<strong>java.lang.IllegalAccessError</strong>、<strong>java.lang.NoSuchFieldError</strong>、<strong>java.lang.NoSuchMethodError</strong> 等。</p>
+<p>验证阶段对于 Java 虚拟机来说，是一个非常重要但又非必须的阶段。如果运行程序的全部代码都已经被反复验证和使用过，在生产阶段就可以考虑使用 <strong>-Xverify:none</strong> 参数来关闭大部分的验证措施，以缩短类加载的时间。  </p>
+<hr>
+<h3 id="阶段3：Prepare"><a href="#阶段3：Prepare" class="headerlink" title="阶段3：Prepare"></a>阶段3：Prepare</h3><ul>
+<li>Prepare 阶段的主要工作就是：为类变量（静态变量）分配内存并且设置该变量的默认初始零值[如果有类变量的话]，类变量会分配在方法区中。</li>
+<li><strong>Prepare 阶段不会为实例变量分配内存和初始化变量值</strong>，实例变量将会在对象实例化时随着对象一起分配在 Java 堆中。</li>
+<li>如果类变量使用 final 修饰，即 <strong>final static</strong> 修饰的变量，在 Prepare 阶段直接就会显式初始化。</li>
+</ul>
 <blockquote>
-<ol start="2">
-<li> <strong>元数据验证</strong></li>
+<p>  <strong>例子</strong></p>
+</blockquote>
+<p>假设一个类变量的定义为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> value = <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+
+<p>那么 value 的值在 Prepare 阶段过后的初始值就是 0（默认零值），而把 value 赋值为 123 的动作要到类的初始化阶段（Initialization）才会被执行。</p>
+<p>在某些“特殊情况”下，即如果类字段的字段属性表中存在 ConstantValue 属性（即类字段是一个常量），那么在 Prepare 阶段变量值就会被初始化为 ConstantValue 属性所指定的初始值。假设上面的变量 value 的定义修改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> value = <span class="number">123</span>;	<span class="comment">// 被 final static 修饰的变量就相当于一个常量 ConstantValue</span></span><br></pre></td></tr></table></figure>
+
+<p>（前端）编译时 javac 将会为 value 生成 ConstantValue 属性，在 Prepare 阶段虚拟机就会将 value 赋值为 123.</p>
+<blockquote>
+<p>  <strong>方法区只是一个逻辑上的区域</strong></p>
+</blockquote>
+<p>从概念上讲，这些类变量所使用的内存都应该在方法区中进行分配。但是必须要注意方法区只是一个逻辑概念，在 JDK8 之前，HotSpot 用永久代来实现方法区；从 JDK8 开始，类变量则是会随着 Class 对象一起存放在 Java 堆中，这时候“类变量在方法区”就完全是一种对逻辑概念的表述了。因为 JDK8 之后，方法区是用元空间实现的，但是类变量也没有保存在元空间中。</p>
+<hr>
+<h3 id="阶段4：Resolve"><a href="#阶段4：Resolve" class="headerlink" title="阶段4：Resolve"></a>阶段4：Resolve</h3><p><strong>解析阶段是虚拟机将常量池内的符号引用转换为直接引用的过程</strong>。</p>
+<blockquote>
+<p>  <strong>JVM 中的符号引用和直接引用</strong>：</p>
+</blockquote>
+<ol>
+<li><p><strong>符号引用（Symbolic_Reference）</strong>：</p>
+<ul>
+<li><p>  符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到引用目标即可。</p>
+</li>
+<li><p>  符号引用与虚拟机实现的内存布局无关。各种虚拟机实现的内存布局可以各不相同，但是它们能接受的符号引用都必须一致。因为符号引用的字面量形式明确定义在《Java虚拟机规范》的 Class 文件格式中。</p>
+</li>
+<li><p>引用目标不一定是已经加载到虚拟机内存中的内容。</p>
+<p>  <em>符号引用的目标可能已被来加载器加载到内存中了，也可能没有。因为符号引用只是一种声明，只有在转换成直接引用时才会去真正的把要引用的目标加载到内存中</em></p>
+</li>
+<li><p>  符号引用在 <code>.class</code> 文件中以 CONSTANT_Class_info、CONSTANT_Fieldref_info、CONSTANT_Methodref_info 等类型的字面量出现。</p>
+</li>
+<li><p>  符号引用是一串字面量，所以被保存在常量池中。</p>
+</li>
+</ul>
+<p> ​        <em>在 Java 中，一个类会被编译成一个 <code>.class</code> 文件；在编译时，还不能确定类中引用到的对象的实际地址，因此只能用符号引用来代替。比如 com.example.People 引用了 com.example.Sleep 这个类，在编译时 People 类是不知道 Sleep 这个类或者这个类对应的实例在内存中的实际地址的，因此只能用符号引用 com.example.Sleep（假设是这个，当然实际上是由类似于 CONSTANT_Class_info 的常量来表示的）来表示 Sleep 的地 址。</em></p>
+</li>
+<li><p><strong>直接引用（Direct Reference）</strong>：</p>
+<ul>
+<li>  直接引用可以是：1、直接指向目标的指针  2、相对偏移量  3、一个能间接定位到目标的句柄。</li>
+<li>  直接引用是和虚拟机实现的内存布局相关的，同一个符号引用在不同的虚拟机实现上翻译出来的直接引用一般不会相同。</li>
+<li>  <strong>如果有了直接引用，那引用的目标必然已经被加载到虚拟机内存中了</strong>。</li>
+</ul>
+</li>
+<li><p><strong>小结</strong>：</p>
+<p> ​        <strong>符号引用是一种声明，而直接引用则是具体的实现</strong>。假设有两个对象 A 和 B，A 依赖了 B（在 A 中使用到了 B）。在符号引用的角度看来是：A 对虚拟机说：我要使用 B 了，但是 B 在哪儿它自己也找不到，它仅仅只是知道 B 的存在。在直接引用的角度看来就是：它找到了 B ，并将 B 的地址给了 A ，这时候 A 才可以真正的使用 B 。</p>
+</li>
 </ol>
-</blockquote>
-<h3 id="2-2-准备（Prepare）"><a href="#2-2-准备（Prepare）" class="headerlink" title="2.2    准备（Prepare）"></a>2.2    准备（Prepare）</h3><ul>
-<li>为类变量（静态变量）分配内存并且设置该变量的默认初始值。</li>
-<li><strong>这里不包含用 <code>final</code> 修饰的 <code>static</code>，因为 <code>final</code> 在编译的时候就会分配了，准备阶段会显式初始化。</strong></li>
-<li><strong>这里不会为实例变量分配初始化</strong>，类变量会分配在方法区中，而实例变量则是随着对象一起分配到 Java 堆中。</li>
-</ul>
-<h3 id="2-3-解析（Resolve）"><a href="#2-3-解析（Resolve）" class="headerlink" title="2.3    解析（Resolve）"></a>2.3    解析（Resolve）</h3><ul>
-<li>将常量池内的符号引用转换为直接引用的过程。</li>
-<li>事实上，解析操作往往会伴随着 JVM 在执行完初始化之后再执行。</li>
-<li>符号引用就是一组符号来描述所引用的目标。</li>
-<li>解析动作主要针对类或接口、字段、类方法、接口方法、方法类型等。对应常量池中的 CONSTANT_Class_info、CONSTANT_Fieldref_info、CONSTANT_Methodref_info 等。</li>
-<li>……待定</li>
-</ul>
-<h2 id="阶段3：初始化"><a href="#阶段3：初始化" class="headerlink" title="阶段3：初始化"></a>阶段3：初始化</h2><ul>
-<li><p><strong>初始化就是执行类构造器方法<code>&lt;clinit&gt;()</code> 的过程。</strong></p>
+<hr>
+<p>《Java虚拟机规范》之中并未规定解析阶段发生的具体时间，所以虚拟机实现可以根据需要来自行判断。到底是在被类加载器加载时就对常量池中的符号引用进行解析，还是等到一个符号引用将要被使用前才去解析它。</p>
+<p>解析动作主要针对类或接口、字段、类方法、接口方法、方法类型等。对应常量池中的 CONSTANT_Class_info、CONSTANT_Fieldref_info、CONSTANT_Methodref_info 等。</p>
+<hr>
+<h3 id="阶段5：Initialization"><a href="#阶段5：Initialization" class="headerlink" title="阶段5：Initialization"></a>阶段5：Initialization</h3><p>在 Prepare 阶段时，类变量已经被系统赋过一次零值了；而<strong>在 Initialization 阶段，则会根据开发人员通过程序编码制定的主观计划去初始化类变量和其它资源</strong>。</p>
+<p>从另一种角度来看，<strong>Initialization 阶段就是执行类构造器方法<code>&lt;clinit&gt;()</code> 的过程。</strong>[Class Init ]</p>
 <blockquote>
-<p><strong>类构造器方法</strong> 不同于 <strong>类的构造器</strong>，这个方法名已经被定义好了，就叫做 <code>clinit()</code> ，可以理解为 Class Init 。</p>
+<p>  <strong><code>&lt;clinit&gt;()</code> 方法与 <code>&lt;init&gt;()</code> 方法的区别</strong>：</p>
 </blockquote>
+<ul>
+<li><p>  <code>&lt;clinit&gt;()</code> 方法是 javac 编译器通过自动收集类中<strong>所有类变量的赋值动作</strong>和<strong>静态代码块中的语句</strong>合并产生的。（前端）编译器收集的顺序是由语句在源文件中出现的顺序决定的。</p>
 </li>
-<li><p>此方法不需要定义，是 javac 编译器自动收集类中的所有类变量的赋值动作和静态代码块中的语句合并而来。</p>
+<li><p>  <strong><code>&lt;clinit&gt;()</code> 方法与类的构造器方法不同。</strong>在 JVM 视角中，类的构造方法是 <code>&lt;init&gt;()</code> 方法。</p>
 </li>
-<li><p>类构造器方法中的指令按语句在源文件中出现的顺序执行。</p>
+<li><p>与 <code>&lt;init&gt;()</code> 方法相比，<code>&lt;clinit&gt;()</code> 方法不需要显式地调用父类的<code>&lt;clinit&gt;()</code> 方法，Java 虚拟机会保证在子类的 <code>&lt;clinit&gt;()</code> 方法执行之前，父类的<code>&lt;clinit&gt;()</code> 方法已经执行完毕。因此在 Java 虚拟机中第一个被执行的 <code>&lt;clinit&gt;()</code> 方法的类型肯定是 java.lang.Object。</p>
+<p>  ​    <em><code>&lt;init&gt;()</code> 方法都是需要显式地调用父类的 <code>&lt;clinit&gt;()</code> 方法的，我们通过构造方法中的 <code>super()</code> 方法区显式地调用父类的 <code>&lt;init&gt;()</code> 方法。当然 <code>spuer()</code> 方法在我们编写代码时可以省略不写，因为它是默认存在的，所以在被 javac 编译后，这个 <code>super()</code> 方法是一定存在的。</em></p>
 </li>
-<li><p><strong><code>&lt;clinit&gt;()</code> 不同于类的构造器</strong>。</p>
-<blockquote>
-<p>构造器在虚拟机中就是 <code>&lt;init&gt;()</code> 方法。</p>
-</blockquote>
+<li><p>  由于父类的<code>&lt;clinit&gt;()</code> 方法先执行，这也就意味着父类中定义的静态语句要优先于子类中静态语句的执行。</p>
 </li>
-<li><p>若该类具有父类，JVM 会保证子类的 <code>&lt;clinit&gt;()</code> 执行前，父类的 <code>&lt;clinit&gt;()</code> 已经执行完毕。</p>
-</li>
-<li><p>虚拟机必须保证一个类的 <code>&lt;clinit&gt;()</code> 方法在多线程下被同步加锁。 </p>
-<blockquote>
-<p>原因：静态变量保存在方法区中，而方法区中的数据是多线程共享的，所以需要保证一个类的方法在多线程下要同步加锁。</p>
-<p><strong>clinit()</strong> 方法本质上就是初始化静态变量，但是静态变量在理论上只能被初始化一次。在不加锁的情况下，如果有多个线程同时执行 <strong>clinit()</strong> 方法，就会创建出多个相同的静态变量，但是如果加了同步锁，那么无论有多少个线程，每个静态变量都只会被初始化一次。</p>
-</blockquote>
+<li><p>  <code>&lt;clinit&gt;()</code> 方法对于类或接口来说并不是必须的，如果一个类中没有静态语句块，也没有对变量的赋值操作，那么（前端）编译期可以不为这个类生成<code>&lt;clinit&gt;()</code> 方法。</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">静态存储结构（.class文件中）</span><br><span class="line">运行时数据结构（内存中的方法区中）</span><br><span class="line">符号引用 vs. 直接引用</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>  <strong>Java 虚拟机必须保证一个类的<code>&lt;clinit&gt;()</code> 方法在多线程环境中被正确地加锁同步。</strong> </p>
+</blockquote>
+<ul>
+<li>  原因：<strong>clinit()</strong> 方法本质上就是初始化静态变量，但是静态变量在理论上只能被初始化一次。在不加锁的情况下，如果有多个线程同时执行 <strong>clinit()</strong> 方法，就会创建出多个相同的静态变量，但是如果加了同步锁，那么无论有多少个线程，每个静态变量都只会被初始化一次。</li>
+<li>  如果多个线程同时去初始化一个类，那么只会有其中一个线程去执行这个类的<code>&lt;clinit&gt;()</code> 方法，其它线程都需要阻塞等待，直到活动线程执行完毕<code>&lt;clinit&gt;()</code> 方法。如果在一个类的<code>&lt;clinit&gt;()</code> 方法有耗时很长的操作，那么就有可能造成多个线程阻塞。</li>
+</ul>
+<blockquote>
+<p>  静态语句代码块中只能访问到定义在静态语句代码块之前的变量。定义在它之后的变量，在前面的静态语句块中可以赋值，但是不能访问。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(num);  <span class="comment">// 静态代码块中可以访问到定义在静态代码块之前的变量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
-<h1 id="类的加载器分类"><a href="#类的加载器分类" class="headerlink" title="类的加载器分类"></a>类的加载器分类</h1><ul>
-<li>JVM 支持两种类型的加载器，分别为 <strong>引导类加载器（BootStrap ClassLoader）</strong> 和 <strong>自定义类加载器（User-Defined ClassLoader）</strong>。</li>
-<li>自定义类加载器并不是开发人员自定义的类加载器，而是 <strong>将所有派生于抽象类 ClassLoader 的类加载器都划分为自定义类加载器。</strong></li>
-<li>无论类加载器的类型如何划分，在程序中我们最常见的类加载器始终只有 3 个，如下图： </li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        num = <span class="number">20</span>;  <span class="comment">// 给定义在静态代码块之后的变量赋值可以正常编译通过</span></span><br><span class="line">        System.out.println(num);    <span class="comment">// 但是引用定义在静态代码块之后的变量编译器会直接提示：“非法向前引用”</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*   num 在 Prepare 阶段就已经分配好内存空间并初始化为零值了，所以在 Initialization 阶段可以在任意位置给其显式地赋值，</span></span><br><span class="line"><span class="comment">* 因为 num 变量一定是存在的，只不过 num 的最终值由最后一次赋值操作决定。</span></span><br><span class="line"><span class="comment">*   而访问语句则应该放到 num 确定最终值之后再进行，如果直接将 num 赋值过程中的某个中间结果暴露给外部访问的话，</span></span><br><span class="line"><span class="comment">* 那得到的结果一定是错误的。</span></span><br><span class="line"><span class="comment">* */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701093804902.png" alt="image-20210701093804902"></p>
+<hr>
+<h1 id="3-类加载器"><a href="#3-类加载器" class="headerlink" title="3    类加载器"></a>3    类加载器</h1><p>类加载器用于实现类的加载动作，将二进制文件中的类数据加载到内存中生成 Class 对象。<strong>不同的类需要使用不同的类加载器来加载</strong>。</p>
+<blockquote>
+<p>  <strong>JVM 中判断两个 Class 对象是否为同一个类的两个必要条件？</strong></p>
+</blockquote>
+<ol>
+<li> 类的全限定类名必须一致，包括包名</li>
+<li> 加载这个类的 ClassLoader（指ClassLoader 的实例对象）必须相同。</li>
+</ol>
+<p>换句话说，在 JVM 中，即使这两个类对象（Class 对象）来源于同一个 Class 文件，被同一个虚拟机所加载，但只要加载它们的 ClassLoader 实例对象不同，那么这两个类对象也是不相同的。</p>
+<blockquote>
+<p>  <strong>如果一个类是由用户类加载器加载的，那么 JVM 会将这个类加载器的引用作为 Class 信息的一部分保存在方法区中。</strong></p>
+</blockquote>
+<ul>
+<li>  AppClassLoader 负责将 .class 文件中的类信息加载到方法区中形成一个 Class 对象，除了 .class 文件中的类基本信息， Class 对象中还保存了加载这个类的类加载器的引用信息。</li>
+<li>  当解析一个类型到另一个类型的引用的时候，JVM 需要保证这两个类型的类加载器是相同的。</li>
 </ul>
+<h2 id="3-1-类加载器分类"><a href="#3-1-类加载器分类" class="headerlink" title="3.1    类加载器分类"></a>3.1    类加载器分类</h2><p>站在 Java 虚拟机的角度来看，只存在两种两种不同的类加载器：1、<strong>启动类加载器（BootStrap ClassLoader）</strong>   2、<strong>自定义类加载器（User-Defined ClassLoader）</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="center">BootStrap ClassLoader</th>
+<th align="center">其它</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">使用 C++ 语言实现（HotSpot）</td>
+<td align="center">使用 Java 语言实现</td>
+</tr>
+<tr>
+<td align="center">内嵌在虚拟机中</td>
+<td align="center">独立存在于虚拟机外部</td>
+</tr>
+<tr>
+<td align="center">无父类</td>
+<td align="center">全部继承自抽象类 java.lang.ClassLoader</td>
+</tr>
+</tbody></table>
+<p>站在开发人员的角度来看，类加载器的分类要更细致一些，如下图，可分为“<strong>三层类加载器</strong>”。</p>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB-1621267020284.png" alt="类加载器分类"></p>
-<h2 id="虚拟机自带的类加载器"><a href="#虚拟机自带的类加载器" class="headerlink" title="虚拟机自带的类加载器"></a>虚拟机自带的类加载器</h2><h3 id="启动类加载器（引导类加载器，BootStrap-ClassLoader）"><a href="#启动类加载器（引导类加载器，BootStrap-ClassLoader）" class="headerlink" title="启动类加载器（引导类加载器，BootStrap ClassLoader）"></a>启动类加载器（引导类加载器，BootStrap ClassLoader）</h3><ul>
-<li>这个类加载器是使用 C/C++ 语言实现的，嵌套在 JVM 内部。</li>
-<li>它用来加载 Java 的核心类库（<code>JAVA_HOME/jre/lib/rt.jar、resource.jar 或 sun.boot.class.path</code> 路径下的内容，用于提供运行 JVM 自身需要的类）</li>
-<li>并不继承自 <strong>java.lang.ClassLoader</strong> ，没有父加载器。</li>
-<li>加载扩展类和应用程序类加载器，并制定为它们的父类加载器。</li>
+<h3 id="3-1-1-BootStrap-ClassLoader"><a href="#3-1-1-BootStrap-ClassLoader" class="headerlink" title="3.1.1    BootStrap ClassLoader"></a>3.1.1    BootStrap ClassLoader</h3><blockquote>
+<p>  启动类加载器；引导类加载器；BootStrap ClassLoader</p>
+</blockquote>
+<ul>
+<li>引导类加载器是用 C++ 语言实现的，内嵌在 JVM 内部。</li>
+<li>它负责加载 Java 的核心类库（即存放在 <code>&lt;JAVA_HOME&gt;/jre/lib/rt.jar、resource.jar 或 sun.boot.class.path</code> 路径下的内容）到内存中，用于提供运行 JVM 自身需要的类。</li>
+<li>并不继承自 <strong>java.lang.ClassLoader</strong> ，没有父类加载器。</li>
+<li>可以加载 Extension ClassLoader 和 Application ClassLoader，并指定为它们的父类加载器。</li>
 <li>出于安全考虑，BootStrap ClassLoader 只加载包名为 java、javax、sun 等开头的类。</li>
+<li>BootStrap ClassLoader 无法被 Java 程序直接引用，用户在编写自定义类加载器时，如果需要把加载请求委派给引导类加载器去处理，那么直接使用 null 代替即可。下图所示就是 java.lang.Class#getClassLoader() 方法的代码，其中的注释和代码实现都说明了以 null 值来代表引导类加载器的约定规则。</li>
 </ul>
-<h3 id="扩展类加载器（Extension-ClassLoader）"><a href="#扩展类加载器（Extension-ClassLoader）" class="headerlink" title="扩展类加载器（Extension ClassLoader）"></a>扩展类加载器（Extension ClassLoader）</h3><ul>
-<li>Java 语言编写，由 <code>sun.misc.Launcher$ExtClassLoader</code> 实现。</li>
-<li>派生于 ClassLoader</li>
-<li>父加载器为启动类加载器</li>
-<li>从 <code>java.ext.dirs</code> 系统属性所指定的目录中加载类库，或从 JDK 的安装目录的 <code>jre/lib/ext</code> 子目录（扩展目录）下加载类库。<em>如果用户创建的 JAR 放在此目录下，也会自动由扩展类加载器加载。</em></li>
+<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701102620816.png" alt="image-20210701102620816"></p>
+<hr>
+<h3 id="3-1-2-Extension-ClassLoader"><a href="#3-1-2-Extension-ClassLoader" class="headerlink" title="3.1.2    Extension ClassLoader"></a>3.1.2    Extension ClassLoader</h3><blockquote>
+<p>  扩展类加载器；Extension ClassLoader</p>
+</blockquote>
+<ul>
+<li><p>扩展类加载器是用 Java 语言编写的，由 <code>sun.misc.Launcher$ExtClassLoader</code> 实现。</p>
+</li>
+<li><p>派生于 ClassLoader</p>
+</li>
+<li><p>父类加载器为 BootStrap ClassLoader</p>
+</li>
+<li><p>负责加载<code>&lt;JAVA_HOME&gt;\lib\ext</code>目录下，或者被 <code>java.ext.dirs</code> 系统变量所指定的路径中的类库。</p>
+<p>  <em>JDK 的开发团队允许用户将具有通用性的类库放在 ext 目录下以扩展 JavaSE 的功能。即如果用户创建的 JAR 放在此目录下，也会自动由扩展类加载器加载。</em></p>
+</li>
 </ul>
 <p>​    </p>
-<h3 id="应用程序类加载器（系统类加载器，AppClassLoader）"><a href="#应用程序类加载器（系统类加载器，AppClassLoader）" class="headerlink" title="应用程序类加载器（系统类加载器，AppClassLoader）"></a>应用程序类加载器（系统类加载器，AppClassLoader）</h3><ul>
-<li>Java 语言编写，由 <code>sun.misc.Launcher$AppClassLoader</code> 实现。</li>
-<li>派生于 ClassLoader</li>
-<li>父类加载器为扩展类加载器</li>
-<li>它负责加载环境变量 classpath 或系统属性 <code>java.class.path</code> 指定路径下的类库。</li>
-<li><strong>该类是程序中默认的类加载器</strong>。一般来说，Java 应用的类都是由它来完成加载。</li>
-<li>通过 <code>ClassLoader#getSystemClassLoader()</code> 方法可以获取到该类加载器。</li>
+<h3 id="3-1-2-Application-ClassLoader"><a href="#3-1-2-Application-ClassLoader" class="headerlink" title="3.1.2    Application ClassLoader"></a>3.1.2    Application ClassLoader</h3><blockquote>
+<p>  应用程序类加载器；系统类加载器；Application ClassLoader</p>
+</blockquote>
+<ul>
+<li><p>Java 语言编写，由 <code>sun.misc.Launcher$AppClassLoader</code> 实现。</p>
+</li>
+<li><p>派生于 ClassLoader</p>
+</li>
+<li><p>父类加载器为扩展类加载器</p>
+</li>
+<li><p>由于 Application ClassLoader 可以通过 <code>java.lang.ClassLoader#getSystemClassLoader()</code> 方法得到，所以该类加载器又被称为“系统类加载器”。</p>
+</li>
+<li><p>它负责加载用户路径（ClassPath）或系统变量 <code>java.class.path</code> 指定路径下的所有类库。</p>
+<p>  <em>ClassPath 一般就是我们开发目录的 src 目录。</em></p>
+<p>  <img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701103654441.png" alt="image-20210701103654441"></p>
+</li>
+<li><p><strong>Application ClassLoader 是应用程序默认的类加载器</strong>。如果应用程序中没有自定义过自己的类加载器，一般情况下 Java 应用中自定义的类都是由它来完成加载的。</p>
+</li>
 </ul>
-<h2 id="用户自定义类加载器"><a href="#用户自定义类加载器" class="headerlink" title="用户自定义类加载器"></a>用户自定义类加载器</h2><ul>
-<li>在 Java 的日常应用程序开发中，类的加载几乎是由上述 3 种类加载器相互配合执行的，在必要时，我们还可以自定义类加载器，来定制类的加载方式。</li>
-</ul>
-<h3 id="为什么要自定义类加载器？"><a href="#为什么要自定义类加载器？" class="headerlink" title="为什么要自定义类加载器？"></a>为什么要自定义类加载器？</h3><ul>
+<hr>
+<h3 id="3-1-4-用户自定义类加载器"><a href="#3-1-4-用户自定义类加载器" class="headerlink" title="3.1.4    用户自定义类加载器"></a>3.1.4    用户自定义类加载器</h3><p>在 Java 的日常应用程序开发中，类的加载几乎是由上述 3 种类加载器相互配合执行的，在必要时，我们还可以自定义类加载器，来定制类的加载方式。</p>
+<h3 id="3-2-1-为什么要自定义类加载器？"><a href="#3-2-1-为什么要自定义类加载器？" class="headerlink" title="3.2.1    为什么要自定义类加载器？"></a>3.2.1    为什么要自定义类加载器？</h3><ul>
 <li>隔离加载类</li>
 <li>修改类加载的方式</li>
 <li>扩展加载源</li>
 <li>防止源码泄露</li>
 </ul>
-<h3 id="用户自定义类加载器实现步骤："><a href="#用户自定义类加载器实现步骤：" class="headerlink" title="用户自定义类加载器实现步骤："></a>用户自定义类加载器实现步骤：</h3><ol>
+<h3 id="3-2-2-用户自定义类加载器实现步骤："><a href="#3-2-2-用户自定义类加载器实现步骤：" class="headerlink" title="3.2.2    用户自定义类加载器实现步骤："></a>3.2.2    用户自定义类加载器实现步骤：</h3><ol>
 <li>开发人员可以通过继承抽象类 <code>java.lang.ClassLoader</code> 类的方式，实现自己的类加载器，以满足一些特殊的需求。</li>
 <li>在 JDK1.2 之前，在自定义类加载器时，总会去继承 ClassLoader 类并重写 <code>loadClass()</code> 方法，从而实现自定义的类加载器，但是在 JDK1.2 之后已经不再建议用户去覆盖 <code>loadClass()</code> 方法，而是建议把自定义的类加载逻辑写在 <code>findClass()</code> 方法中。</li>
 <li>在编写自定义的类加载器时，如果没有太过于复杂的需求，可以直接继承 <strong>URLClassLoader</strong> 类，这样可以避免自己去编写 <code>findClass()</code> 方法及其获取字节流码的方式，使自定义类加载器编写更加简洁。</li>
 </ol>
-<h1 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h1><h2 id="关于-ClassLoader"><a href="#关于-ClassLoader" class="headerlink" title="关于 ClassLoader"></a>关于 ClassLoader</h2><p>ClassLoader 类，它是一个抽象类，其后所有的类加载器都继承自 ClassLoader（不包括启动类加载器）。</p>
+<hr>
+<h2 id="3-2-ClassLoader"><a href="#3-2-ClassLoader" class="headerlink" title="3.2    ClassLoader"></a>3.2    ClassLoader</h2><h3 id="3-2-1-关于-ClassLoader"><a href="#3-2-1-关于-ClassLoader" class="headerlink" title="3.2.1    关于 ClassLoader"></a>3.2.1    关于 ClassLoader</h3><p>ClassLoader 类，它是一个抽象类，其后所有的类加载器都继承自 ClassLoader（不包括启动类加载器）。</p>
 <ul>
 <li>常用方法</li>
 </ul>
@@ -4071,15 +4245,15 @@
 </tr>
 <tr>
 <td><code>public Class&lt;?&gt; loadClass(String name)</code></td>
-<td>加载名称为 name 的类，返回结果为 java.lang.Class 类的实例</td>
+<td>加载名称为 name 的类，返回该类的 java.lang.Class 类实例</td>
 </tr>
 <tr>
 <td><code>protected Class&lt;?&gt; findClass(String name)</code></td>
-<td>查找名称为 name 的类，返回结果为 java.lang.Class 类的实例</td>
+<td>查找名称为 name 的类，返回该类的 java.lang.Class 类实例</td>
 </tr>
 <tr>
 <td><code>protected final Class&lt;?&gt; findLoadedClass(String name)</code></td>
-<td>查找名称为 name 的已经被加载过的类，返回结果为 java.lang.Class 类的实例</td>
+<td>查找名称为 name 的已经被加载过的类，返回该类的 java.lang.Class 类实例</td>
 </tr>
 <tr>
 <td><code>protected final Class&lt;?&gt; defineClass(byte[] b, int off, int len)</code></td>
@@ -4090,11 +4264,13 @@
 <td>连接指定的一个Java类</td>
 </tr>
 </tbody></table>
-<h2 id="获取-ClassLoader-的途径"><a href="#获取-ClassLoader-的途径" class="headerlink" title="获取 ClassLoader 的途径"></a>获取 ClassLoader 的途径</h2><ul>
+<h3 id="3-2-2-获取-ClassLoader-的途径"><a href="#3-2-2-获取-ClassLoader-的途径" class="headerlink" title="3.2.2    获取 ClassLoader 的途径"></a>3.2.2    获取 ClassLoader 的途径</h3><ul>
 <li><p>获取某个类的 ClassLoader</p>
   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxxClass.getClassLoader()</span><br></pre></td></tr></table></figure>
 
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader classLoader = Class.forName(<span class="string">&quot;java.lang.String&quot;</span>).getClassLoader;</span><br></pre></td></tr></table></figure></li>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader classLoader = Class.forName(<span class="string">&quot;java.lang.String&quot;</span>).getClassLoader;</span><br></pre></td></tr></table></figure>
+
+</li>
 <li><p>获取当前线程上下文的 ClassLoader</p>
   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thread.currentThread().getContextClassLoader()</span><br></pre></td></tr></table></figure></li>
 <li><p>获取系统的 ClassLoader</p>
@@ -4102,79 +4278,34 @@
 <li><p>获取调用者的 ClassLoader</p>
   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DriverManager.getCallerClassLoader()</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h1 id="5、双亲委派机制"><a href="#5、双亲委派机制" class="headerlink" title="5、双亲委派机制"></a>5、双亲委派机制</h1><blockquote>
-<p>JVM 对 .class 文件采用的是<strong>按需加载</strong>的方式，也就是说当需要使用该类时才会将 .class 文件加载到内存中生成 Class 对象，而且加载某个类的 .class 文件时，JVM 采用的是 <strong>双亲委派模式</strong> ，即把请求交由父类处理，这是一种任务委派模式。</p>
-</blockquote>
+<hr>
+<h2 id="3-3-双亲委派机制"><a href="#3-3-双亲委派机制" class="headerlink" title="3.3    双亲委派机制"></a>3.3    双亲委派机制</h2><p>在将某个类的 <code>.class</code> 文件加载到内存中时，JVM 采用的是 <strong>双亲委派模式</strong> 。即把请求交由父类处理，这是一种任务委派模式。</p>
 <blockquote>
-<p>工作原理：</p>
+<p><strong>双亲委派模式的工作原理</strong>：</p>
 </blockquote>
 <ol>
-<li> 如果一个类加载器收到了类加载请求，它并不会直接去加载，而是把这个请求委托给父类的加载器去执行；</li>
-<li> 如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归请求最终达到顶层的启动类加载器；</li>
-<li> 如果父类加载器可以完成类加载任务，就加载并返回。如果父类加载器无法完成此加载任务，子类加载器才会尝试自己去加载，这就是双亲委派模式。</li>
+<li> 如果一个类加载器收到了加载某个类的请求，首先它并不会直接自己尝试去加载这个类，而是把这个请求委托给父类加载器去执行；</li>
+<li> 如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归。因此所有的加载请求最终都应该传递到最顶层的 BootStrap_ClassLoader 中；</li>
+<li> 如果最顶级父类加载器可以完成类加载任务，就加载并返回。如果父类加载器无法完成此加载任务，下一级的子类加载器才会尝试自己去加载，这就是双亲委派模式。</li>
 </ol>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6-1621267020284.png" alt="双亲委派机制"></p>
+<p>双亲委派模型的好处就是 Java 中的类随着它的加载器一起具备了一种优先级的层次关系。例如类 java.lang.Object ，它存放在 rt.jar 中。无论哪个类加载器要加载这个类，最终都是委派给处于模型最顶端的 BootStrap ClassLoader 进行加载，因此 Object 类在程序的各种类加载环境中都能够保证是同一个类。反之，如果没有使用双亲委派模型，都由各个类加载器自行去加载的话，如果用户自己也编写了一个名为 java.lang.Object 的类，并放在程序的 ClassPath 中，那么系统中就会出现多个不同的 Object 类，Java 体系中最基础的行为也就无法保证了</p>
 <blockquote>
-<p>举例</p>
+<p><strong>举例</strong></p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、程序中需要使用到 SPI 接口，SPI 接口属于核心API，需要使用双亲委派机制一直到引导类加载器中加载 rt.jar 。</span><br><span class="line">2、SPI 核心类存在大量的接口，这些接口需要具体实现类实现后才能调用其中的方法。而这些方法一般都是第三方jar包，不属于核心API，所以就应该由 AppClassLoader 来加载。</span><br><span class="line"></span><br><span class="line">接口是由 BootStrapClassLoader 加载的，而接口的具体实现类是由 AppClassLoader 加载的。</span><br></pre></td></tr></table></figure>
-
-
-
+<ol>
+<li> 程序运行时需要使用到 SPI 接口，SPI 接口属于核心API，需要使用双亲委派机制一直到 BootStrap_ClassLoader 中加载 rt.jar。</li>
+<li> SPI 核心类存在大量的接口，这些接口需要具体实现类实现后才能调用其中的方法。而这些方法一般都是第三方 jar 包，不属于核心API，所以就应该由 AppClassLoader 来加载。</li>
+<li> 接口是由 BootStrapClassLoader 加载的，而接口的具体实现类是由 AppClassLoader 加载的。</li>
+</ol>
 <blockquote>
-<p>优势</p>
+<p><strong>优势</strong></p>
 </blockquote>
 <ul>
 <li><p>避免类重复加载</p>
 </li>
 <li><p>保护程序安全，防止核心 API 被随意篡改</p>
-</li>
-</ul>
-<h2 id="沙箱安全机制"><a href="#沙箱安全机制" class="headerlink" title="沙箱安全机制"></a>沙箱安全机制</h2><h1 id="6、其它"><a href="#6、其它" class="headerlink" title="6、其它"></a>6、其它</h1><ul>
-<li><p>在 JVM 中，表示两个 Class 对象是否为同一个类的两个必要条件：</p>
-<blockquote>
-<ol>
-<li>类的全限定类名必须一致，包括包名</li>
-<li>加载这个类的 ClassLoader（指ClassLoader 的实例对象）必须相同。</li>
-</ol>
-</blockquote>
-<p>  换句话说，在 JVM 中，即使这两个类对象（Class 对象）来源于同一个 Class 文件，被同一个虚拟机所加载，但只要加载它们的 ClassLoader 实例对象不同，那么这两个类对象也是不相同的。</p>
-</li>
-</ul>
-<ul>
-<li><p>JVM 必须知道一个类型是由 启动类加载器 加载的还是由 用户类加载器 加载的。</p>
-</li>
-<li><p><strong>如果一个类是由用户类加载器加载的，那么 JVM 会将这个类加载器的引用作为 Class 信息的一部分保存在方法区中。</strong></p>
-<blockquote>
-<p>AppClassLoader 负责将 .class 文件中的信息加载到内存中的方法区中形成一个 Class 对象，除了 .class 文件中的基本信息， Class 对象中还保存了加载这个类的类加载器的引用信息。</p>
-</blockquote>
-</li>
-<li><p>当解析一个类型到另一个类型的引用的时候，JVM 需要保证这两个类型的类加载器是相同的。</p>
-</li>
-</ul>
-<h2 id="类的主动使用和被动使用"><a href="#类的主动使用和被动使用" class="headerlink" title="类的主动使用和被动使用"></a>类的主动使用和被动使用</h2><p>Java 程序对类的使用方式分为：主动使用和被动使用</p>
-<ul>
-<li><p>主动使用，又分7种情况：</p>
-<blockquote>
-<ol>
-<li><p>创建类的实例</p>
-</li>
-<li><p>访问某个类或接口的静态变量，或者对该静态变量赋值。</p>
-</li>
-<li><p>调用类的静态方法。</p>
-</li>
-<li><p>反射（比如：Class.forName(“com.example.Test”)）</p>
-</li>
-<li><p>初始化一个类的子类。</p>
-</li>
-<li><p>JVM 启动时被标明为启动类的类。</p>
-</li>
-<li><p>JDK7 开始提供的动态语言支持：</p>
-</li>
-</ol>
-</blockquote>
-</li>
-<li><p>除了以上7种情况，其它使用 Java 类的方式都被看做是 <strong>类的被动使用</strong>，都<strong>不会导致类的初始化</strong>。</p>
+<p>​    </p>
 </li>
 </ul>
 
