@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="ArrayList 线程不安全带着问题学习： 在 Java8 中，   new ArrayList&lt;&gt;() 的底层数据结构是什么？  new ArrayList&lt;&gt;() 的初始长度是多少？  数组长度一旦初始化就不能再修改了，Java 底层对数组进行扩容使用的方法是什么？  数组扩容的标准是什么？每次扩容多大？  ArrayList 是线程安全的吗？  写一个 ArrayL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="集合类线程不安全——List&#x2F;Set&#x2F;Map">
+<meta property="og:url" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="ArrayList 线程不安全带着问题学习： 在 Java8 中，   new ArrayList&lt;&gt;() 的底层数据结构是什么？  new ArrayList&lt;&gt;() 的初始长度是多少？  数组长度一旦初始化就不能再修改了，Java 底层对数组进行扩容使用的方法是什么？  数组扩容的标准是什么？每次扩容多大？  ArrayList 是线程安全的吗？  写一个 ArrayL">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705132107889.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705110738072.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705111012804.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705111123760.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705133755514.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705140516278.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112039567.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112635200.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112857905.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705114523086.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705114959424.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705144202128.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705144627777.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145256894.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145658774.png">
+<meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145828821.png">
+<meta property="article:published_time" content="2021-07-05T01:39:29.000Z">
+<meta property="article:modified_time" content="2021-07-05T07:02:45.434Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705132107889.png">
+
+
+<link rel="canonical" href="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>集合类线程不安全——List/Set/Map | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ArrayList-%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text">ArrayList 线程不安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList-%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">ArrayList 深度解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayList-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.1.</span> <span class="nav-text">ArrayList 构造方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E5%8F%82%E6%9E%84%E9%80%A0%E5%99%A8"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">无参构造器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%A6%E5%8F%82%E6%9E%84%E9%80%A0%E5%99%A8"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">带参构造器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayList-%E7%9A%84%E5%8A%A8%E6%80%81%E6%89%A9%E5%AE%B9"><span class="nav-number">1.1.2.</span> <span class="nav-text">ArrayList 的动态扩容</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          集合类线程不安全——List/Set/Map
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-07-05 09:39:29 / Modified: 15:02:45" itemprop="dateCreated datePublished" datetime="2021-07-05T09:39:29+08:00">2021-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Collection/" itemprop="url" rel="index"><span itemprop="name">Collection</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="ArrayList-线程不安全"><a href="#ArrayList-线程不安全" class="headerlink" title="ArrayList 线程不安全"></a>ArrayList 线程不安全</h1><p><strong>带着问题学习：</strong></p>
+<p>在 Java8 中，</p>
+<ol>
+<li> <code>new ArrayList&lt;&gt;()</code> 的底层数据结构是什么？</li>
+<li> <code>new ArrayList&lt;&gt;()</code> 的初始长度是多少？</li>
+<li> 数组长度一旦初始化就不能再修改了，Java 底层对数组进行扩容使用的方法是什么？</li>
+<li> 数组扩容的标准是什么？每次扩容多大？</li>
+<li> ArrayList 是线程安全的吗？</li>
+<li> 写一个 ArrayList 不安全的例子？</li>
+<li> 如何解决 ArrayList 线程不安全？有几种方法？</li>
+</ol>
+<p><strong>答案：</strong></p>
+<ol>
+<li> <code>new ArrayList&lt;&gt;()</code> 底层默认的数据结构是 Object ，</li>
+<li> 初始长度为 10。</li>
+</ol>
+<p>即 <code>new ArrayList&lt;&gt;()</code> 初始会在内存空间中创建一个 Object[10] 的数组对象。（不完全正确）</p>
+<ol start="3">
+<li><p>Java 底层对数组进行扩容使用的是 <strong>Arrays.copyOf</strong> 方法，再向下一层是 <strong>System.arraycopy</strong> 方法（这是一个本地方法）。</p>
+<ul>
+<li>  ArrayList 是集合一个对象，底层使用数组实现的。对于数组而言，其容量在第一次分配内存空间时就已经确定好了，不能再发生改变了。扩容就是新创建一个更大容量的数组，将原先数组中的全部数据拷贝到新数组中去。</li>
+</ul>
+</li>
+<li><p>数组扩容的标准是正常情况下每次扩张一半，即每次扩张到原来的 1.5 倍。</p>
+<ul>
+<li>  比如，新建一个 ArrayList 数组，数组容量最初为 10，第一次扩容后从 10 扩展到 15，第二次则是从 15 扩展到 22。</li>
+<li>  扩展：HashMap 的初始长度是 16，每次扩容容量增加一倍。</li>
+</ul>
+<p> 如果扩张到原来的 1.5 倍仍然不够用的话，那么就扩张到与有效元素个数相同的容量；</p>
+<p> 扩张是有最大值的，最大值为 Integer.MAX_VALUE。</p>
+</li>
+<li><p> ArrayList 是线程不安全的。</p>
+</li>
+<li><p> 例子见下文</p>
+</li>
+<li><p> 解决 ArrayList 的线程不安全有多种方法，根据实际需要自行选择。本文罗列出来了 X 种。</p>
+</li>
+</ol>
+<h2 id="ArrayList-深度解析"><a href="#ArrayList-深度解析" class="headerlink" title="ArrayList 深度解析"></a>ArrayList 深度解析</h2><p>ArrayList 实现了 List 接口，继承了 AbstractList 类，底层是数组实现的，一般我们把它认为是可以自动扩容的数组。</p>
+<p>它是非线程安全的，一般多用于单线程环境下（与 Vector 最大的区别就是，Vector 是线程安全的，但是 ArrayList 性能更好）；</p>
+<p>它实现了 Serializable 接口，支持序列化，能够通过序列化传输；</p>
+<p>它实现了 RandomAccess 接口，支持快速随机访问，这里表现为可以通过下标直接访问（底层是数组实现的，所以可以直接用数组下标来索引）；</p>
+<p>实现了 Cloneable 接口，能被克隆。</p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705132107889.png" alt="image-20210705132107889"></p>
+<ul>
+<li>  <em><strong>数组是不可以自动扩容的！</strong></em></li>
+</ul>
+<h3 id="ArrayList-构造方法"><a href="#ArrayList-构造方法" class="headerlink" title="ArrayList 构造方法"></a>ArrayList 构造方法</h3><p>ArrayList 一共提供了 3 个构造方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span>；</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>带参构造器较为简单，先进行分析。</p>
+<ul>
+<li>  源码分析（部分）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">8683452581122892189L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数组初始的容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 类加载阶段就已经创建好了的一个不可变的、共享的、空的 Object[] 数组对象</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     *   如果用户创建的数组对象是空的，那么无需在堆中新建一个对象，直接返回这个实例即可。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	*	无参构造函数使用该数组初始化。主要用于与 EMPTY_ELEMENTDATA 区分开来。</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 真正用于存储数组元素的对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">transient</span> Object[] elementData;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 	size即为elementData的长度。</span></span><br><span class="line"><span class="comment">     *  注意 size 是 ArrayList 的一个私有变量，用于记录该 list 集合中当前元素的数量，注意不是容量。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">	</span><br><span class="line">   </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  ArrayList 的单参构造函数，构造具有指定初始容量的空列表。创建时需要传递数组长度 initialCapacity</span></span><br><span class="line"><span class="comment">     *      1、数组长度大于0，新建一个 Object[initialCapacity] 数组返回地址</span></span><br><span class="line"><span class="comment">     *      2、数组长度等于0，不在堆中新建数组对象，直接将类加载阶段初始好的 Object 空数组地址返回</span></span><br><span class="line"><span class="comment">     *      3、数组长度小于0，抛出异常</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal Capacity: &quot;</span>+</span><br><span class="line">                    initialCapacity);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 空参构造函数。如果是空参构造函数的话，elementData 将被赋值为 DEFAULTCAPACITY_EMPTY_ELEMENTDATA，</span></span><br><span class="line"><span class="comment">     * 即 &#123;&#125;。这时将会触发 calculateCapacity() 方法。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 这个静态方法是针对初始化扩容的判断。</span></span><br><span class="line"><span class="comment">     *      当 elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA 时，即 ArrayList 是使用无参构造函数创建的，</span></span><br><span class="line"><span class="comment">     *    就直接将数组的初始长度扩容为 DEFAULT_CAPACITY，即 10</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">calculateCapacity</span><span class="params">(Object[] elementData, <span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) &#123;</span><br><span class="line">            <span class="keyword">return</span> Math.max(DEFAULT_CAPACITY, minCapacity);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> minCapacity;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="无参构造器"><a href="#无参构造器" class="headerlink" title="无参构造器"></a>无参构造器</h4><p>首先查看源码中 <strong>无参构造器</strong> 的实现：</p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705110738072.png" alt="image-20210705110738072"></p>
+<ul>
+<li>  上面的注释表明：无参构造器将会提供一个初始容量为 10 的空数组，即 Object[10]。</li>
+<li>  但是实际上并不是在这一步实现的。我们继续查看 <strong>DEFAULTCAPACITY_EMPTY_ELEMENTDATA</strong> 和 <strong>elementData</strong> 的源码。</li>
+</ul>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705111012804.png" alt="image-20210705111012804"></p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705111123760.png" alt="image-20210705111123760"></p>
+<ul>
+<li>  发现这一步只是将 <strong>elementData</strong> 指向了一个容量为 0  的空数组罢了。</li>
+</ul>
+<h4 id="带参构造器"><a href="#带参构造器" class="headerlink" title="带参构造器"></a>带参构造器</h4><p><strong>public ArrayList(Collection&lt;? extends E&gt; c)</strong></p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705133755514.png" alt="image-20210705133755514"></p>
+<p>这个构造方法是直接将一个 Collection 集合中所有的元素拷贝到 ArrayList 中。</p>
+<ol>
+<li> 首先将 <strong>Collection c</strong> 转换成一个 <strong>Object[] 数组</strong> ，elementData 就是转换后的数组；（数组的 length 属性指的是数组的容量而非数组中有效元素的个数）</li>
+<li>先获取 elementData 的容量并将其赋值给 size，这里的 size 是一个实例变量，用于记录 elementData 的元素个数（而非数组的容量）。<ul>
+<li>  如果 size 不为 0 （Collection c 不为空）则调用 Arrays.copyOf() 方法拷贝 elementData 中的元素到新的内存空间中；</li>
+<li>  否则（Collection c 为空）让 elementData 指向一个类初始化时就已经创建好的空数组对象。</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</span><br><span class="line">       elementData = c.toArray();	<span class="comment">// Collection c --&gt;&gt; Object[]</span></span><br><span class="line">       <span class="keyword">if</span> ((size = elementData.length) != <span class="number">0</span>) &#123;	<span class="comment">// 数组 Object[] 的 length 属性指的就是数组的容量而非数组中有效元素的个数</span></span><br><span class="line">           <span class="keyword">if</span> (elementData.getClass() != Object[].class)</span><br><span class="line">               elementData = Arrays.copyOf(elementData, size, Object[].class);</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="comment">// replace with empty array.</span></span><br><span class="line">           <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>public ArrayList(int initialCapacity)；</strong></p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705140516278.png" alt="image-20210705140516278"></p>
+<p>这是一个带初始容量的 ArrayList 构造方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  ArrayList 的单参构造函数，构造具有指定初始容量的空列表。创建时需要传递数组长度 initialCapacity</span></span><br><span class="line"><span class="comment"> *      1、数组长度大于0，新建一个 Object[initialCapacity] 数组返回地址</span></span><br><span class="line"><span class="comment"> *      2、数组长度等于0，不在堆中新建数组对象，直接将类加载阶段初始好的 Object 空数组地址返回</span></span><br><span class="line"><span class="comment"> *      3、数组长度小于0，抛出异常</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal Capacity: &quot;</span>+</span><br><span class="line">                initialCapacity);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="ArrayList-的动态扩容"><a href="#ArrayList-的动态扩容" class="headerlink" title="ArrayList 的动态扩容"></a>ArrayList 的动态扩容</h3><p><strong>带着问题学习：</strong></p>
+<ol>
+<li> 通过上面的学习，我们还是不知道为什么无参构造器默认指向了一个容量为 0 的空数组，而在注释中却说是一个初始容量为 10 的空数组呢？</li>
+<li> 通过上面的学习我们并没有看到 ArrayList 是动态扩容的，那么为什么说 ArrayList 可以看做是一个动态扩容的数组呢？</li>
+</ol>
+<p>这些问题在 add() 方法中都能找到答案。</p>
+<blockquote>
+<ol>
+<li> <strong>add() 方法是 List 接口声明的通用的方法，在 ArrayList 中的实现如下：</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112039567.png" alt="image-20210705112039567"></p>
+<p>size 是当前数组中有效元素的个数（未新增 e 元素之前）。从源码中可以看出，</p>
+<ol>
+<li> 通过 <strong>ensureCapacityInternal</strong> 方法来保证数组容量问题，该方法接收的参数是 size+1 ；</li>
+<li> 在数组容量问题得到保证后，新增的元素保存在 size+1 的位置上。</li>
+</ol>
+<p>接下来进入 <strong>ensureCapacityInternal()</strong> 方法查看其具体实现：</p>
+<blockquote>
+<ol start="2">
+<li>  <strong>ensureCapacityInternal 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112635200.png" alt="image-20210705112635200"></p>
+<p><strong>ensureCapacityInternal()</strong> 继续调用 <strong>ensureExplicitCapacity</strong> 和 <strong>calculateCapacity</strong> 方法保证数组容量的问题：</p>
+<blockquote>
+<ol start="3">
+<li> <strong>calculateCapacity 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112857905.png" alt="image-20210705112857905"></p>
+<ul>
+<li>  **minCapacity **是要容纳新添加的元素所需要的最小数组容量</li>
+<li>  <strong>DEFAULT_CAPACITY</strong> 是一个常量 10，表示默认数组容量</li>
+<li>  <strong>elementData</strong> 是全局的实例变量</li>
+</ul>
+<p>通过这一步来判断，当前 <strong>elementData</strong> 是否为容量为零的数组（显式地指定初始化容量为 0 或者调用无参构造器），</p>
+<ol>
+<li> 如果是，则使用 <code>Math.max(DEFAULT_CAPACITY, minCapacity)</code> 选择两个参数中较大的。其中 <code>DEFAULT_CAPACITY==10</code>，<code>minCapacity==size+1</code>。可以看出，如果 elementData 为空的话，size+1 即 minCapacity 将会是 1，取较大值后返回的是 10。所以说无参构造器默认初始化一个容量为 10 的数组。但其实并不严格，<strong>我认为这里应该说：无参构造器默认不会初始化数组，而是指向一个在类加载阶段就已经创建好了的容量为 0  的空数组，只有再调用了 add() 方法时，才会在堆空间中初始化一个对象，这时候这个对象的容量才为 10。</strong></li>
+<li> 得到了 minCapacity 数组容量这个值后，当前方法出栈继续调用上一个方法 <strong>ensureExplicitCapacity</strong>。</li>
+</ol>
+<blockquote>
+<ol start="4">
+<li>  <strong>ensureExplicitCapacity 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705114523086.png" alt="image-20210705114523086"></p>
+<ol>
+<li><p> <code>modCount++</code> 是用于在快速失败机制中判断使用的，与本文相关性不大，暂时略过。</p>
+</li>
+<li><p>接下来判断，新增元素后数组中元素个数是否超过了当前数组的容量 elementData.length，如果超过，则调用 <strong>grow</strong> 方法进行扩容。</p>
+</li>
+</ol>
+<blockquote>
+<ol start="5">
+<li> <strong>grow 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705114959424.png" alt="image-20210705114959424"></p>
+<ol>
+<li> <strong>minCapacity</strong> 是新增元素后全部有效元素的个数（可以出现有效元素个数大于数组容量的情况）或 10</li>
+<li> <strong>oldCapacity</strong> 是原来的 ArrayList 集合的容量</li>
+<li> 由于在上一个方法中已经知道原来集合的容量放不下新增的元素了，所以这里首先要进行扩容。<strong>oldCapacity &gt;&gt; 1</strong> 是位运算的右移操作，右移一位相当于除以 2，所以这句代码就等于 <code>int newCapacity = oldCapacity + oldCapacity/2</code>，即容量扩大为原来的1.5倍</li>
+<li> 让扩容后得到新的集合 newCapacity 与 minCapacity 进行比较，如果仍然不够，则直接让 <code>newCapacity == minCapacity</code>，而不再是计算 1.5 倍的扩容。（即如果扩容 1.5 倍后仍然容量不够，那就直接让数组的容量等于元素的个数）</li>
+<li>如果扩容后（第3或4步）发现新数组的容量超过了规定的最大容量 <strong>MAX_ARRAY_SIZE</strong>，则调用 <strong>hugeCapacity</strong>方法进行处理。<ul>
+<li>  <strong>MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8</strong>，因为数组下标是整型的数据，所以其取值范围不能超过这个范围。</li>
+</ul>
+</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705144202128.png" alt="image-20210705144202128"></p>
+<p>所有的处理结束后，调用 <strong>Arrays.copyOf</strong> 方法将旧数组中的所有元素拷贝到新数组中。</p>
+<blockquote>
+<ol start="6">
+<li> <strong>hugeCapacity 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705144627777.png" alt="image-20210705144627777"></p>
+<p>如果新增元素后需要的最小容量大于 MAX_ARRAY_SIZE ，则分配一块长度为 Integer 的最大值 <strong>Integer.MAX_VALUE</strong> 的内存用于数组的存储，如果小于等于，则分配一块长度为 <strong>MAX_ARRAY_SIZE</strong> 内存用于数组的存储。</p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145256894.png" alt="image-20210705145256894"></p>
+<p>方法执行完后，当前栈帧出栈，执行上一个方法。</p>
+<blockquote>
+<ol start="7">
+<li> <strong>Arrays.copyOf</strong></li>
+</ol>
+</blockquote>
+<ol>
+<li> 执行完 hugeCapacity 方法后， grow 方法继续被执行，调用 <strong>Arrays.copyof</strong> 方法，进行复制操作。</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145658774.png" alt="image-20210705145658774"></p>
+<ol start="2">
+<li> <strong>Arrays.copyof</strong> 底层真正执行的是 <strong>System.arraycopy</strong> 方法。</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145828821.png" alt="image-20210705145828821"></p>
+<ol start="3">
+<li> 而 <strong>System.arraycopy</strong> 方法则是一个本地方法。</li>
+</ol>
+<p>​    </p>
+<hr>
+<ul>
+<li>  如果一个应用程序中有很多空数组（ArrayList）的话，那么这些空数组都会指向一个地址。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/03/JUC/" rel="prev" title="JUC">
+                  <i class="fa fa-chevron-left"></i> JUC
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

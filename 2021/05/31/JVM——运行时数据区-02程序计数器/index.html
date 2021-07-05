@@ -23,15 +23,15 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="PC Register 介绍 PC寄存器；程序计数器；PC Register；Program Counter Register，全称是“程序计数寄存器”   JVM中 PC Register 的命名起源于CPU的寄存器，CPU中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在CPU上运行。  JVM中的 PC寄存器 是对 物理PC寄存器 的一种抽象模拟。  JVM中的 PC寄存器">
+<meta name="description" content="程序计数器 Program Counter Register；程序计数寄存器；程序计数器；PC Register；PC寄存器；  PC Register 的命名起源于 CPU 的寄存器，CPU中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在CPU上运行。  JVM中的 PC寄存器 是对 物理PC寄存器 的一种抽象模拟。  JVM中的 PC寄存器 并非是广义上所指的物理寄存器，称">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM——运行时数据区:02程序计数器">
 <meta property="og:url" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-02%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="PC Register 介绍 PC寄存器；程序计数器；PC Register；Program Counter Register，全称是“程序计数寄存器”   JVM中 PC Register 的命名起源于CPU的寄存器，CPU中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在CPU上运行。  JVM中的 PC寄存器 是对 物理PC寄存器 的一种抽象模拟。  JVM中的 PC寄存器">
+<meta property="og:description" content="程序计数器 Program Counter Register；程序计数寄存器；程序计数器；PC Register；PC寄存器；  PC Register 的命名起源于 CPU 的寄存器，CPU中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在CPU上运行。  JVM中的 PC寄存器 是对 物理PC寄存器 的一种抽象模拟。  JVM中的 PC寄存器 并非是广义上所指的物理寄存器，称">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-31T12:40:58.000Z">
-<meta property="article:modified_time" content="2021-05-31T14:06:19.274Z">
+<meta property="article:modified_time" content="2021-07-01T04:23:15.631Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -147,7 +147,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PC-Register-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">PC Register 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PC%E8%AE%A1%E6%95%B0%E5%99%A8%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%88%E9%87%8D%E8%A6%81%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">PC计数器的作用（重要）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">两个常见问题</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PC%E8%AE%A1%E6%95%B0%E5%99%A8%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%88%E9%87%8D%E8%A6%81%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">PC计数器的作用（重要）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">两个常见问题</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -160,13 +160,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -232,10 +232,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2021-05-31 20:40:58 / Modified: 22:06:19" itemprop="dateCreated datePublished" datetime="2021-05-31T20:40:58+08:00">2021-05-31</time>
+      <time title="Created: 2021-05-31 20:40:58" itemprop="dateCreated datePublished" datetime="2021-05-31T20:40:58+08:00">2021-05-31</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-07-01 12:23:15" itemprop="dateModified" datetime="2021-07-01T12:23:15+08:00">2021-07-01</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -256,12 +262,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="PC-Register-介绍"><a href="#PC-Register-介绍" class="headerlink" title="PC Register 介绍"></a>PC Register 介绍</h1><blockquote>
-<p>PC寄存器；程序计数器；PC Register；Program Counter Register，全称是“程序计数寄存器”</p>
+        <h1 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h1><blockquote>
+<p>Program Counter Register；程序计数寄存器；程序计数器；PC Register；PC寄存器；</p>
 </blockquote>
+<p><code>PC Register</code> 的命名起源于 CPU 的寄存器，CPU中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在CPU上运行。</p>
 <ul>
-<li><p>JVM中 <code>PC Register</code> 的命名起源于CPU的寄存器，CPU中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在CPU上运行。</p>
-</li>
 <li><p>JVM中的 PC寄存器 是对 物理PC寄存器 的一种抽象模拟。</p>
 </li>
 <li><p>JVM中的 <code>PC寄存器</code> 并非是广义上所指的物理寄存器，称其为 <code>PC计数器（或指令计数器）</code> 会更加贴切，并且也不容易引起一些不必要的误会。</p>
@@ -282,7 +287,7 @@
 <li><p>PC计数器 是唯一一个在《Java虚拟机规范》中没有规定任何 <code>OutOfMemoryError</code> 情况的区域。</p>
 </li>
 </ul>
-<p>字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。??</p>
+<p>字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。</p>
 <hr>
 <h1 id="PC计数器的作用（重要）"><a href="#PC计数器的作用（重要）" class="headerlink" title="PC计数器的作用（重要）"></a>PC计数器的作用（重要）</h1><p><strong>问题：PC计数器的作用（重要）</strong></p>
 <ul>

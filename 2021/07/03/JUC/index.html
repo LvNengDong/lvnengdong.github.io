@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="JUC；java.util.concurrent；  JUC 是 java.util.concurrent 工具包的简称，这是一个专门处理线程的工具包。 JUC 一般指以下三个包：    java.util.concurrent   java.util.concurrent.atomic   java.util.concurrent.locks  前置知识进程&#x2F;线程进程：CPU 分配资源的最">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JUC">
+<meta property="og:url" content="http://example.com/2021/07/03/JUC/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="JUC；java.util.concurrent；  JUC 是 java.util.concurrent 工具包的简称，这是一个专门处理线程的工具包。 JUC 一般指以下三个包：    java.util.concurrent   java.util.concurrent.atomic   java.util.concurrent.locks  前置知识进程&#x2F;线程进程：CPU 分配资源的最">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/07/03/JUC/JMM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png">
+<meta property="article:published_time" content="2021-07-03T02:00:06.000Z">
+<meta property="article:modified_time" content="2021-07-05T07:02:42.748Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/03/JUC/JMM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png">
+
+
+<link rel="canonical" href="http://example.com/2021/07/03/JUC/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>JUC | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">前置知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">进程&#x2F;线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91-%E5%B9%B6%E8%A1%8C"><span class="nav-number">1.2.</span> <span class="nav-text">并发&#x2F;并行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">1.3.</span> <span class="nav-text">案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA"><span class="nav-number">1.4.1.</span> <span class="nav-text">线程的执行时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81%EF%BC%886%E7%A7%8D%EF%BC%89"><span class="nav-number">1.4.2.</span> <span class="nav-text">线程的状态（6种）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.4.3.</span> <span class="nav-text">线程的实现方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E9%94%81%E7%9A%843%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">1.4.4.</span> <span class="nav-text">加锁的3种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lock"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">Lock</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JMM"><span class="nav-number">2.</span> <span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#volatile-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">3.</span> <span class="nav-text">volatile 关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81"><span class="nav-number">3.1.</span> <span class="nav-text">可见性代码验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="nav-number">3.2.</span> <span class="nav-text">不保证原子性</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/03/JUC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JUC
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-03 10:00:06" itemprop="dateCreated datePublished" datetime="2021-07-03T10:00:06+08:00">2021-07-03</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-07-05 15:02:42" itemprop="dateModified" datetime="2021-07-05T15:02:42+08:00">2021-07-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>  JUC；java.util.concurrent；</p>
+</blockquote>
+<p>JUC 是 <code>java.util.concurrent</code> 工具包的简称，这是一个专门处理线程的工具包。</p>
+<p>JUC 一般指以下三个包：</p>
+<ul>
+<li>  <strong>java.util.concurrent</strong></li>
+<li>  <strong>java.util.concurrent.atomic</strong></li>
+<li>  <strong>java.util.concurrent.locks</strong></li>
+</ul>
+<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="进程-线程"><a href="#进程-线程" class="headerlink" title="进程/线程"></a>进程/线程</h2><p>进程：CPU 分配资源的最小单元</p>
+<p>线程：CPU 执行任务的最小单元</p>
+<p>进程：QQ.exe、office.exe</p>
+<p>进程：</p>
+<ol>
+<li> 在运行的 QQ 程序中同时开着聊天窗口、视频聊天、语音聊天，这些分别都是一个个线程</li>
+<li> 在 Word 中，提供输入页面的是一个线程，打字中如果输出不合法检测并提示的也是一个线程，未保存强制退出后下次可以恢复的功能也需要一直维持一个线程。</li>
+</ol>
+<h2 id="并发-并行"><a href="#并发-并行" class="headerlink" title="并发/并行"></a>并发/并行</h2><ul>
+<li>  并发：多个线程蜂拥而入抢同一份资源。秒杀、抢票</li>
+<li>  并行：多件事情同时进行</li>
+</ul>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><ul>
+<li>  3个售票员    卖出    100张票。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.day01;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.management.ThreadInfo;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/3 20:06</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  题目：三个售票员  卖出  20张票。 如何编写企业级的多线程代码</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 企业级代码固定的编程套路——</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  1、在高内聚低耦合的情况下，  线程      操作      资源类</span></span><br><span class="line"><span class="comment"> *      1.1 一言不合，先创建一个资源类</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SaleTicketDemo01</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        Ticket ticket = <span class="keyword">new</span> Ticket(<span class="number">30</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                ticket.saleTicket();</span><br><span class="line">            &#125;,String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 资源类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ticket</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer ticketNum;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Ticket</span><span class="params">(Integer ticketNum)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.ticketNum = ticketNum;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="comment">/*synchronized*/</span> <span class="function"><span class="keyword">void</span> <span class="title">saleTicket</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (ticketNum &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;线程&quot;</span> + Thread.currentThread().getName()+<span class="string">&quot;正在卖出第&quot;</span>+ticketNum+<span class="string">&quot;张票&quot;</span>);</span><br><span class="line">                ticketNum--;</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><h3 id="线程的执行时机"><a href="#线程的执行时机" class="headerlink" title="线程的执行时机"></a>线程的执行时机</h3><ol>
+<li> <code>start()</code> 方法被调用之后线程并不会立即执行，具体什么时候执行要看什么时候能得到CPU资源，这是由底层操作系统决定的。</li>
+</ol>
+<h3 id="线程的状态（6种）"><a href="#线程的状态（6种）" class="headerlink" title="线程的状态（6种）"></a>线程的状态（6种）</h3><p><strong>线程有6种状态</strong>。可以通过 <code>Thread.State</code> 进入源码查看。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        NEW,</span><br><span class="line">    </span><br><span class="line">        RUNNABLE,</span><br><span class="line"></span><br><span class="line">        BLOCKED,</span><br><span class="line"></span><br><span class="line">        WAITING,	<span class="comment">// 不见不散 </span></span><br><span class="line"></span><br><span class="line">        TIMED_WAITING,	<span class="comment">// 过时不候</span></span><br><span class="line"></span><br><span class="line">        TERMINATED;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="线程的实现方式"><a href="#线程的实现方式" class="headerlink" title="线程的实现方式"></a>线程的实现方式</h3><p>实现一个多线程有四种方式。</p>
+<ol>
+<li> 继承 Thread 类并重写类中的 run() 方法</li>
+<li> 实现 Runnable 接口并重写接口中的 run() 方法</li>
+<li> 实现 Callable 接口并重写接口中的 run() 方法</li>
+<li> 通过线程池分配一个线程</li>
+</ol>
+<p>但是我们在上面的代码中，既没有继承 Thread 类和实现 Runnable/Callable 接口，更没有出现过线程池，那么是如何实现线程的呢？</p>
+<p><strong>匿名内部类 + Lambda表达式</strong> 。在代码中看起来我们并没有实现 Runnable 接口，但其实是实现了的，只是通过一些语法糖让其不直接在源代码中显示出来罢了，在编译成二进制字节码文件时实现 Runnable 接口的这个操作是真实存在的。</p>
+<p>匿名内部类实现的细节：1、实现了 Runnable 接口，并重写了接口中的 run() 方法。    2、多态，用一个 Runnable 类型的变量接收重写后匿名对象的地址。</p>
+<h3 id="加锁的3种方式"><a href="#加锁的3种方式" class="headerlink" title="加锁的3种方式"></a>加锁的3种方式</h3><ol>
+<li> 直接在方法上使用 synchronized 加锁</li>
+<li> 使用 synchronized 代码块</li>
+<li> 使用 Java 中专门提供的锁对象 Lock</li>
+</ol>
+<h4 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h4><p>Lock 是 java.util.concurrent.locks 包下的一个接口，实现类有 3 个：</p>
+<ul>
+<li>  Class ReentrantLock</li>
+<li>  Class ReentrantReadWriteLock.WriteLock</li>
+<li>  Class ReentrantReadWriteLock.ReadLock</li>
+</ul>
+<p>常见的使用格式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock(); </span><br><span class="line">    <span class="comment">// ... </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        lock.lock(); </span><br><span class="line">        <span class="comment">// block until condition holds </span></span><br><span class="line">        <span class="keyword">try</span> &#123; </span><br><span class="line">            <span class="comment">// ... method body </span></span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            lock.unlock() </span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<p>HashMap 的扩容是原值的一倍，HashMap 的初始长度是 16。</p>
+<p>ArrayList 线程不安全。</p>
+<p>CopyOnWrite ：写的时候才复制，读的时候不会产生线程安全</p>
+<p>线程安全只有在多个线程写的时候才会产生，如果只是读的话，多个线程不会产生不安全的问题</p>
+<p>HashSet 底层数据结构是什么？</p>
+<ul>
+<li>  HashMap ！！！</li>
+</ul>
+<p>HashSet.add() </p>
+<hr>
+<h1 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h1><blockquote>
+<p>  <strong>JMM；Java Memory Model；Java内存模型</strong></p>
+</blockquote>
+<p>JMM 是一种抽象的概念，本身<strong>并不真实存在</strong>，它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（包括实例字段、静态字段和构成数组对象的元素）的访问方式。</p>
+<blockquote>
+<p>  <strong>主内存；自己的工作内存</strong></p>
+</blockquote>
+<p>JMM 关于同步的规定：</p>
+<ol>
+<li> 线程加锁前，必须把共享变量的值刷新回<strong>主内存</strong>；</li>
+<li> 线程加锁前，必须读取主内存的最新值到<strong>自己的工作内存</strong>；</li>
+<li> 加锁解锁是同一把锁。</li>
+</ol>
+<p>JVM 是一个进程，运行时包含多个线程，而每个线程创建时 JVM 都会为其创建一个<strong>工作内存（栈空间，包括 Java虚拟机栈和本地方法栈）</strong>，工作内存是每个线程私有的数据区域，而 JMM 中规定所有变量都要存储在<strong>主内存（堆或方法区）</strong>，主内存是共享内存区域，所有线程都可以访问，但<strong>线程对变量的操作（读取、赋值等）必须要在工作内存中进行，首先要将变量从主内存拷贝到自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存</strong>，不能直接操作主内存中的变量，各个线程中的工作内存总存储着主内存中的变量副本拷贝，因此不同的线程间无法访问对方的工作内存，线程间的通信必须通过主内存来完成。其简要访问过程如下图：</p>
+<p><img src="/2021/07/03/JUC/JMM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png" alt="JMM内存结构"></p>
+<blockquote>
+<p>  <strong>JMM 三大特性</strong></p>
+</blockquote>
+<ol>
+<li><p>可见性</p>
+<p> 各个线程对主内存中共享变量的操作都是各个线程各自拷贝到自己的工作内存进行操作然后再写回到主内存中的。</p>
+<p> 这就可能存在一个线程 A 修改了共享变量 X 的值但还未写回主内存时，另一个线程 B 又对主内存中同一个共享变量 X 进行操作，但此时 A 线程工作内存中的共享变量 X 对线程 B 来说并不可见。这种工作内存与主内存同步延迟现象造成了可见性问题。</p>
+</li>
+<li><p> 原子性</p>
+</li>
+<li><p> 有序性</p>
+</li>
+</ol>
+<p>JMM 三大特性是大多数多线程开发需要遵守的规定。但是 volatile 只支持可见性、有序性（禁止指令重排），而不支持原子性。</p>
+<h1 id="volatile-关键字"><a href="#volatile-关键字" class="headerlink" title="volatile 关键字"></a>volatile 关键字</h1><blockquote>
+<ul>
+<li>  volatile 是 Java 虚拟机提供的轻量级的同步机制（乞丐版的 syschorcize）</li>
+<li>  JMM 谈谈</li>
+<li>  哪里用过 volitile</li>
+</ul>
+</blockquote>
+<p>volatile <strong>三大特性</strong></p>
+<ul>
+<li>  保证线程间可见性</li>
+<li>  不保证原子性</li>
+<li>  防止指令重排</li>
+</ul>
+<h2 id="可见性代码验证"><a href="#可见性代码验证" class="headerlink" title="可见性代码验证"></a>可见性代码验证</h2><h2 id="不保证原子性"><a href="#不保证原子性" class="headerlink" title="不保证原子性"></a>不保证原子性</h2><blockquote>
+<p>  代码验证</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  验证 volatile 不保证原子性</span></span><br><span class="line"><span class="comment"> *      1、原子性是什么意思？</span></span><br><span class="line"><span class="comment"> *          不可分割，完整性，也即某个线程正在做某个具体业务时，中间不可以被加塞或者被分隔，需要整体完整。</span></span><br><span class="line"><span class="comment"> *          要么同时成功，要么同时失败</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      2、代码演示</span></span><br><span class="line"><span class="comment"> *          新建 20 个线程，每个线程都调用 1000 次 autoIncrement() 方法对堆中的变量进行自增的操作，</span></span><br><span class="line"><span class="comment"> *          让 main 线程休眠一段时间等到这 20 个新建的线程执行完毕后再查看堆内存中 num 的值，在无错的情况下，</span></span><br><span class="line"><span class="comment"> *          num 的值应该是 0+20*1000=20000</span></span><br><span class="line"><span class="comment"> *          但是实际情况确实，大多数情况下这个值都小于 20000，且值不确定。这说明了 volatile 并不能保证原子性，</span></span><br><span class="line"><span class="comment"> *          即 volatile 并不能保证线程安全。在某个线程执行的时候，可能会被其它线程加塞。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        MyData myData = <span class="keyword">new</span> MyData();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">20</span> ; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">1000</span>; j++) &#123;</span><br><span class="line">                    myData.autoIncrement();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        System.out.println(myData.num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyData</span></span>&#123;</span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*  此时 num 前面是加了 volatile 关键字修饰的，但是 volatile 并不能保证变量的原子性   */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">autoIncrement</span><span class="params">()</span></span>&#123;</span><br><span class="line">        num++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  分析：</p>
+</blockquote>
+<p>如果没有使用 synchronized 加锁，那么就可能存在多个线程同时执行 num++ 这一句代码。</p>
+<p>num++ 这一行代码的实际操作可分为三个步骤：读 –&gt; 改 –&gt; 写。</p>
+<ol>
+<li> 读：首先从主内存中拿到 num 的值，复制一份到字节的工作内存中；</li>
+<li> 改：在自己的工作内存中对 num 进行自增操作；</li>
+<li> 写：将更改后的 num 写回到主内存中去。</li>
+</ol>
+<p>原子性就是 num++ 的“读 –&gt; 改 –&gt; 写”三个步骤是不可分割的，而 volatile 不能保证原子性。</p>
+<p>在保证原子性的情况下 num++ 的执行流程应该是：假设线程 A、B、C 并发执行，线程 A 拿到了 num=0，复制副本后在自己的工作空间中将其更新为 num=1，然后再将其写回到主内存中。这时候其它线程再去对 num 进行操作，这是一个完整的具备原子性的操作流程。</p>
+<p>而在不能保证原子性的情况下则会出现，线程 A、B、C 同时拿到了主内存中的值 num=0，并在各自的内存空间将 num 更新为 1，再同时将更新后的值写回主内存中，那么此时主内存中的值就会是 1，最后一个写入到主内存的 1 会覆盖前面两个写入到主内存的 1。而我们知道实际的运算结果本应该是 3。所以说在不能保证原子性的前提下，上述代码执行的结果大概率会小于 20000。</p>
+<blockquote>
+<p>  如何解决 volatile 不能保证原子性的问题？</p>
+</blockquote>
+<ol>
+<li> 加锁 synchronized</li>
+<li></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/28/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94JavaSE/" rel="prev" title="Java面经——JavaSE">
+                  <i class="fa fa-chevron-left"></i> Java面经——JavaSE
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/" rel="next" title="集合类线程不安全——List/Set/Map">
+                  集合类线程不安全——List/Set/Map <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

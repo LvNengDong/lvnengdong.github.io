@@ -23,16 +23,16 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="函数式接口包含且仅包含一个抽象方法的接口，称为函数式接口。（不是规定接口中只能有一个方法） @FunctionalInterface注解：我们可以通过在任意的函数式接口上使用@FunctionalInterface注解来检查本接口是否为函数式接口。同时，JavaDoc也会包含一条声明，说明这个接口是一个函数式接口。 Java内置四大核心函数式接口   函数式接口 抽象方法 参数类型 返回值类型 说">
+<meta name="description" content="函数式接口包含且仅包含一个抽象方法的接口，称为函数式接口。（不是规定接口中只能有一个方法） @FunctionalInterface注解：我们可以通过在任意接口上使用@FunctionalInterface注解来检查本接口是否为函数式接口。如果某个接口是一个函数式接口，在 JavaDoc也会包含一条声明加以说明。 Java内置四大核心函数式接口   函数式接口 抽象方法 参数类型 返回值类型 说明">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java8新特性">
 <meta property="og:url" content="http://example.com/2021/01/29/Java8%E6%96%B0%E7%89%B9%E6%80%A7/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="函数式接口包含且仅包含一个抽象方法的接口，称为函数式接口。（不是规定接口中只能有一个方法） @FunctionalInterface注解：我们可以通过在任意的函数式接口上使用@FunctionalInterface注解来检查本接口是否为函数式接口。同时，JavaDoc也会包含一条声明，说明这个接口是一个函数式接口。 Java内置四大核心函数式接口   函数式接口 抽象方法 参数类型 返回值类型 说">
+<meta property="og:description" content="函数式接口包含且仅包含一个抽象方法的接口，称为函数式接口。（不是规定接口中只能有一个方法） @FunctionalInterface注解：我们可以通过在任意接口上使用@FunctionalInterface注解来检查本接口是否为函数式接口。如果某个接口是一个函数式接口，在 JavaDoc也会包含一条声明加以说明。 Java内置四大核心函数式接口   函数式接口 抽象方法 参数类型 返回值类型 说明">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/01/29/Java8%E6%96%B0%E7%89%B9%E6%80%A7/Stream%E6%B5%81.png">
 <meta property="article:published_time" content="2021-01-29T02:12:14.000Z">
-<meta property="article:modified_time" content="2021-02-02T11:56:52.151Z">
+<meta property="article:modified_time" content="2021-07-04T13:31:16.012Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/01/29/Java8%E6%96%B0%E7%89%B9%E6%80%A7/Stream%E6%B5%81.png">
@@ -149,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">函数式接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%86%85%E7%BD%AE%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.</span> <span class="nav-text">Java内置四大核心函数式接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E5%AE%83%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.2.</span> <span class="nav-text">其它函数式接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">Lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">从匿名内部类开始学习Lambda表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">Lambda 表达式语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">方法引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%99%A8%E5%BC%95%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text">构造器引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E5%BC%95%E7%94%A8"><span class="nav-number">2.5.</span> <span class="nav-text">数组引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stream-API"><span class="nav-number">3.</span> <span class="nav-text">Stream API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAStream%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.1.</span> <span class="nav-text">创建Stream对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">中间操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%9B%E9%80%89%E5%92%8C%E5%88%87%E7%89%87"><span class="nav-number">3.2.1.</span> <span class="nav-text">筛选和切片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%A0%E5%B0%84"><span class="nav-number">3.2.2.</span> <span class="nav-text">映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">3.2.3.</span> <span class="nav-text">排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">终止操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE"><span class="nav-number">3.3.1.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D"><span class="nav-number">3.3.2.</span> <span class="nav-text">匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E7%BA%A6"><span class="nav-number">3.3.3.</span> <span class="nav-text">规约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B6%E9%9B%86"><span class="nav-number">3.3.4.</span> <span class="nav-text">收集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E6%B5%81%E4%B8%8E%E4%B8%B2%E8%A1%8C%E6%B5%81"><span class="nav-number">3.4.</span> <span class="nav-text">并行流与串行流</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%9A%84%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">接口中的默认方法与静态方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9FAPI"><span class="nav-number">5.</span> <span class="nav-text">新时间日期API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E5%AE%83%E6%96%B0%E7%89%B9%E6%80%A7"><span class="nav-number">6.</span> <span class="nav-text">其它新特性</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">函数式接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%86%85%E7%BD%AE%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.</span> <span class="nav-text">Java内置四大核心函数式接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E5%AE%83%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.2.</span> <span class="nav-text">其它函数式接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">Lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">函数式编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">从匿名内部类开始学习Lambda表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">Lambda 表达式语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text">方法引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%99%A8%E5%BC%95%E7%94%A8"><span class="nav-number">2.5.</span> <span class="nav-text">构造器引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E5%BC%95%E7%94%A8"><span class="nav-number">2.6.</span> <span class="nav-text">数组引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stream-API"><span class="nav-number">3.</span> <span class="nav-text">Stream API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAStream%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.1.</span> <span class="nav-text">创建Stream对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">中间操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%9B%E9%80%89%E5%92%8C%E5%88%87%E7%89%87"><span class="nav-number">3.2.1.</span> <span class="nav-text">筛选和切片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%A0%E5%B0%84"><span class="nav-number">3.2.2.</span> <span class="nav-text">映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">3.2.3.</span> <span class="nav-text">排序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">终止操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE"><span class="nav-number">3.3.1.</span> <span class="nav-text">查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D"><span class="nav-number">3.3.2.</span> <span class="nav-text">匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%84%E7%BA%A6"><span class="nav-number">3.3.3.</span> <span class="nav-text">规约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B6%E9%9B%86"><span class="nav-number">3.3.4.</span> <span class="nav-text">收集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E6%B5%81%E4%B8%8E%E4%B8%B2%E8%A1%8C%E6%B5%81"><span class="nav-number">3.4.</span> <span class="nav-text">并行流与串行流</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%9A%84%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">接口中的默认方法与静态方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9FAPI"><span class="nav-number">5.</span> <span class="nav-text">新时间日期API</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E5%AE%83%E6%96%B0%E7%89%B9%E6%80%A7"><span class="nav-number">6.</span> <span class="nav-text">其它新特性</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -162,13 +162,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -242,7 +242,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-02-02 19:56:52" itemprop="dateModified" datetime="2021-02-02T19:56:52+08:00">2021-02-02</time>
+        <time title="Modified: 2021-07-04 21:31:16" itemprop="dateModified" datetime="2021-07-04T21:31:16+08:00">2021-07-04</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -265,7 +265,7 @@
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h1><p>包含且仅包含一个抽象方法的接口，称为<strong>函数式接口</strong>。（不是规定接口中只能有一个方法）</p>
-<p><code>@FunctionalInterface</code>注解：我们可以通过在任意的函数式接口上使用<code>@FunctionalInterface</code>注解来检查本接口是否为函数式接口。同时，JavaDoc也会包含一条声明，说明这个接口是一个函数式接口。</p>
+<p><code>@FunctionalInterface</code>注解：我们可以通过在任意接口上使用<code>@FunctionalInterface</code>注解来检查本接口是否为函数式接口。如果某个接口是一个函数式接口，在 JavaDoc也会包含一条声明加以说明。</p>
 <h2 id="Java内置四大核心函数式接口"><a href="#Java内置四大核心函数式接口" class="headerlink" title="Java内置四大核心函数式接口"></a>Java内置四大核心函数式接口</h2><table>
 <thead>
 <tr>
@@ -354,16 +354,30 @@
 <hr>
 <h1 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h1><p>所谓的 Lambda 表达式，就是对接口中抽象方法的实现。</p>
 <p>Lambda是一个<strong>匿名函数</strong>，我们可以把Lambda表达式理解为<strong>一段可以传递的代码</strong>（将代码像数据一样进行传递）。可以写出更简洁、更灵活的代码。</p>
+<p><strong>Lambda 表达式整体可以视为一个看起来很长的变量，可以作为方法中的参数传递</strong>。</p>
 <p>Lambda表达式，也可以称为闭包，是Java8的新特性。</p>
-<p>Lambda允许把函数作为一个方法的参数（函数作为参数传递进方法中）。</p>
+<p>Lambda 允许把函数作为一个方法的参数（函数作为参数传递进方法中）。</p>
 <p>原来的匿名内部类–&gt;&gt;Lambda表达式</p>
+<p>Lambda 表达式要求接口是函数式接口，即接口中只有一个抽象方法，在重写方法时不会产生歧义，所以方法名可以省略。</p>
+<p><strong>拷贝小括号，写死右箭头，落地大括号</strong>。</p>
+<p><em>拷贝小括号：接口中唯一的抽象方法参数所在的小括号全部拷贝过来；</em></p>
+<p><em>写死右箭头；</em></p>
+<p><em>落地大括号：具体的落地实现放在大括号中</em></p>
+<p><strong>Lambda 表达式就是解决了匿名内部类代码语法冗余的现象</strong></p>
+<h2 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h2><p>函数：<code>f(x) = kx + b</code>，f(x) 是要计算得到的值， kx+b 是计算过程。</p>
+<p>函数式编程：就是让一个指定类型的变量表示 f(x)，用 Lambda 表达式表示计算过程的编程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Fun fx = (x) -&gt; &#123;kx + b&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="从匿名内部类开始学习Lambda表达式"><a href="#从匿名内部类开始学习Lambda表达式" class="headerlink" title="从匿名内部类开始学习Lambda表达式"></a>从匿名内部类开始学习Lambda表达式</h2><blockquote>
 <p>例1：</p>
 </blockquote>
-<p>匿名内部类可以说是 Lambda 表达式的下位替代品。</p>
-<p>在没有 Lambda 表达式之前，我们可以使用匿名内部类来实现某个接口中的抽象方法，从下面的代码中我们可以看出，该匿名内部类中的功能性代码其实只有一句，即<code>System.out.println(&quot;Hello World&quot;);</code>，但是为了程序符合语法，能正常运行，我们添加了许多无关紧要的代码。</p>
+<p>匿名内部类可以看做是 Lambda 表达式的下位替代品。</p>
+<p>在没有 Lambda 表达式之前，我们可以使用匿名内部类来实现某个接口中的抽象方法，从下面的代码中我们可以看出，该匿名内部类中的功能性代码其实只有一句，即<code>System.out.println(&quot;Hello World&quot;);</code>，但是为了程序符合语法，能正常运行，我们添加了许多模式化的代码。</p>
+<p>匿名内部类实现的细节：1、实现了 Runnable 接口，并重写了接口中的 run() 方法。    2、多态，用一个 Runnable 类型的变量接收重写后匿名对象的</p>
 <p>而在使用了 Lambda 表达式后，我们可以只写最核心的一句代码就可以实习想要的功能，使程序更为简洁、紧凑！</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 匿名内部类</span></span><br><span class="line">    Runnable r1 = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    r1.run();   </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Lambda 表达式</span></span><br><span class="line">    Runnable r2 = () -&gt; System.out.println(<span class="string">&quot;Hello Lambda&quot;</span>);</span><br><span class="line">    r2.run();   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-----------------------------------------输出结果----------------------------------------------------------</span><br><span class="line">    Hello World</span><br><span class="line">    Hello Lambda</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 匿名内部类</span></span><br><span class="line">    Runnable r1 = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    r1.run();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Lambda 表达式</span></span><br><span class="line">    Runnable r2 = () -&gt; System.out.println(<span class="string">&quot;Hello Lambda&quot;</span>);</span><br><span class="line">    r2.run();   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-----------------------------------------输出结果----------------------------------------------------------</span><br><span class="line">    Hello World</span><br><span class="line">    Hello Lambda</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>例2：</p>
@@ -442,8 +456,9 @@
 
 <hr>
 <h2 id="Lambda-表达式语法"><a href="#Lambda-表达式语法" class="headerlink" title="Lambda 表达式语法"></a>Lambda 表达式语法</h2><blockquote>
-<p>格式：</p>
+<p><strong>格式</strong></p>
 </blockquote>
+<p>Lambda 表达式用于实现接口中的抽象方法，那么显然它应该包含 <strong>方法参数列表、方法实现、返回值</strong> 三个部分。</p>
 <p>Java8 中引入了一个新的操作符<code>-&gt;</code>，它将 Lambda 分为了两个部分：</p>
 <ul>
 <li>左侧：Lambda 表达式的<strong>参数列表</strong>；对应接口中抽象方法的参数列表；</li>
@@ -454,16 +469,16 @@
 
 
 <blockquote>
-<p>Lambda 表达式对接口的要求</p>
+<p><strong>Lambda 表达式对接口的要求</strong></p>
 </blockquote>
 <ul>
 <li><p>需要函数式接口的支持。即<code>@FunctionalInterface</code>接口</p>
 </li>
-<li><p>因为函数式接口中有且仅有一个抽象方法，所以使用 Lambda 表达式实现的就是该抽象方法。</p>
+<li><p>因为函数式接口中有且仅有一个抽象方法，所以使用 Lambda 表达式实现的抽象方法是确定的。</p>
 </li>
 </ul>
 <blockquote>
-<p>Lambda表达式的特征：</p>
+<p><strong>Lambda表达式的特征</strong>：</p>
 </blockquote>
 <ul>
 <li>可选的<strong>类型声明</strong>：不需要声明参数类型，因为JVM编译器可通过上下文推断出数据类型。</li>
@@ -472,7 +487,7 @@
 <li>可选的<strong>返回关键字</strong>：如果主体只有一条语句且为返回值语句，则可以省略<code>return</code>关键字和大括号（return关键字和大括号要么全都省略，要么全都不省略）。</li>
 </ul>
 <blockquote>
-<p>Lambda 语法优化</p>
+<p><strong>Lambda 语法优化</strong></p>
 </blockquote>
 <ol>
 <li>简化参数类型：可以不写参数类型，但是必须所有参数都不写参数类型</li>
@@ -487,7 +502,7 @@
 </li>
 </ol>
 <blockquote>
-<p>Lambda 表达式只是实现了方法，但是并没有调用方法。</p>
+<p><strong>Lambda 表达式只是实现了方法，但是并没有调用方法</strong>。</p>
 </blockquote>
 <blockquote>
 <p>示例</p>
@@ -528,7 +543,7 @@
 <p><code>Consumer&lt;T&gt;</code>是一个消费型接口，接口中的抽象方法是<code>void accept(T t)</code>，一个参数无返回值。</p>
 <ol>
 <li>使用 Lambda 表达式后，<code>-&gt;</code>右侧的方法体中的<code>println</code>方法是Java已经实现好的，所以在这里我们就可以考虑使用<strong>方法引用</strong>。</li>
-<li><code>System.out</code>本质上是一个<code>PrintStream</code>类的匿名实例对象，所以采用<code>对象::实例方法名</code>的格式。</li>
+<li>System 中的 out 属性（<code>System.out</code>）本质上指向了一个<code>PrintStream</code>类的匿名实例对象，所以采用<code>对象::实例方法名</code>的格式。</li>
 </ol>
 <p>使用要求：</p>
 <ul>
@@ -1012,7 +1027,21 @@
 
 <h2 id="并行流与串行流"><a href="#并行流与串行流" class="headerlink" title="并行流与串行流"></a>并行流与串行流</h2><p>并行流就是把一个内容分成多个数据块，并用不同的线程分别处理每个数据块的流。</p>
 <p>Java8 中将并行进行了优化，我们可以很容易的对数据进行并行操作。Stream API 可以声明性的通过<code>parallel()</code>与<code>sequential()</code>在并行流和串行流之间进行切换。</p>
-<h1 id="接口中的默认方法与静态方法"><a href="#接口中的默认方法与静态方法" class="headerlink" title="接口中的默认方法与静态方法"></a>接口中的默认方法与静态方法</h1><h1 id="新时间日期API"><a href="#新时间日期API" class="headerlink" title="新时间日期API"></a>新时间日期API</h1><h1 id="其它新特性"><a href="#其它新特性" class="headerlink" title="其它新特性"></a>其它新特性</h1>
+<h1 id="接口中的默认方法与静态方法"><a href="#接口中的默认方法与静态方法" class="headerlink" title="接口中的默认方法与静态方法"></a>接口中的默认方法与静态方法</h1><ul>
+<li>  Java8 之前，接口中只允许定义抽象方法（只有方法的定义，而无方法的实现）；、</li>
+<li>  从 Java8 开始，接口中可以存在方法的实现，但是这个方法必须被 <strong>default</strong> 关键字修饰。</li>
+<li>  从 Java8 开始，接口中也可以定义静态方法。</li>
+<li>  在接口中，静态方法（被 static 修饰的方法）和默认方法（被 default 修饰的方法）<strong>可以定义任意多个</strong>，不受数量的限制。</li>
+</ul>
+<p>接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.day01;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/4 21:07</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Example</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">default</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">default</span> <span class="keyword">int</span> <span class="title">add2</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sub</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a-b;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">sub2</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a-b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>测试类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.day01;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/4 21:09</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  1、函数式接口：</span></span><br><span class="line"><span class="comment"> *      1.1 使用 <span class="doctag">@FunctionalInterface</span> 注解可以校验一个接口是否为函数式接口</span></span><br><span class="line"><span class="comment"> *      1.2 函数式接口要求接口中只能有一个抽象方法</span></span><br><span class="line"><span class="comment"> *  2、从 JDK 8开始，接口中除了抽象方法外，还可以存在 default 和 static 修饰的方法</span></span><br><span class="line"><span class="comment"> *     默认方法（default 方法）和静态方法（static 方法）在接口中可以有任意多个</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestImpl</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Lambda 表达式</span></span><br><span class="line">        Example example = () -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;HelloWorld&quot;</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">        example.sayHello();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> add = example.add(<span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line">        <span class="keyword">int</span> add2 = example.add2(<span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line">        System.out.println(add);</span><br><span class="line">        System.out.println(add2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> sub = Example.sub(<span class="number">7</span>, <span class="number">3</span>);</span><br><span class="line">        <span class="keyword">int</span> sub2 = Example.sub2(<span class="number">7</span>, <span class="number">3</span>);</span><br><span class="line">        System.out.println(sub);</span><br><span class="line">        System.out.println(sub2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 输出结果：</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     *      HelloWorld</span></span><br><span class="line"><span class="comment">     *      7</span></span><br><span class="line"><span class="comment">     *      7</span></span><br><span class="line"><span class="comment">     *      4</span></span><br><span class="line"><span class="comment">     *      4</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="新时间日期API"><a href="#新时间日期API" class="headerlink" title="新时间日期API"></a>新时间日期API</h1><h1 id="其它新特性"><a href="#其它新特性" class="headerlink" title="其它新特性"></a>其它新特性</h1>
     </div>
 
     
