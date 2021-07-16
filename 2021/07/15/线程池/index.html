@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="是什么为什么用？（优势）​        线程池做的工作主要是控制运行的线程的数量，处理过程中将任务放入队列。然后在线程创建后启动这些任务，如果线程数量超过了最大最大数量超出数量的线程排队等候，等其它线程执行完毕，再从队列中取出任务来执行。 主要特点：线程复用、控制最大并发数、管理线程   降低资源消耗。通过重复利用已创建的线程降低线程创建和回收造成的消耗。  提高响应速度。当任务到达时，任务可以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程池">
+<meta property="og:url" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="是什么为什么用？（优势）​        线程池做的工作主要是控制运行的线程的数量，处理过程中将任务放入队列。然后在线程创建后启动这些任务，如果线程数量超过了最大最大数量超出数量的线程排队等候，等其它线程执行完毕，再从队列中取出任务来执行。 主要特点：线程复用、控制最大并发数、管理线程   降低资源消耗。通过重复利用已创建的线程降低线程创建和回收造成的消耗。  提高响应速度。当任务到达时，任务可以">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/Executor.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154412236.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154444221.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154508186.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E6%BA%90%E7%A0%81.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102641510.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102554869.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102733383.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716103054629.png">
+<meta property="og:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716103405598.png">
+<meta property="article:published_time" content="2021-07-15T06:34:36.000Z">
+<meta property="article:modified_time" content="2021-07-16T02:58:21.340Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/Executor.png">
+
+
+<link rel="canonical" href="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>线程池 | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F%EF%BC%88%E4%BC%98%E5%8A%BF%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">为什么用？（优势）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">怎么用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AF%B4%E6%98%8E"><span class="nav-number">3.1.</span> <span class="nav-text">架构说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%EF%BC%883-5%E7%A7%8D%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">代码实现（3&#x2F;5种）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E9%87%8D%E8%A6%81%E5%8F%82%E6%95%B0%EF%BC%887%E5%A4%A7%E5%8F%82%E6%95%B0%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">几个重要参数（7大参数）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%95%E5%B1%82%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">底层工作原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%844%E7%A7%8D%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5"><span class="nav-number">6.</span> <span class="nav-text">线程池的4种拒绝策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E4%B8%AD%EF%BC%89"><span class="nav-number">6.1.</span> <span class="nav-text">阿里巴巴 Java 开发手册（实际开发中）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-number">7.</span> <span class="nav-text">自定义线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%90%88%E7%90%86%E9%85%8D%E7%BD%AE%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8F%82%E6%95%B0"><span class="nav-number">7.1.</span> <span class="nav-text">如何合理配置线程池参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E5%AF%86%E9%9B%86%E5%9E%8B"><span class="nav-number">7.1.1.</span> <span class="nav-text">CPU密集型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO%E5%AF%86%E9%9B%86%E5%9E%8B"><span class="nav-number">7.1.2.</span> <span class="nav-text">IO密集型</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线程池
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-15 14:34:36" itemprop="dateCreated datePublished" datetime="2021-07-15T14:34:36+08:00">2021-07-15</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-07-16 10:58:21" itemprop="dateModified" datetime="2021-07-16T10:58:21+08:00">2021-07-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><h1 id="为什么用？（优势）"><a href="#为什么用？（优势）" class="headerlink" title="为什么用？（优势）"></a>为什么用？（优势）</h1><p>​        线程池做的工作主要是控制运行的线程的数量，处理过程中将任务放入队列。然后在线程创建后启动这些任务，如果线程数量超过了最大最大数量超出数量的线程排队等候，等其它线程执行完毕，再从队列中取出任务来执行。</p>
+<p>主要特点：线程复用、控制最大并发数、管理线程</p>
+<ol>
+<li> 降低资源消耗。通过重复利用已创建的线程降低线程创建和回收造成的消耗。</li>
+<li> 提高响应速度。当任务到达时，任务可以不要等待线程创建就能立即执行。</li>
+<li> 提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配、调优和监控</li>
+</ol>
+<h1 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用"></a>怎么用</h1><h2 id="架构说明"><a href="#架构说明" class="headerlink" title="架构说明"></a>架构说明</h2><p>Java 中的线程池是通过 Executor 框架实现的，该框架用到了 Executor、Executors、ExecutorService、ThreadPoolExecutor 这几个类。</p>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/Executor.png" alt="Executor"></p>
+<h2 id="代码实现（3-5种）"><a href="#代码实现（3-5种）" class="headerlink" title="代码实现（3/5种）"></a>代码实现（3/5种）</h2><blockquote>
+<ol>
+<li> Executors.newFixedThreadPool(int nThreads)</li>
+<li> Executors.newSingleThreadExecutor()</li>
+<li> Executors.newCachedThreadPool()</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.pool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/15 15:12</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ExecutorService threadPool1 = Executors.newFixedThreadPool(<span class="number">5</span>);   <span class="comment">// 创建固定线程数的线程池</span></span><br><span class="line">        ExecutorService threadPool2 = Executors.newSingleThreadExecutor();   <span class="comment">// 创建单线程数的线程池</span></span><br><span class="line">        ExecutorService threadPool3 = Executors.newCachedThreadPool();   <span class="comment">// 创建自适应线程数的线程池</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 模拟10个用户来办理业务，每个用户就是一个来自外部的请求线程</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">                threadPool3.execute(()-&gt;&#123;   <span class="comment">/*让线程池中的某个线程去执行任务*/</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot;****办理业务&quot;</span>);</span><br><span class="line">                &#125;);</span><br><span class="line">                <span class="comment">// main线程睡眠100ms</span></span><br><span class="line">                <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            threadPool3.shutdown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>查看底层源码发现，这三个创建线程池的方法底层都使用了 <strong>ThreadPoolExecutor</strong> 类。</p>
+<blockquote>
+<ol>
+<li> <strong>newFixedThreadPool</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  创建一个定长的线程池，可控制线程的最大并发数，超出的线程会在队列中等待。</li>
+<li>  newFixedThreadPool 创建的线程池 corePoolSize 和 maximumPoolSize 值是相等的，它使用的是 LinkedBlockingQueue。</li>
+<li>  执行长期的任务，性能较好</li>
+</ul>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154412236.png" alt="image-20210715154412236"></p>
+<blockquote>
+<ol start="2">
+<li> <strong>newSingleThreadExecutor</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  创建一个只包含一个线程的线程池，只会用唯一的线程来执行任务，保证所有任务按照指定顺序执行。</li>
+<li>  newSingleThreadExecutor 将 corePoolSize 和 maximumPoolSize 都设置为 1，它使用的是 LinkedBlockingQueue。</li>
+<li>  一个任务一个任务执行的场景</li>
+</ul>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154444221.png" alt="image-20210715154444221"></p>
+<blockquote>
+<ol start="3">
+<li> <strong>newCachedThreadPool</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  创建一个自适应长度的线程池，即多退少补。</li>
+<li>  newCachedThreadPool 将 corePoolSize 设置为 0，将 maximumPoolSize 设置为 Integer.MAX_VALUE，使用的是 SynchronousQueue。也就是说来了任务就创建线程执行任务，当线程空闲超过 60s，就销毁线程。</li>
+<li>  适用于：执行很多短期异步的小程序或者负载较轻的服务器</li>
+</ul>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154508186.png" alt="image-20210715154508186"></p>
+<hr>
+<h1 id="几个重要参数（7大参数）"><a href="#几个重要参数（7大参数）" class="headerlink" title="几个重要参数（7大参数）"></a>几个重要参数（7大参数）</h1><ol>
+<li><p><strong>corePoolSize</strong>：线程池中常驻核心线程数</p>
+<ul>
+<li>  线程池中常驻线程数，即使没有任务时也需要维护的线程数。</li>
+<li>  当有请求任务进来后，首先会安排常驻线程去执行请求任务；</li>
+<li>  当线程池中已使用的线程数量达到 corePoolSize 后，就会把新到达的任务放到缓存队列中。</li>
+</ul>
+</li>
+<li><p> <strong>maximumPoolSize</strong>：线程池能够容纳同时执行的最大线程数，此值必须大于等于 1。</p>
+</li>
+<li><p><strong>keepAliveTime</strong>：多余的空闲线程的存活时间。[多余就是除了常驻线程之外的线程]</p>
+<p> 如果线程池中的线程数量超过 corePoolSize，并且空闲时间达到 keepAliveTime 值时，多余的空闲线程将会被销毁直到只剩下 corePoolSize 个线程。</p>
+<p> 默认情况下，只有当前线程池中的线程数大于 corePoolSize 时 keepAliveTime 才会起作用，直到线程池中的线程数不大于 corePoolSize。</p>
+</li>
+<li><p> <strong>unit</strong>：keepAliveTime 的时间单位</p>
+</li>
+<li><p> <strong>workQueue</strong>：任务队列，被提交但尚未执行的任务</p>
+</li>
+<li><p> <strong>threadFactory</strong>：生成线程池中工作线程的工厂，一般使用默认的即可。</p>
+</li>
+<li><p><strong>handler</strong>：拒绝策略。表示当阻塞队列满了并且工作线程大于等于线程池的最大线程数时如何拒绝请求任务的策略。</p>
+<p> <em>（线程池的所有线程都已经在工作了，并且等待执行的任务队列也满了，这时候就需要拒绝新的任务加入）</em></p>
+</li>
+</ol>
+<hr>
+<h1 id="底层工作原理"><a href="#底层工作原理" class="headerlink" title="底层工作原理"></a>底层工作原理</h1><blockquote>
+<p>  <strong>工作原理</strong></p>
+</blockquote>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt="线程池工作原理图"></p>
+<blockquote>
+<p>  <strong>工作流程图</strong></p>
+</blockquote>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="线程池工作流程图"></p>
+<p>在创建了线程池后，线程池会等待提交过来的任务请求。每当调用 execute() 方法添加一个任务请求时，线程池会做如下判断：</p>
+<ol>
+<li> 如果线程池中正在运行的线程数量小于 corePoolSize，那么马上创建线程运行这个任务；</li>
+<li> 如果线程池中正在运行的线程数量大于等于 corePoolSize，那么将这个任务放入阻塞队列；</li>
+<li> 如果这时候阻塞队列也满了且正在运行的线程数量小于 maximumPoolSize，就会创建非核心线程来执行这个任务；</li>
+<li> 如果队列满了且正在运行的线程数量大于等于 maximumPoolSize，那么线程池会执行<strong>饱和拒绝策略</strong>。</li>
+<li> 当一个线程完成任务时，它会从阻塞队列中选取下一个任务来执行。</li>
+<li>当一个线程无事可做超过一定的时间（keepAliveTime）时，线程池会判断：<ul>
+<li>  如果当前线程池中运行的线程数量大于 corePoolSize ，那么这个线程就会被销毁；</li>
+<li>  所以线程池的所有任务完成后它最终会收缩到 corePoolSize 的大小。</li>
+</ul>
+</li>
+</ol>
+<p>​    任务首先放到线程池的核心池中，放不下就放在阻塞队列，再放不下就对线程池扩容，直到扩容到最大。这时候如果继续有很多线程要进入，启动拒绝策略；如果这时候线程开始逐渐减少，就把线程池中超过一定空闲时间的销毁掉，直到线程池中线程数等于核心线程数。</p>
+<blockquote>
+<p>  <strong>源码分析</strong></p>
+<p>  <strong>ThreadPoolExecutor 的构造函数</strong></p>
+</blockquote>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E6%BA%90%E7%A0%81.png" alt="源码"></p>
+<hr>
+<h1 id="线程池的4种拒绝策略"><a href="#线程池的4种拒绝策略" class="headerlink" title="线程池的4种拒绝策略"></a>线程池的4种拒绝策略</h1><ol>
+<li> <strong>AbortPolicy（默认）</strong>：直接抛出 RuntimeExecutionException 异常，阻止系统正常运行。</li>
+<li> <strong>CallerRunsPolicy</strong>：“调用者“运行一种调节机制，该策略既不会抛弃任务，也不会抛出异常，而是将某些任务回退到调用者，从而降低新任务的流量。</li>
+<li> <strong>DiscardOldestPolicy</strong>：抛弃阻塞队列中等待最久的任务，然后把当前任务加入等待队列中尝试再次提交当前任务。</li>
+<li> <strong>DiscardPolicy</strong>：直接丢弃任务，不予任何处理也不抛出异常。如果允许任务丢失，这是最好的一种方案。</li>
+</ol>
+<p>以上内置拒绝策略均实现了 RejectedExecutionHandler 接口。</p>
+<h2 id="阿里巴巴-Java-开发手册（实际开发中）"><a href="#阿里巴巴-Java-开发手册（实际开发中）" class="headerlink" title="阿里巴巴 Java 开发手册（实际开发中）"></a>阿里巴巴 Java 开发手册（实际开发中）</h2><p>在实际开发中，线程资源必须通过线程池提供，不允许在程序中自行显式地创建线程。</p>
+<p><strong>说明</strong>：使用线程池的好处是减少在创建和销毁线程上所消耗的时间以及系统资源的开销，解决资源不足的问题。如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者“过度切换上下文线程”的问题。</p>
+<p>实际开发中，线程池不允许使用 Executors 工具类去创建，而是要通过 ThreadPoolExecutor 的方式去创建，这样的处理方式让写的同学更加明确线程池的规则，规避资源耗尽的风险。</p>
+<p><strong>说明</strong>：Executors 返回的线程池对象的弊端如下：</p>
+<ol>
+<li><p><code>FixedThreadPool</code> 和 <code>SingleThreadPool</code>：</p>
+<p> 这两种线程池维护的请求（阻塞）队列虽然是有界队列，但是允许的最大长度为 Integer.MAX_VALUE，这个值实际上非常大，可能会堆积大量的请求，从而导致 OOM。 </p>
+</li>
+<li><p><code>CachedThreadPool</code> 和 <code>ScheduledThreadPool</code></p>
+<p> 这两种线程池虽然使用的请求队列是同步阻塞队列，最大容量为1，但是允许创建的最大线程数量为 Integer.MAX_VALUE，也可能会创建大量的线程，从而导致 OOM。</p>
+</li>
+</ol>
+<h1 id="自定义线程池"><a href="#自定义线程池" class="headerlink" title="自定义线程池"></a>自定义线程池</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 10:05</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 手写线程池</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThreadPoolDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         *  参数含义：</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         *      (</span></span><br><span class="line"><span class="comment">         *       int corePoolSize,      核心线程数</span></span><br><span class="line"><span class="comment">         *       int maximumPoolSize,   最大线程数</span></span><br><span class="line"><span class="comment">         *       long keepAliveTime,    多余空闲存活时间</span></span><br><span class="line"><span class="comment">         *       TimeUnit unit,     // 时间单位</span></span><br><span class="line"><span class="comment">         *       BlockingQueue&lt;Runnable&gt; workQueue,     // 请求阻塞队列</span></span><br><span class="line"><span class="comment">         *       ThreadFactory threadFactory,       // 线程池工厂</span></span><br><span class="line"><span class="comment">         *       RejectedExecutionHandler handler   // 拒绝策略</span></span><br><span class="line"><span class="comment">         *      )</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        ThreadPoolExecutor threadPool = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">2</span>,</span><br><span class="line">                <span class="number">5</span>,</span><br><span class="line">                <span class="number">1L</span>,</span><br><span class="line">                TimeUnit.SECONDS,</span><br><span class="line">                <span class="keyword">new</span> LinkedBlockingQueue&lt;&gt;(<span class="number">5</span>),</span><br><span class="line">                Executors.defaultThreadFactory(),</span><br><span class="line">                <span class="keyword">new</span> ThreadPoolExecutor.AbortPolicy());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 模拟10个用户来办理业务，每个用户就是一个来自外部的请求线程。</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">             threadPool.execute(()-&gt;&#123;</span><br><span class="line">                 System.out.println(Thread.currentThread().getName() + <span class="string">&quot;办理业务&quot;</span>);</span><br><span class="line">             &#125;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            threadPool.shutdown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在上面自定义的线程池中，设置能容纳的最大线程数量为 5 个，阻塞队列的最大容量为 5 个，也就是说，该线程池最顶峰时只能同时容纳 10 个线程同时运行。如果超过 10 个线程，则会根据不同的拒绝策略得到不同的运行结果。如果将用户请求的任务设置为 12 个，</p>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102641510.png" alt="image-20210716102641510"></p>
+<blockquote>
+<ol>
+<li> <strong>默认拒绝策略 AbortPolicy 测试</strong></li>
+</ol>
+</blockquote>
+<p>程序会直接抛出<strong>java.util.concurrent.RejectedExecutionException</strong>异常。</p>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102554869.png" alt="image-20210716102554869"></p>
+<blockquote>
+<ol start="2">
+<li> <strong>CallerRunsPolicy 测试</strong></li>
+</ol>
+</blockquote>
+<p>不会抛出异常，但是由于请求的任务数大于线程池的最大线程数与阻塞队列数之和，所以会将容纳不下的任务交还给调用者线程执行，在这里就是 main 线程。</p>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102733383.png" alt="image-20210716102733383"></p>
+<blockquote>
+<ol start="3">
+<li> <strong>DiscardOldestPolicy</strong></li>
+</ol>
+</blockquote>
+<p>不会抛出异常，而是将阻塞队列中等待时间最长的任务丢弃掉。可以看到请求任务有 12 个，而程序只执行的 10 个，阻塞队列中等待时间最长的两个被抛弃掉了。</p>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716103054629.png" alt="image-20210716103054629"></p>
+<blockquote>
+<ol start="4">
+<li> <strong>DiscardPolicy 策略</strong></li>
+</ol>
+</blockquote>
+<p>不会抛出异常，同样是把超出数量的任务抛弃掉，但是在这里抛弃的是容纳不下的最新的任务请求。</p>
+<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716103405598.png" alt="image-20210716103405598"></p>
+<h2 id="如何合理配置线程池参数"><a href="#如何合理配置线程池参数" class="headerlink" title="如何合理配置线程池参数"></a>如何合理配置线程池参数</h2><h3 id="CPU密集型"><a href="#CPU密集型" class="headerlink" title="CPU密集型"></a>CPU密集型</h3><p>CPU 密集的意思是该任务需要大量的运算，而没有阻塞，CPU 一直全速运行。</p>
+<p>CPU 密集任务只有在真正的多核 CPU 上才能得到加速（通过多线程）</p>
+<p>而在单核CPU上，无论你开几个模拟的多线程该任务都不可能得到加速，因为CPU总的运算能力有限。</p>
+<p>CPU 密集型任务的配置尽可能少的线程数量。</p>
+<p>一般公式：CPU 核数 + 1个线程的线程池</p>
+<hr>
+<h3 id="IO密集型"><a href="#IO密集型" class="headerlink" title="IO密集型"></a>IO密集型</h3><p>IO 密集型，即该任务需要大量的 IO，即大量的阻塞。</p>
+<p>在单线程上运行 IO 密集型的任务会导致大量的 CPU 运算能力浪费在等待。</p>
+<p>所以在 IO 密集型任务中使用多线程可以大大的加速程序运行。即在单核 CPU 上，这种加速主要就是利用了被浪费掉的阻塞时间。</p>
+<ul>
+<li>  由于 IO 密集型任务并不是一直在执行任务，则应该配置尽可能多的线程，如 <strong>CPU核数×2</strong></li>
+</ul>
+<hr>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/11/%E9%94%81%E5%88%86%E7%B1%BB/" rel="prev" title="锁分类">
+                  <i class="fa fa-chevron-left"></i> 锁分类
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

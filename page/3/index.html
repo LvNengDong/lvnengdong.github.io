@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-count">120</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,119 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-04%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-04%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88/" class="post-title-link" itemprop="url">JVM——运行时数据区:04本地方法栈</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-31 22:08:17" itemprop="dateCreated datePublished" datetime="2021-05-31T22:08:17+08:00">2021-05-31</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-06-01 12:21:16" itemprop="dateModified" datetime="2021-06-01T12:21:16+08:00">2021-06-01</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="本地方法栈（Native-Method-Stack）"><a href="#本地方法栈（Native-Method-Stack）" class="headerlink" title="本地方法栈（Native Method Stack）"></a>本地方法栈（Native Method Stack）</h1><ul>
+<li><p><strong>Java虚拟机栈用于管理Java方法的调用，而本地方法栈用于管理本地方法的调用。</strong></p>
+</li>
+<li><p>本地方法栈，也是线程私有的。</p>
+</li>
+<li><p>本地方法栈允许被实现成固定或者是可动态扩展的内存大小。（在内存溢出方面和Java虚拟机栈是相同的）</p>
+<blockquote>
+<ul>
+<li>如果线程请求分配的栈容量超过本地方法栈允许的最大容量，JVM将会抛出一个 <code>StackOverflowError</code> 异常。</li>
+<li>如果本地方法栈设置为允许动态扩展，并且在尝试扩展的时候无法申请到足够的内存，或者在创建新的线程时没有足够的内存区创建对应的本地方法栈，那么Java虚拟机将会抛出一个 <code>OutofMemoryError</code> 异常。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>本地方法是使用C语言实现的。</p>
+</li>
+<li><p>它的具体做法是在 Native Method Stack 中登记 native 方法，在 Execution Engine 执行时加载本地方法库。</p>
+</li>
+<li><p><strong>当某个线程调用一个本地方法时，它就进入了一个全新的并且不再受虚拟机限制的世界。它和虚拟机拥有同样的权限。</strong></p>
+<blockquote>
+<ul>
+<li>本地方法可以通过本地方法接口来<strong>访问虚拟机内部的运行时数据区</strong>。</li>
+<li>它甚至可以直接使用本地处理器中的寄存器。</li>
+<li>直接从本地内存的堆中分配任意数量的内存。</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、Java线程调用本地方法，</span><br><span class="line">2、本地方法是用C语言实现的；</span><br><span class="line">3、C语言可以直接与操作系统或硬件进行交互；</span><br><span class="line">4、所以 Java语言可以通过本地方法直接与操作系统交互，而JVM正是直接与操作系统交互的，所以说本地方法和虚拟机拥有同样的权限。</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p><strong>并不是所有的JVM都支持本地方法。因为Java虚拟机规范并没有明确要求本地方法栈使用的语言、具体实现方式、数据结构等</strong>。如果JVM产品不打算支持 native 方法，也可以无需实现本地方法栈。</p>
+</li>
+<li><p>在 HotSpot JVM 中，直接将本地方法栈和虚拟机栈合二为一了。</p>
+</li>
+<li></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1677,162 +1790,6 @@
 <p>可以使用 String 类型的变量接收 json 字符串，然后在将其转换为 JSONObject 对象，再一个一个的从 JSONObject 对象中拿值。</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> String json)</span></span>&#123;	</span><br><span class="line">    Hosp hosp = JSONObject.parseObject(parameter, Hosp.class);</span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/" class="post-title-link" itemprop="url">阿里云短信服务</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-20 21:03:34" itemprop="dateCreated datePublished" datetime="2021-04-20T21:03:34+08:00">2021-04-20</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-21 01:01:28" itemprop="dateModified" datetime="2021-04-21T01:01:28+08:00">2021-04-21</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="开通阿里云短信服务"><a href="#开通阿里云短信服务" class="headerlink" title="开通阿里云短信服务"></a>开通阿里云短信服务</h1><h2 id="1、开通阿里云短信服务"><a href="#1、开通阿里云短信服务" class="headerlink" title="1、开通阿里云短信服务"></a>1、开通阿里云短信服务</h2><blockquote>
-<ol>
-<li>进入官网并登录/注册。</li>
-</ol>
-</blockquote>
-<p>官网地址：<a target="_blank" rel="noopener" href="http://www.aliyun.com/">www.aliyun.com</a></p>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420210414796.png" alt="image-20210420210414796"></p>
-<blockquote>
-<ol start="2">
-<li>首次进入选择免费开通短信服务。</li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420210558936.png" alt="image-20210420210558936"></p>
-<blockquote>
-<ol start="3">
-<li>进入<em>短信服务管理控制台</em>。</li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420213851804.png" alt="image-20210420213851804"></p>
-<h2 id="2、添加签名"><a href="#2、添加签名" class="headerlink" title="2、添加签名"></a>2、添加签名</h2><blockquote>
-<ol>
-<li>进入<code>国内消息 --&gt;&gt; 签名管理 --&gt;&gt; 添加签名</code></li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420211108672.png" alt="image-20210420211108672"></p>
-<blockquote>
-<ol start="2">
-<li>填写签名需要的资料，并发起申请。</li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420211920700.png" alt="image-20210420211920700"></p>
-<h2 id="3、添加模板"><a href="#3、添加模板" class="headerlink" title="3、添加模板"></a>3、添加模板</h2><blockquote>
-<ol>
-<li>进入 <code>国内消息 --&gt;&gt; 模板管理 --&gt;&gt; 添加模板</code></li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420212430982.png" alt="image-20210420212430982"></p>
-<blockquote>
-<ol start="2">
-<li>添加自定义的模板信息。其中：<ul>
-<li><strong>${xxx}</strong> 格式的属性是由从自己的服务器端上传到阿里云上的。</li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420213423198.png" alt="image-20210420213423198"></p>
-<ul>
-<li>Tip：验证码并不是由阿里云生成的，而是通过自己的服务器程序生成上传给阿里云服务器，再由阿里云服务器转发给用户使用的。</li>
-</ul>
-<hr>
-<h2 id="4、获取-AccessKey"><a href="#4、获取-AccessKey" class="headerlink" title="4、获取 AccessKey"></a>4、获取 AccessKey</h2><blockquote>
-<ol>
-<li>进入：<code>用户头像 --&gt;&gt; AccessKey管理 --&gt;&gt; 创建AccessKey</code></li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420213613810.png" alt="image-20210420213613810"></p>
-<h1 id="SpringBoot-整合阿里云服务"><a href="#SpringBoot-整合阿里云服务" class="headerlink" title="SpringBoot 整合阿里云服务"></a>SpringBoot 整合阿里云服务</h1><h2 id="初始化-SpringBoot-项目"><a href="#初始化-SpringBoot-项目" class="headerlink" title="初始化 SpringBoot 项目"></a>初始化 SpringBoot 项目</h2><blockquote>
-<ol>
-<li>创建一个 SpringBoot 项目</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol start="2">
-<li>添加依赖</li>
-</ol>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="3">
-<li>添加配置文件 application.properties</li>
-</ol>
-</blockquote>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 
 
       
