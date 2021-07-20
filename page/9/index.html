@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,569 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/26/%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/11/26/%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8/" class="post-title-link" itemprop="url">通用异常处理</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-11-26 20:04:03" itemprop="dateCreated datePublished" datetime="2020-11-26T20:04:03+08:00">2020-11-26</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-04-05 19:30:31" itemprop="dateModified" datetime="2021-04-05T19:30:31+08:00">2021-04-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>在项目中出现异常常用的处理方法是<code>try...catch</code>或<code>throw</code>。但是如果直接将异常信息展示给客户端浏览器显然是不合适的，下面我们将介绍比较规范的异常处理的过程。</p>
+<h2 id="场景模拟"><a href="#场景模拟" class="headerlink" title="场景模拟"></a>场景模拟</h2><p>向数据库新增一件商品，需要接收以下参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">price：商品价格</span><br><span class="line">name：商品名称</span><br></pre></td></tr></table></figure>
+
+<p>新增完成后在回传数据给前端时进行简单的校验，要求是：</p>
+<ul>
+<li>价格不能为空，为空则数据不合法。</li>
+<li>新增成功后，自动形成商品ID，然后随商品对象一起返回。</li>
+</ul>
+<h2 id="未出现异常的情况"><a href="#未出现异常的情况" class="headerlink" title="未出现异常的情况"></a>未出现异常的情况</h2><ol>
+<li><p>初始化一个SpringBoot工程</p>
+</li>
+<li><p>实体类<code>Item</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.domian;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span>	<span class="comment">// Lombok</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Item</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Long price;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>Controller层</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.web;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/item&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ItemService itemService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Item <span class="title">saveItem</span><span class="params">(Item item)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> itemService.saveItem(item);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>Service层</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.service;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemService</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">      * 模拟业务逻辑：新增商品成功后，自动形成商品ID，然后随商品对象一起返回</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Item <span class="title">saveItem</span><span class="params">(Item item)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> id = <span class="keyword">new</span> Random().nextInt(<span class="number">100</span>);</span><br><span class="line">        item.setId(id);</span><br><span class="line">        <span class="keyword">return</span> item;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>未出现异常时，前端页面提交新增商品的信息，后端把商品信息存到数据库中，成功后返回<strong>商品信息+商品ID</strong>。</p>
+</li>
+</ol>
+<hr>
+<h2 id="出现异常"><a href="#出现异常" class="headerlink" title="出现异常"></a>出现异常</h2><p>因为在程序运行过程中难以避免异常的发生，所以要增加异常处理逻辑。此处在Web层中增加了处理异常的逻辑。</p>
+<ol>
+<li><p>修改Web层的代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.web;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/item&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ItemService itemService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="comment">// ResponseEntity&lt;T&gt;中的泛型代表响应体</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;Item&gt; <span class="title">saveItem</span><span class="params">(Item item)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 校验价格</span></span><br><span class="line">        <span class="keyword">if</span> (item.getPrice() == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="comment">// Restful风格对于响应消息的格式有严格要求：必须返回 1)状态码 2）响应体。	</span></span><br><span class="line">            <span class="comment">// @ResponseBody 只负责响应体内容，而状态码在响应行中，这时候我们可以使用 ResponseEntity 来充当返回值对象</span></span><br><span class="line">            <span class="comment">// 如果是对象创建失败，且原因是请求参数有问题，应该返回响应状态码400.响应体为NULL</span></span><br><span class="line">            <span class="keyword">return</span> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(<span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 对象创建执行成功，返回响应状态码为201，响应体为Item对象</span></span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(HttpStatus.CREATED).body(itemService.saveItem(item));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">   </span><br><span class="line">- 如果请求参数符合规范，返回的结果为：状态码+Item对象：</span><br><span class="line">   </span><br><span class="line">  ![](%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8&#x2F;image-20201126175637689.png)</span><br><span class="line">   </span><br><span class="line">- 如果请求参数不符合规范，返回的结果为：状态码+NULL</span><br><span class="line">   </span><br><span class="line">  ![](%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8&#x2F;image-20201126175512201.png)</span><br><span class="line">   </span><br><span class="line">  显然，只返回响应状态，这样的异常处理对用户而言体验极差。</span><br><span class="line">   </span><br><span class="line">- 如果设置响应体中的数据为“价格不能为空”，与返回值&#96;ResponseEntity&lt;T&gt;&#96;的泛型类型不匹配，编译直接无法通过。</span><br><span class="line">   </span><br><span class="line">     &#96;&#96;&#96;java</span><br><span class="line">      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(&quot;价格不能为空&quot;);    &#x2F;&#x2F; error</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果将<code>ResponseEntity&lt;T&gt;</code>中的泛型类型指定为String类型可以完成该功能，但是这样一来，就不能顾名思义了，也不合适。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="通用异常处理"><a href="#通用异常处理" class="headerlink" title="通用异常处理"></a>通用异常处理</h2><ol>
+<li><p>既然不能通过<code>ResponseEntity&lt;T&gt;</code>完成想要的功能，我们就可以借助异常处理器。继续修改Web层的代码为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.web;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/item&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ItemService itemService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="comment">// ResponseEntity&lt;T&gt;中的泛型代表响应体</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;Item&gt; <span class="title">saveItem</span><span class="params">(Item item)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 校验价格</span></span><br><span class="line">        <span class="keyword">if</span> (item.getPrice() == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="comment">// 抛出异常，异常类RuntimeException中的内容会被封装在响应体中</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;价格不能为空&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 对象创建执行成功，返回响应状态码为201，响应体为Item对象</span></span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(HttpStatus.CREATED).body(itemService.saveItem(item));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>此时，出现异常的响应结果是：</p>
+<p><img src="/2020/11/26/%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8/image-20201126180849084.png"></p>
+<p>因为我们在出现异常的地方抛出了<code>RuntimeException</code>，那么编译器就会认为是服务器内部出现了问题，返回响应状态码是500，显然这是不合适的。</p>
+<p>SpringMVC配置了默认的异常处理器，现在就是默认的异常处理器在帮助我们处理异常。但是，我们想要的结果是：异常不应该由默认的异常处理器来处理，而是由我们自己处理，这就需要定义通用异常处理的逻辑。</p>
+</li>
+</ul>
+</li>
+<li><p>首先我们要拦截Web层抛出的所有异常（这是一种AOP的思想，面向切面编程）。但是不用我们自己去写拦截所有异常的方法，SpringMVC提供了<code>@ControllerAdvice</code>注解默认情况下可以自动拦截所有被<code>@Controller</code>注解修饰的类抛出的异常（即Web层的异常），被<code>@ControllerAdvice</code>修饰的类就是一个通知，可以在运行期增强被拦截到的异常。</p>
+</li>
+<li><p>拦截到异常之后，我们需要手动去处理异常。创建一个通用异常处理器类（本质上是一个<strong>通知</strong>）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.advice;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommonExceptionHandler</span> </span>&#123;</span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 该方法的返回值就是返回给浏览器的信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@ExceptionHandler(RuntimeException.class)</span>	<span class="comment">// 该注解的作用是拦截指定类型的异常</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">myExceptionHandler</span><span class="params">(RuntimeException e)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 拦截所有Web层异常，并在运行期对其进行增强</span></span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p><code>@ControllerAdvice</code>是SpringMVC中的注解，所以项目中事先需要引入SpringMVC的依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-webmvc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.2.6.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>再次访问，得到的结果为：</p>
+</li>
+</ol>
+<p>  <img src="/2020/11/26/%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8/image-20201126183158148.png"></p>
+<hr>
+<h2 id="继续优化"><a href="#继续优化" class="headerlink" title="继续优化"></a>继续优化</h2><p>存在的问题：</p>
+<ol>
+<li>通用异常处理器中，状态码被写死了（硬编码）</li>
+<li>响应体消息只返回字符串过于简单</li>
+</ol>
+<p>解决方法：</p>
+<ol>
+<li><p>响应状态码应该在抛出异常的地方声明。即抛出异常的地方应该声明：1、状态码  2、响应消息message。<code>--&gt;</code> 自定义异常类</p>
+<blockquote>
+<p>不管是<code>Exception类</code>还是<code>RuntimeException类</code>，其构造方法都不能保存响应状态码，所以我们要想在出现异常的地方声明响应状态码，就必须自定义异常类来实现！！！</p>
+</blockquote>
+</li>
+<li><p>响应消息message直接在抛出异常的地方定义也不合适，因为不同的开发人员定义的异常说明可能不同，所以最好的方法是定义在一个枚举类型中，由开发人员去调用即可。</p>
+</li>
+</ol>
+<ol>
+<li><p>自定义异常类：MyException</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.exception;</span><br><span class="line"></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyException</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 类中的属性</span></span><br><span class="line">    <span class="keyword">private</span> ExceptionEnum exceptionEnum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>定义一个枚举类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.enums;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将响应状态码和响应体消息都封装在枚举中，使用的时候直接调用即可。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Getter</span>     <span class="comment">// 提供get方法</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span>  </span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">ExceptionEnum</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    PRICE_CANNOT_BE_NULL(<span class="number">400</span>, <span class="string">&quot;价格不能为空&quot;</span>);</span><br><span class="line">    <span class="comment">// 等价于private static final ExceptionEnum name1  = new ExceptionEnum(400, &quot;价格不能为空&quot;);相当于创建了一个对象</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 类中的属性</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> statusCode;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>修改拦截器</p>
+<ul>
+<li>拦截自定义异常类</li>
+<li>通过自定义异常类中得到枚举中定义的异常信息说明，分别作为响应状态码和响应体返回给浏览器</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.advice;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommonExceptionHandler</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 该方法的返回值就是返回给浏览器的信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@ExceptionHandler</span>()注解的作用是限定拦截的异常的类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@ExceptionHandler(MyException.class)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">myExceptionHandler</span><span class="params">(MyException e)</span></span>&#123;</span><br><span class="line">        ExceptionEnum exceptionEnum = e.getExceptionEnum();</span><br><span class="line">        <span class="keyword">int</span> statusCode = exceptionEnum.getStatusCode();</span><br><span class="line">        String message = exceptionEnum.getMessage();</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(statusCode).body(message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>修改Web层</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.web;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/item&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ItemService itemService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="comment">// ResponseEntity&lt;T&gt;中的泛型代表响应体</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;Item&gt; <span class="title">saveItem</span><span class="params">(Item item)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 校验价格</span></span><br><span class="line">        <span class="keyword">if</span> (item.getPrice() == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="comment">// 抛出自定义异常，自定义异常中接收枚举类中的信息</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MyException(ExceptionEnum.PRICE_CANNOT_BE_NULL);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 对象创建执行成功，返回响应状态码为201，响应体为Item对象</span></span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(HttpStatus.CREATED).body(itemService.saveItem(item));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在还存在的问题就是<strong>响应体</strong>过于简单，所以我们可以将响应体封装成一个复杂的对象返回。</p>
+</li>
+<li><p>定义一个类封装响应体信息，该类接收一个枚举类型，并会将枚举类型中的信息拿过来并加以丰富</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.vo;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 丰富响应体的内容</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExceptionResult</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> status;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">    <span class="keyword">private</span> Long timestamp;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建一个构造函数，构造函数中接收来自ExceptionEnum的信息，并将枚举类中的信息初始化给当前类的属性</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ExceptionResult</span><span class="params">(ExceptionEnum em)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.status = em.getStatusCode();</span><br><span class="line">        <span class="keyword">this</span>.message = em.getMessage();</span><br><span class="line">        <span class="keyword">this</span>.timestamp = System.currentTimeMillis();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>设置拦截器中的响应体的返回值即方法的返回类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test.advice;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommonExceptionHandler</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 该方法的返回值就是返回给浏览器的信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@ExceptionHandler</span>()注解的作用是限定拦截的异常的类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@ExceptionHandler(MyException.class)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;ExceptionResult&gt; <span class="title">myExceptionHandler</span><span class="params">(MyException e)</span></span>&#123;</span><br><span class="line">        ExceptionEnum exceptionEnum = e.getExceptionEnum();</span><br><span class="line">        <span class="keyword">int</span> statusCode = exceptionEnum.getStatusCode();</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(statusCode).body(<span class="keyword">new</span> ExceptionResult(exceptionEnum));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>最终得到的结果如下：</p>
+<p><img src="/2020/11/26/%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8/image-20201126191922799.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>整个项目的目录结构如下：</p>
+<p><img src="/2020/11/26/%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8/image-20201126192009153.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/25/json%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8CJava%E5%AF%B9%E8%B1%A1%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/11/25/json%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8CJava%E5%AF%B9%E8%B1%A1%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">json字符串和Java对象之间的相互转换</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-11-25 22:05:52" itemprop="dateCreated datePublished" datetime="2020-11-25T22:05:52+08:00">2020-11-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-11-26 12:17:08" itemprop="dateModified" datetime="2020-11-26T12:17:08+08:00">2020-11-26</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaWeb/" itemprop="url" rel="index"><span itemprop="name">JavaWeb</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ul>
+<li>JSON：JavaScript 对象表示法（JavaScript Object Notation）。</li>
+<li>JSON 是存储和交换文本信息的语法。类似 XML。</li>
+<li>JSON 比 XML 更小、更快，更易解析。</li>
+</ul>
+<p>在开发过程中，系统和系统之间经常需要交换数据，数据交换的格式有XML、Json等。JSON 作为一种轻量级的数据交换格式，效率比XML高，更易于人阅读和编写，同时也易于机器解析和生成。这些特性使JSON 成为理想的数据交换语言。</p>
+<hr>
+<h1 id="序列化-反序列化"><a href="#序列化-反序列化" class="headerlink" title="序列化/反序列化"></a>序列化/反序列化</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><ul>
+<li><strong>序列化</strong>：Java中序列化就是指把Java对象转换为二进制字节流的过程。（二进制的字节流可以用String保存）</li>
+<li><strong>反序列化</strong>：反序列化就是指把二进制字节流恢复为Java对象的过程。</li>
+</ul>
+<h2 id="序列化的作用"><a href="#序列化的作用" class="headerlink" title="序列化的作用"></a>序列化的作用</h2><ul>
+<li>序列化的核心功能是：在传递和保存对象时，保证对象的可传递性和完整性。对象转换为有序字节流，</li>
+<li>反序列化的核心功能是：根据字节流中保存的对象状态及描述信息，通过反序列化重建对象</li>
+</ul>
+<h2 id="Json-XML数据的网络传输"><a href="#Json-XML数据的网络传输" class="headerlink" title="Json/XML数据的网络传输"></a>Json/XML数据的网络传输</h2><ul>
+<li>在数据传输前，先通过序列化工具将Java对象序列化为Json/XML文件；</li>
+<li>在数据传输后，再将Json/XML文件反序列化为对应的语言对象。</li>
+</ul>
+<hr>
+<h1 id="Json字符串在Java中的使用"><a href="#Json字符串在Java中的使用" class="headerlink" title="Json字符串在Java中的使用"></a>Json字符串在Java中的使用</h1><blockquote>
+<p>json字符串在Java中的操作，不外乎2种情况：</p>
+<ul>
+<li><strong>序列化</strong>：<code>Java对象--&gt;&gt;json字符串</code></li>
+<li><strong>反序列化</strong>：<code>json字符串--&gt;&gt;Java对象</code></li>
+</ul>
+</blockquote>
+<p>要想实现Json字符串和Java对象之间的相互转换，需要借助第3方jar包（或导入Maven依赖）。常见的Json解析器有：jsonlib、gson、fastjson、jackson等。我们这里采用Jackson依赖，因为SpringMVC中默认集成了Jackson依赖。</p>
+<ul>
+<li>使用Jackson要导入的Maven依赖。（如果已经导入<code>spring-boot-starter-web</code>依赖，则无需重复导入下面的依赖）</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-databind<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.core<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-annotations<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.11.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><ol>
+<li><p>在本地服务器上创建一个实体类Student</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(Integer id, String name, Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get方法不能省略</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Student&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;id=&quot;</span> + id +</span><br><span class="line">                <span class="string">&quot;, name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>创建一个测试类，对Student对象进行序列化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> JsonProcessingException </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 1、创建Jackson的核心对象</span></span><br><span class="line">        ObjectMapper objectMapper = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line">        <span class="comment">// 2、创建Student实体类对象</span></span><br><span class="line">        Student student = <span class="keyword">new</span> Student(<span class="number">3</span>, <span class="string">&quot;张飞&quot;</span>, <span class="number">34</span>);</span><br><span class="line">        <span class="comment">// 3、调用ObjectMapper对象中的方法将对象序列化</span></span><br><span class="line">        String json = objectMapper.writeValueAsString(student);</span><br><span class="line">        System.out.println(json);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>输出结果是一个Json字符串。</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Tip</strong>：对象的序列化就是将对象中的数据一一拿出来转化为二进制数据，所以实体类中每个属性一定要有get方法，如果没有get方法，则Jackson的核心对象<code>ObjectMapper</code>无法获取到实体类中的属性，就无法对属性进行序列化。</p>
+</blockquote>
+<h2 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h2><h3 id="json字符串转普通对象"><a href="#json字符串转普通对象" class="headerlink" title="json字符串转普通对象"></a>json字符串转普通对象</h3><ul>
+<li>本地服务器接收到远程服务器发来的一段二进制Json字节流，想要转换成Java对象的形式 ，步骤如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> JsonProcessingException </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 1、模拟从远程服务器接收json字节流</span></span><br><span class="line">        Student student = <span class="keyword">new</span> Student(<span class="number">3</span>, <span class="string">&quot;张飞&quot;</span>, <span class="number">34</span>);</span><br><span class="line">        String json = objectMapper.writeValueAsString(student);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2、创建Jackson的核心对象</span></span><br><span class="line">        ObjectMapper objectMapper = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line">        <span class="comment">// 3、反序列化（json--&gt;普通Java对象）</span></span><br><span class="line">        Student j_stu = objectMapper.readValue(json, Student.class);</span><br><span class="line">        System.out.println(j_stu);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Json字符串转集合"><a href="#Json字符串转集合" class="headerlink" title="Json字符串转集合"></a>Json字符串转集合</h3><p>Json字符串转集合比较麻烦，因为你无法同时把集合的class和元素的class同时传递到一个参数。因此Jackson做了一个工具类，用来解决这个问题：</p>
+<ul>
+<li>方法1：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> JsonProcessingException </span>&#123;</span><br><span class="line">       </span><br><span class="line">        <span class="comment">// 1、模拟从远程服务器接收json字节流</span></span><br><span class="line">        Student student1 = <span class="keyword">new</span> Student(<span class="number">3</span>, <span class="string">&quot;张飞&quot;</span>, <span class="number">34</span>);</span><br><span class="line">        Student student2 = <span class="keyword">new</span> Student(<span class="number">2</span>, <span class="string">&quot;关羽&quot;</span>, <span class="number">36</span>);</span><br><span class="line">        ArrayList&lt;Student&gt; list = <span class="keyword">new</span> ArrayList&lt;Student&gt;();</span><br><span class="line">        list.add(student1);</span><br><span class="line">        list.add(student2);</span><br><span class="line">        String json = objectMapper.writeValueAsString(list);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2、创建Jackson的核心对象</span></span><br><span class="line">        ObjectMapper objectMapper = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3、反序列化</span></span><br><span class="line">        <span class="comment">// 3.1 创建一个工具类，用于接收集合类型的json字符串并指定集合中的元素类型</span></span><br><span class="line">        CollectionType factory = objectMapper.getTypeFactory().constructCollectionType(List.class, Student.class);</span><br><span class="line">        <span class="comment">// 3.2 调用readValue()方法将json数据反序列化到内存中</span></span><br><span class="line">        List&lt;Student&gt; list_stu = objectMapper.readValue(json, factory);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>方法2：只是换了一个工具类来指定json字节流要转换的数据类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> JsonProcessingException </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 1、模拟从远程服务器接收json字节流</span></span><br><span class="line">        Student student1 = <span class="keyword">new</span> Student(<span class="number">3</span>, <span class="string">&quot;张飞&quot;</span>, <span class="number">34</span>);</span><br><span class="line">        Student student2 = <span class="keyword">new</span> Student(<span class="number">2</span>, <span class="string">&quot;关羽&quot;</span>, <span class="number">36</span>);</span><br><span class="line">        ArrayList&lt;Student&gt; list = <span class="keyword">new</span> ArrayList&lt;Student&gt;();</span><br><span class="line">        list.add(student1);</span><br><span class="line">        list.add(student2);</span><br><span class="line">        String json = objectMapper.writeValueAsString(list);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2、创建Jackson的核心对象</span></span><br><span class="line">        ObjectMapper objectMapper = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3、反序列化（json--&gt;List集合）</span></span><br><span class="line">        List&lt;Student&gt; value = objectMapper.readValue(json, <span class="keyword">new</span> TypeReference&lt;List&lt;Student&gt;&gt;() &#123;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="json字符串转任意复杂类型"><a href="#json字符串转任意复杂类型" class="headerlink" title="json字符串转任意复杂类型"></a>json字符串转任意复杂类型</h3><p>当对象泛型关系复杂时，类型工厂使用起来也会比较复杂。这时就可以采用Jackson提供的<code>TypeReference</code>来接收类型泛型，然后底层通过反射来获取泛型上的具体类型。实现json字节流与任意类型对象的转换。当然<code>TypeReference</code>也可以用于json字符串转集合。</p>
+<ul>
+<li>json字符串转为为List集合，List集合中的元素是Map对象。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> JsonProcessingException </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 1、模拟从远程服务器接收json字节流</span></span><br><span class="line">        Student student1 = <span class="keyword">new</span> Student(<span class="number">3</span>, <span class="string">&quot;张飞&quot;</span>, <span class="number">34</span>);</span><br><span class="line">        Student student2 = <span class="keyword">new</span> Student(<span class="number">2</span>, <span class="string">&quot;关羽&quot;</span>, <span class="number">36</span>);</span><br><span class="line">        Map map1 = <span class="keyword">new</span> HashMap&lt;String, Student&gt;();</span><br><span class="line">        Map map2 = <span class="keyword">new</span> HashMap&lt;String, Student&gt;();</span><br><span class="line">        map1.put(<span class="string">&quot;二哥&quot;</span>, student1);</span><br><span class="line">        map2.put(<span class="string">&quot;三弟&quot;</span>, student2);</span><br><span class="line">        ArrayList list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        list.add(map1);</span><br><span class="line">        list.add(map2);</span><br><span class="line">        String json = objectMapper.writeValueAsString(list);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 2、创建Jackson的核心对象</span></span><br><span class="line">        ObjectMapper objectMapper = <span class="keyword">new</span> ObjectMapper();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3、反序列化（json--&gt;Map集合）</span></span><br><span class="line">        List&lt;Map&lt;String, Student&gt;&gt; list_map = objectMapper.readValue(json, <span class="keyword">new</span> TypeReference&lt;List&lt;Map&lt;String, Student&gt;&gt;&gt;() &#123;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        System.out.println(list_map);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/25/SpringCloudApplication%E6%B3%A8%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/11/25/SpringCloudApplication%E6%B3%A8%E8%A7%A3/" class="post-title-link" itemprop="url">@SpringCloudApplication注解</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-11-25 10:39:34 / Modified: 10:48:10" itemprop="dateCreated datePublished" datetime="2020-11-25T10:39:34+08:00">2020-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SpringCould/" itemprop="url" rel="index"><span itemprop="name">SpringCould</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="meta">@EnableCircuitBreaker</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SpringCloudApplication &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>@SpringCouldApplication</code>注解是一个注解的集合。其中的主要功能注解有3个，分别是：</p>
+<ol>
+<li><code>@SpringBootApplication</code><ul>
+<li>声明当前类是一个SpringBoot类</li>
+</ul>
+</li>
+<li><code>@EnableDiscoveryClient</code><ul>
+<li>声明当前类是Eureka服务注册中心的服务调用者</li>
+</ul>
+</li>
+<li><code>@EnableCircuitBreaker</code><ul>
+<li>声明当前类使用了Hystrix熔断器</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/22/Java%E4%B8%ADString%E5%92%8Cint%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/11/22/Java%E4%B8%ADString%E5%92%8Cint%E4%B9%8B%E9%97%B4%E7%9A%84%E7%9B%B8%E4%BA%92%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">Java中String和int之间的相互转换</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-11-22 17:24:54" itemprop="dateCreated datePublished" datetime="2020-11-22T17:24:54+08:00">2020-11-22</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2020-11-23 10:40:28" itemprop="dateModified" datetime="2020-11-23T10:40:28+08:00">2020-11-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 已知：</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">123</span>；</span><br><span class="line">String s = <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="int-–-gt-String"><a href="#int-–-gt-String" class="headerlink" title="int –&gt; String"></a>int –&gt; String</h1><blockquote>
+<p>方法1：<code>int</code>类型数据与<code>空字符串</code>直接用<code>+</code>相连</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = i + <span class="string">&quot;&quot;</span>;		<span class="comment">// 会产生两个String对象</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>方法2：使用String类中的静态方法：<code>valueOf()</code></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = String.valueOf(i)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>方法3：使用<code>Integer</code>类中的静态方法：<code>toString()</code></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = Integer.toString(i)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h1 id="String-–-gt-int"><a href="#String-–-gt-int" class="headerlink" title="String –&gt; int"></a>String –&gt; int</h1><blockquote>
+<p>使用<code>Integer</code>类中的静态方法：<code>praseInt()</code>，不会产生多余的对象，但会抛出异常</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i = Integer.parseInt(s)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><blockquote>
+<p>Double、Float、Long、Byte、Short与STring之间的转换方法大同小异。</p>
+</blockquote>
+<h1 id="String–-gt-char-char数组"><a href="#String–-gt-char-char数组" class="headerlink" title="String–&gt;char/char数组"></a>String–&gt;char/char数组</h1><table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>String.charAt(index)</code></td>
+<td align="center"><code>char</code></td>
+<td align="center">可以得到String中某一指定位置的char</td>
+</tr>
+<tr>
+<td align="center"><code>String.toCharArray()</code></td>
+<td align="center"><code>char[]</code></td>
+<td align="center">可以得到整个String转化的char数组</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -3037,2081 +3600,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/11/CSS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/11/11/CSS/" class="post-title-link" itemprop="url">CSS</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-11-11 11:37:58" itemprop="dateCreated datePublished" datetime="2020-11-11T11:37:58+08:00">2020-11-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-03-12 22:05:47" itemprop="dateModified" datetime="2021-03-12T22:05:47+08:00">2021-03-12</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/2020/11/11/CSS/CSS.png"></p>
-<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><ul>
-<li><p>CSS( Cascading Style Sheets) ：层叠样式表</p>
-<blockquote>
-<p>作用：页面美化和布局控制</p>
-<p>层叠：多个样式可以作用在同一个html上，同时生效。</p>
-</blockquote>
-</li>
-<li><p><strong>好处</strong>：</p>
-<blockquote>
-<p><strong>将内容和样式控制分离</strong>。</p>
-<ul>
-<li>降低耦合度</li>
-<li>提高代码的复用率，提高开发效率</li>
-<li>让分工协作更加容易</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h1 id="CSS的使用（CSS与HTML结合）"><a href="#CSS的使用（CSS与HTML结合）" class="headerlink" title="CSS的使用（CSS与HTML结合）"></a>CSS的使用（CSS与HTML结合）</h1><h2 id="内联样式"><a href="#内联样式" class="headerlink" title="内联样式"></a>内联样式</h2><blockquote>
-<p>在标签内使用<code>style</code>属性定义css代码。</p>
-<p>格式：<code>&lt;div style=&quot;CSS代码&quot;&gt;</code></p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;color:red;&quot;&gt;hello css&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="内部样式"><a href="#内部样式" class="headerlink" title="内部样式"></a>内部样式</h2><blockquote>
-<p>在<code>&lt;head&gt;</code>标签内，定义<code>&lt;style&gt;</code>标签，<code>&lt;style&gt;</code>标签的标签体内容就是css代码。</p>
-</blockquote>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;style&gt;</span><br><span class="line">		<span class="selector-tag">div</span>&#123;</span><br><span class="line">    		<span class="attribute">color</span>:blue;</span><br><span class="line">		&#125;</span><br><span class="line">	&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;<span class="selector-tag">body</span>&gt;</span><br><span class="line">	&lt;<span class="selector-tag">div</span>&gt;hello css&lt;/<span class="selector-tag">div</span>&gt;</span><br><span class="line">&lt;/<span class="selector-tag">body</span>&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="外部样式"><a href="#外部样式" class="headerlink" title="外部样式"></a>外部样式</h2><blockquote>
-<ol>
-<li>定义css资源文件。</li>
-<li>在<code>&lt;head&gt;</code>标签内，定义<code>&lt;link&gt;</code>标签，引入外部的资源文件</li>
-</ol>
-</blockquote>
-<ol>
-<li><p>定义css资源文件：<code>demo.css</code></p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">    <span class="attribute">color</span>:green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>引入外部资源文件</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;link href=&quot;../demo.css&quot;&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;<span class="selector-tag">body</span>&gt;</span><br><span class="line">	&lt;<span class="selector-tag">div</span>&gt;hello css&lt;/<span class="selector-tag">div</span>&gt;</span><br><span class="line">&lt;/<span class="selector-tag">body</span>&gt;</span><br></pre></td></tr></table></figure></li>
-<li><p>引入外部资源——方式2</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">	<span class="keyword">@import</span> <span class="string">&quot;../demo.css&quot;</span>;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h1 id="CSS语法"><a href="#CSS语法" class="headerlink" title="CSS语法"></a>CSS语法</h1><h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">选择器&#123;</span><br><span class="line">    key1: value1;</span><br><span class="line">    key2: value2;</span><br><span class="line">    key3: value3;</span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ul>
-<li><strong>选择器</strong>：筛选具有相似特征的元素</li>
-<li>每一对属性需要使用；隔开，最后一对属性可以不加；</li>
-</ul>
-</blockquote>
-<h2 id="选择器分类"><a href="#选择器分类" class="headerlink" title="选择器分类"></a>选择器分类</h2><h3 id="基础选择器"><a href="#基础选择器" class="headerlink" title="基础选择器"></a>基础选择器</h3><ol>
-<li><p><strong>id选择器</strong>：选择具有某个特定id属性的元素。建议在一个html页面中id值唯一</p>
-   <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#id</span>属性值&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-<li><p><strong>元素选择器</strong>：选择具有相同标签名称的元素</p>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">标签名称&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>类选择器</strong>：选择具有相同的class属性值的元素。</p>
-   <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.class</span>属性值&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-<blockquote>
-<p>Tip：3个基础选择器的优先级：<code>ID选择器 &gt; 类选择器选择器 &gt; 元素选择器</code></p>
-</blockquote>
-<h3 id="扩展选择器："><a href="#扩展选择器：" class="headerlink" title="扩展选择器："></a>扩展选择器：</h3><ol>
-<li><strong>选择所有元素</strong>：</li>
-</ol>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">*&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><strong>并集选择器</strong>：</li>
-</ol>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">选择器<span class="number">1</span>,选择器<span class="number">2</span>&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><strong>子选择器</strong>：筛选选择器1元素下的选择器2的元素</li>
-</ol>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">选择器<span class="number">1</span> 选择器<span class="number">2</span>&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li><strong>父选择器</strong>：筛选选择器2元素下的选择器1的元素</li>
-</ol>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">选择器<span class="number">1</span> &gt; 选择器<span class="number">2</span>&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
-<li><strong>属性选择器</strong>：选择指定元素名称条件下，属性名=属性值的元素</li>
-</ol>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">元素名称<span class="selector-attr">[属性名=<span class="string">&quot;属性值&quot;</span>]</span>&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="6">
-<li><strong>伪类选择器</strong>：选择一些元素具有的状态</li>
-</ol>
-  <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">元素:状态&#123;</span><br><span class="line">    key: value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>如： <code>&lt;a&gt;</code>有如下几种状态，可以选择设置不同状态下展示不同的颜色</p>
-<blockquote>
-<ul>
-<li>link：初始化的状态</li>
-<li>visited：被访问过的状态</li>
-<li>active：正在访问状态</li>
-<li>hover：鼠标悬浮状态</li>
-</ul>
-</blockquote>
-</blockquote>
-<h2 id="CSS中常见的属性对应的键"><a href="#CSS中常见的属性对应的键" class="headerlink" title="CSS中常见的属性对应的键"></a>CSS中常见的属性对应的键</h2><ol>
-<li><strong>字体、文本</strong></li>
-</ol>
-<blockquote>
-<ul>
-<li>font-size：字体大小</li>
-<li>color：文本颜色</li>
-<li>text-align：对其方式</li>
-<li>line-height：行高 </li>
-<li>text_align：文本的对齐方式</li>
-</ul>
-<ol start="2">
-<li><strong>背景</strong></li>
-</ol>
-</blockquote>
-<blockquote>
-<ul>
-<li>background</li>
-</ul>
-<ol start="3">
-<li><strong>边框</strong></li>
-</ol>
-</blockquote>
-<blockquote>
-<ul>
-<li>border</li>
-</ul>
-<ol start="4">
-<li><strong>尺寸</strong></li>
-</ol>
-</blockquote>
-<blockquote>
-<ul>
-<li>width：宽度</li>
-<li>height：高度</li>
-</ul>
-<ol start="5">
-<li><strong>盒子模型</strong>：控制布局</li>
-</ol>
-</blockquote>
-<blockquote>
-<ul>
-<li><p>margin：外边距</p>
-</li>
-<li><p>padding：内边距</p>
-<blockquote>
-<ul>
-<li>默认情况下内边距会影响整个盒子的大小</li>
-<li>box-sizing: border-box;  设置盒子的属性，让width和height就是最终盒子的大小</li>
-</ul>
-</blockquote>
-</li>
-<li><p>float：浮动</p>
-<blockquote>
-<ul>
-<li>left</li>
-<li>right</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/11/JavaScript/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/11/11/JavaScript/" class="post-title-link" itemprop="url">JavaScript</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-11-11 11:37:09" itemprop="dateCreated datePublished" datetime="2020-11-11T11:37:09+08:00">2020-11-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-03-15 23:06:08" itemprop="dateModified" datetime="2021-03-15T23:06:08+08:00">2021-03-15</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/2020/11/11/JavaScript/JavaScript.png"></p>
-<h1 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h1><blockquote>
-<p>JavaScript是一门客户端脚本语言。</p>
-<ul>
-<li><strong>运行在客户端浏览器</strong>中的。每一个浏览器都有JavaScript的解析引擎</li>
-<li>脚本语言：不需要编译，直接就可以被浏览器解析执行了</li>
-</ul>
-</blockquote>
-<p>功能：</p>
-<blockquote>
-<p>是对HTML的增强，可以用来控制html元素，让页面有一些动态的效果，增强用户的体验。</p>
-</blockquote>
-<p>ECMAScript：客户端脚本语言的标准</p>
-<blockquote>
-<ul>
-<li>JavaScript = ECMAScript + JavaScript自己特有的东西(BOM+DOM)</li>
-</ul>
-</blockquote>
-<p>JS特点：</p>
-<blockquote>
-<ol>
-<li><strong>交互性</strong>：它可以完成信息的动态交互。</li>
-<li><strong>安全性</strong>：不允许直接访问硬盘。</li>
-<li><strong>跨平台性</strong>：只要是可以解释JS的浏览器都可以执行，与平台无关。</li>
-</ol>
-</blockquote>
-<hr>
-<h1 id="Js-与-HTML-结合的方式"><a href="#Js-与-HTML-结合的方式" class="headerlink" title="Js 与 HTML 结合的方式"></a>Js 与 HTML 结合的方式</h1><h2 id="内部Js"><a href="#内部Js" class="headerlink" title="内部Js"></a>内部Js</h2><blockquote>
-<p>在<code>&lt;head&gt;</code>或<code>&lt;body&gt;</code>标签中，使用<code>&lt;script&gt;</code>标签来包裹JavaScript代码。</p>
-</blockquote>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">        alert(<span class="string">&quot;hello js&quot;</span>)	   </span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">script</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="外部Js"><a href="#外部Js" class="headerlink" title="外部Js"></a>外部Js</h2><blockquote>
-<p>在<code>&lt;head&gt;</code>或<code>&lt;body&gt;</code>标签中，使用<code>&lt;script src=&quot;&quot;&gt;</code>引入外部的<code>.js</code>文件。</p>
-</blockquote>
-<ol>
-<li><p>定义<code>demo.js</code>文件</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert(<span class="string">&quot;hello js 外部js&quot;</span>);</span><br></pre></td></tr></table></figure></li>
-<li><p>引入外部的<code>demo.js</code></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;js/a.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>    </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<blockquote>
-<p>Tip：</p>
-<ul>
-<li><code>&lt;script&gt;</code>标签可以用来定义JS代码，也可以用来引入JS文件。但是，两个功能只能二选一使用，不能同时使用两个功能。</li>
-<li><strong><code>&lt;script&gt;</code>可以定义在html页面的任何地方，但是定义的位置会影响执行顺序。</strong></li>
-<li><code>&lt;script&gt;</code>标签可以定义多个。</li>
-</ul>
-</blockquote>
-<h1 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h1><blockquote>
-<ul>
-<li>单行注释：// </li>
-<li>多行注释：/**/</li>
-</ul>
-</blockquote>
-<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><p><img src="/2020/11/11/JavaScript/JS%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.png"></p>
-<table>
-<thead>
-<tr>
-<th align="center">ID</th>
-<th align="center">基本数据类型</th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>number</code></td>
-<td align="center">整数/小数/NaN(not a number 一个不是数字的数字类型)</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>string</code></td>
-<td align="center">字符串</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center"><code>boolean</code></td>
-<td align="center">布尔类型</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center"><code>undefined</code></td>
-<td align="center">所有JS变量未赋初始值的时候，默认值都是undefined</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center"><code>null</code></td>
-<td align="center">空值</td>
-</tr>
-</tbody></table>
-<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><blockquote>
-<p>Java语言是强类型语言，而JavaScript是弱类型语言。</p>
-<ul>
-<li>强类型：在开辟变量存储空间时，定义了空间将来存储的数据的数据类型。只能存储固定类型的数据</li>
-<li>弱类型：在开辟变量存储空间时，不定义空间将来的存储数据类型，可以存放任意类型的数据。</li>
-</ul>
-</blockquote>
-<h2 id="Js中变量的定义格式"><a href="#Js中变量的定义格式" class="headerlink" title="Js中变量的定义格式"></a>Js中变量的定义格式</h2><blockquote>
-<p>变量的定义使用<code>var</code>关键字或<code>let</code>关键字 。</p>
-<ul>
-<li><code>var</code>：定义的变量是局部变量</li>
-<li><code>let</code>：定义的变量是全局变量(不建议)</li>
-</ul>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> <span class="keyword">var</span> 变量名;	</span><br><span class="line"><span class="number">2.</span> <span class="keyword">var</span> 变量名 = 值;</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> <span class="keyword">let</span> 变量名;</span><br><span class="line"><span class="number">4.</span> <span class="keyword">let</span> 变量名 = 值;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><code>typeof</code>运算符：获取变量的类型。</p>
-<ul>
-<li><code>null</code> 类型运算后得到的是类型是 <code>object</code></li>
-<li>Js中的语句以<code>;</code>结尾，如果一行只有一条语句则<code> ;</code>可以省略 (不建议)</li>
-</ul>
-</blockquote>
-<hr>
-<h1 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h1><h2 id="一元运算符"><a href="#一元运算符" class="headerlink" title="一元运算符"></a>一元运算符</h2><blockquote>
-<p>只有一个参数的运算符</p>
-</blockquote>
-<p><strong>分类</strong></p>
-<table>
-<thead>
-<tr>
-<th align="center">分类</th>
-<th align="center"></th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>++/--</code></td>
-<td align="center">自增/自减</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"><code>+/-</code></td>
-<td align="center">正号/负号（不是加和减）</td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h2 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h2><ul>
-<li>参考Java的赋值运算符</li>
-</ul>
-<h2 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h2><ul>
-<li>参考Java的算术运算符</li>
-</ul>
-<h3 id="Tip"><a href="#Tip" class="headerlink" title="Tip"></a>Tip</h3><blockquote>
-<p>在JS中，如果运算数不是运算符所要求的类型，那么js引擎会自动的将运算数进行类型转换。</p>
-</blockquote>
-<p>其他类型 <code>--&gt;&gt;</code> number：</p>
-<ul>
-<li><p>String转number：</p>
-<blockquote>
-<p>如果字面值是数字，直接按照字面值转换。</p>
-<p>如果字面值不是数字，则转为NaN（不是数字的数字）</p>
-</blockquote>
-</li>
-<li><p>Boolean类型转Number</p>
-<blockquote>
-<p>true转为1，false转为0</p>
-</blockquote>
-</li>
-</ul>
-<hr>
-<h2 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h2><blockquote>
-<p><code>&gt; &lt; &gt;= &lt;= == ===(全等于)</code></p>
-</blockquote>
-<p><strong>比较方式</strong>：</p>
-<blockquote>
-<ol>
-<li>若待比较的两个变量数据类型相同，则可以直接比较。<ul>
-<li>数值类型直接比较大小；</li>
-<li>字符串类型则会按照字典顺序比较。按位逐一比较，直到得出大小为止。</li>
-</ul>
-</li>
-<li><strong>若待比较的两个变量数据类型不同，则需要先进行类型转换，再比较</strong>。</li>
-</ol>
-</blockquote>
-<p><strong>全等于</strong>：</p>
-<blockquote>
-<p><strong><code>===</code> 全等于</strong>：在比较之前，先判断类型，如果类型不一样，则直接返回false</p>
-</blockquote>
-<h2 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h2><ul>
-<li><code>&amp;&amp;</code>    与</li>
-<li><code>||</code>    或</li>
-<li><code>!</code>    非</li>
-</ul>
-<blockquote>
-<p>Tip：<strong>在JS中，所有的变量，都可以作为一个boolean类型变量使用。</strong></p>
-<p>其他类型转boolean：</p>
-<ul>
-<li><code>number</code>：<code>0</code>或<code>NaN</code>为假，其他为真<ul>
-<li><code>string</code>：除了<code>空字符串(&quot;&quot;)</code>，其他都是true</li>
-</ul>
-</li>
-<li><code>null</code>和<code>undefined</code>：都是false</li>
-</ul>
-<ol start="4">
-<li><code>对象</code>：所有对象都为true</li>
-</ol>
-</blockquote>
-<h2 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h2><ul>
-<li>参考Java的三元运算符</li>
-</ul>
-<hr>
-<h1 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h1><h2 id="默认顺序执行"><a href="#默认顺序执行" class="headerlink" title="默认顺序执行"></a>默认顺序执行</h2><h2 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h2><ol>
-<li><code>if...else...</code></li>
-<li><code>switch</code><ul>
-<li>在Java中，<code>switch()</code>方法中参数可以接受的数据类型：<code>byte int short char,枚举(1.5) ,String(1.7)</code></li>
-<li>在JS中，<code>switch()</code>方法中的参数可以是<strong>任意的基本数据类型</strong></li>
-</ul>
-</li>
-</ol>
-<h2 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h2><ol>
-<li><code>while</code></li>
-<li><code>do...while</code></li>
-<li><code>for</code></li>
-</ol>
-<hr>
-<h1 id="数组（对象）：Array"><a href="#数组（对象）：Array" class="headerlink" title="数组（对象）：Array"></a>数组（对象）：Array</h1><h2 id="定义（3种方式）"><a href="#定义（3种方式）" class="headerlink" title="定义（3种方式）"></a>定义（3种方式）</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方式1</span></span><br><span class="line"><span class="keyword">var</span> 数组名 = <span class="keyword">new</span> <span class="built_in">Array</span>(数组长度);</span><br><span class="line"><span class="comment">// 方式2</span></span><br><span class="line"><span class="keyword">var</span> 数组名 = <span class="keyword">new</span> <span class="built_in">Array</span>(元素列表);</span><br><span class="line"><span class="comment">// 方式3</span></span><br><span class="line"><span class="keyword">var</span> 数组名 = [元素列表];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*例子*/</span></span><br><span class="line"><span class="keyword">var</span> arr1 = [];	<span class="comment">// 定义空数组</span></span><br><span class="line"><span class="keyword">var</span> arr2 = [<span class="number">1</span>, <span class="string">&quot;abc&quot;</span>, <span class="literal">true</span>];		<span class="comment">// 定义数组的同时赋值元素</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="数组对象中的属性"><a href="#数组对象中的属性" class="headerlink" title="数组对象中的属性"></a>数组对象中的属性</h2><ul>
-<li><code>length</code>：数组对象中有一个<code>length</code>属性，该方法返回当前数组中元素的个数。</li>
-</ul>
-<h2 id="数组对象中的方法"><a href="#数组对象中的方法" class="headerlink" title="数组对象中的方法"></a>数组对象中的方法</h2><table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-<th align="center">返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>join(参数)</code></td>
-<td align="center">将数组中的元素按照指定的分隔符拼接为字符串。</td>
-<td align="center">String</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>push()</code></td>
-<td align="center">向数组的末尾添加一个或更多元素，并返回新的长度。</td>
-<td align="center">number</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h2 id="数组对象的特点"><a href="#数组对象的特点" class="headerlink" title="数组对象的特点"></a>数组对象的特点</h2><blockquote>
-<ul>
-<li>JS中，数组的<strong>元素类型是可变</strong>的。</li>
-<li>JS中，数组<strong>长度可变</strong>的。</li>
-</ul>
-</blockquote>
-<h2 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h2><blockquote>
-<p>格式：与Java相同</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 数组名 = [<span class="number">1</span>, <span class="string">&quot;abc&quot;</span>, <span class="literal">true</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.查找</span></span><br><span class="line"><span class="keyword">var</span> x = arr[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.修改</span></span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">66</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.增加</span></span><br><span class="line">arr[<span class="number">3</span>] = <span class="string">&quot;你好&quot;</span>;	<span class="comment">// 或者</span></span><br><span class="line">arr[arr.length] = <span class="string">&quot;hello&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 4.遍历</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">    alert(arr[i])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-<hr>
-<h1 id="方法（对象）：function"><a href="#方法（对象）：function" class="headerlink" title="方法（对象）：function"></a>方法（对象）：function</h1><blockquote>
-<p>在JS中，函数/方法是一个对象。</p>
-</blockquote>
-<h2 id="方法的定义"><a href="#方法的定义" class="headerlink" title="方法的定义"></a>方法的定义</h2><ul>
-<li>方式1：</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> 方法名(<span class="params">参数列表</span>)</span>&#123;</span><br><span class="line">    方法体;</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方式2：</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 方法名 = <span class="function"><span class="keyword">function</span>(<span class="params">形参列表</span>)</span>&#123;</span><br><span class="line">    方法体;</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="方法的调用"><a href="#方法的调用" class="headerlink" title="方法的调用"></a>方法的调用</h2><ul>
-<li>直接通过： <code>函数名(实参列表)</code>  调用。</li>
-</ul>
-<h2 id="方法的属性"><a href="#方法的属性" class="headerlink" title="方法的属性"></a>方法的属性</h2><ul>
-<li><code>length</code>：方法是一个对象，该对象有一个<code>length</code>属性，表示当前方法中形参列表中参数的个数。</li>
-</ul>
-<h2 id="Tip："><a href="#Tip：" class="headerlink" title="Tip："></a>Tip：</h2><blockquote>
-<ul>
-<li>方法是一个对象。</li>
-<li>在JS中，形参的数据类型不用写，返回值类型也不用写。[弱类型语言]</li>
-<li>在Java中允许方法重载，但是在JS中方法的重载会直接覆盖上一次的定义。</li>
-<li>在JS中，方法的调用只与方法的名称有关，与参数列表无关。</li>
-<li>在方法声明中有一个隐藏的内置对象（数组）<code>arguments</code>，封装了所有的实际参数。</li>
-</ul>
-</blockquote>
-<hr>
-<h1 id="日期（对象）：Date"><a href="#日期（对象）：Date" class="headerlink" title="日期（对象）：Date"></a>日期（对象）：Date</h1><h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nowTime = <span class="keyword">new</span> <span class="built_in">Date</span>()</span><br></pre></td></tr></table></figure>
-
-<h2 id="对象中的方法"><a href="#对象中的方法" class="headerlink" title="对象中的方法"></a>对象中的方法</h2><table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>toLocaleString()</code></td>
-<td align="center">返回当前date对象对应时间的本地字符串格式</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>getTime()</code></td>
-<td align="center">返回当前date对象对应时间的毫秒值（始于1970年1月1日0时0分0秒）</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h1 id="数学对象：Math"><a href="#数学对象：Math" class="headerlink" title="数学对象：Math"></a>数学对象：Math</h1><blockquote>
-<p>Math对象不用创建，可以直接使用，类似于Java中的静态类。</p>
-</blockquote>
-<h2 id="对象中的属性"><a href="#对象中的属性" class="headerlink" title="对象中的属性"></a>对象中的属性</h2><ul>
-<li><code>PI</code>：就是<code>π</code>值。</li>
-</ul>
-<h2 id="对象中的方法-1"><a href="#对象中的方法-1" class="headerlink" title="对象中的方法"></a>对象中的方法</h2><table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>random()</code></td>
-<td align="center">返回 [0 ，1） 之间的随机数。</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>ceil(a)</code></td>
-<td align="center">对<code>a</code>向上取整</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center"><code>floor(a)</code></td>
-<td align="center">对<code>a</code>向下取整</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center"><code>round(a)</code></td>
-<td align="center">四舍五入</td>
-</tr>
-</tbody></table>
-<h1 id="正则表达式对象：RegExp"><a href="#正则表达式对象：RegExp" class="headerlink" title="正则表达式对象：RegExp"></a>正则表达式对象：RegExp</h1><h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><p><a href>传送门</a></p>
-<blockquote>
-<p><strong>正则表达式</strong>：定义字符串的组成规则</p>
-</blockquote>
-<ol>
-<li><p>单个字符:[]</p>
-<blockquote>
-<p>如： [a] [ab] [a-zA-Z0-9_]</p>
-<pre><code>* 特殊符号代表特殊含义的单个字符:
- \d:单个数字字符 [0-9]
- \w:单个单词字符[a-zA-Z0-9_]
-</code></pre>
-</blockquote>
-</li>
-<li><p>量词符号：</p>
-<blockquote>
-<ol>
-<li><p>?：表示出现0次或1次<br> *：表示出现0次或多次<br> +：出现1次或多次<br> {m,n}:表示 m&lt;= 数量 &lt;= n</p>
-<p>​    m如果缺省： {,n}:最多n次</p>
-<p>​    n如果缺省：{m,} 最少m次</p>
-</li>
-</ol>
-</blockquote>
-</li>
-<li><p>开始结束符号</p>
-<blockquote>
-<ul>
-<li>^:开始</li>
-<li>$:结束</li>
-</ul>
-</blockquote>
-</li>
-</ol>
-<h2 id="正则表达式对象"><a href="#正则表达式对象" class="headerlink" title="正则表达式对象"></a>正则表达式对象</h2><h3 id="创建（2种方式）"><a href="#创建（2种方式）" class="headerlink" title="创建（2种方式）"></a>创建（2种方式）</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方式1</span></span><br><span class="line"><span class="keyword">var</span> reg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">&quot;正则表达式&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式2</span></span><br><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/正则表达式/</span>;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="对象中的方法-2"><a href="#对象中的方法-2" class="headerlink" title="对象中的方法"></a>对象中的方法</h3><table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>test(参数)</code></td>
-<td align="center">验证指定的字符串是否符合正则定义的规范</td>
-</tr>
-</tbody></table>
-<h1 id="全局对象：Global"><a href="#全局对象：Global" class="headerlink" title="全局对象：Global"></a>全局对象：Global</h1><blockquote>
-<p>全局对象Global中封装的方法不需要对象就可以直接调用。  </p>
-<p>调用方式：<code>方法名()</code></p>
-</blockquote>
-<h2 id="对象中的方法-3"><a href="#对象中的方法-3" class="headerlink" title="对象中的方法"></a>对象中的方法</h2><table>
-<thead>
-<tr>
-<th align="center">序号</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>encodeURL(参数)</code></td>
-<td align="center">将指定数据按URL编码</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>decodeURL(参数)</code></td>
-<td align="center">将指定数据按URL解码</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center"><code>encodeURLComponent(参数)</code></td>
-<td align="center">url编码,编码的字符更多</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center"><code>decodeURLComponent(参数)</code></td>
-<td align="center">url解码</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center"><code>parseInt(参数)</code></td>
-<td align="center">将字符串转为数字</td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center"><code>isNaN(参数)</code></td>
-<td align="center">判断一个值是否是NaN</td>
-</tr>
-<tr>
-<td align="center">7</td>
-<td align="center"><code>eval(参数)</code></td>
-<td align="center">将JavaScript字符串作为脚本代码来执行</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<blockquote>
-<ul>
-<li>NaN六亲不认，连自己都不能识别，所以NaN参与的<code>==</code>比较全部为false。想要判断某一数据是否为NaN，只能通过<code>isNaN()</code>方法</li>
-<li><code>parseInt(参数)</code>方法会逐一判字符串中的每一个字符是否是数字，直到不是数字为止，将前边数字部分转为number。</li>
-</ul>
-</blockquote>
-<h1 id="自定义对象"><a href="#自定义对象" class="headerlink" title="自定义对象"></a>自定义对象</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><ol>
-<li>方式1：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1.定义一个空对象实例</span></span><br><span class="line"><span class="keyword">var</span> 变量名 = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.绑定属性值</span></span><br><span class="line">变量名.属性 = 值;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.定义对象中的方法</span></span><br><span class="line">变量名.函数名 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>方式2：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 变量名 = &#123;</span><br><span class="line">    属性名<span class="number">1</span>:值<span class="number">1</span>,</span><br><span class="line">    ...... ,</span><br><span class="line">    函数名:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> 变量名.属性;</span><br><span class="line"><span class="number">2.</span> 变量名.方法名();</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<hr>
-<h1 id="BOM"><a href="#BOM" class="headerlink" title="BOM"></a>BOM</h1><blockquote>
-<p><strong>BOM</strong>：<code>Browser Object Model</code>，浏览器对象模型，就是将浏览器的各个组成部分封装成对象</p>
-</blockquote>
-<p><strong>BOM的组成部分</strong></p>
-<ul>
-<li><code>Window</code>：窗口对象</li>
-<li><code>Navigator</code>：浏览器对象</li>
-<li><code>Screen</code>：显示器屏幕对象</li>
-<li><code>History</code>：历史记录对象</li>
-<li><code>Location</code>：地址栏对象</li>
-</ul>
-<h2 id="Window：窗口对象"><a href="#Window：窗口对象" class="headerlink" title="Window：窗口对象"></a>Window：窗口对象</h2><h3 id="1、创建"><a href="#1、创建" class="headerlink" title="1、创建"></a>1、创建</h3><blockquote>
-<ul>
-<li>Window对象可以不需要创建直接使用。格式：<code>window.方法名()</code>或<code>window.属性</code></li>
-<li>window引用可以省略。格式：<code>方法名()</code>或<code>属性</code></li>
-</ul>
-</blockquote>
-<h3 id="2、对象中的方法"><a href="#2、对象中的方法" class="headerlink" title="2、对象中的方法"></a>2、对象中的方法</h3><table>
-<thead>
-<tr>
-<th align="center">分类</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-<th align="center">返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">与弹出框有关的方法</td>
-<td align="center"><code>alert()</code></td>
-<td align="center">弹出一个带有一段消息和一个确认按钮的警告框。</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>confirm()</code></td>
-<td align="center">弹出一个带有一段消息以及<strong>确认按钮和取消按钮</strong>的对话框。</td>
-<td align="center">如果用户点击确认按钮，返回true，反之则返回false</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>prompt()</code></td>
-<td align="center">弹出一个提示用户输入的对话框</td>
-<td align="center">返回值是用户输入的值</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">与打开关闭有关的方法</td>
-<td align="center"><code>close()</code></td>
-<td align="center">关闭当前浏览器窗口</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>open()</code></td>
-<td align="center">打开一个新的浏览器窗口</td>
-<td align="center">返回值是新的Window对象</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">与定时器有关的方法</td>
-<td align="center"><code>setTimeout(x, y)</code></td>
-<td align="center">在指定的毫秒数后调用函数或计算表达式。x是待调用的函数，y是时间</td>
-<td align="center">返回值是一个唯一标识，用于取消定时器</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>clearTimeout()</code></td>
-<td align="center">取消由<code>setTimeout()</code>方法设置的定时器</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>setInterval()</code></td>
-<td align="center">按照指定的周期（以毫秒计）来调用函数或计算表达式。</td>
-<td align="center">返回值是一个唯一标识，用于取消定时器</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>clearInterval()</code></td>
-<td align="center">取消由<code>setInterval()</code>设置的 定时器。</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h3 id="3、对象的属性"><a href="#3、对象的属性" class="headerlink" title="3、对象的属性"></a>3、对象的属性</h3><table>
-<thead>
-<tr>
-<th align="center">分类</th>
-<th align="center">属性</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center"><code>history</code></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>location</code></td>
-</tr>
-<tr>
-<td align="center">1、获取其它BOM对象</td>
-<td align="center"><code>Navigator</code></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>Screen</code></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">2、获取DOM对象</td>
-<td align="center"><code>document</code></td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="Location：地址栏对象"><a href="#Location：地址栏对象" class="headerlink" title="Location：地址栏对象"></a>Location：地址栏对象</h2><ol>
-<li><p>创建</p>
-<blockquote>
-<ul>
-<li><code>window.location</code></li>
-<li><code>location</code></li>
-</ul>
-</blockquote>
-</li>
-<li><p>方法</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>reload()</code></td>
-<td align="center">重新加载当前文档。刷新</td>
-</tr>
-</tbody></table>
-</li>
-<li><p>属性</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">属性</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>href</code></td>
-<td align="center">设置或返回完整的URL。该属性在<code>=</code>左边时是设置URL，在<code>=</code>右边时是返回URL</td>
-</tr>
-</tbody></table>
-</li>
-</ol>
-<hr>
-<h2 id="History：历史记录对象"><a href="#History：历史记录对象" class="headerlink" title="History：历史记录对象"></a>History：历史记录对象</h2><ol>
-<li><p>创建</p>
-<blockquote>
-<ul>
-<li><code>window.history</code></li>
-<li><code>history</code></li>
-</ul>
-</blockquote>
-</li>
-<li><p>方法</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-<th align="center">参数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>back()</code></td>
-<td align="center">加载history列表中的上一个URL</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>forward()</code></td>
-<td align="center">加载history列表中的下一个URL</td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center"><code>go(参数)</code></td>
-<td align="center">加载history列表中的某个具体页面</td>
-<td align="center">正数：前进几个历史记录<br>负数：后退几个历史记录</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-</li>
-<li><p>属性</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">属性</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>length</code></td>
-<td align="center">返回当前窗口历史列表中的 URL 数量</td>
-</tr>
-</tbody></table>
-</li>
-</ol>
-<hr>
-<h1 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h1><blockquote>
-<p><strong>DOM</strong>：Document Object Model，文档对象模型</p>
-<p>将标记语言文档的各个组成部分，封装成对象。可以使用这些对象，对标记语言文档进行CRUD的动态操作</p>
-<p>就是把文档中的<strong>标签</strong>、<strong>属性</strong>、<strong>文本</strong>等转化成对象来管理。</p>
-</blockquote>
-<p>W3C DOM 标准被分为 3 个不同的部分：</p>
-<blockquote>
-<ol>
-<li><strong>核心DOM</strong>：面向所有结构化文档的标准模型。包括：<ul>
-<li><code>Document</code>：文档对象</li>
-<li><code>Element</code>：元素对象</li>
-<li><code>Attribute</code>：属性对象</li>
-<li><code>Text</code>：文本对象</li>
-<li><code>Comment</code>：注释对象</li>
-<li><code>Node</code>：节点对象，其他5个的父对象</li>
-</ul>
-</li>
-<li><strong>XML DOM</strong>：针对 XML 文档的标准模型</li>
-<li><strong>HTML DOM</strong>：针对 HTML 文档的标准模型</li>
-</ol>
-</blockquote>
-<h2 id="核心DOM模型"><a href="#核心DOM模型" class="headerlink" title="核心DOM模型"></a>核心DOM模型</h2><h3 id="Document：文档对象"><a href="#Document：文档对象" class="headerlink" title="Document：文档对象"></a>Document：文档对象</h3><blockquote>
-<ol>
-<li>Document对象管理HTML文档中的全部内容。</li>
-<li>Document对象是一种树结构的文档，有层级关系。</li>
-<li>Document对象可以把所有的标签都<strong>对象化</strong>。</li>
-<li>我们可以通过Document对象<strong>访问所有</strong>的标签对象。</li>
-</ol>
-</blockquote>
-<p><img src="/2020/11/11/JavaScript/DOM%E6%96%87%E6%A1%A3%E6%A0%91%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png"></p>
-<ol>
-<li><p>创建：可以使用window对象来获取，或直接获取</p>
-<blockquote>
-<ul>
-<li><code>window.document</code></li>
-<li><code>document</code></li>
-</ul>
-</blockquote>
-</li>
-<li><p>方法</p>
-<table>
-<thead>
-<tr>
-<th align="center">分类</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center"><code>getElementById()</code></td>
-<td align="center">根据id属性值获取元素对象。id属性值一般唯一</td>
-</tr>
-<tr>
-<td align="center">获取Element对象</td>
-<td align="center"><code>getElementsByTagName()</code></td>
-<td align="center">根据元素名称获取元素对象们。返回值是一个数组</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>getElementsByClassName()</code></td>
-<td align="center">根据Class属性值获取元素对象们。返回值是一个数组</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>getElementsByName()</code></td>
-<td align="center">根据name属性值获取元素对象们。返回值是一个数组</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>createAttribute(name)</code></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">创建其他DOM对象</td>
-<td align="center"><code>createComment()</code></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>createElement()</code></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>createTextNode()</code></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>Tip</strong>：以上三个查询方法，一定要在页面加载完成之后执行，才能查询到标签对象。</p>
-</blockquote>
-</li>
-</ol>
-<hr>
-<h3 id="Element：元素对象"><a href="#Element：元素对象" class="headerlink" title="Element：元素对象"></a>Element：元素对象</h3><ol>
-<li><p>创建/获取：通过document来创建/获取</p>
-<blockquote>
-<ul>
-<li><code>document.createElement()</code></li>
-<li><code>document.getElementByXxx()</code></li>
-</ul>
-</blockquote>
-</li>
-<li><p>方法</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>removeAttribute()</code></td>
-<td align="center">删除属性</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>setAttribute()</code></td>
-<td align="center">设置属性</td>
-</tr>
-</tbody></table>
-</li>
-<li><p>属性</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center"></th>
-<th align="center"></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"></td>
-<td align="center"><code>innerHTML</code></td>
-<td align="center">使用<code>innerHTML</code>属性获取/修改标签中的内容</td>
-</tr>
-</tbody></table>
-</li>
-</ol>
-<h3 id="Node：节点对象"><a href="#Node：节点对象" class="headerlink" title="Node：节点对象"></a>Node：节点对象</h3><blockquote>
-<p>其他5个DOM对象的父对象，即：所有的DOM对象都可以被认为是一个节点对象。</p>
-<p>所以，其它5个DOM对象都继承了Node对象中公开的方法。</p>
-</blockquote>
-<ol>
-<li><p>方法</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>appendChild()</code></td>
-<td align="center">向当前节点的子节点列表的结尾添加新的子节点</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>removeChild()</code></td>
-<td align="center">删除（并返回）当前节点的指定子节点</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center"><code>replaceChild()</code></td>
-<td align="center">用新节点替换一个子节点</td>
-</tr>
-</tbody></table>
-</li>
-<li><p>属性</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">属性</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>parentNode</code></td>
-<td align="center">返回当前节点的父节点</td>
-</tr>
-</tbody></table>
-</li>
-</ol>
-<hr>
-<h1 id="JS中的事件"><a href="#JS中的事件" class="headerlink" title="JS中的事件"></a>JS中的事件</h1><blockquote>
-<p><strong>事件</strong>：某些组件被监听到执行了某些操作后，触发某些代码的执行。</p>
-</blockquote>
-<h2 id="事件的注册（绑定）"><a href="#事件的注册（绑定）" class="headerlink" title="事件的注册（绑定）"></a>事件的注册（绑定）</h2><blockquote>
-<p><strong>事件的绑定</strong>：其实就是告诉浏览器，触发事件后要执行哪些代码。</p>
-</blockquote>
-<h3 id="静态注册事件"><a href="#静态注册事件" class="headerlink" title="静态注册事件"></a>静态注册事件</h3><blockquote>
-<p>通过HTML标签的事件属性直接绑定事件响应后的代码，这种方式我们叫做静态注册。</p>
-</blockquote>
-<h3 id="动态注册事件"><a href="#动态注册事件" class="headerlink" title="动态注册事件"></a>动态注册事件</h3><blockquote>
-<p>通过JS代码得到标签的DOM对象，再通过**<code>DOM对象.事件名 = function()&#123;&#125;</code>**这种形式赋予事件响应后的代码。叫做动态注册。</p>
-</blockquote>
-<p><strong>动态注册的基本步骤</strong>：</p>
-<ol>
-<li>获取标签对象。</li>
-<li><code>标签对象.事件名=function()&#123;&#125;</code></li>
-</ol>
-<h2 id="8-2-常见的事件"><a href="#8-2-常见的事件" class="headerlink" title="8.2    常见的事件"></a>8.2    常见的事件</h2><table>
-<thead>
-<tr>
-<th align="center">分类</th>
-<th align="center">事件</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">加载事件</td>
-<td align="center"><code>onload</code></td>
-<td align="center">加载完成事件</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">点击事件</td>
-<td align="center"><code>onclick</code></td>
-<td align="center">单击事件</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>ondblclick</code></td>
-<td align="center">双击事件</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">焦点事件</td>
-<td align="center"><code>onblur</code></td>
-<td align="center">失去焦点事件。常用于输入框失去焦点后验证其输入内容是否合法</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>onfocus</code></td>
-<td align="center">元素获得焦点</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">鼠标事件</td>
-<td align="center"><code>onmousedown</code></td>
-<td align="center">鼠标按钮被按下</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>onmouseup</code></td>
-<td align="center">鼠标按键被松开</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>onmousemove</code></td>
-<td align="center">鼠标被移动</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>onmouseover</code></td>
-<td align="center">鼠标移到某元素之上</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>onmouseout</code></td>
-<td align="center">鼠标从某元素移开</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">键盘事件</td>
-<td align="center"><code>onkeydown</code></td>
-<td align="center">某个键盘按键被按下</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>onkeyup</code></td>
-<td align="center">某个键盘按键被松开</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>onkeypress</code></td>
-<td align="center">某个键盘按键被按下并松开</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">表单事件</td>
-<td align="center"><code>onsubmit</code></td>
-<td align="center">表单提交按钮被点击</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>onreset</code></td>
-<td align="center">重置按钮被点击</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">改变</td>
-<td align="center"><code>onchange</code></td>
-<td align="center">域的内容被改变</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">选择</td>
-<td align="center"><code>onselect</code></td>
-<td align="center">文本被选中</td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/11/HTML/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/11/11/HTML/" class="post-title-link" itemprop="url">HTML</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-11-11 11:36:34" itemprop="dateCreated datePublished" datetime="2020-11-11T11:36:34+08:00">2020-11-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-03-12 21:55:43" itemprop="dateModified" datetime="2021-03-12T21:55:43+08:00">2021-03-12</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/2020/11/11/HTML/HTML.png"></p>
-<h1 id="HTML-概述"><a href="#HTML-概述" class="headerlink" title="HTML 概述"></a>HTML 概述</h1><blockquote>
-<ul>
-<li><p>HTML 是最基础的网页开发语言</p>
-</li>
-<li><p>Hyper Text Markup Language：超文本标记语言</p>
-<blockquote>
-<ul>
-<li><p><strong>超文本</strong>：超文本是用超链接的方法，将各种不同空间的文字信息组织在一起的网状文本</p>
-</li>
-<li><p><strong>标记语言</strong>：</p>
-<ul>
-<li><p>由标签构成的语言。&lt;标签名称&gt; 如 html，xml</p>
-</li>
-<li><p>标记语言不是编程语言。</p>
-<blockquote>
-<ul>
-<li>没有逻辑性</li>
-<li>按顺序从上到下执行</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<ol>
-<li><p>html文档后缀名 .html 或者 .htm</p>
-</li>
-<li><p>标签分为：</p>
-</li>
-</ol>
-<ul>
-<li><p><strong>围堵标签</strong>：有开始标签和结束标签。如<code> &lt;html&gt; &lt;/html&gt;</code></p>
-</li>
-<li><p><strong>自闭合标签</strong>：开始标签和结束标签在一起。如<code> &lt;br/&gt;</code></p>
-</li>
-</ul>
-<ol start="3">
-<li>标签之间可以互相嵌套。</li>
-<li>在<strong>开始标签中</strong>可以定义属性。属性是由键值对构成，值需要用引号(单双都可)引起来</li>
-<li>html的标签不区分大小写，但是建议使用小写。</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol>
-<li><p>标签拥有自己的属性，分为：</p>
-<ul>
-<li><strong>基本属性</strong>：可以修改简单的样式效果</li>
-<li><strong>事件属性</strong>：可以直接设置事件响应后的代码</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">bgcolor</span>=<span class="string">&quot;red&quot;</span>&gt;</span>超链接<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">onclick</span>=<span class="string">&quot;alert(&#x27;你好&#x27;)&quot;</span>&gt;</span>超链接<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>属性必须有值，属性值必须加引号</p>
-</li>
-</ol>
-</blockquote>
-<hr>
-<h1 id="HTML-标签"><a href="#HTML-标签" class="headerlink" title="HTML 标签"></a>HTML 标签</h1><h2 id="1、文件标签"><a href="#1、文件标签" class="headerlink" title="1、文件标签"></a>1、文件标签</h2><blockquote>
-<p>构成html最基本的标签</p>
-</blockquote>
-<ul>
-<li><p><code>html</code>：html文档的根标签【超级祖宗】</p>
-</li>
-<li><p><code>head</code>：头标签</p>
-<blockquote>
-<ul>
-<li>用于指定html文档的一些属性。</li>
-<li>引入外部的资源</li>
-</ul>
-</blockquote>
-</li>
-<li><p><code>title</code>：标题标签</p>
-</li>
-<li><p><code>body</code>：体标签</p>
-</li>
-<li><p><code>&lt;!DOCTYPE html&gt;</code>：定义文档类型，html5中定义该文档是html文档</p>
-</li>
-</ul>
-<h2 id="2、文本标签"><a href="#2、文本标签" class="headerlink" title="2、文本标签"></a>2、文本标签</h2><blockquote>
-<p>和文本有关的标签</p>
-</blockquote>
-<ul>
-<li><p><code>&lt;!-- 注释 --&gt;</code>：注释</p>
-</li>
-<li><p><code>&lt;h1&gt;标题&lt;h1&gt;</code>：标题标签</p>
-<blockquote>
-<p>h1~h6:字体大小逐渐递减</p>
-</blockquote>
-</li>
-<li><p><code>&lt;p&gt;</code>：段落标签</p>
-</li>
-<li><p><code>&lt;br&gt;</code>：换行标签</p>
-</li>
-<li><p><code>&lt;hr&gt;</code>：水平线</p>
-<blockquote>
-<p>属性：</p>
-<ul>
-<li><p>color：颜色</p>
-</li>
-<li><p>width：线长</p>
-</li>
-<li><p>size：线高</p>
-</li>
-<li><p>align：对齐方式</p>
-<blockquote>
-<ul>
-<li>center：居中</li>
-<li>left：左对齐</li>
-<li>right：右对齐</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-</li>
-<li><p><code>&lt;font&gt;</code>：字体标签</p>
-<blockquote>
-<p>属性：</p>
-<ul>
-<li>size：字号</li>
-</ul>
-</blockquote>
-</li>
-<li><p><code>&lt;b&gt;</code>：字体加粗</p>
-</li>
-<li><p><code>&lt;i&gt;</code>：字体斜体</p>
-</li>
-<li><p><code>&lt;center&gt;</code>:文本居中</p>
-<blockquote>
-<p>属性：</p>
-<ul>
-<li>color：颜色</li>
-<li>size：大小</li>
-<li>face：字体</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h3 id="常见的属性对应的值"><a href="#常见的属性对应的值" class="headerlink" title="常见的属性对应的值"></a>常见的属性对应的值</h3><ul>
-<li><p>color：</p>
-<blockquote>
-<ol>
-<li>用英文单词表示：red,green,blue</li>
-<li>RGB(x，y，z)，值的范围：0~255  如  RGB(0,0,255)</li>
-<li>#XXYYZZ，值的范围：00~FF之间。如： #FF00FF</li>
-</ol>
-</blockquote>
-</li>
-<li><p>width：</p>
-<blockquote>
-<ol>
-<li>数值，如width=’20’ ,数值的单位，默认是 px(像素)</li>
-<li>数值%：如width=“20%”，相对于父元素所占的比例</li>
-</ol>
-</blockquote>
-</li>
-</ul>
-<h2 id="3、图片标签"><a href="#3、图片标签" class="headerlink" title="3、图片标签"></a>3、图片标签</h2><ul>
-<li><p><code>&lt;img&gt;</code>：展示图片</p>
-<blockquote>
-<p>属性：</p>
-<ul>
-<li>键：src，指定图片的位置</li>
-<li>值：相对路径/绝对路径</li>
-</ul>
-</blockquote>
- <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot; &quot;</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="4、列表标签："><a href="#4、列表标签：" class="headerlink" title="4、列表标签："></a>4、列表标签：</h2><ul>
-<li>有序列表：<code>&lt;ol&gt;&lt;li&gt;</code></li>
-<li>无序列表：<code>&lt;ul&gt;&lt;li&gt;</code></li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--有序列表 &lt;ol&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>第一项<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>第二项<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--无序列表 &lt;ul&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>第一项<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>第二项<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<h2 id="5、链接标签："><a href="#5、链接标签：" class="headerlink" title="5、链接标签："></a>5、链接标签：</h2><ul>
-<li><p><code>&lt;a&gt;</code>：超链接</p>
-<blockquote>
-<p>属性：</p>
-<ul>
-<li><p>href：指定访问资源的URL</p>
-</li>
-<li><p>target：指定打开资源的方式</p>
-<blockquote>
-<ul>
-<li>_self：默认值，在当前页面打开</li>
-<li>_blank：在空白页面打开</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h2 id="6、div"><a href="#6、div" class="headerlink" title="6、div"></a>6、div</h2><ul>
-<li><code>&lt;div&gt;</code>：块级标签。<strong>每个div都从新一行开始</strong></li>
-</ul>
-<h2 id="7、span："><a href="#7、span：" class="headerlink" title="7、span："></a>7、span：</h2><ul>
-<li><p><code>&lt;span&gt;</code>：<strong>行内标签</strong>/内联标签。</p>
-<blockquote>
-<ul>
-<li>与上文内容直接连接，不换行。</li>
-<li>每个<code>&lt;span&gt;</code>标签内的文本信息在一行中展示。</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h2 id="8、语义化标签"><a href="#8、语义化标签" class="headerlink" title="8、语义化标签"></a>8、语义化标签</h2><blockquote>
-<p>html5中为了提高程序的可读性，提供了一些标签。</p>
-</blockquote>
-<ul>
-<li><code>&lt;header&gt;</code>：页眉</li>
-<li><code>&lt;footer&gt;</code>：页脚</li>
-</ul>
-<h2 id="9、表格标签："><a href="#9、表格标签：" class="headerlink" title="9、表格标签："></a>9、表格标签：</h2><ul>
-<li><p><code>&lt;table&gt;</code>：定义表格</p>
-<blockquote>
-<p>属性：</p>
-<ul>
-<li>width：宽度</li>
-<li>border：边框</li>
-<li>cellpadding：定义内容和单元格的距离</li>
-<li>cellspacing：定义单元格之间的距离。如果指定为0，则单元格的线会合为一条、</li>
-<li>bgcolor：背景色</li>
-<li>align：对齐方式</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li><p><code>&lt;tr&gt;</code>：定义行</p>
-<blockquote>
-<ul>
-<li>bgcolor：背景色</li>
-<li>align：对齐方式</li>
-</ul>
-</blockquote>
-</li>
-<li><p><code>&lt;td&gt;</code>：定义单元格</p>
-<blockquote>
-<ul>
-<li>colspan：合并列</li>
-<li>rowspan：合并行</li>
-</ul>
-</blockquote>
-</li>
-<li><p><code>&lt;th&gt;</code>：定义表头单元格</p>
-</li>
-<li><p><code>&lt;caption&gt;</code>：表格标题</p>
-</li>
-<li><p><code>&lt;thead&gt;</code>：表示表格的头部分</p>
-</li>
-<li><p><code>&lt;tbody&gt;</code>：表示表格的体部分</p>
-</li>
-<li><p><code>&lt;tfoot&gt;</code>：表示表格的脚部分</p>
-</li>
-</ul>
-<h2 id="10、表单标签"><a href="#10、表单标签" class="headerlink" title="10、表单标签"></a>10、表单标签</h2><blockquote>
-<p>表单：用于采集用户输入的数据，和服务器进行交互。</p>
-</blockquote>
-<ul>
-<li><p><code>&lt;form&gt;</code>：用于定义表单。可以定义一个范围，范围代表采集用户数据的范围</p>
-<blockquote>
-<p>属性：</p>
-<ul>
-<li>action：指定提交数据的URL</li>
-<li>method：指定提交方式。GET/POST/…</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h3 id="表单项标签"><a href="#表单项标签" class="headerlink" title="表单项标签"></a>表单项标签</h3><ul>
-<li><p>表单项标签：</p>
-<ul>
-<li><p><code>&lt;input&gt;</code>：</p>
-<blockquote>
-<p>属性：</p>
-<ul>
-<li><p>type</p>
-<blockquote>
-<ul>
-<li><p>text：文本输入框，默认值</p>
-<blockquote>
-<p>placeholder：指定输入框的提示信息，当输入框的内容发生变化，会自动清空提示信息    </p>
-</blockquote>
-</li>
-<li><p>password：密码输入框</p>
-</li>
-<li><p>radio:单选框</p>
-<blockquote>
-<ol>
-<li>要想让多个单选框实现单选的效果，则多个单选框的name属性值必须一样。</li>
-<li>一般会给每一个单选框提供value属性，绑定其被选中后提交的值</li>
-<li>checked属性，可以指定默认值</li>
-</ol>
-</blockquote>
-</li>
-<li><p>checkbox：复选框</p>
-<blockquote>
-<ol>
-<li>一般会给复选框中的每一个单选框提供value属性，指定其被选中后提交的值</li>
-<li>checked属性，可以指定默认值</li>
-</ol>
-</blockquote>
-</li>
-<li><p>file：文件选择框</p>
-</li>
-<li><p>hidden：隐藏域，用于提交一些信息。</p>
-</li>
-</ul>
-<ul>
-<li><p>按钮：</p>
-<blockquote>
-<ul>
-<li><p>submit：提交按钮。可以提交表单</p>
-</li>
-<li><p>button：普通按钮</p>
-</li>
-<li><p>image：图片提交按钮</p>
-<blockquote>
-<p>src属性指定图片的路径</p>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-</li>
-<li><p><code>&lt;label&gt;</code>：指定输入项的文字描述信息</p>
-<blockquote>
-<p>label的for属性一般会和 input 的 id属性值对应。如果对应了，则点击label区域，会让input输入框获取焦点。</p>
-</blockquote>
-</li>
-<li><p><code>&lt;select&gt;</code>： 下拉列表</p>
-</li>
-<li><p>子元素：<code>&lt;option&gt;</code>，指定列表项</p>
-<blockquote>
-<ul>
-<li><code>&lt;select&gt;</code>标签只能定义一个选择列表，并不能定义选择列表内的值。</li>
-<li>如果想定义选择列表中的选项，需要使用<code>&lt;option&gt;</code>标签</li>
-</ul>
-</blockquote>
-</li>
-<li><p><code>&lt;textarea&gt;</code>：文本域</p>
-<blockquote>
-<ul>
-<li>rows：指定文本域的行数。 </li>
-<li>cols：指定文本域的列数，每一行有多少个字符。</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/07/Zuul/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/11/07/Zuul/" class="post-title-link" itemprop="url">Zuul</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-11-07 22:09:31" itemprop="dateCreated datePublished" datetime="2020-11-07T22:09:31+08:00">2020-11-07</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2020-11-25 15:15:30" itemprop="dateModified" datetime="2020-11-25T15:15:30+08:00">2020-11-25</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringCould/" itemprop="url" rel="index"><span itemprop="name">SpringCould</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h1><p>从一个房间走到另一个房间，必然要经过一扇门。同样，从一个网络向另一个网络发送信息，也必须经过一道“关口”，即<strong>网关（GateWay）</strong>。</p>
-<p>顾名思义，网关（GateWay）就是一个网络连接到另一个网络的“关口”。        通常我们讲的网关就是路由器的IP地址。</p>
-<blockquote>
-<p>**网关(Gateway)**又称网间连接器、协议转换器。            网关在网络层以上实现网络互连，是复杂的网络互连设备，仅用于两个高层协议不同的网络互连。网关既可以用于广域网互连，也可以用于局域网互连。                 网关是一种充当转换重任的计算机系统或设备。使用在不同的通信协议、数据格式或语言，甚至体系结构完全不同的两种系统之间，网关是一个翻译器。与网桥只是简单地传达信息不同，网关对收到的信息要重新打包，以适应目的系统的需求。</p>
-</blockquote>
-<h2 id="SpringCould中的网关"><a href="#SpringCould中的网关" class="headerlink" title="SpringCould中的网关"></a>SpringCould中的网关</h2><p>在不使用Zuul网关的情况下，使用Spring Cloud实现的微服务的架构大致如下：</p>
-<p><img src="/2020/11/07/Zuul/1525674644660.png" alt="1525674644660"></p>
-<blockquote>
-<ul>
-<li>我们通过Eureka实现了<strong>服务注册中心</strong>以及<strong>服务注册</strong>与<strong>发现</strong>；</li>
-<li>通过Ribbon或Feign实现<strong>服务的消费</strong>以及<strong>负载均衡</strong>；</li>
-<li>通过Spring Cloud Config实现了应用多环境的外部化配置以及版本管理。</li>
-<li>为了使得服务集群更为健壮，使用Hystrix的融断机制来避免在微服务架构中个别服务出现异常时引起的故障蔓延。</li>
-</ul>
-</blockquote>
-<p>在该架构中，我们的服务集群包含：内部服务Service A和Service B，他们都会注册与订阅服务至Eureka Server，而Open Service是一个对外的服务集群，通过负载均衡公开至服务调用方。我们把焦点聚集在对外服务这块，直接暴露我们的服务地址，这样的实现是否合理，或者是否有更好的实现方式呢？</p>
-<p>先来说说这样架构需要做的一些事儿以及存在的不足：</p>
-<blockquote>
-<ul>
-<li><p>为了保证对外服务的安全性，我们需要实现对服务访问的权限控制，而开放服务的权限控制机制将会贯穿并污染整个开放服务的业务逻辑，</p>
-</li>
-<li><p>无法直接复用既有接口。</p>
-<blockquote>
-<p>当我们需要把一个已经存在的内部服务集群变为对外服务集群时，我们不得不通过在原有接口上增加校验逻辑，或增加一个代理调用来实现权限控制，而不能直接复用原有的接口。</p>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<p>面对类似上面的问题，我们要如何解决呢？答案是：服务网关！</p>
-<blockquote>
-<p>为了解决上面这些问题，我们需要将权限控制这样的东西从我们的服务单元中抽离出去，而最适合这些逻辑的地方就是处于对外访问最前端的地方，我们需要一个更强大一些的均衡负载器——<strong>服务网关</strong>。</p>
-</blockquote>
-<p>服务网关是微服务架构中一个不可或缺的部分。通过服务网关统一向外系统提供REST API的过程中，除了具备服务路由、均衡负载功能之外，它还具备了<code>权限控制</code>等功能。Spring Cloud Netflix中的Zuul就担任了这样的一个角色，为微服务架构提供了前门保护的作用，同时将权限控制这些较重的非业务逻辑内容迁移到服务路由层面，使得服务集群主体能够具备更高的可复用性和可测试性。</p>
-<hr>
-<h1 id="Zuul"><a href="#Zuul" class="headerlink" title="Zuul"></a>Zuul</h1><p>Zuul是Netflix开源的微服务网关，它可以和Eureka、Ribbon、Hystrix等组件配合使用。Zuul的核心是一系列的<strong>过滤器</strong>，这些过滤器可以完成以下功能：</p>
-<blockquote>
-<p><strong>身份认证与安全</strong>：</p>
-<ul>
-<li>识别每个资源的验证要求，并拒绝那些与要求不符的请求。</li>
-</ul>
-<p><strong>审查与监控</strong>：</p>
-<ul>
-<li>在边缘位置追踪有意义的数据和统计结果，从而带来精确的生产视图。</li>
-</ul>
-<p><strong>动态路由</strong>：</p>
-<ul>
-<li>动态地将请求路由到不同的后端集群。</li>
-</ul>
-<p><strong>压力测试</strong>：</p>
-<ul>
-<li>逐渐增加指向集群的流量，以了解性能。</li>
-</ul>
-<p><strong>负载分配</strong>：</p>
-<ul>
-<li>为每一种负载类型分配对应的容量，并弃用超出限定值的请求。</li>
-</ul>
-<p><strong>静态响应处理</strong>：</p>
-<ul>
-<li>在边缘位置直接建立部分响应，从而避免其转发到内部集群。</li>
-</ul>
-<p><strong>多区域弹性</strong>：</p>
-<ul>
-<li>跨越AWS Region进行请求路由，旨在实现ELB（Elastic Load Balancing）使用的多样化，以及让系统的边缘更贴近系统的使用者。</li>
-</ul>
-</blockquote>
-<h2 id="SpringCould中的Zuul"><a href="#SpringCould中的Zuul" class="headerlink" title="SpringCould中的Zuul"></a>SpringCould中的Zuul</h2><p>SpringCould对Zuul进行了整合与增强。目前，Zuul使用的默认HTTP客户端是<code>ApacheHTTPClient</code>，也可以使用<code>RestClient</code>或者<code>okhttp3.OkHttpClient</code>。可以通过设置文件修改HTTP客户端。</p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">ribbon.restclient.enabled</span>=<span class="string">true;</span></span><br><span class="line"><span class="meta">ribbon.okhttp.enabled</span>=<span class="string">true;</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="Zuul加入后的架构"><a href="#Zuul加入后的架构" class="headerlink" title="Zuul加入后的架构"></a>Zuul加入后的架构</h2><p><img src="/2020/11/07/Zuul/1525675648881.png" alt="1525675648881"></p>
-<ul>
-<li>不管是来自于客户端（PC或移动端）的请求，<strong>还是服务内部调用</strong>。一切对服务的请求都会经过Zuul这个网关，然后再由网关来实现 鉴权、动态路由等等操作。Zuul就是我们服务的统一入口。</li>
-</ul>
-<hr>
-<h2 id="路由规则"><a href="#路由规则" class="headerlink" title="路由规则"></a>路由规则</h2><ul>
-<li><p>映射规则</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">10010</span> <span class="comment"># 当前服务的端口号</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">	<span class="attr">name:</span> <span class="string">api-gateway</span> <span class="comment"># 当前服务实例名</span></span><br><span class="line"></span><br><span class="line"><span class="attr">zuul:</span></span><br><span class="line">  <span class="attr">routes:</span></span><br><span class="line">  	<span class="attr">user-service:</span>	<span class="comment"># 这里是自定义的路由ID</span></span><br><span class="line">  	<span class="attr">path:</span> <span class="string">/user-service/**</span> 	<span class="comment"># 定义访问路径</span></span><br><span class="line">  	<span class="attr">url:</span> <span class="string">http://127.0.0.1:8081</span>	<span class="comment"># 访问路径映射到的实际url地址</span></span><br></pre></td></tr></table></figure>
-
-<p>我们将符合<code>path</code>规则的一切请求，都代理到<code>url</code>参数指定的地址。</p>
-<p>本例中，我们将<code>/user-service/**</code>开头的请求，代理到<code>http://127.0.0.1:8081</code>。</p>
-<p>此时：<code>http://localhost:10010/user-service/user/1</code> 等价于 <code>http://127.0.0.1:8081/user/1</code></p>
-</li>
-</ul>
-<h3 id="5-1-2-面向服务的路由"><a href="#5-1-2-面向服务的路由" class="headerlink" title="5.1.2    面向服务的路由"></a>5.1.2    面向服务的路由</h3><ul>
-<li>在刚才的路由规则中，我们把路径对应的服务地址写死了！如果一个服务有多个实例的话，这样做显然是不合理的。</li>
-<li>我们应该根据服务的名称，去Eureka注册中心查找服务对应的所有实例列表，然后进行动态路由才对。</li>
-</ul>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加Eureka配置，拉取服务列表</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">	<span class="attr">registry-fetch-interval-seconds:</span> <span class="number">5</span> <span class="comment"># 获取服务列表的周期：5s</span></span><br><span class="line">  	<span class="attr">service-url:</span></span><br><span class="line">	  <span class="attr">defaultZone:</span> <span class="string">http://127.0.0.1:10086/eureka</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">	<span class="attr">prefer-ip-address:</span> <span class="literal">true</span></span><br><span class="line">	<span class="attr">ip-address:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="comment"># 修改路由映射规则，通过服务名称获取路由地址</span></span><br><span class="line"><span class="attr">zuul:</span></span><br><span class="line">  <span class="attr">routes:</span></span><br><span class="line">  	<span class="attr">user-service:</span>	<span class="comment"># 路由ID，随意写</span></span><br><span class="line">  	  <span class="attr">path:</span>	<span class="string">/user-service/**</span>	<span class="comment"># 映射路径</span></span><br><span class="line">  	  <span class="attr">serviceId:</span> <span class="string">user-service</span>	<span class="comment"># 指定服务名称</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="1、简化的路由配置"><a href="#1、简化的路由配置" class="headerlink" title="1、简化的路由配置"></a>1、简化的路由配置</h4><ol>
-<li><p>在上面的配置中，我们的规则是这样的：</p>
-<ul>
-<li><code>zuul.routes.&lt;routes&gt;.path=/xxx/**</code>：来指定映射路径。<code>&lt;routes&gt;</code>是自定义的路由名。</li>
-<li><code>zuul.routes.&lt;routes&gt;.serviceId=/user-service</code>：来指定服务名。</li>
-</ul>
-</li>
-<li><p>而大多数情况下，我们的<code>&lt;routes&gt;</code>路由名往往和服务名会定义成一样的，因此Zuul就提供了一种简化的配置语法：</p>
-<ul>
-<li><code>zuul.routes.&lt;serviceId&gt;=&lt;path&gt;</code></li>
-</ul>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">zuul:</span></span><br><span class="line">  <span class="attr">routes:</span></span><br><span class="line">  	<span class="attr">user-service:</span> <span class="string">/user-service/**</span>	<span class="comment"># 服务名称&amp;映射路径[省去了对服务名称的配置]	</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<h4 id="2、默认的路由规则"><a href="#2、默认的路由规则" class="headerlink" title="2、默认的路由规则"></a>2、默认的路由规则</h4><ul>
-<li>在使用Zuul的过程中，上述的规则已经大大简化了配置。但是当服务较多时，配置仍是比较繁琐的，因此Zuul就指定了默认的路由规则：<ul>
-<li>默认情况下，一切服务的映射路径就是服务名本身。<ul>
-<li>例如服务名为：<code>user-service</code>，则默认的映射路径就是：<code>/user-service/**</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>也就是说，上面的映射规则我们完全不配置也是OK的。</li>
-</ul>
-<h4 id="4、路由前缀"><a href="#4、路由前缀" class="headerlink" title="4、路由前缀"></a>4、路由前缀</h4><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">zuul:</span></span><br><span class="line">  <span class="attr">prefix:</span> <span class="string">/api</span>	<span class="comment"># 添加路由前缀</span></span><br><span class="line">  <span class="attr">routes:</span> </span><br><span class="line">  	<span class="attr">user-service:</span>	<span class="comment"># 路由ID</span></span><br><span class="line">  	  <span class="attr">path:</span> <span class="string">/user-service/**</span></span><br><span class="line">  	  <span class="attr">serviceId:</span> <span class="string">user-service</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>我们通过<code>zuul.prefix=/api</code>来指定了路由的前缀，这样在发起请求时，路径就要以<code>/api</code>开头</li>
-</ul>
-<h2 id="5-2-过滤器"><a href="#5-2-过滤器" class="headerlink" title="5.2    过滤器"></a>5.2    过滤器</h2><ul>
-<li>Zuul作为网关的其中一个重要功能，就是实现请求的鉴权。而这个工作往往是通过Zuul提供的过滤器来实现的。</li>
-</ul>
-<h2 id="5-3-负载均衡-amp-熔断"><a href="#5-3-负载均衡-amp-熔断" class="headerlink" title="5.3    负载均衡  &amp;  熔断"></a>5.3    负载均衡  &amp;  熔断</h2><ul>
-<li>Zuul中默认已经集成了Ribbon负载均衡和Hystrix熔断机制。但所有的超时策略走的都是默认值，比如熔断超时时间只有1s，很容易就触发了，因此建议手动配置。</li>
-</ul>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">zuul:</span></span><br><span class="line">  <span class="attr">retryable:</span> <span class="literal">true</span>	<span class="comment"># 开启重试机制</span></span><br><span class="line"> </span><br><span class="line"><span class="attr">ribbon:</span></span><br><span class="line">  <span class="attr">ConnectTimeout:</span> <span class="number">250</span> <span class="comment"># 连接超时时间(ms)</span></span><br><span class="line">  <span class="attr">ReadTimeout:</span> <span class="number">2000</span> <span class="comment"># 通信超时时间(ms)</span></span><br><span class="line">  <span class="attr">OkToRetryOnAllOperations:</span> <span class="literal">true</span> <span class="comment"># 是否对所有操作重试</span></span><br><span class="line">  <span class="attr">MaxAutoRetriesNextServer:</span> <span class="number">2</span> <span class="comment"># 同一服务不同实例的重试次数</span></span><br><span class="line">  <span class="attr">MaxAutoRetries:</span> <span class="number">1</span> <span class="comment"># 同一实例的重试次数</span></span><br><span class="line"></span><br><span class="line"><span class="attr">hystrix:</span></span><br><span class="line">  <span class="attr">command:</span></span><br><span class="line">	<span class="attr">default:</span></span><br><span class="line">	  <span class="attr">execution:</span></span><br><span class="line">		<span class="attr">isolation:</span></span><br><span class="line">		  <span class="attr">thread:</span></span><br><span class="line">			<span class="attr">timeoutInMillisecond:</span> <span class="number">6000</span> <span class="comment"># 熔断超时时长：6000ms</span></span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 

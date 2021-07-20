@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">124</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,540 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/09/JWT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/09/JWT/" class="post-title-link" itemprop="url">JWT</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-09 16:05:40 / Modified: 19:17:53" itemprop="dateCreated datePublished" datetime="2021-05-09T16:05:40+08:00">2021-05-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h1><p>完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。</p>
+<p>Token 就是将这些信息包装成一个编码后的字符串，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Jack#14692866513#192.0.0.1#...</span><br></pre></td></tr></table></figure>
+
+<p>并且将这个字符串放入请求头 header 中。</p>
+<p>在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。</p>
+<p>在请求头中，查看是否包含 token 字符串，</p>
+<p>如果包含，对 token 字符串进行校验，比较该 token 与我们生成的 token 是否相同，相同则校验通过，表示目前就处于登录状态。否则不通过。</p>
+<p>token 可以设置有效时间！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">token 的作用：</span><br><span class="line">	1、存储用户信息</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Token-的生成"><a href="#Token-的生成" class="headerlink" title="Token  的生成"></a>Token  的生成</h2><p>Token 需要按照一定的规则来生成。这个规则可以由开发者自己决定，也可以借助一些 token 生成工具来生成。</p>
+<p>JWT 就是一个生产 token 的工具包。</p>
+<h1 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h1><ul>
+<li>JWT（Json Web Token）：是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准。（就是按照一定的规则生成 Json 字符串）</li>
+<li>JWT 的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源。比如用在用户登录上。</li>
+<li>JWT最重要的作用就是对 token信息的<strong>防伪</strong>作用。</li>
+</ul>
+<h2 id="JWT-原理"><a href="#JWT-原理" class="headerlink" title="JWT 原理"></a>JWT 原理</h2><p>一个JWT由三个部分组成：公共部分、私有部分、签名部分。最后由这三者组合进行 base64 编码得到 JWT。</p>
+<p><img src="/2021/05/09/JWT/image-20210509161913888.png" alt="image-20210509161913888"></p>
+<blockquote>
+<ol>
+<li>公共部分</li>
+</ol>
+</blockquote>
+<ul>
+<li>主要是该 JWT 的相关配置参数，比如签名的加密算法、格式类型、过期时间等等。</li>
+<li>Key=ATGUIGU</li>
+</ul>
+<blockquote>
+<ol start="2">
+<li>私有部分</li>
+</ol>
+</blockquote>
+<ul>
+<li>用户自定义的内容，真正要封装的信息。</li>
+<li>如：user { “userId”：”192321”，”name”：”张三”}</li>
+</ul>
+<blockquote>
+<ol start="3">
+<li>签名部分</li>
+</ol>
+</blockquote>
+<ul>
+<li>SaltiP：当前服务器的 IP 地址！{linux 中配置代理服务器的ip}</li>
+<li>主要用户对 JWT 生成字符串的时候，进行加密{盐值}</li>
+</ul>
+<p>最终组成：key+salt+userInfo –&gt;&gt;token</p>
+<p>base64 编码，并不是加密，只是把明文信息变成了不可见的字符串。但是其实只要用一些工具就可以把 base64 编码解成明文，所以不要在JWT中放入涉及私密的信息。</p>
+<h2 id="SpringBoot-整合-JWT"><a href="#SpringBoot-整合-JWT" class="headerlink" title="SpringBoot 整合 JWT"></a>SpringBoot 整合 JWT</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.jsonwebtoken.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang3.StringUtils;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JwtHelper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// token 的过期时间</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> tokenExpiration = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;</span><br><span class="line">    <span class="comment">// token 的签名秘钥（根据秘钥进行编码、加密等操作）</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String tokenSignKey = <span class="string">&quot;123456&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据参数生成 token 字符串（加密）</span></span><br><span class="line"><span class="comment">     * 这里的参数是：1、用户id（userId）  2、用户姓名（userName）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userId</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userName</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">createToken</span><span class="params">(Long userId, String userName)</span> </span>&#123;</span><br><span class="line">        String token = Jwts.builder()</span><br><span class="line">            .setSubject(<span class="string">&quot;YYGH-USER&quot;</span>)    <span class="comment">// 设置分类</span></span><br><span class="line">            .setExpiration(<span class="keyword">new</span> Date(System.currentTimeMillis() + tokenExpiration))  <span class="comment">// 设置过期时间</span></span><br><span class="line">            .claim(<span class="string">&quot;userId&quot;</span>, userId)</span><br><span class="line">            .claim(<span class="string">&quot;userName&quot;</span>, userName)</span><br><span class="line">            .signWith(SignatureAlgorithm.HS512, tokenSignKey)</span><br><span class="line">            .compressWith(CompressionCodecs.GZIP)</span><br><span class="line">            .compact();</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户id：userid（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title">getUserId</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        Integer userId = (Integer) claims.get(<span class="string">&quot;userId&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> userId.longValue();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户名称：userName（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getUserName</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws</span><br><span class="line">            = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        <span class="keyword">return</span> (String) claims.get(<span class="string">&quot;userName&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String token = JwtHelper.createToken(<span class="number">1L</span>, <span class="string">&quot;Jack&quot;</span>);</span><br><span class="line">        System.out.println(token);</span><br><span class="line">        System.out.println(JwtHelper.getUserId(token));</span><br><span class="line">        System.out.println(JwtHelper.getUserName(token));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>测试结果：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ</span><br><span class="line">.H4sIAAAAAAAAAKtWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDMyMDM2NbUw11EqLU4t8kwBikGYfom5qUAtXonJ2Uq1AA6KXZ1BAAAA</span><br><span class="line">.ajuC6Hj7TCbklRN238jTyQSL-gQEGG55UkUxnP64IuL41C5OVvVZnKH3VQiZSrVtOQhHh5XnEKV3nr5xKWWzvw</span><br><span class="line"><span class="comment">// 可以看到，token 由3部分组成，中间用 . 隔开 ！</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br><span class="line">Jack</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">SpringBoot接口返回数据</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-06 23:45:17 / Modified: 23:57:25" itemprop="dateCreated datePublished" datetime="2021-05-06T23:45:17+08:00">2021-05-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="1、格式化接口返回的-Date-类型数据"><a href="#1、格式化接口返回的-Date-类型数据" class="headerlink" title="1、格式化接口返回的 Date 类型数据"></a>1、格式化接口返回的 Date 类型数据</h1><h2 id="存在的问题："><a href="#存在的问题：" class="headerlink" title="存在的问题："></a>存在的问题：</h2><p>在 SpringBoot 的返回值中，如果返回值是 Date 类型数据或返回值对象中包含 Date 类型数据。接口会将 Date 类型数据转换成 Json 字符串并返回，Date 类型数据默认转换成的 Json 字符串格式如下：</p>
+<p><img src="/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/image-20210407150210541.png" alt="image-20210407150210541"></p>
+<ol>
+<li>而实际需求想要的时间数据格式往往类似于<code>yyyy-MM-dd HH:mm:ss</code>这样的；</li>
+<li>而且特别强调一点是我在测试时调用接口的时间是北京时间<code>14：47</code>，而接口返回值中的时间是<code>06：47</code>，显然这是按照国际标准时区计时返回的。</li>
+</ol>
+<hr>
+<h2 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h2><p>SpringBoot 内部集成了Jackson 依赖，所以我们可以直接使用 Jackson 工具来制定 Date 类型数据转换成 Json 字符串数据的规则，只要开发人员指定了 Date 类型数据序列化的规则，则默认的转换规则就会被覆盖掉。</p>
+<blockquote>
+<p>制定 Date 数据序列化规则的方法主要有2种：</p>
+</blockquote>
+<h3 id="1、使用-JsonFormat-注解"><a href="#1、使用-JsonFormat-注解" class="headerlink" title="1、使用 @JsonFormat 注解"></a>1、使用 @JsonFormat 注解</h3><p>我们可以在返回数据对象的字段上添加 <strong>@JsonFormat</strong> 注解来规定想要的返回格式和设置想要的时区。（北京时区是：GMT+8）</p>
+<p><img src="/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/image-20210407151151336.png" alt="image-20210407151151336"></p>
+<p>修改之后的响应结果如下：</p>
+<p><img src="/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/image-20210407150840406.png" alt="image-20210407150840406"></p>
+<hr>
+<h3 id="2、使用-Jackson-的全局配置"><a href="#2、使用-Jackson-的全局配置" class="headerlink" title="2、使用 Jackson 的全局配置"></a>2、使用 Jackson 的全局配置</h3><p>我们可以在<code>application.properties</code>配置文件中设置全局属性：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.jackson.date-format</span>=<span class="string">yyyy-MM-dd HH:mm:ss</span></span><br><span class="line"><span class="meta">spring.jackson.time-zone</span>=<span class="string">GMT+8</span></span><br><span class="line"><span class="meta">spring.jackson.serialization.write-dates-as-timestamps</span>=<span class="string">false</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意事项：</strong></p>
+</blockquote>
+<p><strong>@JsonFormat 注解 的优先级高于 全局配置文件 ！</strong>  当这两个同时存在时，以 @JsonFormat 注解为主！</p>
+<hr>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">MongoDB下载与安装</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-05 11:46:13 / Modified: 11:49:53" itemprop="dateCreated datePublished" datetime="2021-05-05T11:46:13+08:00">2021-05-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MongoDB/" itemprop="url" rel="index"><span itemprop="name">MongoDB</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="下载-amp-安装"><a href="#下载-amp-安装" class="headerlink" title="下载 &amp; 安装"></a>下载 &amp; 安装</h1><ul>
+<li>使用宝塔的一键安装！</li>
+</ul>
+<hr>
+<h2 id="远端访问"><a href="#远端访问" class="headerlink" title="远端访问"></a>远端访问</h2><p>在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：</p>
+<blockquote>
+<ol>
+<li> 是否放开了服务器的防火墙。</li>
+</ol>
+</blockquote>
+<p>MongoDB 对外开放的端口号是 <strong>27017</strong>，必须放开此端口的防火墙。</p>
+<blockquote>
+<ol start="2">
+<li> 设置允许所有地址访问。</li>
+</ol>
+</blockquote>
+<p>MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需要修改配置文件。（下图是默认配置文件的配置信息）</p>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505103207460.png" alt="image-20210505103207460"></p>
+<ul>
+<li><p>可直接设置配置文件为 <code>bindIpAll: true</code>，即允许所有的IPv4和IPv6地址访问</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIpAll</span>: <span class="string">true</span></span><br></pre></td></tr></table></figure></li>
+<li><p>也可以将 bindIp 修改为 <code>0.0.0.0</code></p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIp</span>: <span class="string">0.0.0.0</span></span><br></pre></td></tr></table></figure></li>
+<li><p>注意事项：<br><strong>net.bindIp</strong> 和 <strong>net.bindIpAll</strong> 是互斥的。也就是说，你可以指定其中一个，但不能同时指定两者。</p>
+</li>
+</ul>
+<hr>
+<h1 id="MongoDB-数据库加密"><a href="#MongoDB-数据库加密" class="headerlink" title="MongoDB 数据库加密"></a>MongoDB 数据库加密</h1><blockquote>
+<p>  MongoDB 的用户名和密码是基于特定数据库的，而不是基于整个系统的，所以所有的数据库都需要设置密码。</p>
+</blockquote>
+<p>如果需要给 MongoDB 数据库使用安全验证，则需要用 <code>--auth</code> 开启安全性检查，只有认证通过的用户才能对数据库执行读写操作。</p>
+<h2 id="1、在服务器端进入-MongoDB-环境"><a href="#1、在服务器端进入-MongoDB-环境" class="headerlink" title="1、在服务器端进入 MongoDB 环境"></a>1、在服务器端进入 MongoDB 环境</h2><h3 id="1-1-MongoDB-安装在-Docker-中"><a href="#1-1-MongoDB-安装在-Docker-中" class="headerlink" title="1.1    MongoDB 安装在 Docker 中"></a>1.1    MongoDB 安装在 Docker 中</h3><blockquote>
+<p>  如果 MongoDB 安装在 Docker 中，首先进入 Docker 的 MongoDB 环境中！</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it [容器id&#x2F;容器名] mongo</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504220804360.png" alt="image-20210504220804360"></p>
+<h3 id="1-2-通过宝塔安装的-MongoDB"><a href="#1-2-通过宝塔安装的-MongoDB" class="headerlink" title="1.2    通过宝塔安装的 MongoDB"></a>1.2    通过宝塔安装的 MongoDB</h3><blockquote>
+<p>  如果是通过宝塔安装的 MongoDB ，其默认的安装位置为：<code>/www/server/mongodb</code> （通过宝塔安装的所有应用都保存在 <strong>/www/server</strong> 目录下）</p>
+</blockquote>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505105819882.png" alt="image-20210505105819882"></p>
+<ol>
+<li> 进入 MongoDB 的安装目录：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /www/server/mongodb/bin</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li> 输入命令 <code>mongo</code> ，进入 MongoDB 环境</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="2、切换到-‘admin’-数据库"><a href="#2、切换到-‘admin’-数据库" class="headerlink" title="2、切换到 ‘admin’ 数据库"></a>2、切换到 ‘admin’ 数据库</h2><blockquote>
+<p>  <strong>admin</strong> 数据库是 MongoDB 初始化时创建的，用于管理用户角色。</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221215610.png" alt="image-20210504221215610"></p>
+<h2 id="3、设置超级管理员用户"><a href="#3、设置超级管理员用户" class="headerlink" title="3、设置超级管理员用户"></a>3、设置超级管理员用户</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user: <span class="string">&#x27;superPanda&#x27;</span>, <span class="built_in">pwd</span>: <span class="string">&#x27;pandaMaster&#x27;</span>, roles:[<span class="string">&#x27;root&#x27;</span>]&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>  user：超级管理员的用户名</li>
+<li>  pwd：超级管理员的用户密码</li>
+<li>  roles：用于设置用户的权限，如：读、写等等。<strong>root</strong> 代表所有权限</li>
+</ul>
+</blockquote>
+<p>验证是否添加成功：如果返回 “1” 表示添加成功，返回 “0” 表示添加失败。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.auth(<span class="string">&#x27;用户名&#x27;</span>, <span class="string">&#x27;用户密码&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221640941.png" alt="image-20210504221640941"></p>
+<h2 id="4、给特定的数据库设置权限"><a href="#4、给特定的数据库设置权限" class="headerlink" title="4、给特定的数据库设置权限"></a>4、给特定的数据库设置权限</h2><blockquote>
+<p>  第3步是给超级管理员设置账号和密码，现在要给特定的库设置权限。我这里以 <strong>beauty_dev</strong> 库为例。</p>
+</blockquote>
+<h3 id="4-1-切换到-beauty-dev-数据库"><a href="#4-1-切换到-beauty-dev-数据库" class="headerlink" title="4.1    切换到 beauty_dev 数据库"></a>4.1    切换到 beauty_dev 数据库</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use beauty_dev</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-添加用户"><a href="#4-2-添加用户" class="headerlink" title="4.2    添加用户"></a>4.2    添加用户</h3><blockquote>
+<p>  为 beauty_dev 库添加一个用户，并赋予权限。</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user:<span class="string">&#x27;用户名&#x27;</span>, <span class="built_in">pwd</span>:<span class="string">&#x27;密码&#x27;</span>, roles: [&#123;role: <span class="string">&#x27;readWrite&#x27;</span>, db: <span class="string">&#x27;beauty_dev&#x27;</span>&#125;]&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  这段命令的意思是：创建一个普通用户，并给予读写权限，<code>db</code> 表示用户可操作的数据库名。</li>
+</ul>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504222318840.png" alt="image-20210504222318840"></p>
+<blockquote>
+<p>  <strong>常见的权限类型：</strong></p>
+<p>  Read：允许用户读取指定数据库</p>
+<p>  readWrite：允许用户读写指定数据库</p>
+<p>  dbAdmin：允许用户在指定数据库中执行管理函数，如索引创建、删除，查看统计或访问system.profile</p>
+<p>  userAdmin：允许用户向system.users集合写入，可以找指定数据库里创建、删除和管理用户</p>
+<p>  clusterAdmin：只在admin数据库中可用，赋予用户所有分片和复制集相关函数的管理权限。</p>
+<p>  readAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读权限</p>
+<p>  readWriteAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读写权限</p>
+<p>  userAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的userAdmin权限</p>
+<p>  dbAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的dbAdmin权限。</p>
+<p>  root：只在admin数据库中可用。超级账号，超级权限</p>
+</blockquote>
+<h2 id="5、重启"><a href="#5、重启" class="headerlink" title="5、重启"></a>5、重启</h2><blockquote>
+<p>  配置完成后，重启 MongoDB。</p>
+<p>  MongoDB 默认不开启访问控制，我们要通过 <code>--auth</code> 参数开启安全登录。<code>--auth</code> 一旦开启了，用户连接 MongoDB 的数据库时必须制定用户名和密码。</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo --dbpath 存放数据库文件夹路径 --auth</span><br><span class="line"></span><br><span class="line">mongod --dbpath /www/server/mongodb/data --auth		<span class="comment"># 宝塔中存放数据库数据的文件路径</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-1-宝塔可视化界面修改"><a href="#5-1-宝塔可视化界面修改" class="headerlink" title="5.1    宝塔可视化界面修改"></a>5.1    宝塔可视化界面修改</h3><ul>
+<li>  修改前</li>
+</ul>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111109060.png" alt="image-20210505111109060"></p>
+<ul>
+<li>  修改后</li>
+</ul>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111159182.png" alt="image-20210505111159182"></p>
+<ul>
+<li>  重启即可完成加密登录</li>
+</ul>
+<h2 id="6、效果展示"><a href="#6、效果展示" class="headerlink" title="6、效果展示"></a>6、效果展示</h2><p>此时通过无密登录已经无法正常访问数据库了。</p>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111544758.png" alt="image-20210505111544758"></p>
+<p>只有通过用户认证（账号密码登录）后才能正常访问数据库。</p>
+<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111829513.png" alt="image-20210505111829513"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">SpringBoot处理json格式的请求数据</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-05-01 16:36:36 / Modified: 17:47:42" itemprop="dateCreated datePublished" datetime="2021-05-01T16:36:36+08:00">2021-05-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>使用 Spring 的拦截器获取请求参数时，发现一个问题就是：</p>
+<p>GET 请求使用 <strong>request.getParameterMap()</strong> 获取请求参数是可行的，</p>
+<p>但是 POST 请求使用 <strong>request.getParameterMap()</strong> 获取请求参数是获取不到的。</p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>如果是 POST请求 contentType 设置为 <code>application/x-www-form-urlencoded</code> 是可以通过 <strong>request.getParameterMap()</strong> 来获取请求参数的；</p>
+<blockquote>
+<p><code>application/x-www-form-urlencoded</code> 即POST请求的请求参数是键值对类型。</p>
+</blockquote>
+<p><img src="/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/image-20210501164732194.png" alt="image-20210501164732194"></p>
+<p>如果上述条件没有满足，则相关的表单数据不会被设置进 request 的 parameter 集合中，相关的数据就需要通过 <strong>request.getInputStream()</strong> 来拦截获取。</p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><p>如果我们使用了POST 请求请求数据，并且发送的是 json 类型的数据，如下图：</p>
+<p><img src="/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/image-20210501164852880.png" alt="image-20210501164852880"></p>
+<p>这时我们想要在 Controller 层拦截请求数据就不能使用 HttpServletRequest 对象了。</p>
+<p>我们可以使用 <strong>@RequestBody</strong> 注解：</p>
+<h2 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h2><blockquote>
+<p>如果请求参数的形式和 JavaBean 相同，可以直接用对应的 JavaBean 来接收。  </p>
+</blockquote>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> Hosp hosp)</span></span>&#123;	<span class="comment">// 这里的 Hosp 是一个自定义的 JavaBean</span></span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h2><blockquote>
+<p>可以使用一个 Map 集合接收 json 字符串，然后再一个一个的从Map 中拿值。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> Map&lt;String,Object&gt; json)</span></span>&#123;	</span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h2><blockquote>
+<p>可以使用 String 类型的变量接收 json 字符串，然后在将其转换为 JSONObject 对象，再一个一个的从 JSONObject 对象中拿值。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> String json)</span></span>&#123;	</span><br><span class="line">    Hosp hosp = JSONObject.parseObject(parameter, Hosp.class);</span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1188,7 +1722,7 @@
 <tr>
 <td>From</td>
 <td>发出请求的用户的Email</td>
-<td>From: <a href="mailto:&#x75;&#115;&#x65;&#114;&#x40;&#101;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#x75;&#115;&#x65;&#114;&#x40;&#101;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#x6d;</a></td>
+<td>From: <a href="mailto:&#x75;&#x73;&#101;&#114;&#64;&#101;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x75;&#x73;&#101;&#114;&#64;&#101;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;</a></td>
 </tr>
 <tr>
 <td>Host</td>
@@ -1652,1014 +2186,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/" class="post-title-link" itemprop="url">Vue组件化编码</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-09 23:10:34" itemprop="dateCreated datePublished" datetime="2021-04-09T23:10:34+08:00">2021-04-09</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-05 14:46:36" itemprop="dateModified" datetime="2021-05-05T14:46:36+08:00">2021-05-05</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Vue-cli"><a href="#Vue-cli" class="headerlink" title="Vue-cli"></a>Vue-cli</h1><h2 id="1、是什么？"><a href="#1、是什么？" class="headerlink" title="1、是什么？"></a>1、是什么？</h2><p>通过对 WebPack 的了解，如果我们手动去设置打包相关的配置信息是非常麻烦的。因为在开发中，需要打包的东西不止是 Js、Css、HTML、image 等，还有更多的东西要处理，如果我如果我一一去添加这些插件和加载器非常耗费时间。</p>
-<p>而作为一个开发人员，我们需要关注的往往只有项目源代码文件<code>（即src文件）</code>和少数几个配置文件。为了提高开发效率，Vue 官方提供了一个快速搭建 Vue Web项目的脚手架：<strong>vue-cli</strong>，使用它能快速的构建一个web工程模板。类似于 Java 中的 SpringBoot 等框架，我们只需在这个脚手架上进行二次开发即可！</p>
-<h2 id="2、如何使用？"><a href="#2、如何使用？" class="headerlink" title="2、如何使用？"></a>2、如何使用？</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><blockquote>
-<p>GitHub 地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-cli">https://github.com/vuejs/vue-cli</a></p>
-</blockquote>
-<blockquote>
-<p>安装命令（全局安装）：</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>测试是否安装成功：在控制台输出以下命令看是否有响应。</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><blockquote>
-<ol>
-<li>创建一个空文件夹，在当前文件夹下进入控制台窗口。</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol start="2">
-<li>初始化模板项目。</li>
-</ol>
-</blockquote>
-<ul>
-<li>vue-cli 给我们提供了多个项目模板，我们最常使用的就是 webpack 模板（即初始化一个使用 webpack 打包的 vue web 项目）。</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法： vue init 模板名 [项目名称]</span></span><br><span class="line">vue init webpack</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目名称可以先不指定，在稍后的提示选项中指定！</span></span><br></pre></td></tr></table></figure>
-
-<p>初始化项目的选项根据需要自行选择：</p>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409232341832.png" alt="image-20210409232341832"></p>
-<blockquote>
-<ol start="3">
-<li>使用<code>npm install</code>安装依赖。（如果在第二步中使用 NPM 自动安装的话，就无需进行手动安装这一步了！）</li>
-</ol>
-</blockquote>
-<p>安装成功！提示我们可以使用<code>npm run dev</code>命令启动。</p>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209062090.png" alt="1530209062090"></p>
-<h2 id="3、模板项目的结构？"><a href="#3、模板项目的结构？" class="headerlink" title="3、模板项目的结构？"></a>3、模板项目的结构？</h2><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233127399.png" alt="image-20210409233127399"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">|—— build 				&#x2F;&#x2F; webpack 相关的配置文件夹(基本不需要修改)</span><br><span class="line">	|—— dev-server.js 	 &#x2F;&#x2F; 通过express 启动后台服务器</span><br><span class="line">|—— config				&#x2F;&#x2F; webpack 相关的配置文件夹(基本不需要修改)</span><br><span class="line">	|—— index.js		&#x2F;&#x2F; 指定的后台服务的端口号和静态资源文件夹</span><br><span class="line">|—— node_modules		&#x2F;&#x2F; 依赖包文件夹</span><br><span class="line">|—— src 				&#x2F;&#x2F; 源码文件夹</span><br><span class="line">	|—— components		&#x2F;&#x2F; vue 组件及其相关资源文件夹</span><br><span class="line">	|—— App.vue			&#x2F;&#x2F; 应用根组件</span><br><span class="line">	|—— main.js			&#x2F;&#x2F; 应用入口js</span><br><span class="line">|—— static				&#x2F;&#x2F; 静态资源文件夹</span><br><span class="line">|—— .babelrc			&#x2F;&#x2F; babel 的配置文件（babel runtime control）</span><br><span class="line">|—— .eslintignore		&#x2F;&#x2F; eslint 检查忽略的配置</span><br><span class="line">|—— .eslintrc.js		&#x2F;&#x2F; eslint 的配置文件（eslint runtime control）</span><br><span class="line">|—— .editorcconfig</span><br><span class="line">|—— .gitignore			&#x2F;&#x2F; Git 版本控制忽略文件配置</span><br><span class="line">|—— .postcssrc.js</span><br><span class="line">|—— index.html			&#x2F;&#x2F; 主页面文件</span><br><span class="line">|—— package.json		&#x2F;&#x2F; 应用包配置文件</span><br><span class="line">|—— package-lock.json</span><br><span class="line">|—— README.md			&#x2F;&#x2F; 应用描述说明的readme 文件</span><br></pre></td></tr></table></figure>
-
-<h3 id="src"><a href="#src" class="headerlink" title="src"></a>src</h3><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210404124345145.png" alt="image-20210404124345145"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">├── assets 			&#x2F;&#x2F; 图片等资源 </span><br><span class="line">├── components 		&#x2F;&#x2F; 各种公共组件，非公共组件在各自view下维护 </span><br><span class="line">├── router 			&#x2F;&#x2F; 路由表 </span><br><span class="line">├── App.vue 		&#x2F;&#x2F; 项目根组件</span><br><span class="line">├── main.js 		&#x2F;&#x2F; 项目入口文件</span><br></pre></td></tr></table></figure>
-
-<h4 id="入口文件：main-js"><a href="#入口文件：main-js" class="headerlink" title="入口文件：main.js"></a>入口文件：<code>main.js</code></h4><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209503007.png" alt="1525913687860"></p>
-<h4 id="单文件组件：-vue"><a href="#单文件组件：-vue" class="headerlink" title="单文件组件：*.vue*"></a>单文件组件：<code>*.vue*</code></h4><p>我们称后缀名为<code>.vue</code>的文件为单文件组件。每一个<code>.vue</code>文件，就是一个独立的vue组件。而 <strong>App.vue</strong> 是整个项目的根组件。</p>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209769323.png" alt="1530209769323"></p>
-<p>单文件组件中包含三部分内容：</p>
-<ul>
-<li><code>&lt;template/&gt;</code>：<strong>Html 模板</strong></li>
-<li><code>&lt;script/&gt;</code>：<strong>Js 脚本</strong>，这里编写的就是vue的组件对象，还可以有data(){}等</li>
-<li><code>&lt;style/&gt;</code>：<strong>Css 样式</strong>，支持CSS语法高亮和提示</li>
-</ul>
-<p>每个组件都有自己独立的html、JS、CSS，互不干扰，真正做到可独立复用。</p>
-<h4 id="多文件组件"><a href="#多文件组件" class="headerlink" title="多文件组件"></a>多文件组件</h4><p>既然有单文件组件，那么就一定有多文件组件。多文件组件一般是一个文件夹，这个文件夹中除了包含一些单文件组件之外，还可以包含一些 image 等静态资源。所有这些资源形成一个大的组件对外暴露，我们把这个大的组件就叫做多文件组件！！！</p>
-<h3 id="gitkeep"><a href="#gitkeep" class="headerlink" title=".gitkeep"></a>.gitkeep</h3><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233500688.png" alt="image-20210409233500688"></p>
-<p><code>.gitkeep</code> 是作用于 Git 进行版本管理的文件。</p>
-<p>Git 进行版本控制时有一个特点就是如果某个文件夹为空就会自动忽略（即不对该文件夹进行版本控制），但是如果我们不想该文件夹被忽略的话，就可以在该文件夹下创建一个<code>.gitkeep</code>的文件（文件内容为空），这样Git在进行版本管理时就不会忽略该文件夹了！！！</p>
-<h2 id="4、运行"><a href="#4、运行" class="headerlink" title="4、运行"></a>4、运行</h2><blockquote>
-<p>查看项目文件的配置信息：<code>package.json</code></p>
-</blockquote>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210016103.png" alt="1530210016103"></p>
-<ul>
-<li>可以看到这里引入了非常多的依赖，绝大多数都是开发期依赖，比如大量的加载器。</li>
-<li>运行时依赖只有 vue 和 vue-router</li>
-<li>脚本有三个：<ul>
-<li>dev：使用了webpack-dev-server命令，开发时热部署使用</li>
-<li>start：使用了npm run dev命令，与上面的dev效果完全一样，当脚本名为“start”时，可以省略“run”。 </li>
-<li>build：等同于webpack的打包功能，会打包到dist目录下。</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>启动项目</p>
-</blockquote>
-<p>我们执行<code>npm run dev</code> 或者 <code>npm start</code> 都可以启动项目：</p>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210411076.png" alt="1530210411076"></p>
-<blockquote>
-<p>检查页面元素</p>
-</blockquote>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409234531234.png" alt="image-20210409234531234"></p>
-<h2 id="5、项目打包"><a href="#5、项目打包" class="headerlink" title="5、项目打包"></a>5、项目打包</h2><blockquote>
-<p>打包命令</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="6、项目发布"><a href="#6、项目发布" class="headerlink" title="6、项目发布"></a>6、项目发布</h2><h3 id="使用静态服务器发布"><a href="#使用静态服务器发布" class="headerlink" title="使用静态服务器发布"></a>使用静态服务器发布</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install -g serve</span><br><span class="line">serve dist</span><br><span class="line">访问: http:&#x2F;&#x2F;localhost:5000</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用动态web服务器发布-tomcat"><a href="#使用动态web服务器发布-tomcat" class="headerlink" title="使用动态web服务器发布(tomcat)"></a>使用动态web服务器发布(tomcat)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">修改配置: webpack.prod.conf.js</span><br><span class="line">output: &#123;</span><br><span class="line">publicPath: &#39;&#x2F;xxx&#x2F;&#39; &#x2F;&#x2F;打包文件夹的名称</span><br><span class="line">&#125;</span><br><span class="line">重新打包:</span><br><span class="line">npm run build</span><br><span class="line">修改dist 文件夹为项目名称: xxx</span><br><span class="line">将xxx 拷贝到运行的tomcat 的webapps 目录下</span><br><span class="line">访问: http:&#x2F;&#x2F;localhost:8080&#x2F;xxx</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h1 id="组件定义与使用"><a href="#组件定义与使用" class="headerlink" title="组件定义与使用"></a>组件定义与使用</h1><h2 id="什么是组件？"><a href="#什么是组件？" class="headerlink" title="什么是组件？"></a>什么是组件？</h2><ul>
-<li><strong>组件就是一个局部功能界面。包含要实现这个功能界面所有的相关资源，包括 html、css、js、image 等。</strong></li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The Vue build version to load with the `import` command</span></span><br><span class="line"><span class="comment">// (runtime-only or standalone) has been set in webpack.base.conf with an alias.</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App&#x27;</span>   <span class="comment">// 引入一个组件</span></span><br><span class="line"></span><br><span class="line">Vue.config.productionTip = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* eslint-disable no-new */</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&#x27;#app&#x27;</span>,</span><br><span class="line">  components: &#123; App &#125;,    <span class="comment">// 将组件映射成指定名称的标签（这里利用ES6语法省略&lt;K,V&gt;为K）</span></span><br><span class="line">  template: <span class="string">&#x27;&lt;App/&gt;&#x27;</span>    <span class="comment">// 模板。模板最终会嵌入到 el 匹配到的页面中去。所以我们最终在 index.html 中渲染的内容就是 &lt;App/&gt; 组件中的内容</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="vue-文件的组成-3-个部分"><a href="#vue-文件的组成-3-个部分" class="headerlink" title="vue 文件的组成(3 个部分)"></a>vue 文件的组成(3 个部分)</h2><p><strong>一个 Vue 文件就是一个单文件组件！！！</strong></p>
-<blockquote>
-<ol>
-<li>模板页面</li>
-<li>JS 模块对象</li>
-<li>样式</li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	页面模板</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">        data() &#123;return &#123;&#125;&#125;,</span><br><span class="line">        methods: &#123;&#125;,</span><br><span class="line">        computed: &#123;&#125;,</span><br><span class="line">        components: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">    样式定义</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><blockquote>
-<ol>
-<li>引入组件</li>
-<li>映射成标签</li>
-<li>使用组件标签</li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;HelloWorld&gt;&lt;&#x2F;HelloWorld&gt;</span><br><span class="line">    &lt;hello-world&gt;&lt;&#x2F;hello-world&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    import HelloWorld from &#39;.&#x2F;components&#x2F;HelloWorld&#39;</span><br><span class="line">    export default &#123;</span><br><span class="line">        components: &#123;</span><br><span class="line">            HelloWorld</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="关于标签名与标签属性名书写问题"><a href="#关于标签名与标签属性名书写问题" class="headerlink" title="关于标签名与标签属性名书写问题"></a>关于标签名与标签属性名书写问题</h2><ol>
-<li>写法一: 一模一样</li>
-<li>写法二: 大写变小写, 并用-连接</li>
-</ol>
-<h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><h3 id="1、创建根组件"><a href="#1、创建根组件" class="headerlink" title="1、创建根组件"></a>1、创建根组件</h3><blockquote>
-<p>因为Vue项目是一个单页面应用，我们一般在这个单页面中会引入一个根组件（所有组件的祖宗），一般命名为<strong>App.vue</strong>。所以第二步我们要创建一个 App.vue 组件</p>
-</blockquote>
-<ol>
-<li>先创建组件基本结构（固定写法）。包括写 html  的 <code>&lt;template/&gt;</code> ， 写 js 的 <code>&lt;script/&gt;</code> ，写 css 的 <code>&lt;style/&gt;</code></li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;  &#x2F;&#x2F; 配置对象（能配置的属性&#x2F;方法与Vue一致）</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="2、创建其它组件"><a href="#2、创建其它组件" class="headerlink" title="2、创建其它组件"></a>2、创建其它组件</h3><blockquote>
-<p>其它组件都是根组件的子孙组件。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;p class&#x3D;&quot;myClass&quot;&gt;&#123;&#123;msg&#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;  &#x2F;&#x2F; 配置对象（能配置的属性&#x2F;方法与Vue一致）</span><br><span class="line">  name: &quot;HelloWorld&quot;,</span><br><span class="line">  data()&#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      msg: &quot;Hello Vue&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">  .myClass&#123;</span><br><span class="line">    color: red;</span><br><span class="line">    font-size: 30px;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>可以看到在一个组件内部，html 部分可以直接调用 script 中的数据model以及 style中的css样式</li>
-</ul>
-<h3 id="3、在根组件中引用其它组件"><a href="#3、在根组件中引用其它组件" class="headerlink" title="3、在根组件中引用其它组件"></a>3、在根组件中引用其它组件</h3><blockquote>
-<ol>
-<li>引入子组件：<code>import HelloWorld from &quot;./components/HelloWorld&quot;;</code></li>
-<li>将引入的子组件映射成一个标签：<code>component</code></li>
-<li>使用（组件）标签</li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;img class&#x3D;&quot;logo&quot; src&#x3D;&quot;src&#x2F;assets&#x2F;logo.png&quot;&#x2F;&gt;</span><br><span class="line">&lt;!--    3、使用（组件）标签  --&gt;</span><br><span class="line">    &lt;HelloWorld&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">  &#x2F;&#x2F; 1、引入组件</span><br><span class="line">  import HelloWorld from &quot;.&#x2F;components&#x2F;HelloWorld&quot;;</span><br><span class="line">  export default &#123;</span><br><span class="line">    components: &#123;HelloWorld&#125;,</span><br><span class="line">    data()&#123;</span><br><span class="line">      return&#123;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#x2F;&#x2F; 2、将引入的组件映射成标签</span><br><span class="line">    comments:&#123;</span><br><span class="line">      HelloWorld,   &#x2F;&#x2F; 采用ES6语法，简化&lt;K,V&gt;的书写</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">  .logo&#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    height: 200px;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="4、创建-main-js"><a href="#4、创建-main-js" class="headerlink" title="4、创建 main.js"></a>4、创建 main.js</h3><blockquote>
-<p>在<code>main.js</code>中创建一个Vue对象，用于将根组件<code>&lt;App/&gt;</code>渲染到<code>index.html</code>中去！！</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 入口js：创建Vue实例</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入 vue 依赖</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// （1）引入 App 组件（根组件）</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&quot;./App&quot;</span>;</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  components:&#123;</span><br><span class="line">    App,  <span class="comment">// （2）将 App 组件映射成标签</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//（3）将组件标签渲染到指定的页面中去</span></span><br><span class="line">  template:<span class="string">&#x27;&lt;App/&gt;&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/lifecycle.png" alt="Vue 实例生命周期"></p>
-<h1 id="组件化编码的流程"><a href="#组件化编码的流程" class="headerlink" title="组件化编码的流程"></a>组件化编码的流程</h1><p>拆分组件–&gt;&gt;静态组件–&gt;&gt;动态组件</p>
-<h2 id="做交互"><a href="#做交互" class="headerlink" title="做交互"></a>做交互</h2><p>绑定事件监听</p>
-<p>–&gt;&gt;</p>
-<p>自动收集数据</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">跨域问题常见的解决方案</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-06 00:02:02" itemprop="dateCreated datePublished" datetime="2021-04-06T00:02:02+08:00">2021-04-06</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-11 23:30:16" itemprop="dateModified" datetime="2021-04-11T23:30:16+08:00">2021-04-11</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="什么是跨域问题"><a href="#什么是跨域问题" class="headerlink" title="什么是跨域问题"></a>什么是跨域问题</h1><p>跨域问题是浏览器对于 Ajax 请求的一种安全限制：一个页面发起的ajax请求，只能是与当前页域名相同的路径，这能有效的阻止跨站攻击。</p>
-<p>以下情况都属于跨域：</p>
-<table>
-<thead>
-<tr>
-<th>跨域原因说明</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>域名不同</td>
-<td><code>www.jd.com</code> 与 <code>www.taobao.com</code></td>
-</tr>
-<tr>
-<td>域名相同，端口不同</td>
-<td><code>www.jd.com:8080</code> 与 <code>www.jd.com:8081</code></td>
-</tr>
-<tr>
-<td>二级域名不同</td>
-<td><code>item.jd.com</code> 与 <code>miaosha.jd.com</code></td>
-</tr>
-</tbody></table>
-<p>如果<strong>域名和端口都相同，但是请求路径不同</strong>，不属于跨域，如：</p>
-<p><code>www.jd.com/item</code> </p>
-<p><code>www.jd.com/goods</code></p>
-<p>而我们刚才是从<code>manage.leyou.com</code>去访问<code>api.leyou.com</code>，这属于二级域名不同，跨域了。</p>
-<h1 id="跨域问题常见的解决方案"><a href="#跨域问题常见的解决方案" class="headerlink" title="跨域问题常见的解决方案"></a>跨域问题常见的解决方案</h1><blockquote>
-<ol>
-<li><strong>nginx 反向代理</strong></li>
-</ol>
-</blockquote>
-<p>利用 nginx 把跨域反向代理为不跨域，支持各种请求方式</p>
-<p>缺点：需要在nginx进行额外配置，语义不清晰</p>
-<blockquote>
-<ol start="2">
-<li><strong>CORS</strong></li>
-</ol>
-</blockquote>
-<p>规范化的跨域请求解决方案，安全可靠。</p>
-<p>优势：</p>
-<ul>
-<li>在服务端进行控制是否允许跨域，可自定义规则</li>
-<li>支持各种请求方式</li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li>会产生额外的请求</li>
-</ul>
-<h1 id="CORS-解决跨域"><a href="#CORS-解决跨域" class="headerlink" title="CORS 解决跨域"></a>CORS 解决跨域</h1><h2 id="什么是-CORS"><a href="#什么是-CORS" class="headerlink" title="什么是 CORS"></a>什么是 CORS</h2><p>CORS 是一个 W3C 标准，全称是”跨域资源共享”（Cross-origin resource sharing）。</p>
-<p>它允许浏览器向跨源服务器，发出 <code>XMLHttpRequest</code> 请求，从而克服了AJAX只能同源使用的限制。</p>
-<p>CORS需要浏览器和服务器同时支持。</p>
-<ul>
-<li><p>浏览器端：</p>
-<p>目前，所有浏览器都支持该功能（IE10以下不行）。整个CORS通信过程，都是浏览器自动完成，不需要用户参与。</p>
-</li>
-<li><p>服务端：</p>
-<p>CORS通信与AJAX没有任何差别，因此你不需要改变以前的业务逻辑。只不过，浏览器会在请求中携带一些头信息，我们需要以此判断是否允许其跨域，然后在响应头中加入一些信息即可。这一般通过过滤器完成即可。</p>
-</li>
-</ul>
-<h2 id="CORS-原理"><a href="#CORS-原理" class="headerlink" title="CORS 原理"></a>CORS 原理</h2><p>浏览器会将 Ajax 请求分为两类，其处理方案略有差异：简单请求、特殊请求。</p>
-<h3 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h3><p>只要同时满足以下两大条件，就属于简单请求。：</p>
-<p>（1) 请求方法是以下三种方法之一：</p>
-<ul>
-<li>HEAD</li>
-<li>GET</li>
-<li>POST</li>
-</ul>
-<p>（2）HTTP的头信息不超出以下几种字段：</p>
-<ul>
-<li>Accept</li>
-<li>Accept-Language</li>
-<li>Content-Language</li>
-<li>Last-Event-ID</li>
-<li>Content-Type：只限于三个值<code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code></li>
-</ul>
-<p>当浏览器发现发起的ajax请求是简单请求时，会在请求头中携带一个字段：<code>Origin</code>.【发起请求的域名】</p>
-<p><img src="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/1530460311064.png" alt="1530460311064"></p>
-<p>Origin中会指出当前请求属于哪个域（协议+域名+端口）。服务会根据这个值决定是否允许其跨域。</p>
-<p>如果服务器允许跨域，需要在返回的响应头中携带下面信息：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: http://manage.leyou.com</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Content-Type: text/html; charset=utf-8</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Access-Control-Allow-Origin：可接受的域，是一个具体域名或者*（代表任意域名）</li>
-<li>Access-Control-Allow-Credentials：是否允许携带cookie，默认情况下，cors不会携带cookie，除非这个值是true</li>
-</ul>
-<blockquote>
-<p>有关cookie：</p>
-</blockquote>
-<p>要想操作cookie，需要满足3个条件：</p>
-<ul>
-<li>服务的响应头中需要携带Access-Control-Allow-Credentials并且为true。</li>
-<li>浏览器发起ajax需要指定withCredentials 为true</li>
-<li>响应头中的Access-Control-Allow-Origin一定不能为*，必须是指定的域名</li>
-</ul>
-<h3 id="特殊请求"><a href="#特殊请求" class="headerlink" title="特殊请求"></a>特殊请求</h3><p>不符合简单请求的条件，会被浏览器判定为特殊请求,，例如请求方式为PUT。</p>
-<blockquote>
-<p>预检请求</p>
-</blockquote>
-<p>特殊请求会在正式通信之前，增加一次HTTP查询请求，称为”预检”请求（preflight）。</p>
-<p>浏览器先询问服务器，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些HTTP动词和头信息字段。只有得到肯定答复，浏览器才会发出正式的<code>XMLHttpRequest</code>请求，否则就报错。</p>
-<p>一个“预检”请求的样板：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">OPTIONS</span> <span class="string">/cors</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Origin</span><span class="punctuation">: </span>http://manage.leyou.com</span><br><span class="line"><span class="attribute">Access-Control-Request-Method</span><span class="punctuation">: </span>PUT</span><br><span class="line"><span class="attribute">Access-Control-Request-Headers</span><span class="punctuation">: </span>X-Custom-Header</span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.leyou.com</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>en-US</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0...</span><br></pre></td></tr></table></figure>
-
-<p>与简单请求相比，除了Origin以外，多了两个头：</p>
-<ul>
-<li>Access-Control-Request-Method：接下来会用到的请求方式，比如PUT</li>
-<li>Access-Control-Request-Headers：会额外用到的头信息</li>
-</ul>
-<blockquote>
-<p>预检请求的响应</p>
-</blockquote>
-<p>服务的收到预检请求，如果许可跨域，会发出响应：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Date</span><span class="punctuation">: </span>Mon, 01 Dec 2008 01:15:39 GMT</span><br><span class="line"><span class="attribute">Server</span><span class="punctuation">: </span>Apache/2.0.61 (Unix)</span><br><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>http://manage.leyou.com</span><br><span class="line"><span class="attribute">Access-Control-Allow-Credentials</span><span class="punctuation">: </span>true</span><br><span class="line"><span class="attribute">Access-Control-Allow-Methods</span><span class="punctuation">: </span>GET, POST, PUT</span><br><span class="line"><span class="attribute">Access-Control-Allow-Headers</span><span class="punctuation">: </span>X-Custom-Header</span><br><span class="line"><span class="attribute">Access-Control-Max-Age</span><span class="punctuation">: </span>1728000</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/html; charset=utf-8</span><br><span class="line"><span class="attribute">Content-Encoding</span><span class="punctuation">: </span>gzip</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>0</span><br><span class="line"><span class="attribute">Keep-Alive</span><span class="punctuation">: </span>timeout=2, max=100</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>Keep-Alive</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/plain</span><br></pre></td></tr></table></figure>
-
-<p>除了<code>Access-Control-Allow-Origin</code>和<code>Access-Control-Allow-Credentials</code>以外，这里又额外多出3个头：</p>
-<ul>
-<li>Access-Control-Allow-Methods：允许访问的方式</li>
-<li>Access-Control-Allow-Headers：允许携带的头</li>
-<li>Access-Control-Max-Age：本次许可的有效时长，单位是秒，<strong>过期之前的ajax请求就无需再次进行预检了</strong></li>
-</ul>
-<p>如果浏览器得到上述响应，则认定为可以跨域，后续就跟简单请求的处理是一样的了。</p>
-<h2 id="跨域实现"><a href="#跨域实现" class="headerlink" title="跨域实现"></a>跨域实现</h2><p>虽然原理比较复杂，但是前面说过：</p>
-<ul>
-<li>浏览器端都有浏览器自动完成，我们无需操心</li>
-<li>服务端可以通过拦截器统一实现，不必每次都去进行跨域判定的编写。</li>
-</ul>
-<p>事实上，SpringMVC已经帮我们写好了CORS的跨域过滤器：CorsFilter ,内部已经实现了刚才所讲的判定逻辑，我们直接用就好了。</p>
-<h3 id="通过-CrossOrigin-注解实现"><a href="#通过-CrossOrigin-注解实现" class="headerlink" title="通过 @CrossOrigin 注解实现"></a>通过 @CrossOrigin 注解实现</h3><p>通过 @CrossOrigin 注解实现跨域请求非常简单，只需要在要访问的 Controller 上加上 @CrossOrigin 注解即可！</p>
-<p>缺点是不能全局生效，每个要跨域的 Controller 都需要添加 @CrossOrigin 注解！</p>
-<p><img src="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/image-20210406002533903.png" alt="image-20210406002533903"></p>
-<h3 id="通过全局配置文件实现"><a href="#通过全局配置文件实现" class="headerlink" title="通过全局配置文件实现"></a>通过全局配置文件实现</h3><blockquote>
-<ol>
-<li>编写一个配置类，并且注册 CorsFilter</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.cors.CorsConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.cors.UrlBasedCorsConfigurationSource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.filter.CorsFilter;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GlobalCorsConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> CorsFilter <span class="title">corsFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.添加CORS配置信息</span></span><br><span class="line">        CorsConfiguration config = <span class="keyword">new</span> CorsConfiguration();</span><br><span class="line">        <span class="comment">//1) 允许哪些IP可以跨域访问，可以添加多个。最好不要写 *，否则cookie就无法使用了</span></span><br><span class="line">        config.addAllowedOrigin(<span class="string">&quot;http://localhost:90&quot;</span>);</span><br><span class="line">        <span class="comment">//2) 是否发送Cookie信息</span></span><br><span class="line">        config.setAllowCredentials(<span class="keyword">true</span>);</span><br><span class="line">        <span class="comment">//3) 允许的请求方式</span></span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;OPTIONS&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;HEAD&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;GET&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;PUT&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;POST&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;DELETE&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;PATCH&quot;</span>);</span><br><span class="line">        <span class="comment">// 4）允许的头信息</span></span><br><span class="line">        config.addAllowedHeader(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        <span class="comment">// 5）有效时长</span></span><br><span class="line">        config.setMaxAge(<span class="number">36000L</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2.添加映射路径，我们拦截一切请求</span></span><br><span class="line">        UrlBasedCorsConfigurationSource configSource = <span class="keyword">new</span> UrlBasedCorsConfigurationSource();</span><br><span class="line">        configSource.registerCorsConfiguration(<span class="string">&quot;/**&quot;</span>, config);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.返回新的CorsFilter.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CorsFilter(configSource);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="常见的错误"><a href="#常见的错误" class="headerlink" title="常见的错误"></a>常见的错误</h1><h2 id="常见错误1："><a href="#常见错误1：" class="headerlink" title="常见错误1："></a>常见错误1：</h2><p><strong>@CrossOrigin注解</strong> 和 <strong>全局配置文件</strong> 不能同时存在，因为这两种方式都能起到允许跨域的效果，如果同时使用就会发生冲突！</p>
-<h2 id="常见错误2"><a href="#常见错误2" class="headerlink" title="常见错误2"></a>常见错误2</h2><p><img src="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/image-20210406000556206.png" alt="image-20210406000556206"></p>
-<blockquote>
-<p>错误信息：</p>
-<p><strong>Cross origin requests are only supported for protocol schemes: http, data, chrome, chrome-extension, chrome-untrusted, https</strong></p>
-<p>解释说明：跨域请求只支持以下协议：http, data, chrome, chrome-extension, chrome-untrusted, https。</p>
-</blockquote>
-<p>分析：</p>
-<p>每当你看到`Cross origin requests are only supported…消息时，几乎可以肯定地说这意味着你只是忘记了在代码中的请求URL上添加<strong>https</strong> 或 <strong>http</strong>。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/03/Java%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/03/Java%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" class="post-title-link" itemprop="url">Java开发日记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-04-03 12:15:58 / Modified: 12:17:28" itemprop="dateCreated datePublished" datetime="2021-04-03T12:15:58+08:00">2021-04-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Java%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Java开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="toString-、-String-、String-valueOf-Object-的区别"><a href="#toString-、-String-、String-valueOf-Object-的区别" class="headerlink" title="toString()、(String)、String.valueOf(Object)的区别"></a>toString()、(String)、String.valueOf(Object)的区别</h1><p>在 Java 项目的实际开发和应用中，常常需要用到将对象转为 String 这一基本功能。</p>
-<p>常用的方法有：</p>
-<blockquote>
-<ul>
-<li><strong>Object.toString()</strong></li>
-<li><strong>(String)Object</strong></li>
-<li><strong>String.valueOf(Object)</strong></li>
-</ul>
-</blockquote>
-<h2 id="1-采用-Object-toString-方法"><a href="#1-采用-Object-toString-方法" class="headerlink" title="1    采用 Object.toString() 方法"></a>1    采用 Object.toString() 方法</h2><ul>
-<li>因为 <strong>toString()</strong> 方法是 <strong>java.lang.Object</strong>  类里的 public 方法，所以任何 Java 对象都可以调用此方法。</li>
-<li>但在使用时要注意，<strong>必须保证 Object 不是 null 值，否则将抛出 NullPointerException 异常。</strong></li>
-<li>采用这种方法时，通常派生类会覆盖 Object 里的 toString() 方法。</li>
-</ul>
-<h2 id="2-采用类型转换-String-Object-方法"><a href="#2-采用类型转换-String-Object-方法" class="headerlink" title="2    采用类型转换 (String)Object 方法"></a>2    采用类型转换 (String)Object 方法</h2><ul>
-<li><p>使用这种方法时，需要注意的是类型必须能转成String类型。因为 Object 类型的对象在转成 String 对象时语法检查并不会报错，这将可能导致潜在的错误存在。所以再转换时最好用 <code>instanceof()</code> 方法做个类型检查，以判断是否可以转换。否则容易抛出 CalssCastException 异常。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void test01()&#123;</span><br><span class="line">    Object obj &#x3D; 100;</span><br><span class="line">    String objStr &#x3D; (String) obj;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String</span><br><span class="line">     *&#x2F;</span><br><span class="line">    log.info(objStr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>此外，因 null 值可以强制转换为任何 Java 类类型，所以 (String)null 也是合法的。</p>
-<p><strong>null 值经过转换后还是 null。注意是 空值null  而不是  字符串null  ！！！</strong></p>
-</li>
-</ul>
-<h2 id="3-采用-String-valueOf-Object-方法"><a href="#3-采用-String-valueOf-Object-方法" class="headerlink" title="3    采用 String.valueOf(Object) 方法"></a>3    采用 String.valueOf(Object) 方法</h2><p><code>String.valueOf(Object)</code> 的基础是 <code>Object.toString()</code> ，但它与 <code>Object.toString()</code> 又有所不同。在前面方法1的分析中提到，<strong>使用<code>toString(Object)</code> 方法时需保证 Object 不为 null 。但在采用 <code>String.valueOf(Object)</code> 方法时，将不用担心 Object 是否为 null 这一问题。</strong></p>
-<blockquote>
-<p>为了便于说明问题，我们来分析一下相关的源代码。</p>
-</blockquote>
-<p>JDK 中 <code>String.valueOf(Object)</code> 方法的源码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static String valueOf(Object obj) &#123;</span><br><span class="line">    return (obj &#x3D;&#x3D; null) ? &quot;null&quot; : obj.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>从上面的源码可以很清晰的看出 null 值不用担心的理由。</li>
-<li>但是，这也恰恰给了我们隐患。我们应当注意到，<strong>当 Object 为 null 时，String.valueOf(object) 的值是 字符串”null”，而不是 空值null ！！！在使用过程中切记要注意。</strong></li>
-</ul>
-<p>以上是对object对象转换为String的一些总结。</p>
-<h1 id="LocalDate"><a href="#LocalDate" class="headerlink" title="LocalDate"></a>LocalDate</h1><h3 id="LocalDate-中的常用方法："><a href="#LocalDate-中的常用方法：" class="headerlink" title="LocalDate 中的常用方法："></a>LocalDate 中的常用方法：</h3><table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th>返回值</th>
-<th>说明</th>
-<th>例子</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>LocalDate.now()</code></td>
-<td>LocalDate</td>
-<td>获取当前日期的年月日</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>LocalDate.of(2020, 02, 18);</code></td>
-<td>LocalDate</td>
-<td>获取指定日期的年月日</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><strong>查询</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>getYear()</code></td>
-<td>int</td>
-<td>查看该日期的年份</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>getMonth()</code></td>
-<td>Month</td>
-<td>查看该日期的月份</td>
-<td>MARCH</td>
-</tr>
-<tr>
-<td align="left"><code>getDayOfYear()</code></td>
-<td>int</td>
-<td>查看该日期在是一年中的第几天</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>getDayOfMonth()</code></td>
-<td>int</td>
-<td>查看该日期是一个月中的第几天</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>getDayOfWeek()</code></td>
-<td>DayOfWeek</td>
-<td>查看该日期是一周中的周几</td>
-<td>WEDNESDAY</td>
-</tr>
-<tr>
-<td align="left"><code>lengthOfMonth()</code></td>
-<td>int</td>
-<td>查询该月有多少天</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>lengthOfYear()</code></td>
-<td>int</td>
-<td>查询该年有多少天</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><strong>修改</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>withYear(int year)</code></td>
-<td>LocalDate</td>
-<td>修改该日期的年份</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>withMonth(int month)</code></td>
-<td>LocalDate</td>
-<td>修改该日期的月份</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>withDayOfMonth(int dayOfMonth)</code></td>
-<td>LocalDate</td>
-<td>修改该日期在当月的天数</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>withDayOfYear(int dayOfYear)</code></td>
-<td>LocalDate</td>
-<td>修改该日期在当年的天数</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><em>在原有的基础上增加年份/月份/周数/天数</em></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>plusYears(long yearsToAdd)</code></td>
-<td>LocalDate</td>
-<td>在原有的基础上增加年份</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>plusMonths(long monthsToAdd)</code></td>
-<td>LocalDate</td>
-<td>在原有的基础上增加月份</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>ymd.plusWeeks(long weeksToAdd)</code></td>
-<td>LocalDate</td>
-<td>在原有的基础上增加周数</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>plusDays(long daysToAdd)</code></td>
-<td>LocalDate</td>
-<td>在原有的基础上增加天数</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><em>在原有的基础上减少年份/月份/周数/天数</em></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>minusYears(long yearsToAdd)</code></td>
-<td>LocalDate</td>
-<td>在原有的基础上减少年份</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>minusMonths(long monthsToAdd)</code></td>
-<td>LocalDate</td>
-<td>在原有的基础上减少月份</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>minusWeeks(long weeksToAdd)</code></td>
-<td>LocalDate</td>
-<td>在原有的基础上减少周数</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>minusDays(long daysToAdd)</code></td>
-<td>LocalDate</td>
-<td>在原有的基础上减少天数</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><strong>判断</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>isLeapYear()</code></td>
-<td>boolean</td>
-<td>判断该年是否为闰年</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>isBefore(ChronoLocalDate other)</code></td>
-<td>boolean</td>
-<td>判断该日期是否比参数日期早</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>isAfter(ChronoLocalDate other)</code></td>
-<td>boolean</td>
-<td>判断该日期是否比参数日期晚</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>isEqual(ChronoLocalDate other)</code></td>
-<td>boolean</td>
-<td>判断两个日期是否相等</td>
-<td></td>
-</tr>
-<tr>
-<td align="left"></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><strong>比较</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td align="left"><code>compareTo(ChronoLocalDate other)</code></td>
-<td>int</td>
-<td>比较该日期与other日期的大小， 返回正数，则当前对象日期较晚。 ChronoLocalDate接口 是 LocalDate类 的父类接口</td>
-<td></td>
-</tr>
-</tbody></table>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.junit.jupiter.api.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.test.context.SpringBootTest;</span><br><span class="line"><span class="keyword">import</span> java.time.DayOfWeek;</span><br><span class="line"><span class="keyword">import</span> java.time.LocalDate;</span><br><span class="line"><span class="keyword">import</span> java.time.Month;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LocalDateTest</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLocalDate</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 基础方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 获取当前日期的年月日。如：2021-03-31</span></span><br><span class="line">        LocalDate ymd = LocalDate.now();</span><br><span class="line">        System.out.println(ymd.toString());</span><br><span class="line">        <span class="comment">// 获取指定日期的年月日</span></span><br><span class="line">        LocalDate ymd2 = LocalDate.of(<span class="number">2020</span>, <span class="number">2</span>, <span class="number">18</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 查询</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 查看该日期的年份</span></span><br><span class="line">        <span class="keyword">int</span> year = ymd.getYear();</span><br><span class="line">        <span class="comment">// 查看该日期的月份。如：MARCH</span></span><br><span class="line">        Month month = ymd.getMonth();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 查看该日期在是一年中的第几天。如：90 就表示当前时间是从年初开始的第90天</span></span><br><span class="line">        <span class="keyword">int</span> dayOfYear = ymd.getDayOfYear();</span><br><span class="line">        <span class="comment">// 查看该日期是一个月中的第几天</span></span><br><span class="line">        <span class="keyword">int</span> dayOfMonth = ymd.getDayOfMonth();</span><br><span class="line">        <span class="comment">// 查看该日期是一周中的周几。如：WEDNESDAY</span></span><br><span class="line">        DayOfWeek dayOfWeek = ymd.getDayOfWeek();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 查看该月有多少天</span></span><br><span class="line">        <span class="keyword">int</span> daysOfMonth = ymd.lengthOfMonth();</span><br><span class="line">        <span class="comment">// 查看该年有多少天，365或366</span></span><br><span class="line">        <span class="keyword">int</span> daysOfYear = ymd.lengthOfYear();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 修改</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 修改该日期的年份</span></span><br><span class="line">        LocalDate withYear = ymd.withYear(<span class="number">2030</span>);</span><br><span class="line">        <span class="comment">// 修改该日期的月份</span></span><br><span class="line">        LocalDate withMonth = ymd.withMonth(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 修改该日期在当月的天数</span></span><br><span class="line">        LocalDate withDayOfMonth = ymd.withDayOfMonth(<span class="number">25</span>);</span><br><span class="line">        <span class="comment">// 修改该日期在当年的天数</span></span><br><span class="line">        LocalDate withDayOfYear = ymd.withDayOfYear(<span class="number">234</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 在原有的基础上增加年份/月份/周数/天数</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line">        <span class="comment">// 在原有的基础上增加年份</span></span><br><span class="line">        LocalDate plusYears = ymd.plusYears(<span class="number">2L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上增加月份</span></span><br><span class="line">        LocalDate plusMonths = ymd.plusMonths(<span class="number">30L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上增加周数</span></span><br><span class="line">        LocalDate plusWeeks = ymd.plusWeeks(<span class="number">13L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上增加天数</span></span><br><span class="line">        LocalDate plusDays = ymd.plusDays(<span class="number">35</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 在原有的基础上减少年份/月份/周数/天数</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line">        <span class="comment">// 在原有的基础上减少年份</span></span><br><span class="line">        LocalDate minusYears = ymd.minusYears(<span class="number">2L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上减少月份</span></span><br><span class="line">        LocalDate minusMonths = ymd.minusMonths(<span class="number">30L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上减少周数</span></span><br><span class="line">        LocalDate minusWeeks = ymd.minusWeeks(<span class="number">13L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上减少天数</span></span><br><span class="line">        LocalDate minusDays = ymd.minusDays(<span class="number">35</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 判断</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 判断该年是否为闰年</span></span><br><span class="line">        <span class="keyword">boolean</span> b = ymd.isLeapYear();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 判断该日期是否比参数日期早</span></span><br><span class="line">        <span class="keyword">boolean</span> b1 = ymd.isBefore(ymd2);</span><br><span class="line">        <span class="comment">// 判断该日期是否比参数日期晚</span></span><br><span class="line">        <span class="keyword">boolean</span> b2 = ymd.isAfter(ymd2);</span><br><span class="line">        <span class="comment">// 判断两个日期是否相等</span></span><br><span class="line">        <span class="keyword">boolean</span> b3 = ymd.isEqual(ymd2);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 比较</span></span><br><span class="line"><span class="comment">         * ChronoLocalDate接口 是 LocalDate类 的父类接口</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 比较该日期（ymd）与参数日期（ymd2）的大小，返回正数，则 ymd日期 较晚</span></span><br><span class="line">        <span class="keyword">int</span> i = ymd.compareTo(ymd2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="LocalDate-与-String-之间的转换"><a href="#LocalDate-与-String-之间的转换" class="headerlink" title="LocalDate 与 String 之间的转换"></a>LocalDate 与 String 之间的转换</h3><table>
-<thead>
-<tr>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>format(DateTimeFormatter formatter)</code></td>
-<td align="center">LocalDate &gt;&gt; String</td>
-</tr>
-<tr>
-<td align="center"><code>parse(CharSequence text, DateTimeFormatter formatter)</code></td>
-<td align="center">String &gt;&gt; LocalDate</td>
-</tr>
-</tbody></table>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * LocalDate 与 String 之间的互相转换</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">localDateSwitchString</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// LocalDate &gt;&gt; String</span></span><br><span class="line">    LocalDate ymd = LocalDate.now();</span><br><span class="line">    DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy年MM月dd日&quot;</span>);</span><br><span class="line">    String s = ymd.format(ofPattern);</span><br><span class="line">    log.info(s);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// String &gt;&gt; LocalDate</span></span><br><span class="line">    String s2 = <span class="string">&quot;2020:12:21&quot;</span>;</span><br><span class="line">    DateTimeFormatter ofPattern2 = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy:MM:dd&quot;</span>);</span><br><span class="line">    LocalDate date = LocalDate.parse(s2, ofPattern2);</span><br><span class="line">    System.out.println(date);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="LocalDate-与-LocalDateTime"><a href="#LocalDate-与-LocalDateTime" class="headerlink" title="LocalDate 与 LocalDateTime"></a>LocalDate 与 LocalDateTime</h3><blockquote>
-<p>简言之，<strong>LocalDate</strong> 就是不带时分秒的日期，而 <strong>LocalDateTime</strong> 就是带有时分秒日期。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * LocalDate 和 LocalDateTime 的比较</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">compareWithLocalDateTime</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 获取当前时间</span></span><br><span class="line">    LocalDateTime time = LocalDateTime.now();</span><br><span class="line">    <span class="comment">// 获取指定日期的时间</span></span><br><span class="line">    LocalDateTime time2 = LocalDateTime.of(<span class="number">2021</span>, <span class="number">9</span>, <span class="number">23</span>, <span class="number">16</span>, <span class="number">32</span>, <span class="number">35</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="LocalDate-LocalDateTime-与-Date-之间的转换"><a href="#LocalDate-LocalDateTime-与-Date-之间的转换" class="headerlink" title="LocalDate/LocalDateTime 与 Date 之间的转换"></a>LocalDate/LocalDateTime 与 Date 之间的转换</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Date &lt;&lt;--&gt;&gt; LocalDate/LocalDateTime</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">switchDate</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// Date --&gt;&gt; LocalDate/LocalDateTime</span></span><br><span class="line">    Date date = <span class="keyword">new</span> Date();</span><br><span class="line">    LocalDate toLocalDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();</span><br><span class="line">    LocalDateTime toLocalDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// LocalDate/LocalDateTime --&gt;&gt; Date</span></span><br><span class="line">    LocalDate localDate = LocalDate.now(ZoneId.systemDefault());</span><br><span class="line">    Date toDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());</span><br><span class="line"></span><br><span class="line">    LocalDateTime localDateTime = LocalDateTime.now(ZoneId.systemDefault());</span><br><span class="line">    Date toDate2 = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/03/MySQL%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/03/MySQL%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" class="post-title-link" itemprop="url">MySQL开发日记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-04-03 12:07:37 / Modified: 12:11:20" itemprop="dateCreated datePublished" datetime="2021-04-03T12:07:37+08:00">2021-04-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="多表联查-三张或三张以上"><a href="#多表联查-三张或三张以上" class="headerlink" title="多表联查(三张或三张以上)"></a>多表联查(三张或三张以上)</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 三张表 </span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> </span><br><span class="line"><span class="keyword">FROM</span> (表<span class="number">1</span> <span class="keyword">INNER</span> <span class="keyword">JOIN</span> 表<span class="number">2</span> <span class="keyword">ON</span> 表<span class="number">1.</span>字段号<span class="operator">=</span>表<span class="number">2.</span>字段号) <span class="keyword">INNER</span> <span class="keyword">JOIN</span> 表<span class="number">3</span> <span class="keyword">ON</span> 表<span class="number">1.</span>字段号<span class="operator">=</span>表<span class="number">3.</span>字段号</span><br><span class="line"><span class="keyword">WHERE</span> ......</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 四张表</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> </span><br><span class="line"><span class="keyword">FROM</span> ((表<span class="number">1</span> <span class="keyword">INNER</span> <span class="keyword">JOIN</span> 表<span class="number">2</span> <span class="keyword">ON</span> 表<span class="number">1.</span>字段号<span class="operator">=</span>表<span class="number">2.</span>字段号) <span class="keyword">INNER</span> <span class="keyword">JOIN</span> 表<span class="number">3</span> <span class="keyword">ON</span> 表<span class="number">1.</span>字段号<span class="operator">=</span>表<span class="number">3.</span>字段号) <span class="keyword">INNER</span> <span class="keyword">JOIN</span> 表<span class="number">4</span> <span class="keyword">ON</span> 表<span class="number">1.</span>字段号<span class="operator">=</span>表<span class="number">4.</span>字段号</span><br><span class="line"><span class="keyword">WHERE</span> ......</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h1 id="SQL-的执行顺序"><a href="#SQL-的执行顺序" class="headerlink" title="SQL 的执行顺序"></a>SQL 的执行顺序</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">     from</span><br><span class="line">--&gt;&gt; join</span><br><span class="line">--&gt;&gt; on</span><br><span class="line">--&gt;&gt; where</span><br><span class="line">--&gt;&gt; group by</span><br><span class="line">--&gt;&gt; avg &#x2F; sum ......</span><br><span class="line">--&gt;&gt; having</span><br><span class="line">--&gt;&gt; select</span><br><span class="line">--&gt;&gt; distinct</span><br><span class="line">--&gt;&gt; order by</span><br><span class="line">--&gt;&gt; limit</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>总结：</p>
-</blockquote>
-<ul>
-<li>所有的查询语句都是从 from 开始执行的</li>
-<li><strong>在执行过程中，每个步骤都会为下一步骤生成一个虚拟表，这个虚拟表将作为下一个执行步骤的输入！</strong></li>
-</ul>
-<blockquote>
-<p>分析：</p>
-</blockquote>
-<ul>
-<li><p>step1：首先对 from 子句中的前两张表（可能查询大于两张表）执行一个笛卡尔乘积，此时生成虚拟表 vt1（Virtual Table）！</p>
-</li>
-<li><p>step2：接下来就是使用 on 筛选器。on 中的逻辑表达式将应用到 vt1 中的每一行，筛选出满足 on 逻辑表达式的行，生成虚拟表 vt2 ！</p>
-</li>
-<li><p>step3：如果是 outer join 那么这一步就将添加外部行，如果是 left outer jion 就把左表在第二步中过滤的添加进来，如果是 right outer join 那么就将右表在第二步中过滤掉的行添加进来，这样生成虚拟表 vt3 。</p>
-</li>
-<li><p>step4：如果 from 子句中的表的数量多于两个，那么就将 vt3 和第三个表连接计算笛卡尔积，生成虚拟表，该过程就是一个重复 1~3 步的过程，最终得到一个新的虚拟表 vt3 ！</p>
-</li>
-<li><p>step5：应用 where 筛选器。  使用 where 筛选器对上一步产生的虚拟表 vt3 进行筛选，生成虚拟表 vt4 ！</p>
-</li>
-<li><p>step6：group by 子句将 vt4 表中指定字段唯一的值组合成为一组，得到虚拟表 vt5 ！<strong>如果应用了 group by ，最终的结果集中只为每个组保留一行数据！</strong></p>
-</li>
-<li><p>step7：应用聚合函数，生成虚拟表 vt5 ！</p>
-</li>
-<li><p>step8：应用 having 筛选器，生成 vt7 ！having 筛选器是唯一一个可以筛选已分组数据的筛选器！</p>
-</li>
-<li><p>step9：使用 select 语句对于 vt7 表中的列进行筛选，得到 vt8 ！</p>
-</li>
-<li><p>step10：应用 distinct 语句，移除 vt8 表中数据相同的行，生成 vt9 ！</p>
-<p>事实上，如果应用了 group by 子句，那么 distinct 子句就是多余的，因为在分组的时候就是将列中唯一的值分成一组，同时每一组只返回一行记录，所以所有的记录都是不相同的。</p>
-</li>
-<li><p>应用 order by 子句。按照 order by 语句对 vt9 表进行排序 ！</p>
-</li>
-<li><p>应用 limit 子句，进行物理分页。</p>
-</li>
-</ul>
-<hr>
-<h1 id="MySQL-中-EXISTS-NOT-EXISTS-的使用"><a href="#MySQL-中-EXISTS-NOT-EXISTS-的使用" class="headerlink" title="MySQL 中 EXISTS / NOT EXISTS 的使用"></a>MySQL 中 EXISTS / NOT EXISTS 的使用</h1><h3 id="准备数据库"><a href="#准备数据库" class="headerlink" title="准备数据库"></a>准备数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">-- 初始化数据库</span><br><span class="line">DROP TABLE IF EXISTS student;</span><br><span class="line">DROP TABLE IF EXISTS department;</span><br><span class="line"></span><br><span class="line">-- 创建学生表</span><br><span class="line">CREATE TABLE IF NOT EXISTS student</span><br><span class="line">(</span><br><span class="line">	Sno INT PRIMARY KEY AUTO_INCREMENT COMMENT &quot;学号&quot;,</span><br><span class="line">	Sname VARCHAR(20) COMMENT &quot;姓名&quot;,</span><br><span class="line">	Sgender INT COMMENT &quot;性别&quot;,</span><br><span class="line">	Sage INT COMMENT &quot;年龄&quot;,</span><br><span class="line">	DepId INT COMMENT &quot;院系编号&quot;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">-- 创建部门表</span><br><span class="line">CREATE TABLE IF NOT EXISTS department</span><br><span class="line">(</span><br><span class="line">	DepId INT PRIMARY KEY AUTO_INCREMENT COMMENT &quot;院系编号&quot;,</span><br><span class="line">	DepName VARCHAR(20) COMMENT &quot;院系名字&quot;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-- 部门表插入数据</span><br><span class="line">INSERT INTO </span><br><span class="line">  department (DepName)</span><br><span class="line">VALUES</span><br><span class="line">  (&quot;石工院&quot;),</span><br><span class="line">  (&quot;地科院&quot;),</span><br><span class="line">  (&quot;电工院&quot;),</span><br><span class="line">  (&quot;计科院&quot;),</span><br><span class="line">  (&quot;人文院&quot;),</span><br><span class="line">  (&quot;经管院&quot;)</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">-- 学生表插入数据</span><br><span class="line">INSERT INTO </span><br><span class="line">  student (Sname, Sgender, Sage, DepId)</span><br><span class="line">VALUES</span><br><span class="line">  (&quot;李勇&quot;, 1, 23, 4),</span><br><span class="line">  (&quot;刘成&quot;, 1, 24, 1),</span><br><span class="line">  (&quot;张丽&quot;, 0, 23, 4),</span><br><span class="line">  (&quot;王攀&quot;, 1, 23, 5),</span><br><span class="line">  (&quot;侯哥&quot;, 1, 22, 2),</span><br><span class="line">  (&quot;李桂荣&quot;, 0, 25, 3),</span><br><span class="line">  (&quot;王洪刚&quot;, 1, 24, 4)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="EXISTS-用法"><a href="#EXISTS-用法" class="headerlink" title="EXISTS 用法"></a>EXISTS 用法</h3><ul>
-<li>EXISTS 表示“<strong>存在</strong>”的意思，带有 EXISTS 谓词的子查询不返回任何数据，只产生逻辑值 <strong>true</strong> 或 <strong>false</strong> ！</li>
-<li><strong>EXISTS 要连接一个查询子句</strong>。使用了 EXISTS 后，若内层查询结果为非空，则外层的 WHERE 子句返回值为 true，否则返回值为 false。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-- 查询 DepName &#x3D; &quot;计科院&quot; 的学生信息</span><br><span class="line"></span><br><span class="line">-- 做法1：</span><br><span class="line">SELECT Sname FROM student stu, department dep</span><br><span class="line">WHERE stu.DepId &#x3D; dep.DepId </span><br><span class="line">AND dep.DepName &#x3D; &quot;计科院&quot;</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">-- 做法2（测试 EXISTS 用法：）：</span><br><span class="line">SELECT Sname FROM student stu</span><br><span class="line">WHERE EXISTS </span><br><span class="line">  (SELECT 1 FROM department dep WHERE stu.DepId &#x3D; dep.DepId AND dep.DepName &#x3D; &quot;计科院&quot;)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/04/03/MySQL%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/image-20210401151204435.png" alt="image-20210401151204435"></p>
-<blockquote>
-<p>分析：</p>
-</blockquote>
-<ul>
-<li><p>对于做法1而言：</p>
-<ol>
-<li>首先要对 <code>student</code> 表和 <code>department</code> 表进行笛卡尔积相连得到虚拟表 vt1；</li>
-<li>再用 <code>where</code> 条件进行一次筛选得到虚拟表 vt2 ；</li>
-<li>然后再用 <code>and</code> 条件进行一次筛选得到虚拟表 vt3 ；</li>
-<li>最后再用 <code>select</code> 进行查询列的筛选！</li>
-</ol>
-</li>
-<li><p>对于做法2而言</p>
-<ol>
-<li><p>首先分析最内层的子句：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> Sname <span class="keyword">FROM</span> department dep <span class="keyword">WHERE</span> stu.DepId <span class="operator">=</span> dep.DepId <span class="keyword">AND</span> dep.DepName <span class="operator">=</span> &quot;计科院&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>子查询的查询条件必须依赖于外层父查询的某个属性值</strong>（本例是 <code>Student.DepId</code> 值），这个相关子查询的处理过程是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1、首先取外层查询中（student）表的第一个元组，根据它与内层查询相关的属性值 &#96;DeptId&#96; 和内层查询的其它条件 dep.DepName &#x3D; &quot;计科院&quot; 处理内层查询，若外层 WHERE 得到返回值为 TRUE，则取该元组的 Sname 属性放入结果表</span><br><span class="line">2、然后再取 student 表的下一元组，重复这一过程，直至外层 student 表全部检查完毕！</span><br></pre></td></tr></table></figure></li>
-<li><p>可以看到我们没有使用笛卡尔积关联要查询的两张表，大大提高了SQL的查询效率！</p>
-</li>
-</ol>
-</li>
-</ul>
-<h3 id="NOT-EXISTS-用法"><a href="#NOT-EXISTS-用法" class="headerlink" title="NOT EXISTS 用法"></a>NOT EXISTS 用法</h3><ul>
-<li>NOT EXISTS 与 EXISTS 的用法基本一致。</li>
-<li>使用存在量词 NOT EXISTS 后，若对应查询结果为空，则外层的 WHERE 子语句返回 TRUE，否则返回 FALSE。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM student stu</span><br><span class="line">WHERE NOT EXISTS </span><br><span class="line">  (SELECT * FROM department dep WHERE stu.DepId &#x3D; dep.DepId AND dep.DepName &#x3D; &quot;计科院&quot;)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/04/03/MySQL%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/image-20210401151133530.png" alt="image-20210401151133530"></p>
-<h1 id="根据时间范围查询语句"><a href="#根据时间范围查询语句" class="headerlink" title="根据时间范围查询语句"></a>根据时间范围查询语句</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"># 查询今天的数据</span><br><span class="line">SELECT * FROM 表名 where TO_DAYS(时间字段名) &#x3D; to_days(now());</span><br><span class="line"></span><br><span class="line"># 查询昨天的数据</span><br><span class="line">SELECT * FROM 表名 WHERE TO_DAYS(NOW()) - TO_DAYS(时间字段名) &lt;&#x3D; 1</span><br><span class="line"></span><br><span class="line"># 查询近7天的数据</span><br><span class="line">SELECT * FROM 表名 where DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;&#x3D; date(时间字段名)</span><br><span class="line"></span><br><span class="line"># 查询近30天的数据</span><br><span class="line">SELECT * FROM 表名 where DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;&#x3D; date(时间字段名)</span><br><span class="line"></span><br><span class="line"># 查询本月从1号开始到查询截止日期的数据</span><br><span class="line">SELECT * FROM 表名 WHERE DATE_FORMAT( 时间字段名, &#39;%Y%m&#39; ) &#x3D; DATE_FORMAT( CURDATE( ) , &#39;%Y%m&#39; )</span><br><span class="line"></span><br><span class="line"># 查询上一月的数据</span><br><span class="line">SELECT * FROM 表名 WHERE PERIOD_DIFF( date_format( now( ) , &#39;%Y%m&#39; ) , date_format( 时间字段名, &#39;%Y%m&#39; ) ) &#x3D;1</span><br><span class="line"></span><br><span class="line"># 查询本季度数据</span><br><span class="line">select * from 表名 where QUARTER(create_date)&#x3D;QUARTER(now());</span><br><span class="line"></span><br><span class="line"># 查询上季度数据</span><br><span class="line">select * from 表名 where QUARTER(create_date)&#x3D;QUARTER(DATE_SUB(now(),interval 1 QUARTER));</span><br><span class="line"></span><br><span class="line"># 查询本年数据</span><br><span class="line">select * from 表名 where YEAR(create_date)&#x3D;YEAR(NOW());</span><br><span class="line"></span><br><span class="line"># 查询上年数据</span><br><span class="line">select * from 表名 where year(create_date)&#x3D;year(date_sub(now(),interval 1 year));</span><br><span class="line"></span><br><span class="line"># 查询当前这周到查询截止日期的数据</span><br><span class="line">SELECT * FROM 表名 WHERE YEARWEEK(date_format(submittime,&#39;%Y-%m-%d&#39;)) &#x3D; YEARWEEK(now());</span><br><span class="line"></span><br><span class="line"># 查询上周的数据</span><br><span class="line">SELECT * FROM 表名 WHERE YEARWEEK(date_format(submittime,&#39;%Y-%m-%d&#39;)) &#x3D; YEARWEEK(now())-1;</span><br></pre></td></tr></table></figure>
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
