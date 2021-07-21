@@ -155,13 +155,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -194,6 +194,384 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/13/String/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/13/String/" class="post-title-link" itemprop="url">String</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-06-13 11:42:39 / Modified: 20:01:23" itemprop="dateCreated datePublished" datetime="2021-06-13T11:42:39+08:00">2021-06-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>  本篇文章默认使用 HotSpot 虚拟机在 JDK8 环境下运行，如有其它情况会具体指出。</p>
+</blockquote>
+<h1 id="1-String-的基本特性"><a href="#1-String-的基本特性" class="headerlink" title="1  String 的基本特性"></a>1  String 的基本特性</h1><blockquote>
+<p>  String；字符串，顾名思义，字符串就是把一个个的字符串在一起，所以说字符串的底层实现就是一个字符数组。</p>
+</blockquote>
+<p><img src="/2021/06/13/String/1623398509911-a4c2e130-bfc9-4aa7-9a9d-531df6e1cdee.png" alt="image.png"></p>
+<ul>
+<li>  String 被声明为 <strong>final</strong> 的，表示不可变，不可被继承，不可被重写。</li>
+<li>  String 实现了 <strong>Serializable</strong> 接口，表示字符串是支持序列化的。</li>
+<li>  String 实现了 <strong>Comparable</strong> 接口，表示 String 可以比较大小。</li>
+<li>  在 JDK8 中，String 使用 <code>final char[] value</code> 数组来存储字符串数据。</li>
+</ul>
+<h2 id="1-1-String存储结构变更"><a href="#1-1-String存储结构变更" class="headerlink" title="1.1    String存储结构变更"></a>1.1    String存储结构变更</h2><ul>
+<li>  在 JDK9 之前，String（字符串）的底层是通过字符数组 <code>char[]</code> 来保存字符串的。</li>
+<li>  从 JDK9 开始，String 底层变成了通过字节数组 <code>byte[]</code> 来保存字符串数据。</li>
+</ul>
+<p>String 底层将 <code>char[]</code> 变成 <code>byte[]</code> 来存储字符串数据，可以节约一些空间。</p>
+<p>同时，基于 String 的一些对象，如 StringBuffer、StringBuilder 等也作出了同样的改变，将存储结构变更为了 byte[] 。</p>
+<hr>
+<h2 id="1-2-String-的不可变性"><a href="#1-2-String-的不可变性" class="headerlink" title="1.2    String 的不可变性"></a>1.2    String 的不可变性</h2><ul>
+<li><p>  String：代表不可变的字符序列</p>
+</li>
+<li><ul>
+<li>  当对字符串重新赋值时，需要重写指定内存区域，重新赋值，不能在原先 value 的基础上进行赋值。</li>
+<li>  当对现有的字符串进行拼接操作时，也需要重新指定内存区域，重新赋值，不能在原先 value 的基础上进行赋值。</li>
+<li>  当调用 <code>String.replace()</code> 方法修改指定的字符串或字符时，也需要重新指定内存区域并重新赋值，不能在原先 value 的基础上进行赋值。</li>
+</ul>
+</li>
+<li><p>  通过字面量的方式（区别于 new）给一个字符串赋值，此时字符串的值保存在堆空间的字符串常量池中。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">&quot;abc&quot;</span>;  <span class="comment">// 字面量定义的方式，“abc”存储在字符串常量池中</span></span><br><span class="line">String s2 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">s1 = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有的线程共用堆空间中的同一个字符串常量池，显然，字符串常量池中是不允许出现重复的字符串的，所以上述代码的 s1 和 s2 指向的是同一个字符串。</span></span><br><span class="line"><span class="comment">// 如果让 s1 指向一个新的字符串 &quot;hello&quot;，JVM就会在字符串常量池中新开辟一块内存保存字符串 &quot;hello&quot;，而不会去改变原先字符串 &quot;abc&quot; 的内存地址，所以输出为false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// String 字符串为什么不能直接拼接字符串？</span></span><br><span class="line">String 的底层实现方式是 <span class="keyword">char</span>[] 或 <span class="keyword">byte</span>[] ，显然，数组一旦被创建出来，那么它的长度一定就确定了，不能再被更改，所以说在进行字符串拼接操作时，只能是新开辟一块空间保存新的字符串，而不是去改变原有的字符串。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>  <strong>字符串常量池中是不会存储相同内容的字符串的</strong> 。</p>
+</li>
+<li><ul>
+<li>  String 的 StringPool 是一个固定大小的 HashTable，默认值大小长度在不同的JDK版本中均有所不同。如果放进 String Pool 的 String 非常多，就会造成 Hash 冲突严重，从而导致链表会很长，而链表长了后直接会造成的影响就是当调用 String.intern() 时性能会大幅下降。</li>
+<li>  使用 <code>-XX:StringTableSize</code> 可以设置 StringPool 的长度。</li>
+<li>  JDK6中，StringPool 的默认长度为 1009 ，可以任意设置大小；</li>
+<li>  从 JDK7 开始，StringPool 的默认长度增加到了 60013 ，</li>
+<li>  从 JDK8 开始，可设置的最小长度为 1009 。</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-String的内存分配"><a href="#2-String的内存分配" class="headerlink" title="2  String的内存分配"></a>2  String的内存分配</h1><p>​        Java语言中有 8 种基本数据类型和一种比较特殊的类型 String 。这些类型为了使它们在运行过程中速度更快、更节省内存，都提供了一种常量池的概念。    常量池类似于一个 Java 系统级别提供的缓存。8种基本数据类型的常量池都是系统协调的， <strong>String类型的常量池比较特殊，想要在常量池创建字面量对象的主要方法有两种</strong> ：</p>
+<ol>
+<li>直接使用双引号声明出来的 String 对象会直接存储在常量池中。<ul>
+<li>  比如： <code>String info = &quot;HelloWorld&quot;;</code> </li>
+</ul>
+</li>
+<li> 如果不是双引号声明的 String 对象，可以使用 String 提供的 intern() 方法。</li>
+</ol>
+<h2 id="JDK8-中-String-对象在-JVM-内存中的几种情况"><a href="#JDK8-中-String-对象在-JVM-内存中的几种情况" class="headerlink" title="JDK8 中 String 对象在 JVM 内存中的几种情况"></a>JDK8 中 String 对象在 JVM 内存中的几种情况</h2><ol>
+<li> <code>String s1 = &quot;Hello World&quot;;</code></li>
+<li> <code>String s1 = new String(&quot;Hello World&quot;);</code></li>
+<li> 只存在于字符串常量池中；</li>
+<li> 只存在于堆中的非字符串常量池空间；</li>
+<li> 二者</li>
+</ol>
+<h2 id="2-1-不同JDK版本中-StringPool-在内存中的调整"><a href="#2-1-不同JDK版本中-StringPool-在内存中的调整" class="headerlink" title="2.1  不同JDK版本中 StringPool 在内存中的调整"></a>2.1  不同JDK版本中 StringPool 在内存中的调整</h2><ul>
+<li>  在 Java7 以前，字符串常量池存放在方法区中（在 HotSpot 中就是永久代）。</li>
+<li>  从 Java7 开始，HotSpot 将字符串常量池的位置调整到了 Java 堆中。</li>
+</ul>
+<blockquote>
+<p>  <strong>问题：String Pool 为什么要从方法区调整到堆空间中？</strong></p>
+</blockquote>
+<ul>
+<li>保存在方法区的缺点：<ol>
+<li> 方法区（永久代/元空间）默认占用的内存空间较小，如果在方法区中保存大量的 String 字面量对象，极易导致方法区空间出现 OOM  异常。</li>
+<li> 即使将方法区初始的内存空间设置为一个较高的值，但是由于方法区进行 GC 的频率极低，这也就意味着在方法区中，String对象在使用完后，无法做到及时的 GC，也会导致方法区频繁出现 OOM 异常。</li>
+</ol>
+</li>
+<li>保存在堆空间的优点：<ol>
+<li> 所有的 String 字面量对象都保存在堆（Heap）中，它就和其它普通对象一样，这样的好处就是在进行JVM调优时只需调整堆的大小就可以了。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h1 id="3-String的基本操作"><a href="#3-String的基本操作" class="headerlink" title="3  String的基本操作"></a>3  String的基本操作</h1><p>​        Java语言规范里要求完全相同的字符串字面量对象，应该包含同样的Unicode字符序列（包含同一份码点序列的常量），并且必须指向同一个String类实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">psvm()&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h1 id="4-字符串拼接操作"><a href="#4-字符串拼接操作" class="headerlink" title="4  字符串拼接操作"></a>4  字符串拼接操作</h1><blockquote>
+<ul>
+<li>  常量 + 常量</li>
+<li>  常量 + 变量</li>
+<li>  变量 + 变量</li>
+</ul>
+</blockquote>
+<h2 id="常量-常量"><a href="#常量-常量" class="headerlink" title="常量 + 常量"></a>常量 + 常量</h2><p>​        常量与常量的拼接结果还保存在常量池中，原理是编译期优化。</p>
+<blockquote>
+<p>  <strong>问题：如何理解“编译期优化”？</strong></p>
+</blockquote>
+<p>答：在 <code>.java</code> 源代码中使用多个字符串常量进行拼接，这些字符串常量在被编译为 <code>.class</code> 字节码文件时就会将多个字符串合为一个字符串常量，也就是说被加载到 JVM 内存中的只是 <code>.class</code> 字节码文件中的拼接后的字符串常量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span> + <span class="string">&quot;c&quot;</span>;    <span class="comment">// 在编译后，就等同于 &quot;abc&quot;</span></span><br><span class="line">    String s2 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  .java 文件需要先被编译成 .class 字节码文件，再被加载到JVM中执行。</span></span><br><span class="line"><span class="comment">     *      在 .class 文件中，s1 已经是一个拼接过的常量了。即</span></span><br><span class="line"><span class="comment">     *          String s1 = &quot;abc&quot;;</span></span><br><span class="line"><span class="comment">     *          String s2 = &quot;abc&quot;;</span></span><br><span class="line"><span class="comment">     *      所以在将字节码文件加载到 JVM 中运行时这两个常量都会保存在堆空间的常量池中，并且常量池中不允许出现重复的元素，所以说 s1 和 s2 指向同一个对象。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    System.out.println(s1 == s2);   <span class="comment">// true</span></span><br><span class="line">    System.out.println(s1.equals(s2));      <span class="comment">// true</span></span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="常量-变量-变量"><a href="#常量-变量-变量" class="headerlink" title="常量/变量 +变量"></a>常量/变量 +变量</h2><ul>
+<li><p>  常量池中不会保存相同内容的字面量对象。</p>
+</li>
+<li><p>  在字符串拼接操作中，多个字符串只要其中有一个是变量，结果就只会保存在堆中的非常量池区域。</p>
+</li>
+<li><p>含有变量的字符串拼接原理是：只要拼接的多个字符串中存在变量，那么 JVM 在进行字符串拼接的时候，</p>
+<ol>
+<li> 首先会 <code>new StringBuilder()</code> 对象，</li>
+<li> 然后调用该对象中的 <code>append()</code> 方法拼接字符串，</li>
+<li> 最后再调用  <code>StringBuilder#toString()</code> 方法，将拼接后的字符串对象转换成 String 对象，并将这个 String 对象保存在堆中的非常量池区域。</li>
+</ol>
+<p>  <strong>Tip：此时拼接后的 String 对象只会保存在堆中的非常量池区域，而不会同步保存到字符串常量池中！！！</strong></p>
+</li>
+</ul>
+<blockquote>
+<p>  代码：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line">    String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        s1 + s2 的执行细节：</span></span><br><span class="line"><span class="comment">            1、StringBuilder sb = new StringBuilder();</span></span><br><span class="line"><span class="comment">            2、sb.append(s1);</span></span><br><span class="line"><span class="comment">            3、sb.append(s2);</span></span><br><span class="line"><span class="comment">            4、sb.toString();  --&gt;&gt; 类似于 new String(&quot;ab&quot;)</span></span><br><span class="line"><span class="comment">        所以说，最后得到的地址值是在第4步的 sb.toString() 中确定的，这个方法类似于 new String() ，但是并不相同。使用 new String() 创建出来的 String 对象会同时保存在堆中的非常量池区域和字符串常量池中，而 StringBuilder#toString() 方法则只会将 String 对象保存在堆中的非常量池区域。</span></span><br><span class="line"><span class="comment">        </span></span><br><span class="line"><span class="comment">        Tip：在 jdk5 之前，含有变量的字符串拼接实现，底层使用的类是 StringBuffer ，因为 jdk5 之前并没有 StringBuilder 这个类；</span></span><br><span class="line"><span class="comment">             从 jdk5 开始，才使用 StringBuilder 代替 StringBuffer 来完成含有变量的字符串拼接操作。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    String s4 = s1 + s2;</span><br><span class="line">    String s5 = <span class="string">&quot;a&quot;</span> + s2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  字节码文件</p>
+</blockquote>
+<p><img src="/2021/06/13/String/1623478701279-d327aa0f-fdc0-47a9-a63e-e310317f7271.png" alt="test.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> 0 ldc #2 &lt;a&gt;   // 在字符串常量池中创建一个字面量对象&lt;a&gt;，并得到该字面量对象的内存地址</span><br><span class="line"> <span class="number">2</span> astore_1     <span class="comment">// 将字面量&lt;a&gt;的内存地址保存到栈中栈帧的局部变量表中下标为 1 的位置上</span></span><br><span class="line"> 3 ldc #3 &lt;b&gt;  </span><br><span class="line"> <span class="number">5</span> astore_2     </span><br><span class="line"> 6 ldc #4 &lt;ab&gt;  </span><br><span class="line"> <span class="number">8</span> astore_3    </span><br><span class="line">  </span><br><span class="line"> <span class="comment">/* 创建 StringBuilder 对象开始 */</span></span><br><span class="line"> 9 new #5 &lt;java/lang/StringBuilder&gt; </span><br><span class="line"><span class="number">12</span> dup</span><br><span class="line">13 invokespecial #6 &lt;java/lang/StringBuilder.&lt;init&gt;&gt;</span><br><span class="line"><span class="comment">/*  创建 StringBuilder 对象结束 */</span></span><br><span class="line"></span><br><span class="line"><span class="number">16</span> aload_1  <span class="comment">// 取出局部变量表中下标为1的位置上的值，即常量池中字面量对象&lt;a&gt;的地址值</span></span><br><span class="line">17 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    // 调用 StringBuilder#append() 将该值追加到 StringBuilder 对象中</span><br><span class="line"><span class="number">20</span> aload_2  </span><br><span class="line">21 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;</span><br><span class="line">     </span><br><span class="line">24 invokevirtual #8 &lt;java/lang/StringBuilder.toString&gt;  // 调用 StringBuilder#toString() 将StringBuilder对象转化为String对象</span><br><span class="line"><span class="number">27</span> astore <span class="number">4</span> <span class="comment">// 将上一条指令得到的String对象的内存地址值保存到局部变量表下标为4的位置上</span></span><br><span class="line"></span><br><span class="line">29 new #5 &lt;java/lang/StringBuilder&gt;</span><br><span class="line"><span class="number">32</span> dup</span><br><span class="line">33 invokespecial #6 &lt;java/lang/StringBuilder.&lt;init&gt;&gt;</span><br><span class="line"></span><br><span class="line">36 ldc #2 &lt;a&gt;   // 从常量池中得到字符串常量&lt;a&gt;</span><br><span class="line">38 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    </span><br><span class="line"><span class="number">41</span> aload_2      </span><br><span class="line">42 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    </span><br><span class="line">45 invokevirtual #8 &lt;java/lang/StringBuilder.toString&gt;  </span><br><span class="line"><span class="number">48</span> astore <span class="number">5</span>     </span><br><span class="line">     </span><br><span class="line"><span class="number">50</span> <span class="keyword">return</span>   <span class="comment">// 返回</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="特殊情况：final-修饰的变量"><a href="#特殊情况：final-修饰的变量" class="headerlink" title="特殊情况：final 修饰的变量"></a>特殊情况：final 修饰的变量</h3><p>使用 <code>final</code> 修饰的变量就等价于常量，因为在 <code>.java</code> 源文件在编译成 <code>.class</code> 字节码文件的时候就已经把 <code>final</code> 修饰的变量转换成常量值了（编译期优化）。也就是说加载到 JVM 内存中执行的就是常量字符串，也自然保存在常量池中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">final</span> String s1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line">    <span class="keyword">final</span> String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s4 = s1 + s2;</span><br><span class="line">    System.out.println(s3 == s4);  <span class="comment">// true</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        使用 final 修饰的变量，在编译成字节码文件的时候就已经把这些变量转换成常量了（编译期优化），也就是说进入JVM执行的就是常量字符串，也自然保存在常量池中。</span></span><br><span class="line"><span class="comment">        所以可以得到 s3==s4 为 true</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>  如果拼接的结果调用 <code>intern()</code> 方法，则主动将常量池中还没有的字符串对象放入池中，并返回此对象在常量池中的地址。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        String s1 = <span class="string">&quot;javaEE&quot;</span>;   <span class="comment">// String Pool；poolAddress[0]</span></span><br><span class="line">        String s2 = <span class="string">&quot;hadoop&quot;</span>;   <span class="comment">// String Pool；poolAddress[1]</span></span><br><span class="line"></span><br><span class="line">        String s3 = <span class="string">&quot;javaEEhadoop&quot;</span>;     <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line">        String s4 = <span class="string">&quot;javaEE&quot;</span> + <span class="string">&quot;hadoop&quot;</span>;    <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line">        String s5 = s1 + <span class="string">&quot;hadoop&quot;</span>;  <span class="comment">// Not String Pool； heapAddress[0]</span></span><br><span class="line">        String s6 = <span class="string">&quot;javaEE&quot;</span> + s2;  <span class="comment">// Not String Pool; heapAddress[1]</span></span><br><span class="line">        String s7 = s1 + s2;    <span class="comment">// Not String Pool; heapAddress[2]</span></span><br><span class="line">        String s8 = s6.intern();    <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 分析：</span></span><br><span class="line"><span class="comment">         *      s1 保存在字符串常量池中，地址为 poolAddress[0]；</span></span><br><span class="line"><span class="comment">         *      s2 保存在字符串常量池中，地址为 poolAddress[1]；</span></span><br><span class="line"><span class="comment">         *      s3 保存在字符串常量池中，地址为 poolAddress[2]；</span></span><br><span class="line"><span class="comment">         *      s4 是两个常量的拼接，结果仍保存在常量池中，并且常量池中相同的值只会保存一份数据，所以 s4 的地址为 poolAddress[2]；</span></span><br><span class="line"><span class="comment">         *      s5 是 变量+常量 的拼接，结果只会保存在堆中的非常量池区域，所以 s5 的地址为 heapAddress[0]；</span></span><br><span class="line"><span class="comment">         *      s6 也是 变量+常量 的拼接，结果会保存在堆中的非常量池区域，并且在非常量池区域并没有要求相同的值只能保存一份数据，所以 s6 会占用一块新的内存空间，地址为 heapAddress[1]；</span></span><br><span class="line"><span class="comment">         *      s7 也是 变量+变量 的拼接，结果会保存在堆中的非常量池区域，原理同 s6 一样，所以 s7 的地址为 heapAddress[2]；</span></span><br><span class="line"><span class="comment">         *      s8 调用 intern() 方法，相当于对 s8 字符串的值在常量池中作一个校验。首先在常量池中查找是否含有相同值的字符串，如果有，得到该地址值，如果没有，就创建该字符串并得到地址值。显然，本例中该字符串在常量池中是已经存在的，所以 s8 的地址值为 poolAddress[2];</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"></span><br><span class="line">        System.out.println(s3 == s4);   <span class="comment">// true</span></span><br><span class="line">        System.out.println(s3 == s5);   <span class="comment">// false</span></span><br><span class="line">        System.out.println(s3 == s6);   <span class="comment">// false</span></span><br><span class="line">        System.out.println(s3 == s7);   <span class="comment">// false</span></span><br><span class="line">        System.out.println(s5 == s6);   <span class="comment">// false</span></span><br><span class="line">        System.out.println(s5 == s7);   <span class="comment">// false</span></span><br><span class="line">        System.out.println(s6 == s7);   <span class="comment">// false</span></span><br><span class="line">        System.out.println(s3 == s8);   <span class="comment">// true</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    如果拼接的多个字符串中含有变量，则类似于（但不等价）在堆空间中使用 new 关键字创建一个String对象，具体的内容为拼接的结果。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+<h1 id="5-intern-的使用"><a href="#5-intern-的使用" class="headerlink" title="5  intern() 的使用"></a>5  intern() 的使用</h1><h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p><img src="/2021/06/13/String/1623488782339-dd95c67e-52d3-4dfd-887b-52ed4e499a47.png" alt="image.png"></p>
+<p>​        <strong>intern()</strong> 方法是 String 类中的一个方法，查看源码可知，<code>String#intern()</code> 方法是一个 <code>native</code> 修饰的本地方法。也就是说，其具体实现是由非 Java 的 C/C++ 来实现的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">方法源码（JDK8）：</span></span><br><span class="line"><span class="comment"> * Returns a canonical representation for the string object.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * A pool of strings, initially empty, is maintained privately by the</span></span><br><span class="line"><span class="comment"> * class &#123;<span class="doctag">@code</span> String&#125;.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * When the intern method is invoked, if the pool already contains a</span></span><br><span class="line"><span class="comment"> * string equal to this &#123;<span class="doctag">@code</span> String&#125; object as determined by</span></span><br><span class="line"><span class="comment"> * the &#123;<span class="doctag">@link</span> #equals(Object)&#125; method, then the string from the pool is</span></span><br><span class="line"><span class="comment"> * returned. Otherwise, this &#123;<span class="doctag">@code</span> String&#125; object is added to the</span></span><br><span class="line"><span class="comment"> * pool and a reference to this &#123;<span class="doctag">@code</span> String&#125; object is returned.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * It follows that for any two strings &#123;<span class="doctag">@code</span> s&#125; and &#123;<span class="doctag">@code</span> t&#125;,</span></span><br><span class="line"><span class="comment"> * &#123;<span class="doctag">@code</span> s.intern() == t.intern()&#125; is &#123;<span class="doctag">@code</span> true&#125;</span></span><br><span class="line"><span class="comment"> * if and only if &#123;<span class="doctag">@code</span> s.equals(t)&#125; is &#123;<span class="doctag">@code</span> true&#125;.</span></span><br><span class="line"><span class="comment"> * &lt;p&gt;</span></span><br><span class="line"><span class="comment"> * All literal strings and string-valued constant expressions are</span></span><br><span class="line"><span class="comment"> * interned. String literals are defined in section 3.10.5 of the</span></span><br><span class="line"><span class="comment"> * &lt;cite&gt;The Java&amp;trade; Language Specification&lt;/cite&gt;.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span>  a string that has the same contents as this string, but is</span></span><br><span class="line"><span class="comment"> *          guaranteed to be from a pool of unique strings.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> String <span class="title">intern</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>主要作用：</strong></p>
+</blockquote>
+<p>​        假设存在一个字符串对象 <code>String s1</code> ，当调用 <code>s1.intern()</code> 方法时，</p>
+<ol>
+<li> 首先要去判断字符串常量池中是否已经存在一个字面量对象 s2 与 s1 对象的值相等，即 <code>s1.equals(s2) == true</code> 是否恒成立。</li>
+<li> 如果成立，那么就返回字符串常量池中字面量对象的内存地址。</li>
+<li> 若不成立，就将 s1 对象的值复制一份作为一个字面量对象添加到字符串常量池中，并返回该字面量对象在字符串常量池中的内存地址。</li>
+</ol>
+<hr>
+<h2 id="intern-的使用"><a href="#intern-的使用" class="headerlink" title="intern() 的使用"></a>intern() 的使用</h2><ul>
+<li>  如果不是通过双引号创建的String对象，可以使用 String 提供的 intern() 方法，将 String 对象放入常量池中。</li>
+<li>  intern() 方法的作用：intern() 方法会从字符串常量池中查询当前字符串是否存在，若不存在就会将当前字符串放入常量池中。也就是说，在任意字符串上调用 <code>String#intern()</code> 方法,，其返回结果所指向的地址值，必须和直接以常量形式出现的字符串实例完全相同。通俗点讲，Interned String 就是确保字符串在内存中只有一份数据，这样可以节约内存空间，加快字符串操作任务的执行速度。</li>
+<li>  Tip：这个值只会被存放在字符串内部池（String Intern Pool）。</li>
+</ul>
+<blockquote>
+<p>  <strong>问题：如何保证变量 s 指向的字符串是字符串常量池中的数据而不是堆中非常量池区域的数据呢？</strong></p>
+</blockquote>
+<p>答：有2种方式</p>
+<ol>
+<li> 直接通过双引号而不是 new 关键字来创建 String 对象。如：<code>String s = &quot;HelloWorld&quot;;</code></li>
+<li> 对得到的字符串对象，调用 <code>intern()</code> 方法。（这种方法并不能完全保证）</li>
+</ol>
+<blockquote>
+<p>  <strong>问题：<code>new String(&quot;HelloWorld&quot;)</code> 会创建几个对象？</strong> </p>
+</blockquote>
+<p>答：如果在此之前，字符串常量池中已有字面量对象 “HelloWorld”，则新创建1个对象；否则是新创建2个对象，一个保存在堆中非字符串常量池区域（和普通对象一样），另一个是字符串常量池中的字面量对象 “HelloWorld”。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String s = <span class="keyword">new</span> String(<span class="string">&quot;HelloWorld&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li> 首先，在堆中非常量池区域中创建一个 String 对象。</li>
+<li> 其次，在字符串常量池中创建字面量为 “HelloWorld” 的字面量对象。</li>
+<li> 再次，调用 String 类的构造方法，对字符串对象 s 进行显式初始化；</li>
+<li> 最后，将结果地址保存到局部变量表下标为1的位置上。</li>
+</ol>
+<p><img src="/2021/06/13/String/1623491535138-3562077b-906b-41ae-aaee-49806b528949.png" alt="image.png"></p>
+<blockquote>
+<p>  <strong>扩展：<code>String str = new String(&quot;a&quot;) + new String(&quot;b&quot;);</code> 会创建多少个对象？</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String str = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/06/13/String/1623492457552-7821a5f9-93b5-44b1-aabf-11514fb0ba93.png" alt="image.png"></p>
+<p>分析：</p>
+<ul>
+<li><p>  对象1：new StringBuilder()， 首先，两个字符串变量拼接时，需要一个辅助对象 StringBuilder 。</p>
+</li>
+<li><p>  对象2：new String(“a”)，</p>
+</li>
+<li><p>  对象3：常量池中的字面量对象 “a”</p>
+</li>
+<li><p>  对象4：new String(“b”)，</p>
+</li>
+<li><p>  对象5：常量池中的字面量对象 “b”</p>
+</li>
+<li><p>  对象6：在调用 <code>StringBuilder.toString()</code> 方法时，根据 <code>toString()</code> 方法的源码，还要创建一个 String 对象。</p>
+</li>
+<li><ul>
+<li>  Tip：<strong>toString() 方法虽然方法的调用，在字符串常量池中不会创建对应的字面量对象。</strong></li>
+</ul>
+</li>
+</ul>
+<p><img src="/2021/06/13/String/1623492807620-7f60184d-4382-4830-b450-95b9019c6051.png" alt="image.png"></p>
+<blockquote>
+<p>  <code>StringBuilder#toString()</code> 的字节码文件</p>
+</blockquote>
+<p><img src="/2021/06/13/String/image-20210613173632473.png" alt="image-20210613173632473"></p>
+<blockquote>
+<p>  面试题</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        String s1 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);    <span class="comment">// s1 --&gt;&gt; Not String Pool ；heapAddr[0]</span></span><br><span class="line">        s1.intern();    <span class="comment">// s1 --&gt;&gt; Not String Pool ；heapAddr[0]</span></span><br><span class="line">        			   <span class="comment">// s1.intern() 的返回值 --&gt;&gt; String Pool ； poolAddr[0]</span></span><br><span class="line">        String s2 = <span class="string">&quot;1&quot;</span>;    <span class="comment">// s2 --&gt;&gt; String Pool ； poolAddr[0]</span></span><br><span class="line">        System.out.println(s1 == s2);   <span class="comment">// False</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	1. 使用 new 关键字创建对象，</span></span><br><span class="line"><span class="comment">		1.1	首先会在堆中非常量池区域分配内存保存字符串对象 &quot;1&quot; ；</span></span><br><span class="line"><span class="comment">		1.2	并且之后还会在常量池中分配内存保存字面量对象 &quot;1&quot; ;</span></span><br><span class="line"><span class="comment">		1.3	但是此时栈中局部变量表中的 s1 保存的是堆中非常量池区域的字符串对象的内存地址；</span></span><br><span class="line"><span class="comment">		</span></span><br><span class="line"><span class="comment">     2. 调用 s1.intern() 方法，JVM 尝试在字符串常量池中创建值为 &quot;1&quot; 的字面量对象，发现已存在，</span></span><br><span class="line"><span class="comment">     得到该字面量对象的地址，作为方法的返回值。</span></span><br><span class="line"><span class="comment">     	2.1 intern() 方法是有返回值的，返回值就是字面量对象 &quot;1&quot; 在字符串常量池中的内存地址，但</span></span><br><span class="line"><span class="comment">     	是在本例中并没有使用这个地址，也就是说，到目前为止，s1 中保存的仍然是堆中非常量池区域中</span></span><br><span class="line"><span class="comment">     	那个字符串对象的内存地址。</span></span><br><span class="line"><span class="comment">     	</span></span><br><span class="line"><span class="comment">     3. 直接使用双引号创建 String 对象，JVM 会尝试在字符串常量池中创建值为 &quot;1&quot; 的字面量对象，发</span></span><br><span class="line"><span class="comment">     现已存在，得到该字面量对象的地址，并将此字面量对象的内存地址保存在栈的局部变量表中，即此时 </span></span><br><span class="line"><span class="comment">     s2 指向字符串常量池中对应字面量对象的地址。</span></span><br><span class="line"><span class="comment">     </span></span><br><span class="line"><span class="comment">     4. 所以，s1==s2 结果为 False</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        String s3 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);  <span class="comment">// s3 --&gt;&gt; Not String Pool ；heapAddr[1]</span></span><br><span class="line">        s3.intern();    <span class="comment">// // s3 --&gt;&gt; Not String Pool ；heapAddr[1]</span></span><br><span class="line">        String s4 = <span class="string">&quot;11&quot;</span>;    <span class="comment">// JDK6：String Pool ； poolAddr[1]  JDK7：Not String Pool ；heapAddr[1]</span></span><br><span class="line">        System.out.println(s3 == s4);   <span class="comment">// JDK6：False  JDK7：True</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	1. s3 指向的对象是由两个字符串变量拼接而成的，在进行字符串变量的拼接时，底层要借助 StingBuilder 实现，</span></span><br><span class="line"><span class="comment">	其中有一步需要使用 StringBuilder#toString() 方法将 Stringbuilder 对象转换成 String 对象，在使用 </span></span><br><span class="line"><span class="comment">	toString() 方法时，只会在堆中的非常量池区域创建一个 String 对象，并不会在常量池中创建这个对象对应的字</span></span><br><span class="line"><span class="comment">	面量对象（类似于 new，但不会同步到常量池中）。</span></span><br><span class="line"><span class="comment">	</span></span><br><span class="line"><span class="comment">	2. 由于此时字符串常量池中没有对应的字面量对象，所以调用 intern() 方法时需要在常量池中创建该字符串的字面</span></span><br><span class="line"><span class="comment">	量对象并返回其地址值。</span></span><br><span class="line"><span class="comment">   		2.1	在 JDK7 之前，字符串常量池不在堆空间中，会在字符串常量池创建一个真正的字面量对象并返回其地址值。</span></span><br><span class="line"><span class="comment">   		2.2 从 JDK7 开始，字符串常量池也保存在堆空间中，这时在常量池中创建的的字面量对象并不是“真正”的字面</span></span><br><span class="line"><span class="comment">   		量对象，而直接是 s3 对象的地址值。</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    3. 此处没有使用 intern() 方法的返回值，所以 s3 仍然指向堆中非常量池空间中的那个字符串对象的地址。</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    4. 直接使用字面量创建String对象。由于此时字符串常量池中已有该字面量对象，所以不再新建对象，只是返回字面量对象的地址，而显然该字面量对象的地址是一个地址值，最后真正指向的对象还是堆中非常量池区域的那个String对象，而返回地址按照对象的就近原则也是堆中非常量池区域的String对象的地址值。</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    5.  所以说， 在JDK7之前，s3 == s4 为 False；而从JDK7开始，s3 == s4 为 True</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><img src="/2021/06/13/String/1623508433062-ce767a2e-fba1-4f8d-bd53-374635e01625.png" alt="intern的使用 (1).png"></p>
+<ol>
+<li></li>
+</ol>
+<ol>
+<li></li>
+</ol>
+<h3 id="不同版本JDK中不同方式创建字符串对象的先后顺序的影响"><a href="#不同版本JDK中不同方式创建字符串对象的先后顺序的影响" class="headerlink" title="不同版本JDK中不同方式创建字符串对象的先后顺序的影响"></a>不同版本JDK中不同方式创建字符串对象的先后顺序的影响</h3><ol>
+<li> 如果只在堆的非字符串常量池区域创建对象： <code>String s1 = new String(&quot;a&quot;) + new String(&quot;b&quot;);</code> 此时常量池中没有该字符串值对应的字面量对象。</li>
+<li> 如果这时继续在常量池中创建 “ab” 字符串对应的字面量对象。如调用 <code>s1.intern();</code> 方法。</li>
+</ol>
+<ul>
+<li><ul>
+<li>  从 JDK7 开始，为了节省内存，在常量池中创建字面量对象这一步，如果在堆的非常量池区域存在相同字面量值的对象，就不再创建一个“真正”的字面量对象了，而是在字面量对象的地址中保存堆中非常量池区域那个对象的地址值。</li>
+<li>  而在 JDK7 之前，在常量池中创建的对象时真正意义上的字面量对象，保存的是真正的数据值，而不是对象的引用。</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li> 如果使用 <code>String s1 = new String(&quot;1&quot;);</code> 创建对象，这时会创建两个对象，即字符串常量池中的字面量对象和Java堆的非字符串常量池区域的对象，这两个对象都是真正意义上的对象。上述1，2的规则就不再使用了。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; JDK8 中测试</span><br><span class="line"></span><br><span class="line">    public void test()&#123;</span><br><span class="line">        String s3 &#x3D; new String(&quot;1&quot;) + new String(&quot;1&quot;);  &#x2F;&#x2F; Not String Pool ；heapAddr[1]</span><br><span class="line">        s3.intern();    &#x2F;&#x2F; String Pool ； poolAddr[1]</span><br><span class="line">        String s4 &#x3D; &quot;11&quot;;    &#x2F;&#x2F; Not String Pool ；heapAddr[1]</span><br><span class="line">        System.out.println(s3 &#x3D;&#x3D; s4);   &#x2F;&#x2F; True</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#x2F;*</span><br><span class="line">        调换了2、3行代码的执行顺序</span><br><span class="line">    *&#x2F;</span><br><span class="line">    public void test()&#123;</span><br><span class="line">        String s3 &#x3D; new String(&quot;1&quot;) + new String(&quot;1&quot;);  &#x2F;&#x2F; Heap&#39;s Not String Pool ；heapAddr[0]</span><br><span class="line">        String s4 &#x3D; &quot;11&quot;;    &#x2F;&#x2F; String Pool ; poolAddr[0]</span><br><span class="line">        s3.intern();    &#x2F;&#x2F; String Pool ； poolAddr[0]</span><br><span class="line">        System.out.println(s3 &#x3D;&#x3D; s4);   &#x2F;&#x2F; False</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  总结：String中intern()的使用：</p>
+</blockquote>
+<ul>
+<li><p>  在 JDK7 之前，将字符串对象尝试放入字符串常量池中时：</p>
+</li>
+<li><ul>
+<li>  如果字符串常量池中已经含有，则并不会放入，并返回已有对象的内存地址；</li>
+<li>  如果字符串常量池中没有，则会将当前对象的值复制一份，放入字符串常量池，并返回字符串常量池中该对象的内存地址；</li>
+</ul>
+</li>
+<li><p>  从 JDK7 开始，将字符串对象尝试放入字符串常量池中时：</p>
+</li>
+<li><ul>
+<li>  如果字符串常量池中已经含有该字面量对象，则直接返回该字面量对象的内存地址即可；</li>
+<li>  如果没有，则会把<strong>对象的引用地址复制一份</strong>，放入字符串常量池，并返回字符串常量池中的引用地址。</li>
+</ul>
+</li>
+</ul>
+<h2 id="intern-的练习"><a href="#intern-的练习" class="headerlink" title="intern 的练习"></a>intern 的练习</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    public void test()&#123;</span><br><span class="line">&#x2F;&#x2F;      String x &#x3D; &quot;ab&quot;;</span><br><span class="line">        String s1 &#x3D; new String(&quot;a&quot;) + new String(&quot;b&quot;);</span><br><span class="line">        &#x2F;&#x2F; 在上一行代码执行完毕之后，字符串常量池中并没有字面量对象 &quot;ab&quot;</span><br><span class="line"></span><br><span class="line">        String s2 &#x3D; s1.intern();</span><br><span class="line">        &#x2F;&#x2F; JDK6中，在字符串常量池中创建字面量对象 &quot;ab&quot; ，并将地址值赋给 s2</span><br><span class="line">        &#x2F;&#x2F; JDK8中，在字符串常量池中没有创建字面量对象 &quot;ab&quot;，而是创建了一个引用对象，指向堆中非字符串常量池中的地址并将地址返回</span><br><span class="line">        System.out.println(s1 &#x3D;&#x3D; &quot;ab&quot;); &#x2F;&#x2F; false（JDK6）；true（JDK8）</span><br><span class="line">        System.out.println(s2 &#x3D;&#x3D; &quot;ab&quot;); &#x2F;&#x2F; true</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public void test()&#123;</span><br><span class="line">    </span><br><span class="line">    String s1 &#x3D; new String(&quot;a&quot;) + new String(&quot;b&quot;);  &#x2F;&#x2F; &quot;ab&quot; --&gt;&gt; Heap   执行完以后，在字符串常量池中不会生成 &quot;ab&quot;</span><br><span class="line">    s1.intern();</span><br><span class="line">    String s2 &#x3D; &quot;ab&quot;;   &#x2F;&#x2F; s2 --&gt;&gt; String Pool --&gt;&gt; Heap</span><br><span class="line">    System.out.println(s1 &#x3D;&#x3D; s2); &#x2F;&#x2F; true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public void test()&#123;</span><br><span class="line">    String s1 &#x3D; new String(&quot;ab&quot;);   &#x2F;&#x2F; &quot;ab&quot; --&gt;&gt; Heap, SringPool    执行完以后，在字符串常量池中会生成 &quot;ab&quot;，但是s1指向的是Heap中的那个</span><br><span class="line">    s1.intern();</span><br><span class="line">    String s2 &#x3D; &quot;ab&quot;;   &#x2F;&#x2F; s2 --&gt;&gt; String Pool</span><br><span class="line">    System.out.println(s1 &#x3D;&#x3D; s2); &#x2F;&#x2F; false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h1 id="7-G1-中的-String-去重操作"><a href="#7-G1-中的-String-去重操作" class="headerlink" title="7  G1 中的 String 去重操作"></a>7  G1 中的 String 去重操作</h1><p>字符串常量池中本就不允许存储重复元素，所以 String 的去重操作针对的是堆中非字符串常量池的区域。</p>
+<p>String s1 = new String(“hello”);</p>
+<p>String s1 = new String(“hello”);</p>
+<p>什么是去重操作？（图）</p>
+<h2 id="背景说明"><a href="#背景说明" class="headerlink" title="背景说明"></a>背景说明</h2><blockquote>
+<p>  背景</p>
+</blockquote>
+<p>通过对大量 Java 应用的研究测试表明：</p>
+<ul>
+<li>  堆中存活的数据集合中 String 对象占据了约 25%；</li>
+<li>  其中 String 对象中重复的对象又占了约 13.5%；重复的意思就是： <code>string1.equals(string2) == true</code> </li>
+<li>  堆上存在重复的String对象必然是一种内存资源的浪费。</li>
+<li>  String 对象的平均长度是 45</li>
+</ul>
+<p>许多大规模Java应用的瓶颈在于内存，而这些项目将在G1垃圾收集器中实现自动持续对重复的String对象进行去重，这样能避免浪费内存。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2773,85 +3151,6 @@
 <p><strong>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互</strong>。jre大部分是用Java实现的，它也通过一些本地方法与外界交互。例如：java.lamg.Thread 的 <code>setPriority()</code> 方法是用Java实现的，但是它的具体实现调用的是该类里的本地方法<code>setPriority0()</code>。这个本地方法是用C实现的，并被植入JVM内部。</p>
 <h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><p><strong>目前该方法的使用越来越少了，除非是与硬件有关的应用</strong>，比如通过Java程序驱动打印机或者Java系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/14/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/14/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">类加载器子系统</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-14 21:13:51" itemprop="dateCreated datePublished" datetime="2021-05-14T21:13:51+08:00">2021-05-14</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-06-10 17:27:28" itemprop="dateModified" datetime="2021-06-10T17:27:28+08:00">2021-06-10</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
       
     </div>
 
