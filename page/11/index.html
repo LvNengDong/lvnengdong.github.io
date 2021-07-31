@@ -4061,7 +4061,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">IO系统</a>
+          <a href="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">IO流</a>
         </h2>
 
         <div class="post-meta-container">
@@ -4079,7 +4079,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-09 11:13:24" itemprop="dateModified" datetime="2021-05-09T11:13:24+08:00">2021-05-09</time>
+        <time title="Modified: 2021-07-31 22:45:40" itemprop="dateModified" datetime="2021-07-31T22:45:40+08:00">2021-07-31</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -4101,11 +4101,26 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="1、File类"><a href="#1、File类" class="headerlink" title="1、File类"></a>1、File类</h1><h2 id="1-1、File类概述"><a href="#1-1、File类概述" class="headerlink" title="1.1、File类概述"></a>1.1、File类概述</h2><ul>
-<li><p><code>java.io.File</code>类是<strong>文件</strong>和<strong>目录路径</strong>名的抽象表示形式。    主要用于<strong>文件</strong>和<strong>目录</strong>的创建、查找和删除等操作。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">java.io.File;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">File</span> </span></span><br><span class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">Object</span> </span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">File</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="1-2、File类中的方法"><a href="#1-2、File类中的方法" class="headerlink" title="1.2、File类中的方法"></a>1.2、File类中的方法</h2><h3 id="1-2-1、构造方法"><a href="#1-2-1、构造方法" class="headerlink" title="1.2.1、构造方法"></a>1.2.1、构造方法</h3><table>
+          <h1 id="File类"><a href="#File类" class="headerlink" title="File类"></a>File类</h1><h2 id="1-是什么"><a href="#1-是什么" class="headerlink" title="1    是什么"></a>1    是什么</h2><ol>
+<li><strong>File 类的一个实例对象，代表一个文件或一个文件目录。</strong></li>
+<li><code>java.io.File</code></li>
+<li>File 类中涉及到关于文件或文件目录的创建、删除、重命名、修改时间、文件大小等方法，<strong>并未涉及到写入或读取文件内容的操作</strong>。如果需要读取或写入文件内容，必须使用IO流来完成。【总之就是文件和文件夹的除了读写之外的其它相关方法】</li>
+<li>File 类的对象常会作为参数传递到流的构造器中，指明读取或写入的”目的地”。</li>
+</ol>
+<blockquote>
+<p>  <strong>类结构</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">java.io.File;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">File</span> </span></span><br><span class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">Object</span> </span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">File</span>&gt;	// 可序列化；可比较</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="2-类实例化"><a href="#2-类实例化" class="headerlink" title="2    类实例化"></a>2    类实例化</h2><blockquote>
+<p>  <strong>常用构造方法</strong></p>
+</blockquote>
+<p><img src="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/image-20210507091527611-1627738403443.png" alt="image-20210507091527611"></p>
+<table>
 <thead>
 <tr>
 <th align="center">ID</th>
@@ -4134,153 +4149,240 @@
 <td align="center">通过将给定的 <code>file:</code> URI 转换为一个抽象路径名来创建一个新的 <code>File</code> 实例</td>
 </tr>
 </tbody></table>
-<p><img src="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/image-20210507091527611.png" alt="image-20210507091527611"></p>
-<ul>
-<li>File 类没有无参构造方法。也就是说创建 File 实例必须指定文件/目录要保存的位置。</li>
-<li>File实例可以是一个文件，也可以是一个目录。</li>
-<li><strong>创建File实例并不等价于创建了文件/文件夹。</strong> 创建 File 实例只是在内存中开辟了一块空间保存这个实例对象，并不会在硬盘上创建一个真实的文件或文件夹，只有调用这个实例对象的 <code>mkdir()</code>、<code>mkdirs()</code> 或 <code>createNewFile()</code> 方法时才会在硬盘上创建出真正的文件/目录。</li>
-</ul>
+<blockquote>
+<p>  <strong>代码演示</strong></p>
+</blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件路径名</span></span><br><span class="line">String pathname2 = <span class="string">&quot;D:\\aaa\\bbb.txt&quot;</span>;</span><br><span class="line">File file2 = <span class="keyword">new</span> File(pathname2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过父路径和子路径字符串</span></span><br><span class="line">String parent = <span class="string">&quot;d:\\aaa&quot;</span>;</span><br><span class="line">String child = <span class="string">&quot;bbb.txt&quot;</span>;</span><br><span class="line">File file3 = <span class="keyword">new</span> File(parent, child);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过父级File对象和子路径字符串</span></span><br><span class="line">File parentDir = <span class="keyword">new</span> File(<span class="string">&quot;d:\\aaa&quot;</span>);</span><br><span class="line">String child = <span class="string">&quot;bbb.txt&quot;</span>;</span><br><span class="line">File file4 = <span class="keyword">new</span> File(parentDir, child);</span><br></pre></td></tr></table></figure>
 
 
 
-
-
-<h3 id="1-2-3、成员方法"><a href="#1-2-3、成员方法" class="headerlink" title="1.2.3、成员方法"></a>1.2.3、成员方法</h3><table>
+<blockquote>
+<p>  <strong>注意：</strong></p>
+</blockquote>
+<ul>
+<li>File 类没有无参构造方法(因为有重载的构造方法，JVM 就不再提供无参构造器了)。也就是说<strong>创建 File 实例必须指定文件/目录要保存的位置</strong>。</li>
+<li>File 实例可以是一个文件或一个目录。</li>
+<li><strong>创建File实例并不等价于创建了文件/目录。</strong> 创建 File 实例只是在内存中开辟了一块空间保存这个实例对象，并不会在硬盘上创建一个真实的文件或文件夹，只有进一步调用这个实例对象的 <code>mkdir()</code>、<code>mkdirs()</code> 或 <code>createNewFile()</code> 方法时才会在硬盘上创建出真正的文件/目录。</li>
+</ul>
+<blockquote>
+<p>  <strong>路径：</strong></p>
+</blockquote>
+<ul>
+<li>  相对路径：相较于某个路径下的路径。</li>
+<li>  绝对路径：包含盘符在内的文件或文件目录的路径。</li>
+</ul>
+<p><strong>说明：</strong><br>在 IDEA中：</p>
+<ul>
+<li>  如果使用 JUnit 中的单元测试方法测试，相对路径即为当前 Module 下。</li>
+<li>  如果使用 main() 测试，相对路径即为当前的Project下。</li>
+</ul>
+<p><strong>路径分隔符：</strong></p>
+<ul>
+<li>  Windows 和 DOS 系统默认使用 <code>\</code> 来表示；</li>
+<li>  UNIX 和 URL 使用 <code>/</code> 来表示。</li>
+</ul>
+<h2 id="3-常用成员方法"><a href="#3-常用成员方法" class="headerlink" title="3    常用成员方法"></a>3    常用成员方法</h2><blockquote>
+<p>  <strong>获取功能：</strong></p>
+</blockquote>
+<table>
 <thead>
 <tr>
-<th align="center">ID</th>
 <th align="center">方法</th>
 <th align="center">返回值</th>
 <th align="center">说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="center"></td>
-<td align="center"><strong>获取功能：</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">1</td>
 <td align="center"><code>getAbsolutePath()</code></td>
 <td align="center"><code>String</code></td>
-<td align="center">返回此File的绝对路径字符串</td>
+<td align="center">获取绝对路径</td>
 </tr>
 <tr>
-<td align="center">2</td>
 <td align="center"><code>getPath()</code></td>
 <td align="center"><code>String</code></td>
-<td align="center">将此File转换为路径名字符串</td>
+<td align="center">获取路径（返回的路径与创建File对象时传入的路径一致，<br>即创建是传入相对路径此时就获取相对路径）</td>
 </tr>
 <tr>
-<td align="center">3</td>
 <td align="center"><code>getName()</code></td>
 <td align="center"><code>String</code></td>
-<td align="center">返回此File表示的文件或目录名称。</td>
+<td align="center">返回此文件或目录名称</td>
 </tr>
 <tr>
-<td align="center">4</td>
 <td align="center"><code>length()</code></td>
 <td align="center"><code>long</code></td>
-<td align="center">返回此File表示的文件的长度[字节]。</td>
+<td align="center">获取文件的长度(单位:字节)；不能获取目录的长度</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><strong>判断功能：</strong></td>
-<td align="center"></td>
-<td align="center"></td>
+<td align="center"><code>getParent()</code></td>
+<td align="center"><code>String</code></td>
+<td align="center">获取上层目录，若无则返回null。</td>
 </tr>
 <tr>
-<td align="center">6</td>
-<td align="center"><code>exists()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="center">判断此File表示的文件或目录是否存在</td>
+<td align="center"><code>lastModified()</code></td>
+<td align="center"><code>long</code></td>
+<td align="center">获取最后一次修改时间（毫秒值）</td>
 </tr>
 <tr>
-<td align="center">7</td>
-<td align="center"><code>isDirectory()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="center">判断此File表示的是否为目录。</td>
-</tr>
-<tr>
-<td align="center">8</td>
-<td align="center"><code>isFile()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="center">判断此File表示的是否为文件</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><strong>创建/删除功能</strong></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">9</td>
-<td align="center"><code>createNewFile()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="center">当且仅当具有该名称的文件尚不存在时，创建一个新的文件。</td>
-</tr>
-<tr>
-<td align="center">10</td>
-<td align="center"><code>delete()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="center">删除此File表示的文件或目录。【如果此File表示目录，则目录必须为空才能被删除】</td>
-</tr>
-<tr>
-<td align="center">11</td>
-<td align="center"><code>mkdir()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="center">创建此File表示的目录</td>
-</tr>
-<tr>
-<td align="center">12</td>
-<td align="center"><code>mkdirs()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="center">创建此File表示的目录，包括任何必需但不存在的父目录。</td>
-</tr>
-<tr>
-<td align="center"></td>
 <td align="center"><strong>目录的遍历</strong></td>
 <td align="center"></td>
 <td align="center"></td>
 </tr>
 <tr>
-<td align="center">13</td>
 <td align="center"><code>list()</code></td>
 <td align="center"><code>String[]</code></td>
-<td align="center">返回一个String数组，返回该File<strong>目录中</strong>的所有子文件或目录。</td>
+<td align="center">获取指定目录下的所有文件或目录的<strong>名称数组</strong></td>
 </tr>
 <tr>
-<td align="center">14</td>
 <td align="center"><code>listFiles()</code></td>
 <td align="center"><code>File[]</code></td>
-<td align="center">返回一个File数组，表示该File<strong>目录中</strong>的所有子文件或目录。</td>
+<td align="center">获取指定目录下的所有文件或目录的<strong>File数组</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>  <strong>判断功能：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>exists()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断是否存在</td>
+</tr>
+<tr>
+<td align="center"><code>isDirectory()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断是否为目录。</td>
+</tr>
+<tr>
+<td align="center"><code>isFile()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断是否为文件</td>
+</tr>
+<tr>
+<td align="center"><code>canRead()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断是否可读</td>
+</tr>
+<tr>
+<td align="center"><code>canWrite</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断是否可写</td>
+</tr>
+<tr>
+<td align="center"><code>isHidden</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="center">判断是否隐藏</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>  <strong>创建功能：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>createNewFile()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="left">当文件不存在时创建<strong>文件</strong>。</td>
+</tr>
+<tr>
+<td align="center"><code>mkdir()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="left">创建<strong>目录</strong>。如果目录存在，不创建；如果上层目录不存在也不创建。</td>
+</tr>
+<tr>
+<td align="center"><code>mkdirs()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="left">创建目录，包括任何必需但不存在的父目录。</td>
 </tr>
 </tbody></table>
 <ul>
-<li>调用<code>list</code>或<code>listFiles</code>方法遍历File对象，此时File对象必须是<strong>目录</strong>，且<strong>真实存在</strong>，否则会返回空指针异常，无法进行遍历。</li>
+<li>  <strong>注意</strong>：如果你创建的目录或文件没有写盘符路径，那么默认在项目路径下。</li>
 </ul>
 <blockquote>
 <p><strong>mkdir()</strong> 、<strong>mkdirs()</strong> 和 <strong>createNewFile()</strong> 的区别</p>
 </blockquote>
 <ul>
-<li><p><code>mkdir() / mkdirs()</code> 方法用于创建目录，<code>createNewFile()</code> 方法用于创建文件。</p>
-<p>也就是说，在使用<code>mkdir() / mkdirs()</code> 方法时，即使开发人员指定目录名为 <code>aaa.txt</code> ，它也不会创建出一个 <code>aaa.txt</code> 文件，而只是会创建出一个名为 <code>aaa.txt</code> 的目录。</p>
-</li>
-<li><p><code>mkdirs()</code> 方法可用于一次性创建多级目录，而 <code>mkdir()</code> 和 <code>createNewFile()</code> 方法每次只能创建单级目录。</p>
-<p>也就是说，如果指定的文件路径是一个多级目录，且这个多级目录中间的部分目录不存在，则创建文件/目录的方法就不会执行成功。</p>
-<p>不同的是 <code>mkdir()</code> 方法即使执行不成功也不会报错，而 <code>createNewFile()</code> 方法会直接报错。报错信息如下：</p>
-</li>
+<li><code>mkdir() / mkdirs()</code> 方法用于创建目录，<code>createNewFile()</code> 方法用于创建文件。</li>
+<li>也就是说，在使用<code>mkdir() / mkdirs()</code> 方法时，即使开发人员指定名称为 <code>aaa.txt</code> ，它也不会创建出一个 <code>aaa.txt</code> 文件，而只是会创建出一个名为 <code>aaa.txt</code> 的目录。</li>
+<li><code>mkdirs()</code> 方法可用于一次性创建多级目录，而 <code>mkdir()</code> 方法每次只能创建单层目录。</li>
+<li>比如，要求的创建一个文件，这个文件保存在一个多层目录下，且这个多层目录中间的部分目录不存在，则创建文件和目录的方法都不会执行成功。不同的是  <strong><code>mkdir()</code> 方法即使执行不成功也不会报错，而 <code>createNewFile()</code> 方法会直接报错</strong>。报错信息如下：</li>
 </ul>
 <p><img src="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/image-20210507094900445.png" alt="image-20210507094900445"></p>
-<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> file;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyFile</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">/*  构造方法1   */</span></span><br><span class="line">        File file01 = <span class="keyword">new</span> File(<span class="string">&quot;G:\\AAA&quot;</span>);</span><br><span class="line">        <span class="comment">/*  构造方法2   */</span></span><br><span class="line">        File file02 = <span class="keyword">new</span> File(file01, <span class="string">&quot;BBB&quot;</span>);</span><br><span class="line">        <span class="comment">/*  构造方法3   */</span></span><br><span class="line">        File file03 = <span class="keyword">new</span> File(<span class="string">&quot;G:\\AAA\\BBB&quot;</span>, <span class="string">&quot;1.txt&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建多级目录</span></span><br><span class="line">        file02.mkdirs();</span><br><span class="line">        <span class="comment">// 创建文件（创建文件前必须先创建好文件保存的目录）</span></span><br><span class="line">        file03.createNewFile();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  1、获取 文件/目录 的绝对路径 */</span></span><br><span class="line">        File absoluteFile = file03.getAbsoluteFile();</span><br><span class="line">        System.out.println(absoluteFile);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  2、获取 文件/目录 的路径（如果构建File对象时使用的是相对路径就得到相对路径，使用的是的绝对路径就得到绝对路径） */</span></span><br><span class="line">        String path = file03.getPath();</span><br><span class="line">        System.out.println(path);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  3、获取 文件名/目录名    */</span></span><br><span class="line">        String name = file03.getName();</span><br><span class="line">        System.out.println(name);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  4、获取 文件/目录 的字节长度（目录的长度为0）*/</span></span><br><span class="line">        <span class="keyword">long</span> length = file03.length();</span><br><span class="line">        System.out.println(length);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  5、返回该file对象目录中的所有子文件或目录的 String[] 格式 */</span></span><br><span class="line">        String[] list = file01.list();</span><br><span class="line">        <span class="keyword">for</span> (String s : list) &#123;</span><br><span class="line">            System.out.println(s+<span class="string">&quot;-------------&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  6、返回该file对象目录中的所有子文件或目录的 File[] 格式  */</span></span><br><span class="line">        File[] listFiles = file01.listFiles();</span><br><span class="line">        System.out.println(listFiles);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  返回结果：</span></span><br><span class="line"><span class="comment">     *  </span></span><br><span class="line"><span class="comment">     *      G:\AAA\BBB\1.txt</span></span><br><span class="line"><span class="comment">     *      G:\AAA\BBB\1.txt</span></span><br><span class="line"><span class="comment">     *      1.txt</span></span><br><span class="line"><span class="comment">     *      0</span></span><br><span class="line"><span class="comment">     *      BBB-------------</span></span><br><span class="line"><span class="comment">     *      [Ljava.io.File;@4c3e4790</span></span><br><span class="line"><span class="comment">     */</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>  <strong>删除功能：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>delete()</code></td>
+<td align="center"><code>boolean</code></td>
+<td align="left">删除文件或目录。删除时目录必须为空才能被删除</td>
+</tr>
+</tbody></table>
+<ul>
+<li>  <strong>注意：</strong>Java 中的删除不走回收站。</li>
+</ul>
+<blockquote>
+<p>  <strong>重命名功能：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>renameTo(File dest)</code></td>
+<td align="center"><code>boolea</code></td>
+<td align="center">文件重命名</td>
+</tr>
+</tbody></table>
+<ul>
+<li>调用<code>list</code>或<code>listFiles</code>方法遍历File对象，此时File对象必须是<strong>目录</strong>，且<strong>真实存在</strong>，否则会返回空指针异常，无法进行遍历。</li>
+</ul>
+<hr>
+<h2 id="4-代码演示"><a href="#4-代码演示" class="headerlink" title="4    代码演示"></a>4    代码演示</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> file;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyFile</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">/*  构造方法1   */</span></span><br><span class="line">        File file01 = <span class="keyword">new</span> File(<span class="string">&quot;G:\\AAA&quot;</span>);</span><br><span class="line">        <span class="comment">/*  构造方法2   */</span></span><br><span class="line">        File file02 = <span class="keyword">new</span> File(file01, <span class="string">&quot;BBB&quot;</span>);</span><br><span class="line">        <span class="comment">/*  构造方法3   */</span></span><br><span class="line">        File file03 = <span class="keyword">new</span> File(<span class="string">&quot;G:\\AAA\\BBB&quot;</span>, <span class="string">&quot;1.txt&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建多级目录</span></span><br><span class="line">        file02.mkdirs();</span><br><span class="line">        <span class="comment">// 创建文件（创建文件前必须先创建好文件保存的目录）</span></span><br><span class="line">        file03.createNewFile();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  1、获取 文件/目录 的绝对路径 */</span></span><br><span class="line">        File absoluteFile = file03.getAbsoluteFile();</span><br><span class="line">        System.out.println(absoluteFile);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  2、获取 文件/目录 的路径</span></span><br><span class="line"><span class="comment">        （如果创建File对象时使用的是相对路径就得到相对路径，使用的是的绝对路径就得到绝对路径） */</span></span><br><span class="line">        String path = file03.getPath();</span><br><span class="line">        System.out.println(path);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  3、获取 文件名/目录名    */</span></span><br><span class="line">        String name = file03.getName();</span><br><span class="line">        System.out.println(name);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  4、获取 文件/目录 的字节长度（目录的长度为0）*/</span></span><br><span class="line">        <span class="keyword">long</span> length = file03.length();</span><br><span class="line">        System.out.println(length);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  5、返回该file对象目录中的所有子文件或目录的 String[] 格式 */</span></span><br><span class="line">        String[] list = file01.list();</span><br><span class="line">        Arrays.toString(list)</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  6、返回该file对象目录中的所有子文件或目录的 File[] 格式  */</span></span><br><span class="line">        File[] listFiles = file01.listFiles();</span><br><span class="line">        System.out.println(listFiles);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  返回结果：</span></span><br><span class="line"><span class="comment">     *  </span></span><br><span class="line"><span class="comment">     *      G:\AAA\BBB\1.txt</span></span><br><span class="line"><span class="comment">     *      G:\AAA\BBB\1.txt</span></span><br><span class="line"><span class="comment">     *      1.txt</span></span><br><span class="line"><span class="comment">     *      0</span></span><br><span class="line"><span class="comment">     *      BBB</span></span><br><span class="line"><span class="comment">     *      [Ljava.io.File;@4c3e4790</span></span><br><span class="line"><span class="comment">     */</span></span><br></pre></td></tr></table></figure>
 
 
 
 <hr>
-<h1 id="2、IO概述"><a href="#2、IO概述" class="headerlink" title="2、IO概述"></a>2、IO概述</h1><h2 id="2-1、IO的分类"><a href="#2-1、IO的分类" class="headerlink" title="2.1、IO的分类"></a>2.1、IO的分类</h2><p><img src="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/IO%E5%88%86%E7%B1%BB.png"></p>
-<h3 id="2-1-1、顶级的父类们"><a href="#2-1-1、顶级的父类们" class="headerlink" title="2.1.1、顶级的父类们"></a>2.1.1、顶级的父类们</h3><table>
+<h1 id="IO-流"><a href="#IO-流" class="headerlink" title="IO 流"></a>IO 流</h1><h2 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h2><ul>
+<li><strong>IO 流就是数据的流动。</strong></li>
+<li>我们把数据的传输，看做是一种数据的流动，按照流动的方向，以<strong>内存为基准</strong>，分为输入流和输出流。</li>
+<li>即流向内存为输入流，流出内存为输出流。</li>
+<li>输入也叫做<strong>读取数据</strong>，输出也叫做<strong>写出数据</strong>。</li>
+</ul>
+<p><img src="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/IO.png" alt="IO"></p>
+<h2 id="IO的分类"><a href="#IO的分类" class="headerlink" title="IO的分类"></a>IO的分类</h2><ol>
+<li> 按数据流向分类：<strong>输入流</strong>、<strong>输出流</strong></li>
+<li> 按操作数据的单位分类：<strong>字节流</strong>、<strong>字符流</strong></li>
+</ol>
+<p><img src="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/IO%E5%88%86%E7%B1%BB.png"></p>
+<hr>
+<h2 id="流的体系结构"><a href="#流的体系结构" class="headerlink" title="流的体系结构"></a>流的体系结构</h2><blockquote>
+<p>  <strong>顶级父类</strong></p>
+</blockquote>
+<table>
 <thead>
 <tr>
 <th align="center"></th>
@@ -4290,8 +4392,8 @@
 </thead>
 <tbody><tr>
 <td align="center"><strong>字节流</strong></td>
-<td align="center"><code>inputStream</code></td>
-<td align="center"><code>outputStream</code></td>
+<td align="center"><code>InputStream</code></td>
+<td align="center"><code>OutputStream</code></td>
 </tr>
 <tr>
 <td align="center"><strong>字符流</strong></td>
@@ -4299,6 +4401,41 @@
 <td align="center"><code>Writer</code></td>
 </tr>
 </tbody></table>
+<blockquote>
+<p>  <strong>体系结构</strong></p>
+</blockquote>
+<p><img src="/2020/10/13/IO%E7%B3%BB%E7%BB%9F/image-20210731223442543.png" alt="image-20210731223442543"></p>
+<blockquote>
+<p>  <strong>常用结构</strong></p>
+</blockquote>
+<ol>
+<li> 顶级父类：<code>InputStream</code>、<code>OutputStream</code>、<code>Reader</code>、<code>Writer</code></li>
+<li> 文件流：<code>FileInputStream</code>、<code>FileOutputStream</code>、<code>FileReader</code>、<code>FileWriter</code></li>
+<li> 缓冲流：<code>BufferedInputStream</code>、<code>BufferedOutputStream</code>、<code>BufferedReader</code>、<code>BufferedWriter</code></li>
+</ol>
+<hr>
+<h2 id="输入-输出的标准化过程"><a href="#输入-输出的标准化过程" class="headerlink" title="输入/输出的标准化过程"></a>输入/输出的标准化过程</h2><h3 id="输入过程"><a href="#输入过程" class="headerlink" title="输入过程"></a>输入过程</h3><ol>
+<li><p> 创建 File 类对象，指明读取的数据的来源。（要求此文件一定要存在）；</p>
+</li>
+<li><p> 创建相应的输入流，将 File 类的对象作为参数，传入流的构造器中</p>
+</li>
+<li><p>具体的读入过程：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建相应的byte[] 或 char[]。</span></span><br><span class="line"><span class="keyword">char</span>[] buffer = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> len;</span><br><span class="line"><span class="keyword">while</span> ((len=reader.read(buffer))!=-<span class="number">1</span>)&#123;</span><br><span class="line">    String str = <span class="keyword">new</span> String(buffer,<span class="number">0</span>,len);</span><br><span class="line">    System.out.println(str); <span class="comment">// 字节流转换为字符流，输出到控制台，不出现乱码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p> 关闭流资源。</p>
+</li>
+</ol>
+<p>说明：程序中出现的异常需要使用 <code>try-catch-finally</code> 处理。</p>
+<h3 id="输出过程"><a href="#输出过程" class="headerlink" title="输出过程"></a>输出过程</h3><ol>
+<li><p> 创建 File 类对象，指明写出的数据的位置。（不要求此文件一定要存在）</p>
+</li>
+<li><p> 创建相应的输出流，将 File 类的对象作为参数传入流的构造器中；</p>
+</li>
+<li><p>具体的写出过程：</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">write(<span class="keyword">char</span>[]/<span class="keyword">byte</span>[] buffer,<span class="number">0</span>,len)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.读写过程</span></span><br><span class="line">    <span class="keyword">char</span>[]buffer=<span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> len;</span><br><span class="line"><span class="keyword">while</span> ((len= isr.read(buffer))!=-<span class="number">1</span>) &#123;</span><br><span class="line">    osw.write(buffer,<span class="number">0</span>,len);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p> 关闭流资源。</p>
+</li>
+</ol>
+<p>说明：程序中出现的异常需要使用 <code>try-catch-finally</code> 处理。</p>
 <hr>
 <h1 id="3、字节流"><a href="#3、字节流" class="headerlink" title="3、字节流"></a>3、字节流</h1><h2 id="3-0、一切皆为字节流"><a href="#3-0、一切皆为字节流" class="headerlink" title="3.0、一切皆为字节流"></a>3.0、一切皆为字节流</h2><p>一切文件数据（文本、图片、视频等）在存储时，都是以二进制数字的形式保存的，都是一个一个的字节，传输时同样如此。    所以，字节流可以传输任意文件数据。    在操作流时，我们要时刻明确，无论使用什么样的流对象，底层传输的始终是二进制数据。</p>
 <h2 id="3-1、OutputStream"><a href="#3-1、OutputStream" class="headerlink" title="3.1、OutputStream"></a>3.1、OutputStream</h2><h3 id="3-1-1、概述"><a href="#3-1-1、概述" class="headerlink" title="3.1.1、概述"></a>3.1.1、概述</h3><ul>
