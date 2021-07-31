@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="题目：    公司员工入职，要求将每个员工的所有信息（id，gender，name，addr，……）等全部录入系统。当输入该员工的 id 时，要求查找到该员工的所有信息。   要求：不使用数据库，尽量节省内存，速度越快越好。&#x3D;&#x3D;&gt;&gt; 哈希表（散列）  应用场景    一般情况下，Java 程序直接与数据库交互，对数据的增删改查都直接体现在数据库中。   但是在某些开发场景中，我们会把被">
+<meta property="og:type" content="article">
+<meta property="og:title" content="哈希表">
+<meta property="og:url" content="http://example.com/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="题目：    公司员工入职，要求将每个员工的所有信息（id，gender，name，addr，……）等全部录入系统。当输入该员工的 id 时，要求查找到该员工的所有信息。   要求：不使用数据库，尽量节省内存，速度越快越好。&#x3D;&#x3D;&gt;&gt; 哈希表（散列）  应用场景    一般情况下，Java 程序直接与数据库交互，对数据的增删改查都直接体现在数据库中。   但是在某些开发场景中，我们会把被">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/HashTable%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.png">
+<meta property="og:image" content="http://example.com/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/image-20210721223318370.png">
+<meta property="og:image" content="http://example.com/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/%E4%BD%BF%E7%94%A8%E5%93%88%E5%B8%8C%E8%A1%A8%E7%AE%A1%E7%90%86%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF.png">
+<meta property="og:image" content="http://example.com/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/image-20210721225646006.png">
+<meta property="article:published_time" content="2021-07-21T08:44:57.000Z">
+<meta property="article:modified_time" content="2021-07-21T15:00:48.910Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/HashTable%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.png">
+
+
+<link rel="canonical" href="http://example.com/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>哈希表 | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90"><span class="nav-number">3.1.</span> <span class="nav-text">架构分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.2.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          哈希表
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-07-21 16:44:57 / Modified: 23:00:48" itemprop="dateCreated datePublished" datetime="2021-07-21T16:44:57+08:00">2021-07-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><strong>题目</strong>：</p>
+<blockquote>
+<p>  公司员工入职，要求将每个员工的所有信息（id，gender，name，addr，……）等全部录入系统。当输入该员工的 id 时，要求查找到该员工的所有信息。</p>
+<p>  <strong>要求：</strong>不使用数据库，尽量节省内存，速度越快越好。==&gt;&gt; <strong>哈希表（散列）</strong></p>
+</blockquote>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p><img src="/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/HashTable%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.png"></p>
+<ul>
+<li>  一般情况下，Java 程序直接与数据库交互，对数据的增删改查都直接体现在数据库中。</li>
+<li>  但是在某些开发场景中，我们会把被经常访问且不会经常变化的数据放入缓存（内存）中存储，来达到提高访问速度和减少数据库访问流量的目的。</li>
+<li>  常用的缓存框架有 Redis、MemCache 等，但是在没有这些框架之前是如何处理这个问题的呢？或者说由于缓存产品太重量级了，对于一些极少量数据的缓存用缓存产品是得不偿失的，反而会拖垮服务的性能。那么这个时候应该怎么办呢？手写一个缓存产品。</li>
+<li>  HashTable 是一种数据结构，它将所有的数据都保存在内存中，可以设计成为一个缓存结构。</li>
+</ul>
+<h1 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h1><blockquote>
+<p>  <strong>HashTable；哈希表；散列表；散列函数</strong></p>
+</blockquote>
+<p>HashTable 是根据<strong>关键码值</strong>（Key Value）进行访问的数据结构。</p>
+<p>也就是说，它通过把关键码值映射到表中的一个位置来访问记录，以加快查找的速度。这个映射函数就叫做<strong>散列函数</strong>，存放记录的数组叫做<strong>散列表</strong>。</p>
+<p><img src="/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/image-20210721223318370.png" alt="image-20210721223318370"></p>
+<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><h2 id="架构分析"><a href="#架构分析" class="headerlink" title="架构分析"></a>架构分析</h2><p><img src="/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/%E4%BD%BF%E7%94%A8%E5%93%88%E5%B8%8C%E8%A1%A8%E7%AE%A1%E7%90%86%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">哈希表 = 数组 + 链表</span><br><span class="line"></span><br><span class="line">数组 ==&gt;&gt; EmpLinkedList[]；数组中的每一个元素都是一个链表。</span><br><span class="line">链表 ==&gt;&gt; EmpLinkedList；链表中的每一个元素为 Emp 类创建的实例对象</span><br><span class="line"></span><br><span class="line">所以需要三个类，</span><br><span class="line">    <span class="number">1</span>、HashTable 类用于创建 HashTable 实例对象；该对象中需要对外提供：</span><br><span class="line">    	<span class="number">1</span>️⃣	链表集合 EmpLinkedList[]；</span><br><span class="line">    	<span class="number">2</span>️⃣ 计算哈希值的散列函数；</span><br><span class="line">    	<span class="number">3</span>️⃣ API层面的CRUD方法</span><br><span class="line">    </span><br><span class="line">    <span class="number">2</span>、EmpLinkedList 类用于维护数组中的每条链表；该类中需要：</span><br><span class="line">    	<span class="number">1</span>️⃣ 定位每条链表的头结点 head</span><br><span class="line">    	<span class="number">2</span>️⃣ 操作链表中元素的 CRUD 方法</span><br><span class="line">    </span><br><span class="line">    <span class="number">3</span>、Emp 对象用于维护链表中的单个元素；该类中需要：</span><br><span class="line">    	<span class="number">1</span>️⃣ Emp 对象的基本属性/方法</span><br><span class="line">    	<span class="number">2</span>️⃣ 链表中下一个节点的引用 next</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>我们按照从小到大的顺序实现。</p>
+<ol>
+<li>管理员工，首先需要一个员工类 Emp 用于创建多个员工对象；<ul>
+<li>  由于员工对象时链表中的节点，所以除了基础信息外，还需要一个指向下一个元素的指针。</li>
+</ul>
+</li>
+<li>  哈希表中存在多条链表，需要有一个链表类维护多个链表对象。</li>
+<li>  最后还需要一个 HashTable 类统筹管理多个链表对象。</li>
+</ol>
+<blockquote>
+<p>  <strong>Emp</strong>类</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.hashtable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/21 17:43</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Emp</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> Emp next;   <span class="comment">// 指向下一个节点，默认为null</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Emp</span><span class="params">(Integer id, String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Emp&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;id=&quot;</span> + id +</span><br><span class="line">                <span class="string">&quot;, name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>EmpLinkedList</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.hashtable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/21 17:45</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmpLinkedList</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Emp head;   <span class="comment">// 头指针</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加员工到链表中</span></span><br><span class="line">    <span class="comment">/* 假设当添加员工时，id是自增长的，即id的分配总是从小到大，因此我们将员工直接加入到链表的最后即可*/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Emp emp)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 如果链表为空，直接添加到第一位即可（这里没有设置空数据的头结点，head直接指向第一个有效节点）</span></span><br><span class="line">        <span class="keyword">if</span> (head == <span class="keyword">null</span>)&#123;</span><br><span class="line">            head = emp;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果链表不为空，尾插</span></span><br><span class="line">        Emp temp = head.next;</span><br><span class="line">        <span class="keyword">while</span> (temp != <span class="keyword">null</span>)&#123;</span><br><span class="line">            temp = temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        temp = emp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 遍历链表 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showAll</span><span class="params">(<span class="keyword">int</span> no)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 链表为空</span></span><br><span class="line">        <span class="keyword">if</span> (head == <span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;第&quot;</span> + no+ <span class="string">&quot;条链表为空&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 链表不为空，循环遍历</span></span><br><span class="line">        Emp temp = head;</span><br><span class="line">        <span class="keyword">while</span> (temp != <span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.print(<span class="string">&quot;第&quot;</span> + no + <span class="string">&quot;条链表：***&quot;</span> + temp);</span><br><span class="line">            temp = temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 遍历完毕换行</span></span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 根据id查找员工 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Emp <span class="title">findById</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 链表为空，员工不存在，返回 null</span></span><br><span class="line">        <span class="keyword">if</span> (head == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果链表不为空，遍历比较，根据id找员工</span></span><br><span class="line">        Emp temp = head;</span><br><span class="line">        <span class="keyword">while</span> (temp != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span> (temp.id == id)&#123; <span class="comment">// 找到了对应id的员工</span></span><br><span class="line">                <span class="keyword">return</span> temp;</span><br><span class="line">            &#125;</span><br><span class="line">            temp = temp.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 遍历整个链表都没有找到匹配的 id，返回 null</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>HashTable</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.hashtable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/21 17:45</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * HashTable，用于管理多条链表</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashTable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> EmpLinkedList[] empLinkedListArr;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;   <span class="comment">// 表示共有多少条链表</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 构造器 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HashTable</span><span class="params">(<span class="keyword">int</span> size)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.size = size;</span><br><span class="line">        <span class="comment">// 初始化 empLinkedListArr</span></span><br><span class="line">        empLinkedListArr = <span class="keyword">new</span> EmpLinkedList[size];</span><br><span class="line">        <span class="comment">// 分别初始化每条链表</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            empLinkedListArr[i] = <span class="keyword">new</span> EmpLinkedList();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 散列函数：根据员工id计算出哈希值（这里采用取模法）。*/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashFun</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hashCode = id % size;</span><br><span class="line">        <span class="keyword">return</span> hashCode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 添加 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Emp emp)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 1、根据员工id计算出哈希值（应该添加到哪条链表中）</span></span><br><span class="line">        <span class="keyword">int</span> hashCode = <span class="keyword">this</span>.hashFun(emp.id);</span><br><span class="line">        <span class="comment">// 2、将emp添加到对应的链表中</span></span><br><span class="line">        empLinkedListArr[hashCode].add(emp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*  遍历：</span></span><br><span class="line"><span class="comment">    *   1、遍历数组（数组元素为链表）</span></span><br><span class="line"><span class="comment">    *   2、遍历链表（链表元素为Emp）</span></span><br><span class="line"><span class="comment">    * */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showAll</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            empLinkedListArr[i].showAll(i); <span class="comment">// 变量链表的方法</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 根据id查找员工 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findById</span><span class="params">(<span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 1、计算 hashCode 值，定位到具体哪一条链表</span></span><br><span class="line">        <span class="keyword">int</span> hashCode = <span class="keyword">this</span>.hashFun(id);</span><br><span class="line">        <span class="comment">// 2、遍历某条链表，查找 id 相同的 Emp 对象</span></span><br><span class="line">        Emp emp = empLinkedListArr[hashCode].findById(id);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == emp)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;员工号为 &quot;</span>+ id + <span class="string">&quot;的员工不存在&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;在第&quot;</span> + hashCode + <span class="string">&quot;条链表中找到了该员工，员工信息为：===&quot;</span> + emp);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>测试类</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.hashtable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/21 18:30</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        HashTable hashTable = <span class="keyword">new</span> HashTable(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        Emp emp1 = <span class="keyword">new</span> Emp(<span class="number">1</span>, <span class="string">&quot;李梅&quot;</span>);</span><br><span class="line">        Emp emp2 = <span class="keyword">new</span> Emp(<span class="number">3</span>, <span class="string">&quot;K49&quot;</span>);</span><br><span class="line">        Emp emp3 = <span class="keyword">new</span> Emp(<span class="number">5</span>, <span class="string">&quot;罗伯特&quot;</span>);</span><br><span class="line">        Emp emp4 = <span class="keyword">new</span> Emp(<span class="number">7</span>, <span class="string">&quot;安迪&quot;</span>);</span><br><span class="line">        Emp emp5 = <span class="keyword">new</span> Emp(<span class="number">9</span>, <span class="string">&quot;七枷社&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 向哈希表中添加元素</span></span><br><span class="line">        hashTable.add(emp1);</span><br><span class="line">        hashTable.add(emp2);</span><br><span class="line">        hashTable.add(emp3);</span><br><span class="line">        hashTable.add(emp4);</span><br><span class="line">        hashTable.add(emp5);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 遍历哈希表</span></span><br><span class="line">        hashTable.showAll();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 根据id查找</span></span><br><span class="line">        hashTable.findById(<span class="number">7</span>);</span><br><span class="line">        hashTable.findById(<span class="number">56</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>执行结果</strong></p>
+<p><img src="/2021/07/21/%E5%93%88%E5%B8%8C%E8%A1%A8/image-20210721225646006.png" alt="image-20210721225646006"></p>
+<p><strong>分析优化</strong></p>
+<ol>
+<li><p>上述代码中，在添加员工信息时，我们假定按照 id 从低到高插入，所以在向链表中插入 Emp 对象时只需使用尾插法即可。</p>
+<p>  那么：如果 id 不是从低到高插入，但要求各条链表仍是从低到高，怎么解决？</p>
+<p>  答：在插入节点时需要先进行根据 id 排序，再插入到合适的位置中去。</p>
+</li>
+<li><p>  上述代码用来实现哈希表的链表不带表头，即链表的第一个结点就存放 Emp 信息，如果想要设计一个带表头的链表应该如何实现？</p>
+</li>
+<li><p>  哈希表如何实现节点的删除操作?</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/20/Spring%E2%80%94%E2%80%94TX/" rel="prev" title="Spring——TX">
+                  <i class="fa fa-chevron-left"></i> Spring——TX
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/21/%E6%A0%91/" rel="next" title="树">
+                  树 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
