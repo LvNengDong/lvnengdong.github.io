@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,311 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/02/%E6%B3%9B%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/02/%E6%B3%9B%E5%9E%8B/" class="post-title-link" itemprop="url">泛型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-02 16:33:49 / Modified: 18:32:18" itemprop="dateCreated datePublished" datetime="2021-08-02T16:33:49+08:00">2021-08-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="泛型的引入背景"><a href="#泛型的引入背景" class="headerlink" title="泛型的引入背景"></a>泛型的引入背景</h1><blockquote>
+<p>  <strong>JDK5 之前</strong></p>
+</blockquote>
+<p>​        集合类在设计阶段阶段不能确定这个集合到底实际存的是什么类型的对象，所以在 JDK5 之前只能把元素类型设计为 Object，如果我们对集合不做任何限定，它就可以存储任何类型的对象。如果一个集合中存储了多种数据类型的元素，那么在编译后这些元素都会向上转型为Object类型。这样的话，当我们取出任一元素想执行其特有的方法时，就必须采用向下转型。然而由于集合中元素的数据类型不同，所以没有一个统一的标准可以一次性将集合中的所有元素向下转型。</p>
+<blockquote>
+<p>  <strong>从 JDK5 开始</strong></p>
+</blockquote>
+<p>​        在JDK1.5++，新增了<strong>泛型（Generic）</strong>语法。让你在设计 API 时可以指定类或方法支持泛型，这样我们使用API时也变得更为简洁，并得到了编译时期的语法检查。</p>
+<p>​        JDK5 之后使用泛型来解决这个问题。因为这个时候除了元素的类型不确定，其它的部分是确定的，例如关于这个元素如何保存，如何管理等是确定的，因此<strong>此时把元素的类型设计成一个参数</strong>，这个类型参数叫做<strong>泛型</strong>。</p>
+<h1 id="泛型的概念"><a href="#泛型的概念" class="headerlink" title="泛型的概念"></a>泛型的概念</h1><blockquote>
+<p>  <strong>定义</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>泛型</strong>：可以在<strong>类中或方法</strong>中预支的使用未知的类型。</li>
+<li>  所谓泛型，就是允许在定义类、接口时通过一个标识表示类中某个属性的类型或者是某个方法的返回值及参数类型。这个类型参数将在使用时确定。比如：①继承或实现这个接口时；  ②创建对象时；  ③传入实际的类型参数时，也称为类型实参；</li>
+<li>  <strong>泛型的使用</strong>：定义时不指定数据类型，使用时再指定数据类型。</li>
+</ul>
+<blockquote>
+<p>  <strong>小总结</strong></p>
+</blockquote>
+<ol>
+<li> <strong>泛型是在定义时使用的；</strong></li>
+<li> 使用时才指定泛型的具体类型；</li>
+<li> <strong>当没有指定泛型时，默认类型为 Object 类型。</strong></li>
+<li> Collection虽然可以存储不同类型的对象，但实际使用时我们建议一般只存储同一类型的对象。</li>
+</ol>
+<hr>
+<h1 id="使用泛型的好处"><a href="#使用泛型的好处" class="headerlink" title="使用泛型的好处"></a>使用泛型的好处</h1><ol>
+<li>将运行时期的<code>ClassCastException</code>，转移到了编译时期变成了编译失败。</li>
+<li>避免了类型强转的麻烦。</li>
+</ol>
+<hr>
+<h1 id="泛型在集合中的使用"><a href="#泛型在集合中的使用" class="headerlink" title="泛型在集合中的使用"></a>泛型在集合中的使用</h1><h2 id="JDK5-之前"><a href="#JDK5-之前" class="headerlink" title="JDK5 之前"></a>JDK5 之前</h2><blockquote>
+<p>  <strong>存在的问题：</strong></p>
+</blockquote>
+<ol>
+<li> 类型不安全</li>
+<li> 强转时，可能出现 ClassCastException</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ArrayList list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    <span class="comment">// 需求：存放学生的成绩</span></span><br><span class="line">    list.add(<span class="number">78</span>);</span><br><span class="line">    list.add(<span class="number">76</span>);</span><br><span class="line">    list.add(<span class="number">89</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 问题一：类型不安全</span></span><br><span class="line">    <span class="comment">// list.add(&quot;Tom&quot;);</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(Object score : list)&#123;</span><br><span class="line">        <span class="comment">// 问题二：强转时，可能出现ClassCastException</span></span><br><span class="line">        <span class="keyword">int</span> stuScore = (Integer) score;</span><br><span class="line">        System.out.println(stuScore);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/02/%E6%B3%9B%E5%9E%8B/image-20210802165130946.png" alt="image-20210802165130946"></p>
+<hr>
+<h2 id="JDK5-之后"><a href="#JDK5-之后" class="headerlink" title="JDK5 之后"></a>JDK5 之后</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ArrayList&lt;Integer&gt; list =  <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">    list.add(<span class="number">78</span>);</span><br><span class="line">    list.add(<span class="number">87</span>);</span><br><span class="line">    list.add(<span class="number">99</span>);</span><br><span class="line">    <span class="comment">// 编译时，就会进行类型检查，保证数据的安全</span></span><br><span class="line">    <span class="comment">// list.add(&quot;Tom&quot;);	// 发生编译时异常</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方式一：</span></span><br><span class="line"><span class="comment">//        for(Integer score : list)&#123;</span></span><br><span class="line"><span class="comment">//            //避免了强转操作</span></span><br><span class="line"><span class="comment">//            int stuScore = score;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//            System.out.println(stuScore);</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 方式二：</span></span><br><span class="line">    Iterator&lt;Integer&gt; iterator = list.iterator();</span><br><span class="line">    <span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">        <span class="keyword">int</span> stuScore = iterator.next();</span><br><span class="line">        System.out.println(stuScore);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/08/02/%E6%B3%9B%E5%9E%8B/image-20210802165301817.png" alt="image-20210802165301817"></p>
+<h2 id="JDK7-新特性：类型推断"><a href="#JDK7-新特性：类型推断" class="headerlink" title="JDK7 新特性：类型推断"></a>JDK7 新特性：类型推断</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以HashMap为例</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">// Map&lt;String,Integer&gt; map = new HashMap&lt;String,Integer&gt;();	// JDK7之前</span></span><br><span class="line">    Map&lt;String,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();	<span class="comment">// jdk7新特性：类型推断</span></span><br><span class="line"></span><br><span class="line">    map.put(<span class="string">&quot;Tom&quot;</span>,<span class="number">87</span>);</span><br><span class="line">    map.put(<span class="string">&quot;Jerry&quot;</span>,<span class="number">87</span>);</span><br><span class="line">    map.put(<span class="string">&quot;Jack&quot;</span>,<span class="number">67</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//泛型的嵌套</span></span><br><span class="line">    Set&lt;Map.Entry&lt;String,Integer&gt;&gt; entry = map.entrySet();</span><br><span class="line">    Iterator&lt;Map.Entry&lt;String, Integer&gt;&gt; iterator = entry.iterator();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">        Map.Entry&lt;String, Integer&gt; e = iterator.next();</span><br><span class="line">        String key = e.getKey();</span><br><span class="line">        Integer value = e.getValue();</span><br><span class="line">        System.out.println(key + <span class="string">&quot;----&quot;</span> + value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="集合中使用泛型总结"><a href="#集合中使用泛型总结" class="headerlink" title="集合中使用泛型总结"></a>集合中使用泛型总结</h2><ul>
+<li><p>  集合接口或集合类从 JDK5 开始都修改为带泛型的结构。</p>
+</li>
+<li><p>  在实例化集合类时，可以指明具体的泛型类型。</p>
+</li>
+<li><p>指明完以后，在集合类或接口中凡是使用到泛型的位置，都会转换为具体的数据类型。</p>
+<p>  比如：add(E e)  —&gt; 实例化以后：add(Integer e)</p>
+</li>
+<li><p>  注意点：<strong>泛型的类型必须是类，不能是基本数据类型。需要用到基本数据类型时，拿包装类替换</strong>。</p>
+</li>
+<li><p>  <strong>如果实例化时，没指明泛型的类型。默认类型为 <code>java.lang.Object</code> 类型。</strong></p>
+</li>
+</ul>
+<hr>
+<h1 id="泛型的语法（自定义泛型类、泛型接口、泛型方法）"><a href="#泛型的语法（自定义泛型类、泛型接口、泛型方法）" class="headerlink" title="泛型的语法（自定义泛型类、泛型接口、泛型方法）"></a>泛型的语法（自定义泛型类、泛型接口、泛型方法）</h1><h2 id="1-定义和使用带泛型的类"><a href="#1-定义和使用带泛型的类" class="headerlink" title="1    定义和使用带泛型的类"></a>1    定义和使用带泛型的类</h2><blockquote>
+<p>  <strong>定义：</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">修饰符 <span class="class"><span class="keyword">class</span> 类名&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// 代码块</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>使用：</strong>（== 什么时候确定泛型）</p>
+</blockquote>
+<p>定义类的时候，只是表明了该类将会使用泛型，但<strong>具体的泛型类型，是在创建实例对象的时候指定的</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 定义带泛型的类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArratList</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.使用：创建对象时，根据创建对象时指定的泛型不同，集合中保存数据的类型也不同。但是class类只有一个。</span></span><br><span class="line">ArrayList&lt;String&gt; list1 = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">ArrayList&lt;Integer&gt; list2 = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="2-定义和使用含有泛型的接口"><a href="#2-定义和使用含有泛型的接口" class="headerlink" title="2    定义和使用含有泛型的接口"></a>2    定义和使用含有泛型的接口</h2><blockquote>
+<p>  <strong>定义</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">修饰符 <span class="class"><span class="keyword">interface</span> 接口名&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>使用：</strong></p>
+</blockquote>
+<ol>
+<li> <strong>定义实现类(子类)时确定泛型的类型</strong>。</li>
+<li> <strong>始终不缺定泛型的类型，直到创建对象时，才确定泛型的类型</strong>。</li>
+</ol>
+<ul>
+<li>  <strong>接口A</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">A</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    使用：</span></span><br><span class="line"><span class="comment">      1. 定义实现类时确定泛型的类型</span></span><br><span class="line"><span class="comment">      2. 始终不缺定泛型的类型，直到创建对象时，才确定泛型的类型</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span> Class C&lt;E&gt; implements A&lt;E&gt;&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">&#125;    </span><br><span class="line"></span><br><span class="line">psvm&#123;</span><br><span class="line">    C&lt;Integer&gt; c = <span class="keyword">new</span> C&lt;Integer&gt;();    <span class="comment">// 直到创建对象时，才确定泛型的类型为Integer</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  定义实现类 B 的时候确定泛型的类型：此时 <code>class B</code> 就不再是泛型类了</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">implements</span> <span class="title">A</span>&lt;<span class="title">Integer</span>&gt;</span>&#123; <span class="comment">// 此时，泛型E的值就是Integer，类 B 就不是泛型类了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  直到创建对象 C 时，才确定泛型的类型：此时 <code>class C</code> 仍然是泛型类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">C</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">A</span>&lt;<span class="title">T</span>&gt;</span>&#123;  <span class="comment">// 在实现类的定义阶段并没有确定泛型的类型， class C 仍然是泛型类</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        C&lt;Integer&gt; c = <span class="keyword">new</span> C&lt;&gt;();   <span class="comment">// 直到创建对象时，才确定泛型的类型</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-定义和使用带泛型的方法"><a href="#3-定义和使用带泛型的方法" class="headerlink" title="3    定义和使用带泛型的方法"></a>3    定义和使用带泛型的方法</h2><blockquote>
+<p>  <strong>定义：</strong></p>
+</blockquote>
+<ul>
+<li>  泛型方法：在方法中出现了泛型结构的方法就叫做泛型方法。</li>
+<li>  <strong>泛型参数与类的泛型参数没任何关系。</strong></li>
+<li>  换句话说就是，<strong>泛型方法所属的类是不是泛型类都没关系</strong>。</li>
+<li>  泛型方法，可以是一个静态方法。【原因：泛型参数是在调用方法时确定的。并非在实例化类时确定。】</li>
+<li>  泛型可以声明在参数列表中的参数上；</li>
+<li>  也可以声明在方法的返回值上</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">修饰符 &lt;E&gt; 返回值类型 方法名(参数列表)&#123;</span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="4-代码演示"><a href="#4-代码演示" class="headerlink" title="4    代码演示"></a>4    代码演示</h2><blockquote>
+<ol>
+<li> <strong>Order.java</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Order</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    String orderName;</span><br><span class="line">    <span class="keyword">int</span> orderId;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 类的内部结构就可以使用类的泛型</span></span><br><span class="line">    T orderT;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Order</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//编译不通过</span></span><br><span class="line"><span class="comment">//        T[] arr = new T[10];</span></span><br><span class="line">        <span class="comment">//编译通过</span></span><br><span class="line">        T[] arr = (T[]) <span class="keyword">new</span> Object[<span class="number">10</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Order</span><span class="params">(String orderName, <span class="keyword">int</span> orderId, T orderT)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.orderName = orderName;</span><br><span class="line">        <span class="keyword">this</span>.orderId = orderId;</span><br><span class="line">        <span class="keyword">this</span>.orderT = orderT;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 以下的个方法都是泛型方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getOrderT</span><span class="params">()</span></span>&#123;   <span class="comment">// 泛型声明在返回值中</span></span><br><span class="line">        <span class="keyword">return</span> orderT;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOrderT</span><span class="params">(T orderT)</span></span>&#123;    <span class="comment">// 泛型声明在参数列表中</span></span><br><span class="line">        <span class="keyword">this</span>.orderT = orderT;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Order&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;orderName=&#x27;&quot;</span> + orderName + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, orderId=&quot;</span> + orderId +</span><br><span class="line">                <span class="string">&quot;, orderT=&quot;</span> + orderT +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 静态方法中不能使用类的泛型。</span></span><br><span class="line"><span class="comment">//    public static void show(T orderT)&#123;</span></span><br><span class="line"><span class="comment">//        System.out.println(orderT);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//编译不通过</span></span><br><span class="line"><span class="comment">//        try&#123;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        &#125;catch(T t)&#123;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 泛型方法可以是静态方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">copyFromArrayToList</span><span class="params">(E[] arr)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;E&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (E e : arr) &#123;</span><br><span class="line">            list.add(e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol>
+<li> <strong>SubOrder.java</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SubOrder</span> <span class="keyword">extends</span> <span class="title">Order</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;E&gt; <span class="function">List&lt;E&gt; <span class="title">copyFromArrayToList</span><span class="params">(E[] arr)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;E&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (E e : arr) &#123;</span><br><span class="line">            list.add(e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol>
+<li> <strong>测试</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 如果定义了泛型类，实例化没指明类的泛型，则认为此泛型类型为Object类型</span></span><br><span class="line">    <span class="comment">// 要求：如果大家定义了类是带泛型的，建议在实例化时要指明类的泛型。</span></span><br><span class="line">    Order order = <span class="keyword">new</span> Order();</span><br><span class="line">    order.setOrderT(<span class="number">123</span>);</span><br><span class="line">    order.setOrderT(<span class="string">&quot;ABC&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//建议：实例化时指明类的泛型</span></span><br><span class="line">    Order&lt;String&gt; order1 = <span class="keyword">new</span> Order&lt;String&gt;(<span class="string">&quot;orderAA&quot;</span>, <span class="number">1001</span>, <span class="string">&quot;order:AA&quot;</span>);</span><br><span class="line">    order1.setOrderT(<span class="string">&quot;AA:hello&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    SubOrder sub1 = <span class="keyword">new</span> SubOrder();</span><br><span class="line">    <span class="comment">// 由于子类在继承带泛型的父类时，指明了泛型类型。则实例化子类对象时，不再需要指明泛型。</span></span><br><span class="line">    sub1.setOrderT(<span class="number">1122</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ArrayList&lt;String&gt; list1 = <span class="keyword">null</span>;</span><br><span class="line">    ArrayList&lt;Integer&gt; list2 = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">    <span class="comment">// 泛型不同的引用不能相互赋值。</span></span><br><span class="line">    <span class="comment">// list1 = list2;   // 编译时异常</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试泛型方法</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test4</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Order&lt;String&gt; order = <span class="keyword">new</span> Order&lt;&gt;();</span><br><span class="line">    Integer[] arr = <span class="keyword">new</span> Integer[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line">    <span class="comment">// 泛型方法在调用时，指明泛型参数的类型。</span></span><br><span class="line">    List&lt;Integer&gt; list = order.copyFromArrayToList(arr);</span><br><span class="line">    System.out.println(list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-注意点"><a href="#5-注意点" class="headerlink" title="5    注意点"></a>5    注意点</h2><ol>
+<li> 泛型类可能有多个参数，此时应将多个参数一起放在尖括号内。比如：<code>&lt;E, T, K, V&gt;</code></li>
+<li> 泛型的不同引用之间不能相互赋值。</li>
+<li> 泛型如果不指定，将被擦除，泛型对应的类型均按照 Object 处理。</li>
+<li> 如果泛型结构是一个抽象类或接口，则不可能创建一个泛型类的对象。</li>
+<li> JDK7 中，新增了自动类型推断，简化了泛型的操作。</li>
+<li> 泛型在使用时不能用基本数据类型，可以使用包装类替代。</li>
+<li> 在 <code>类/接口</code> 上声明的泛型，在本类或本接口中即代表某种具体类型，可以作为非静态属性的类型，非静态方法的参数类型和返回值类型。但<strong>在静态方法中不能使用类的泛型</strong>。</li>
+<li> <strong>静态方法中也可以使用泛型，但静态方法中使用的泛型是独立的泛型，而不是泛型类（或泛型接口）上声明的泛型。</strong></li>
+<li> <strong>异常类不能是泛型的</strong>。即如果一个类实现或继承了 Exception 系列的类或接口，它就不能再使用泛型了。</li>
+<li> 不能使用 <code>E e = new E[]</code>，但可以使用 **E[] = (E[])new Object[capacity]**。</li>
+<li>父类有泛型，子类可以选择保留泛型也可以选择指定泛型类型<ul>
+<li>子类不保留父类的泛型：按需实现<ul>
+<li>  ①没有类型，擦除；    </li>
+<li>  ②指定具体类型</li>
+</ul>
+</li>
+<li>子类保留父类的泛型：泛型子类<ul>
+<li>  ①全部保留</li>
+<li>  ②部分保留</li>
+</ul>
+</li>
+</ul>
+</li>
+<li> 子类除了指定或保留父类的泛型外，还可以增加自己的泛型。</li>
+</ol>
+<hr>
+<h1 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h1><ul>
+<li>  在定义类、接口或方法时，使用泛型可以将数据类型的确定延后到创建对象或调用方法时，但是如果直到创建对象或调用方法时也还不能确定使用什么数据类型或要使用多种数据类型时，可以采用通配符<code>&lt;?&gt;</code>表示。</li>
+<li>  但是一旦使用泛型通配符后，就只能使用Object类中的公共方法，集合中对象自身特有的方法就无法被调用。</li>
+</ul>
+<h2 id="1-通配符的基本使用"><a href="#1-通配符的基本使用" class="headerlink" title="1    通配符的基本使用"></a>1    通配符的基本使用</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Collection&lt;Integer&gt; list1 = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        getElements(list1);</span><br><span class="line">        Collection&lt;String&gt; list2 = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        getElements(list2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getElements</span><span class="params">(Collection&lt;?&gt; coll)</span></span>&#123;</span><br><span class="line">        <span class="comment">// ?代表可以接收任意类型数据</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li> <code>getElements</code> 方法第一次传递了 Integer 类型的集合，第二次传递了 String 类型的集合；</li>
+<li> 如果要想通过同一个方法处理这些参数，可通过设置 <code>getElements()</code> 方法的形参为 <code>(ArrayList&lt;?&gt; arr)</code>或其父类表示。</li>
+</ol>
+<h2 id="2-通配符的高级使用——受限泛型"><a href="#2-通配符的高级使用——受限泛型" class="headerlink" title="2    通配符的高级使用——受限泛型"></a>2    通配符的高级使用——受限泛型</h2><p>在 Java 中，通过通配符可以指定一个泛型的<strong>上限</strong>和<strong>下限</strong>。</p>
+<blockquote>
+<ol>
+<li> <strong>泛型的上限</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li><p>格式</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">类型名称 &lt;? extends 类&gt; 对象名称</span><br></pre></td></tr></table></figure></li>
+<li><p>  含义：在指定泛型的类型时，只能设置为该类型或其子类。</p>
+</li>
+</ul>
+<blockquote>
+<ol start="2">
+<li> <strong>泛型的下限</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li><p>格式</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">类型名称 &lt;? <span class="keyword">super</span> 类&gt; 对象名称</span><br></pre></td></tr></table></figure></li>
+<li><p>  含义：：在指定泛型的类型时，只能设置为该类型或其父类。</p>
+</li>
+</ul>
+<blockquote>
+<ol start="3">
+<li> <strong>代码演示</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Number类型是Integer类型的父类</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;Integer&gt; list1 = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        ArrayList&lt;String&gt; list2 = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        ArrayList&lt;Number&gt; list3 = <span class="keyword">new</span> ArrayList&lt;Number&gt;();</span><br><span class="line">        ArrayList&lt;Object&gt; list4 = <span class="keyword">new</span> ArrayList&lt;Object&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        getElement1(list1);</span><br><span class="line">        getElement1(list2);     <span class="comment">// 报错</span></span><br><span class="line">        getElement1(list3);</span><br><span class="line">        getElement1(list4);     <span class="comment">// 报错</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        getElement2(list1);     <span class="comment">// 报错</span></span><br><span class="line">        getElement2(list2);     <span class="comment">// 报错</span></span><br><span class="line">        getElement2(list3);</span><br><span class="line">        getElement2(list4);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用getElement1方法时，只能接收Number类型及其子类</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getElement1</span><span class="params">(ArrayList&lt;? extends Number&gt; arr)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用getElement2方法时，只能接收Number类型及其父类</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getElement2</span><span class="params">(ArrayList&lt;? <span class="keyword">super</span> Number&gt; arr)</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="3-注意点"><a href="#3-注意点" class="headerlink" title="3    注意点"></a>3    注意点</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test3</span><span class="params">()</span></span>&#123;</span><br><span class="line">    List&lt;Object&gt; list1 = <span class="keyword">null</span>;</span><br><span class="line">    List&lt;String&gt; list2 = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    List&lt;?&gt; list = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    list = list1;	<span class="comment">// 编译通过</span></span><br><span class="line">    list = list2;	<span class="comment">// 编译通过</span></span><br><span class="line"><span class="comment">//        list1 = list2;  // 编译时异常</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; list3 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list3.add(<span class="string">&quot;AA&quot;</span>);</span><br><span class="line">    list3.add(<span class="string">&quot;BB&quot;</span>);</span><br><span class="line">    list = list3;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 添加(写入)：对于List&lt;?&gt;，不能向其内部添加数据，除了添加null之外。</span></span><br><span class="line">    <span class="comment">//        list.add(&quot;DD&quot;);	// 编译时异常</span></span><br><span class="line">    list.add(<span class="keyword">null</span>);	<span class="comment">// OK</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取(读取)：允许读取数据，读取的数据类型为Object。</span></span><br><span class="line">    Object o = list.get(<span class="number">0</span>);</span><br><span class="line">    System.out.println(o);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  <strong>涉及通配符的集合的数据的写入和读取</strong>：如上面代码所示</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -3152,215 +3457,6 @@
 </ol>
 <p><strong>基于接口的动态代理（JDK动态代理），向下转型时只能转换成接口的类型，而不能转换成接口的实现类类型，否则就会抛出异常！！！</strong></p>
 <hr>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="post-title-link" itemprop="url">线程间通信</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-07-18 14:51:15 / Modified: 15:45:39" itemprop="dateCreated datePublished" datetime="2021-07-18T14:51:15+08:00">2021-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="LockSupport"><a href="#LockSupport" class="headerlink" title="LockSupport"></a>LockSupport</h1><h2 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h2><p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716173307046.png" alt="image-20210716173307046"></p>
-<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716173522862.png" alt="image-20210716173522862"></p>
-<p>LockSupport 是用来创建锁和其它同步类的基本线程阻塞原语。</p>
-<p>LockSupport 是 JUC 包下的一个类，也可以用于多线程间通信，是 wait/notify（唤醒/等待）机制的改良加强版。</p>
-<p>LockSupport 是一个线程阻塞工具类，<strong>类中所有的方法都是静态方法</strong>，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。归根结底，LockSupport 调用的是 Unsafe 类中的 native 方法。</p>
-<p>LockSupport 提供了 <code>park()</code> 和 <code>unpark()</code> 方法实现阻塞线程和解除线程阻塞的过程。</p>
-<hr>
-<h2 id="为什么学-LockSupport"><a href="#为什么学-LockSupport" class="headerlink" title="为什么学 LockSupport"></a>为什么学 LockSupport</h2><ol>
-<li> LockSupport 是学习 AQS 的前置知识。</li>
-<li> 传统的等待/唤醒机制在某些情况下不适用</li>
-</ol>
-<p>Java –&gt;&gt; JVM</p>
-<p>JUC –&gt;&gt; AQS –&gt; 前置知识（可重入锁、LockSupport）</p>
-<p>JUC 底层原理就是 AQS，就相当于 JVM 之于 Java，学习 AQS 需要先了解 LockSupport 和 可重入锁。</p>
-<hr>
-<h2 id="三组让线程等待-唤醒的方法（传统等待-唤醒方法存在的缺陷）"><a href="#三组让线程等待-唤醒的方法（传统等待-唤醒方法存在的缺陷）" class="headerlink" title="三组让线程等待/唤醒的方法（传统等待/唤醒方法存在的缺陷）"></a>三组让线程等待/唤醒的方法（传统等待/唤醒方法存在的缺陷）</h2><blockquote>
-<ol>
-<li> <strong>Object</strong>：<code>wait()</code> 和 <code>notify()</code></li>
-<li> <strong>Condition</strong>：<code>await()</code> 和 <code>signal()</code></li>
-<li> <strong>LockSupport</strong>：<code>park()</code> 和 <code>unpark()</code></li>
-</ol>
-</blockquote>
-<h3 id="Object-类中的-wait-和-notify-方法实现线程的等待和唤醒（wait-notify-限制）"><a href="#Object-类中的-wait-和-notify-方法实现线程的等待和唤醒（wait-notify-限制）" class="headerlink" title="Object 类中的 wait 和 notify 方法实现线程的等待和唤醒（wait/notify 限制）"></a>Object 类中的 wait 和 notify 方法实现线程的等待和唤醒（wait/notify 限制）</h3><h4 id="正常"><a href="#正常" class="headerlink" title="正常"></a>正常</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.one;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 18:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行结果：</span></span><br><span class="line"><span class="comment"> *      T1 come in</span></span><br><span class="line"><span class="comment"> *      T1 进入Waiting状态</span></span><br><span class="line"><span class="comment"> *      T2 come in</span></span><br><span class="line"><span class="comment"> *      T2 唤醒Waiting中的线程</span></span><br><span class="line"><span class="comment"> *      T1 被唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="异常1"><a href="#异常1" class="headerlink" title="异常1"></a>异常1</h4><p>将 <code>wait</code> 和 <code>notify</code> 方法，两个都去掉同步代码块。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            synchronized (obj)&#123;</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            synchronized (obj)&#123;</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行结果：</p>
-<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716181135743.png" alt="image-20210716181135743"></p>
-<ul>
-<li>  <strong>Object 类中的 wait、notify、notifyAll 方法必须放在 synchronized 同步代码（同步代码块或同步方法）中才能使用。</strong></li>
-<li>  <strong>编译时不会报错，但是运行时会抛出 <code>IllegalMonitorStateException</code> 异常。</strong>【非法监听状态异常】</li>
-</ul>
-<hr>
-<h4 id="异常2"><a href="#异常2" class="headerlink" title="异常2"></a>异常2</h4><p>让 <code>notify()</code> 先于 <code>wait()</code> 执行，会导致某个线程进入 Waiting 状态后无法被唤醒，程序无法结束。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();		<span class="comment">// 13行</span></span><br><span class="line"><span class="comment">//                    obj.wait(1000);      // 超时唤醒可以单独出现              </span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>执行结果</strong></p>
-<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716181509277.png" alt="image-20210716181509277"></p>
-<p><strong>分析</strong></p>
-<ol>
-<li> 在线程 T1 争夺锁对象之前让其先暂停 1s，避免其与 T2 线程争夺锁对象。</li>
-<li> T2 线程先得到锁对象，在控制台上输出指定的内容，并随机唤醒当前锁对象维护的等待队列中的一个线程，将其移动到锁对象的同步队列中（当前锁对象的等待队列为空）。最后执行完毕释放锁对象。</li>
-<li> T1 线程休眠 1s 后醒来获得锁对象，开始执行同步代码块中的方法，将指定内容打印输出到控制台上。但是在执行到 13 行 <code>obj.wait();</code> 代码后，由于唤醒动作已经先于阻塞动作执行了，此时线程 T1 进入 Waiting 状态后再没有额外的唤醒动作要执行了，所以 T1 会一直陷入 Waiting 状态，该行代码之后的打印输出动作也就不会被执行到。</li>
-<li> 整个进程无法结束。</li>
-</ol>
-<p><strong>附加</strong></p>
-<p>如果将唤醒操作设置成超时唤醒，则 <strong>wait(long timeout)</strong> 可以不用与 <code>notify()</code> 方法成对出现，也可以不用关心与 <code>notify()</code> 方法出现的顺序。</p>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
-<li>  <code>wait()</code> 和 <code>notify()</code> 方法必须<strong>要在 synchronized 同步代码里面</strong>且<strong>成对使用</strong>，且使用时必须先 <code>wait</code> 后 <code>notify</code>（一般情况）。</li>
-</ul>
-<hr>
-<h3 id="Condition-接口中的-await-和-signal-方法实现线程的等待和唤醒"><a href="#Condition-接口中的-await-和-signal-方法实现线程的等待和唤醒" class="headerlink" title="Condition 接口中的 await 和 signal 方法实现线程的等待和唤醒"></a>Condition 接口中的 await 和 signal 方法实现线程的等待和唤醒</h3><p>与<code>Object#wait</code>、<code>Object#notify</code> 方法遇到的问题基本一样。</p>
-<h4 id="正常-1"><a href="#正常-1" class="headerlink" title="正常"></a>正常</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.one;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 18:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">        Condition condition = lock.newCondition();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            try &#123; Thread.sleep(1000); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125;</span></span><br><span class="line"></span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line"></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                condition.await();  <span class="comment">// 当前线程被阻塞</span></span><br><span class="line"></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                condition.signal();</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行结果：</span></span><br><span class="line"><span class="comment"> *      T1 come in</span></span><br><span class="line"><span class="comment"> *      T1 进入Waiting状态</span></span><br><span class="line"><span class="comment"> *      T2 come in</span></span><br><span class="line"><span class="comment"> *      T2 唤醒Waiting中的线程</span></span><br><span class="line"><span class="comment"> *      T1 被唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="异常1-1"><a href="#异常1-1" class="headerlink" title="异常1"></a>异常1</h4><p>如果注释掉 lock 和 unlock 方法，程序将会抛出 <strong>IllegalMonitorStateException</strong> 异常。</p>
-<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716184240464.png" alt="image-20210716184240464"></p>
-<h4 id="异常2-1"><a href="#异常2-1" class="headerlink" title="异常2"></a>异常2</h4><p>如果调换 <code>await()</code> 和 <code>signal()</code> 的执行顺序，将有一个线程永远处于 Waiting 状态，导致线程无法结束。</p>
-<hr>
-<h3 id="传统的-synchronized-和-Lock-实现等待唤醒通知的约束（总结）"><a href="#传统的-synchronized-和-Lock-实现等待唤醒通知的约束（总结）" class="headerlink" title="传统的 synchronized 和 Lock 实现等待唤醒通知的约束（总结）"></a>传统的 synchronized 和 Lock 实现等待唤醒通知的约束（总结）</h3><ol>
-<li> 等待和唤醒的方法必须写在锁代码块（synchronized 或 lock）中；</li>
-<li> 必须先等待后唤醒。如果先唤醒后等待，线程将陷入死等。</li>
-</ol>
-<hr>
-<h3 id="LockSupport-类中park等待和unpark唤醒"><a href="#LockSupport-类中park等待和unpark唤醒" class="headerlink" title="LockSupport 类中park等待和unpark唤醒"></a>LockSupport 类中park等待和unpark唤醒</h3><ul>
-<li>  见下文</li>
-</ul>
-<hr>
-<h2 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h2><p>在 LockSupport 中，通过 <code>park()</code> 和 <code>unpark(Thread thread)</code> 方法来实现阻塞和唤醒线程的操作。</p>
-<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716203238382.png" alt="image-20210716203238382"></p>
-<p><strong>原理</strong></p>
-<ul>
-<li>  LockSupport 类使用了一种名为 Permit（许可证）的概念来做到阻塞和唤醒线程的功能，Permit 与线程绑定。</li>
-<li>  Permit 只有两个值 1 和 0，默认是 0。</li>
-<li>  0 表示线程没有许可证，1 表示线程拥有许可证。每个线程允许携带的许可证的最大上限是 1。</li>
-</ul>
-<h3 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h3><blockquote>
-<p>  <code>park()</code>：阻塞当前线程（会消耗掉一个许可证）</p>
-<p>  <code>park(Object blocker)</code>：阻塞传入的指定线程（会消耗掉一个许可证）</p>
-</blockquote>
-<p>调用 <code>LockSupport#park()</code> 方法时，底层调用的是 <code>UNSAFE.park()</code> 方法</p>
-<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716203521212.png" alt="image-20210716203521212"></p>
-<p>默认情况 <code>permit == 0</code>，对于一个新的线程直接调用 <code>park()</code> 方法，该线程没有许可证可以被消耗，所以当前线程就会阻塞，直到其它线程给该线程颁发一个许可证，即设置该线程的 <code>permit == 1</code> 时，该线程会从阻塞状态中恢复运行，执行<code>park()</code>方法，消耗掉一个许可证，设置 <code>permit ==0</code> ，并继续执行 <code>park()</code> 方法之后的代码。</p>
-<hr>
-<h3 id="唤醒"><a href="#唤醒" class="headerlink" title="唤醒"></a>唤醒</h3><blockquote>
-<p>  <code>unpark(Thread thread)</code>：唤醒某个线程。<strong>严格意义上将并不是唤醒线程，而是给线程颁发了一个许可证，这个许可证可以不立即生效，只有在遇到 park() 方法造成的阻塞时，拥有许可证可以保证线程不被阻塞。</strong></p>
-</blockquote>
-<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716203852897.png" alt="image-20210716203852897"></p>
-<p>调用 <code>unpark(thread)</code> 方法后，设置thread 线程的许可证 <code>permit == 1</code>（注意多次调用 <code>unpark()</code>，permit 的值不会累加，最高只能是 1），自动唤醒 thread 线程，即之前阻塞中的 <code>LockSupport.park()</code> 方法会立即返回。</p>
-<h3 id="形象的理解"><a href="#形象的理解" class="headerlink" title="形象的理解"></a>形象的理解</h3><p>线程阻塞时需要消耗凭证（permit），这个凭证每个线程最多只有 1 个。</p>
-<ol>
-<li>当调用 <code>park()</code> 方法时，<ul>
-<li>  如果有凭证，则会直接消耗掉这个凭证，然后程序继续执行。</li>
-<li>  如果无凭证，则必须阻塞等待凭证可用</li>
-</ul>
-</li>
-<li> 而 <code>unpark()</code> 正好相反，它会增加一个凭证，但凭证最多只能有一个，累加无效。</li>
-</ol>
-<p><em>permit 许可证与线程绑定。</em></p>
-<p><em>permit  是一张万能的许可证，可以提前发给线程，线程每遇到一个关卡（阻塞）就需要消耗许可证。如果有则通过关卡，没有则不让通过，即阻塞。且每个线程最大只能持有一张许可证。</em></p>
-<hr>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>LockSupport 的优势</strong></p>
-<ul>
-<li>  优势1：不需要锁块，唤醒和阻塞的代码可以写在任意位置。（之前的两种方法都只能写在锁代码块中）</li>
-<li>  优势2：支持 <code>unpark()</code> 可以在 <code>park()</code> 之前执行（先唤醒后等待）</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockSupportDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t come in \t&quot;</span> + System.currentTimeMillis());</span><br><span class="line">            LockSupport.park(); <span class="comment">// 阻塞当前线程</span></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t 被唤醒 \t&quot;</span> + System.currentTimeMillis());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>);</span><br><span class="line">        t1.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;唤醒&quot;</span> + t1.getName() + <span class="string">&quot;线程&quot;</span>);</span><br><span class="line">            LockSupport.unpark(t1); </span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>代码分析</strong></p>
-<ol>
-<li> T1 线程即使抢到 CPU 资源后也会立即睡眠 3s，所以 T2 线程中的内容必定先于 T1 执行。</li>
-<li> T2 调用 <code>unpark()</code> 方法给 t1 线程发放了一个通行证；</li>
-<li> 3s 后 T1 线程睡醒，接着上次的位置继续执行，打印 <code>... come in ...</code> 在控制台上，接着执行 <code>park()</code> 方法阻塞线程，但是由于此时 T1 线程是有一个通行证 permit 的，所以这个阻塞校验可以通过，紧接着继续执行下面的操作。</li>
-</ol>
-<p><strong>最终的运行结果为</strong>：</p>
-<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716213814924.png" alt="image-20210716213814924"></p>
-<p>可以看到：<code>LockSupport.park()</code>前后执行时间是一样的，也就说明阻塞没有生效。</p>
-<hr>
-<h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><blockquote>
-<ol>
-<li> <strong>为什么可以先唤醒线程后阻塞线程？</strong></li>
-</ol>
-</blockquote>
-<p><code>unpark()</code> 方法并不是直接唤醒阻塞的线程，而是相当于给线程发放了一个万能的通行证，只要有这个通行证在，线程在遇到阻塞时，直接消费这个通行证就可以通过而不会被阻塞。</p>
-<blockquote>
-<ol start="2">
-<li> <strong>为什么唤醒两次后阻塞两次，但最终结果还会阻塞线程？</strong></li>
-</ol>
-</blockquote>
-<p>因为一个线程持有通行证的最大数量只能为 1，所以调用两次 <code>unpark()</code> 和调用一次 <code>unpark()</code> 效果一样，最多只能获得一个通行证。而调用两次 <code>park()</code> 则会消费两个通行证，证不够就不能放行。</p>
 
       
     </div>

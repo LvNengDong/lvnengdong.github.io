@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">131</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,215 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" class="post-title-link" itemprop="url">线程间通信</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-07-18 14:51:15 / Modified: 15:45:39" itemprop="dateCreated datePublished" datetime="2021-07-18T14:51:15+08:00">2021-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="LockSupport"><a href="#LockSupport" class="headerlink" title="LockSupport"></a>LockSupport</h1><h2 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h2><p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716173307046.png" alt="image-20210716173307046"></p>
+<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716173522862.png" alt="image-20210716173522862"></p>
+<p>LockSupport 是用来创建锁和其它同步类的基本线程阻塞原语。</p>
+<p>LockSupport 是 JUC 包下的一个类，也可以用于多线程间通信，是 wait/notify（唤醒/等待）机制的改良加强版。</p>
+<p>LockSupport 是一个线程阻塞工具类，<strong>类中所有的方法都是静态方法</strong>，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。归根结底，LockSupport 调用的是 Unsafe 类中的 native 方法。</p>
+<p>LockSupport 提供了 <code>park()</code> 和 <code>unpark()</code> 方法实现阻塞线程和解除线程阻塞的过程。</p>
+<hr>
+<h2 id="为什么学-LockSupport"><a href="#为什么学-LockSupport" class="headerlink" title="为什么学 LockSupport"></a>为什么学 LockSupport</h2><ol>
+<li> LockSupport 是学习 AQS 的前置知识。</li>
+<li> 传统的等待/唤醒机制在某些情况下不适用</li>
+</ol>
+<p>Java –&gt;&gt; JVM</p>
+<p>JUC –&gt;&gt; AQS –&gt; 前置知识（可重入锁、LockSupport）</p>
+<p>JUC 底层原理就是 AQS，就相当于 JVM 之于 Java，学习 AQS 需要先了解 LockSupport 和 可重入锁。</p>
+<hr>
+<h2 id="三组让线程等待-唤醒的方法（传统等待-唤醒方法存在的缺陷）"><a href="#三组让线程等待-唤醒的方法（传统等待-唤醒方法存在的缺陷）" class="headerlink" title="三组让线程等待/唤醒的方法（传统等待/唤醒方法存在的缺陷）"></a>三组让线程等待/唤醒的方法（传统等待/唤醒方法存在的缺陷）</h2><blockquote>
+<ol>
+<li> <strong>Object</strong>：<code>wait()</code> 和 <code>notify()</code></li>
+<li> <strong>Condition</strong>：<code>await()</code> 和 <code>signal()</code></li>
+<li> <strong>LockSupport</strong>：<code>park()</code> 和 <code>unpark()</code></li>
+</ol>
+</blockquote>
+<h3 id="Object-类中的-wait-和-notify-方法实现线程的等待和唤醒（wait-notify-限制）"><a href="#Object-类中的-wait-和-notify-方法实现线程的等待和唤醒（wait-notify-限制）" class="headerlink" title="Object 类中的 wait 和 notify 方法实现线程的等待和唤醒（wait/notify 限制）"></a>Object 类中的 wait 和 notify 方法实现线程的等待和唤醒（wait/notify 限制）</h3><h4 id="正常"><a href="#正常" class="headerlink" title="正常"></a>正常</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.one;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 18:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行结果：</span></span><br><span class="line"><span class="comment"> *      T1 come in</span></span><br><span class="line"><span class="comment"> *      T1 进入Waiting状态</span></span><br><span class="line"><span class="comment"> *      T2 come in</span></span><br><span class="line"><span class="comment"> *      T2 唤醒Waiting中的线程</span></span><br><span class="line"><span class="comment"> *      T1 被唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="异常1"><a href="#异常1" class="headerlink" title="异常1"></a>异常1</h4><p>将 <code>wait</code> 和 <code>notify</code> 方法，两个都去掉同步代码块。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            synchronized (obj)&#123;</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            synchronized (obj)&#123;</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716181135743.png" alt="image-20210716181135743"></p>
+<ul>
+<li>  <strong>Object 类中的 wait、notify、notifyAll 方法必须放在 synchronized 同步代码（同步代码块或同步方法）中才能使用。</strong></li>
+<li>  <strong>编译时不会报错，但是运行时会抛出 <code>IllegalMonitorStateException</code> 异常。</strong>【非法监听状态异常】</li>
+</ul>
+<hr>
+<h4 id="异常2"><a href="#异常2" class="headerlink" title="异常2"></a>异常2</h4><p>让 <code>notify()</code> 先于 <code>wait()</code> 执行，会导致某个线程进入 Waiting 状态后无法被唤醒，程序无法结束。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();		<span class="comment">// 13行</span></span><br><span class="line"><span class="comment">//                    obj.wait(1000);      // 超时唤醒可以单独出现              </span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>执行结果</strong></p>
+<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716181509277.png" alt="image-20210716181509277"></p>
+<p><strong>分析</strong></p>
+<ol>
+<li> 在线程 T1 争夺锁对象之前让其先暂停 1s，避免其与 T2 线程争夺锁对象。</li>
+<li> T2 线程先得到锁对象，在控制台上输出指定的内容，并随机唤醒当前锁对象维护的等待队列中的一个线程，将其移动到锁对象的同步队列中（当前锁对象的等待队列为空）。最后执行完毕释放锁对象。</li>
+<li> T1 线程休眠 1s 后醒来获得锁对象，开始执行同步代码块中的方法，将指定内容打印输出到控制台上。但是在执行到 13 行 <code>obj.wait();</code> 代码后，由于唤醒动作已经先于阻塞动作执行了，此时线程 T1 进入 Waiting 状态后再没有额外的唤醒动作要执行了，所以 T1 会一直陷入 Waiting 状态，该行代码之后的打印输出动作也就不会被执行到。</li>
+<li> 整个进程无法结束。</li>
+</ol>
+<p><strong>附加</strong></p>
+<p>如果将唤醒操作设置成超时唤醒，则 <strong>wait(long timeout)</strong> 可以不用与 <code>notify()</code> 方法成对出现，也可以不用关心与 <code>notify()</code> 方法出现的顺序。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
+<li>  <code>wait()</code> 和 <code>notify()</code> 方法必须<strong>要在 synchronized 同步代码里面</strong>且<strong>成对使用</strong>，且使用时必须先 <code>wait</code> 后 <code>notify</code>（一般情况）。</li>
+</ul>
+<hr>
+<h3 id="Condition-接口中的-await-和-signal-方法实现线程的等待和唤醒"><a href="#Condition-接口中的-await-和-signal-方法实现线程的等待和唤醒" class="headerlink" title="Condition 接口中的 await 和 signal 方法实现线程的等待和唤醒"></a>Condition 接口中的 await 和 signal 方法实现线程的等待和唤醒</h3><p>与<code>Object#wait</code>、<code>Object#notify</code> 方法遇到的问题基本一样。</p>
+<h4 id="正常-1"><a href="#正常-1" class="headerlink" title="正常"></a>正常</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.one;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 18:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">        Condition condition = lock.newCondition();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            try &#123; Thread.sleep(1000); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125;</span></span><br><span class="line"></span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line"></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                condition.await();  <span class="comment">// 当前线程被阻塞</span></span><br><span class="line"></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                condition.signal();</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行结果：</span></span><br><span class="line"><span class="comment"> *      T1 come in</span></span><br><span class="line"><span class="comment"> *      T1 进入Waiting状态</span></span><br><span class="line"><span class="comment"> *      T2 come in</span></span><br><span class="line"><span class="comment"> *      T2 唤醒Waiting中的线程</span></span><br><span class="line"><span class="comment"> *      T1 被唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="异常1-1"><a href="#异常1-1" class="headerlink" title="异常1"></a>异常1</h4><p>如果注释掉 lock 和 unlock 方法，程序将会抛出 <strong>IllegalMonitorStateException</strong> 异常。</p>
+<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716184240464.png" alt="image-20210716184240464"></p>
+<h4 id="异常2-1"><a href="#异常2-1" class="headerlink" title="异常2"></a>异常2</h4><p>如果调换 <code>await()</code> 和 <code>signal()</code> 的执行顺序，将有一个线程永远处于 Waiting 状态，导致线程无法结束。</p>
+<hr>
+<h3 id="传统的-synchronized-和-Lock-实现等待唤醒通知的约束（总结）"><a href="#传统的-synchronized-和-Lock-实现等待唤醒通知的约束（总结）" class="headerlink" title="传统的 synchronized 和 Lock 实现等待唤醒通知的约束（总结）"></a>传统的 synchronized 和 Lock 实现等待唤醒通知的约束（总结）</h3><ol>
+<li> 等待和唤醒的方法必须写在锁代码块（synchronized 或 lock）中；</li>
+<li> 必须先等待后唤醒。如果先唤醒后等待，线程将陷入死等。</li>
+</ol>
+<hr>
+<h3 id="LockSupport-类中park等待和unpark唤醒"><a href="#LockSupport-类中park等待和unpark唤醒" class="headerlink" title="LockSupport 类中park等待和unpark唤醒"></a>LockSupport 类中park等待和unpark唤醒</h3><ul>
+<li>  见下文</li>
+</ul>
+<hr>
+<h2 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h2><p>在 LockSupport 中，通过 <code>park()</code> 和 <code>unpark(Thread thread)</code> 方法来实现阻塞和唤醒线程的操作。</p>
+<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716203238382.png" alt="image-20210716203238382"></p>
+<p><strong>原理</strong></p>
+<ul>
+<li>  LockSupport 类使用了一种名为 Permit（许可证）的概念来做到阻塞和唤醒线程的功能，Permit 与线程绑定。</li>
+<li>  Permit 只有两个值 1 和 0，默认是 0。</li>
+<li>  0 表示线程没有许可证，1 表示线程拥有许可证。每个线程允许携带的许可证的最大上限是 1。</li>
+</ul>
+<h3 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h3><blockquote>
+<p>  <code>park()</code>：阻塞当前线程（会消耗掉一个许可证）</p>
+<p>  <code>park(Object blocker)</code>：阻塞传入的指定线程（会消耗掉一个许可证）</p>
+</blockquote>
+<p>调用 <code>LockSupport#park()</code> 方法时，底层调用的是 <code>UNSAFE.park()</code> 方法</p>
+<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716203521212.png" alt="image-20210716203521212"></p>
+<p>默认情况 <code>permit == 0</code>，对于一个新的线程直接调用 <code>park()</code> 方法，该线程没有许可证可以被消耗，所以当前线程就会阻塞，直到其它线程给该线程颁发一个许可证，即设置该线程的 <code>permit == 1</code> 时，该线程会从阻塞状态中恢复运行，执行<code>park()</code>方法，消耗掉一个许可证，设置 <code>permit ==0</code> ，并继续执行 <code>park()</code> 方法之后的代码。</p>
+<hr>
+<h3 id="唤醒"><a href="#唤醒" class="headerlink" title="唤醒"></a>唤醒</h3><blockquote>
+<p>  <code>unpark(Thread thread)</code>：唤醒某个线程。<strong>严格意义上将并不是唤醒线程，而是给线程颁发了一个许可证，这个许可证可以不立即生效，只有在遇到 park() 方法造成的阻塞时，拥有许可证可以保证线程不被阻塞。</strong></p>
+</blockquote>
+<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716203852897.png" alt="image-20210716203852897"></p>
+<p>调用 <code>unpark(thread)</code> 方法后，设置thread 线程的许可证 <code>permit == 1</code>（注意多次调用 <code>unpark()</code>，permit 的值不会累加，最高只能是 1），自动唤醒 thread 线程，即之前阻塞中的 <code>LockSupport.park()</code> 方法会立即返回。</p>
+<h3 id="形象的理解"><a href="#形象的理解" class="headerlink" title="形象的理解"></a>形象的理解</h3><p>线程阻塞时需要消耗凭证（permit），这个凭证每个线程最多只有 1 个。</p>
+<ol>
+<li>当调用 <code>park()</code> 方法时，<ul>
+<li>  如果有凭证，则会直接消耗掉这个凭证，然后程序继续执行。</li>
+<li>  如果无凭证，则必须阻塞等待凭证可用</li>
+</ul>
+</li>
+<li> 而 <code>unpark()</code> 正好相反，它会增加一个凭证，但凭证最多只能有一个，累加无效。</li>
+</ol>
+<p><em>permit 许可证与线程绑定。</em></p>
+<p><em>permit  是一张万能的许可证，可以提前发给线程，线程每遇到一个关卡（阻塞）就需要消耗许可证。如果有则通过关卡，没有则不让通过，即阻塞。且每个线程最大只能持有一张许可证。</em></p>
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>LockSupport 的优势</strong></p>
+<ul>
+<li>  优势1：不需要锁块，唤醒和阻塞的代码可以写在任意位置。（之前的两种方法都只能写在锁代码块中）</li>
+<li>  优势2：支持 <code>unpark()</code> 可以在 <code>park()</code> 之前执行（先唤醒后等待）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockSupportDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t come in \t&quot;</span> + System.currentTimeMillis());</span><br><span class="line">            LockSupport.park(); <span class="comment">// 阻塞当前线程</span></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t 被唤醒 \t&quot;</span> + System.currentTimeMillis());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>);</span><br><span class="line">        t1.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;唤醒&quot;</span> + t1.getName() + <span class="string">&quot;线程&quot;</span>);</span><br><span class="line">            LockSupport.unpark(t1); </span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>代码分析</strong></p>
+<ol>
+<li> T1 线程即使抢到 CPU 资源后也会立即睡眠 3s，所以 T2 线程中的内容必定先于 T1 执行。</li>
+<li> T2 调用 <code>unpark()</code> 方法给 t1 线程发放了一个通行证；</li>
+<li> 3s 后 T1 线程睡醒，接着上次的位置继续执行，打印 <code>... come in ...</code> 在控制台上，接着执行 <code>park()</code> 方法阻塞线程，但是由于此时 T1 线程是有一个通行证 permit 的，所以这个阻塞校验可以通过，紧接着继续执行下面的操作。</li>
+</ol>
+<p><strong>最终的运行结果为</strong>：</p>
+<p><img src="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/image-20210716213814924.png" alt="image-20210716213814924"></p>
+<p>可以看到：<code>LockSupport.park()</code>前后执行时间是一样的，也就说明阻塞没有生效。</p>
+<hr>
+<h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><blockquote>
+<ol>
+<li> <strong>为什么可以先唤醒线程后阻塞线程？</strong></li>
+</ol>
+</blockquote>
+<p><code>unpark()</code> 方法并不是直接唤醒阻塞的线程，而是相当于给线程发放了一个万能的通行证，只要有这个通行证在，线程在遇到阻塞时，直接消费这个通行证就可以通过而不会被阻塞。</p>
+<blockquote>
+<ol start="2">
+<li> <strong>为什么唤醒两次后阻塞两次，但最终结果还会阻塞线程？</strong></li>
+</ol>
+</blockquote>
+<p>因为一个线程持有通行证的最大数量只能为 1，所以调用两次 <code>unpark()</code> 和调用一次 <code>unpark()</code> 效果一样，最多只能获得一个通行证。而调用两次 <code>park()</code> 则会消费两个通行证，证不够就不能放行。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -3614,266 +3823,6 @@
 </li>
 </ol>
 <h2 id="4-3-就近原则"><a href="#4-3-就近原则" class="headerlink" title="4.3    就近原则"></a>4.3    就近原则</h2><p>在作用域范围内，如果存在多个同名的变量，某个变量 A 在引用  这多个同名变量的时候真正引用的是离 A ，之间的引用距离越近的</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/06/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式——单例模式</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-06-28 13:01:17 / Modified: 22:47:57" itemprop="dateCreated datePublished" datetime="2021-06-28T13:01:17+08:00">2021-06-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="1-什么是单例模式？"><a href="#1-什么是单例模式？" class="headerlink" title="1    什么是单例模式？"></a>1    什么是单例模式？</h1><blockquote>
-<p>  单例模式；Singleton</p>
-</blockquote>
-<ul>
-<li>Singleton：在 Java 中即指单例设计模式，它是软件开发中最常用的设计模式之一。<ul>
-<li>  单：唯一</li>
-<li>  例：实例</li>
-</ul>
-</li>
-<li>  单例设计模式，即某个类在整个系统中只能有一个实例对象可被获取和使用。</li>
-<li>例如：代表JVM运行环境的Runtime类</li>
-</ul>
-<h1 id="2-要点"><a href="#2-要点" class="headerlink" title="2    要点"></a>2    要点</h1><blockquote>
-<ol>
-<li> <strong>怎样保证某个类只能有一个实例？</strong></li>
-</ol>
-</blockquote>
-<ol>
-<li> 将构造方法私有化。</li>
-<li> 将实例对象的创建提前到类加载阶段。</li>
-</ol>
-<p>分析：</p>
-<ul>
-<li>  将构造方法私有化，即不对外提供创建该类的实例对象的入口。那么创建实例对象的时机只能提前到类加载阶段。</li>
-<li>  一个类只能被加载一次，每个类 <code>&lt;clinit&gt;()</code> 方法只会被执行一次，只要在 <code>&lt;clinit&gt;()</code> 方法中执行创建对象的行为，该对象就一定会被创建出来一个，且我们已经关闭了外部创建该对象的入口，那么该对象就有且仅有一个了。</li>
-<li>  <code>&lt;clinit&gt;()</code> 方法只会执行类中的静态变量赋值和静态代码块，所以要创建的对象必须通过一个静态变量来保存。</li>
-</ul>
-<blockquote>
-<ol start="2">
-<li> <strong>该类必须向整个系统提供这个实例。</strong></li>
-</ol>
-</blockquote>
-<ol>
-<li> 直接对外暴露该对象在内存中的地址。</li>
-<li> 通过一个静态的 get() 方法获取该对象实例。</li>
-</ol>
-<hr>
-<h1 id="3-几种单例模式的常见形式"><a href="#3-几种单例模式的常见形式" class="headerlink" title="3    几种单例模式的常见形式"></a>3    几种单例模式的常见形式</h1><p><strong>饿汉式</strong></p>
-<ul>
-<li>  介绍：不管该单例对象在程序运行中是否会被使用，都会创建该对象。</li>
-<li>  优点：不存在线程问题。因为创建对象是在类加载阶段进行的，这个阶段不会存在线程安全问题。</li>
-<li>几种实现方式：<ol>
-<li> 直接实例化饿汉式（简单直观）</li>
-<li> 枚举式（最简单）</li>
-<li> 静态代码块饿汉式（适合较为复杂实例化场景）</li>
-</ol>
-</li>
-</ul>
-<p><strong>懒汉式</strong></p>
-<ul>
-<li>  介绍：程序运行时不会立即创建对象，知道该单例对象要被使用时才创建对象</li>
-<li>几种实现方式：<ol>
-<li> 线程不安全（适用于单线程）</li>
-<li> 线程安全（适用于多线程）</li>
-<li> 静态内部类形式（适用于多线程）</li>
-</ol>
-</li>
-</ul>
-<p><strong>小结</strong></p>
-<ul>
-<li>  如果是饿汉式，枚举形式最简单</li>
-<li>  如果是懒汉式，静态内部类形式最简单</li>
-</ul>
-<hr>
-<h1 id="4-代码"><a href="#4-代码" class="headerlink" title="4    代码"></a>4    代码</h1><h2 id="4-1-饿汉式"><a href="#4-1-饿汉式" class="headerlink" title="4.1    饿汉式"></a>4.1    饿汉式</h2><h3 id="4-1-1-基础款"><a href="#4-1-1-基础款" class="headerlink" title="4.1.1    基础款"></a>4.1.1    基础款</h3><ul>
-<li>  单例类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:10</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 饿汉式：</span></span><br><span class="line"><span class="comment"> *  在类初始化时直接创建实例对象，不管程序运行中是否会用到这个对象</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  1、将构造方法私有化</span></span><br><span class="line"><span class="comment"> *  2、将创建对象的动作提前到类加载阶段</span></span><br><span class="line"><span class="comment"> *  3、提供外部访问该单例对象的入口</span></span><br><span class="line"><span class="comment"> *      3.1 可以直接对外暴露类变量</span></span><br><span class="line"><span class="comment"> *      3.2 也可以选择对外暴露一个 get() 方法。</span></span><br><span class="line"><span class="comment"> *      3.3 这里我把这两个入口都暴露了。</span></span><br><span class="line"><span class="comment"> *  4、强调这是一个单例对象，我们可以用 final 修饰</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton01</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将创建对象的动作提前到类加载阶段（使用 final 修饰符用于声明该类是一个单例对象，不能被修改）</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Singleton01 INSTANCE = <span class="keyword">new</span> Singleton01();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  将构造方法私有化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton01</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提供外部访问单例对象的入口</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Singleton01 <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  测试类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:19</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试：分别获取两个单例对象，查看这两个对象是否相同，如果相同则证明获取的同一个对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonTest01</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Singleton01 instance1 = Singleton01.INSTANCE;</span><br><span class="line">        Singleton01 instance2 = Singleton01.INSTANCE.getInstance();</span><br><span class="line"></span><br><span class="line">        System.out.println(instance1 == instance2);     <span class="comment">// 运行结果为：true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h3 id="4-1-2-枚举式"><a href="#4-1-2-枚举式" class="headerlink" title="4.1.2    枚举式"></a>4.1.2    枚举式</h3><ul>
-<li>  单例类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:24</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  1、枚举类型，表示该类对应的实例对象是有限的几个。</span></span><br><span class="line"><span class="comment"> *  2、我们可以限定为一个，就成了单例</span></span><br><span class="line"><span class="comment"> *  3、枚举重写了类的 toString() 方法，使用 PrintStream#print() 方法打印出来的字符串就是举对象的名字</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">Singleton02</span> </span>&#123;</span><br><span class="line">    INSTANCE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  测试类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:19</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试：分别获取两个单例对象，查看这两个对象是否相同，如果相同则证明获取的同一个对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonTest02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Singleton02 instance1 = Singleton02.INSTANCE;</span><br><span class="line">        Singleton02 instance2 = Singleton02.INSTANCE;</span><br><span class="line"></span><br><span class="line">        System.out.println(instance1);  <span class="comment">// 运行结果为：INSTANCE</span></span><br><span class="line">        System.out.println(instance1 == instance2);     <span class="comment">// 运行结果为：true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h3 id="4-1-3-静态代码块式（复杂场景使用）"><a href="#4-1-3-静态代码块式（复杂场景使用）" class="headerlink" title="4.1.3    静态代码块式（复杂场景使用）"></a>4.1.3    静态代码块式（复杂场景使用）</h3><ul>
-<li><p>  使用静态代码块创建单例对象与直接使用静态变量保存单例对象无本质上的区别，只不过如果某个单例对象的构造方法足够复杂的话，将全部的代码直接写在构造函数中可读性较差，可以借助静态代码块提高程序的可读性。</p>
-</li>
-<li><p><strong>设定一个复杂的场景</strong>：</p>
-<ol>
-<li> 某个单例的构造函数是有参的。</li>
-<li> 并且这个参数是一个变量，该变量的具体值要从配置文件中读取。</li>
-<li> 那么显然，我们的构造函数比较复杂，我们就可以将获取构造器需要的参数这一步骤放在静态代码块中执行。</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li>  单例类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:10</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton03</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Singleton03 INSTANCE;</span><br><span class="line">    <span class="keyword">private</span> String info;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 静态代码块，只会在类加载的时候执行一次。将创建单例对象的动作放到静态代码块中（即将创建单例对象的动作提前到类加载阶段）</span></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">/*  指定从当前类的根目录下读取 single.properties 配置文件，并且规定该配置文件中应该存在 key 为 name 的值   */</span></span><br><span class="line">            Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">            properties.load(Singleton03.class.getClassLoader().getResourceAsStream(<span class="string">&quot;single.properties&quot;</span>));</span><br><span class="line">            String info = properties.getProperty(<span class="string">&quot;info&quot;</span>);</span><br><span class="line">            <span class="comment">/*  获取到配置文件中指定 key 对应的 value，并作为当前类单例对象的构造方法的参数创建该单例对象  */</span></span><br><span class="line">            INSTANCE = <span class="keyword">new</span> Singleton03(info);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  将构造方法私有化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton03</span><span class="params">(String info)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.info = info;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提供外部访问单例对象的入口</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Singleton03 <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> info;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setInfo</span><span class="params">(String info)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.info = info;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Singleton03&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;info=&#x27;&quot;</span> + info + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  配置文件：<code>src/single.properties</code></li>
-</ul>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># key=value</span></span><br><span class="line"><span class="attr">info</span>=<span class="string">Singleton</span></span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>  测试类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:19</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试：分别获取两个单例对象，查看这两个对象是否相同，如果相同则证明获取的同一个对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonTest03</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Singleton03 instance1 = Singleton03.INSTANCE;</span><br><span class="line">        Singleton03 instance2 = Singleton03.INSTANCE.getInstance();</span><br><span class="line"></span><br><span class="line">        System.out.println(instance1);  <span class="comment">// 输出结果：Singleton03&#123;info=&#x27;Singleton&#x27;&#125;</span></span><br><span class="line">        System.out.println(instance1 == instance2);     <span class="comment">// 运行结果为：true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h2 id="4-2-懒汉式"><a href="#4-2-懒汉式" class="headerlink" title="4.2    懒汉式"></a>4.2    懒汉式</h2><p><strong>注意事项：</strong></p>
-<ul>
-<li>  <strong>在使用懒汉式的设计模式创建单例对象时，引用单例对象的静态变量就不合适公有化了。</strong>因为在懒汉式单例设计模式中，该对象只有在调用静态方法 <code>getInstance()</code> 方法时才会被创建，如果在没有创建对象之前就直接调用该属性则结果一定为空，这是不合适的。</li>
-</ul>
-<h3 id="4-2-1-单线程款"><a href="#4-2-1-单线程款" class="headerlink" title="4.2.1    单线程款"></a>4.2.1    单线程款</h3><ul>
-<li>  单例类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:10</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 懒汉式：</span></span><br><span class="line"><span class="comment"> *  延迟创建这个实例对象的时间，在需要使用时再创建。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  1、将构造方法私有化</span></span><br><span class="line"><span class="comment"> *  2、用一个静态变量保存这个唯一的单例对象</span></span><br><span class="line"><span class="comment"> *  3、提供外部访问该单例对象的入口</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton04</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton04 INSTANCE = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法私有化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton04</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供一个方法，当该方法被调用时才会创建单例对象（懒汉式）</span></span><br><span class="line"><span class="comment">     *  当某个线程调用了 Singleton04.getInstance() 方法时，</span></span><br><span class="line"><span class="comment">     *      * 若该单例对象不存在，则创建</span></span><br><span class="line"><span class="comment">     *      * 若该单例对象存在，则返回</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton04 <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == INSTANCE)&#123;</span><br><span class="line">            INSTANCE = <span class="keyword">new</span> Singleton04();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>  测试类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:19</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试：分别获取两个单例对象，查看这两个对象是否相同，如果相同则证明获取的同一个对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonTest04</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Singleton04 instance1 = Singleton04.getInstance();</span><br><span class="line">        Singleton04 instance2 = Singleton04.getInstance();</span><br><span class="line"></span><br><span class="line">        System.out.println(instance1 == instance2);     <span class="comment">// 运行结果为：true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>  缺点：上述代码，在单线程下测试是完全正确的，但是在多线程下是线程不安全的，无法保证只会创建出来一个对象。</li>
-</ul>
-<h4 id="线程不安全测试："><a href="#线程不安全测试：" class="headerlink" title="线程不安全测试："></a>线程不安全测试：</h4><ol>
-<li> 修改单例类的代码</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:10</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton04</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton04 INSTANCE = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法私有化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton04</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton04 <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == INSTANCE)&#123;</span><br><span class="line">            <span class="comment">// 此处是线程不安全的，如果有多个线程同时进入，则会创建多个 INSTANCE 对象，就不能保证单例对象的唯一性了</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>); <span class="comment">/* 让每个线程进入的线程都先都睡眠 1000ms*/</span></span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            INSTANCE = <span class="keyword">new</span> Singleton04();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li> 修改测试类代码</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:19</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试：分别获取两个单例对象，查看这两个对象是否相同，如果相同则证明获取的同一个对象</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      该单例对象在单线程环境下不会有任何问题，但是在多线程环境下运行，则是线程不安全的</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonTest04_02</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  创建线程的任务执行体  */</span></span><br><span class="line">        Callable&lt;Singleton04&gt; callable = <span class="keyword">new</span> Callable&lt;Singleton04&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Singleton04 <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> Singleton04.getInstance();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  使用线程池创建 2 个子线程，并启动子线程执行指定的任务，得到任务的返回结果 */</span></span><br><span class="line">        ExecutorService es = Executors.newFixedThreadPool(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        Future&lt;Singleton04&gt; future1 = es.submit(callable);</span><br><span class="line">        Future&lt;Singleton04&gt; future2 = es.submit(callable);</span><br><span class="line"></span><br><span class="line">        Singleton04 instance1 = future1.get();</span><br><span class="line">        Singleton04 instance2 = future2.get();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        System.out.println(instance1 == instance2);     <span class="comment">// 运行结果为：false</span></span><br><span class="line"></span><br><span class="line">        es.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h3 id="4-2-1-多线程款"><a href="#4-2-1-多线程款" class="headerlink" title="4.2.1    多线程款"></a>4.2.1    多线程款</h3><ul>
-<li>  单例类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:10</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  DCL单例（Double Checked Lock Singleton）——双重校验锁单例</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton05</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton05 INSTANCE = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法私有化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton05</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton05 <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == INSTANCE)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>); <span class="comment">/* 让每个线程进入的线程都先都睡眠 1000ms，用于模拟多线程同时进入*/</span></span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 允许多个线程进入</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton05.class)&#123;</span><br><span class="line">                <span class="comment">// 双重校验——DCL单例（Double Checked Lock Singleton）</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">null</span> == INSTANCE)&#123;</span><br><span class="line">                    INSTANCE = <span class="keyword">new</span> Singleton05();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  测试类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:19</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 测试：分别获取两个单例对象，查看这两个对象是否相同，如果相同则证明获取的同一个对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonTest05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  创建线程的任务执行体  */</span></span><br><span class="line">        Callable&lt;Singleton05&gt; callable = <span class="keyword">new</span> Callable&lt;Singleton05&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Singleton05 <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> Singleton05.getInstance();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*  使用线程池创建 2 个子线程，并启动子线程执行指定的任务，得到任务的返回结果 */</span></span><br><span class="line">        ExecutorService es = Executors.newFixedThreadPool(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        Future&lt;Singleton05&gt; future1 = es.submit(callable);</span><br><span class="line">        Future&lt;Singleton05&gt; future2 = es.submit(callable);</span><br><span class="line"></span><br><span class="line">        Singleton05 instance1 = future1.get();</span><br><span class="line">        Singleton05 instance2 = future2.get();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        System.out.println(instance1 == instance2);     <span class="comment">// 运行结果为：true</span></span><br><span class="line"></span><br><span class="line">        es.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="4-2-1-多线程款简化版：静态内部类形式"><a href="#4-2-1-多线程款简化版：静态内部类形式" class="headerlink" title="4.2.1    多线程款简化版：静态内部类形式"></a>4.2.1    多线程款简化版：静态内部类形式</h3><ul>
-<li>  单例类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:10</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  1、静态内部类不会自动随着外部类的加载和初始化而初始化，它是需要单独去加载和初始化的。</span></span><br><span class="line"><span class="comment"> *  2、因为单例对象是在内部类加载和初始化时创建的，因此线程是安全的。</span></span><br><span class="line"><span class="comment"> *  3、内部类只有在被使用时，才会被加载，这时候才会创建 INSTANCE 对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton06</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法私有化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton06</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Inner</span></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> Singleton06 INSTANCE = <span class="keyword">new</span> Singleton06();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton06 <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Inner.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>  测试类</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.javase.singleton;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/6/28 20:19</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 测试：分别获取两个单例对象，查看这两个对象是否相同，如果相同则证明获取的同一个对象</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonTest06</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 1、Singleton06.getInstance() 方法被调用时，才会去加载内部类；</span></span><br><span class="line"><span class="comment">        * 2、内部类加载的时候，才会去创建 INSTANCE 这个单例对象</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line">        Singleton06 instance1 = Singleton06.getInstance();</span><br><span class="line">        Singleton06 instance2 = Singleton06.getInstance();</span><br><span class="line">        System.out.println(instance1 == instance2);     <span class="comment">// 运行结果为：true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
 
       
     </div>
