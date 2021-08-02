@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="1    什么是JVM​        JVM 只是一个概念，而 Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode) 则是 JVM 的一个落地产品，HotSpot 是 Orecle平台默认的 Java 虚拟机。常见的 JVM 的落地产品还有：JRockit、J9 等。 1.1    HotSpot​        在装有">
+<meta name="description" content="什么是JVM​        JVM 只是一个概念，而 Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode) 则是 JVM 的一个落地产品，HotSpot 是 Orecle 平台默认的 Java 虚拟机。常见的 JVM 的落地产品还有：JRockit、J9 等。 1.1    HotSpot​        在装有JDK的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM体系结构">
 <meta property="og:url" content="http://example.com/2021/04/16/JVM%E5%86%85%E5%AD%98/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1    什么是JVM​        JVM 只是一个概念，而 Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode) 则是 JVM 的一个落地产品，HotSpot 是 Orecle平台默认的 Java 虚拟机。常见的 JVM 的落地产品还有：JRockit、J9 等。 1.1    HotSpot​        在装有">
+<meta property="og:description" content="什么是JVM​        JVM 只是一个概念，而 Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode) 则是 JVM 的一个落地产品，HotSpot 是 Orecle 平台默认的 Java 虚拟机。常见的 JVM 的落地产品还有：JRockit、J9 等。 1.1    HotSpot​        在装有JDK的">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/04/16/JVM%E5%86%85%E5%AD%98/image-20210416102603356.png">
 <meta property="og:image" content="http://example.com/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC01%E7%AB%A0_Java%E8%AF%AD%E8%A8%80%E7%9A%84%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%80%A7.jpg">
@@ -41,7 +41,7 @@
 <meta property="og:image" content="http://example.com/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E8%8B%B1-1621267020283.jpg">
 <meta property="og:image" content="http://example.com/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E4%B8%AD-1621267020284.jpg">
 <meta property="article:published_time" content="2021-04-16T14:25:39.000Z">
-<meta property="article:modified_time" content="2021-06-10T09:29:18.812Z">
+<meta property="article:modified_time" content="2021-08-02T13:21:35.110Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/04/16/JVM%E5%86%85%E5%AD%98/image-20210416102603356.png">
@@ -158,7 +158,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFJVM"><span class="nav-number">1.</span> <span class="nav-text">1    什么是JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-HotSpot"><span class="nav-number">1.1.</span> <span class="nav-text">1.1    HotSpot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Java%E2%80%94%E2%80%94%E8%B7%A8%E5%B9%B3%E5%8F%B0%E7%9A%84%E8%AF%AD%E8%A8%80"><span class="nav-number">1.2.</span> <span class="nav-text">1.2    Java——跨平台的语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-JVM%E2%80%94%E2%80%94%E8%B7%A8%E8%AF%AD%E8%A8%80%E7%9A%84%E5%B9%B3%E5%8F%B0"><span class="nav-number">1.3.</span> <span class="nav-text">1.3    JVM——跨语言的平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">1.4.</span> <span class="nav-text">字节码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%B7%B7%E5%90%88%E7%BC%96%E7%A8%8B"><span class="nav-number">1.5.</span> <span class="nav-text">多语言混合编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">1.6.</span> <span class="nav-text">虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">1.7.</span> <span class="nav-text">Java 虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.8.</span> <span class="nav-text">JVM 的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E7%9A%84%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84"><span class="nav-number">1.9.</span> <span class="nav-text">JVM 的整体结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-Loader-Subsystem"><span class="nav-number">1.9.1.</span> <span class="nav-text">Class Loader Subsystem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Runtime-Data-Area"><span class="nav-number">1.9.2.</span> <span class="nav-text">Runtime Data Area</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Execution-Engine"><span class="nav-number">1.9.3.</span> <span class="nav-text">Execution Engine</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E4%BB%A3%E7%A0%81%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.10.</span> <span class="nav-text">Java 代码的执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E7%9A%84%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.11.</span> <span class="nav-text">JVM 的架构模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">1.12.</span> <span class="nav-text">JVM 的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="nav-number">1.12.1.</span> <span class="nav-text">虚拟机的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="nav-number">1.12.2.</span> <span class="nav-text">虚拟机的执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E9%80%80%E5%87%BA"><span class="nav-number">1.12.3.</span> <span class="nav-text">虚拟机的退出</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1%E3%80%81%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">1、内存结构概述</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFJVM"><span class="nav-number">1.</span> <span class="nav-text">什么是JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-HotSpot"><span class="nav-number">1.1.</span> <span class="nav-text">1.1    HotSpot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Java%E2%80%94%E2%80%94%E8%B7%A8%E5%B9%B3%E5%8F%B0%E7%9A%84%E8%AF%AD%E8%A8%80"><span class="nav-number">1.2.</span> <span class="nav-text">1.2    Java——跨平台的语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-JVM%E2%80%94%E2%80%94%E8%B7%A8%E8%AF%AD%E8%A8%80%E7%9A%84%E5%B9%B3%E5%8F%B0"><span class="nav-number">1.3.</span> <span class="nav-text">1.3    JVM——跨语言的平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">1.4.</span> <span class="nav-text">字节码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%B7%B7%E5%90%88%E7%BC%96%E7%A8%8B"><span class="nav-number">1.5.</span> <span class="nav-text">多语言混合编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">1.6.</span> <span class="nav-text">虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="nav-number">1.7.</span> <span class="nav-text">Java 虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.8.</span> <span class="nav-text">JVM 的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E7%9A%84%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84"><span class="nav-number">1.9.</span> <span class="nav-text">JVM 的整体结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Class-Loader-Subsystem"><span class="nav-number">1.9.1.</span> <span class="nav-text">Class Loader Subsystem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Runtime-Data-Area"><span class="nav-number">1.9.2.</span> <span class="nav-text">Runtime Data Area</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Execution-Engine"><span class="nav-number">1.9.3.</span> <span class="nav-text">Execution Engine</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E4%BB%A3%E7%A0%81%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.10.</span> <span class="nav-text">Java 代码的执行流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E7%9A%84%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.11.</span> <span class="nav-text">JVM 的架构模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">1.12.</span> <span class="nav-text">JVM 的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="nav-number">1.12.1.</span> <span class="nav-text">虚拟机的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="nav-number">1.12.2.</span> <span class="nav-text">虚拟机的执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E9%80%80%E5%87%BA"><span class="nav-number">1.12.3.</span> <span class="nav-text">虚拟机的退出</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">内存结构概述</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -171,13 +171,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -251,7 +251,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-06-10 17:29:18" itemprop="dateModified" datetime="2021-06-10T17:29:18+08:00">2021-06-10</time>
+        <time title="Modified: 2021-08-02 21:21:35" itemprop="dateModified" datetime="2021-08-02T21:21:35+08:00">2021-08-02</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -273,7 +273,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="1-什么是JVM"><a href="#1-什么是JVM" class="headerlink" title="1    什么是JVM"></a>1    什么是JVM</h1><p>​        JVM 只是一个概念，而 <code>Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)</code> 则是 JVM 的一个落地产品，HotSpot 是 Orecle平台默认的 Java 虚拟机。常见的 JVM 的落地产品还有：JRockit、J9 等。</p>
+        <h1 id="什么是JVM"><a href="#什么是JVM" class="headerlink" title="什么是JVM"></a>什么是JVM</h1><p>​        JVM 只是一个概念，而 <code>Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)</code> 则是 JVM 的一个落地产品，HotSpot 是 Orecle 平台默认的 Java 虚拟机。常见的 JVM 的落地产品还有：JRockit、J9 等。</p>
 <h2 id="1-1-HotSpot"><a href="#1-1-HotSpot" class="headerlink" title="1.1    HotSpot"></a>1.1    HotSpot</h2><p>​        在装有JDK的电脑上，输入 <code>java -version</code> 命令，会展示如下信息：</p>
 <p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/image-20210416102603356.png"></p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ java -version</span><br><span class="line">java version <span class="string">&quot;1.8.0_141&quot;</span>	</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_141-b15)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.162-b12, mixed mode)</span><br></pre></td></tr></table></figure>
@@ -409,7 +409,7 @@
 </ol>
 <p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/JVM%E5%86%85%E5%AD%98%5C%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E8%8B%B1.jpg"></p>
 <hr>
-<h1 id="1、内存结构概述"><a href="#1、内存结构概述" class="headerlink" title="1、内存结构概述"></a>1、内存结构概述</h1><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E7%AE%80%E5%9B%BE-1621267020283.jpg" alt="第02章_JVM架构-简图"></p>
+<h1 id="内存结构概述"><a href="#内存结构概述" class="headerlink" title="内存结构概述"></a>内存结构概述</h1><p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E7%AE%80%E5%9B%BE-1621267020283.jpg" alt="第02章_JVM架构-简图"></p>
 <p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E8%8B%B1-1621267020283.jpg" alt="第02章_JVM架构-英"></p>
 <p><img src="/2021/04/16/JVM%E5%86%85%E5%AD%98/%E7%AC%AC02%E7%AB%A0_JVM%E6%9E%B6%E6%9E%84-%E4%B8%AD-1621267020284.jpg" alt="第02章_JVM架构-中"></p>
 
