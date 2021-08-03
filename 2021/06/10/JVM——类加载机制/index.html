@@ -32,14 +32,13 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/ClassLoader.png">
 <meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png">
-<meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%AC%AC02%E7%AB%A0_%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B-1621267020284.jpg">
 <meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701093804902.png">
-<meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB-1621267020284.png">
+<meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/类加载器分类-1621267020284.png">
 <meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701102620816.png">
 <meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701103654441.png">
 <meta property="og:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6-1621267020284.png">
 <meta property="article:published_time" content="2021-06-10T09:26:39.000Z">
-<meta property="article:modified_time" content="2021-07-01T03:23:05.074Z">
+<meta property="article:modified_time" content="2021-08-03T04:24:41.577Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/ClassLoader.png">
@@ -169,7 +168,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -249,7 +248,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-01 11:23:05" itemprop="dateModified" datetime="2021-07-01T11:23:05+08:00">2021-07-01</time>
+        <time title="Modified: 2021-08-03 12:24:41" itemprop="dateModified" datetime="2021-08-03T12:24:41+08:00">2021-08-03</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -298,29 +297,28 @@
 <li>除了以上7种情况，其它使用 Java 类的方式都被看做是 <strong>类的被动使用</strong>，都<strong>不会导致类的初始化</strong>。</li>
 </ul>
 <hr>
-<h2 id="1-2-类加载器"><a href="#1-2-类加载器" class="headerlink" title="1.2    类加载器"></a>1.2    类加载器</h2><p>类加载器（ClassLoader）负责从文件系统或网络中加载二进制字节流（如<code>.class</code>二进制字节码文件）到方法区中，至于该二进制字节流是否可以运行，则由执行引擎（Execution Engine）决定。</p>
+<h2 id="1-2-类加载器"><a href="#1-2-类加载器" class="headerlink" title="1.2    类加载器"></a>1.2    类加载器</h2><p>类加载器（ClassLoader）负责从文件系统或网络中加载二进制字节流（如<code>.class</code>二进制字节码文件）<strong>到方法区中</strong>，至于该二进制字节流是否可以运行，则由执行引擎（Execution Engine）决定。</p>
 <p>加载到 JVM 内存中的类信息存放在方法区。除了类本身的信息外，方法区中还会存放运行时常量池信息，可能还包括字符串字面量和数字常量（这部分常量信息是 Class 文件中常量池部分的内存映射）。</p>
 <blockquote>
-<p>运行时常量池对应 <code>.class</code> 文件中的常量池，通过对字节码文件的反编译我们发现字节码文件中存在常量池。常量池在程序运行时首先会被加载到内存中，这时候就变成了运行时常量池。</p>
+<p>运行时常量池对应 <code>.class</code> 文件中的常量池，通过对字节码文件的反编译我们发现字节码文件中存在常量池。常量池在程序运行时会被加载到方法区的运行时常量池中。</p>
 </blockquote>
-<p>类在被加载到内存中时依赖于运行时常量池（类中定义了的常量、存在的符号引用都保存在常量值中，在加载类到内存中时就保存在运行时常量池中了）。</p>
+<p>类在被加载到内存中时依赖于运行时常量池（类中定义的常量、存在的符号字面量等都保存在常量池中，在加载类到内存中时就保存在运行时常量池中了）。</p>
 <h3 id="1-2-1-类加载器-ClassLoader-对象"><a href="#1-2-1-类加载器-ClassLoader-对象" class="headerlink" title="1.2.1    类加载器 ClassLoader 对象"></a>1.2.1    类加载器 ClassLoader 对象</h3><ol>
 <li><code>.class</code> 字节码文件一般保存在本地硬盘上，可以理解为实例对象的模板，这个模板首先要加载到虚拟机中，然后在创建实例对象的时候才能根据这个模板创建出 n 个实例对象。</li>
 <li><code>.class</code> 字节码文件被加载到虚拟机中时，会在方法区中划分一块内存保存这部分类数据，我们称之为<strong>DNA 元数据模板</strong>。</li>
 <li>从 <code>.class字节码文件 --&gt; 元数据模板</code> 的过程中，需要一个运输工具承担一个快递员的角色完成这一过程，这个工具就是<strong>类加载器 （Class Loader）</strong>。</li>
 </ol>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/ClassLoader.png" alt="ClassLoader"></p>
-<p>–</p>
+<hr>
 <h1 id="2-类的生命周期"><a href="#2-类的生命周期" class="headerlink" title="2    类的生命周期"></a>2    类的生命周期</h1><h2 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1    概述"></a>2.1    概述</h2><p>一个类型从被加载到虚拟机内存中开始，到卸载出内存为止。整个生命周期将会经历七个阶段。这七个阶段发生的顺序如下图所示。</p>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="类的生命周期"></p>
 <p>这七个阶段按照生命周期可分为：<strong>类加载阶段 –&gt; 类使用阶段 –&gt; 类卸载阶段</strong>。类加载阶段中的验证、准备、解析三个阶段合称为连接（Linking）。</p>
 <p>其中，加载、验证、准备、初始化和卸载这五个阶段的顺序是可以确定的，类型的加载过程必须按部就班地按照这种顺序开始。而解析阶段则不一定（解析阶段主要负责将符号引用转换为直接引用），它在某些情况下可以在初始化阶段之后再开始，这是为了支持 Java 语言的运行时绑定特性。</p>
-<p>// TODO：图片移动到初始化阶段</p>
-<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%AC%AC02%E7%AB%A0_%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B-1621267020284.jpg" alt="第02章_类的加载过程"></p>
+<hr>
 <h2 id="2-2-类加载阶段"><a href="#2-2-类加载阶段" class="headerlink" title="2.2    类加载阶段"></a>2.2    类加载阶段</h2><h3 id="阶段1：Loading"><a href="#阶段1：Loading" class="headerlink" title="阶段1：Loading"></a>阶段1：Loading</h3><p>“加载（Loading）”是整个“类加载（Class_Loading）”过程中的一个阶段，这两个概念比较容易混淆。</p>
 <ol>
 <li>通过类的全限定类名获取定义此类的二进制字节流。<ul>
-<li>  说明：字节码文件以二进制格式保存，通过IO方式将<code>.class</code>字节码文件中的内容传输到JVM内存中以字节流形式保存。</li>
+<li>  说明：字节码文件以二进制格式保存，通过IO方式将<code>.class</code>字节码文件中的内容以字节流的形式传输到JVM内存中。</li>
 </ul>
 </li>
 <li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。<ul>
@@ -403,7 +401,7 @@
 <blockquote>
 <p>  <strong>方法区只是一个逻辑上的区域</strong></p>
 </blockquote>
-<p>从概念上讲，这些类变量所使用的内存都应该在方法区中进行分配。但是必须要注意方法区只是一个逻辑概念，在 JDK8 之前，HotSpot 用永久代来实现方法区；从 JDK8 开始，类变量则是会随着 Class 对象一起存放在 Java 堆中，这时候“类变量在方法区”就完全是一种对逻辑概念的表述了。因为 JDK8 之后，方法区是用元空间实现的，但是类变量也没有保存在元空间中。</p>
+<p>从概念上讲，这些类变量所使用的内存都应该在方法区中进行分配。但是必须要注意方法区只是一个逻辑概念，在 JDK8 之前，HotSpot 用永久代来实现方法区；从 JDK8 开始，类变量则是会随着 Class 对象一起存放在 Java 堆中，这时候“类变量在方法区”就完全是一种对逻辑概念的表述了。因为 JDK8 之后，方法区是用元空间实现的，但是类变量和Class对象也没有保存在元空间中。</p>
 <hr>
 <h3 id="阶段4：Resolve"><a href="#阶段4：Resolve" class="headerlink" title="阶段4：Resolve"></a>阶段4：Resolve</h3><p><strong>解析阶段是虚拟机将常量池内的符号引用转换为直接引用的过程</strong>。</p>
 <blockquote>
@@ -424,7 +422,7 @@
 <li><p>  符号引用是一串字面量，所以被保存在常量池中。</p>
 </li>
 </ul>
-<p> ​        <em>在 Java 中，一个类会被编译成一个 <code>.class</code> 文件；在编译时，还不能确定类中引用到的对象的实际地址，因此只能用符号引用来代替。比如 com.example.People 引用了 com.example.Sleep 这个类，在编译时 People 类是不知道 Sleep 这个类或者这个类对应的实例在内存中的实际地址的，因此只能用符号引用 com.example.Sleep（假设是这个，当然实际上是由类似于 CONSTANT_Class_info 的常量来表示的）来表示 Sleep 的地 址。</em></p>
+<p> ​        <em>在 Java 中，一个类会被编译成一个 <code>.class</code> 文件；在编译时，还不能确定类中引用到的对象的实际地址，因此只能用符号引用来代替。比如 com.example.People 引用了 com.example.Sleep 这个类，在编译时 People 类是不知道 Sleep 这个类或者这个类对应的实例在内存中的实际地址的，因此只能用符号引用 com.example.Sleep（假设是这个，当然实际上是由类似于 CONSTANT_Class_info 的常量来表示的）来表示 Sleep 的地址。</em></p>
 </li>
 <li><p><strong>直接引用（Direct Reference）</strong>：</p>
 <ul>
@@ -451,12 +449,12 @@
 </li>
 <li><p>  <strong><code>&lt;clinit&gt;()</code> 方法与类的构造器方法不同。</strong>在 JVM 视角中，类的构造方法是 <code>&lt;init&gt;()</code> 方法。</p>
 </li>
-<li><p>与 <code>&lt;init&gt;()</code> 方法相比，<code>&lt;clinit&gt;()</code> 方法不需要显式地调用父类的<code>&lt;clinit&gt;()</code> 方法，Java 虚拟机会保证在子类的 <code>&lt;clinit&gt;()</code> 方法执行之前，父类的<code>&lt;clinit&gt;()</code> 方法已经执行完毕。因此在 Java 虚拟机中第一个被执行的 <code>&lt;clinit&gt;()</code> 方法的类型肯定是 java.lang.Object。</p>
-<p>  ​    <em><code>&lt;init&gt;()</code> 方法都是需要显式地调用父类的 <code>&lt;clinit&gt;()</code> 方法的，我们通过构造方法中的 <code>super()</code> 方法区显式地调用父类的 <code>&lt;init&gt;()</code> 方法。当然 <code>spuer()</code> 方法在我们编写代码时可以省略不写，因为它是默认存在的，所以在被 javac 编译后，这个 <code>super()</code> 方法是一定存在的。</em></p>
+<li><p>与 <code>&lt;init&gt;()</code> 方法相比，<code>&lt;clinit&gt;()</code> 方法不需要显式地调用父类的<code>&lt;clinit&gt;()</code> 方法，Java <strong>虚拟机会保证在子类的 <code>&lt;clinit&gt;()</code> 方法执行之前，父类的<code>&lt;clinit&gt;()</code> 方法已经执行完毕</strong>。因此在 Java 虚拟机中第一个被执行的 <code>&lt;clinit&gt;()</code> 方法的类型肯定是 java.lang.Object。</p>
+<p>  ​    <em><code>&lt;init&gt;()</code> 方法都是需要显式地调用父类的 <code>&lt;init&gt;()</code> 方法的，我们通过构造方法中的 <code>super()</code> 方法区显式地调用父类的 <code>&lt;init&gt;()</code> 方法。当然 <code>spuer()</code> 方法在我们编写代码时可以省略不写，因为它是默认存在的，所以在被 javac 编译后，这个 <code>super()</code> 方法是一定存在的。</em></p>
 </li>
-<li><p>  由于父类的<code>&lt;clinit&gt;()</code> 方法先执行，这也就意味着父类中定义的静态语句要优先于子类中静态语句的执行。</p>
+<li><p>  由于父类的<code>&lt;clinit&gt;()</code> 方法先执行，这也就意味着<strong>父类中定义的静态语句要优先于子类中静态语句的执行</strong>。</p>
 </li>
-<li><p>  <code>&lt;clinit&gt;()</code> 方法对于类或接口来说并不是必须的，如果一个类中没有静态语句块，也没有对变量的赋值操作，那么（前端）编译期可以不为这个类生成<code>&lt;clinit&gt;()</code> 方法。</p>
+<li><p>  <code>&lt;clinit&gt;()</code> 方法对于类或接口来说并不是必须的，如果一个类中没有静态语句块，也没有对变量的赋值操作，那么（前端）编译器可以不为这个类生成<code>&lt;clinit&gt;()</code> 方法。</p>
 </li>
 </ul>
 <blockquote>
@@ -467,7 +465,7 @@
 <li>  如果多个线程同时去初始化一个类，那么只会有其中一个线程去执行这个类的<code>&lt;clinit&gt;()</code> 方法，其它线程都需要阻塞等待，直到活动线程执行完毕<code>&lt;clinit&gt;()</code> 方法。如果在一个类的<code>&lt;clinit&gt;()</code> 方法有耗时很长的操作，那么就有可能造成多个线程阻塞。</li>
 </ul>
 <blockquote>
-<p>  静态语句代码块中只能访问到定义在静态语句代码块之前的变量。定义在它之后的变量，在前面的静态语句块中可以赋值，但是不能访问。</p>
+<p>  <strong>静态语句代码块中只能访问到定义在静态语句代码块之前的变量。定义在它之后的变量，在前面的静态语句块中可以赋值，但是不能访问。</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(num);  <span class="comment">// 静态代码块中可以访问到定义在静态代码块之前的变量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -517,7 +515,12 @@
 </tr>
 </tbody></table>
 <p>站在开发人员的角度来看，类加载器的分类要更细致一些，如下图，可分为“<strong>三层类加载器</strong>”。</p>
-<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB-1621267020284.png" alt="类加载器分类"></p>
+<img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/类加载器分类-1621267020284.png" alt="类加载器分类" style="zoom: 67%;">
+
+
+
+
+
 <h3 id="3-1-1-BootStrap-ClassLoader"><a href="#3-1-1-BootStrap-ClassLoader" class="headerlink" title="3.1.1    BootStrap ClassLoader"></a>3.1.1    BootStrap ClassLoader</h3><blockquote>
 <p>  启动类加载器；引导类加载器；BootStrap ClassLoader</p>
 </blockquote>
@@ -527,7 +530,7 @@
 <li>并不继承自 <strong>java.lang.ClassLoader</strong> ，没有父类加载器。</li>
 <li>可以加载 Extension ClassLoader 和 Application ClassLoader，并指定为它们的父类加载器。</li>
 <li>出于安全考虑，BootStrap ClassLoader 只加载包名为 java、javax、sun 等开头的类。</li>
-<li>BootStrap ClassLoader 无法被 Java 程序直接引用，用户在编写自定义类加载器时，如果需要把加载请求委派给引导类加载器去处理，那么直接使用 null 代替即可。下图所示就是 java.lang.Class#getClassLoader() 方法的代码，其中的注释和代码实现都说明了以 null 值来代表引导类加载器的约定规则。</li>
+<li>BootStrap ClassLoader 无法被 Java 程序直接引用，用户在编写自定义类加载器时，如果需要把加载请求委派给引导类加载器去处理，那么直接使用 null 代替即可。下图所示就是 <strong>java.lang.Class#getClassLoader()</strong> 方法的代码，其中的注释和代码实现都说明了以 null 值来代表引导类加载器的约定规则。</li>
 </ul>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701102620816.png" alt="image-20210701102620816"></p>
 <hr>
@@ -579,10 +582,13 @@
 <li>在编写自定义的类加载器时，如果没有太过于复杂的需求，可以直接继承 <strong>URLClassLoader</strong> 类，这样可以避免自己去编写 <code>findClass()</code> 方法及其获取字节流码的方式，使自定义类加载器编写更加简洁。</li>
 </ol>
 <hr>
-<h2 id="3-2-ClassLoader"><a href="#3-2-ClassLoader" class="headerlink" title="3.2    ClassLoader"></a>3.2    ClassLoader</h2><h3 id="3-2-1-关于-ClassLoader"><a href="#3-2-1-关于-ClassLoader" class="headerlink" title="3.2.1    关于 ClassLoader"></a>3.2.1    关于 ClassLoader</h3><p>ClassLoader 类，它是一个抽象类，其后所有的类加载器都继承自 ClassLoader（不包括启动类加载器）。</p>
-<ul>
-<li>常用方法</li>
+<h2 id="3-2-ClassLoader"><a href="#3-2-ClassLoader" class="headerlink" title="3.2    ClassLoader"></a>3.2    ClassLoader</h2><h3 id="3-2-1-关于-ClassLoader"><a href="#3-2-1-关于-ClassLoader" class="headerlink" title="3.2.1    关于 ClassLoader"></a>3.2.1    关于 ClassLoader</h3><ul>
+<li>  ClassLoader 类，它是一个抽象类，声明了类加载器对象中共有的方法。</li>
+<li>  除了启动类加载器外所有的类加载器都继承自 ClassLoader。</li>
 </ul>
+<blockquote>
+<p>  <strong>常用方法：</strong></p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -596,19 +602,19 @@
 </tr>
 <tr>
 <td><code>public Class&lt;?&gt; loadClass(String name)</code></td>
-<td>加载名称为 name 的类，返回该类的 java.lang.Class 类实例</td>
+<td>加载指定名称的类，返回该类的 Class 对象实例</td>
 </tr>
 <tr>
 <td><code>protected Class&lt;?&gt; findClass(String name)</code></td>
-<td>查找名称为 name 的类，返回该类的 java.lang.Class 类实例</td>
+<td>查找指定名称的类，返回该类的 Class 对象实例</td>
 </tr>
 <tr>
 <td><code>protected final Class&lt;?&gt; findLoadedClass(String name)</code></td>
-<td>查找名称为 name 的已经被加载过的类，返回该类的 java.lang.Class 类实例</td>
+<td>查找名称为 name 的已经被加载过的类，返回该类的 Class 对象实例</td>
 </tr>
 <tr>
 <td><code>protected final Class&lt;?&gt; defineClass(byte[] b, int off, int len)</code></td>
-<td>把字节数组b中的内容转换为一个Java类，返回结果为 java.lang.Class 类的实例</td>
+<td>把字节数组b中的内容转换为一个Java类，返回该类的 Class 对象实例</td>
 </tr>
 <tr>
 <td><code>protected final void resolveClass(Class&lt;?&gt; c)</code></td>
@@ -640,14 +646,14 @@
 <li> 如果最顶级父类加载器可以完成类加载任务，就加载并返回。如果父类加载器无法完成此加载任务，下一级的子类加载器才会尝试自己去加载，这就是双亲委派模式。</li>
 </ol>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6-1621267020284.png" alt="双亲委派机制"></p>
-<p>双亲委派模型的好处就是 Java 中的类随着它的加载器一起具备了一种优先级的层次关系。例如类 java.lang.Object ，它存放在 rt.jar 中。无论哪个类加载器要加载这个类，最终都是委派给处于模型最顶端的 BootStrap ClassLoader 进行加载，因此 Object 类在程序的各种类加载环境中都能够保证是同一个类。反之，如果没有使用双亲委派模型，都由各个类加载器自行去加载的话，如果用户自己也编写了一个名为 java.lang.Object 的类，并放在程序的 ClassPath 中，那么系统中就会出现多个不同的 Object 类，Java 体系中最基础的行为也就无法保证了</p>
+<p>双亲委派模型的好处就是 Java 中的类随着它的加载器一起具备了一种优先级的层次关系。例如类 <code>java.lang.Object</code> ，它存放在 <code>rt.jar</code> 中。无论哪个类加载器要加载这个类，最终都是委派给处于模型最顶端的 <code>BootStrap ClassLoader </code>进行加载，因此 Object 类在程序的各种类加载环境中都能够保证是同一个类。反之，如果没有使用双亲委派模型，都由各个类加载器自行去加载的话，如果用户自己也编写了一个名为 <code>java.lang.Object</code> 的类，并放在程序的 ClassPath 中，那么系统中就会出现多个不同的 Object 类，Java 体系中最基础的行为也就无法保证了</p>
 <blockquote>
 <p><strong>举例</strong></p>
 </blockquote>
 <ol>
-<li> 程序运行时需要使用到 SPI 接口，SPI 接口属于核心API，需要使用双亲委派机制一直到 BootStrap_ClassLoader 中加载 rt.jar。</li>
-<li> SPI 核心类存在大量的接口，这些接口需要具体实现类实现后才能调用其中的方法。而这些方法一般都是第三方 jar 包，不属于核心API，所以就应该由 AppClassLoader 来加载。</li>
-<li> 接口是由 BootStrapClassLoader 加载的，而接口的具体实现类是由 AppClassLoader 加载的。</li>
+<li> 程序运行时需要使用到 SPI 接口，SPI 接口属于核心API，需要使用双亲委派机制一直到 <code>BootStrapClassLoader</code> 中加载 <code>rt.jar</code>。</li>
+<li> SPI 核心类存在大量的接口，这些接口需要具体实现类实现后才能调用其中的方法。而这些方法一般都是第三方 jar 包，不属于核心API，所以就应该由 <code>AppClassLoader</code> 来加载。</li>
+<li> 接口是由 <code>BootStrapClassLoader</code> 加载的，而接口的具体实现类是由 <code>ApplicationClassLoader</code> 加载的。</li>
 </ol>
 <blockquote>
 <p><strong>优势</strong></p>

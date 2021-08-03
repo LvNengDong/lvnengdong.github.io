@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -669,7 +669,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-01 11:23:05" itemprop="dateModified" datetime="2021-07-01T11:23:05+08:00">2021-07-01</time>
+        <time title="Modified: 2021-08-03 12:24:41" itemprop="dateModified" datetime="2021-08-03T12:24:41+08:00">2021-08-03</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -718,29 +718,28 @@
 <li>除了以上7种情况，其它使用 Java 类的方式都被看做是 <strong>类的被动使用</strong>，都<strong>不会导致类的初始化</strong>。</li>
 </ul>
 <hr>
-<h2 id="1-2-类加载器"><a href="#1-2-类加载器" class="headerlink" title="1.2    类加载器"></a>1.2    类加载器</h2><p>类加载器（ClassLoader）负责从文件系统或网络中加载二进制字节流（如<code>.class</code>二进制字节码文件）到方法区中，至于该二进制字节流是否可以运行，则由执行引擎（Execution Engine）决定。</p>
+<h2 id="1-2-类加载器"><a href="#1-2-类加载器" class="headerlink" title="1.2    类加载器"></a>1.2    类加载器</h2><p>类加载器（ClassLoader）负责从文件系统或网络中加载二进制字节流（如<code>.class</code>二进制字节码文件）<strong>到方法区中</strong>，至于该二进制字节流是否可以运行，则由执行引擎（Execution Engine）决定。</p>
 <p>加载到 JVM 内存中的类信息存放在方法区。除了类本身的信息外，方法区中还会存放运行时常量池信息，可能还包括字符串字面量和数字常量（这部分常量信息是 Class 文件中常量池部分的内存映射）。</p>
 <blockquote>
-<p>运行时常量池对应 <code>.class</code> 文件中的常量池，通过对字节码文件的反编译我们发现字节码文件中存在常量池。常量池在程序运行时首先会被加载到内存中，这时候就变成了运行时常量池。</p>
+<p>运行时常量池对应 <code>.class</code> 文件中的常量池，通过对字节码文件的反编译我们发现字节码文件中存在常量池。常量池在程序运行时会被加载到方法区的运行时常量池中。</p>
 </blockquote>
-<p>类在被加载到内存中时依赖于运行时常量池（类中定义了的常量、存在的符号引用都保存在常量值中，在加载类到内存中时就保存在运行时常量池中了）。</p>
+<p>类在被加载到内存中时依赖于运行时常量池（类中定义的常量、存在的符号字面量等都保存在常量池中，在加载类到内存中时就保存在运行时常量池中了）。</p>
 <h3 id="1-2-1-类加载器-ClassLoader-对象"><a href="#1-2-1-类加载器-ClassLoader-对象" class="headerlink" title="1.2.1    类加载器 ClassLoader 对象"></a>1.2.1    类加载器 ClassLoader 对象</h3><ol>
 <li><code>.class</code> 字节码文件一般保存在本地硬盘上，可以理解为实例对象的模板，这个模板首先要加载到虚拟机中，然后在创建实例对象的时候才能根据这个模板创建出 n 个实例对象。</li>
 <li><code>.class</code> 字节码文件被加载到虚拟机中时，会在方法区中划分一块内存保存这部分类数据，我们称之为<strong>DNA 元数据模板</strong>。</li>
 <li>从 <code>.class字节码文件 --&gt; 元数据模板</code> 的过程中，需要一个运输工具承担一个快递员的角色完成这一过程，这个工具就是<strong>类加载器 （Class Loader）</strong>。</li>
 </ol>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/ClassLoader.png" alt="ClassLoader"></p>
-<p>–</p>
+<hr>
 <h1 id="2-类的生命周期"><a href="#2-类的生命周期" class="headerlink" title="2    类的生命周期"></a>2    类的生命周期</h1><h2 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1    概述"></a>2.1    概述</h2><p>一个类型从被加载到虚拟机内存中开始，到卸载出内存为止。整个生命周期将会经历七个阶段。这七个阶段发生的顺序如下图所示。</p>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="类的生命周期"></p>
 <p>这七个阶段按照生命周期可分为：<strong>类加载阶段 –&gt; 类使用阶段 –&gt; 类卸载阶段</strong>。类加载阶段中的验证、准备、解析三个阶段合称为连接（Linking）。</p>
 <p>其中，加载、验证、准备、初始化和卸载这五个阶段的顺序是可以确定的，类型的加载过程必须按部就班地按照这种顺序开始。而解析阶段则不一定（解析阶段主要负责将符号引用转换为直接引用），它在某些情况下可以在初始化阶段之后再开始，这是为了支持 Java 语言的运行时绑定特性。</p>
-<p>// TODO：图片移动到初始化阶段</p>
-<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%AC%AC02%E7%AB%A0_%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B-1621267020284.jpg" alt="第02章_类的加载过程"></p>
+<hr>
 <h2 id="2-2-类加载阶段"><a href="#2-2-类加载阶段" class="headerlink" title="2.2    类加载阶段"></a>2.2    类加载阶段</h2><h3 id="阶段1：Loading"><a href="#阶段1：Loading" class="headerlink" title="阶段1：Loading"></a>阶段1：Loading</h3><p>“加载（Loading）”是整个“类加载（Class_Loading）”过程中的一个阶段，这两个概念比较容易混淆。</p>
 <ol>
 <li>通过类的全限定类名获取定义此类的二进制字节流。<ul>
-<li>  说明：字节码文件以二进制格式保存，通过IO方式将<code>.class</code>字节码文件中的内容传输到JVM内存中以字节流形式保存。</li>
+<li>  说明：字节码文件以二进制格式保存，通过IO方式将<code>.class</code>字节码文件中的内容以字节流的形式传输到JVM内存中。</li>
 </ul>
 </li>
 <li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。<ul>
@@ -823,7 +822,7 @@
 <blockquote>
 <p>  <strong>方法区只是一个逻辑上的区域</strong></p>
 </blockquote>
-<p>从概念上讲，这些类变量所使用的内存都应该在方法区中进行分配。但是必须要注意方法区只是一个逻辑概念，在 JDK8 之前，HotSpot 用永久代来实现方法区；从 JDK8 开始，类变量则是会随着 Class 对象一起存放在 Java 堆中，这时候“类变量在方法区”就完全是一种对逻辑概念的表述了。因为 JDK8 之后，方法区是用元空间实现的，但是类变量也没有保存在元空间中。</p>
+<p>从概念上讲，这些类变量所使用的内存都应该在方法区中进行分配。但是必须要注意方法区只是一个逻辑概念，在 JDK8 之前，HotSpot 用永久代来实现方法区；从 JDK8 开始，类变量则是会随着 Class 对象一起存放在 Java 堆中，这时候“类变量在方法区”就完全是一种对逻辑概念的表述了。因为 JDK8 之后，方法区是用元空间实现的，但是类变量和Class对象也没有保存在元空间中。</p>
 <hr>
 <h3 id="阶段4：Resolve"><a href="#阶段4：Resolve" class="headerlink" title="阶段4：Resolve"></a>阶段4：Resolve</h3><p><strong>解析阶段是虚拟机将常量池内的符号引用转换为直接引用的过程</strong>。</p>
 <blockquote>
@@ -844,7 +843,7 @@
 <li><p>  符号引用是一串字面量，所以被保存在常量池中。</p>
 </li>
 </ul>
-<p> ​        <em>在 Java 中，一个类会被编译成一个 <code>.class</code> 文件；在编译时，还不能确定类中引用到的对象的实际地址，因此只能用符号引用来代替。比如 com.example.People 引用了 com.example.Sleep 这个类，在编译时 People 类是不知道 Sleep 这个类或者这个类对应的实例在内存中的实际地址的，因此只能用符号引用 com.example.Sleep（假设是这个，当然实际上是由类似于 CONSTANT_Class_info 的常量来表示的）来表示 Sleep 的地 址。</em></p>
+<p> ​        <em>在 Java 中，一个类会被编译成一个 <code>.class</code> 文件；在编译时，还不能确定类中引用到的对象的实际地址，因此只能用符号引用来代替。比如 com.example.People 引用了 com.example.Sleep 这个类，在编译时 People 类是不知道 Sleep 这个类或者这个类对应的实例在内存中的实际地址的，因此只能用符号引用 com.example.Sleep（假设是这个，当然实际上是由类似于 CONSTANT_Class_info 的常量来表示的）来表示 Sleep 的地址。</em></p>
 </li>
 <li><p><strong>直接引用（Direct Reference）</strong>：</p>
 <ul>
@@ -871,12 +870,12 @@
 </li>
 <li><p>  <strong><code>&lt;clinit&gt;()</code> 方法与类的构造器方法不同。</strong>在 JVM 视角中，类的构造方法是 <code>&lt;init&gt;()</code> 方法。</p>
 </li>
-<li><p>与 <code>&lt;init&gt;()</code> 方法相比，<code>&lt;clinit&gt;()</code> 方法不需要显式地调用父类的<code>&lt;clinit&gt;()</code> 方法，Java 虚拟机会保证在子类的 <code>&lt;clinit&gt;()</code> 方法执行之前，父类的<code>&lt;clinit&gt;()</code> 方法已经执行完毕。因此在 Java 虚拟机中第一个被执行的 <code>&lt;clinit&gt;()</code> 方法的类型肯定是 java.lang.Object。</p>
-<p>  ​    <em><code>&lt;init&gt;()</code> 方法都是需要显式地调用父类的 <code>&lt;clinit&gt;()</code> 方法的，我们通过构造方法中的 <code>super()</code> 方法区显式地调用父类的 <code>&lt;init&gt;()</code> 方法。当然 <code>spuer()</code> 方法在我们编写代码时可以省略不写，因为它是默认存在的，所以在被 javac 编译后，这个 <code>super()</code> 方法是一定存在的。</em></p>
+<li><p>与 <code>&lt;init&gt;()</code> 方法相比，<code>&lt;clinit&gt;()</code> 方法不需要显式地调用父类的<code>&lt;clinit&gt;()</code> 方法，Java <strong>虚拟机会保证在子类的 <code>&lt;clinit&gt;()</code> 方法执行之前，父类的<code>&lt;clinit&gt;()</code> 方法已经执行完毕</strong>。因此在 Java 虚拟机中第一个被执行的 <code>&lt;clinit&gt;()</code> 方法的类型肯定是 java.lang.Object。</p>
+<p>  ​    <em><code>&lt;init&gt;()</code> 方法都是需要显式地调用父类的 <code>&lt;init&gt;()</code> 方法的，我们通过构造方法中的 <code>super()</code> 方法区显式地调用父类的 <code>&lt;init&gt;()</code> 方法。当然 <code>spuer()</code> 方法在我们编写代码时可以省略不写，因为它是默认存在的，所以在被 javac 编译后，这个 <code>super()</code> 方法是一定存在的。</em></p>
 </li>
-<li><p>  由于父类的<code>&lt;clinit&gt;()</code> 方法先执行，这也就意味着父类中定义的静态语句要优先于子类中静态语句的执行。</p>
+<li><p>  由于父类的<code>&lt;clinit&gt;()</code> 方法先执行，这也就意味着<strong>父类中定义的静态语句要优先于子类中静态语句的执行</strong>。</p>
 </li>
-<li><p>  <code>&lt;clinit&gt;()</code> 方法对于类或接口来说并不是必须的，如果一个类中没有静态语句块，也没有对变量的赋值操作，那么（前端）编译期可以不为这个类生成<code>&lt;clinit&gt;()</code> 方法。</p>
+<li><p>  <code>&lt;clinit&gt;()</code> 方法对于类或接口来说并不是必须的，如果一个类中没有静态语句块，也没有对变量的赋值操作，那么（前端）编译器可以不为这个类生成<code>&lt;clinit&gt;()</code> 方法。</p>
 </li>
 </ul>
 <blockquote>
@@ -887,7 +886,7 @@
 <li>  如果多个线程同时去初始化一个类，那么只会有其中一个线程去执行这个类的<code>&lt;clinit&gt;()</code> 方法，其它线程都需要阻塞等待，直到活动线程执行完毕<code>&lt;clinit&gt;()</code> 方法。如果在一个类的<code>&lt;clinit&gt;()</code> 方法有耗时很长的操作，那么就有可能造成多个线程阻塞。</li>
 </ul>
 <blockquote>
-<p>  静态语句代码块中只能访问到定义在静态语句代码块之前的变量。定义在它之后的变量，在前面的静态语句块中可以赋值，但是不能访问。</p>
+<p>  <strong>静态语句代码块中只能访问到定义在静态语句代码块之前的变量。定义在它之后的变量，在前面的静态语句块中可以赋值，但是不能访问。</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(num);  <span class="comment">// 静态代码块中可以访问到定义在静态代码块之前的变量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -937,7 +936,12 @@
 </tr>
 </tbody></table>
 <p>站在开发人员的角度来看，类加载器的分类要更细致一些，如下图，可分为“<strong>三层类加载器</strong>”。</p>
-<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB-1621267020284.png" alt="类加载器分类"></p>
+<img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/类加载器分类-1621267020284.png" alt="类加载器分类" style="zoom: 67%;">
+
+
+
+
+
 <h3 id="3-1-1-BootStrap-ClassLoader"><a href="#3-1-1-BootStrap-ClassLoader" class="headerlink" title="3.1.1    BootStrap ClassLoader"></a>3.1.1    BootStrap ClassLoader</h3><blockquote>
 <p>  启动类加载器；引导类加载器；BootStrap ClassLoader</p>
 </blockquote>
@@ -947,7 +951,7 @@
 <li>并不继承自 <strong>java.lang.ClassLoader</strong> ，没有父类加载器。</li>
 <li>可以加载 Extension ClassLoader 和 Application ClassLoader，并指定为它们的父类加载器。</li>
 <li>出于安全考虑，BootStrap ClassLoader 只加载包名为 java、javax、sun 等开头的类。</li>
-<li>BootStrap ClassLoader 无法被 Java 程序直接引用，用户在编写自定义类加载器时，如果需要把加载请求委派给引导类加载器去处理，那么直接使用 null 代替即可。下图所示就是 java.lang.Class#getClassLoader() 方法的代码，其中的注释和代码实现都说明了以 null 值来代表引导类加载器的约定规则。</li>
+<li>BootStrap ClassLoader 无法被 Java 程序直接引用，用户在编写自定义类加载器时，如果需要把加载请求委派给引导类加载器去处理，那么直接使用 null 代替即可。下图所示就是 <strong>java.lang.Class#getClassLoader()</strong> 方法的代码，其中的注释和代码实现都说明了以 null 值来代表引导类加载器的约定规则。</li>
 </ul>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701102620816.png" alt="image-20210701102620816"></p>
 <hr>
@@ -999,10 +1003,13 @@
 <li>在编写自定义的类加载器时，如果没有太过于复杂的需求，可以直接继承 <strong>URLClassLoader</strong> 类，这样可以避免自己去编写 <code>findClass()</code> 方法及其获取字节流码的方式，使自定义类加载器编写更加简洁。</li>
 </ol>
 <hr>
-<h2 id="3-2-ClassLoader"><a href="#3-2-ClassLoader" class="headerlink" title="3.2    ClassLoader"></a>3.2    ClassLoader</h2><h3 id="3-2-1-关于-ClassLoader"><a href="#3-2-1-关于-ClassLoader" class="headerlink" title="3.2.1    关于 ClassLoader"></a>3.2.1    关于 ClassLoader</h3><p>ClassLoader 类，它是一个抽象类，其后所有的类加载器都继承自 ClassLoader（不包括启动类加载器）。</p>
-<ul>
-<li>常用方法</li>
+<h2 id="3-2-ClassLoader"><a href="#3-2-ClassLoader" class="headerlink" title="3.2    ClassLoader"></a>3.2    ClassLoader</h2><h3 id="3-2-1-关于-ClassLoader"><a href="#3-2-1-关于-ClassLoader" class="headerlink" title="3.2.1    关于 ClassLoader"></a>3.2.1    关于 ClassLoader</h3><ul>
+<li>  ClassLoader 类，它是一个抽象类，声明了类加载器对象中共有的方法。</li>
+<li>  除了启动类加载器外所有的类加载器都继承自 ClassLoader。</li>
 </ul>
+<blockquote>
+<p>  <strong>常用方法：</strong></p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -1016,19 +1023,19 @@
 </tr>
 <tr>
 <td><code>public Class&lt;?&gt; loadClass(String name)</code></td>
-<td>加载名称为 name 的类，返回该类的 java.lang.Class 类实例</td>
+<td>加载指定名称的类，返回该类的 Class 对象实例</td>
 </tr>
 <tr>
 <td><code>protected Class&lt;?&gt; findClass(String name)</code></td>
-<td>查找名称为 name 的类，返回该类的 java.lang.Class 类实例</td>
+<td>查找指定名称的类，返回该类的 Class 对象实例</td>
 </tr>
 <tr>
 <td><code>protected final Class&lt;?&gt; findLoadedClass(String name)</code></td>
-<td>查找名称为 name 的已经被加载过的类，返回该类的 java.lang.Class 类实例</td>
+<td>查找名称为 name 的已经被加载过的类，返回该类的 Class 对象实例</td>
 </tr>
 <tr>
 <td><code>protected final Class&lt;?&gt; defineClass(byte[] b, int off, int len)</code></td>
-<td>把字节数组b中的内容转换为一个Java类，返回结果为 java.lang.Class 类的实例</td>
+<td>把字节数组b中的内容转换为一个Java类，返回该类的 Class 对象实例</td>
 </tr>
 <tr>
 <td><code>protected final void resolveClass(Class&lt;?&gt; c)</code></td>
@@ -1060,14 +1067,14 @@
 <li> 如果最顶级父类加载器可以完成类加载任务，就加载并返回。如果父类加载器无法完成此加载任务，下一级的子类加载器才会尝试自己去加载，这就是双亲委派模式。</li>
 </ol>
 <p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6-1621267020284.png" alt="双亲委派机制"></p>
-<p>双亲委派模型的好处就是 Java 中的类随着它的加载器一起具备了一种优先级的层次关系。例如类 java.lang.Object ，它存放在 rt.jar 中。无论哪个类加载器要加载这个类，最终都是委派给处于模型最顶端的 BootStrap ClassLoader 进行加载，因此 Object 类在程序的各种类加载环境中都能够保证是同一个类。反之，如果没有使用双亲委派模型，都由各个类加载器自行去加载的话，如果用户自己也编写了一个名为 java.lang.Object 的类，并放在程序的 ClassPath 中，那么系统中就会出现多个不同的 Object 类，Java 体系中最基础的行为也就无法保证了</p>
+<p>双亲委派模型的好处就是 Java 中的类随着它的加载器一起具备了一种优先级的层次关系。例如类 <code>java.lang.Object</code> ，它存放在 <code>rt.jar</code> 中。无论哪个类加载器要加载这个类，最终都是委派给处于模型最顶端的 <code>BootStrap ClassLoader </code>进行加载，因此 Object 类在程序的各种类加载环境中都能够保证是同一个类。反之，如果没有使用双亲委派模型，都由各个类加载器自行去加载的话，如果用户自己也编写了一个名为 <code>java.lang.Object</code> 的类，并放在程序的 ClassPath 中，那么系统中就会出现多个不同的 Object 类，Java 体系中最基础的行为也就无法保证了</p>
 <blockquote>
 <p><strong>举例</strong></p>
 </blockquote>
 <ol>
-<li> 程序运行时需要使用到 SPI 接口，SPI 接口属于核心API，需要使用双亲委派机制一直到 BootStrap_ClassLoader 中加载 rt.jar。</li>
-<li> SPI 核心类存在大量的接口，这些接口需要具体实现类实现后才能调用其中的方法。而这些方法一般都是第三方 jar 包，不属于核心API，所以就应该由 AppClassLoader 来加载。</li>
-<li> 接口是由 BootStrapClassLoader 加载的，而接口的具体实现类是由 AppClassLoader 加载的。</li>
+<li> 程序运行时需要使用到 SPI 接口，SPI 接口属于核心API，需要使用双亲委派机制一直到 <code>BootStrapClassLoader</code> 中加载 <code>rt.jar</code>。</li>
+<li> SPI 核心类存在大量的接口，这些接口需要具体实现类实现后才能调用其中的方法。而这些方法一般都是第三方 jar 包，不属于核心API，所以就应该由 <code>AppClassLoader</code> 来加载。</li>
+<li> 接口是由 <code>BootStrapClassLoader</code> 加载的，而接口的具体实现类是由 <code>ApplicationClassLoader</code> 加载的。</li>
 </ol>
 <blockquote>
 <p><strong>优势</strong></p>
@@ -2376,7 +2383,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-02 10:18:29" itemprop="dateModified" datetime="2021-07-02T10:18:29+08:00">2021-07-02</time>
+        <time title="Modified: 2021-08-03 16:48:06" itemprop="dateModified" datetime="2021-08-03T16:48:06+08:00">2021-08-03</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2399,7 +2406,7 @@
     
     <div class="post-body" itemprop="articleBody">
           <blockquote>
-<p>虚拟机栈内存结构简图</p>
+<p><strong>虚拟机栈内存结构简图</strong></p>
 </blockquote>
 <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png" alt="虚拟机栈内存结构"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">|--栈</span><br><span class="line">	|--栈帧1</span><br><span class="line">		|--局部变量表</span><br><span class="line">			|--Slot1</span><br><span class="line">			|--Slot2</span><br><span class="line">			|--......</span><br><span class="line">		|--操作数栈</span><br><span class="line">		|--方法返回地址</span><br><span class="line">		|--动态链接</span><br><span class="line">		|--附加信息</span><br><span class="line">	|--栈帧2</span><br><span class="line">	|--栈帧3</span><br><span class="line">	|--....</span><br></pre></td></tr></table></figure>
@@ -2407,8 +2414,17 @@
 
 
 <hr>
-<h1 id="虚拟机栈概述"><a href="#虚拟机栈概述" class="headerlink" title="虚拟机栈概述"></a>虚拟机栈概述</h1><h2 id="虚拟机栈出现的背景"><a href="#虚拟机栈出现的背景" class="headerlink" title="虚拟机栈出现的背景"></a>虚拟机栈出现的背景</h2><p>由于跨平台的设计，Java 的指令都是根据栈来设计的。不同平台CPU架构不同，所以不能设计为基于寄存器的。</p>
-<p><strong>优点是跨平台，指令集小，编译器容易实现，缺点是性能下降，实现同样的功能需要更多的指令。</strong></p>
+<h1 id="虚拟机栈概述"><a href="#虚拟机栈概述" class="headerlink" title="虚拟机栈概述"></a>虚拟机栈概述</h1><h2 id="虚拟机栈出现的背景"><a href="#虚拟机栈出现的背景" class="headerlink" title="虚拟机栈出现的背景"></a>虚拟机栈出现的背景</h2><ul>
+<li>  由于 JVM 跨平台的设计，所以 JVM 的指令都是根据栈来设计的。</li>
+<li>  不同平台 CPU 架构不同，所以 JVM 指令不能设计为基于寄存器的。</li>
+</ul>
+<blockquote>
+<p>  <strong>栈式指令的优缺点：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>优点是跨平台，指令集小，编译器容易实现，</strong></li>
+<li>  <strong>缺点是性能下降（与寄存器相比），实现同样的功能需要更多的指令。</strong></li>
+</ul>
 <hr>
 <h2 id="内存中的栈与堆"><a href="#内存中的栈与堆" class="headerlink" title="内存中的栈与堆"></a>内存中的栈与堆</h2><p><strong>栈是运行时的单位，而堆是存储的单位。</strong></p>
 <ul>
@@ -2416,30 +2432,34 @@
 <li>堆解决的是数据存储的问题，即数据怎么放，放在哪儿。</li>
 </ul>
 <hr>
-<h2 id="虚拟机栈的基本内容"><a href="#虚拟机栈的基本内容" class="headerlink" title="虚拟机栈的基本内容"></a>虚拟机栈的基本内容</h2><p><strong>是什么 ？</strong></p>
+<h2 id="虚拟机栈的基本内容"><a href="#虚拟机栈的基本内容" class="headerlink" title="虚拟机栈的基本内容"></a>虚拟机栈的基本内容</h2><blockquote>
+<p>  <strong>是什么 ？</strong></p>
+</blockquote>
 <ul>
 <li><p>Java 虚拟机栈（Java Virtual Machine Stack），早期也叫 Java 栈。</p>
 </li>
-<li><p>每个线程在创建时都会创建一个虚拟机栈，其内部保存一个个的栈帧（Stack Frame），对应着一次次的Java方法调用。</p>
-<hr>
+<li><p>每个线程在创建时都会创建一个虚拟机栈，其内部保存一个个的栈帧（Stack Frame），对应着一次次的方法调用。</p>
 </li>
 </ul>
-<p><strong>生命周期</strong></p>
-<ul>
-<li><p>生命周期与线程一致。</p>
-<hr>
-</li>
-</ul>
-<p><strong>作用</strong></p>
-<ul>
-<li><p>主要负责管理Java程序的运行。它保存方法的局部变量、部分结果，并参与方法的调用和返回。</p>
 <blockquote>
-<p>局部变量：如果局部变量属于8种基本数据类型，则保存的是数据值；如果局部变量是引用数据类型，则保存的是对象的引用地址。</p>
+<p>  <strong>生命周期</strong></p>
 </blockquote>
-<hr>
+<ul>
+<li>生命周期与线程一致。</li>
+</ul>
+<blockquote>
+<p>  <strong>作用</strong></p>
+</blockquote>
+<ul>
+<li><p>主要负责管理 Java 线程的运行。它保存方法的局部变量、部分结果，并参与方法的调用和返回。</p>
+<blockquote>
+<p>局部变量：如果局部变量是属于 8 种基本数据类型的，则保存的是数据值；如果局部变量是引用数据类型，则保存的是对象的引用地址。</p>
+</blockquote>
 </li>
 </ul>
-<p><strong>栈的优点</strong></p>
+<blockquote>
+<p>  <strong>栈的优点</strong></p>
+</blockquote>
 <ul>
 <li><p>栈是一种快速有效的分配存储方式，其访问速度仅仅次于程序计数器。</p>
 </li>
@@ -2449,23 +2469,21 @@
 <li>执行结束后出栈。</li>
 </ol>
 </li>
-<li><p>对于栈来说不存在垃圾回收问题，出栈就等同于垃圾回收。</p>
+<li><p><strong>对于栈来说不存在垃圾回收问题，出栈就等同于垃圾回收。</strong></p>
 <hr>
 </li>
 </ul>
-<p><strong>栈中可能出现的异常</strong></p>
-<ul>
-<li><p>Java 虚拟机规范允许 <strong>Java栈的大小可以是动态的或者是固定不变的</strong>。</p>
 <blockquote>
+<p>  <strong>栈中可能出现的异常</strong></p>
+</blockquote>
+<p>Java 虚拟机规范允许 <strong>Java栈的大小可以是动态的或者是固定不变的</strong>。</p>
 <ul>
 <li>如果采用固定大小的虚拟机栈，那每一个线程的对应的虚拟机栈的容量在线程创建之初就已经确定了，如果线程请求分配的栈容量超过虚拟机栈允许的最大容量，JVM将会抛出一个 <strong>StackOverflowError</strong> 异常。</li>
 <li>如果虚拟机栈设置为可动态扩展，并且在尝试扩展时无法申请到足够的内存，或者在创建新的线程时没有足够的内存去创建对应的虚拟机栈，那JVM将会抛出一个 <strong>OutOfMemoryError</strong> 异常。</li>
 </ul>
+<blockquote>
+<p>  <strong>设置栈内存的大小</strong></p>
 </blockquote>
-<hr>
-</li>
-</ul>
-<p><strong>设置栈内存的大小</strong></p>
 <ul>
 <li><p>我们可以使用参数 <code>-Xss</code> 来设置线程的最大栈空间，栈空间的大小直接决定了函数调用的最大可达深度。</p>
 </li>
@@ -2476,14 +2494,19 @@
 <hr>
 <h1 id="栈的存储单位"><a href="#栈的存储单位" class="headerlink" title="栈的存储单位"></a>栈的存储单位</h1><h2 id="栈中存储什么？"><a href="#栈中存储什么？" class="headerlink" title="栈中存储什么？"></a>栈中存储什么？</h2><ul>
 <li>每个线程都有自己的栈，栈中的数据都是以 <strong>栈帧（Stack Frame）</strong> 为基本单位存储的。</li>
-<li>在这个线程上，<em>每个正在执行的方法都有各自对应的一个栈帧（Stack Frame）</em>。</li>
+<li>在这个线程上，每个正在执行的方法都有各自对应的一个栈帧（Stack Frame）。</li>
 <li>栈帧是一个内存区域，是一个数据集，保存了方法执行过程中的各种数据信息。</li>
 </ul>
 <hr>
-<h2 id="栈的运行原理"><a href="#栈的运行原理" class="headerlink" title="栈的运行原理"></a>栈的运行原理</h2><p><strong>当前栈帧</strong>、<strong>当前方法</strong> 和 <strong>当前类</strong> 的说明：</p>
+<h2 id="栈的运行原理"><a href="#栈的运行原理" class="headerlink" title="栈的运行原理"></a>栈的运行原理</h2><blockquote>
+<p>  <strong>当前栈帧</strong>、<strong>当前方法</strong> 和 <strong>当前类</strong> 的说明：</p>
+</blockquote>
 <ul>
 <li>在一个线程中，同一时刻，只能有一个栈帧正在执行操作，即只有当前正在执行方法的栈帧（栈顶栈帧）是有效的，这个栈帧被称为<strong>当前栈帧（Current Frame）</strong>，与当前栈帧对应的方法就是<strong>当前方法（Current Method）</strong>，这个方法所在的类就是<strong>当前类（Current Class）</strong>。</li>
 </ul>
+<blockquote>
+<p>  <strong>执行原理：</strong></p>
+</blockquote>
 <ul>
 <li>JVM对<code>虚拟机栈</code>的直接操作只有两个，就是对栈帧进行<strong>压栈</strong>和<strong>出栈</strong>。</li>
 <li>如果在当前方法中调用了其它方法，那么对应的新的栈帧会被创建出来，放在栈的顶端，变成了新的当前栈帧。</li>
@@ -2503,13 +2526,17 @@
 <li>当方法4出栈后，方法3就位于了栈顶，栈帧3就变成了新的当前栈帧，方法3变成了新的当前方法，方法3所在的类就成了新的当前类。</li>
 <li>以此类推。</li>
 </ul>
+<blockquote>
+<p>  <strong>注意：</strong></p>
+</blockquote>
 <ul>
 <li>不同线程中的栈帧是不允许互相引用的，即不可以在一个线程的栈帧之中引用另一个线程的栈帧。</li>
 <li>如果<code>当前方法</code>调用了其它方法，那么这个“其它方法”就会成为<code>新的当前方法</code>，这个<code>新的当前方法</code>在执行完毕出栈时，当前栈帧会传回此方法的执行结果给上一个栈帧。接着，虚拟机会丢弃当前栈帧，使上一个栈帧重新成为当前栈帧。</li>
 <li>方法的结束方法时有两种：<strong>一种是正常的函数返回，使用 return 指令；另一种是抛出异常。不管使用哪种方式，都会导致当前栈帧出栈。</strong></li>
 </ul>
+<hr>
 <h1 id="局部变量表（Local-Variables）"><a href="#局部变量表（Local-Variables）" class="headerlink" title="局部变量表（Local Variables）"></a>局部变量表（Local Variables）</h1><blockquote>
-<p>局部变量表；局部变量数组；本地变量表。</p>
+<p><strong>局部变量表；局部变量数组；本地变量表。</strong></p>
 </blockquote>
 <p><strong>局部变量表的逻辑结构是一个一维数字数组，主要用于存储栈帧对应方法的参数和方法内部的局部变量。</strong></p>
 <ul>
@@ -2520,21 +2547,22 @@
 </ol>
 </li>
 </ul>
-<hr>
-<p><strong>问题：为什么说局部变量表存储的是一个数字数组呢？</strong></p>
+<blockquote>
+<p>  <strong>问题：为什么说局部变量表存储的是一个数字数组呢？</strong></p>
+</blockquote>
+<p>答：</p>
 <ul>
-<li><p>答：首先明确，局部变量表中主要保存了栈帧对应方法的<strong>方法参数</strong>和<strong>方法内的局部变量</strong>。</p>
-<p>​    这两种数据的类型无外乎就是基本数据类型和引用数据类型。在基本数据类型中：<code>byte</code>、<code>short</code>、<code>int</code>、<code>long</code>、<code>double</code>、<code>float </code>本来就是数字类型，<code>boolean</code>、<code>char </code>可以通过 ASCII 码表转化成数字类型；同理，引用类型数据也可以转成为数字表示。</p>
-<p>​    所以说，局部变量表存储的是一个数字数组。</p>
-</li>
+<li>  首先明确，局部变量表中主要保存了栈帧对应方法的<strong>方法参数、方法内的局部变量、和方法返回值</strong>。</li>
+<li>  这些数据的类型无外乎就是基本数据类型和引用数据类型。在基本数据类型中：<code>byte</code>、<code>short</code>、<code>int</code>、<code>long</code>、<code>double</code>、<code>float </code>本来就是数字类型，<code>boolean</code>、<code>char </code>可以通过 ASCII 码表转化成数字类型；同理，引用类型数据也可以转成为数字表示。</li>
+<li>  所以说，局部变量表存储的是一个数字数组。</li>
 </ul>
-<hr>
-<p><strong>问题：局部变量表存在线程安全问题吗？</strong></p>
-<ul>
-<li>答：由于局部变量表是建立在虚拟机栈的栈帧上，而虚拟机栈是线程私有的数据，因此不存在线程安全问题。</li>
-</ul>
-<p><strong>线程安全问题</strong>：多个线程同时操作共享的数据可能会造成安全问题。</p>
-<hr>
+<blockquote>
+<p>  <strong>问题：局部变量表存在线程安全问题吗？</strong></p>
+</blockquote>
+<p>答：由于局部变量表是建立在虚拟机栈的栈帧上，而虚拟机栈是线程私有的数据，因此不存在线程安全问题。</p>
+<blockquote>
+<p>  <strong>知识点：</strong></p>
+</blockquote>
 <ul>
 <li><strong>局部变量表所需的容量大小是在前端编译期就已经确定了的</strong>，并保存在方法的 Code 属性的 <code>maximum local variable</code> 数据项中。在方法运行期间是不会改变局部变量表的大小的。</li>
 <li><strong>方法可嵌套调用的次数由栈的大小（深度）决定</strong>。一般来说，<strong>栈越大，方法可嵌套调用的次数就越多</strong>。对于一个方法而言，它的参数和局部变量越多，就会使得局部变量表膨胀，它的栈帧也就越大，为满足方法调用所需传递的信息量增大的需求，函数调用就会占用更多的栈空间，导致其嵌套调用次数就会减少。</li>
@@ -2557,7 +2585,7 @@
 </ul>
 </blockquote>
 </li>
-<li><p>JVM 会为局部变量表中的每一个 Slot 都分配一个<strong>访问索引</strong>，通过这个索引即可成功访问到局部变量表中每个Slot中保存的的值。</p>
+<li><p>JVM 会为局部变量表中的每一个 Slot 都分配一个<strong>访问索引</strong>，通过这个索引即可成功访问到局部变量表中每个 Slot 中保存的的值。</p>
 </li>
 <li><p>当一个<strong>实例方法</strong>被调用时，它的<code>方法参数</code>和<code>方法内部的局部变量</code>将会<strong>按照顺序被复制</strong>到局部变量表中的每一个Slot上。</p>
 <blockquote>
@@ -2606,7 +2634,7 @@
 <h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><ul>
 <li>在栈帧中，与性能调优关系最密切的部分就是<strong>局部变量表</strong>。<ol>
 <li>首先，局部变量表在一个栈帧中占据的内存往往是较多的，当涉及到栈内存溢出时，往往要考虑优化栈帧中局部变量表的内存。</li>
-<li>其次，局部变量表中保存了大量的对象的指针，这些指针指向的对象存储在堆空间中，当局部变量表中的指针失效后，如何回收，什么时候回收 等等条件都影响着堆空间的利用，所以说：在栈帧中，与性能调优关系最密切的部分就是局部变量表。</li>
+<li>其次，局部变量表中保存了大量的对象指针，这些指针指向的对象存储在堆空间中，当局部变量表中的指针失效后，如何回收，什么时候回收 等等条件都影响着堆空间的利用，所以说：在栈帧中，与性能调优关系最密切的部分就是局部变量表。</li>
 </ol>
 </li>
 </ul>
@@ -2615,10 +2643,12 @@
 </ul>
 <hr>
 <h1 id="操作数栈（Operand-Stack）"><a href="#操作数栈（Operand-Stack）" class="headerlink" title="操作数栈（Operand Stack）"></a>操作数栈（Operand Stack）</h1><blockquote>
-<p>操作数栈；表达式栈</p>
+<p><strong>操作数栈；表达式栈</strong></p>
 </blockquote>
 <ul>
 <li><p>操作数栈也是栈帧中的一个重要组成部分。</p>
+</li>
+<li><p>根据指令对局部变量表中的变量进行运算。</p>
 </li>
 <li><p><strong>操作数栈的作用就是：在方法执行过程中，根据字节码指令，往栈中写入数据或提取数据，即入栈（push）/ 出栈（pop）</strong></p>
 <blockquote>
@@ -2653,34 +2683,36 @@
 <h1 id="栈顶缓存技术（Top-of-Stack-Cashing）"><a href="#栈顶缓存技术（Top-of-Stack-Cashing）" class="headerlink" title="栈顶缓存技术（Top-of-Stack Cashing）"></a>栈顶缓存技术（Top-of-Stack Cashing）</h1><p>基于栈式架构的虚拟机所使用的<strong>零地址指令</strong>更加紧凑，但完成一项操作的时候必然需要使用更多的入栈和出栈指令，这同时也就意味着将需要使用更多的指令分派（instruction dispatch）次数和内存读写次数。</p>
 <p>由于操作数是存储在内存中的，因此频繁的读/写操作必然会影响执行速度。为了解决这个问题，HotSpot JVM 的设计者提出了 栈顶缓存技术（Tos，Top-of-Stack Cashing）技术，<strong>将栈顶元素全部缓存在物理CPU的寄存器中，以此降低对内存的读/写次数，提升执行引擎的执行效率</strong>。</p>
 <hr>
-<h1 id="动态链接（Dynamic-Linking）"><a href="#动态链接（Dynamic-Linking）" class="headerlink" title="动态链接（Dynamic Linking）"></a>动态链接（Dynamic Linking）</h1><p><strong>动态链接：指向运行时常量池中的方法引用</strong></p>
+<h1 id="动态链接（Dynamic-Linking）"><a href="#动态链接（Dynamic-Linking）" class="headerlink" title="动态链接（Dynamic Linking）"></a>动态链接（Dynamic Linking）</h1><p><strong>动态链接：指向运行时常量池中方法的引用</strong>【符号引用转换为直接引用】</p>
 <ul>
-<li>大部分字节码指令在执行时都需要借助运行时常量池，所以HotSpot虚拟机在设计之初，就在帧数据区保存了一个能够访问运行时常量池的指针，方便程序访问运行时常量池。</li>
-<li>每一个栈帧内部都包含一个指向<strong>运行时常量池</strong>中<strong>该栈帧所属方法的引用</strong>。包含这个引用的目的就是为了支持当前方法的代码能够实现<strong>动态链接（Dynamic Linking）</strong>。比如：invokedynamic 指令。</li>
+<li>大部分字节码指令在执行时都需要借助运行时常量池，所以 HotSpot 在设计之初，就在栈帧数据区保存了一个能够访问运行时常量池的指针，方便程序访问运行时常量池。</li>
+<li>每一个栈帧内部都包含一个指向<strong>运行时常量池</strong>中<strong>该栈帧所属方法的引用</strong>。包含这个引用的目的就是为了支持当前方法的代码能够实现<strong>动态链接（Dynamic Linking）</strong>。比如：<code>invokedynamic</code> 指令。</li>
 <li>在<code>.java</code>源文件被编译成<code>.class</code>字节码文件时，所有的变量和方法引用都会转化为符号引用（Symbolic Reference）保存在 <code>.class</code> 文件的常量池里。    比如：描述一个方法调用了其它方法时，就是通过常量池中指向方法的符号引用来表示的，而<strong>动态链接的作用就是为了将这些符号引用转换为调用方法的直接引用</strong>。</li>
 </ul>
 <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5.png" alt="动态链接"></p>
 <h2 id="为什么需要常量池呢？"><a href="#为什么需要常量池呢？" class="headerlink" title="为什么需要常量池呢？"></a>为什么需要常量池呢？</h2><p>常量池的作用，就是为了提供一些符号和常量，便于指令的识别。</p>
 <ul>
 <li>一般来讲，我们的字节码文件所占的空间都比较小，但是每个字节码文件中保存的内容却不少，比如类的父类信息、各种数据类型的信息、等等等等。这些信息如果都保存在字节码文件中，显然字节码文件空间就非常臃肿了，那么这些信息保存在哪儿呢？常量池中！</li>
-<li>我们在字节码文件中只需要保存常量值中具体数据对象的引用，就可以在程序运行去具体的运行时常量池中找到程序运行所需要的数据信息。</li>
+<li>我们在字节码文件中只需要保存常量池中具体数据对象的引用，就可以在程序运行去具体的运行时常量池中找到程序运行所需要的数据信息。</li>
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>常量池/运行时常量池：保存指向方法和变量的符号引用；</li>
 <li>动态链接：将符号引用转换成直接引用。</li>
 </ul>
 <hr>
-<h1 id="方法的调用"><a href="#方法的调用" class="headerlink" title="方法的调用"></a>方法的调用</h1><p><strong>问题：Java 语言具有多态性，那么JVM如何知道运行的时候应该调用父类的方法还是子类的方法呢 ？</strong></p>
-<p>在JVM中，将符号引用转换为调用方法的直接引用与方法的绑定机制相关。</p>
+<h1 id="方法的调用"><a href="#方法的调用" class="headerlink" title="方法的调用"></a>方法的调用</h1><blockquote>
+<p>  <strong>问题：Java 语言具有多态性，那么 JVM 在运行时如何知道应该调用父类的方法还是子类的方法呢 ？</strong></p>
+</blockquote>
+<p>在 JVM 中，将符号引用转换为调用方法时的直接引用与方法的绑定机制相关。</p>
 <ul>
 <li><p><strong>静态链接</strong>：</p>
-<p>当一个字节码文件被装载进JVM内部时，如果<strong>被调用的目标方法在编译期可知</strong>，且运行期保持不变时，这种情况下将调用方法的符号引用转换为直接引用的过程称为静态链接。</p>
+<p>当一个字节码文件被加载进 JVM 内存中时，如果<strong>被调用的目标方法在编译期可知</strong>，且运行期保持不变时，这种情况下将调用方法的符号引用转换为直接引用的过程称为静态链接。</p>
 </li>
 <li><p><strong>动态链接</strong>：</p>
 <p>如果<strong>被调用的方法在编译期无法被确定下来</strong>，也就是说，只能在程序运行期将调用方法的符号引用转换为直接引用，由于这种引用转换过程具备动态性，因此也就被称之为动态链接。</p>
 </li>
 </ul>
-<p>对应的方法的绑定机制为：早期绑定（Early Binding）和 晚期绑定（Late Binding）。</p>
+<p>对应的方法的绑定机制为：<strong>早期绑定（Early Binding）</strong>和 <strong>晚期绑定（Late Binding）</strong>。</p>
 <p><strong>绑定是：一个字段、方法或者类从符号引用被转换为直接引用的过程，这仅仅发生一次</strong>。</p>
 <ul>
 <li><p><strong>早期绑定</strong>：</p>
@@ -2690,12 +2722,16 @@
 <p>如果<strong>被调用的方法在编译期无法被确定下来，只能够在程序运行期根据实际的类绑定相关的方法</strong>，这种绑定方式也就被称之为晚期绑定。</p>
 </li>
 </ul>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">虚函数：运行期才能确定下来</span><br></pre></td></tr></table></figure>
-
-
-
 <p>面向对象的语言的共性就是都支持 封装、继承和多态 等面向对象特性。既然这一类的编程语言具备多态特性，那么自然也就具备早期绑定和晚期绑定两种绑定方式。</p>
 <p>Java 中任何一个普通方法都具备虚函数的特征，它相当于C++语言中的虚函数（C++语言中需要使用关键字 virtual 来显示定义）。如果在 Java 程序中不希望某个方法拥有虚函数的特征时，则可以使用 final 关键字来标记这个方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">虚函数：运行期才能确定下来</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
 <h2 id="虚方法-amp-非虚方法"><a href="#虚方法-amp-非虚方法" class="headerlink" title="虚方法 &amp; 非虚方法"></a>虚方法 &amp; 非虚方法</h2><ul>
 <li>如果方法在编译期就确定了具体的调用版本，且这个版本在运行时是不可变的。这样的方法就称为<strong>非虚方法</strong>。</li>
 <li>静态方法、私有方法、final方法、实例构造器、父类方法都是非虚方法。</li>
@@ -2733,7 +2769,7 @@
 </li>
 </ul>
 <p>前四条指令固化在虚拟机内部，方法的调用执行不可人为干预，而 <code>invokedynamic</code> 指令则支持由用户确定方法版本，其中 <strong>invokestatic指令 和 invokespecial指令 调用的方法称为非虚方法，其余的（final 修饰的除外）称为虚方法</strong>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如果父类 Father 中定义了 final 关键字修饰的方法，在子类中直接调用该方法：</span><br><span class="line">我们会发现该方法是使用 invokevirtual 指令调用的，但本质上这还是一个非虚方法，因为被 final 修饰的方法在编译期就可以确定唯一的方法版本，不能被子类重写。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如果父类 Father 中定义了 final 关键字修饰的方法，在子类中直接调用该方法：</span><br><span class="line"></span><br><span class="line">我们会发现该方法是使用 invokevirtual 指令调用的，但本质上这还是一个非虚方法，</span><br><span class="line">因为被 final 修饰的方法在编译期就可以确定唯一的方法版本，不能被子类重写。</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>JVM 字节码指令集一直比较稳定，一直到 Java7 中才增加了一个 <code>invokedynamic</code> 指令，这是 Java 为了实现动态类型语言支持而做的一种改进。</li>
@@ -2742,38 +2778,53 @@
 </ul>
 <hr>
 <h2 id="动态类型语言和静态类型语言"><a href="#动态类型语言和静态类型语言" class="headerlink" title="动态类型语言和静态类型语言"></a>动态类型语言和静态类型语言</h2><ul>
-<li>动态类型语言和静态类型语言两者的区别就在于对类型的检查是在编译期还是在运行期。满足前者就是静态类型语言，反之就是动态类型语言。 </li>
-<li>也就是说，<strong>静态类型语言是判断变量自身的类型信息；动态类型语言是判断变量值的类型信息。变量没有类型信息，变量值才有类型信息</strong>。这是动态语言的一个重要特性。</li>
+<li><strong>动态类型语言和静态类型语言两者的区别就在于对类型的检查是在编译期还是在运行期</strong>。满足前者就是静态类型语言，反之就是动态类型语言。 </li>
+<li>也就是说，静态类型语言是判断变量自身的类型信息；动态类型语言是判断变量值的类型信息。变量没有类型信息，变量值才有类型信息。这是动态语言的一个重要特性。</li>
 <li>Java 是一种静态类型语言，静态类型语言就是强类型语言，动态类型语言就是弱类型语言，如：Js、Python 等。</li>
 </ul>
 <hr>
 <h2 id="Java语言中方法重写的本质"><a href="#Java语言中方法重写的本质" class="headerlink" title="Java语言中方法重写的本质"></a>Java语言中方法重写的本质</h2><ol>
-<li><p>找到<strong>操作数栈</strong>栈顶的第一个元素，即执行方法的对象的实际类型，记做 C 。</p>
-</li>
-<li><p>如果在类型 C 中能找到与被调用方法 返回值、名称 和 请求参数 都相符的方法，则继续进行访问权限校验，如果校验通过则返回这个方法的直接引用，查找过程结束；如果不通过，则返回 java.lang.IllegalAccessError 异常。</p>
-</li>
-<li><p>否则，按照继承关系从下往上依次对 C 的父类进行第2步的搜索和验证过程。</p>
-</li>
-<li><p>如果始终没有找到合适的方法，则抛出 <code>java.lang.AbstractMethodError</code> 异常。</p>
-</li>
+<li> 当我们调用一个对象的方法的时候，首先会将这个对象的实际类型压入操作数栈记做 C 。</li>
+<li> 然后 JVM 就会去这个类型对应的 Class 中去查找是否含有 <code>返回值、名称和请求参数</code> 与调用方法都相同的方法；</li>
+<li> 如果找到了，继续进行访问权限校验，若校验通过，就返回该方法的直接引用；若校验失败，则返回 java.lang.IllegalAccessError 异常。</li>
+<li> 如果在 Class C 中找不到符合条件的方法，则按照继承关系从下往上依次对 C 的父类进行第2、3步的检索和验证过程。</li>
+<li> 如果始终没有找到对应的方法，则抛出 <code>java.lang.AbstractMethodError</code> 异常。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、当我们调用一个对象的方法的时候，首先会将这个对象的实际类型压入操作数栈。</span><br><span class="line">2、然后 JVM 就会去这个类型对应的 Class 中去查找是否含有 返回值、名称和请求参数 都相同的方法；</span><br><span class="line">3、如果找到了，则继续进行访问权限校验，若校验通过，就返回该方法的直接引用；若校验失败，则返回 java.lang.IllegalAccessError 异常。</span><br><span class="line">4、如果在 类型C 中找不到对应的方法，则按照继承关系从下往上依次对 C 的父类进行第2、3步的检索和验证过程。</span><br><span class="line">5、如果始终没有找到对应的方法，则抛出 java.lang.AbstractMethodError 异常。</span><br></pre></td></tr></table></figure>
-
-<h3 id="IllegalAccessError-介绍"><a href="#IllegalAccessError-介绍" class="headerlink" title="IllegalAccessError 介绍"></a>IllegalAccessError 介绍</h3><p>程序试图访问或修改一个属性或调用一个方法，如果这个属性或方法，你没有权限访问，一般的，这就会引起编译期异常。这个错误如果发生在运行时，就说明一个类发生了不兼容的改变。</p>
+<blockquote>
+<p>  <strong>IllegalAccessError</strong></p>
+</blockquote>
+<ul>
+<li>  程序试图访问或修改一个属性或调用一个方法，如果这个属性或方法，你没有权限访问，一般会引起编译期异常。这个错误如果发生在运行时，就说明一个类发生了不兼容的改变。</li>
+</ul>
 <hr>
 <h2 id="虚方法表"><a href="#虚方法表" class="headerlink" title="虚方法表"></a>虚方法表</h2><ul>
-<li>在面向对象的编程中，会很频繁的使用到动态分派，如果在每次动态分派的过程中都要重新在类的方法元数据中搜索合适的目标的话可能影响到执行效率。因此，为了提高性能，JVM 采用在类的方法区建立一个虚方法表（virtual method table）（非虚方法不会出现在表中）来实现，虚方法表中的每个虚方法通过索引来代替递归查找。</li>
-<li>每个类中都有一个虚方法表，表中存放着各个方法的实际入口。</li>
-<li>那么虚方法表什么时候创建呢？</li>
+<li>在面向对象的编程中，会很频繁的使用到动态分派，如果在每次动态分派的过程中都要重新在类的方法元数据中搜索合适的目标的话可能影响到执行效率。因此，为了提高性能，JVM 采用<strong>在方法区为每个 Class 对象建立一个虚方法表</strong>（virtual method table）（非虚方法不会出现在表中）来实现，虚方法表中的每个虚方法通过索引来代替递归查找。</li>
+<li>每个类都对应有一个虚方法表，表中存放着各个方法的实际入口。</li>
 </ul>
-<p>虚方法表会在类加载的链接阶段被创建并开始初始化，类的变量初始值准备完成之后，JVM 会把该类的虚方法表也初始化完毕。</p>
+<blockquote>
+<p>  <strong>那么虚方法表什么时候创建呢？</strong></p>
+</blockquote>
+<p>虚方法表会在<strong>链接阶段</strong>被创建并开始初始化，类的变量<strong>初始</strong>值准备完成之后，JVM 会把该类的虚方法表也初始化完毕。</p>
 <hr>
-<h1 id="方法返回地址（Return-Address）"><a href="#方法返回地址（Return-Address）" class="headerlink" title="方法返回地址（Return Address）"></a>方法返回地址（Return Address）</h1><p>方法返回地址是栈帧中的一块内存地址。存放调用该方法的 <code>程序计数器</code> 的值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">假设现有一JVM栈，首先调用了A方法 ，A方法中又调用了B方法（B方法有返回值）；</span><br><span class="line">1、A方法首先入栈，</span><br><span class="line">2、在A方法的某一行代码中调用了B方法，B方法入栈，B方法在执行完毕后，返回值中保存着程序计数器的值，即下一条JVM指令的地址，这样执</span><br><span class="line">行引擎就能根据这个地址跳转回A方法中去，继续执行A方法中的代码。</span><br></pre></td></tr></table></figure>
-
-<p>一个方法的结束，有两种方式：1、正常执行完成    2、出现未处理的异常，非正常退出。  无论通过哪种方式退出，在方法退出后都返回到该方法被调用的位置。  </p>
+<h1 id="方法返回地址（Return-Address）"><a href="#方法返回地址（Return-Address）" class="headerlink" title="方法返回地址（Return Address）"></a>方法返回地址（Return Address）</h1><blockquote>
+<p>  <strong>定义</strong></p>
+</blockquote>
+<p><strong>方法返回地址</strong>保存的是程序计数器的值（指向下一条要执行指令的地址）。</p>
+<blockquote>
+<p>  <strong>举例</strong></p>
+</blockquote>
+<p>假设在某一栈中，先调用了A方法 ，A方法中又调用了B方法：</p>
+<ol>
+<li> A方法首先入栈，</li>
+<li> 在A方法的某一行代码中调用了B方法，B方法入栈，<strong>B方法在执行完毕后，要跳转回A方法中去，就需要用到这个方法返回地址</strong>。</li>
+<li> 方法返回地址的值就是程序计数器的值，即下一条JVM指令的地址，这样执行引擎就能根据这个地址跳转回A方法中去，继续执行A方法中的代码。</li>
+</ol>
+<blockquote>
+<p>  <strong>方法的两种结束方式：</strong></p>
+</blockquote>
+<p>一个方法的结束有两种方式：①正常执行完成    ②出现未处理的异常，非正常退出。  无论通过哪种方式退出，在方法退出后都返回到该方法被调用的位置。  </p>
 <ul>
-<li>方法正常退出时，<strong>调用者的<code>程序计数器</code>的值作为返回地址，即调用该方法的指令的下一条指令的地址</strong>。</li>
+<li>方法正常退出时，<strong>会将调用者的程序计数器的值作为返回地址，即调用该方法的指令的下一条指令的地址</strong>。</li>
 <li>而通过异常退出的，返回地址要通过异常表来确定，栈帧中一般不会保存这部分信息。</li>
 </ul>
 <p>当一个方法开始执行后，只有两种方式可以退出这个方法：</p>
@@ -2793,33 +2844,49 @@
 <hr>
 <h1 id="一些附加信息"><a href="#一些附加信息" class="headerlink" title="一些附加信息"></a>一些附加信息</h1><p>栈帧中还允许携带与Java虚拟机实现相关的一些附加信息。例如：对程序调试提供支持的信息。</p>
 <hr>
-<h1 id="栈的相关面试题"><a href="#栈的相关面试题" class="headerlink" title="栈的相关面试题"></a>栈的相关面试题</h1><ul>
-<li>举例栈溢出的情况？</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">栈溢出：StackOverflowError</span><br><span class="line">内存溢出：OutOfMemoryError</span><br><span class="line"></span><br><span class="line">1、如果设置栈帧内存为自适应的话，假设某个方法入栈时需要占用的内存为2M，那么这时候JVM就会自动分配栈帧内存大于等于2M的空间给方法使用。这种情况下不会出现 StackOverflowError ，但是会当栈的内存不足以满足新的栈帧需要的内存时，就会出现OutOfMemoryError。</span><br><span class="line">2、如果设置栈帧内存为手动指定的话，假设某个方法入栈时需要占用的内存为2M，但是我们手动设置的栈帧的最大内存为1M，那么这时就会出现 StackOverflowError。</span><br><span class="line">【待定】</span><br></pre></td></tr></table></figure>
+<h1 id="栈的相关面试题"><a href="#栈的相关面试题" class="headerlink" title="栈的相关面试题"></a>栈的相关面试题</h1><blockquote>
+<ol>
+<li> <strong>举例栈溢出的情况？</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">栈溢出：StackOverflowError</span><br><span class="line">内存溢出：OutOfMemoryError</span><br></pre></td></tr></table></figure>
 
+<ol>
+<li> 如果设置栈帧内存为自适应的话，假设某个方法入栈时需要占用的内存为2M，那么这时候JVM就会自动分配栈帧内存大于等于2M的空间给方法使用。这种情况下不会出现 StackOverflowError ，但是会当栈的内存不足以满足新的栈帧需要的内存时，会出现OutOfMemoryError。</li>
+<li> 如果设置栈帧内存为手动指定的话，假设某个方法入栈时需要占用的内存为2M，但是我们手动设置的栈帧的最大内存为1M，那么这时就会出现 StackOverflowError。</li>
+</ol>
+<blockquote>
+<ol start="2">
+<li> <strong>调整栈大小，就能保证不出现溢出吗？</strong></li>
+</ol>
+</blockquote>
+<p>答：不能。如果入栈的方法是一个死循环的递归方法，那么增加栈的内存只能保证栈溢出的时间出现的晚一些，最终还是会出现栈溢出。</p>
+<blockquote>
+<ol start="3">
+<li> <strong>分配的栈内存越大越好吗？</strong></li>
+</ol>
+</blockquote>
+<p>答：不是。会挤占其它内存空间。</p>
+<blockquote>
+<ol start="4">
+<li> <strong>垃圾回收是否会涉及到虚拟机栈？</strong></li>
+</ol>
+</blockquote>
+<p>答：不会。</p>
 <ul>
-<li>调整栈大小，就能保证不出现溢出吗？</li>
+<li>  程序计数器：不存在Error，不存在GC；</li>
+<li>  虚拟机栈：存在Error，不存在GC（通过出栈的方式来完成类似于垃圾回收的功能）；</li>
+<li>  本地方法栈：存在Error，不存在GC（类似于虚拟机栈）；</li>
+<li>  堆：存在Error，存在GC；</li>
+<li>  方法区：存在Error，存在GC；</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答：不能。</span><br><span class="line"></span><br><span class="line">如果入栈的方法是一个死循环的递归方法，那么增加栈的内存只能保证栈溢出的时间出现的晚一些，最终还是会出现栈溢出</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>分配的栈内存越大越好吗？</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答：不是</span><br><span class="line"></span><br><span class="line">挤占其它内存空间</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>垃圾回收是否会涉及到虚拟机栈？</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">答：不会。</span><br><span class="line"></span><br><span class="line">程序计数器：不存在Error，不存在GC</span><br><span class="line">虚拟机栈：存在Error，不存在GC（通过出栈的方式来完成类似于垃圾回收的功能）</span><br><span class="line">本地方法栈：存在Error，不存在GC（类似于虚拟机栈）</span><br><span class="line">堆：存在Error，存在GC</span><br><span class="line">方法区：存在Error，存在GC</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法中定义的局部变量是否线程安全？</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：不一定。具体问题具体分析。</span><br></pre></td></tr></table></figure>
-
+<blockquote>
+<ol start="5">
+<li> <strong>方法中定义的局部变量是否线程安全？</strong></li>
+</ol>
+</blockquote>
+<p>答：不一定。具体问题具体分析。</p>
 <p>​    </p>
-<hr>
 
       
     </div>
@@ -2877,7 +2944,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-01 12:23:15" itemprop="dateModified" datetime="2021-07-01T12:23:15+08:00">2021-07-01</time>
+        <time title="Modified: 2021-08-03 15:14:52" itemprop="dateModified" datetime="2021-08-03T15:14:52+08:00">2021-08-03</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2900,59 +2967,66 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h1><blockquote>
-<p>Program Counter Register；程序计数寄存器；程序计数器；PC Register；PC寄存器；</p>
+<p><strong>Program Counter Register；程序计数寄存器；程序计数器；PC Register；PC寄存器；</strong></p>
 </blockquote>
-<p><code>PC Register</code> 的命名起源于 CPU 的寄存器，CPU中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在CPU上运行。</p>
 <ul>
-<li><p>JVM中的 PC寄存器 是对 物理PC寄存器 的一种抽象模拟。</p>
+<li><p>PC Register 的命名起源于 CPU 的寄存器，CPU 中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在 CPU上运行。</p>
 </li>
-<li><p>JVM中的 <code>PC寄存器</code> 并非是广义上所指的物理寄存器，称其为 <code>PC计数器（或指令计数器）</code> 会更加贴切，并且也不容易引起一些不必要的误会。</p>
+<li><p>JVM 中的 PC寄存器 是对 物理PC寄存器 的一种抽象模拟。</p>
+</li>
+<li><p>JVM 中的 PC寄存器 并非是广义上所指的物理寄存器，称其为 <strong>PC计数器（或指令计数器）</strong> 会更加贴切，并且也不容易引起一些不必要的误会。</p>
 </li>
 <li><p>PC计数器 在JVM内存中只占一块很小的内存空间，几乎可以忽略不计。</p>
 </li>
 <li><p>PC计数器 是JVM内存中运行速度最快的存储区域。</p>
 </li>
-<li><p>PC计数器是线程私有的，每个线程都有自己的PC计数器，生命周期与线程的生命周期保持一致。</p>
+<li><p>PC计数器是线程私有的，每个线程都有自己的 PC计数器，生命周期与线程的生命周期保持一致。</p>
 </li>
 <li><p>任何一个线程在同一时间都只能有一个方法被执行，这个方法也被称为<strong>当前方法</strong>。</p>
 </li>
-<li><p>PC寄存器 中保存了当前线程当前方法的JVM指令地址。</p>
-<p>或者，如果当前线程正在执行的是Native方法，PC寄存器保存的指令地址则是<code>undefined</code>。</p>
+<li><p>PC寄存器中记录的是当前线程当前方法对应的的字节码指令的地址。</p>
+<p>或者，如果当前线程正在执行的是 Native 方法，PC寄存器保存的指令地址则是<code>undefined</code>。</p>
 </li>
 <li><p>PC寄存器 是程序控制流的指示器。分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖PC寄存器来完成。</p>
 </li>
 <li><p>PC计数器 是唯一一个在《Java虚拟机规范》中没有规定任何 <code>OutOfMemoryError</code> 情况的区域。</p>
 </li>
 </ul>
-<p>字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。</p>
 <hr>
-<h1 id="PC计数器的作用（重要）"><a href="#PC计数器的作用（重要）" class="headerlink" title="PC计数器的作用（重要）"></a>PC计数器的作用（重要）</h1><p><strong>问题：PC计数器的作用（重要）</strong></p>
+<h1 id="PC计数器的作用（重要）"><a href="#PC计数器的作用（重要）" class="headerlink" title="PC计数器的作用（重要）"></a>PC计数器的作用（重要）</h1><blockquote>
+<p>  <strong>问题：PC计数器的作用（重要）</strong></p>
+</blockquote>
 <ul>
-<li>PC寄存器 用来存储下一条要执行的字节码指令的地址。由执行引擎根据这个地址读取下一条指令。</li>
+<li>PC 计数器可以看做是当前线程所执行的字节码指令的行号指示器，即执行引擎要执行的指令的地址，执行引擎根据这个地址执行字节码指令。当该行的指令执行结束后，PC 计数器变更为下一条指令的地址，执行引擎继续通过读取程序计数器中的指令地址来执行具体的字节码指令。</li>
 </ul>
-<p><strong>举例说明</strong></p>
+<blockquote>
+<p>  <strong>举例说明</strong></p>
+</blockquote>
 <ol>
 <li><strong>执行引擎</strong> 从 <strong>PC计数器</strong> 中取出下一条要执行的字节码指令的地址。</li>
 <li><strong>执行引擎</strong> 根据这个地址去加载具体要执行的字节码指令。</li>
 <li><strong>执行引擎</strong> 将 字节码指令 编译成底层的二进制机器指令，最后交给 CPU 去执行。</li>
 </ol>
-<h1 id="两个常见问题"><a href="#两个常见问题" class="headerlink" title="两个常见问题"></a>两个常见问题</h1><hr>
-<p><strong>问题一：为什么要使用程序计数器记录当前线程的执行地址呢 ？</strong></p>
-<p>答：当多个线程并发执行时，CPU需要不停的切换各个线程，当线程切换回来以后，它必须得知道上一次执行到哪条指令了，接下来才能续着上次指令的位置继续执行程序。</p>
-<p>JVM的字节码解释器就需要通过改变 PC寄存器 的值来明确下一条要执行的字节码指令的在内存中的位置。？？？</p>
 <hr>
-<p><strong>问题二：程序计数器为什么会被设定为线程私有？</strong></p>
+<h1 id="两个常见问题"><a href="#两个常见问题" class="headerlink" title="两个常见问题"></a>两个常见问题</h1><blockquote>
+<p>  <strong>问题一：为什么要使用程序计数器记录当前线程的执行地址呢 ？</strong></p>
+</blockquote>
+<p>答：当多个线程并发执行时，CPU需要不停的切换各个线程，当线程切换回来以后，它必须得知道上一次执行到哪条指令了，接下来才能续着上次指令的位置继续执行程序。JVM 的字节码解释器就需要通过改变 PC寄存器 的值来明确下一条要执行的字节码指令的在内存中的位置。</p>
+<blockquote>
+<p>  <strong>问题二：程序计数器为什么会被设定为线程私有？</strong></p>
+</blockquote>
 <ul>
 <li><p>线程并发执行时CPU会在多个线程间不停地做任务切换，这就导致单个线程需要经常中断和恢复。当线程切换回来后，为了能够接着从上次执行执行的位置开始执行，就必须利用程序计数器来记录线程当前方法的指令地址。</p>
 </li>
 <li><p>如果程序计数器设置为多个线程共享：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">假设现有2个线程共用1个程序计数器。</span><br><span class="line">	线程1 执行字节码指令，执行到了第5条指令，将要执行第6条指令。将指令6的地址保存到PC寄存器中，切换到线程2执行。</span><br><span class="line">	线程2 执行字节码指令，执行到了11条指令，将要执行12条指令，将地址12保存到PC寄存器中。</span><br><span class="line"></span><br><span class="line">由于2个线程共用1个PC寄存器，当CPU再次切回线程1时，我们会发现PC寄存器中保存的是最新的指令的地址，也就是说线程1保存到寄存器</span><br><span class="line">中的地址已经被线程2替换掉了，当再次切换到线程1执行时，它已经无法从线程1上次暂停的位置继续往下执行，显然这是不合适的。</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>为了能够准确的记录各个线程马上要执行的字节码指令的地址，最好的办法就是为每一个线程都分配一个 PC寄存器。</strong>  这样一来各个线程之间的程序计数器独立计算，就不会出现互相干扰的情况。</p>
+<li><p><strong>为了能够准确的记录各个线程下一条要执行的字节码指令的地址，最好的办法就是为每一个线程都分配一个 PC寄存器。</strong>  这样一来各个线程之间的程序计数器独立计算，就不会出现互相干扰的情况。</p>
 </li>
 </ul>
+<p><strong>专业解释：</strong></p>
 <ul>
-<li><p>专业解释</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">由于CPU时间片轮的限制，多个线程在并发执行过程中，任何一个确定的时刻，一个处理器或者多核处理器的一个内核，只会执行某个线程</span><br><span class="line">中的一条指令。</span><br><span class="line">在多线程并发执行过程中，这样必然导致线程经常中断或恢复，如何保证每次切换线程都能准确续到上次执行的位置呢？需要每个线程在创</span><br><span class="line">建后，都产生自己的程序计数器和栈帧，这样程序计数器在各个线程之间互不影响。</span><br></pre></td></tr></table></figure></li>
+<li>  由于 CPU 时间片轮的限制，多个线程在并发执行过程中，任何一个确定的时刻，一个处理器或者多核处理器的一个内核，只会执行某个线程中的一条指令。</li>
+<li>  在多线程并发执行过程中，这样必然导致线程经常中断或恢复，如何保证每次切换线程都能准确续到上次执行的位置呢？需要每个线程在创建后，都产生自己的程序计数器和栈帧，这样程序计数器在各个线程之间互不影响。</li>
 </ul>
 
       
@@ -3011,7 +3085,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-01 12:13:28" itemprop="dateModified" datetime="2021-07-01T12:13:28+08:00">2021-07-01</time>
+        <time title="Modified: 2021-08-03 14:49:08" itemprop="dateModified" datetime="2021-08-03T14:49:08+08:00">2021-08-03</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -3050,7 +3124,7 @@
 <p>下图是一种经典的 JVM 内存布局：</p>
 <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.png"></p>
 <p><strong>Part1：</strong></p>
-<p>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域有各自的用途，以及创建和销毁时间。</p>
+<p>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域有各自的用途，创建和销毁时间。</p>
 <ul>
 <li>有的区域会随着虚拟机进程的启动而创建，随着虚拟机进程的退出而销毁。</li>
 <li>有的区域则是与线程一一对应的，随着用户线程的开始和结束而创建和销毁。</li>
@@ -3149,10 +3223,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2021-05-20 21:19:19 / Modified: 23:27:43" itemprop="dateCreated datePublished" datetime="2021-05-20T21:19:19+08:00">2021-05-20</time>
+      <time title="Created: 2021-05-20 21:19:19" itemprop="dateCreated datePublished" datetime="2021-05-20T21:19:19+08:00">2021-05-20</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 12:33:15" itemprop="dateModified" datetime="2021-08-03T12:33:15+08:00">2021-08-03</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -3173,14 +3253,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="本地方法接口"><a href="#本地方法接口" class="headerlink" title="本地方法接口"></a>本地方法接口</h1><h2 id="什么是本地方法？"><a href="#什么是本地方法？" class="headerlink" title="什么是本地方法？"></a>什么是本地方法？</h2><p>使用 <strong>native</strong> 关键字修饰的Java方法。</p>
-<p><strong>一个 <code>Native Metho</code> 就是一个Java调用非Java代码的接口</strong>。</p>
-<p>一个 <code>Native Method</code> 是这样一个Java方法，该方法由非Java语言实现，比如C。</p>
-<p>这个特征并非Java所特有，很多其它的编程语言都有这一机制，比如在 C++ 中，就可以用 <code>extern &quot;C&quot;</code> 告知 C++ 编译期去调用一个 C 的函数。</p>
-<p>在定义一个 Native Method 时，并不提供实现体（有点像定义一个 Java Interface），因为其实现体是由非Java语言在外面实现的。</p>
-<p>本地接口的作用是融合不同的编程语言为Java所用，它的初衷是融合 C/C++ 程序。</p>
-<p>标识符 native 可以与所有其它的 java 标识符连用，但 abstract 除外。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">native 关键字表明调用了本地方法，是有实现体的，但是是采用非Java语言实现的；</span><br><span class="line">而 abstract 关键字表明无无方法实现体。</span><br><span class="line">这两个关键字是相互矛盾的。</span><br></pre></td></tr></table></figure>
+          <h1 id="本地方法接口"><a href="#本地方法接口" class="headerlink" title="本地方法接口"></a>本地方法接口</h1><h2 id="什么是本地方法？"><a href="#什么是本地方法？" class="headerlink" title="什么是本地方法？"></a>什么是本地方法？</h2><ul>
+<li>  使用 <strong>native</strong> 关键字修饰的方法。</li>
+<li>  该方法由非 Java 语言实现的，比如 C 或 C++。</li>
+<li>  在定义一个 <code>Native Method</code> 时，并不提供实现体（有点像定义接口中的抽象方法），因为其具体实现是由非 Java 语言在外面实现的。</li>
+<li>  <strong>标识符 native 可以与所有其它的 java 标识符连用，但 abstract 除外</strong>。</li>
+<li>  <strong>一个 <code>Native Method</code> 就是一个Java调用非Java代码的接口</strong>。</li>
+<li>  这个特征并非 Java 特有的，很多其它的编程语言都有这一机制，比如在 C++ 中，就可以用 <code>extern &quot;C&quot;</code> 告知 C++ 编译器去调用一个 C 的函数。</li>
+<li>  本地接口的作用是融合不同的编程语言为 Java 所用，它的初衷是融合 C/C++ 程序。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">native 关键字表明了当前方法是一个本地方法，是有实现体的，但实现体是采用非Java语言实现的；</span><br><span class="line">而 abstract 关键字表明无无方法实现体。</span><br><span class="line">这两个关键字是相互矛盾的。</span><br></pre></td></tr></table></figure>
 
 
 
@@ -3190,23 +3272,28 @@
 <h2 id="为什么要使用-Native-Method-？"><a href="#为什么要使用-Native-Method-？" class="headerlink" title="为什么要使用 Native Method ？"></a>为什么要使用 Native Method ？</h2><p>Java 语言使用起来非常方便，然而有些层次的任务用 Java 实现起来不容易，或者我们对程序的效率很在意时，问题就来了。</p>
 <blockquote>
 <ol>
-<li>与Java环境外交互</li>
+<li><strong>与Java环境外交互</strong></li>
 </ol>
 </blockquote>
 <p><strong>有时Java应用需要与Java外面的环境交互，这是本地方法存在的主要原因</strong>。有时Java需要与一些底层系统，如操作系统或某些硬件交换信息，本地方法正是这样的一种交流机制，它为我们提供了一个非常简洁的接口，类似于一个黑盒，我们无需去了解Java应用之外的繁琐的细节。</p>
 <blockquote>
 <ol start="2">
-<li>与操作系统交互</li>
+<li><strong>与操作系统交互</strong></li>
 </ol>
 </blockquote>
-<p>JVM 支持着 Java语言本身和运行时库，它是Java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。然而不管怎样，它毕竟不是一个完成的系统，它经常需要依赖一些底层系统的支持。这些底层系统常常是强大的操作系统。<strong>通过使用本地方法，我们得以用Java实现了jre与底层的交互，甚至JVM的一些部分就是用C写的</strong>。还有，如果我们要使用一些Java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</p>
+<ul>
+<li>  JVM 虚拟机是一个虚拟机系统，支持 Java 语言本身和运行时库，它是Java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。</li>
+<li>  然而不管怎样，它毕竟不是一个完整的系统，它经常需要依赖一些底层系统的支持。这些底层系统常常是强大的操作系统。</li>
+<li>  <strong>通过使用本地方法，我们得以用 Java 与底层的操作系统交互，甚至JVM的一些部分就是用C写的</strong>。</li>
+<li>  还有，如果我们要使用一些 Java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</li>
+</ul>
 <blockquote>
 <ol start="3">
-<li>Sun’s Java</li>
+<li><strong>Sun’s Java</strong></li>
 </ol>
 </blockquote>
-<p><strong>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互</strong>。jre大部分是用Java实现的，它也通过一些本地方法与外界交互。例如：java.lamg.Thread 的 <code>setPriority()</code> 方法是用Java实现的，但是它的具体实现调用的是该类里的本地方法<code>setPriority0()</code>。这个本地方法是用C实现的，并被植入JVM内部。</p>
-<h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><p><strong>目前该方法的使用越来越少了，除非是与硬件有关的应用</strong>，比如通过Java程序驱动打印机或者Java系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
+<p><strong>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互</strong>。JRE 大部分是用 Java 实现的，它也通过一些本地方法与外界交互。例如：java.lamg.Thread 的 <code>setPriority()</code> 方法是用Java实现的，但是它的具体实现调用的是该类里的本地方法<code>setPriority0()</code>。这个本地方法是用C实现的，并被植入JVM内部。</p>
+<h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><p><strong>目前本地方法的使用越来越少了，除非是与硬件有关的应用</strong>，比如通过 Java 程序驱动打印机或者 Java 系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
 
       
     </div>

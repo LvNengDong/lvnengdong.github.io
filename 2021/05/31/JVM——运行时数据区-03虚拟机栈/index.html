@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="虚拟机栈内存结构简图   12345678910111213|--栈	|--栈帧1		|--局部变量表			|--Slot1			|--Slot2			|--......		|--操作数栈		|--方法返回地址		|--动态链接		|--附加信息	|--栈帧2	|--栈帧3	|--....     虚拟机栈概述虚拟机栈出现的背景由于跨平台的设计，Java 的指令都是根据栈来设计的。不同平台CPU">
+<meta name="description" content="虚拟机栈内存结构简图   12345678910111213|--栈	|--栈帧1		|--局部变量表			|--Slot1			|--Slot2			|--......		|--操作数栈		|--方法返回地址		|--动态链接		|--附加信息	|--栈帧2	|--栈帧3	|--....     虚拟机栈概述虚拟机栈出现的背景   由于 JVM 跨平台的设计，所以 JVM 的指令都是根据栈来设">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM——运行时数据区:03虚拟机栈">
 <meta property="og:url" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="虚拟机栈内存结构简图   12345678910111213|--栈	|--栈帧1		|--局部变量表			|--Slot1			|--Slot2			|--......		|--操作数栈		|--方法返回地址		|--动态链接		|--附加信息	|--栈帧2	|--栈帧3	|--....     虚拟机栈概述虚拟机栈出现的背景由于跨平台的设计，Java 的指令都是根据栈来设计的。不同平台CPU">
+<meta property="og:description" content="虚拟机栈内存结构简图   12345678910111213|--栈	|--栈帧1		|--局部变量表			|--Slot1			|--Slot2			|--......		|--操作数栈		|--方法返回地址		|--动态链接		|--附加信息	|--栈帧2	|--栈帧3	|--....     虚拟机栈概述虚拟机栈出现的背景   由于 JVM 跨平台的设计，所以 JVM 的指令都是根据栈来设">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png">
 <meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/image-20210517000602364.png">
@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/Slot-1621265523329.png">
 <meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5.png">
 <meta property="article:published_time" content="2021-05-31T14:06:53.000Z">
-<meta property="article:modified_time" content="2021-07-02T02:18:29.148Z">
+<meta property="article:modified_time" content="2021-08-03T08:48:06.069Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png">
@@ -153,7 +153,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">虚拟机栈概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%87%BA%E7%8E%B0%E7%9A%84%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">虚拟机栈出现的背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E6%A0%88%E4%B8%8E%E5%A0%86"><span class="nav-number">1.2.</span> <span class="nav-text">内存中的栈与堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%86%85%E5%AE%B9"><span class="nav-number">1.3.</span> <span class="nav-text">虚拟机栈的基本内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%88%E7%9A%84%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D"><span class="nav-number">2.</span> <span class="nav-text">栈的存储单位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88%E4%B8%AD%E5%AD%98%E5%82%A8%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">栈中存储什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88%E7%9A%84%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">栈的运行原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E8%A1%A8%EF%BC%88Local-Variables%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">局部变量表（Local Variables）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-Slot-%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">3.1.</span> <span class="nav-text">关于 Slot 的理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slot-%E7%9A%84%E9%87%8D%E5%A4%8D%E5%88%A9%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">Slot 的重复利用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F-%E5%92%8C-%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F-%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">3.3.</span> <span class="nav-text">静态变量 和 局部变量 的对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="nav-number">3.4.</span> <span class="nav-text">补充说明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">操作数栈（Operand Stack）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%88%E9%A1%B6%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF%EF%BC%88Top-of-Stack-Cashing%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">栈顶缓存技术（Top-of-Stack Cashing）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%EF%BC%88Dynamic-Linking%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">动态链接（Dynamic Linking）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%91%A2%EF%BC%9F"><span class="nav-number">6.1.</span> <span class="nav-text">为什么需要常量池呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">方法的调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%96%B9%E6%B3%95-amp-%E9%9D%9E%E8%99%9A%E6%96%B9%E6%B3%95"><span class="nav-number">7.1.</span> <span class="nav-text">虚方法 &amp; 非虚方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B%E8%AF%AD%E8%A8%80%E5%92%8C%E9%9D%99%E6%80%81%E7%B1%BB%E5%9E%8B%E8%AF%AD%E8%A8%80"><span class="nav-number">7.2.</span> <span class="nav-text">动态类型语言和静态类型语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="nav-number">7.3.</span> <span class="nav-text">Java语言中方法重写的本质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IllegalAccessError-%E4%BB%8B%E7%BB%8D"><span class="nav-number">7.3.1.</span> <span class="nav-text">IllegalAccessError 介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%96%B9%E6%B3%95%E8%A1%A8"><span class="nav-number">7.4.</span> <span class="nav-text">虚方法表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%BF%94%E5%9B%9E%E5%9C%B0%E5%9D%80%EF%BC%88Return-Address%EF%BC%89"><span class="nav-number">8.</span> <span class="nav-text">方法返回地址（Return Address）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E9%99%84%E5%8A%A0%E4%BF%A1%E6%81%AF"><span class="nav-number">9.</span> <span class="nav-text">一些附加信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%88%E7%9A%84%E7%9B%B8%E5%85%B3%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">10.</span> <span class="nav-text">栈的相关面试题</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">虚拟机栈概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%87%BA%E7%8E%B0%E7%9A%84%E8%83%8C%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">虚拟机栈出现的背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E6%A0%88%E4%B8%8E%E5%A0%86"><span class="nav-number">1.2.</span> <span class="nav-text">内存中的栈与堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%86%85%E5%AE%B9"><span class="nav-number">1.3.</span> <span class="nav-text">虚拟机栈的基本内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%88%E7%9A%84%E5%AD%98%E5%82%A8%E5%8D%95%E4%BD%8D"><span class="nav-number">2.</span> <span class="nav-text">栈的存储单位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88%E4%B8%AD%E5%AD%98%E5%82%A8%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">栈中存储什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88%E7%9A%84%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">栈的运行原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E8%A1%A8%EF%BC%88Local-Variables%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">局部变量表（Local Variables）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-Slot-%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">3.1.</span> <span class="nav-text">关于 Slot 的理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slot-%E7%9A%84%E9%87%8D%E5%A4%8D%E5%88%A9%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">Slot 的重复利用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F-%E5%92%8C-%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F-%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">3.3.</span> <span class="nav-text">静态变量 和 局部变量 的对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="nav-number">3.4.</span> <span class="nav-text">补充说明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">操作数栈（Operand Stack）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%88%E9%A1%B6%E7%BC%93%E5%AD%98%E6%8A%80%E6%9C%AF%EF%BC%88Top-of-Stack-Cashing%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">栈顶缓存技术（Top-of-Stack Cashing）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%EF%BC%88Dynamic-Linking%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">动态链接（Dynamic Linking）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%91%A2%EF%BC%9F"><span class="nav-number">6.1.</span> <span class="nav-text">为什么需要常量池呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">方法的调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%96%B9%E6%B3%95-amp-%E9%9D%9E%E8%99%9A%E6%96%B9%E6%B3%95"><span class="nav-number">7.1.</span> <span class="nav-text">虚方法 &amp; 非虚方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B%E8%AF%AD%E8%A8%80%E5%92%8C%E9%9D%99%E6%80%81%E7%B1%BB%E5%9E%8B%E8%AF%AD%E8%A8%80"><span class="nav-number">7.2.</span> <span class="nav-text">动态类型语言和静态类型语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="nav-number">7.3.</span> <span class="nav-text">Java语言中方法重写的本质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%96%B9%E6%B3%95%E8%A1%A8"><span class="nav-number">7.4.</span> <span class="nav-text">虚方法表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E8%BF%94%E5%9B%9E%E5%9C%B0%E5%9D%80%EF%BC%88Return-Address%EF%BC%89"><span class="nav-number">8.</span> <span class="nav-text">方法返回地址（Return Address）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E9%99%84%E5%8A%A0%E4%BF%A1%E6%81%AF"><span class="nav-number">9.</span> <span class="nav-text">一些附加信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%88%E7%9A%84%E7%9B%B8%E5%85%B3%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">10.</span> <span class="nav-text">栈的相关面试题</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -166,7 +166,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">134</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -246,7 +246,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-02 10:18:29" itemprop="dateModified" datetime="2021-07-02T10:18:29+08:00">2021-07-02</time>
+        <time title="Modified: 2021-08-03 16:48:06" itemprop="dateModified" datetime="2021-08-03T16:48:06+08:00">2021-08-03</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -269,7 +269,7 @@
     
     <div class="post-body" itemprop="articleBody">
         <blockquote>
-<p>虚拟机栈内存结构简图</p>
+<p><strong>虚拟机栈内存结构简图</strong></p>
 </blockquote>
 <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png" alt="虚拟机栈内存结构"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">|--栈</span><br><span class="line">	|--栈帧1</span><br><span class="line">		|--局部变量表</span><br><span class="line">			|--Slot1</span><br><span class="line">			|--Slot2</span><br><span class="line">			|--......</span><br><span class="line">		|--操作数栈</span><br><span class="line">		|--方法返回地址</span><br><span class="line">		|--动态链接</span><br><span class="line">		|--附加信息</span><br><span class="line">	|--栈帧2</span><br><span class="line">	|--栈帧3</span><br><span class="line">	|--....</span><br></pre></td></tr></table></figure>
@@ -277,8 +277,17 @@
 
 
 <hr>
-<h1 id="虚拟机栈概述"><a href="#虚拟机栈概述" class="headerlink" title="虚拟机栈概述"></a>虚拟机栈概述</h1><h2 id="虚拟机栈出现的背景"><a href="#虚拟机栈出现的背景" class="headerlink" title="虚拟机栈出现的背景"></a>虚拟机栈出现的背景</h2><p>由于跨平台的设计，Java 的指令都是根据栈来设计的。不同平台CPU架构不同，所以不能设计为基于寄存器的。</p>
-<p><strong>优点是跨平台，指令集小，编译器容易实现，缺点是性能下降，实现同样的功能需要更多的指令。</strong></p>
+<h1 id="虚拟机栈概述"><a href="#虚拟机栈概述" class="headerlink" title="虚拟机栈概述"></a>虚拟机栈概述</h1><h2 id="虚拟机栈出现的背景"><a href="#虚拟机栈出现的背景" class="headerlink" title="虚拟机栈出现的背景"></a>虚拟机栈出现的背景</h2><ul>
+<li>  由于 JVM 跨平台的设计，所以 JVM 的指令都是根据栈来设计的。</li>
+<li>  不同平台 CPU 架构不同，所以 JVM 指令不能设计为基于寄存器的。</li>
+</ul>
+<blockquote>
+<p>  <strong>栈式指令的优缺点：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>优点是跨平台，指令集小，编译器容易实现，</strong></li>
+<li>  <strong>缺点是性能下降（与寄存器相比），实现同样的功能需要更多的指令。</strong></li>
+</ul>
 <hr>
 <h2 id="内存中的栈与堆"><a href="#内存中的栈与堆" class="headerlink" title="内存中的栈与堆"></a>内存中的栈与堆</h2><p><strong>栈是运行时的单位，而堆是存储的单位。</strong></p>
 <ul>
@@ -286,30 +295,34 @@
 <li>堆解决的是数据存储的问题，即数据怎么放，放在哪儿。</li>
 </ul>
 <hr>
-<h2 id="虚拟机栈的基本内容"><a href="#虚拟机栈的基本内容" class="headerlink" title="虚拟机栈的基本内容"></a>虚拟机栈的基本内容</h2><p><strong>是什么 ？</strong></p>
+<h2 id="虚拟机栈的基本内容"><a href="#虚拟机栈的基本内容" class="headerlink" title="虚拟机栈的基本内容"></a>虚拟机栈的基本内容</h2><blockquote>
+<p>  <strong>是什么 ？</strong></p>
+</blockquote>
 <ul>
 <li><p>Java 虚拟机栈（Java Virtual Machine Stack），早期也叫 Java 栈。</p>
 </li>
-<li><p>每个线程在创建时都会创建一个虚拟机栈，其内部保存一个个的栈帧（Stack Frame），对应着一次次的Java方法调用。</p>
-<hr>
+<li><p>每个线程在创建时都会创建一个虚拟机栈，其内部保存一个个的栈帧（Stack Frame），对应着一次次的方法调用。</p>
 </li>
 </ul>
-<p><strong>生命周期</strong></p>
-<ul>
-<li><p>生命周期与线程一致。</p>
-<hr>
-</li>
-</ul>
-<p><strong>作用</strong></p>
-<ul>
-<li><p>主要负责管理Java程序的运行。它保存方法的局部变量、部分结果，并参与方法的调用和返回。</p>
 <blockquote>
-<p>局部变量：如果局部变量属于8种基本数据类型，则保存的是数据值；如果局部变量是引用数据类型，则保存的是对象的引用地址。</p>
+<p>  <strong>生命周期</strong></p>
 </blockquote>
-<hr>
+<ul>
+<li>生命周期与线程一致。</li>
+</ul>
+<blockquote>
+<p>  <strong>作用</strong></p>
+</blockquote>
+<ul>
+<li><p>主要负责管理 Java 线程的运行。它保存方法的局部变量、部分结果，并参与方法的调用和返回。</p>
+<blockquote>
+<p>局部变量：如果局部变量是属于 8 种基本数据类型的，则保存的是数据值；如果局部变量是引用数据类型，则保存的是对象的引用地址。</p>
+</blockquote>
 </li>
 </ul>
-<p><strong>栈的优点</strong></p>
+<blockquote>
+<p>  <strong>栈的优点</strong></p>
+</blockquote>
 <ul>
 <li><p>栈是一种快速有效的分配存储方式，其访问速度仅仅次于程序计数器。</p>
 </li>
@@ -319,23 +332,21 @@
 <li>执行结束后出栈。</li>
 </ol>
 </li>
-<li><p>对于栈来说不存在垃圾回收问题，出栈就等同于垃圾回收。</p>
+<li><p><strong>对于栈来说不存在垃圾回收问题，出栈就等同于垃圾回收。</strong></p>
 <hr>
 </li>
 </ul>
-<p><strong>栈中可能出现的异常</strong></p>
-<ul>
-<li><p>Java 虚拟机规范允许 <strong>Java栈的大小可以是动态的或者是固定不变的</strong>。</p>
 <blockquote>
+<p>  <strong>栈中可能出现的异常</strong></p>
+</blockquote>
+<p>Java 虚拟机规范允许 <strong>Java栈的大小可以是动态的或者是固定不变的</strong>。</p>
 <ul>
 <li>如果采用固定大小的虚拟机栈，那每一个线程的对应的虚拟机栈的容量在线程创建之初就已经确定了，如果线程请求分配的栈容量超过虚拟机栈允许的最大容量，JVM将会抛出一个 <strong>StackOverflowError</strong> 异常。</li>
 <li>如果虚拟机栈设置为可动态扩展，并且在尝试扩展时无法申请到足够的内存，或者在创建新的线程时没有足够的内存去创建对应的虚拟机栈，那JVM将会抛出一个 <strong>OutOfMemoryError</strong> 异常。</li>
 </ul>
+<blockquote>
+<p>  <strong>设置栈内存的大小</strong></p>
 </blockquote>
-<hr>
-</li>
-</ul>
-<p><strong>设置栈内存的大小</strong></p>
 <ul>
 <li><p>我们可以使用参数 <code>-Xss</code> 来设置线程的最大栈空间，栈空间的大小直接决定了函数调用的最大可达深度。</p>
 </li>
@@ -346,14 +357,19 @@
 <hr>
 <h1 id="栈的存储单位"><a href="#栈的存储单位" class="headerlink" title="栈的存储单位"></a>栈的存储单位</h1><h2 id="栈中存储什么？"><a href="#栈中存储什么？" class="headerlink" title="栈中存储什么？"></a>栈中存储什么？</h2><ul>
 <li>每个线程都有自己的栈，栈中的数据都是以 <strong>栈帧（Stack Frame）</strong> 为基本单位存储的。</li>
-<li>在这个线程上，<em>每个正在执行的方法都有各自对应的一个栈帧（Stack Frame）</em>。</li>
+<li>在这个线程上，每个正在执行的方法都有各自对应的一个栈帧（Stack Frame）。</li>
 <li>栈帧是一个内存区域，是一个数据集，保存了方法执行过程中的各种数据信息。</li>
 </ul>
 <hr>
-<h2 id="栈的运行原理"><a href="#栈的运行原理" class="headerlink" title="栈的运行原理"></a>栈的运行原理</h2><p><strong>当前栈帧</strong>、<strong>当前方法</strong> 和 <strong>当前类</strong> 的说明：</p>
+<h2 id="栈的运行原理"><a href="#栈的运行原理" class="headerlink" title="栈的运行原理"></a>栈的运行原理</h2><blockquote>
+<p>  <strong>当前栈帧</strong>、<strong>当前方法</strong> 和 <strong>当前类</strong> 的说明：</p>
+</blockquote>
 <ul>
 <li>在一个线程中，同一时刻，只能有一个栈帧正在执行操作，即只有当前正在执行方法的栈帧（栈顶栈帧）是有效的，这个栈帧被称为<strong>当前栈帧（Current Frame）</strong>，与当前栈帧对应的方法就是<strong>当前方法（Current Method）</strong>，这个方法所在的类就是<strong>当前类（Current Class）</strong>。</li>
 </ul>
+<blockquote>
+<p>  <strong>执行原理：</strong></p>
+</blockquote>
 <ul>
 <li>JVM对<code>虚拟机栈</code>的直接操作只有两个，就是对栈帧进行<strong>压栈</strong>和<strong>出栈</strong>。</li>
 <li>如果在当前方法中调用了其它方法，那么对应的新的栈帧会被创建出来，放在栈的顶端，变成了新的当前栈帧。</li>
@@ -373,13 +389,17 @@
 <li>当方法4出栈后，方法3就位于了栈顶，栈帧3就变成了新的当前栈帧，方法3变成了新的当前方法，方法3所在的类就成了新的当前类。</li>
 <li>以此类推。</li>
 </ul>
+<blockquote>
+<p>  <strong>注意：</strong></p>
+</blockquote>
 <ul>
 <li>不同线程中的栈帧是不允许互相引用的，即不可以在一个线程的栈帧之中引用另一个线程的栈帧。</li>
 <li>如果<code>当前方法</code>调用了其它方法，那么这个“其它方法”就会成为<code>新的当前方法</code>，这个<code>新的当前方法</code>在执行完毕出栈时，当前栈帧会传回此方法的执行结果给上一个栈帧。接着，虚拟机会丢弃当前栈帧，使上一个栈帧重新成为当前栈帧。</li>
 <li>方法的结束方法时有两种：<strong>一种是正常的函数返回，使用 return 指令；另一种是抛出异常。不管使用哪种方式，都会导致当前栈帧出栈。</strong></li>
 </ul>
+<hr>
 <h1 id="局部变量表（Local-Variables）"><a href="#局部变量表（Local-Variables）" class="headerlink" title="局部变量表（Local Variables）"></a>局部变量表（Local Variables）</h1><blockquote>
-<p>局部变量表；局部变量数组；本地变量表。</p>
+<p><strong>局部变量表；局部变量数组；本地变量表。</strong></p>
 </blockquote>
 <p><strong>局部变量表的逻辑结构是一个一维数字数组，主要用于存储栈帧对应方法的参数和方法内部的局部变量。</strong></p>
 <ul>
@@ -390,21 +410,22 @@
 </ol>
 </li>
 </ul>
-<hr>
-<p><strong>问题：为什么说局部变量表存储的是一个数字数组呢？</strong></p>
+<blockquote>
+<p>  <strong>问题：为什么说局部变量表存储的是一个数字数组呢？</strong></p>
+</blockquote>
+<p>答：</p>
 <ul>
-<li><p>答：首先明确，局部变量表中主要保存了栈帧对应方法的<strong>方法参数</strong>和<strong>方法内的局部变量</strong>。</p>
-<p>​    这两种数据的类型无外乎就是基本数据类型和引用数据类型。在基本数据类型中：<code>byte</code>、<code>short</code>、<code>int</code>、<code>long</code>、<code>double</code>、<code>float </code>本来就是数字类型，<code>boolean</code>、<code>char </code>可以通过 ASCII 码表转化成数字类型；同理，引用类型数据也可以转成为数字表示。</p>
-<p>​    所以说，局部变量表存储的是一个数字数组。</p>
-</li>
+<li>  首先明确，局部变量表中主要保存了栈帧对应方法的<strong>方法参数、方法内的局部变量、和方法返回值</strong>。</li>
+<li>  这些数据的类型无外乎就是基本数据类型和引用数据类型。在基本数据类型中：<code>byte</code>、<code>short</code>、<code>int</code>、<code>long</code>、<code>double</code>、<code>float </code>本来就是数字类型，<code>boolean</code>、<code>char </code>可以通过 ASCII 码表转化成数字类型；同理，引用类型数据也可以转成为数字表示。</li>
+<li>  所以说，局部变量表存储的是一个数字数组。</li>
 </ul>
-<hr>
-<p><strong>问题：局部变量表存在线程安全问题吗？</strong></p>
-<ul>
-<li>答：由于局部变量表是建立在虚拟机栈的栈帧上，而虚拟机栈是线程私有的数据，因此不存在线程安全问题。</li>
-</ul>
-<p><strong>线程安全问题</strong>：多个线程同时操作共享的数据可能会造成安全问题。</p>
-<hr>
+<blockquote>
+<p>  <strong>问题：局部变量表存在线程安全问题吗？</strong></p>
+</blockquote>
+<p>答：由于局部变量表是建立在虚拟机栈的栈帧上，而虚拟机栈是线程私有的数据，因此不存在线程安全问题。</p>
+<blockquote>
+<p>  <strong>知识点：</strong></p>
+</blockquote>
 <ul>
 <li><strong>局部变量表所需的容量大小是在前端编译期就已经确定了的</strong>，并保存在方法的 Code 属性的 <code>maximum local variable</code> 数据项中。在方法运行期间是不会改变局部变量表的大小的。</li>
 <li><strong>方法可嵌套调用的次数由栈的大小（深度）决定</strong>。一般来说，<strong>栈越大，方法可嵌套调用的次数就越多</strong>。对于一个方法而言，它的参数和局部变量越多，就会使得局部变量表膨胀，它的栈帧也就越大，为满足方法调用所需传递的信息量增大的需求，函数调用就会占用更多的栈空间，导致其嵌套调用次数就会减少。</li>
@@ -427,7 +448,7 @@
 </ul>
 </blockquote>
 </li>
-<li><p>JVM 会为局部变量表中的每一个 Slot 都分配一个<strong>访问索引</strong>，通过这个索引即可成功访问到局部变量表中每个Slot中保存的的值。</p>
+<li><p>JVM 会为局部变量表中的每一个 Slot 都分配一个<strong>访问索引</strong>，通过这个索引即可成功访问到局部变量表中每个 Slot 中保存的的值。</p>
 </li>
 <li><p>当一个<strong>实例方法</strong>被调用时，它的<code>方法参数</code>和<code>方法内部的局部变量</code>将会<strong>按照顺序被复制</strong>到局部变量表中的每一个Slot上。</p>
 <blockquote>
@@ -476,7 +497,7 @@
 <h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><ul>
 <li>在栈帧中，与性能调优关系最密切的部分就是<strong>局部变量表</strong>。<ol>
 <li>首先，局部变量表在一个栈帧中占据的内存往往是较多的，当涉及到栈内存溢出时，往往要考虑优化栈帧中局部变量表的内存。</li>
-<li>其次，局部变量表中保存了大量的对象的指针，这些指针指向的对象存储在堆空间中，当局部变量表中的指针失效后，如何回收，什么时候回收 等等条件都影响着堆空间的利用，所以说：在栈帧中，与性能调优关系最密切的部分就是局部变量表。</li>
+<li>其次，局部变量表中保存了大量的对象指针，这些指针指向的对象存储在堆空间中，当局部变量表中的指针失效后，如何回收，什么时候回收 等等条件都影响着堆空间的利用，所以说：在栈帧中，与性能调优关系最密切的部分就是局部变量表。</li>
 </ol>
 </li>
 </ul>
@@ -485,10 +506,12 @@
 </ul>
 <hr>
 <h1 id="操作数栈（Operand-Stack）"><a href="#操作数栈（Operand-Stack）" class="headerlink" title="操作数栈（Operand Stack）"></a>操作数栈（Operand Stack）</h1><blockquote>
-<p>操作数栈；表达式栈</p>
+<p><strong>操作数栈；表达式栈</strong></p>
 </blockquote>
 <ul>
 <li><p>操作数栈也是栈帧中的一个重要组成部分。</p>
+</li>
+<li><p>根据指令对局部变量表中的变量进行运算。</p>
 </li>
 <li><p><strong>操作数栈的作用就是：在方法执行过程中，根据字节码指令，往栈中写入数据或提取数据，即入栈（push）/ 出栈（pop）</strong></p>
 <blockquote>
@@ -523,34 +546,36 @@
 <h1 id="栈顶缓存技术（Top-of-Stack-Cashing）"><a href="#栈顶缓存技术（Top-of-Stack-Cashing）" class="headerlink" title="栈顶缓存技术（Top-of-Stack Cashing）"></a>栈顶缓存技术（Top-of-Stack Cashing）</h1><p>基于栈式架构的虚拟机所使用的<strong>零地址指令</strong>更加紧凑，但完成一项操作的时候必然需要使用更多的入栈和出栈指令，这同时也就意味着将需要使用更多的指令分派（instruction dispatch）次数和内存读写次数。</p>
 <p>由于操作数是存储在内存中的，因此频繁的读/写操作必然会影响执行速度。为了解决这个问题，HotSpot JVM 的设计者提出了 栈顶缓存技术（Tos，Top-of-Stack Cashing）技术，<strong>将栈顶元素全部缓存在物理CPU的寄存器中，以此降低对内存的读/写次数，提升执行引擎的执行效率</strong>。</p>
 <hr>
-<h1 id="动态链接（Dynamic-Linking）"><a href="#动态链接（Dynamic-Linking）" class="headerlink" title="动态链接（Dynamic Linking）"></a>动态链接（Dynamic Linking）</h1><p><strong>动态链接：指向运行时常量池中的方法引用</strong></p>
+<h1 id="动态链接（Dynamic-Linking）"><a href="#动态链接（Dynamic-Linking）" class="headerlink" title="动态链接（Dynamic Linking）"></a>动态链接（Dynamic Linking）</h1><p><strong>动态链接：指向运行时常量池中方法的引用</strong>【符号引用转换为直接引用】</p>
 <ul>
-<li>大部分字节码指令在执行时都需要借助运行时常量池，所以HotSpot虚拟机在设计之初，就在帧数据区保存了一个能够访问运行时常量池的指针，方便程序访问运行时常量池。</li>
-<li>每一个栈帧内部都包含一个指向<strong>运行时常量池</strong>中<strong>该栈帧所属方法的引用</strong>。包含这个引用的目的就是为了支持当前方法的代码能够实现<strong>动态链接（Dynamic Linking）</strong>。比如：invokedynamic 指令。</li>
+<li>大部分字节码指令在执行时都需要借助运行时常量池，所以 HotSpot 在设计之初，就在栈帧数据区保存了一个能够访问运行时常量池的指针，方便程序访问运行时常量池。</li>
+<li>每一个栈帧内部都包含一个指向<strong>运行时常量池</strong>中<strong>该栈帧所属方法的引用</strong>。包含这个引用的目的就是为了支持当前方法的代码能够实现<strong>动态链接（Dynamic Linking）</strong>。比如：<code>invokedynamic</code> 指令。</li>
 <li>在<code>.java</code>源文件被编译成<code>.class</code>字节码文件时，所有的变量和方法引用都会转化为符号引用（Symbolic Reference）保存在 <code>.class</code> 文件的常量池里。    比如：描述一个方法调用了其它方法时，就是通过常量池中指向方法的符号引用来表示的，而<strong>动态链接的作用就是为了将这些符号引用转换为调用方法的直接引用</strong>。</li>
 </ul>
 <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5.png" alt="动态链接"></p>
 <h2 id="为什么需要常量池呢？"><a href="#为什么需要常量池呢？" class="headerlink" title="为什么需要常量池呢？"></a>为什么需要常量池呢？</h2><p>常量池的作用，就是为了提供一些符号和常量，便于指令的识别。</p>
 <ul>
 <li>一般来讲，我们的字节码文件所占的空间都比较小，但是每个字节码文件中保存的内容却不少，比如类的父类信息、各种数据类型的信息、等等等等。这些信息如果都保存在字节码文件中，显然字节码文件空间就非常臃肿了，那么这些信息保存在哪儿呢？常量池中！</li>
-<li>我们在字节码文件中只需要保存常量值中具体数据对象的引用，就可以在程序运行去具体的运行时常量池中找到程序运行所需要的数据信息。</li>
+<li>我们在字节码文件中只需要保存常量池中具体数据对象的引用，就可以在程序运行去具体的运行时常量池中找到程序运行所需要的数据信息。</li>
 </ul>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>常量池/运行时常量池：保存指向方法和变量的符号引用；</li>
 <li>动态链接：将符号引用转换成直接引用。</li>
 </ul>
 <hr>
-<h1 id="方法的调用"><a href="#方法的调用" class="headerlink" title="方法的调用"></a>方法的调用</h1><p><strong>问题：Java 语言具有多态性，那么JVM如何知道运行的时候应该调用父类的方法还是子类的方法呢 ？</strong></p>
-<p>在JVM中，将符号引用转换为调用方法的直接引用与方法的绑定机制相关。</p>
+<h1 id="方法的调用"><a href="#方法的调用" class="headerlink" title="方法的调用"></a>方法的调用</h1><blockquote>
+<p>  <strong>问题：Java 语言具有多态性，那么 JVM 在运行时如何知道应该调用父类的方法还是子类的方法呢 ？</strong></p>
+</blockquote>
+<p>在 JVM 中，将符号引用转换为调用方法时的直接引用与方法的绑定机制相关。</p>
 <ul>
 <li><p><strong>静态链接</strong>：</p>
-<p>当一个字节码文件被装载进JVM内部时，如果<strong>被调用的目标方法在编译期可知</strong>，且运行期保持不变时，这种情况下将调用方法的符号引用转换为直接引用的过程称为静态链接。</p>
+<p>当一个字节码文件被加载进 JVM 内存中时，如果<strong>被调用的目标方法在编译期可知</strong>，且运行期保持不变时，这种情况下将调用方法的符号引用转换为直接引用的过程称为静态链接。</p>
 </li>
 <li><p><strong>动态链接</strong>：</p>
 <p>如果<strong>被调用的方法在编译期无法被确定下来</strong>，也就是说，只能在程序运行期将调用方法的符号引用转换为直接引用，由于这种引用转换过程具备动态性，因此也就被称之为动态链接。</p>
 </li>
 </ul>
-<p>对应的方法的绑定机制为：早期绑定（Early Binding）和 晚期绑定（Late Binding）。</p>
+<p>对应的方法的绑定机制为：<strong>早期绑定（Early Binding）</strong>和 <strong>晚期绑定（Late Binding）</strong>。</p>
 <p><strong>绑定是：一个字段、方法或者类从符号引用被转换为直接引用的过程，这仅仅发生一次</strong>。</p>
 <ul>
 <li><p><strong>早期绑定</strong>：</p>
@@ -560,12 +585,16 @@
 <p>如果<strong>被调用的方法在编译期无法被确定下来，只能够在程序运行期根据实际的类绑定相关的方法</strong>，这种绑定方式也就被称之为晚期绑定。</p>
 </li>
 </ul>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">虚函数：运行期才能确定下来</span><br></pre></td></tr></table></figure>
-
-
-
 <p>面向对象的语言的共性就是都支持 封装、继承和多态 等面向对象特性。既然这一类的编程语言具备多态特性，那么自然也就具备早期绑定和晚期绑定两种绑定方式。</p>
 <p>Java 中任何一个普通方法都具备虚函数的特征，它相当于C++语言中的虚函数（C++语言中需要使用关键字 virtual 来显示定义）。如果在 Java 程序中不希望某个方法拥有虚函数的特征时，则可以使用 final 关键字来标记这个方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">虚函数：运行期才能确定下来</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
 <h2 id="虚方法-amp-非虚方法"><a href="#虚方法-amp-非虚方法" class="headerlink" title="虚方法 &amp; 非虚方法"></a>虚方法 &amp; 非虚方法</h2><ul>
 <li>如果方法在编译期就确定了具体的调用版本，且这个版本在运行时是不可变的。这样的方法就称为<strong>非虚方法</strong>。</li>
 <li>静态方法、私有方法、final方法、实例构造器、父类方法都是非虚方法。</li>
@@ -603,7 +632,7 @@
 </li>
 </ul>
 <p>前四条指令固化在虚拟机内部，方法的调用执行不可人为干预，而 <code>invokedynamic</code> 指令则支持由用户确定方法版本，其中 <strong>invokestatic指令 和 invokespecial指令 调用的方法称为非虚方法，其余的（final 修饰的除外）称为虚方法</strong>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如果父类 Father 中定义了 final 关键字修饰的方法，在子类中直接调用该方法：</span><br><span class="line">我们会发现该方法是使用 invokevirtual 指令调用的，但本质上这还是一个非虚方法，因为被 final 修饰的方法在编译期就可以确定唯一的方法版本，不能被子类重写。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如果父类 Father 中定义了 final 关键字修饰的方法，在子类中直接调用该方法：</span><br><span class="line"></span><br><span class="line">我们会发现该方法是使用 invokevirtual 指令调用的，但本质上这还是一个非虚方法，</span><br><span class="line">因为被 final 修饰的方法在编译期就可以确定唯一的方法版本，不能被子类重写。</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>JVM 字节码指令集一直比较稳定，一直到 Java7 中才增加了一个 <code>invokedynamic</code> 指令，这是 Java 为了实现动态类型语言支持而做的一种改进。</li>
@@ -612,38 +641,53 @@
 </ul>
 <hr>
 <h2 id="动态类型语言和静态类型语言"><a href="#动态类型语言和静态类型语言" class="headerlink" title="动态类型语言和静态类型语言"></a>动态类型语言和静态类型语言</h2><ul>
-<li>动态类型语言和静态类型语言两者的区别就在于对类型的检查是在编译期还是在运行期。满足前者就是静态类型语言，反之就是动态类型语言。 </li>
-<li>也就是说，<strong>静态类型语言是判断变量自身的类型信息；动态类型语言是判断变量值的类型信息。变量没有类型信息，变量值才有类型信息</strong>。这是动态语言的一个重要特性。</li>
+<li><strong>动态类型语言和静态类型语言两者的区别就在于对类型的检查是在编译期还是在运行期</strong>。满足前者就是静态类型语言，反之就是动态类型语言。 </li>
+<li>也就是说，静态类型语言是判断变量自身的类型信息；动态类型语言是判断变量值的类型信息。变量没有类型信息，变量值才有类型信息。这是动态语言的一个重要特性。</li>
 <li>Java 是一种静态类型语言，静态类型语言就是强类型语言，动态类型语言就是弱类型语言，如：Js、Python 等。</li>
 </ul>
 <hr>
 <h2 id="Java语言中方法重写的本质"><a href="#Java语言中方法重写的本质" class="headerlink" title="Java语言中方法重写的本质"></a>Java语言中方法重写的本质</h2><ol>
-<li><p>找到<strong>操作数栈</strong>栈顶的第一个元素，即执行方法的对象的实际类型，记做 C 。</p>
-</li>
-<li><p>如果在类型 C 中能找到与被调用方法 返回值、名称 和 请求参数 都相符的方法，则继续进行访问权限校验，如果校验通过则返回这个方法的直接引用，查找过程结束；如果不通过，则返回 java.lang.IllegalAccessError 异常。</p>
-</li>
-<li><p>否则，按照继承关系从下往上依次对 C 的父类进行第2步的搜索和验证过程。</p>
-</li>
-<li><p>如果始终没有找到合适的方法，则抛出 <code>java.lang.AbstractMethodError</code> 异常。</p>
-</li>
+<li> 当我们调用一个对象的方法的时候，首先会将这个对象的实际类型压入操作数栈记做 C 。</li>
+<li> 然后 JVM 就会去这个类型对应的 Class 中去查找是否含有 <code>返回值、名称和请求参数</code> 与调用方法都相同的方法；</li>
+<li> 如果找到了，继续进行访问权限校验，若校验通过，就返回该方法的直接引用；若校验失败，则返回 java.lang.IllegalAccessError 异常。</li>
+<li> 如果在 Class C 中找不到符合条件的方法，则按照继承关系从下往上依次对 C 的父类进行第2、3步的检索和验证过程。</li>
+<li> 如果始终没有找到对应的方法，则抛出 <code>java.lang.AbstractMethodError</code> 异常。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、当我们调用一个对象的方法的时候，首先会将这个对象的实际类型压入操作数栈。</span><br><span class="line">2、然后 JVM 就会去这个类型对应的 Class 中去查找是否含有 返回值、名称和请求参数 都相同的方法；</span><br><span class="line">3、如果找到了，则继续进行访问权限校验，若校验通过，就返回该方法的直接引用；若校验失败，则返回 java.lang.IllegalAccessError 异常。</span><br><span class="line">4、如果在 类型C 中找不到对应的方法，则按照继承关系从下往上依次对 C 的父类进行第2、3步的检索和验证过程。</span><br><span class="line">5、如果始终没有找到对应的方法，则抛出 java.lang.AbstractMethodError 异常。</span><br></pre></td></tr></table></figure>
-
-<h3 id="IllegalAccessError-介绍"><a href="#IllegalAccessError-介绍" class="headerlink" title="IllegalAccessError 介绍"></a>IllegalAccessError 介绍</h3><p>程序试图访问或修改一个属性或调用一个方法，如果这个属性或方法，你没有权限访问，一般的，这就会引起编译期异常。这个错误如果发生在运行时，就说明一个类发生了不兼容的改变。</p>
+<blockquote>
+<p>  <strong>IllegalAccessError</strong></p>
+</blockquote>
+<ul>
+<li>  程序试图访问或修改一个属性或调用一个方法，如果这个属性或方法，你没有权限访问，一般会引起编译期异常。这个错误如果发生在运行时，就说明一个类发生了不兼容的改变。</li>
+</ul>
 <hr>
 <h2 id="虚方法表"><a href="#虚方法表" class="headerlink" title="虚方法表"></a>虚方法表</h2><ul>
-<li>在面向对象的编程中，会很频繁的使用到动态分派，如果在每次动态分派的过程中都要重新在类的方法元数据中搜索合适的目标的话可能影响到执行效率。因此，为了提高性能，JVM 采用在类的方法区建立一个虚方法表（virtual method table）（非虚方法不会出现在表中）来实现，虚方法表中的每个虚方法通过索引来代替递归查找。</li>
-<li>每个类中都有一个虚方法表，表中存放着各个方法的实际入口。</li>
-<li>那么虚方法表什么时候创建呢？</li>
+<li>在面向对象的编程中，会很频繁的使用到动态分派，如果在每次动态分派的过程中都要重新在类的方法元数据中搜索合适的目标的话可能影响到执行效率。因此，为了提高性能，JVM 采用<strong>在方法区为每个 Class 对象建立一个虚方法表</strong>（virtual method table）（非虚方法不会出现在表中）来实现，虚方法表中的每个虚方法通过索引来代替递归查找。</li>
+<li>每个类都对应有一个虚方法表，表中存放着各个方法的实际入口。</li>
 </ul>
-<p>虚方法表会在类加载的链接阶段被创建并开始初始化，类的变量初始值准备完成之后，JVM 会把该类的虚方法表也初始化完毕。</p>
+<blockquote>
+<p>  <strong>那么虚方法表什么时候创建呢？</strong></p>
+</blockquote>
+<p>虚方法表会在<strong>链接阶段</strong>被创建并开始初始化，类的变量<strong>初始</strong>值准备完成之后，JVM 会把该类的虚方法表也初始化完毕。</p>
 <hr>
-<h1 id="方法返回地址（Return-Address）"><a href="#方法返回地址（Return-Address）" class="headerlink" title="方法返回地址（Return Address）"></a>方法返回地址（Return Address）</h1><p>方法返回地址是栈帧中的一块内存地址。存放调用该方法的 <code>程序计数器</code> 的值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">假设现有一JVM栈，首先调用了A方法 ，A方法中又调用了B方法（B方法有返回值）；</span><br><span class="line">1、A方法首先入栈，</span><br><span class="line">2、在A方法的某一行代码中调用了B方法，B方法入栈，B方法在执行完毕后，返回值中保存着程序计数器的值，即下一条JVM指令的地址，这样执</span><br><span class="line">行引擎就能根据这个地址跳转回A方法中去，继续执行A方法中的代码。</span><br></pre></td></tr></table></figure>
-
-<p>一个方法的结束，有两种方式：1、正常执行完成    2、出现未处理的异常，非正常退出。  无论通过哪种方式退出，在方法退出后都返回到该方法被调用的位置。  </p>
+<h1 id="方法返回地址（Return-Address）"><a href="#方法返回地址（Return-Address）" class="headerlink" title="方法返回地址（Return Address）"></a>方法返回地址（Return Address）</h1><blockquote>
+<p>  <strong>定义</strong></p>
+</blockquote>
+<p><strong>方法返回地址</strong>保存的是程序计数器的值（指向下一条要执行指令的地址）。</p>
+<blockquote>
+<p>  <strong>举例</strong></p>
+</blockquote>
+<p>假设在某一栈中，先调用了A方法 ，A方法中又调用了B方法：</p>
+<ol>
+<li> A方法首先入栈，</li>
+<li> 在A方法的某一行代码中调用了B方法，B方法入栈，<strong>B方法在执行完毕后，要跳转回A方法中去，就需要用到这个方法返回地址</strong>。</li>
+<li> 方法返回地址的值就是程序计数器的值，即下一条JVM指令的地址，这样执行引擎就能根据这个地址跳转回A方法中去，继续执行A方法中的代码。</li>
+</ol>
+<blockquote>
+<p>  <strong>方法的两种结束方式：</strong></p>
+</blockquote>
+<p>一个方法的结束有两种方式：①正常执行完成    ②出现未处理的异常，非正常退出。  无论通过哪种方式退出，在方法退出后都返回到该方法被调用的位置。  </p>
 <ul>
-<li>方法正常退出时，<strong>调用者的<code>程序计数器</code>的值作为返回地址，即调用该方法的指令的下一条指令的地址</strong>。</li>
+<li>方法正常退出时，<strong>会将调用者的程序计数器的值作为返回地址，即调用该方法的指令的下一条指令的地址</strong>。</li>
 <li>而通过异常退出的，返回地址要通过异常表来确定，栈帧中一般不会保存这部分信息。</li>
 </ul>
 <p>当一个方法开始执行后，只有两种方式可以退出这个方法：</p>
@@ -663,33 +707,49 @@
 <hr>
 <h1 id="一些附加信息"><a href="#一些附加信息" class="headerlink" title="一些附加信息"></a>一些附加信息</h1><p>栈帧中还允许携带与Java虚拟机实现相关的一些附加信息。例如：对程序调试提供支持的信息。</p>
 <hr>
-<h1 id="栈的相关面试题"><a href="#栈的相关面试题" class="headerlink" title="栈的相关面试题"></a>栈的相关面试题</h1><ul>
-<li>举例栈溢出的情况？</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">栈溢出：StackOverflowError</span><br><span class="line">内存溢出：OutOfMemoryError</span><br><span class="line"></span><br><span class="line">1、如果设置栈帧内存为自适应的话，假设某个方法入栈时需要占用的内存为2M，那么这时候JVM就会自动分配栈帧内存大于等于2M的空间给方法使用。这种情况下不会出现 StackOverflowError ，但是会当栈的内存不足以满足新的栈帧需要的内存时，就会出现OutOfMemoryError。</span><br><span class="line">2、如果设置栈帧内存为手动指定的话，假设某个方法入栈时需要占用的内存为2M，但是我们手动设置的栈帧的最大内存为1M，那么这时就会出现 StackOverflowError。</span><br><span class="line">【待定】</span><br></pre></td></tr></table></figure>
+<h1 id="栈的相关面试题"><a href="#栈的相关面试题" class="headerlink" title="栈的相关面试题"></a>栈的相关面试题</h1><blockquote>
+<ol>
+<li> <strong>举例栈溢出的情况？</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">栈溢出：StackOverflowError</span><br><span class="line">内存溢出：OutOfMemoryError</span><br></pre></td></tr></table></figure>
 
+<ol>
+<li> 如果设置栈帧内存为自适应的话，假设某个方法入栈时需要占用的内存为2M，那么这时候JVM就会自动分配栈帧内存大于等于2M的空间给方法使用。这种情况下不会出现 StackOverflowError ，但是会当栈的内存不足以满足新的栈帧需要的内存时，会出现OutOfMemoryError。</li>
+<li> 如果设置栈帧内存为手动指定的话，假设某个方法入栈时需要占用的内存为2M，但是我们手动设置的栈帧的最大内存为1M，那么这时就会出现 StackOverflowError。</li>
+</ol>
+<blockquote>
+<ol start="2">
+<li> <strong>调整栈大小，就能保证不出现溢出吗？</strong></li>
+</ol>
+</blockquote>
+<p>答：不能。如果入栈的方法是一个死循环的递归方法，那么增加栈的内存只能保证栈溢出的时间出现的晚一些，最终还是会出现栈溢出。</p>
+<blockquote>
+<ol start="3">
+<li> <strong>分配的栈内存越大越好吗？</strong></li>
+</ol>
+</blockquote>
+<p>答：不是。会挤占其它内存空间。</p>
+<blockquote>
+<ol start="4">
+<li> <strong>垃圾回收是否会涉及到虚拟机栈？</strong></li>
+</ol>
+</blockquote>
+<p>答：不会。</p>
 <ul>
-<li>调整栈大小，就能保证不出现溢出吗？</li>
+<li>  程序计数器：不存在Error，不存在GC；</li>
+<li>  虚拟机栈：存在Error，不存在GC（通过出栈的方式来完成类似于垃圾回收的功能）；</li>
+<li>  本地方法栈：存在Error，不存在GC（类似于虚拟机栈）；</li>
+<li>  堆：存在Error，存在GC；</li>
+<li>  方法区：存在Error，存在GC；</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答：不能。</span><br><span class="line"></span><br><span class="line">如果入栈的方法是一个死循环的递归方法，那么增加栈的内存只能保证栈溢出的时间出现的晚一些，最终还是会出现栈溢出</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>分配的栈内存越大越好吗？</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">答：不是</span><br><span class="line"></span><br><span class="line">挤占其它内存空间</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>垃圾回收是否会涉及到虚拟机栈？</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">答：不会。</span><br><span class="line"></span><br><span class="line">程序计数器：不存在Error，不存在GC</span><br><span class="line">虚拟机栈：存在Error，不存在GC（通过出栈的方式来完成类似于垃圾回收的功能）</span><br><span class="line">本地方法栈：存在Error，不存在GC（类似于虚拟机栈）</span><br><span class="line">堆：存在Error，存在GC</span><br><span class="line">方法区：存在Error，存在GC</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>方法中定义的局部变量是否线程安全？</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">答：不一定。具体问题具体分析。</span><br></pre></td></tr></table></figure>
-
+<blockquote>
+<ol start="5">
+<li> <strong>方法中定义的局部变量是否线程安全？</strong></li>
+</ol>
+</blockquote>
+<p>答：不一定。具体问题具体分析。</p>
 <p>​    </p>
-<hr>
 
     </div>
 
