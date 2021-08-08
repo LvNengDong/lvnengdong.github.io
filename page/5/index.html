@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">136</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,272 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">JVM——运行时数据区:01概述</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-31 20:33:06" itemprop="dateCreated datePublished" datetime="2021-05-31T20:33:06+08:00">2021-05-31</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 14:49:08" itemprop="dateModified" datetime="2021-08-03T14:49:08+08:00">2021-08-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E5%BC%95%E5%85%A5%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.jpg"></p>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><hr>
+<p><strong>问题：什么是内存？</strong></p>
+<ul>
+<li>内存是非常重要的系统资源，是硬盘和CPU的中间仓库及桥梁，承载着操作系统和应用程序的实时运行。  </li>
+</ul>
+<hr>
+<p><strong>问题：什么是JVM内存布局？</strong></p>
+<ul>
+<li>JVM 内存布局规定了 Java 程序在运行过程中内存申请、分配、管理的策略，保证了 JVM 高效稳定的运行。</li>
+<li><strong>不同的 JVM 对于内存布局的划分方式和管理机制存在着差异。</strong></li>
+</ul>
+<hr>
+<p><strong>JVM内存布局（经典）</strong></p>
+<p>下图是一种经典的 JVM 内存布局：</p>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.png"></p>
+<p><strong>Part1：</strong></p>
+<p>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域有各自的用途，创建和销毁时间。</p>
+<ul>
+<li>有的区域会随着虚拟机进程的启动而创建，随着虚拟机进程的退出而销毁。</li>
+<li>有的区域则是与线程一一对应的，随着用户线程的开始和结束而创建和销毁。</li>
+</ul>
+<blockquote>
+<p>一个虚拟机对应一个进程。虚拟机启动就创建一个进程，虚拟机退出就杀死一个进程。</p>
+</blockquote>
+<p><strong>Part2：</strong></p>
+<p>在上图中，灰色的内存区域是单个线程所私有的，红色的内存区域是多个线程共享的。即：</p>
+<ul>
+<li>JVM中每个线程私有的内存区域包括： 1、程序计数器    2、虚拟机栈    3、本地方法栈</li>
+<li>JVM中所有线程共享内存区域包括：1、堆    2、方法区（永久代或元空间、代码缓存）</li>
+</ul>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E7%BA%BF%E7%A8%8B%E5%85%B1%E4%BA%AB%E5%92%8C%E7%A7%81%E6%9C%89%E7%9A%84%E7%BB%93%E6%9E%84-1622464561115.jpg"></p>
+<blockquote>
+<p>PC：PC寄存器（程序计数器）</p>
+<p>VMS：虚拟机栈</p>
+<p>NMS：本地方法栈</p>
+</blockquote>
+<hr>
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><ul>
+<li><p>线程是一个程序里的运行单元。JVM 允许一个应用有多个线程并行执行。</p>
+</li>
+<li><p>每个Java程序启动后是一个进程，这个进程中可以包含多个线程。</p>
+</li>
+<li><p>在 HotSpot VM 中，每个线程都与操作系统的本地线程一一映射。</p>
+<blockquote>
+<p>当一个 Java 线程开始执行时，本地操作系统同时也会创建一个本地线程；当 Java 线程执行结束后，本地线程也会回收。</p>
+</blockquote>
+</li>
+<li><p>操作系统负责线程的安排调度，将所有的线程安排到任一可用的CPU上（如果本地机器有多个CPU的话）。一旦本地线程初始化成功，它就会调用 Java 线程中的 run() 方法。</p>
+</li>
+</ul>
+<hr>
+<h2 id="JVM-系统线程"><a href="#JVM-系统线程" class="headerlink" title="JVM 系统线程"></a>JVM 系统线程</h2><ul>
+<li><p>如果你使用 jconsole 或者是任何一个调试工具，都能看到在后台有许多线程在运行。但是这些线程不包括调用 <code>public static void main(String[])</code> 的 main 线程以及所有这个 main 线程自己创建的线程。</p>
+</li>
+<li><p>这些主要的后台系统线程在 HotSpot JVM 里主要是以下几个：</p>
+<blockquote>
+<ul>
+<li>虚拟机线程</li>
+<li>周期任务线程</li>
+<li>GC 线程</li>
+<li>编译线程</li>
+<li>信号调度线程</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/20/JVM%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/20/JVM%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/" class="post-title-link" itemprop="url">JVM——本地方法库</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-20 21:19:19" itemprop="dateCreated datePublished" datetime="2021-05-20T21:19:19+08:00">2021-05-20</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 12:33:15" itemprop="dateModified" datetime="2021-08-03T12:33:15+08:00">2021-08-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="本地方法接口"><a href="#本地方法接口" class="headerlink" title="本地方法接口"></a>本地方法接口</h1><h2 id="什么是本地方法？"><a href="#什么是本地方法？" class="headerlink" title="什么是本地方法？"></a>什么是本地方法？</h2><ul>
+<li>  使用 <strong>native</strong> 关键字修饰的方法。</li>
+<li>  该方法由非 Java 语言实现的，比如 C 或 C++。</li>
+<li>  在定义一个 <code>Native Method</code> 时，并不提供实现体（有点像定义接口中的抽象方法），因为其具体实现是由非 Java 语言在外面实现的。</li>
+<li>  <strong>标识符 native 可以与所有其它的 java 标识符连用，但 abstract 除外</strong>。</li>
+<li>  <strong>一个 <code>Native Method</code> 就是一个Java调用非Java代码的接口</strong>。</li>
+<li>  这个特征并非 Java 特有的，很多其它的编程语言都有这一机制，比如在 C++ 中，就可以用 <code>extern &quot;C&quot;</code> 告知 C++ 编译器去调用一个 C 的函数。</li>
+<li>  本地接口的作用是融合不同的编程语言为 Java 所用，它的初衷是融合 C/C++ 程序。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">native 关键字表明了当前方法是一个本地方法，是有实现体的，但实现体是采用非Java语言实现的；</span><br><span class="line">而 abstract 关键字表明无无方法实现体。</span><br><span class="line">这两个关键字是相互矛盾的。</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="为什么要使用-Native-Method-？"><a href="#为什么要使用-Native-Method-？" class="headerlink" title="为什么要使用 Native Method ？"></a>为什么要使用 Native Method ？</h2><p>Java 语言使用起来非常方便，然而有些层次的任务用 Java 实现起来不容易，或者我们对程序的效率很在意时，问题就来了。</p>
+<blockquote>
+<ol>
+<li><strong>与Java环境外交互</strong></li>
+</ol>
+</blockquote>
+<p><strong>有时Java应用需要与Java外面的环境交互，这是本地方法存在的主要原因</strong>。有时Java需要与一些底层系统，如操作系统或某些硬件交换信息，本地方法正是这样的一种交流机制，它为我们提供了一个非常简洁的接口，类似于一个黑盒，我们无需去了解Java应用之外的繁琐的细节。</p>
+<blockquote>
+<ol start="2">
+<li><strong>与操作系统交互</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  JVM 虚拟机是一个虚拟机系统，支持 Java 语言本身和运行时库，它是Java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。</li>
+<li>  然而不管怎样，它毕竟不是一个完整的系统，它经常需要依赖一些底层系统的支持。这些底层系统常常是强大的操作系统。</li>
+<li>  <strong>通过使用本地方法，我们得以用 Java 与底层的操作系统交互，甚至JVM的一些部分就是用C写的</strong>。</li>
+<li>  还有，如果我们要使用一些 Java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</li>
+</ul>
+<blockquote>
+<ol start="3">
+<li><strong>Sun’s Java</strong></li>
+</ol>
+</blockquote>
+<p><strong>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互</strong>。JRE 大部分是用 Java 实现的，它也通过一些本地方法与外界交互。例如：java.lamg.Thread 的 <code>setPriority()</code> 方法是用Java实现的，但是它的具体实现调用的是该类里的本地方法<code>setPriority0()</code>。这个本地方法是用C实现的，并被植入JVM内部。</p>
+<h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><p><strong>目前本地方法的使用越来越少了，除非是与硬件有关的应用</strong>，比如通过 Java 程序驱动打印机或者 Java 系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1144,898 +1410,6 @@
 <li>必须要在请求头中申明 content-Type（如application/json）。springMvc通过HandlerAdapter配置的HttpMessageConverters解析httpEntity的数据，并绑定到相应的bean上。</li>
 </ul>
 <h1 id="PathVaribale"><a href="#PathVaribale" class="headerlink" title="@PathVaribale"></a>@PathVaribale</h1><h1 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h1>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" class="post-title-link" itemprop="url">文件的上传与下载</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-13 22:08:33" itemprop="dateCreated datePublished" datetime="2021-04-13T22:08:33+08:00">2021-04-13</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-15 23:52:00" itemprop="dateModified" datetime="2021-04-15T23:52:00+08:00">2021-04-15</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h1><blockquote>
-<p>参考：<a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2020/11/03/HTTP%E5%8D%8F%E8%AE%AE/">HTTP协议</a></p>
-</blockquote>
-<h1 id="HTTP-请求头中的-content-type-属性"><a href="#HTTP-请求头中的-content-type-属性" class="headerlink" title="HTTP 请求头中的 content-type 属性"></a>HTTP 请求头中的 content-type 属性</h1><h2 id="什么是-Content-Type-？"><a href="#什么是-Content-Type-？" class="headerlink" title="什么是 Content-Type ？"></a>什么是 Content-Type ？</h2><p>HTTP 消息的请求头/响应头数据是以键值对<code>&lt;K, V&gt;</code>形式存储的。 <strong>Content-Type</strong> 就是 HTTP 请求头消息中的一个键值对的 key ，用来描述客户端浏览器向服务器发送的请求时请求数据的数据类型，其对应的 Value 是 MIME 类型的数据。</p>
-<blockquote>
-<p><strong>Tip：</strong></p>
-<p>HTTP 协议不仅是一个数据传输的工具，还能改变数据在网络中传输的类型。</p>
-<p>具体想要数据以什么样的类型在网络中传输传递则是由前端人员提前规定好的。！！！</p>
-</blockquote>
-<h2 id="Content-Type-的格式"><a href="#Content-Type-的格式" class="headerlink" title="Content-Type 的格式"></a>Content-Type 的格式</h2><blockquote>
-<p>Content-Type 中 Value 的格式：</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type: subtype[;parameter:type]</span><br><span class="line">-- 主类型: 子类型[;参数: 参数类型]</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Content-Type 对应的 Value 值的数据类型与 MIME 类似。但是在 Content-Type 中还可以额外添加一些参数。常见的有设置请求消息的编码方式，如<code>charset:utf-8</code>。</li>
-</ul>
-<blockquote>
-<p>Demo</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Type: text/html;charset:utf-8;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>描述</p>
-</blockquote>
-<p><code>Content-Type</code> 键对应的值 Value 语法的格式，可分为三个部分，分别是：1、主类型（type）    2、子类型（subtype）    3、参数（parameter）[可选]</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1、主类型（type）</span><br><span class="line">-- 主类型与MIME类型一致，比如 text。如果是 * 号则代表所有类型。</span><br><span class="line"></span><br><span class="line">2、子类型（subtype）</span><br><span class="line">-- 子类型也与MIME类型一致，比如html。如果是 * 号则代表所有类型。</span><br><span class="line"></span><br><span class="line">3、参数（parameter）</span><br><span class="line">-- 参数是可选的，可以在 Content-Type 的 Value 中加入一些特殊的参数，比如 Accept 请求头的参数，常见的有用于设置字符编码的 charset 参数。</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>props</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Content-Type：&quot;表示发送的数据类型（MIME类型）&quot;</span><br><span class="line">   -- 常见的属性： </span><br><span class="line">    	application&#x2F;x-www-form-urlencoded</span><br><span class="line">			# 表示以键值对的格式发送请求数据（数据封装在请求体中）。如：name1&#x3D;value1&amp;name2&#x3D;value2，然后对其进行url编码</span><br><span class="line">	    	# url编码是把非英文的内容转换为：%xx%xxx 的格式</span><br><span class="line">	    multipart&#x2F;form-data</span><br><span class="line">			# 表示以多段的形式提交数据给服务器（以流的形式提交，用于上传）</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="Content-Type中常见的媒体格式类型"><a href="#Content-Type中常见的媒体格式类型" class="headerlink" title="Content-Type中常见的媒体格式类型"></a>Content-Type中常见的媒体格式类型</h2><blockquote>
-<p>参考 MIME 类型：</p>
-</blockquote>
-<h3 id="以-text-开头的媒体格式类型"><a href="#以-text-开头的媒体格式类型" class="headerlink" title="以 text 开头的媒体格式类型"></a>以 text 开头的媒体格式类型</h3><table>
-<thead>
-<tr>
-<th align="center">文件</th>
-<th align="center">文件后缀名</th>
-<th align="center">MIME类型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">超文本标记语言</td>
-<td align="center">.html 或 .htm</td>
-<td align="center">text/html</td>
-</tr>
-<tr>
-<td align="center">普通文本</td>
-<td align="center">.txt</td>
-<td align="center">text/plain</td>
-</tr>
-<tr>
-<td align="center">XML文本</td>
-<td align="center">.xml</td>
-<td align="center">text/xml</td>
-</tr>
-</tbody></table>
-<h3 id="以-image-开头的媒体格式类型"><a href="#以-image-开头的媒体格式类型" class="headerlink" title="以 image 开头的媒体格式类型"></a>以 image 开头的媒体格式类型</h3><table>
-<thead>
-<tr>
-<th align="center">文件</th>
-<th align="center">文件后缀名</th>
-<th align="center">MIME类型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">GIF图片格式</td>
-<td align="center">.gif</td>
-<td align="center">image/img</td>
-</tr>
-<tr>
-<td align="center">JPEG图片格式</td>
-<td align="center">.jpeg 或 .jpg</td>
-<td align="center">image/jpeg</td>
-</tr>
-<tr>
-<td align="center">png图片格式</td>
-<td align="center">.png</td>
-<td align="center">image/png</td>
-</tr>
-</tbody></table>
-<h3 id="以application开头的媒体格式类型"><a href="#以application开头的媒体格式类型" class="headerlink" title="以application开头的媒体格式类型"></a>以application开头的媒体格式类型</h3><table>
-<thead>
-<tr>
-<th align="left">文件</th>
-<th align="left">MIME类型</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">XHTML格式</td>
-<td align="left">application/xhtml+xml</td>
-</tr>
-<tr>
-<td align="left">XML数据格式</td>
-<td align="left">application/xml</td>
-</tr>
-<tr>
-<td align="left">Atom XML聚合格式</td>
-<td align="left">application/atom+xml</td>
-</tr>
-<tr>
-<td align="left">JSON数据格式</td>
-<td align="left">application/json</td>
-</tr>
-<tr>
-<td align="left">pdf格式</td>
-<td align="left">application/pdf</td>
-</tr>
-<tr>
-<td align="left">Word文档格式</td>
-<td align="left">application/msword</td>
-</tr>
-<tr>
-<td align="left">二进制流数据（如常见的文件下载）</td>
-<td align="left">application/octet-stream</td>
-</tr>
-</tbody></table>
-<hr>
-<h1 id="文件上传前置知识"><a href="#文件上传前置知识" class="headerlink" title="文件上传前置知识"></a>文件上传前置知识</h1><h2 id="使用HTTP协议上传文件时数据传输的类型"><a href="#使用HTTP协议上传文件时数据传输的类型" class="headerlink" title="使用HTTP协议上传文件时数据传输的类型"></a>使用HTTP协议上传文件时数据传输的类型</h2><blockquote>
-<p><strong><code>Content-Type: multipart/form-data</code> ： 使用HTTP协议进行文件传输时数据的格式</strong></p>
-<p><em>表示将客户端提交的数据，以<strong>多段</strong>的形式进行拼接，然后以二进制流的形式发送给服务器。</em></p>
-<ul>
-<li><strong>多段</strong>：一次可上传多条数据，每条数据之间以分隔符分开。每条属性都是二进制的字符流。</li>
-</ul>
-</blockquote>
-<p>在通过HTTP协议（一般是浏览器）上传文件（如图片）时，显然简单的<code>&lt;K, V&gt;</code>值是不能描述图片对象的，所以我们在上传文件的同时要指定<code>Content-Type: multipart/form-data</code>属性值，这样 HTTP 协议在接收到这两个条件后，就会将客户端的上传的图片文件转化成（多段）二进制字节流数据，封装到请求体中，最后将这个HTTP请求中包含的所有信息交给到服务器处理。</p>
-<p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/image-20210414233936188.png" alt="image-20210414233936188"></p>
-<h2 id="文件上传的必要前提（前端）"><a href="#文件上传的必要前提（前端）" class="headerlink" title="文件上传的必要前提（前端）"></a>文件上传的必要前提（前端）</h2><blockquote>
-<ol>
-<li>设置表单属性：<code>&lt;from enctype = &quot;multipart/form-data&quot;&gt;</code></li>
-</ol>
-</blockquote>
-<ul>
-<li>如果想要 HTTP 协议能够将表单中的数据转化成多段二进制流数据的话，在上传文件的同时我们就要声明上传的文件在HTTP中的数据类型是<code>Content-Type: multipart/form-data</code>，在前端中的做法就是设置表单属性为：<code>&lt;from enctype = &quot;multipart/form-data&quot;&gt;</code></li>
-<li>在前端的表单中，<code>&lt;form encType=&quot;&quot;&gt;</code> 中默认的 encType 是 <strong>application/x-www-form-urlencoded</strong>，这表示 <code>&lt;form/&gt;</code> 表单中的数据将被HTTP协议编码为 <code>&lt;K, V&gt;</code> 格式发送到服务器。而如果我们想通过表单进行文件上传的话，需要修改表单的属性为：<code>&lt;from encType=multipart/form-data&gt;</code></li>
-<li>不管我们通过前端页面还是通过 Postman 等工具进行文件上传时都必须设置请求头中 <code>Content-Type</code> 的值为 <strong>multipart/form-data</strong> 。</li>
-</ul>
-<blockquote>
-<ol start="2">
-<li>请求方式必须是<strong>POST</strong></li>
-</ol>
-</blockquote>
-<p>原因：GET 请求有长度的限制，使用 GET 请求上传图片的话往往会超出请求URL 的长度限制，导致上传图片不能正常显示！！！</p>
-<blockquote>
-<ol start="3">
-<li>提供一个文件选择域<code>&lt;input type=&quot;file&quot;/&gt;</code></li>
-</ol>
-</blockquote>
-<h2 id="HTML-lt-form-gt-标签的-enctype-属性"><a href="#HTML-lt-form-gt-标签的-enctype-属性" class="headerlink" title="HTML &lt;form&gt; 标签的 enctype 属性"></a>HTML <code>&lt;form&gt;</code> 标签的 enctype 属性</h2><blockquote>
-<p>说明：</p>
-</blockquote>
-<p>enctype 属性规定在发送到服务器之前HTTP协议应该如何对<code>&lt;form&gt;</code>表单中的数据进行编码。</p>
-<p>默认地，表单数据会编码为 “application/x-www-form-urlencoded”。也就是说，在发送到服务器之前，所有字符都会进行 url 编码（空格转换为 “+” 加号，特殊符号转换为 ASCII HEX 值）。</p>
-<blockquote>
-<p>语法：</p>
-</blockquote>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">enctype</span>=<span class="string">&quot;value&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>属性值：</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th align="left">值</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">application/x-www-form-urlencoded</td>
-<td align="left">在发送前编码所有字符（默认）</td>
-</tr>
-<tr>
-<td align="left">multipart/form-data</td>
-<td align="left">不对字符编码。在使用包含文件上传控件的表单时，必须使用该值。</td>
-</tr>
-<tr>
-<td align="left">text/plain</td>
-<td align="left">空格转换为 “+” 加号，但不对特殊字符编码。</td>
-</tr>
-</tbody></table>
-<hr>
-<h1 id="文件上传的原理分析"><a href="#文件上传的原理分析" class="headerlink" title="文件上传的原理分析"></a>文件上传的原理分析</h1><blockquote>
-<p>当<code>&lt;form enctype=&quot;application/x-www-form-urlencoded/&gt;</code> 时（即使用默认值），form表单的正文内容是键值对的形式，如：key=value&amp;key=value&amp;……</p>
-</blockquote>
-<blockquote>
-<ul>
-<li>当 <code>&lt;form enctype=&quot;multipart/form-data&quot;/&gt;</code> 时（不使用默认值），请求正文内容如下，这时 <strong>request.getParameter()</strong> 方法就会失效。</li>
-</ul>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 每一部分都是MIME类型描述的正文</span></span><br><span class="line"></span><br><span class="line">-----------------------------7de1a433602ac 				<span class="comment">// 分界符</span></span><br><span class="line">Content-Disposition: form-data; name=<span class="string">&quot;userName&quot;</span> 		<span class="comment">// 协议头</span></span><br><span class="line">aaa	 												<span class="comment">// 协议的正文 </span></span><br><span class="line">-----------------------------7de1a433602ac </span><br><span class="line">Content-Disposition: form-data; name=<span class="string">&quot;file&quot;</span>; filename=<span class="string">&quot;C:\Users\zhy\Desktop\fileupload_demofile\b.txt&quot;</span> </span><br><span class="line">Content-Type: text/plain 							  <span class="comment">// 协议的类型（MIME类型） ;</span></span><br><span class="line">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb </span><br><span class="line">-----------------------------7de1a433602ac--</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<hr>
-<h1 id="原生-Servlet-实现文件上传"><a href="#原生-Servlet-实现文件上传" class="headerlink" title="原生 Servlet 实现文件上传"></a>原生 Servlet 实现文件上传</h1><h2 id="1、创建-Maven-工程并导入依赖"><a href="#1、创建-Maven-工程并导入依赖" class="headerlink" title="1、创建 Maven 工程并导入依赖"></a>1、创建 Maven 工程并导入依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 文件上传相关的jar包依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="2、编写一个文件上传的-jsp-页面"><a href="#2、编写一个文件上传的-jsp-页面" class="headerlink" title="2、编写一个文件上传的 jsp 页面"></a>2、编写一个文件上传的 jsp 页面</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h3&gt;文件上传&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">    &lt;form method=<span class="string">&quot;post&quot;</span> enctype=<span class="string">&quot;multipart/form-data&quot;</span> action=<span class="string">&quot;$&#123;pageContext.request.contextPath&#125;/user/fileUpload&quot;</span>&gt;</span><br><span class="line">        选择文件&lt;input type=<span class="string">&quot;file&quot;</span> name=<span class="string">&quot;upload&quot;</span>&gt;</span><br><span class="line">        &lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;上传文件&quot;</span>&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3、编写控制器Controller"><a href="#3、编写控制器Controller" class="headerlink" title="3、编写控制器Controller"></a>3、编写控制器Controller</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 处理文件上传的业务逻辑</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 跳转到成功页面</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RequestMapping(value = &quot;fileUpload&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testFileUpload</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.设置文件上传后保存的目录</span></span><br><span class="line">    String path = request.getSession().getServletContext().getRealPath(<span class="string">&quot;uploads&quot;</span>);</span><br><span class="line">    <span class="comment">// 判断该路径是否存在，如果不存在，则创建该文件夹</span></span><br><span class="line">    File file = <span class="keyword">new</span> File(path);</span><br><span class="line">    <span class="keyword">if</span> (!file.exists())&#123;</span><br><span class="line">        file.mkdirs();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.解析Request请求，获取上传的文件</span></span><br><span class="line">    DiskFileItemFactory factory = <span class="keyword">new</span> DiskFileItemFactory();</span><br><span class="line">    <span class="comment">// 创建一个上传工具，指定使用缓存区与临时文件存储位置.</span></span><br><span class="line">    ServletFileUpload upload = <span class="keyword">new</span> ServletFileUpload(factory);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析Request请求</span></span><br><span class="line">    <span class="comment">// 解析上传文件的multipart/form-data流，返回按照传输顺序解析出的FileItem实例列表</span></span><br><span class="line">    List&lt;FileItem&gt; items = upload.parseRequest(request);</span><br><span class="line">    <span class="keyword">for</span> (FileItem item : items) &#123;</span><br><span class="line">        <span class="comment">// 判断当前item对象是否是待上传的文件项</span></span><br><span class="line">        <span class="keyword">if</span> (item.isFormField())&#123;</span><br><span class="line">            <span class="comment">// 说明是普通表单项</span></span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 说明是上传文件项</span></span><br><span class="line">            <span class="comment">// 设置文件名称</span></span><br><span class="line">            <span class="comment">// 获取上传的文件名称</span></span><br><span class="line">            String filename = item.getName();</span><br><span class="line">            <span class="comment">// 将文件名设置为唯一值</span></span><br><span class="line">            String uuid = UUID.randomUUID().toString().replace(<span class="string">&quot;-&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">            filename = uuid+<span class="string">&quot;-&quot;</span>+filename;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 完成文件上传</span></span><br><span class="line">            item.write(<span class="keyword">new</span> File(path,filename));</span><br><span class="line">            <span class="comment">// 删除临时文件</span></span><br><span class="line">            item.delete();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">&quot;文件上传成功&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="4、跳转到成功页面"><a href="#4、跳转到成功页面" class="headerlink" title="4、跳转到成功页面"></a>4、跳转到成功页面</h2><hr>
-<h1 id="SpringMVC-实现文件上传"><a href="#SpringMVC-实现文件上传" class="headerlink" title="SpringMVC 实现文件上传"></a>SpringMVC 实现文件上传</h1><ul>
-<li>SpringMVC 的传统方式上传，指的是我们上传的文件和访问的应用在同一台服务器上。</li>
-<li>并且上传完成之后，浏览器可以跳转。</li>
-</ul>
-<h2 id="1、SpringMVC文件上传原理分析"><a href="#1、SpringMVC文件上传原理分析" class="headerlink" title="1、SpringMVC文件上传原理分析"></a>1、SpringMVC文件上传原理分析</h2><p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/SpringMVC%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90.png"></p>
-<ol>
-<li><p>SpringMVC 框架文件上传的优势就在于可以手动配置一个<strong>文件解析器</strong>，这个文件解析器可以自动帮助我们把文件项从Request 请求中把文件项分离出来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 即在文件上传中，Request请求中包含的数据也不仅仅是文件本身，还有其它很多附带的数据。</span><br><span class="line">2. 在 JavaWeb 文件上传的案例中，我们必须从 Request 请求中将待上传的文件项手动分离出来，这非常麻烦。</span><br><span class="line">3. 而 SpringMVC 只需要配置一个&#96;文件解析器&#96;，就可以让框架自动完成对文件项的提取。对于开发人员来说，只需要直接处	理文件项即可。</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/03-%E5%8E%9F%E7%90%86.bmp"></p>
-<h2 id="2、实现步骤"><a href="#2、实现步骤" class="headerlink" title="2、实现步骤"></a>2、实现步骤</h2><h3 id="1、初始化-Maven-工程并导入依赖"><a href="#1、初始化-Maven-工程并导入依赖" class="headerlink" title="1、初始化 Maven 工程并导入依赖"></a>1、初始化 Maven 工程并导入依赖</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 文件上传相关的jar包依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="2、配置文件解析器-SpringMVC-xml"><a href="#2、配置文件解析器-SpringMVC-xml" class="headerlink" title="2、配置文件解析器[SpringMVC.xml]"></a>2、配置文件解析器[<code>SpringMVC.xml</code>]</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置文件上传解析器--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;multipartResolver&quot;</span>      <span class="attr">class</span>=<span class="string">&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--设置上传文件的最大尺寸为5MB--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;maxUploadSize&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>5242880<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  <span class="comment">&lt;!--1024*1024*5--&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注意：<strong>文件上传解析器中的<code>id</code>属性是固定的</strong>，不能起别的名称，否则无法实现请求参数的绑定。</li>
-</ul>
-<h3 id="2、编写一个文件上传的jsp页面"><a href="#2、编写一个文件上传的jsp页面" class="headerlink" title="2、编写一个文件上传的jsp页面"></a>2、编写一个文件上传的jsp页面</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=<span class="string">&quot;post&quot;</span> enctype=<span class="string">&quot;multipart/form-data&quot;</span></span><br><span class="line">      action=<span class="string">&quot;$&#123;pageContext.request.contextPath&#125;/user/fileUpload2&quot;</span>&gt;</span><br><span class="line">    选择文件&lt;input type=<span class="string">&quot;file&quot;</span> name=<span class="string">&quot;img3&quot;</span>&gt;</span><br><span class="line">    &lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;上传文件&quot;</span>&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意：</p>
-<ul>
-<li>选择文件<code>&lt;input type=type=&quot;file&quot; name=&quot;img3&quot;&gt;</code>中的<code>name</code>属性的值必须和<code>Controller控制器</code>中具体方法中的参数<code>MultipartFile img3</code> 的名称一致，否则就会接收不到数据。</li>
-</ul>
-</blockquote>
-<h3 id="3、编写控制器Controller-1"><a href="#3、编写控制器Controller-1" class="headerlink" title="3、编写控制器Controller"></a>3、编写控制器Controller</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(path = &quot;fileUpload2&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testFileUpload2</span><span class="params">(MultipartFile img3, HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">// 1.设置文件上传后的保存位置</span></span><br><span class="line">    String filepath = request.getSession().getServletContext().getRealPath(<span class="string">&quot;/uploads/&quot;</span>);</span><br><span class="line">    File file = <span class="keyword">new</span> File(filepath);</span><br><span class="line">    <span class="keyword">if</span> (!file.exists())&#123;</span><br><span class="line">        file.mkdirs();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2.设置文件上传后的文件名</span></span><br><span class="line">    String uuid = UUID.randomUUID().toString().replace(<span class="string">&quot;-&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    String filename = img3.getOriginalFilename();</span><br><span class="line">    filename = filename+uuid;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.上传文件</span></span><br><span class="line">    img3.transferTo(<span class="keyword">new</span> File(filepath, filename));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4、跳转到成功页面-1"><a href="#4、跳转到成功页面-1" class="headerlink" title="4、跳转到成功页面"></a>4、跳转到成功页面</h3><h1 id="SpringMVC-实现跨服务器文件上传"><a href="#SpringMVC-实现跨服务器文件上传" class="headerlink" title="SpringMVC 实现跨服务器文件上传"></a>SpringMVC 实现跨服务器文件上传</h1><h2 id="1、分服务器的目的"><a href="#1、分服务器的目的" class="headerlink" title="1、分服务器的目的"></a>1、分服务器的目的</h2><ol>
-<li>在实际开发中，我们会有很多处理不同功能的服务器。如：<ul>
-<li>应用服务器：负责部署我们的应用</li>
-<li>数据库服务器：运行我们的数据库</li>
-<li>缓存和消息队列服务器：负责处理大并发访问的缓存和消息</li>
-<li>文件服务器：负责存储用户上传文件的服务器</li>
-</ul>
-</li>
-<li>分服务器处理的目的是为了让服务器各司其职，从而提高我们项目的运行效率。</li>
-</ol>
-<p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/SpringMVC%E8%B7%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0.png"></p>
-<h2 id="2、实现步骤-1"><a href="#2、实现步骤-1" class="headerlink" title="2、实现步骤"></a>2、实现步骤</h2><h3 id="1、准备2个Maven工程"><a href="#1、准备2个Maven工程" class="headerlink" title="1、准备2个Maven工程"></a>1、准备2个Maven工程</h3><ol>
-<li><p>创建2个Maven工程</p>
-<ul>
-<li>准备2个TomCat服务器，并且创建一个用于存放图片的web工程</li>
-</ul>
-</li>
-<li><p>导入依赖的坐标</p>
-<ul>
-<li>跨服务器文件上传需要额外导入的依赖坐标</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--跨服务器文件上传的依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.sun.jersey<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jersey-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.18.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.sun.jersey<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jersey-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.18.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<h3 id="2、编写一个文件上传的jsp页面-1"><a href="#2、编写一个文件上传的jsp页面-1" class="headerlink" title="2、编写一个文件上传的jsp页面"></a>2、编写一个文件上传的jsp页面</h3><h3 id="3、编写控制器Controller-2"><a href="#3、编写控制器Controller-2" class="headerlink" title="3、编写控制器Controller"></a>3、编写控制器Controller</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 跨服务器文件上传</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RequestMapping(path = &quot;fileUpload3&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testFileUpload3</span><span class="params">(MultipartFile img3)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">// 1.设置文件上传后保存的路径</span></span><br><span class="line">    String filepath = <span class="string">&quot;http://localhost:9090/uploads/&quot;</span>;</span><br><span class="line">    <span class="comment">// 2.设置文件上传后的文件名</span></span><br><span class="line">    String uuid = UUID.randomUUID().toString().replace(<span class="string">&quot;-&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    String filename = img3.getOriginalFilename();</span><br><span class="line">    filename = filename+uuid;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.跨服务器上传文件</span></span><br><span class="line">    <span class="comment">// 3.1 创建客户端对象[jersey提供的]</span></span><br><span class="line">    Client client = Client.create();</span><br><span class="line">    <span class="comment">// 3.2 和图片服务器建立连接</span></span><br><span class="line">    WebResource resource = client.resource(filepath+filename);</span><br><span class="line">    <span class="comment">// 3.3 上传文件</span></span><br><span class="line">    resource.put(img3.getBytes());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="4、跳转到成功页面-2"><a href="#4、跳转到成功页面-2" class="headerlink" title="4、跳转到成功页面"></a>4、跳转到成功页面</h3><hr>
-<p><strong>Spring MVC中关于Content-Type类型信息的使用</strong></p>
-<p>在Spring MVC中，主要就是使用@RequestMapping注解来处理请求，因此首先我们来看看@RequestMapping注解的Class定义。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span> </span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Mapping</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> RequestMapping &#123;</span><br><span class="line">    String[] value() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    RequestMethod[] method() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    String[] params() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    String[] headers() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    String[] consumes() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    String[] produces() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>下面对注解提供的参数进行简单解析。</p>
-<p>value：指定请求的 URL</p>
-<p>method： 指定请求的method类型， 比如GET、POST、PUT、DELETE等。</p>
-<p><strong>consumes：指定处理请求的提交内容类型（Content-Type），例如application/json、text/html;等。</strong></p>
-<p>produces：指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回。</p>
-<p>params：指定request中必须包含某些参数值，才让该方法处理。</p>
-<p>headers：指定request中必须包含某些指定的header值，才能让该方法处理请求。</p>
-<p>其中，consumes、produces可以使用Content-type中的信息对不需要的信息进行过滤，仅接受需要的数据；headers则可以使用Content-Type中的信息对请求进行过滤和判断。</p>
-<p><strong>Request Headers和Response Headers中的候选属性</strong></p>
-<p>这里列举出 Request Headers（请求头）和Response Headers（响应头）中的候选属性。</p>
-<p>Request Headers的候选属性</p>
-<table>
-<thead>
-<tr>
-<th>候选属性</th>
-<th>说明</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Accept</td>
-<td>指定客户端能够接收的内容类型</td>
-<td>Accept: text/plain, text/html</td>
-</tr>
-<tr>
-<td>Accept-Charset</td>
-<td>浏览器可以接受的字符编码集</td>
-<td>Accept-Charset: iso-8859-5</td>
-</tr>
-<tr>
-<td>Accept-Encoding</td>
-<td>指定浏览器可以支持的web服务器返回内容压缩编码类型</td>
-<td>Accept-Encoding: compress, gzip</td>
-</tr>
-<tr>
-<td>Accept-Language</td>
-<td>浏览器可接受的语言</td>
-<td>Accept-Language: en,zh</td>
-</tr>
-<tr>
-<td>Accept-Ranges</td>
-<td>可以请求网页实体的一个或者多个子范围字段</td>
-<td>Accept-Ranges: bytes</td>
-</tr>
-<tr>
-<td>Authorization</td>
-<td>HTTP授权的授权证书</td>
-<td>Authorization: Basic QWxhZLRpbjpvcGVuIHNoc2FtZQ==</td>
-</tr>
-<tr>
-<td>Cache-Control</td>
-<td>指定请求和响应遵循的缓存机制</td>
-<td>Cache-Control: no-cache</td>
-</tr>
-<tr>
-<td>Connection</td>
-<td>表示是否需要持久连接。（HTTP 1.1默认进行持久连接）</td>
-<td>Connection: close</td>
-</tr>
-<tr>
-<td>Cookie</td>
-<td>HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器</td>
-<td>Cookie: $Version=1; Skin=new;</td>
-</tr>
-<tr>
-<td>Content-Length</td>
-<td>请求的内容长度</td>
-<td>Content-Length: 348</td>
-</tr>
-<tr>
-<td>Content-Type</td>
-<td>请求的与实体对应的MIME信息</td>
-<td>Content-Type: application/x-www-form-urlencoded</td>
-</tr>
-<tr>
-<td>Date</td>
-<td>请求发送的日期和时间</td>
-<td>Date: Tue, 15 Nov 2018 08:22:31 GMT</td>
-</tr>
-<tr>
-<td>Expect</td>
-<td>请求的特定的服务器行为</td>
-<td>Expect: 100-continue</td>
-</tr>
-<tr>
-<td>From</td>
-<td>发出请求的用户的Email</td>
-<td>From: <a href="mailto:&#117;&#115;&#x65;&#x72;&#64;&#101;&#109;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;">&#117;&#115;&#x65;&#x72;&#64;&#101;&#109;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#109;</a></td>
-</tr>
-<tr>
-<td>Host</td>
-<td>指定请求的服务器的域名和端口号</td>
-<td>Host: <a target="_blank" rel="noopener" href="http://www.yanggb.com/">www.yanggb.com</a></td>
-</tr>
-<tr>
-<td>If-Match</td>
-<td>只有请求内容与实体相匹配才有效</td>
-<td>If-Match: “737060ff8c284d8af7ad2082f209582d”</td>
-</tr>
-<tr>
-<td>If-Modified-Since</td>
-<td>如果请求的部分在指定时间之后被修改则请求成功，未被修改则返回304代码</td>
-<td>If-Modified-Since: Sat, 29 Oct 2018 19:43:31 GMT</td>
-</tr>
-<tr>
-<td>If-None-Match</td>
-<td>如果内容未改变返回304代码，参数为服务器先前发送的Etag，与服务器回应的Etag比较判断是否改变</td>
-<td>If-None-Match: “737060cd8c284d8af7ad3082f209582d”</td>
-</tr>
-<tr>
-<td>If-Range</td>
-<td>如果实体未改变，服务器发送客户端丢失的部分，否则发送整个实体。参数也为Etag</td>
-<td>If-Range: “737060cd8c284d8af7ad3082f209582d”</td>
-</tr>
-<tr>
-<td>If-Unmodified-Since</td>
-<td>只在实体在指定时间之后未被修改才请求成功</td>
-<td>If-Unmodified-Since: Sat, 29 Oct 2018 19:23:11 GMT</td>
-</tr>
-<tr>
-<td>Max-Forwards</td>
-<td>限制信息通过代理和网关传送的时间</td>
-<td>Max-Forwards: 10</td>
-</tr>
-<tr>
-<td>Pragma</td>
-<td>用来包含实现特定的指令</td>
-<td>Pragma: no-cache</td>
-</tr>
-<tr>
-<td>Proxy-Authorization</td>
-<td>连接到代理的授权证书</td>
-<td>Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
-</tr>
-<tr>
-<td>Range</td>
-<td>只请求实体的一部分，指定范围</td>
-<td>Range: bytes=500-999</td>
-</tr>
-<tr>
-<td>Referer</td>
-<td>先前网页的地址，当前请求网页紧随其后，即来路</td>
-<td>Referer: <a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb1.html">http://www.yanggb.com/yanggb1.html</a></td>
-</tr>
-<tr>
-<td>TE</td>
-<td>客户端愿意接受的传输编码，并通知服务器接受接受尾加头信息</td>
-<td>TE: trailers,deflate;q=0.5</td>
-</tr>
-<tr>
-<td>Upgrade</td>
-<td>向服务器指定某种传输协议以便服务器进行转换（如果支持）</td>
-<td>Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</td>
-</tr>
-<tr>
-<td>User-Agent</td>
-<td>User-Agent的内容包含发出请求的用户信息</td>
-<td>User-Agent: Mozilla/5.0 (Linux; X11)</td>
-</tr>
-<tr>
-<td>Via</td>
-<td>通知中间网关或代理服务器地址，通信协议</td>
-<td>Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
-</tr>
-<tr>
-<td>Warning</td>
-<td>关于消息实体的警告信息</td>
-<td>Warn: 199 Miscellaneous warning</td>
-</tr>
-</tbody></table>
-<p>可以看到，Content-Type是Request Headers中的一个候选属性。</p>
-<p>Response Headers的候选属性</p>
-<table>
-<thead>
-<tr>
-<th>候选属性</th>
-<th>说明</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Accept-Ranges</td>
-<td>表明服务器是否支持指定范围请求及哪种类型的分段请求</td>
-<td>Accept-Ranges: bytes</td>
-</tr>
-<tr>
-<td>Age</td>
-<td>从原始服务器到代理缓存形成的估算时间（以秒计，非负）</td>
-<td>Age: 12</td>
-</tr>
-<tr>
-<td>Allow</td>
-<td>对某网络资源的有效的请求行为，不允许则返回405</td>
-<td>Allow: GET, HEAD</td>
-</tr>
-<tr>
-<td>Cache-Control</td>
-<td>告诉所有的缓存机制是否可以缓存及哪种类型</td>
-<td>Cache-Control: no-cache</td>
-</tr>
-<tr>
-<td>Content-Encoding</td>
-<td>web服务器支持的返回内容压缩编码类型</td>
-<td>Content-Encoding: gzip</td>
-</tr>
-<tr>
-<td>Content-Language</td>
-<td>响应体的语言</td>
-<td>Content-Language: en,zh</td>
-</tr>
-<tr>
-<td>Content-Length</td>
-<td>响应体的长度</td>
-<td>Content-Length: 348</td>
-</tr>
-<tr>
-<td>Content-Location</td>
-<td>请求资源可替代的备用的另一地址</td>
-<td>Content-Location: /index.htm</td>
-</tr>
-<tr>
-<td>Content-MD5</td>
-<td>返回资源的MD5校验值</td>
-<td>Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==</td>
-</tr>
-<tr>
-<td>Content-Range</td>
-<td>在整个返回体中本部分的字节位置</td>
-<td>Content-Range: bytes 21010-47021/47022</td>
-</tr>
-<tr>
-<td>Content-Type</td>
-<td>返回内容的MIME类型</td>
-<td>Content-Type: text/html; charset=utf-8</td>
-</tr>
-<tr>
-<td>Date</td>
-<td>原始服务器消息发出的时间</td>
-<td>Date: Tue, 15 Nov 2018 08:22:22 GMT</td>
-</tr>
-<tr>
-<td>ETag</td>
-<td>请求变量的实体标签的当前值</td>
-<td>ETag: “737060cd8c284d8af7ad3082f209582d”</td>
-</tr>
-<tr>
-<td>Expires</td>
-<td>响应过期的日期和时间</td>
-<td>Expires: Thu, 01 Dec 2018 16:00:00 GMT</td>
-</tr>
-<tr>
-<td>Last-Modified</td>
-<td>请求资源的最后修改时间</td>
-<td>Last-Modified: Tue, 15 Nov 2018 12:25:26 GMT</td>
-</tr>
-<tr>
-<td>Location</td>
-<td>用来重定向接收方到非请求URL的位置来完成请求或标识新的资源</td>
-<td>Location: <a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb2.html">http://www.yanggb.com/yanggb2.html</a></td>
-</tr>
-<tr>
-<td>Pragma</td>
-<td>包括实现特定的指令，它可应用到响应链上的任何接收方</td>
-<td>Pragma: no-cache</td>
-</tr>
-<tr>
-<td>Proxy-Authenticate</td>
-<td>它指出认证方案和可应用到代理的该URL上的参数</td>
-<td>Proxy-Authenticate: Basic</td>
-</tr>
-<tr>
-<td>refresh</td>
-<td>应用于重定向或一个新的资源被创造，在5秒之后重定向（由网景提出，被大部分浏览器支持）</td>
-<td>Refresh: 5; url=<a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb9.html">http://www.yanggb.com/yanggb9.html</a></td>
-</tr>
-<tr>
-<td>Retry-After</td>
-<td>如果实体暂时不可取，通知客户端在指定时间之后再次尝试</td>
-<td>Retry-After: 120</td>
-</tr>
-<tr>
-<td>Server</td>
-<td>web服务器软件名称</td>
-<td>Server: Apache/1.3.27 (Unix) (Red-Hat/Linux)</td>
-</tr>
-<tr>
-<td>Set-Cookie</td>
-<td>设置Http Cookie</td>
-<td>Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1</td>
-</tr>
-<tr>
-<td>Trailer</td>
-<td>指出头域在分块传输编码的尾部存在</td>
-<td>Trailer: Max-Forwards</td>
-</tr>
-<tr>
-<td>Transfer-Encoding</td>
-<td>文件传输编码</td>
-<td>Transfer-Encoding:chunked</td>
-</tr>
-<tr>
-<td>Vary</td>
-<td>告诉下游代理是使用缓存响应还是从原始服务器请求</td>
-<td>Vary: *</td>
-</tr>
-<tr>
-<td>Via</td>
-<td>告知代理客户端响应是通过哪里发送的</td>
-<td>Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
-</tr>
-<tr>
-<td>Warning</td>
-<td>警告实体可能存在的问题</td>
-<td>Warning: 199 Miscellaneous warning</td>
-</tr>
-<tr>
-<td>WWW-Authenticate</td>
-<td>表明客户端请求实体应该使用的授权方案</td>
-<td>WWW-Authenticate: Basic</td>
-</tr>
-</tbody></table>
-<p><strong>具体使用示例</strong></p>
-<p>这里通过几个具体的实例来了解怎么在Spring MVC中使用两个Headers中的信息。</p>
-<p>示例1：headers属性取Request Headers中的Referer属性。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value &#x3D; &quot;&#x2F;yanggb2&quot;, method &#x3D; RequestMethod.GET, headers&#x3D;&quot;Referer&#x3D;http:&#x2F;&#x2F;www.yanggb.com&#x2F;yanggb1&quot;)</span><br><span class="line">public void yanggb2() &#123;   </span><br><span class="line">    &#x2F;&#x2F; 如果上一个页面的地址不是上面headers属性中Referer指定的地址，不会执行此方法</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-<p>这里的headers里面可以匹配所有Headers里面可以出现的信息，不局限于Referer信息。</p>
-<p>示例2：headers属性取Request Headers中的Accept属性。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value &#x3D; &quot;&#x2F;yanggb2&quot;, headers &#x3D; &quot;Accept&#x3D;application&#x2F;json&quot;) </span><br><span class="line">public void yanggb3(HttpServletResponse response) throws IOException &#123; </span><br><span class="line">    &#x2F;&#x2F; 表示响应的内容区数据的媒体类型为json格式，且编码为utf-8（客户端应该以utf-8解码）</span><br><span class="line">    response.setContentType(&quot;application&#x2F;json;charset&#x3D;utf-8&quot;); </span><br><span class="line">    &#x2F;&#x2F; 写出响应体内容</span><br><span class="line">    String jsonData &#x3D; &quot;&#123;\&quot;username\&quot;:\&quot;yanggb\&quot;,\&quot;password\&quot;:\&quot;123\&quot;&#125;&quot;; </span><br><span class="line">    response.getWriter().write(jsonData);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>这样，服务器就会根据请求头【Accept=application/json】生产json数据。</p>
-<p>当你有如下Accept头，将遵守如下规则进行应用：</p>
-<p>①Accept：text/html,application/xml,application/json</p>
-<p>将按照如下顺序进行produces的匹配 ①text/html ②application/xml ③application/json。</p>
-<p>②Accept：application/xml;q=0.5,application/json;q=0.9,text/html。</p>
-<p>将按照如下顺序进行produces的匹配 ①text/html ②application/json ③application/xml。</p>
-<p>参数为媒体类型的质量因子，越大则优先权越高(从0到1)。</p>
-<p>③Accept：*/<em>,text/</em>,text/html</p>
-<p>将按照如下顺序进行produces的匹配 ①text/html ②text/* ③*/*。</p>
-<p>即匹配规则为：最明确的优先匹配。</p>
-<p>示例3：params属性取参数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value &#x3D; &quot;&#x2F;yanggb&#x2F;&#123;userId&#125;&quot;, method &#x3D; RequestMethod.GET, params &#x3D; &quot;yanggb1&#x3D;yanggb2&quot;) </span><br><span class="line">public void findUser(@PathVariable String userId) &#123;</span><br><span class="line">    &#x2F;&#x2F; 当请求中包含参数yanggb1时才会执行此方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在上面的代码中，就起到了一个过滤的作用。</p>
-<p>实例4：consumes/produces属性过滤请求。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Controller </span><br><span class="line">@RequestMapping(value &#x3D; &quot;&#x2F;users&quot;, method &#x3D; RequestMethod.POST, consumes&#x3D;&quot;application&#x2F;json&quot;, produces &#x3D; &quot;application&#x2F;json&quot;) </span><br><span class="line">@ResponseBody</span><br><span class="line">public List&lt;User&gt; addUser(@RequestBody User userl) &#123;   </span><br><span class="line">    return List&lt;User&gt; users;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>上面这个方法仅处理请求Content-Type为【application/json】类型的请求，produces标识处理请求中Accept头中包含了【application/json】的请求，同时暗示了返回的内容类型为【application/json】。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;测试文件上传&lt;&#x2F;title&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &lt;form method&#x3D;&quot;post&quot; enctype&#x3D;&quot;multipart&#x2F;form-data&quot;&gt;</span><br><span class="line">            用户名：&lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;username&quot;&gt;&lt;br&gt;</span><br><span class="line">            头像：&lt;input type&#x3D;&quot;file&quot; name&#x3D;&quot;photo&quot;&gt;&lt;br&gt;</span><br><span class="line">            &lt;input type&#x3D;submit value&#x3D;&quot;上传&quot; @click&#x3D;&quot;upload&quot;&gt;</span><br><span class="line">        &lt;&#x2F;form&gt;</span><br><span class="line">        &lt;button  @click&#x3D;&quot;upload&quot;&gt;点我&lt;&#x2F;button&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src&#x3D;&quot;.&#x2F;node_modules&#x2F;axios&#x2F;dist&#x2F;axios.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;.&#x2F;node_modules&#x2F;vue&#x2F;dist&#x2F;vue.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    const vm &#x3D; new Vue(&#123;</span><br><span class="line">        el: &quot;#app&quot;,</span><br><span class="line">        methods: &#123;</span><br><span class="line">            upload()&#123;</span><br><span class="line">                alert(&quot;哈哈&quot;)</span><br><span class="line">                axios.post(&quot;localhost:8080&#x2F;user&#x2F;2&quot;)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h1 id="文件上传时发送的HTTP协议的内容"><a href="#文件上传时发送的HTTP协议的内容" class="headerlink" title="文件上传时发送的HTTP协议的内容"></a>文件上传时发送的HTTP协议的内容</h1><p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/image-20210414233855135.png" alt="image-20210414233855135"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/11/Vue%E8%B7%AF%E7%94%B1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/11/Vue%E8%B7%AF%E7%94%B1/" class="post-title-link" itemprop="url">Vue路由</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-11 11:12:35" itemprop="dateCreated datePublished" datetime="2021-04-11T11:12:35+08:00">2021-04-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-09 15:51:20" itemprop="dateModified" datetime="2021-05-09T15:51:20+08:00">2021-05-09</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="什么是路由"><a href="#什么是路由" class="headerlink" title="什么是路由"></a>什么是路由</h1><p>路由就是一组映射关系，即<code>&lt;K, V&gt;</code>键值对。</p>
-<p>K 是 Path，</p>
-<p>V 是 通过这个 Path 要访问的路径！</p>
-<ul>
-<li>在后端中，V 一般是处理请求的回调函数。</li>
-<li>在前端（Vue）中：V 就是一个组件。</li>
-</ul>
-<hr>
-<h1 id="Vue-Router-概述"><a href="#Vue-Router-概述" class="headerlink" title="Vue-Router 概述"></a>Vue-Router 概述</h1><ul>
-<li>Vue-Router 是官方提供的用来实现 SPA 的 vue 插件</li>
-<li>GitHub地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-router">https://github.com/vuejs/vue-router</a></li>
-<li>官方文档（中文）：<a target="_blank" rel="noopener" href="http://router.vuejs.org/zh-cn/">http://router.vuejs.org/zh-cn/</a></li>
-<li>下载：<code>npm install vue-router --save</code></li>
-</ul>
-<hr>
-<h1 id="Vue-Router-相关-API"><a href="#Vue-Router-相关-API" class="headerlink" title="Vue-Router 相关 API"></a>Vue-Router 相关 API</h1><h2 id="1、创建路由器"><a href="#1、创建路由器" class="headerlink" title="1、创建路由器"></a>1、创建路由器</h2><blockquote>
-<p>**VueRouter()**：用于创建路由器的构造函数</p>
-</blockquote>
-<p>路由器 &amp; 路由：路由器是路由信息的集合，路由器是一个构造函数，在路由器的构造函数中可以配置多个路有信息！</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">	<span class="comment">// 多个配置项</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="2、在路由器中配置路由信息"><a href="#2、在路由器中配置路由信息" class="headerlink" title="2、在路由器中配置路由信息"></a>2、在路由器中配置路由信息</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">routes: [</span><br><span class="line">    &#123; </span><br><span class="line">        <span class="comment">// 一般路由</span></span><br><span class="line">        path: <span class="string">&#x27;/about&#x27;</span>,</span><br><span class="line">        component: About</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123; </span><br><span class="line">        <span class="comment">// 自动跳转路由</span></span><br><span class="line">        path: <span class="string">&#x27;/&#x27;</span>,</span><br><span class="line">        redirect: <span class="string">&#x27;/about&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3、注册路由器"><a href="#3、注册路由器" class="headerlink" title="3、注册路由器"></a>3、注册路由器</h2><blockquote>
-<ul>
-<li><p><em>注册路由器就是声明使用路由器，我们创建好了 Vue-Router 实例后如果不告诉 Vue 的话 Vue 在启动项目时也不会去加载Vue-Router这个路由器实例。声明使用类似于 SpringBoot 中的 @Component 注解，只有声明使用后项目才会去加载该类中的信息。</em></p>
-</li>
-<li><p><em>Vue 一般是一个单页面应用，只会绑定一个 Vue 对象（当然这个 Vue 对象可以有任意多个子级配置对象），我们需要在这个 Vue 实例中声明使用路由器，项目在加载时才会去加载路由器中配置的路由信息。</em></p>
-</li>
-</ul>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// import router from &#x27;./router/index.js&#x27;	// 引入路由器模块，（这个模块的配置下文会将到），由于 router 中的Js文件名为 index.js，所以我们可以将引入路径简写为下面的配置！！！</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router&#x27;</span>	</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    router		<span class="comment">// 1、router 就是 Vue-Router 实例对象。	 2、配置对象的属性名都是一些固定的名称，不能随便修改</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="4、使用路由组件标签"><a href="#4、使用路由组件标签" class="headerlink" title="4、使用路由组件标签"></a>4、使用路由组件标签</h2><ol>
-<li><code>&lt;router-link&gt;</code>：用来生成路由链接</li>
-<li><code>&lt;router-view&gt;</code>：用来显示当前路由组件界面</li>
-</ol>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--  1、用来生成路由链接  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">to</span>=<span class="string">&quot;/xxx&quot;</span>&gt;</span>Go to XXX<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--  2、用来显示当前路由组件界面  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h1 id="快速入门（基本路由）"><a href="#快速入门（基本路由）" class="headerlink" title="快速入门（基本路由）"></a>快速入门（基本路由）</h1><p>在实际开发中，组件可分为两大类：</p>
-<ol>
-<li>路由组件：路由组件一般放在 <strong>views/pages</strong> 目录下</li>
-<li>非路由组件：非路由组件一般放在 <strong>components</strong> 目录下</li>
-</ol>
-<p>在实际开发中，一般会专门创建一个 <strong>src/router/index.js</strong> 文件用于定义路由器模块！</p>
-<p><img src="/2021/04/11/Vue%E8%B7%AF%E7%94%B1/image-20210411113552483.png" alt="image-20210411113552483"></p>
-<blockquote>
-<p><strong>src/router/index.js</strong></p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 路由器模块</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="comment">// 2、引入 vue 插件</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="comment">// 1、引入 vue-router 插件</span></span><br><span class="line"><span class="keyword">import</span> VueRouter <span class="keyword">from</span> <span class="string">&quot;vue-router&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3、声明使用 VueRouter 实例</span></span><br><span class="line">Vue.use(VueRouter)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 6、在路由信息中需要映射到Vue组件，所以在这里引入Vue组件</span></span><br><span class="line"><span class="keyword">import</span> About <span class="keyword">from</span> <span class="string">&quot;../views/About&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> Home <span class="keyword">from</span> <span class="string">&quot;../views/Home&quot;</span>;</span><br><span class="line"><span class="comment">// 4、路由器模块应该向外暴露一个路由器对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  <span class="comment">// 5、配置路由信息（多个）: 用数组 `[]` 保存；   数组中的每个路由配置信息都是一个对象：用 `&#123;&#125;` 保存对象</span></span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">&#x27;/about&#x27;</span>,</span><br><span class="line">      component: <span class="string">&#x27;About&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">&#x27;/home&#x27;</span>,</span><br><span class="line">      component: <span class="string">&#x27;Home&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>src/main.js</strong></p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 入口js：创建Vue实例</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router/index.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// （1）引入 App 组件（根组件）</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&quot;./App&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  components:&#123;</span><br><span class="line">    App,  <span class="comment">// （2）将 App 组件映射成标签</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//（3）使用组件标签</span></span><br><span class="line">  template:<span class="string">&#x27;&lt;App/&gt;&#x27;</span>,</span><br><span class="line"></span><br><span class="line">  router,   <span class="comment">// 配置对象的属性名都是一些固定的名称，不能随便修改</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h1 id="嵌套路由"><a href="#嵌套路由" class="headerlink" title="嵌套路由"></a>嵌套路由</h1><h1 id="缓存路由组件"><a href="#缓存路由组件" class="headerlink" title="缓存路由组件"></a>缓存路由组件</h1><h1 id="向路由组件传递数据"><a href="#向路由组件传递数据" class="headerlink" title="向路由组件传递数据"></a>向路由组件传递数据</h1><h2 id="方式1：路由路径携带参数-param-query"><a href="#方式1：路由路径携带参数-param-query" class="headerlink" title="方式1：路由路径携带参数(param/query)"></a>方式1：路由路径携带参数(param/query)</h2><ol>
-<li><p>配置路由</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">routes: [</span><br><span class="line">    &#123;</span><br><span class="line">        path: <span class="string">&#x27;/aaa/bbb/:id&#x27;</span>,		<span class="comment">// :id 就是传递过去的参数，id 可变</span></span><br><span class="line">        component: MessageDetail</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></li>
-<li><p>路由路径</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">&quot;`/aaa/bbb/$&#123;m.id&#125;`&quot;</span>&gt;</span>&#123;&#123;m.title&#125;&#125;<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>在路由组件中读取请求参数</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">this</span>.$route.params.id</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="方式2-lt-router-view-gt-属性携带数据"><a href="#方式2-lt-router-view-gt-属性携带数据" class="headerlink" title="方式2: &lt;router-view&gt;属性携带数据"></a>方式2: <code>&lt;router-view&gt;</code>属性携带数据</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">router-view</span> <span class="attr">:msg</span>=<span class="string">&quot;msg&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="编程式路由导航"><a href="#编程式路由导航" class="headerlink" title="编程式路由导航"></a>编程式路由导航</h1><ul>
-<li>JS 中实现页面跳转</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.location.href = <span class="string">&#x27;要跳转的url地址&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Vue 编程式路由导航</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">this.$router.push(&quot;要跳转的url地址&quot;)</span><br></pre></td></tr></table></figure>
-
-
-
-
       
     </div>
 

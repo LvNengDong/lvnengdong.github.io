@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="1    前置知识在 Java 内存模型中，我们知道了 JMM 有一个主内存，每个线程有自己的私有工作内存，工作内存中保存了一些变量在主内存的拷贝。    内存可见性：  指的是线程之间的可见性，当一个线程修改了共享变量时，另一个线程可以读取到这个修改后的值。    重排序  为优化程序性能，对原有的指令执行顺序进行优化重新排序。重排序可能发生在多个阶段，比如编译重排序、CPU重排序等。  2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="volatile">
+<meta property="og:url" content="http://example.com/2021/08/07/volatile/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1    前置知识在 Java 内存模型中，我们知道了 JMM 有一个主内存，每个线程有自己的私有工作内存，工作内存中保存了一些变量在主内存的拷贝。    内存可见性：  指的是线程之间的可见性，当一个线程修改了共享变量时，另一个线程可以读取到这个修改后的值。    重排序  为优化程序性能，对原有的指令执行顺序进行优化重新排序。重排序可能发生在多个阶段，比如编译重排序、CPU重排序等。  2">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/08/07/volatile/image-20210506143613131.png">
+<meta property="og:image" content="http://example.com/2021/08/07/volatile/image-20210506143757319.png">
+<meta property="og:image" content="http://example.com/2021/08/07/volatile/image-20210709105405172.png">
+<meta property="og:image" content="http://example.com/2021/08/07/volatile/image-20210709112717007.png">
+<meta property="og:image" content="http://example.com/2021/08/07/volatile/image-20210709113136165.png">
+<meta property="og:image" content="http://example.com/2021/08/07/volatile/image-20210709113659357.png">
+<meta property="og:image" content="http://example.com/2021/08/07/volatile/%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92.png">
+<meta property="og:image" content="http://example.com/2021/08/07/volatile/%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%843%E4%B8%AA%E9%98%B6%E6%AE%B5.png">
+<meta property="article:published_time" content="2021-08-07T08:28:28.000Z">
+<meta property="article:modified_time" content="2021-08-08T03:08:26.638Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/08/07/volatile/image-20210506143613131.png">
+
+
+<link rel="canonical" href="http://example.com/2021/08/07/volatile/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>volatile | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">1    前置知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Volatile-%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">2    Volatile 概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%86%85%E5%AD%98%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">3    内存可见性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E9%AA%8C%E8%AF%81%E6%99%AE%E9%80%9A%E5%8F%98%E9%87%8F%E4%B9%8B%E9%97%B4%E7%9A%84%E5%86%85%E5%AD%98%E4%B8%8D%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-number">3.1.</span> <span class="nav-text">3.1    验证普通变量之间的内存不可见性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E9%AA%8C%E8%AF%81-volatile-%E8%83%BD%E4%BF%9D%E8%AF%81%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-number">3.2.</span> <span class="nav-text">3.2    验证 volatile 能保证可见性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">4    不保证原子性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%9C%89%E5%BA%8F%E6%80%A7%EF%BC%88%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">5    有序性（指令重排）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%EF%BC%9F"><span class="nav-number">5.1.</span> <span class="nav-text">为什么要禁止指令重排？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">5.2.</span> <span class="nav-text">指令重排是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E6%BC%94%E7%A4%BA"><span class="nav-number">5.3.</span> <span class="nav-text">指令重排演示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E6%A1%88%E4%BE%8B1%EF%BC%9A%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96%E6%80%A7"><span class="nav-number">5.3.1.</span> <span class="nav-text">指令重排案例1：数据依赖性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E6%A1%88%E4%BE%8B2%EF%BC%9A%E6%95%B0%E6%8D%AE%E9%97%B4%E6%97%A0%E4%BE%9D%E8%B5%96%E6%80%A7"><span class="nav-number">5.3.2.</span> <span class="nav-text">指令重排案例2：数据间无依赖性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E6%A1%88%E4%BE%8B3"><span class="nav-number">5.3.3.</span> <span class="nav-text">指令重排案例3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E6%80%BB%E7%BB%93"><span class="nav-number">5.4.</span> <span class="nav-text">指令重排总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7%E8%8E%B7%E5%BE%97%E4%BF%9D%E8%AF%81"><span class="nav-number">6.</span> <span class="nav-text">6    线程安全性获得保证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-DCL-%E5%8D%95%E4%BE%8B"><span class="nav-number">7.</span> <span class="nav-text">7    DCL 单例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DCL-%E5%8D%95%E4%BE%8B%E5%AD%98%E5%9C%A8%E7%9A%84%E9%9A%90%E6%82%A3%E5%8F%8A%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-number">7.1.</span> <span class="nav-text">DCL 单例存在的隐患及优化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E8%BF%87%E7%A8%8B%E4%B8%ADCPU%E8%BF%9B%E8%A1%8C%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">7.1.1.</span> <span class="nav-text">Java创建对象过程中CPU进行的操作</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/07/volatile/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          volatile
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-07 16:28:28" itemprop="dateCreated datePublished" datetime="2021-08-07T16:28:28+08:00">2021-08-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-08 11:08:26" itemprop="dateModified" datetime="2021-08-08T11:08:26+08:00">2021-08-08</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-前置知识"><a href="#1-前置知识" class="headerlink" title="1    前置知识"></a>1    前置知识</h1><p>在 Java 内存模型中，我们知道了 JMM 有一个主内存，每个线程有自己的私有工作内存，工作内存中保存了一些变量在主内存的拷贝。</p>
+<blockquote>
+<p>  <strong>内存可见性：</strong></p>
+</blockquote>
+<p>指的是线程之间的可见性，当一个线程修改了共享变量时，另一个线程可以读取到这个修改后的值。</p>
+<blockquote>
+<p>  <strong>重排序</strong></p>
+</blockquote>
+<p>为优化程序性能，对原有的指令执行顺序进行优化重新排序。重排序可能发生在多个阶段，比如编译重排序、CPU重排序等。</p>
+<hr>
+<h1 id="2-Volatile-概述"><a href="#2-Volatile-概述" class="headerlink" title="2    Volatile 概述"></a>2    Volatile 概述</h1><ol>
+<li> volatile 是 Java 提供的轻量级的同步机制（乞丐版的 syschorcize）</li>
+<li>volatile <strong>三大特性</strong><ul>
+<li>  保证变量的<strong>内存可见性</strong></li>
+<li>  <strong>禁止 volatile 变量与普通变量重排序</strong></li>
+<li>  不保证原子性</li>
+</ul>
+</li>
+</ol>
+<h1 id="3-内存可见性"><a href="#3-内存可见性" class="headerlink" title="3    内存可见性"></a>3    内存可见性</h1><ul>
+<li>  可见性是指当一个线程运行时能感知到另一个线程对共享变量做出的改变。</li>
+</ul>
+<h2 id="3-1-验证普通变量之间的内存不可见性"><a href="#3-1-验证普通变量之间的内存不可见性" class="headerlink" title="3.1    验证普通变量之间的内存不可见性"></a>3.1    验证普通变量之间的内存不可见性</h2><ul>
+<li>  如果两个线程不是同时执行的，而是先后执行，因为每次本地内存中对共享变量的改变都会写回到主内存中，另一个线程接着再取出来的是更改过的共享变量。这就相当于是一个单线程了。</li>
+<li>  简单点就是说，A、B两个线程并发执行，B 线程正在用着 num，并且可能还要继续用一段时间，这时候线程 A 修改了 num 的值，B线程马上就知道了，这叫做线程间变量的可见性。（用着用着 num 突然变了）  </li>
+<li>  而 A、B 两个线程先后被创建，然后开始并发执行，如果B线程在创建之前A线程就已经修改完 num 的值并将其写回主内存了，那么B线程得到的 num 变量的副本自然也是被 A 线程修改后的 num。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VisibleDemo</span></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        flag = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (flag == <span class="keyword">false</span>)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;end&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        VisibleDemo demo = <span class="keyword">new</span> VisibleDemo();</span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            	<span class="comment">// Thread.sleep(100);</span></span><br><span class="line">                demo.method1();</span><br><span class="line">        &#125;, <span class="string">&quot;A&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            demo.method2();</span><br><span class="line">        &#125;, <span class="string">&quot;B&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  我们来分析一下这段代码，线程 A 调用了 <code>method1()</code>，线程 B 调用了 <code>method2()</code>，线程A 和线程B 并发执行。</li>
+<li>  我们想象中的是由于 flag 没有使用 volatile 修饰，那么在线程 A 中对 flag 的改变线程B 不能感知到，那么线程B 自然就会进入到死循环中了，导致 JVM 进程不能结束。</li>
+<li>  但程序的真实结果是线程B执行了，即知道了 flag 的改变，死循环不会执行，而是会执行输出语句。这是为什么呢？难道不加 volatile 也能保证可见性吗？其实不是的。</li>
+<li>  由于我们上面这段代码非常简单，在 main 方法中有创建 A、B 两个线程的操作，先创建A，再创建B。但是由于A线程执行的时间太短了，所以在线程B执行之前A线程已经执行完了 <code>method1()</code> 方法，并且把修改后的 flag 重写回了主内存。这时B线程才去执行 <code>run()</code>，所以B线程创建时从主内存中复制过去的变量 flag 已经是修改过的值了，即<code>flag==true</code>，所以自然不会进入死循环了。</li>
+<li>  如果想要验证不加 volatile 就不具备可见性，可以让线程 A 先睡眠 100ms，让线程B先执行 method2 方法进入死循环，再让线程A去修改 flag 的值，发现程序不能结束，这也就验证了此时线程间确实是不具备可见性的。</li>
+</ul>
+<hr>
+<h2 id="3-2-验证-volatile-能保证可见性"><a href="#3-2-验证-volatile-能保证可见性" class="headerlink" title="3.2    验证 volatile 能保证可见性"></a>3.2    验证 volatile 能保证可见性</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadTests</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="comment">/*volatile*/</span> <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// child线程</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">while</span> (flag)&#123;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;==========End of Child Thread&quot;</span>);</span><br><span class="line">        &#125;, <span class="string">&quot;Child&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// main线程</span></span><br><span class="line">        Thread.sleep(<span class="number">100</span>);</span><br><span class="line">        flag = <span class="keyword">false</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;turn flag off&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>上面这段代码在运行时，存在两个线程 child 和 main，一个保存在主内存中的变量 flag。</p>
+<ol>
+<li>由于 main 线程在创建子线程后会睡眠100ms，所以 child 线程开始执行，检测到 <code>flag == true</code>，child 线程进入死循环中。</li>
+<li>mian 线程在睡醒后继续执行，修改 <code>flag=false</code>并在控制台上输出指定内容，然后主线程结束。</li>
+<li>但这是我们会发现程序并没有结束，因为 child 线程仍处于死循环状态。也就是说<strong>main 线程修改全局变量 flag=false ，并不能被 child 线程感知到</strong>。</li>
+</ol>
+<p><img src="/2021/08/07/volatile/image-20210506143613131.png" alt="image-20210506143613131"></p>
+<p>但是如果我们将 <strong>volatile</strong> 关键字的注释打开，代码的执行流程就变成了：</p>
+<ol>
+<li>child 线程开始执行，检测到 <code>flag == true</code>，进入死循环中。</li>
+<li>mian 线程在睡醒后继续执行，修改 <code>flag = false</code>并在控制台上输出指定内容，然后主线程结束。</li>
+<li>但是此时 child 线程监听了到主线程对于 flag 变量的修改，即在 child 线程的感知中 <code>flag == false</code> 了，所以 child 线程退出死循环，在控制台上打印指定内容，child 线程结束。</li>
+<li>整个 JVM 进程结束。</li>
+</ol>
+<p><img src="/2021/08/07/volatile/image-20210506143757319.png" alt="image-20210506143757319"></p>
+<p><strong>总结：</strong></p>
+<p>上面的代码可以证明：<strong>volatile 关键字可以保证多个线程之间共享变量的可见性</strong>。即共享变量在某个线程中的本地内存中发生了变化，其它的线程也可以监听到这种变化！当然这种<strong>监听的底层原理还是通过主内存作为传输纽带进行交互的</strong>，即单个线程在本地内存中对共享变量的操作最终还是要写回到主内存中，再由主内存将这种变化通知到其它所有使用这个共享变量的线程。</p>
+<hr>
+<h1 id="4-不保证原子性"><a href="#4-不保证原子性" class="headerlink" title="4    不保证原子性"></a>4    不保证原子性</h1><blockquote>
+<p>  <strong>代码验证</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  验证 volatile 不保证原子性</span></span><br><span class="line"><span class="comment"> *     </span></span><br><span class="line"><span class="comment"> *      新建20个线程，每个线程都调用1000次 autoIncrement() 方法对共享变量num进行自增的操作，</span></span><br><span class="line"><span class="comment"> *      让 main 线程休眠一段时间直到这20个新建的线程执行完毕后再查看堆内存中num的值，在无错的情况下，</span></span><br><span class="line"><span class="comment"> *      num 的值应该是 0+20*1000=20000</span></span><br><span class="line"><span class="comment"> *      但是实际情况确实，大多数情况下这个值都小于20000，且值不确定。这说明了volatile并不能保证原子性，</span></span><br><span class="line"><span class="comment"> *      即 volatile 并不能保证线程安全。在某个线程执行的时候，可能会被其它线程加塞。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        MyData myData = <span class="keyword">new</span> MyData();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">20</span> ; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">1000</span>; j++) &#123;</span><br><span class="line">                    myData.autoIncrement();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        System.out.println(myData.num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyData</span></span>&#123;</span><br><span class="line">     <span class="comment">/*  此时 num 前面是加了 volatile 关键字修饰的，但是 volatile 并不能保证变量的原子性   */</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">autoIncrement</span><span class="params">()</span></span>&#123;</span><br><span class="line">        num++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>为什么说 volatile 不能保证原子性？</strong></p>
+</blockquote>
+<p>因为在 <code>MyData#autoIncrement()</code> 方法中，可能存在多个线程同时执行了 num++ 操作。</p>
+<p><strong>num++</strong> 这一行代码的实际操作可分为三个步骤：<code>读 --&gt; 改 --&gt; 写</code></p>
+<ol>
+<li> 读：首先从主内存中拿到 num 的值，复制一份到自己的工作内存中；[<code>getfield #2 &lt;com/juc/day01/Test.n&gt;</code>]</li>
+<li> 改：在自己的工作内存中对 num 进行自增操作；[<code>iadd</code>]</li>
+<li> 写：将更改后的 num 写回到主内存中去。[<code>putfield #2 &lt;com/juc/day01/Test.n&gt;</code>]</li>
+</ol>
+<p><img src="/2021/08/07/volatile/image-20210709105405172.png" alt="image-20210709105405172"></p>
+<p>原子性就是对 num 的操作，即 “读 –&gt; 改 –&gt; 写” 这三个步骤是不可分割的，而 volatile 不能保证原子性。</p>
+<p>​        在保证原子性的情况下 num++ 的执行流程应该是：假设线程 A、B、C 并发执行，线程 A 拿到了 num=0，复制副本后在自己的工作空间中将其更新为 num=1，然后再将其写回到主内存中。这时候其它线程再去对 num 进行操作，这是一个完整的具备原子性的操作流程。</p>
+<p>​        而在不能保证原子性的情况下则会出现，线程 A、B、C 同时拿到了主内存中的值 num=0，并在各自的内存空间将 num 更新为 1。接下来三个线程需要将更新后的值写回主内存中，假设 A 先写回主内存，主内存中的共享变量改变后需要通知其它线程，但是在这个通知还未发送到 B、C 线程的时候，B、C 线程就已经把写回主内存的操作都做完了，那么此时主内存中的值仍然会是 1，最后一个写入到主内存的 1 会覆盖前面两个写入到主内存的 1。而我们知道实际的运算结果本应该是 3。所以说在不能保证原子性的前提下，上述代码执行的结果大概率会小于 20000。</p>
+<blockquote>
+<p>  <strong>如何解决 volatile 不能保证原子性的问题？</strong></p>
+</blockquote>
+<ol>
+<li> 使用 synchronized 关键字加锁（可以解决，但的锁太重）</li>
+<li> 使用 JUC 包下的 AtomicInteger</li>
+</ol>
+<p>查看 JavaDoc 可知，在 <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/package-summary.html">java.util.concurrent.atomic</a> 包下包含了一系列的能保证原子性的数据类型。我们可以<strong>在使用 volatile 的基础上再使用 AtomicXXX 类型的对象就能保证多线程操作数据的可见性和原子性并存，并且不用添加重锁</strong>。</p>
+<img src="/2021/08/07/volatile/image-20210709112717007.png" alt="image-20210709112717007" style="zoom:80%;">
+
+
+
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicInteger.html">AtomicInteger</a> 的构造方法<ul>
+<li>  AtomicInteger 其实就是对 Integer 的又一层包装，二者最大的区别就是 Integer 不能保证原子性，但 AtomicInteger 可以。</li>
+<li>  默认的无参构造函数会初始化一个满足原子性的值为 0 的 int 类型数据</li>
+<li>  带参的构造函数可以自己指定初始化值。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2021/08/07/volatile/image-20210709113136165.png" alt="image-20210709113136165"></p>
+<ul>
+<li>  <strong>代码修改</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        MyData myData = <span class="keyword">new</span> MyData();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">20</span> ; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">1000</span>; j++) &#123;</span><br><span class="line">                    myData.autoIncrement();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        System.out.println(myData.num);		<span class="comment">// 此时输出结果必定为 20000</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyData</span></span>&#123;</span><br><span class="line">    <span class="keyword">volatile</span> AtomicInteger num = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">autoIncrement</span><span class="params">()</span></span>&#123;</span><br><span class="line">        num.getAndIncrement();   <span class="comment">// 等价于 num++;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>AtomicInteger#getAndIncrement() 方法源码</strong></p>
+</blockquote>
+<img src="/2021/08/07/volatile/image-20210709113659357.png" alt="image-20210709113659357" style="zoom:80%;">
+
+
+
+
+
+<hr>
+<h1 id="5-有序性（指令重排）"><a href="#5-有序性（指令重排）" class="headerlink" title="5    有序性（指令重排）"></a>5    有序性（指令重排）</h1><h2 id="为什么要禁止指令重排？"><a href="#为什么要禁止指令重排？" class="headerlink" title="为什么要禁止指令重排？"></a>为什么要禁止指令重排？</h2><p>在多线程程序中，如果发生了指令重排，可能会导致程序的执行结果每次都是不确定的。即线程不安全。</p>
+<hr>
+<h2 id="指令重排是什么？"><a href="#指令重排是什么？" class="headerlink" title="指令重排是什么？"></a>指令重排是什么？</h2><p>计算机在执行程序时，为了提高性能，编译器和处理器往往会<strong>对指令进行重排</strong>。</p>
+<p>指令重排造成的结果是：程序员写的代码的执行的顺序与代码真正在底层执行的顺序是有偏差的。</p>
+<p><img src="/2021/08/07/volatile/%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92.png" alt="指令重排"></p>
+<ul>
+<li>  多线程环境中线程交替执行，由于指令优化重排的存在，多个线程中使用的变量能否保证一致性是无法确定的，程序执行的结果也就无法预测了。</li>
+<li>  处理器在进行指令重排时必须要考虑指令之间的<strong>数据依赖性</strong>。（也就是说指令重排必须是在满足数据依赖性的基础上进行的）</li>
+</ul>
+<hr>
+<h2 id="指令重排演示"><a href="#指令重排演示" class="headerlink" title="指令重排演示"></a>指令重排演示</h2><h3 id="指令重排案例1：数据依赖性"><a href="#指令重排案例1：数据依赖性" class="headerlink" title="指令重排案例1：数据依赖性"></a>指令重排案例1：数据依赖性</h3><p>​        程序进行指令重排的前提是一定要满足数据依赖性，那么什么是数据依赖性呢？很简单的一个例子就是，想要吃苹果就必须得先有苹果，在程序中就是想要使用变量 num 就必须先声明这个变量 num。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x = <span class="number">3</span>;	<span class="comment">// 1</span></span><br><span class="line"><span class="keyword">int</span> y = <span class="number">4</span>;	<span class="comment">// 2</span></span><br><span class="line">x = x + <span class="number">7</span>;	<span class="comment">// 3</span></span><br><span class="line">y = y + <span class="number">8</span>;	<span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+
+<p>​        在上面的程序中，源代码设计的执行顺序是 <code>1234</code>，但是如果发生了指令重排，它就有可能变成 <code>2143</code>、<code>1324</code>，这都是 OK 的，但是能不能变成 <code>4321</code> 呢？答案是不可以的，因为第3、4条语句对应的指令是需要依赖于 1、2条语句指令创建的变量的，这就是最简单的数据依赖性。</p>
+<h3 id="指令重排案例2：数据间无依赖性"><a href="#指令重排案例2：数据间无依赖性" class="headerlink" title="指令重排案例2：数据间无依赖性"></a>指令重排案例2：数据间无依赖性</h3><ol>
+<li> 在两个线程的程序中，源代码中设计的程序执行顺序为：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a,b,x,y = <span class="number">0</span>;</span><br><span class="line"><span class="comment">// 在声明完4个变量a，b，x，y 后，这4个变量之间无依赖性，执行顺序可以任意组合</span></span><br><span class="line">x = a;</span><br><span class="line">y = b;</span><br><span class="line">b = <span class="number">1</span>;</span><br><span class="line">a = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">这段代码在执行结束后，x 和 y 的结果应该为：x=<span class="number">0</span>, y=<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li> 但是如果编译器对这段程序代码执行指令重排优化后，可能会出现执行顺序变为：</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">2</span>;</span><br><span class="line">x = a;</span><br><span class="line">b = <span class="number">1</span>;</span><br><span class="line">y = b;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">这段代码在执行结束后，x 和 y 的结果应该为：x=<span class="number">2</span>, y=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="指令重排案例3"><a href="#指令重排案例3" class="headerlink" title="指令重排案例3"></a>指令重排案例3</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReSortDemo</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        num = <span class="number">1</span>;	<span class="comment">// 语句1</span></span><br><span class="line">        flag = <span class="keyword">true</span>;	<span class="comment">// 语句2</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (flag)&#123;</span><br><span class="line">            num = num + <span class="number">5</span>;	<span class="comment">// 语句3</span></span><br><span class="line">            System.out.println(num);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>假设现在有两个线程 A、B 并发执行 method1 和 method2 方法。</p>
+<blockquote>
+<p>  <strong>未发生指令重排：</strong></p>
+</blockquote>
+<p>假设线程 A 先执行 <code>method1()</code>，更新 num 和 flag 的值，线程 B 再执行，执行 <code>num = num + 5;</code>，最终 num 的值为 6，<strong>输出的结果为 6</strong>。</p>
+<blockquote>
+<p>  <strong>发生指令重排：</strong></p>
+</blockquote>
+<p>发生指令重排后，假设语句1和语句2在重排后执行顺序发生了交换，线程A先执行 <code>flag=true</code>，紧接着又切换到线程B 执行 <code>num=num+5</code>，但此时 num == 0，因此线程 B <strong>输出的结果变成了 5</strong>，并且最后还是会执行语句1让<code>num = 1;</code>。可以看到发生指令重排后程序的运行结果每次可能不一样。</p>
+<hr>
+<h2 id="指令重排总结"><a href="#指令重排总结" class="headerlink" title="指令重排总结"></a>指令重排总结</h2><ul>
+<li>  <code>volatile</code> 关键字能禁止指令重排，从而避免多线程环境下程序执行结果不确定的情况。</li>
+<li>  单线程程序中发生指令重排是不会影响到最终的执行结果的，因为指令重排首先要满足对象的依赖性，所以不会出现某个对象还没有初始化就对其操作的情况。</li>
+<li>  指令重排有时候有好处（执行速度比较快），有时候有坏处（执行结果得不到保证），需要根据具体场景判断是否需要使用指令重排。如果需要就不用加 <code>volatile</code> 修饰，如果不需要指令重排就加 <code>volatile</code> 修饰。</li>
+</ul>
+<hr>
+<h1 id="6-线程安全性获得保证"><a href="#6-线程安全性获得保证" class="headerlink" title="6    线程安全性获得保证"></a>6    线程安全性获得保证</h1><blockquote>
+<p>  <strong>多线程存在哪些隐患？</strong></p>
+</blockquote>
+<ol>
+<li> 工作内存与主内存同步延迟现象导致的可见性问题。</li>
+<li> 指令重排导致的有序性问题。</li>
+</ol>
+<blockquote>
+<p>  <strong>如何解决？</strong></p>
+</blockquote>
+<ol>
+<li> 对于多个工作内存间的可见性问题，可以使用 synchronized 或 volatile 关键字解决，它们都可以使一个线程<strong>修改后的变量立即对其它线程可见</strong>。</li>
+<li> 对于指令重排导致的有序性问题，可以使用 volatile 关键字解决，因为 volatile 的另一个作用就是禁止指令重排。</li>
+</ol>
+<blockquote>
+<p>  <strong>遗留问题：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>synchronized 关键字不能禁止指令重排，却能保证有序性，这是为什么？</strong></li>
+</ul>
+<hr>
+<h1 id="7-DCL-单例"><a href="#7-DCL-单例" class="headerlink" title="7    DCL 单例"></a>7    DCL 单例</h1><p>DCL（Double Check Lock）：双重检查锁</p>
+<blockquote>
+<ol>
+<li><strong>饿汉式单例</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 创建一个单例对象（饿汉式）：</span></span><br><span class="line"><span class="comment"> *      </span></span><br><span class="line"><span class="comment"> *      1、将构造方法私有化（不提供从外部创建对象的接口）</span></span><br><span class="line"><span class="comment"> *      2、提供一个公共的方法用于获取这个单例对象</span></span><br><span class="line"><span class="comment"> *	    3、在类加载时就创建一个实例对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleExample singleExample = <span class="keyword">new</span> SingleExample();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SingleExample <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> singleExample;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上面这种单例模式的弊端：无论这个单例对象在程序中是否会使用，在类加载阶段都会创建这个单例对象。会浪费服务器的性能。</li>
+</ul>
+<blockquote>
+<ol start="2">
+<li><strong>单例优化（懒加载）</strong>：类加载阶段不创建实例对象，在使用时才创建实例对象。</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleExample singleExample;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SingleExample <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == singleExample)&#123;</span><br><span class="line">            <span class="comment">// 线程不安全。假设在这个位置同时进入了多个线程</span></span><br><span class="line">            singleExample = <span class="keyword">new</span> SingleExample();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleExample;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>上面这种单例模式的弊端：线程不安全！！！</li>
+<li>如果同时有多个线程进入了第 10 行的位置，显然这些线程都会执行 <code>new SingleExample()</code> 方法，就会创建多个对象实例。</li>
+</ul>
+<blockquote>
+<ol start="3">
+<li>继续优化：想要实现线程安全，就需要<strong>加锁</strong>。</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleExample ;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> SingleExample <span class="title">getInstance</span><span class="params">()</span></span>&#123;	<span class="comment">// 使用 synchronized 关键字加锁</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == singleExample)&#123;</span><br><span class="line">            singleExample = <span class="keyword">new</span> SingleExample();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// TODO</span></span><br><span class="line">        <span class="keyword">return</span> singleExample;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>上面这种单例模式的弊端：锁的粒度太大。</p>
+<p>  除了第一次调用 <code>getInstance()</code> 方法时会执行创建 SingleExample 对象的动作外，以后的每一次调用都是直接返回 singleExample 对象的引用，返回对象引用这个操作的耗时是很小的，绝大部分的耗时都用在 synchronized 修饰符的同步准备上，也就是说对象创建好了之后再有多个线程访问该方法是安全的，直接在最外层的方法上加锁，每次仍然需要进行锁对象的争夺，就会影响程序执行的性能了。</p>
+</li>
+</ul>
+<blockquote>
+<ol start="4">
+<li>继续优化：<strong>降低锁的粒度</strong>。将同步锁加在具体某一行或几行代码上。</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleExample singleExample;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SingleExample <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == singleExample) &#123;</span><br><span class="line">            <span class="comment">// 可能存在多个线程同时进入</span></span><br><span class="line">            <span class="keyword">synchronized</span> (SingleExample.class) &#123;</span><br><span class="line">                singleExample = <span class="keyword">new</span> SingleExample();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> singleExample;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>弊端：违背了单例的原则。</li>
+<li>分析：第 9 行可能存在多个线程同时进入，即使在第10行进行了加锁，但是第 9 行的多个线程已经通过了 if 判断，不会再次进行判断了，所以这多个线程最终还是会创建出来多个 SingleExample 对象，违背了单例的原则。</li>
+</ul>
+<blockquote>
+<ol start="5">
+<li>继续优化：<strong>DCL（Double Check Lock）</strong>，双重检查锁。在锁的前面和后面都进行一次判断</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SingleExample singleExample;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SingleExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SingleExample <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 支持多线程操作且线程安全的代码</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == singleExample) &#123;    <span class="comment">/*第一次检查，如果已有实例对象就不会触发多线程操作，作用是节省性能*/</span></span><br><span class="line">            <span class="comment">// 可能存在多个线程同时进入</span></span><br><span class="line">            <span class="keyword">synchronized</span> (SingleExample.class) &#123;    <span class="comment">/*第二次检查，作用是保证创建出来的实例对象只能有一个*/</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">null</span> == singleExample)&#123;</span><br><span class="line">                    singleExample = <span class="keyword">new</span> SingleExample();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> singleExample;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>双重检查锁可以解决锁的粒度大且线程不安全的问题。</p>
+</li>
+<li><p>分析：</p>
+<ol>
+<li> 第一次检查的目的：如果 singleExample 对象已经被创建了出来，那么就不会进入到多个线程争夺锁对象的阶段，节省性能。</li>
+<li> 第二次检查的目的：保证创建出来的实例对象只能有一个。</li>
+</ol>
+</li>
+<li><p>隐患：</p>
+<p>  DCL 单例看起来已经可以完美地创建出来一个单例对象了，但是由于存在指令重排的可能，因此 DCL 单例还能有进一步优化的可能。</p>
+</li>
+</ul>
+<h2 id="DCL-单例存在的隐患及优化方法"><a href="#DCL-单例存在的隐患及优化方法" class="headerlink" title="DCL 单例存在的隐患及优化方法"></a>DCL 单例存在的隐患及优化方法</h2><p>​        DCL 单例并不一定线程安全，原因是可能会出现指令重排，所以还需要使用 volatile 关键字来防止高并发情况下，指令重排造成的线程安全问题。</p>
+<h3 id="Java创建对象过程中CPU进行的操作"><a href="#Java创建对象过程中CPU进行的操作" class="headerlink" title="Java创建对象过程中CPU进行的操作"></a>Java创建对象过程中CPU进行的操作</h3><p><img src="/2021/08/07/volatile/%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E7%9A%843%E4%B8%AA%E9%98%B6%E6%AE%B5.png"></p>
+<p>Java 创建对象的过程可分为三个部分：</p>
+<ol>
+<li>在堆中给将要创建的对象分配一块内存空间，并赋初始零值。</li>
+<li>根据对象的构造函数进行初始化（显式初始化）。</li>
+<li>在栈中建立指针与对象的对应关系。</li>
+</ol>
+<p>​        Java 创建对象的每一步都需要 CPU 提供相应的指令，且对象数据保存在堆内存中，CPU 需要从内存中去读取这部分数据并拿回来运算，这就有可能会发生指令重排。</p>
+<p>​        步骤2 和 步骤3 不存在数据依赖关系，所以可能会存在指令重排，而且无论重排前还是重排后程序的执行结果在单线程中并没有改变，因此这种重排是允许的。</p>
+<blockquote>
+<p>  <strong>重排前</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">memory = allocate();	<span class="comment">// 1、给对象分配内存空间</span></span><br><span class="line">instance(memory);		<span class="comment">// 2、初始化对象</span></span><br><span class="line">instance = memory;		<span class="comment">// 3、设置栈中变量 instance 指向刚分配的内存地址，此时 instance != null</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>重排后</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">memory = allocate();	<span class="comment">// 1、给对象分配内存空间</span></span><br><span class="line">instance = memory;		<span class="comment">// 3、设置栈中变量 instance 指向刚分配的内存地址，此时 instance != null，但是对象还没有初始化完成</span></span><br><span class="line">instance(memory);		<span class="comment">// 2、初始化对象</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>如果发生指令重排，则原本执行顺序可能变为<code>1-&gt; 3-&gt; 2</code>，指令重排在单线程下是不会对程序产生大的影响的，因为单线程操作的过程中不会有其它线程来访问程序执行的某个中间阶段，最终的结果不会改变。</li>
+<li>但是如果在多线程的情况下（假设指令重排后顺序变为<code>1-&gt; 3-&gt; 2</code>），线程A 创建单例对象，执行了1，3步骤后，切换到线程B 执行读取单例对象并返回的操作，因为线程A 执行完1、3步骤后 <code>instance != null</code>，所以线程B 不会再去执行创建对象的代码，而是直接返回单例对象的引用，但是此时这个引用指向的单例对象的值是类加载阶段赋的初始零值 null，而不是构造器中显式指定的初始值，显然这是不对的。如果线程B 拿着这个错误的单例对象去使用了，线程B 对应的程序就不能够正常运行了。</li>
+<li>即便之后线程A 再执行第2步骤，完成了构造器显式赋值，并且之后也不会再出现读取到默认零值的情况，但是起码存在这样一种出错的可能性。</li>
+<li>而 <strong>volatile</strong> 关键字的作用就是保证指令不被重排。当创建单例对象时，保证指令的执行顺序一定是是 <code>1-&gt; 2 -&gt;3</code>。</li>
+</ul>
+<blockquote>
+<p>  <strong>null != single 有两种情况：</strong></p>
+</blockquote>
+<ol>
+<li> 已经完整地创建过 SingleExample 对象了，没有发生指令重排，或者在指令重排的时候没有多个线程访问。</li>
+<li> 正在创建 SingleExample 对象，但是发生了指令重排，并且有多个线程访问，并且有 A线程得到了锁对象，但是只执行了分配内存空间和设置 instance 指向内存地址后，CPU 资源就切换到 B线程去执行了，这时候 instance 确实是有值的（地址值），但是地址中没有数据，如果 B线程拿到了 instance 并使用，就会出现程序执行错误了。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/05/%E5%9B%BE/" rel="prev" title="图">
+                  <i class="fa fa-chevron-left"></i> 图
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-count">136</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,309 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/01/Docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/01/Docker/" class="post-title-link" itemprop="url">Docker</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-01 23:50:12" itemprop="dateCreated datePublished" datetime="2021-03-01T23:50:12+08:00">2021-03-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-03-27 19:52:29" itemprop="dateModified" datetime="2021-03-27T19:52:29+08:00">2021-03-27</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Dcoker"><a href="#Dcoker" class="headerlink" title="Dcoker"></a>Dcoker</h1><ol>
+<li>如果我们想要安装 MySQL ，首先第一步就是要搜索 Docker 库里面有没有 MySQL 镜像！</li>
+</ol>
+<h2 id="在linux系统上安装docker"><a href="#在linux系统上安装docker" class="headerlink" title="在linux系统上安装docker"></a>在linux系统上安装docker</h2><blockquote>
+<p>步骤：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">1、检查内核版本，必须是3.10及以上</span><br><span class="line">uname ‐r</span><br><span class="line"></span><br><span class="line">2、安装 docker</span><br><span class="line">yum install docker</span><br><span class="line"></span><br><span class="line">3、输入 y 确认安装</span><br><span class="line"></span><br><span class="line">4、启动 docker</span><br><span class="line">[root@localhost ~]# systemctl start docker</span><br><span class="line"></span><br><span class="line">5、查看 docker 版本信息</span><br><span class="line">[root@localhost ~]# docker ‐v</span><br><span class="line"></span><br><span class="line">6、设置 docker 开机自启</span><br><span class="line">[root@localhost ~]# systemctl enable docker</span><br><span class="line"></span><br><span class="line">6、停止docker</span><br><span class="line">systemctl stop docker</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Docker常用命令"><a href="#Docker常用命令" class="headerlink" title="Docker常用命令"></a>Docker常用命令</h1><h2 id="镜像操作"><a href="#镜像操作" class="headerlink" title="镜像操作"></a>镜像操作</h2><table>
+<thead>
+<tr>
+<th align="center">操作</th>
+<th align="center">命令</th>
+<th align="center">eg</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">检索</td>
+<td align="center"><code>docker search 镜像名</code></td>
+<td align="center"><code>docker search mysql</code></td>
+<td>检索（检索镜像库中的镜像）。我们经常去 <a target="_blank" rel="noopener" href="https://hub.docker.com/">DockerHub</a> 上检索镜像的详细信息，如镜像的TAG。</td>
+</tr>
+<tr>
+<td align="center">拉取</td>
+<td align="center"><code>docker pull 镜像名:tag</code></td>
+<td align="center"><code>docker pull mysql</code></td>
+<td>拉取镜像（下载）。<code>:tag</code> 是可选的，表示标签，多为软件的版本，默认是 <code>latest</code></td>
+</tr>
+<tr>
+<td align="center">列表</td>
+<td align="center"><code>docker images</code></td>
+<td align="center"><code>docker images</code></td>
+<td>查看所有本地镜像</td>
+</tr>
+<tr>
+<td align="center">删除</td>
+<td align="center"><code>ocker rmi image-id</code></td>
+<td align="center"></td>
+<td>删除指定的本地镜像</td>
+</tr>
+</tbody></table>
+<h2 id="容器操作"><a href="#容器操作" class="headerlink" title="容器操作"></a>容器操作</h2><p>软件镜像（QQ安装程序）—-运行镜像—-产生一个容器（正在运行的软件，运行的QQ）</p>
+<blockquote>
+<ol>
+<li>根据镜像启动容器     </li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line">	docker run [--name container-name] -d image-name</span><br><span class="line"></span><br><span class="line">说明：</span><br><span class="line">	--name	开启自定义容器的名字</span><br><span class="line">	container-name	容器的名字</span><br><span class="line">	-d		后台运行</span><br><span class="line">	image-name		指定要启动的镜像</span><br><span class="line"></span><br><span class="line">eg：</span><br><span class="line">	docker run --name mysql -d tomcat:3.4.5</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="2">
+<li>查看运行中的容器（列表）</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="3">
+<li>查看所有的容器（包括运行中的和已经停止的）   </li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="3">
+<li>停止运行中的容器    </li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">语法：</span><br><span class="line">	docker stop container-name（或container-id）</span><br><span class="line"></span><br><span class="line">说明：</span><br><span class="line">	container-name		容器的名字</span><br><span class="line">	container-id		容器的ID</span><br><span class="line">eg：</span><br><span class="line">	</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="4">
+<li>启动容器（启动容器针对的是已经启动过但停止的容器，直接启动一个镜像则不会成功）     </li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start container-name（或container-id）</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="5">
+<li>删除容器（删除容器的时候容器一定要是停止状态）   </li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm container-id</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="6">
+<li>端口映射：<ul>
+<li>功能：将 Docker容器 中的服务的端口号映射到主机的端口号上。</li>
+<li>原因：Docker 安装在服务器上，启动容器中的服务使用的是容器内部的端口，而通过 HTTP 协议访问的端口是服务器的端口号。  如果不映射的话，通过浏览器就不能访问到Docker容器内的服务，所以必须把 Docker容器 内部的端口号映射到主机的端口号上，这样才能够通过 HTTP 协议访问到容器中的服务！</li>
+<li>端口映射应该在启动容器时进行！</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">格式：</span><br><span class="line">	docker run [--name container-name] -d [-p host_port:docker_port] container-name[:tags]</span><br><span class="line"></span><br><span class="line">说明：</span><br><span class="line">	-d：后台运行</span><br><span class="line">	-p：将 Docker容器 中的服务的端口号映射到主机的端口号上。   </span><br><span class="line">		格式：主机端口号:容器端口号</span><br></pre></td></tr></table></figure>
+
+
+
+<ol>
+<li>查看容器的日志</li>
+<li>-e  指定参数（参数是键值对）</li>
+</ol>
+<h1 id="Docker启动高版本的tomcat容器访问端口显示404页面显示"><a href="#Docker启动高版本的tomcat容器访问端口显示404页面显示" class="headerlink" title="Docker启动高版本的tomcat容器访问端口显示404页面显示"></a>Docker启动高版本的tomcat容器访问端口显示404页面显示</h1><p>docker启动tomcat容器访问端口显示404页面显示 源服务器未能找到目标资源的表示或者是不愿公开一个已经存在<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/xyq608074/article/details/107084407">https://blog.csdn.net/xyq608074/article/details/107084407</a></p>
+<h1 id="安装MySQL"><a href="#安装MySQL" class="headerlink" title="安装MySQL"></a>安装MySQL</h1><p>对于5.x版本的MySQL可以直接使用，对于更高版本的MySQL验证方式有所不同</p>
+<h1 id="解决docker安装mysql8-0无法远程连接问题"><a href="#解决docker安装mysql8-0无法远程连接问题" class="headerlink" title="解决docker安装mysql8.0无法远程连接问题"></a>解决docker安装mysql8.0无法远程连接问题</h1><p>MySQL8.0 的加密方式发生了改变，需要把加密方式改回来后才可以正常进行远程登录<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/shuoshuo132/article/details/81304123">https://blog.csdn.net/shuoshuo132/article/details/81304123</a></p>
+<h1 id="高级操作"><a href="#高级操作" class="headerlink" title="高级操作"></a>高级操作</h1><p>把主机的 /my/custum 文件夹挂载到 mysqldocker 容器的 /etc/mysql/conf.d 文件夹里面（采用合并的方式，即自定义的配置文件会覆盖合并原先配置文件中同名的属性）<br>我们可以自己指定本地主机中的配置文件夹的名称，如可以将  /my/custum 修改成 /conf/mysql 等</p>
+<h1 id="Docker-安装-MongoDB"><a href="#Docker-安装-MongoDB" class="headerlink" title="Docker 安装 MongoDB"></a>Docker 安装 MongoDB</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">拉取镜像</span> </span><br><span class="line">docker pull mongo:latest</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建和启动容器</span> </span><br><span class="line">docker run -d --restart=always -p 27017:27017 --name mymongo -v /data/db:/data/db -d mongo</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">进入容器</span> </span><br><span class="line">docker exec -it mymongo /bin/bash </span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">使用MongoDB客户端进行操作</span> </span><br><span class="line">mongo </span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"> show dbs <span class="comment">#查询所有的数据库</span></span> </span><br><span class="line">admin 0.000GB </span><br><span class="line">config 0.000GB </span><br><span class="line">local 0.000GB </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/19/MapReduce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/02/19/MapReduce/" class="post-title-link" itemprop="url">MapReduce</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-19 15:10:17" itemprop="dateCreated datePublished" datetime="2021-02-19T15:10:17+08:00">2021-02-19</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-02-23 23:09:59" itemprop="dateModified" datetime="2021-02-23T23:09:59+08:00">2021-02-23</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Hadoop/" itemprop="url" rel="index"><span itemprop="name">Hadoop</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="MapReduce概述"><a href="#MapReduce概述" class="headerlink" title="MapReduce概述"></a>MapReduce概述</h1><h2 id="MapReduce定义"><a href="#MapReduce定义" class="headerlink" title="MapReduce定义"></a>MapReduce定义</h2><p>MapReduce 是一个分布式运算程序的编程框架，是用户开发“基于Hadoop的数据分析应用”的核心框架。</p>
+<p>MapReduce核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个Hadoop集群上。</p>
+<h2 id="MapReduce优缺点"><a href="#MapReduce优缺点" class="headerlink" title="MapReduce优缺点"></a>MapReduce优缺点</h2><h3 id="优点——简单"><a href="#优点——简单" class="headerlink" title="优点——简单"></a>优点——简单</h3><h3 id="缺点——慢"><a href="#缺点——慢" class="headerlink" title="缺点——慢"></a>缺点——慢</h3><hr>
+<blockquote>
+<p>如何对数据进行切片？</p>
+</blockquote>
+<h2 id="Shuffle"><a href="#Shuffle" class="headerlink" title="Shuffle"></a>Shuffle</h2><p>shuffle：洗牌</p>
+<p>从 Mapper 出去到 Reducer 接收之前全部都是 Shuffle 的范围。</p>
+<blockquote>
+<p>Shuffle 阶段数据发生了关键的变化：</p>
+</blockquote>
+<ol>
+<li>从 Mapper 出去的 &lt;K，V&gt; 值是无序的，而到了 Reducer 中数据则是有分组的。 也就是说，在 Shuffle 阶段会将数据整理、分组。</li>
+<li>Mapper 出来的数据是无序的，在 Shuffle 阶段首先对数据进行排序，排完序之后，相等的数据就挨在一起了，再进行分组就相对容易了。</li>
+<li>排序方法：快排 + 归并<ul>
+<li>对于快速排序来说，需要将所有的数据全部加载进内存中然后再进行比较；但是对于大数据而言，显然是不合理的。所以会先将大数据的切分，对每一块数据进行快排。</li>
+<li>然后再将多个有序块再进行归并排序。</li>
+</ul>
+</li>
+<li>数据会被分片（逻辑上），每一个片对应一个 MapTask 。每个 MapTask 都会进行排序，最终形成一个归并排序后的有序数据块，这些数据块最终又会汇总到一个 Reducer 中。Reducer 在拿到多个有序文件后，再进行一次归并让多个有序文件变成一个有序文件，最终输入到 Reducer 中。</li>
+<li>这就是 Shuffle 阶段如何把数据进行排序、分组的过程。</li>
+</ol>
+<ul>
+<li>三次排序：<ol>
+<li>快排</li>
+<li>归并</li>
+<li>再次归并</li>
+</ol>
+</li>
+</ul>
+<h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2599,507 +2902,6 @@
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span> 处理请求地址映射。</span><br><span class="line">method - 指定请求的⽅法类型：POST/GET/DELETE/PUT 等</span><br><span class="line">value - 指定实际的请求地址</span><br><span class="line">consumes - 指定处理请求的提交内容类型，例如 Content-Type 头部设置application/json,</span><br><span class="line">text/html</span><br><span class="line">produces - 指定返回的内容类型</span><br><span class="line"><span class="meta">@PathVariable</span> URL 映射时，⽤于绑定请求参数到⽅法参数</span><br><span class="line"><span class="meta">@RequestBody</span> 这⾥注解⽤于读取请求体 boy 的数据，通过 HttpMessageConverter 解析绑定到对象</span><br><span class="line">中</span><br></pre></td></tr></table></figure>
 
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/" class="post-title-link" itemprop="url">SpringBoot与数据访问</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-01-17 23:09:30 / Modified: 23:49:28" itemprop="dateCreated datePublished" datetime="2021-01-17T23:09:30+08:00">2021-01-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h1><h1 id="1、整合JDBC"><a href="#1、整合JDBC" class="headerlink" title="1、整合JDBC"></a>1、整合JDBC</h1><h1 id="2、整合数据库连接池"><a href="#2、整合数据库连接池" class="headerlink" title="2、整合数据库连接池"></a>2、整合数据库连接池</h1><h1 id="3、整合MyBatis"><a href="#3、整合MyBatis" class="headerlink" title="3、整合MyBatis"></a>3、整合MyBatis</h1><blockquote>
-<ol start="0">
-<li>准备MySQL数据库</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol>
-<li>导入依赖</li>
-</ol>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--MyBatis启动依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>	</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--MySql--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol start="2">
-<li>配置数据库连接属性</li>
-</ol>
-</blockquote>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据库连接</span></span><br><span class="line"><span class="meta">spring.datasource.url</span>=<span class="string">jdbc:mysql://localhost:3306/springboot01?serverTimezone=Asia/Shanghai</span></span><br><span class="line"><span class="meta">spring.datasource.username</span>=<span class="string">root</span></span><br><span class="line"><span class="meta">spring.datasource.password</span>=<span class="string">root</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol start="3">
-<li>创建一个Web项目</li>
-</ol>
-</blockquote>
-<p><img src="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/image-20210117233128526.png" alt="image-20210117233128526"></p>
-<blockquote>
-<ol start="4">
-<li>使用<code>@Mapper</code>或<code>@MapperScan</code>将接口扫描装配到容器中</li>
-</ol>
-</blockquote>
-<p>在MyBatis中，需要在类上使用<code>@Mapper</code>注解表明当前类是一个操作数据库的Mapper。</p>
-<p><code>@Mapper</code>注解的源代码中包含了<code>@Component</code>注解。</p>
-<p>对于一个复杂的项目，随着开发迭代的版本越来越多，代码越来越复杂，如果给每新增一个操作数据库的类都添加一次<code>@Mapper</code>注解，显然是非常不方便的，这时候就可以使用<code>@MapperScan</code>注解，该注解可以指定一个包，该包下的所有子类都相当于自动添加了一个<code>@Mapper</code>注解，我们一般把<code>@MapperScan</code>注解添加在SpringBoot的启动类上。</p>
-<ul>
-<li><strong>@Mapper</strong></li>
-</ul>
-<p><img src="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/image-20210117233506600.png" alt="image-20210117233506600"></p>
-<ul>
-<li><strong>@MapperScan</strong></li>
-</ul>
-<p><img src="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/image-20210117233800222.png" alt="image-20210117233800222"></p>
-<blockquote>
-<ol start="5">
-<li>引入全局配置文件和映射配置文件<code>[只有使用Mapper.xml配置文件书写SQL语句时才需要]</code></li>
-</ol>
-<p>官网参考文档：<a target="_blank" rel="noopener" href="https://mybatis.org/mybatis-3/getting-started.html#">https://mybatis.org/mybatis-3/getting-started.html#</a></p>
-</blockquote>
-<p><img src="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/image-20210117233252854.png" alt="image-20210117233252854"></p>
-<ol>
-<li>设置全局配置文件：<code>mybatis-config.xml</code></li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>设置映射配置文件：<code>CityMapper.xml</code></li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">  <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">  <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;org.mybatis.example.BlogMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectBlog&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;Blog&quot;</span>&gt;</span></span><br><span class="line">        select * from Blog where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>Spring boot读取MyBatis的两个配置文件</li>
-</ol>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># MyBatis全局配置文件位置</span></span><br><span class="line"><span class="meta">mybatis.config-location</span>=<span class="string">classpath:mybatis/mybatis-config.xml</span></span><br><span class="line"><span class="comment"># MyBatis映射配置文件位置</span></span><br><span class="line"><span class="meta">mybatis.mapper-locations</span>=<span class="string">classpath:mybatis/mapper/*.xml</span></span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="6">
-<li>在<code>CityDao接口</code>中定义操作数据库的抽象方法，在<code>CityMapper.xml</code>中定义具体的SQL语句。</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol start="7">
-<li>给自定义的实体类统一起别名</li>
-</ol>
-</blockquote>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 给自定义的实体类起别名</span></span><br><span class="line"><span class="meta">mybatis.type-aliases-package</span>=<span class="string">cn.xsyu.dao</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol start="8">
-<li>其它配置</li>
-</ol>
-</blockquote>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#开启MyBatis驼峰式命名规则自动转换功能</span></span><br><span class="line"><span class="meta">mybatis.configuration.map-underscore-to-camel-case</span>=<span class="string">true</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="4、整合SpringData-JPA"><a href="#4、整合SpringData-JPA" class="headerlink" title="4、整合SpringData JPA"></a>4、整合SpringData JPA</h1>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/09/Swagger/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/01/09/Swagger/" class="post-title-link" itemprop="url">Swagger</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-01-09 17:24:11" itemprop="dateCreated datePublished" datetime="2021-01-09T17:24:11+08:00">2021-01-09</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-06 23:22:28" itemprop="dateModified" datetime="2021-04-06T23:22:28+08:00">2021-04-06</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Swagger-概述"><a href="#Swagger-概述" class="headerlink" title="Swagger 概述"></a>Swagger 概述</h1><ul>
-<li>Swagger号称世界上最流行的API框架</li>
-<li>RestFul文档在线自动生成工具=&gt; API文档与API定义同步更新</li>
-<li>直接运行，可以在线测试API接口</li>
-</ul>
-<blockquote>
-<p>API接口：Controller/Mapping</p>
-</blockquote>
-<ul>
-<li>支持多种语言（Java、PHP等）</li>
-</ul>
-<p>官网：<a target="_blank" rel="noopener" href="https://swagger.io/">https://swagger.io/</a></p>
-<p>在项目中使用Swagger需要使用SpringBox</p>
-<ul>
-<li>swagger2</li>
-<li>UI：提供给后端人员一个UI界面，用于测试接口</li>
-</ul>
-<hr>
-<h1 id="SpringBoot集成Swagger"><a href="#SpringBoot集成Swagger" class="headerlink" title="SpringBoot集成Swagger"></a>SpringBoot集成Swagger</h1><ol>
-<li><p>新建一个SpringBootWeb项目</p>
-</li>
-<li><p>导入相关依赖</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--swagger核心依赖（swagger是老版本，swagger2是新版本）--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--swagger-ui，swagger提供的可视化访问页面--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>编写一个<code>HelloController</code>工程</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.controller;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/hello&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;HelloWorld&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>创建一个Swagger配置类：<code>config/SwaggerConfig</code></p>
-<ul>
-<li>设置当前类为配置类</li>
-<li>开启Swagger2：<code>EnableSwagger2</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.config;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span>		<span class="comment">// 设置当前类为配置类</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span>		<span class="comment">// 开启Swagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 此时Swagger已经可以使用了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>测试运行。</p>
-<ul>
-<li><p>访问地址（本地环境）：<a target="_blank" rel="noopener" href="http://localhost:8080/swagger-ui.html">http://localhost:8080/swagger-ui.html</a></p>
-<p>为什么使用<code>swagger-ui.html</code>作为访问地址？因为在我们导入的<code>springfox-swagger-ui</code>依赖中配置了一个<code>swagger-ui.html</code>页面提供给我们访问。</p>
-</li>
-</ul>
-<p><img src="/2021/01/09/Swagger/image-20201217163726161.png"></p>
-<ul>
-<li>访问结果如下：</li>
-</ul>
-</li>
-</ol>
-<p><img src="/2021/01/09/Swagger/image-20201217162840840-1610184493859.png" alt="image-20201217162840840"></p>
-<p>我们可以看到，在接口信息部分有2个接口，其中<code>hello-controller</code>是我们自己写的接口，而<code>basic-error-controller</code>是默认错误结果会跳转到的接口。</p>
-<hr>
-<h2 id="配置Swagger"><a href="#配置Swagger" class="headerlink" title="配置Swagger"></a>配置Swagger</h2><p>Docket类是Swagger中的核心配置类，那么如何在Swagger的配置类<code>SwaggerConfig</code>中配置Docket实例呢？（Docket是Swagger内部的类）</p>
-<blockquote>
-<ol>
-<li>在创建<code>Docket对象</code>时，构造函数中需要传入一个<code>DocumentationType对象</code>；</li>
-<li><code>DocumentationType.SWAGGER_2</code>的作用是获得一个<code>DocumentationType对象</code>(可查看源码)；</li>
-<li><code>Docket对象</code>中有一个<code>apiInfo()方法</code>，可以<strong>配置</strong>Swagger默认的启动信息，即上面图片中的Swagger信息；</li>
-<li><code>apiInfo()方法</code>需要接收一个参数，该参数就是一个<code>ApiInfo对象</code>。我们可以将自定义的配置信息保存在这个对象中，当然也可以使用默认的配置信息。<ul>
-<li><code>ApiInfo对象</code>的构造器中需要接收一些属性、一个<code>Contact对象</code>、和一个<code>ArrayList对象</code>，可以查看下面的构造函数。<ul>
-<li><code>Contact对象</code>中保存了一些作者信息。</li>
-<li><code>ArrayList对象</code>默认为空。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.config;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置Swagger的Docket实例</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">getDocket</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">            .apiInfo(<span class="keyword">this</span>.getApiInfo());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    	自定义一个方法，该方法的作用是返回一个ApiInfo对象</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ApiInfo <span class="title">getApiInfo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Contact contact = <span class="keyword">new</span> Contact(<span class="string">&quot;lnd&quot;</span>, <span class="string">&quot;www.baidu.com&quot;</span>, <span class="string">&quot;1979347443@qq.com&quot;</span>);</span><br><span class="line">        ApiInfo apiInfo = <span class="keyword">new</span> ApiInfo(</span><br><span class="line">            <span class="string">&quot;LND的API文档&quot;</span>,                <span class="comment">// 标题</span></span><br><span class="line">            <span class="string">&quot;Swagger使用测试&quot;</span>,      <span class="comment">// 描述</span></span><br><span class="line">            <span class="string">&quot;L/1.0.0&quot;</span>,              <span class="comment">// 版本号</span></span><br><span class="line">            <span class="string">&quot;urn:tos&quot;</span>,      <span class="comment">// 开发团队的服务地址</span></span><br><span class="line">            contact,                        <span class="comment">// 作者信息</span></span><br><span class="line">            <span class="string">&quot;Apache 2.0&quot;</span>,           <span class="comment">// 许可证</span></span><br><span class="line">            <span class="string">&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;</span>,   <span class="comment">// 地址</span></span><br><span class="line">            <span class="keyword">new</span> ArrayList&lt;VendorExtension&gt;());      <span class="comment">// 默认为空的ArrayList</span></span><br><span class="line">        <span class="keyword">return</span> apiInfo;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>修改后的结果如下：</p>
-<p><img src="/2021/01/09/Swagger/image-20201217155834966.png" alt="image-20201217155834966"></p>
-<hr>
-<ul>
-<li><p><code>Docket对象</code>的构造方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Docket对象需要传入一个DocumentationType对象</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Docket</span><span class="params">(DocumentationType documentationType)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.documentationType = documentationType;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>ApiInfo对象</code>的构造方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建ApiInfo对象需要下面一些属性，Contact对象和默认为空的ArrayList对象</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Deprecated</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ApiInfo</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    String title,</span></span></span><br><span class="line"><span class="function"><span class="params">    String description,</span></span></span><br><span class="line"><span class="function"><span class="params">    String version,</span></span></span><br><span class="line"><span class="function"><span class="params">    String termsOfServiceUrl,</span></span></span><br><span class="line"><span class="function"><span class="params">    String contactName,</span></span></span><br><span class="line"><span class="function"><span class="params">    String license,</span></span></span><br><span class="line"><span class="function"><span class="params">    String licenseUrl)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(title, description, version, termsOfServiceUrl, <span class="keyword">new</span> Contact(contactName, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>), license, licenseUrl, <span class="keyword">new</span> ArrayList&lt;VendorExtension&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>查看源码可知，ApiInfo的一个构造函数如上，可以在创建对象时自定义对象中的属性。（ApiInfo类中没有get/set方法，所以只能在构造函数中定义这些属性）。</p>
-<p>ApiInfo的默认配置信息如下，我们可以自己选择是否更改这些信息。</p>
-<p><img src="/2021/01/09/Swagger/image-20201217153644561.png" alt="image-20201217153644561"></p>
-</li>
-<li><p><code>Contact对象</code>的构造方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Contact是一个用于保存作者信息的对象，无get/set方法，只能通过构造函数设置对象中的属性。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Contact</span><span class="params">(String name, String url, String email)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.url = url;</span><br><span class="line">    <span class="keyword">this</span>.email = email;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<p>在<code>hello-controller接口</code>中，我们可以看到7种请求方式全部被展示出来了，原因是我们在Controller中使用了<code>@RequestMapping(&quot;/hello&quot;)</code>注解，如果想要只显示某种具体的请求方式，应该使用<code>@GetMapping()</code>或<code>@PostMapping()</code>等注解。</p>
-<p><img src="/2021/01/09/Swagger/image-20201217163207420.png" alt="image-20201217163207420"></p>
-<p>Models中包含ModelAndView和View两个对象。<img src="/2021/01/09/Swagger/image-20201217163226474.png" alt="image-20201217163226474"></p>
-<hr>
-<h3 id="配置Swagger要扫描的接口"><a href="#配置Swagger要扫描的接口" class="headerlink" title="配置Swagger要扫描的接口"></a>配置Swagger要扫描的接口</h3><p>修改配置类（新增）</p>
-<p><code>Docket.select</code></p>
-<table>
-<thead>
-<tr>
-<th align="center">对象</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>Docket</code></td>
-<td align="center"><code>select()</code></td>
-<td align="center">Docket对象中有一个select()方法，返回值是一个ApiSelectorBuilder对象，<br>用于配置Swagger要扫描的接口</td>
-</tr>
-<tr>
-<td align="center"><code>ApiSelectorBuilder</code></td>
-<td align="center"><code>build()</code></td>
-<td align="center">ApiSelectorBuilder对象中有一个build()方法,返回值是一个Docket对象</td>
-</tr>
-</tbody></table>
-<p>我们可以<strong>在<code>select()</code>和<code>build()</code>方法之间</strong>添加<strong>扫描条件/过滤条件等</strong>，自定义配置要扫描的接口。</p>
-<table>
-<thead>
-<tr>
-<th align="center">对象</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>ApiSelectorBuilder</code></td>
-<td align="center"><code>.apis(RequestHandlerSelectors.basePackage())</code></td>
-<td align="center">指定要扫描的包</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.apis(RequestHandlerSelectors.any())</code></td>
-<td align="center">扫描全部</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.apis(RequestHandlerSelectors.none())</code></td>
-<td align="center">全都不扫描</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))</code></td>
-<td align="center">扫描类上的注解，参数是一个注解的反射对象。<br>效果：只有加了特定注解的类才能被扫描到。</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.apis(RequestHandlerSelectors.withMethodAnnotation(GetMapping.class))</code></td>
-<td align="center">扫描方法上的注解，参数是一个注解的反射对象</td>
-</tr>
-<tr>
-<td align="center">同上</td>
-<td align="center"><code>.paths(PathSelectors.ant(&quot;com.nengdong.swaggerdemo&quot;))</code></td>
-<td align="center">过滤，被配置到过滤中的路径不能被扫描到（过滤的优先级高于扫描）</td>
-</tr>
-</tbody></table>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置了Swagger的Docket实例</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">getDocket</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">        .apiInfo(<span class="keyword">this</span>.getApiInfo())</span><br><span class="line"></span><br><span class="line">        .select()</span><br><span class="line">        .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.nengdong.swaggerdemo.controller&quot;</span>))    </span><br><span class="line">        .build();	<span class="comment">// RequestHandlerSelectors，工具类，配置要扫描接口的方式</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>.select() ...... .build()</code>包含扫描/过滤条件，是一个整体，两个方法之间只能使用<code>.apis()</code>和<code>.paths()</code>方法，其它方法需要在这个整体之外</p>
-<hr>
-<h3 id="配置是否启动Swagger"><a href="#配置是否启动Swagger" class="headerlink" title="配置是否启动Swagger"></a>配置是否启动Swagger</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置了Swagger的Docket实例</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">getDocket</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">        .apiInfo(<span class="keyword">this</span>.getApiInfo())</span><br><span class="line"></span><br><span class="line">        .select()</span><br><span class="line">        .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.nengdong.swaggerdemo.controller&quot;</span>))   </span><br><span class="line">        .build()</span><br><span class="line"></span><br><span class="line">        .enable(<span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<table>
-<thead>
-<tr>
-<th align="center">对象</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>Docket</code></td>
-<td align="center"><code>enable(false)</code></td>
-<td align="center">是否启用Swagger，默认为true（启用），如果为false，则Swagger的访问地址失效</td>
-</tr>
-</tbody></table>
-<p><strong>问题：如何做到只Swagger在生产环境中使用，在发布后不使用？</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(生产环境)&#123;</span><br><span class="line">    使用</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span>(发布环境)&#123;</span><br><span class="line">    使用</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<hr>
-<h3 id="配置API文档的分组"><a href="#配置API文档的分组" class="headerlink" title="配置API文档的分组"></a>配置API文档的分组</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Docket <span class="title">getDocket</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">        .apiInfo(<span class="keyword">this</span>.getApiInfo())</span><br><span class="line"></span><br><span class="line">        .select()</span><br><span class="line">        .apis(RequestHandlerSelectors.basePackage(<span class="string">&quot;com.nengdong.swaggerdemo.controller&quot;</span>))  </span><br><span class="line">        .build()</span><br><span class="line"></span><br><span class="line">        .groupName(<span class="string">&quot;派大星&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p><img src="/2021/01/09/Swagger/image-20201217180145087.png" alt="image-20201217180145087"></p>
-<p><img src="/2021/01/09/Swagger/image-20201218102545852.png" alt="image-20201218102545852"></p>
-<blockquote>
-<p>在使用链式编程时，IDEA会给出自动提示，上一行结尾的对象调用下一行中的方法，例如在上图中的调用关系如下：<code>Docket.select()</code>、<code>ApiSelectorBuilder.apis()</code>、<code>Docket.groupName()</code></p>
-</blockquote>
-<ul>
-<li>如何配置多个分组？创建多个Docket实例即可！</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">docket1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">docket2</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">docket3</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2).groupName(<span class="string">&quot;C&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h2 id="实体类配置"><a href="#实体类配置" class="headerlink" title="实体类配置"></a>实体类配置</h2><p>创建<code>pojo/User</code>实体类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.pojo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> String gender;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(Integer id, String name, String gender)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.gender = gender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>Swagger不能得到私有的属性，所以我们必须提供公共的get/set方法，否则Swagger只能得到一个空的对象。</strong></p>
-<p><strong>或者直接设置User属性为public也可。</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.controller;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/getUser&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="number">13</span>, <span class="string">&quot;海绵宝宝&quot;</span>, <span class="string">&quot;male&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 只要我们的接口的返回值中存在实体类，它就会被扫描到Swagger中。</span></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/postUser&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">postUser</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="number">13</span>, <span class="string">&quot;海绵宝宝&quot;</span>, <span class="string">&quot;male&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/01/09/Swagger/image-20201217184552860.png" alt="image-20201217184552860"></p>
-<hr>
-<h1 id="常见的注解"><a href="#常见的注解" class="headerlink" title="常见的注解"></a>常见的注解</h1><h3 id="作用在实体类上"><a href="#作用在实体类上" class="headerlink" title="作用在实体类上"></a>作用在实体类上</h3><h4 id="1、-ApiModel"><a href="#1、-ApiModel" class="headerlink" title="1、@ApiModel"></a>1、@ApiModel</h4><ul>
-<li>作用在<strong>实体类</strong>上</li>
-</ul>
-<h4 id="2、-ApiModelProperty"><a href="#2、-ApiModelProperty" class="headerlink" title="2、@ApiModelProperty"></a>2、@ApiModelProperty</h4><ul>
-<li>作用在实体类的<strong>字段</strong>上。只用于注释，如果不加的话，返回的是实体类的属性，加上之后返回实体类的属性和注释。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.nengdong.swaggerdemo.pojo;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ApiModel(&quot;用户实体类&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@ApiModelProperty(&quot;唯一id&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Integer id;</span><br><span class="line">    <span class="meta">@ApiModelProperty(&quot;用户名&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="meta">@ApiModelProperty(&quot;性别&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String gender;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(Integer id, String name, String gender)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.gender = gender;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/01/09/Swagger/image-20201217184926007.png" alt="image-20201217184926007"></p>
-<h3 id="作用在Controller上"><a href="#作用在Controller上" class="headerlink" title="作用在Controller上"></a>作用在Controller上</h3><h4 id="3、-ApiOperation"><a href="#3、-ApiOperation" class="headerlink" title="3、@ApiOperation"></a>3、@ApiOperation</h4><ul>
-<li><p>作用在<strong>接口(Controller)上</strong></p>
-</li>
-<li><p>接口源码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span>		</span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> ApiOperation &#123;</span><br><span class="line">    <span class="comment">// 接口说明</span></span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;		</span><br><span class="line">    <span class="comment">// 接口发布说明</span></span><br><span class="line">    <span class="function">String <span class="title">notes</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    String[] tags() <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// 接口返回参数类型</span></span><br><span class="line">    Class&lt;?&gt; response() <span class="keyword">default</span> Void.class;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">responseContainer</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">responseReference</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// 接口请求方式</span></span><br><span class="line">    <span class="function">String <span class="title">httpMethod</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="meta">@Deprecated</span> <span class="function"><span class="keyword">int</span> <span class="title">position</span><span class="params">()</span> <span class="keyword">default</span> 0</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">nickname</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">produces</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">consumes</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function">String <span class="title">protocols</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    Authorization[] authorizations() <span class="keyword">default</span> <span class="meta">@Authorization(value = &quot;&quot;)</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">hidden</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    ResponseHeader[] responseHeaders() <span class="keyword">default</span> <span class="meta">@ResponseHeader(name = &quot;&quot;, response = Void.class)</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">code</span><span class="params">()</span> <span class="keyword">default</span> 200</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    Extension[] extensions() <span class="keyword">default</span> <span class="meta">@Extension(properties = @ExtensionProperty(name = &quot;&quot;, value = &quot;&quot;))</span>;</span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">ignoreJsonView</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-<li><p>例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/getUser&quot;)</span></span><br><span class="line"><span class="meta">@ApiOperation(value = &quot;接口说明&quot;, httpMethod = &quot;请求方式：Get&quot;, response = User.class, notes = &quot;接口发布说明&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">getUser</span><span class="params">(<span class="meta">@ApiParam(value = &quot;用户ID&quot;)</span> Integer id)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> User(id, <span class="string">&quot;海绵宝宝&quot;</span>, <span class="string">&quot;male&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/01/09/Swagger/image-20201218111820647.png" alt="image-20201218111820647"></p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Api</span>：用在请求的类上，表示对类的说明</span><br><span class="line">    tags=<span class="string">&quot;说明该类的作用，可以在UI界面上看到的注解&quot;</span></span><br><span class="line">    value=<span class="string">&quot;该参数没什么意义，在UI界面上也看到，所以不需要配置&quot;</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@ApiOperation</span>：用在请求的方法上，说明方法的用途、作用</span><br><span class="line">    value=<span class="string">&quot;说明方法的用途、作用&quot;</span></span><br><span class="line">    notes=<span class="string">&quot;方法的备注说明&quot;</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@ApiImplicitParams</span>：用在请求的方法上，表示一组参数说明</span><br><span class="line">    <span class="meta">@ApiImplicitParam</span>：用在<span class="meta">@ApiImplicitParams</span>注解中，指定一个请求参数的各个方面</span><br><span class="line">        name：参数名</span><br><span class="line">        value：参数的汉字说明、解释</span><br><span class="line">        required：参数是否必须传</span><br><span class="line">        paramType：参数放在哪个地方</span><br><span class="line">            · header --&gt; 请求参数的获取：<span class="meta">@RequestHeader</span></span><br><span class="line">            · query --&gt; 请求参数的获取：<span class="meta">@RequestParam</span></span><br><span class="line">            · path（用于restful接口）--&gt; 请求参数的获取：<span class="meta">@PathVariable</span></span><br><span class="line">            · body 以流的形式提交 仅支持POST <span class="meta">@RequestBody</span>接收注解</span><br><span class="line">            · form (不常用)    </span><br><span class="line">        dataType：参数类型，默认String，其它值dataType=<span class="string">&quot;Integer&quot;</span>       </span><br><span class="line">        defaultValue：参数的默认值</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@ApiResponses</span>：用在请求的方法上，表示一组响应</span><br><span class="line">    <span class="meta">@ApiResponse</span>：用在<span class="meta">@ApiResponses</span>中，一般用于表达一个错误的响应信息</span><br><span class="line">        code：数字，例如<span class="number">400</span></span><br><span class="line">        message：信息，例如<span class="string">&quot;请求参数没填好&quot;</span></span><br><span class="line">        response：抛出异常的类</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="meta">@ApiModel</span>：用于响应类上，表示一个返回响应数据的信息</span><br><span class="line">            （这种一般用在post创建的时候，使用<span class="meta">@RequestBody</span>这样的场景，</span><br><span class="line">            请求参数无法使用<span class="meta">@ApiImplicitParam</span>注解进行描述的时候）</span><br><span class="line">    <span class="meta">@ApiModelProperty</span>：用在属性上，描述响应类的属性</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ApiImplicitParams(&#123;</span></span><br><span class="line"><span class="meta">    @ApiImplicitParam(name=&quot;mobile&quot;,value=&quot;手机号&quot;,required=true,paramType=&quot;form&quot;),</span></span><br><span class="line"><span class="meta">    @ApiImplicitParam(name=&quot;password&quot;,value=&quot;密码&quot;,required=true,paramType=&quot;form&quot;),</span></span><br><span class="line"><span class="meta">    @ApiImplicitParam(name=&quot;age&quot;,value=&quot;年龄&quot;,required=true,paramType=&quot;form&quot;,dataType=&quot;Integer&quot;)</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@ApiOperation(value = &quot;select1请求&quot;,notes = &quot;多个参数，多种的查询参数类型&quot;)</span></span><br><span class="line"><span class="meta">@ApiResponses(&#123;</span></span><br><span class="line"><span class="meta">    @ApiResponse(code=400,message=&quot;请求参数没填好&quot;),</span></span><br><span class="line"><span class="meta">    @ApiResponse(code=404,message=&quot;请求路径没有或页面跳转路径不对&quot;)</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h1 id="Swagger错误"><a href="#Swagger错误" class="headerlink" title="Swagger错误"></a>Swagger错误</h1><blockquote>
-<p>每次访问SwaggerUI界面时，出现<strong>java.lang.NumberFormatException</strong>异常。即使不做任何操作</p>
-</blockquote>
-<p>解决方案：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--swagger核心依赖（swagger是老版本，swagger2是新版本）--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.swagger<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>swagger-models:1.5.20<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.swagger<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>swagger-models<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.21<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--swagger-ui，swagger提供的可视化访问页面--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/csdn_lwq/article/details/109094931">https://blog.csdn.net/csdn_lwq/article/details/109094931</a></p>
-<h1 id="SpringBoot-集成-Knife4j"><a href="#SpringBoot-集成-Knife4j" class="headerlink" title="SpringBoot 集成 Knife4j"></a>SpringBoot 集成 Knife4j</h1><p>Knife4j 是一个 Swagger-UI 界面，作用同 Swagger-UI 一样，只不过比原来界面更加好看。安装步骤如下：</p>
-<h2 id="1、添加-Maven-依赖"><a href="#1、添加-Maven-依赖" class="headerlink" title="1、添加 Maven 依赖"></a>1、添加 Maven 依赖</h2><ul>
-<li><code>knife4j-spring-boot-starter</code>的作用同上面讲的 <code>springfox-swagger-ui</code> 作用是完全一样的，所以安装该依赖时最好将 <code>swagger-ui</code>依赖注释掉，当然不注释也没有关系，因为这两个UI的访问地址不同，所以理论上也不会产生冲突。</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--knife4j--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.xiaoymin<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>knife4j-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="2、添加配置类"><a href="#2、添加配置类" class="headerlink" title="2、添加配置类"></a>2、添加配置类</h2><blockquote>
-<p>在启动类或自定义的 Swagger 配置类上添加 <strong>@EnableKnife4j</strong> 注解启用 knife4j ！</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger2</span></span><br><span class="line"><span class="meta">@EnableKnife4j</span>	<span class="comment">// 启用 knife4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Swagger2Config</span> </span>&#123;</span><br><span class="line">	<span class="comment">// TODO</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3、启动项目"><a href="#3、启动项目" class="headerlink" title="3、启动项目"></a>3、启动项目</h2><blockquote>
-<p>knife4j 默认的访问地址是：<code>http://ip:port/doc.html</code></p>
-</blockquote>
-<p><img src="/2021/01/09/Swagger/image-20210406232226453.png" alt="image-20210406232226453"></p>
 
       
     </div>
