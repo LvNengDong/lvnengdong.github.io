@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,336 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/09/BlockingQueue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/09/BlockingQueue/" class="post-title-link" itemprop="url">BlockingQueue</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-09 15:45:50 / Modified: 16:50:54" itemprop="dateCreated datePublished" datetime="2021-08-09T15:45:50+08:00">2021-08-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>  <strong>阻塞队列；BlockingQueue</strong></p>
+</blockquote>
+<h1 id="阻塞队列的由来"><a href="#阻塞队列的由来" class="headerlink" title="阻塞队列的由来"></a>阻塞队列的由来</h1><blockquote>
+<p>  <strong>生产者-消费者模式</strong></p>
+</blockquote>
+<ul>
+<li>  我们假设一种场景，生产者一直生产资源，消费者一直消费资源，资源存储在一个缓冲池中，生产者将生产的资源存进缓冲池中，消费者从缓冲池中拿到资源进行消费，这就是⼤名鼎鼎的生产者-消费者模式。</li>
+<li>  该模式能够简化开发过程，一方⾯消除了生产者类与消费者类之间的代码依赖性，另一方⾯将生产数据的过程与使用数据的过程解耦简化负载。</li>
+<li>  我们自己编码实现这个模式的时候，因为需要让多个线程操作共享变量（即资源），所以很容易引发线程安全问题，造成重复消费和死锁，尤其是生产者和消费者存在多个的情况。另外，当缓冲池空了，我们需要阻塞消费者，唤醒生产者；当缓冲池满了，我们需要阻塞生产者，唤醒消费者，这些个等待-唤醒逻辑都需要自己实现。</li>
+</ul>
+<blockquote>
+<p>  <strong>为什么需要 BlockingQueue？有什么好处？</strong></p>
+</blockquote>
+<ul>
+<li>  在多线程领域，所谓阻塞，就是指在某些情况下会挂起线程（即阻塞），一旦条件满足，被挂起的线程又会被唤醒。[但是这些都是需要人工去判断挂起和唤醒的] [<strong>手动挂起和唤醒</strong>]</li>
+<li>  在 juc 包发布以前，在多线程环境下，我们每个程序员都必须自己去控制这些细节，尤其还要兼顾效率和线程安全，这会给开发带来不小的难度。</li>
+<li>  由程序员手动去判断阻塞和唤醒条件是非常容易出错的，所以 JDK 中新增了 **阻塞队列(BlockingQueue)**，你只管往里面存、取就行，而不用担心多线程环境下存、取共享变量的线程安全问题。</li>
+<li>  好处是我们不需要关心什么时候阻塞线程，什么时候唤醒线程，因为这一切都由 BlockingQueue 自动实现了。[<strong>自动挂起和唤醒</strong>]</li>
+<li>  BlockingQueue⼀般用于⽣产者-消费者模式，⽣产者是往队列里添加元素的线程，消费者是从队列里拿元素的线程。BlockingQueue就是存放元素的容器。</li>
+</ul>
+<hr>
+<h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><ol>
+<li> 阻塞队列首先是一个对垒，满足队列 FIFO 的特性；</li>
+<li>阻塞队列<ul>
+<li>  当阻塞队列为空时，从队列中<strong>获取</strong>元素的操作将会被阻塞。</li>
+<li>  当阻塞队列为满时，往队列里<strong>添加</strong>元素的操作将会被阻塞。</li>
+</ul>
+</li>
+<li> 阻塞队列空了消费者阻塞，满了生产者阻塞。</li>
+</ol>
+<p><img src="/2021/08/09/BlockingQueue/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97.png" alt="阻塞队列"></p>
+<hr>
+<h1 id="核心方法"><a href="#核心方法" class="headerlink" title="核心方法"></a>核心方法</h1><p>阻塞队列提供了四组不同的方法用于插入、移除、检查元素：</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法类型</th>
+<th align="center">抛出异常</th>
+<th align="center">返回特殊值</th>
+<th align="center">阻塞</th>
+<th align="center">超时</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">插入</td>
+<td align="center"><code>add(e)</code></td>
+<td align="center"><code>offer(e)</code></td>
+<td align="center"><code>put(e)</code></td>
+<td align="center"><code>offer(e, time, unit)</code></td>
+</tr>
+<tr>
+<td align="center">移出</td>
+<td align="center"><code>remove()</code></td>
+<td align="center"><code>poll()</code></td>
+<td align="center"><code>take()</code></td>
+<td align="center"><code>poll(time, unit)</code></td>
+</tr>
+<tr>
+<td align="center">检查</td>
+<td align="center"><code>element()</code></td>
+<td align="center"><code>peek()</code></td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+<ul>
+<li>  检查：检查队列是否为空，不为空则查到队头元素的值</li>
+</ul>
+<blockquote>
+<p>  <strong>抛出异常：</strong></p>
+</blockquote>
+<p>如果试图的操作无法立即执行，则抛出异常。</p>
+<ul>
+<li>  当阻塞队列满时，再往队列里插入元素会抛出 <strong>IllegalStateException: Queue full</strong> 异常；</li>
+<li>  当阻塞队列空时，再从队列里删除元素会抛出 <strong>NoSuchElementException</strong> 异常。</li>
+</ul>
+<blockquote>
+<p>  <strong>返回特殊值：</strong></p>
+</blockquote>
+<p>如果试图的操作无法立即执行，会返回一个特殊值。</p>
+<ul>
+<li>  对于插入方法，成功返回 <strong>true</strong> 失败返回 <strong>false</strong>；</li>
+<li>  对于移除方法，成功返回出队的元素，队列为空就返回 <strong>null</strong>。</li>
+</ul>
+<blockquote>
+<p>  <strong>一直阻塞：</strong></p>
+</blockquote>
+<p>如果试图的操作无法立即执行，则一直阻塞或者响应中断。</p>
+<ul>
+<li>  当阻塞队列满时，生产者线程继续往队列里 put 元素，队列会一直阻塞生产线程；</li>
+<li>  当阻塞队列空时，消费者线程继续试图从队列中 take 元素，队列会一直阻塞消费者线程直到队列可用。</li>
+</ul>
+<blockquote>
+<p>  <strong>超时退出：</strong></p>
+</blockquote>
+<p>如果试图的操作无法立即执行，该方法调用将会发⽣阻塞，直到能够执行，但等待时间不会超过给定值。返回一个特定值以告知该操作是否成功，通常是 <code>true / false</code>。</p>
+<ul>
+<li>  当阻塞队列满时，继续向队列中添加元素，会阻塞生产者线程一段时间，若该段时间内队列中可以添加元素了，则添加成功，超过时间后生产者线程会退出，返回一个特定值告知该操作是否成功。</li>
+<li>  当阻塞队列空时，继续从队列中移出元素，会阻塞消费者线程一段时间，若该段时间内可以从队列中移除元素了，则移除成功，超过时间后消费者线程会退出，返回一个特定值告知该操作是否成功。</li>
+</ul>
+<blockquote>
+<p>  <strong>注意</strong></p>
+</blockquote>
+<ul>
+<li>  不能往阻塞队列中插⼊null，会抛出空指针异常。</li>
+<li>  可以访问阻塞队列中的任意元素，调⽤ <code>remove(o)</code> 可以将队列之中的特定对象移除，但并不⾼效，尽量避免使⽤。</li>
+</ul>
+<hr>
+<h1 id="BlockingQueue-架构"><a href="#BlockingQueue-架构" class="headerlink" title="BlockingQueue 架构"></a>BlockingQueue 架构</h1><img src="/2021/08/09/BlockingQueue/BlockingQueue.png" alt="BlockingQueue">
+
+
+
+<ul>
+<li>  <strong>ArrayBlockingQueue：由数组结构组成的有界阻塞队列。类似于ArrayList</strong></li>
+<li>  <strong>LinkedBlockedQueue：由链表结构组成的有界阻塞队列（但大小默认值为 Integer.MAX_VALUE）。类似于 LinkedArrayList</strong></li>
+<li>  PriorityBlockingQueue：支持优先级排序的无界阻塞队列</li>
+<li>  DelayQueue：使用优先级队列实现的延迟无界阻塞队列。</li>
+<li>  <strong>SynchronousQueue：不存储元素的阻塞队列。</strong></li>
+<li>  LinkedTransferQueue：由链表结构组成的无界阻塞队列。</li>
+<li>  LinkedBlockingDeque：由链表结构组成的双向阻塞队列。</li>
+</ul>
+<h2 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><blockquote>
+<p>  <strong>构造方法</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayBlockingQueue</span><span class="params">(<span class="keyword">int</span> capacity, <span class="keyword">boolean</span> fair)</span></span>&#123;</span><br><span class="line">    <span class="comment">//...省略代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  ArrayBlockingQueue 是由数组结构组成的<strong>有界</strong>阻塞队列。</li>
+<li>  内部结构是<strong>数组</strong>，故具有数组的特性。</li>
+<li>  可以初始化队列大小， 且一旦初始化不能改变。构造方法中的 <strong>fair</strong> 表示控制对象的内部锁是否采⽤公平锁，默认是非公平锁。</li>
+</ul>
+<h2 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h2><ul>
+<li>  由链表结构组成的<strong>有界</strong>阻塞队列。默认队列的大小是 <strong>Integer.MAX_VALUE</strong>，也可以指定大小。</li>
+<li>  内部结构是链表，具有链表的特性。</li>
+<li>  此队列按照先进先出的原则对元素进行排序。</li>
+</ul>
+<h2 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><ul>
+<li>  这个队列比较特殊，没有任何内部容量，甚至连一个队列的容量都没有。并且每个 <code>put</code> 必须等待一个 <code>take</code>，反之亦然。</li>
+</ul>
+<blockquote>
+<p>  <strong>SynchronousQueue 与容量为 1 的 ArrayBlockingQueue、LinkedBlockingQueue 有什么区别？</strong></p>
+</blockquote>
+<p>在 SynchronousQueue 中：</p>
+<ul>
+<li>  <code>iterator()</code> 永远返回空，因为里面没有东西；</li>
+<li>  <code>isEmpty()</code> 永远返回 true；</li>
+<li>  <code>peek()</code> 永远返回 <strong>null</strong>；</li>
+<li>  <code>put()</code> 往 queue 放进去一个 element 以后就一直 wait，直到有其他 thread 进来把这个 element 取走。</li>
+<li>  <code>offer()</code> 往 queue 里放一个 element 后立即返回，如果碰巧这个 element 被另一个thread取走了，<code>offer()</code> 返回 true，认为 <code>offer()</code> 成功；否则返回 false。</li>
+<li>  <code>take()</code> 取出并且 remove 掉 queue 里 的 element，取不到东西他会一直等。</li>
+<li>  <code>poll()</code> 取出并且 remove 掉 queue 里的 element，只有到碰巧另外一个线程正在往 queue 里 offer 数据或者 put 数据的时候，该方法才会取到东西。否则立即返回 null。</li>
+<li>  <code>remove()</code> &amp; <code>removeAll()</code> 永远返回 false。</li>
+</ul>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
+<li>  PriorityBlockingQueue 不会阻塞数据⽣产者（因为队列是无界的），⽽只会在没有可消费的数据时，阻塞数据的消费者。</li>
+<li>  因此使⽤的时候要特别注意，⽣产者⽣产数据的速度绝对不能快于消费者消费数据的速度，否则时间一⻓，会最终耗尽所有的可⽤堆内存空间。</li>
+<li>  对于使⽤默认大小的LinkedBlockingQueue也是一样的。</li>
+</ul>
+<hr>
+<h1 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h1><h2 id="ArrayBlockingQueue-1"><a href="#ArrayBlockingQueue-1" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><h3 id="Case1：add-remove"><a href="#Case1：add-remove" class="headerlink" title="Case1：add / remove"></a>Case1：add / remove</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.blk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/13 17:18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产*/</span></span><br><span class="line">        <span class="keyword">boolean</span> b1 = blockingQueue.add(<span class="string">&quot;A&quot;</span>);    <span class="comment">// 正常添加返回值为Boolean类型的true</span></span><br><span class="line">        blockingQueue.add(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        blockingQueue.add(<span class="string">&quot;C&quot;</span>);</span><br><span class="line"><span class="comment">//        blockingQueue.add(&quot;X&quot;);   // 队列满时再向队列时添加元素会抛出异常：IllegalStateException: Queue full</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*检索*/</span></span><br><span class="line">        String element = blockingQueue.element();   <span class="comment">// 正常检索返回队首元素</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费*/</span></span><br><span class="line">        String q1 = blockingQueue.remove();     <span class="comment">// 正常出队返回值为队首元素</span></span><br><span class="line">        String q2 = blockingQueue.remove();</span><br><span class="line">        String q3 = blockingQueue.remove();</span><br><span class="line"><span class="comment">//        String q4 = blockingQueue.remove();   // 队列空时继续出队会抛出异常：NoSuchElementException</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  队列满时继续入队</li>
+</ul>
+<p><img src="/2021/08/09/BlockingQueue/image-20210713172132018.png" alt="image-20210713172132018"></p>
+<ul>
+<li>  队列为空时继续出队</li>
+</ul>
+<p><img src="/2021/08/09/BlockingQueue/image-20210713172625099.png" alt="image-20210713172625099"></p>
+<h3 id="Case2：offer-poll"><a href="#Case2：offer-poll" class="headerlink" title="Case2：offer / poll"></a>Case2：offer / poll</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.blk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/13 17:18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产*/</span></span><br><span class="line">        <span class="keyword">boolean</span> b1 = blockingQueue.offer(<span class="string">&quot;A&quot;</span>);    <span class="comment">// 正常添加返回值为Boolean类型的true</span></span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;C&quot;</span>);</span><br><span class="line">        System.out.println(blockingQueue.offer(<span class="string">&quot;X&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*检索*/</span></span><br><span class="line">        String element = blockingQueue.peek();   <span class="comment">// 正常检索返回队首元素</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费*/</span></span><br><span class="line">        String q1 = blockingQueue.poll();     <span class="comment">// 正常出队返回值为队首元素</span></span><br><span class="line">        String q2 = blockingQueue.poll();</span><br><span class="line">        String q3 = blockingQueue.poll();</span><br><span class="line">        System.out.println(blockingQueue.poll());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 输出结果：</span></span><br><span class="line"><span class="comment"> *      false</span></span><br><span class="line"><span class="comment"> *      null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Case3：put-take"><a href="#Case3：put-take" class="headerlink" title="Case3：put / take"></a>Case3：put / take</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.blk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/13 17:18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产*/</span></span><br><span class="line">        blockingQueue.put(<span class="string">&quot;A&quot;</span>);    <span class="comment">// 正常添加无返回值</span></span><br><span class="line">        blockingQueue.put(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        blockingQueue.put(<span class="string">&quot;C&quot;</span>);</span><br><span class="line"><span class="comment">//        blockingQueue.put(&quot;X&quot;);     // 当队列满时，继续入队元素，就会阻塞当前线程</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费*/</span></span><br><span class="line">        String q1 = blockingQueue.take();     <span class="comment">// 正常出队返回队首元素</span></span><br><span class="line">        String q2 = blockingQueue.take();</span><br><span class="line">        String q3 = blockingQueue.take();</span><br><span class="line">        System.out.println(<span class="string">&quot;==========&quot;</span>);</span><br><span class="line">        String q4 = blockingQueue.take();       <span class="comment">// 当队列空时，继续出队，也会阻塞当前线程</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="Case4：offer-poll"><a href="#Case4：offer-poll" class="headerlink" title="Case4：offer / poll"></a>Case4：offer / poll</h3><p><img src="/2021/08/09/BlockingQueue/image-20210713173931729.png" alt="image-20210713173931729"></p>
+<p><img src="/2021/08/09/BlockingQueue/image-20210713174208204.png" alt="image-20210713174208204"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.blk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/13 17:18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产*/</span></span><br><span class="line">        <span class="keyword">boolean</span> b1 = blockingQueue.offer(<span class="string">&quot;A&quot;</span>,<span class="number">2</span>, TimeUnit.SECONDS);    <span class="comment">// 正常添加返回值为Boolean类型的true</span></span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;B&quot;</span>, <span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;C&quot;</span>, <span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;X&quot;</span>, <span class="number">2</span>, TimeUnit.SECONDS);  <span class="comment">// 队列满时继续添加，会阻塞当前线程 2s，之后继续运行线程</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费*/</span></span><br><span class="line">        String q1 = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);    <span class="comment">// 正常出队返回值为队首元素</span></span><br><span class="line">        String q2 = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">        String q3 = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">        String q4 = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);    <span class="comment">// 队列空时继续出队，会阻塞当前线程线程2s，</span></span><br><span class="line">        <span class="comment">// 如果2s后队列还为空，则返回null，若2s后队列被其它线程入队了值，则返回队首的值</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="SynchronousQueue-1"><a href="#SynchronousQueue-1" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><p><strong>原理</strong></p>
+<ul>
+<li>  SynchronousQueue 没有容量。与其它 BlockingQueue 不同，SynchronousQueue 是一个不存储元素的 BlockingQueue，每一个 put 元素操作必须等待一个 take 操作，否则不能继续添加元素，反之亦然。</li>
+<li>  也可以理解为 SynchronousQueue 容量为 1，即每生产一个必须等消费之后才能继续生产下一个。</li>
+</ul>
+<p><strong>代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronousQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> SynchronousQueue&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产者线程*/</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; put A&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.put(<span class="string">&quot;A&quot;</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; put B&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.put(<span class="string">&quot;B&quot;</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; put C&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.put(<span class="string">&quot;C&quot;</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;producer&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费者线程*/</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.take(); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">2000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.take(); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.take(); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;customer&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>代码分析</strong></p>
+<ol>
+<li> main 线程启动，创建 SynchronousQueue 类的实例对象，创建两个线程，生产者线程和消费者线程并发执行。</li>
+<li> 生产者线程连续生产 3 个元素，但是由于 blockingQueue 是一个同步队列，最大容量是 1，所以只能添加进去一个，然后被挂起；</li>
+<li> 消费者线程在 3s 后消费一个线程，消费完成后，生产者线程才能被唤醒继续生产。</li>
+</ol>
+<p>所有程序的输出结果是：</p>
+<ol>
+<li> 生产者线程添加 “A” 到同步阻塞队列，然后被挂起，等待队列中元素被消费；</li>
+<li> 3s 后消费者线程被唤醒消费队列中队首元素，然后继续挂起 2s；</li>
+<li> 生产者线程检测到阻塞队列为空，生产 “B” 到同步队列中，等待队列中的元素被消费；</li>
+<li> 2s 后消费者线程被唤醒消费队列中队首元素，然后继续挂起 1s；</li>
+<li> 生产者线程检测到阻塞队列为空，生产 “C” 到同步队列中，等待队列中的元素被消费，生产线程结束；</li>
+<li> 1s 后消费者线程被唤醒消费队列中队首元素，消费者线程结束；</li>
+<li> main 线程结束，程序执行完成。</li>
+</ol>
+<p>输出结果为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">producer put A</span><br><span class="line">producer put B</span><br><span class="line">producer put C</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h1 id="用在哪里"><a href="#用在哪里" class="headerlink" title="用在哪里"></a>用在哪里</h1><h2 id="生产者消费者模式"><a href="#生产者消费者模式" class="headerlink" title="生产者消费者模式"></a>生产者消费者模式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/14 10:31</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 知识点： volatile/CAS/atomicInteger/BlockQueue/线程交互/原子引用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyData3</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;   <span class="comment">// 默认开启，进行 生产+消费 。需要被多个线程知道，使用 volatile 修饰</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> AtomicInteger atomicInteger = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line"></span><br><span class="line">    BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">null</span>;     <span class="comment">// 定义为接口类型，可以接受该接口的所有实现类</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*构造器注入*/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyData3</span><span class="params">(BlockingQueue&lt;String&gt; blockingQueue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.blockingQueue = blockingQueue;</span><br><span class="line">        System.out.println(blockingQueue.getClass().getName()); <span class="comment">// 通过反射的方式获取调用对象的全限定类名，方便出错时检查</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">product</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        String data = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> result;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// flag == true</span></span><br><span class="line">        <span class="keyword">while</span> (flag)&#123;</span><br><span class="line">            data = atomicInteger.incrementAndGet()+<span class="string">&quot;&quot;</span>; <span class="comment">// i++</span></span><br><span class="line">            result = blockingQueue.offer(data, <span class="number">2L</span>, TimeUnit.SECONDS);    <span class="comment">// 加入阻塞队列，并返回执行结果</span></span><br><span class="line">            <span class="keyword">if</span> (result)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;加入队列成功***&quot;</span> + data);</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;加入队列失败***&quot;</span> + data);</span><br><span class="line">            &#125;</span><br><span class="line">            TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// flag == false</span></span><br><span class="line">        System.out.println(Thread.currentThread().getName()+<span class="string">&quot;生产线程执行结束&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">consumer</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        String result = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">while</span> (flag)&#123;</span><br><span class="line">            result = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">null</span> == result)&#123;</span><br><span class="line">                flag = <span class="keyword">false</span>;</span><br><span class="line">                System.out.println(<span class="string">&quot;超过2s没有取到阻塞队列中的数据，消费线程退出&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;消费&quot;</span> + result +<span class="string">&quot;成功&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*测试类*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProdConsumerDemo03</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        MyData3 myData3 = <span class="keyword">new</span> MyData3(<span class="keyword">new</span> ArrayBlockingQueue&lt;String&gt;(<span class="number">3</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;生产线程启动&quot;</span>);</span><br><span class="line">                myData3.product();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;Product&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;消费线程启动&quot;</span>);</span><br><span class="line">                myData3.consumer();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;Consumer&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5s钟后，生产和消费都结束</span></span><br><span class="line">        <span class="keyword">try</span> &#123; TimeUnit.SECONDS.sleep(<span class="number">5</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">        myData3.stop();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>执行结果</strong></p>
+<img src="/2021/08/09/BlockingQueue/image-20210714203155396.png" alt="image-20210714203155396" style="zoom:80%;">
+
+
+
+<p><strong>代码分析</strong></p>
+<ol>
+<li> main 线程启动，创建一个资源类，传入一个阻塞队列。</li>
+<li> 启动一个生产线程（Product）和一个消费线程（Consumer），两个线程并发执行。</li>
+<li> main 线程可以直接叫停这两个线程</li>
+</ol>
+<p><em>生产线程：</em></p>
+<ol>
+<li> 生产线程执行具有原子性的 i++ 操作，并将 i 加入阻塞队列（阻塞队列的最大容量为 3），每加入一次暂停 1s</li>
+</ol>
+<p><em>消费线程</em>：</p>
+<ol>
+<li>消费线程消费阻塞队列中的值，<ul>
+<li>  如果阻塞队列中有值，则消费成功；</li>
+<li>  如果超过 2s 消费队列中都没有值，则消费失败，消费线程退出。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><ul>
+<li>  <a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">超链接：线程池</a></li>
+</ul>
+<blockquote>
+<p>  <strong>线程池 ThreadPoolExecutor 的构造方法</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</span><br><span class="line">         Executors.defaultThreadFactory(), defaultHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="消息中间件"><a href="#消息中间件" class="headerlink" title="消息中间件"></a>消息中间件</h2><blockquote>
+<p>  …TODO</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2082,330 +2412,6 @@
 
 
 
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/25/%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/07/25/%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">算法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-07-25 12:48:34" itemprop="dateCreated datePublished" datetime="2021-07-25T12:48:34+08:00">2021-07-25</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-30 08:32:21" itemprop="dateModified" datetime="2021-07-30T08:32:21+08:00">2021-07-30</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<ul>
-<li>  分治算法</li>
-<li>  动态规划算法</li>
-</ul>
-</blockquote>
-<h1 id="分治算法"><a href="#分治算法" class="headerlink" title="分治算法"></a>分治算法</h1><h2 id="分治算法介绍"><a href="#分治算法介绍" class="headerlink" title="分治算法介绍"></a>分治算法介绍</h2><p>​        分治法是一种很重要的算法，顾名思义就是“分而治之”，即把一个复杂的问题分解成两个或更多相同或相似的子问题，再继续把子问题分成更小的子问题，直到最后子问题可以简单的直接求解，原问题的解即子问题的解的合并。</p>
-<p>​        分治思想是很多高效算法的基础，如排序算法（快速排序、归并排序），傅立叶变换（快速傅立叶变换）等。</p>
-<h2 id="分治算法的基本步骤"><a href="#分治算法的基本步骤" class="headerlink" title="分治算法的基本步骤"></a>分治算法的基本步骤</h2><p>分治法在每一层递归上都有三个步骤：</p>
-<ol>
-<li> <strong>分解</strong>：将原问题分解为若干个规模较小，相互独立，与原问题形式相同的子问题；</li>
-<li> <strong>解决</strong>：若子问题规模较小而容易被解决则直接解，否则递归地解各个子问题；</li>
-<li> <strong>合并</strong>：将各个子问题的解合并为原问题的解。</li>
-</ol>
-<p>分治（Divide-and-Conquer）算法的设计模式如下<strong>：</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> |P| ≤ n0</span><br><span class="line">    <span class="function">then <span class="title">return</span><span class="params">(ADHOC(P))</span></span></span><br><span class="line"><span class="function">    <span class="comment">//将P分解为较小的子问题 P1 ,P2 ,…,Pk</span></span></span><br><span class="line">    for i←1 to k</span><br><span class="line">        <span class="keyword">do</span> yi ← Divide-<span class="keyword">and</span>-Conquer(Pi)   递归解决Pi</span><br><span class="line">            T ← MERGE(y1,y2,…,yk)   合并子问题</span><br><span class="line">            <span class="keyword">return</span>(T)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  其中 <code>|P|</code> 表示问题 P 的规模；<code>n0</code> 是一个阈值，表示当问题 <code>P</code> 的规模不超过 <code>n0</code> 时，问题已容易直接解出，不必再继续分解；</li>
-<li>  <code>ADHOC(P)</code> 是该分治法中的基本子算法，用于直接解决小规模的问题 <code>P</code>。因此，当 <code>P</code> 的规模不超过 <code>n0</code> 时直接用算法 <code>ADHOC(P)</code> 求解。</li>
-<li>  算法 <code>MERGE(y1,y2,…,yk)</code> 是该分治法中的合并子算法，用于将 <code>P</code> 的子问题 <code>P1 ,P2 ,…,Pk</code> 的相应的解 <code>y1,y2,…,yk</code> 合并为 <code>P</code> 的解。</li>
-</ul>
-<h2 id="分治算法可以求解的一些经典问题"><a href="#分治算法可以求解的一些经典问题" class="headerlink" title="分治算法可以求解的一些经典问题"></a>分治算法可以求解的一些经典问题</h2><ul>
-<li>  二分查找</li>
-<li>  大整数乘法</li>
-<li>  棋盘覆盖</li>
-<li>  合并排序</li>
-<li>  快速排序</li>
-<li>  线性时间选择</li>
-<li>  最接近点对问题</li>
-<li>  循环赛日程表</li>
-<li>  汉诺塔</li>
-</ul>
-<hr>
-<h2 id="汉诺塔"><a href="#汉诺塔" class="headerlink" title="汉诺塔"></a>汉诺塔</h2><p><img src="/2021/07/25/%E7%AE%97%E6%B3%95/image-20210725192445350.png" alt="image-20210725192445350"></p>
-<p><strong>要求：</strong></p>
-<ul>
-<li>  将A塔的所有圆盘移动到C塔；</li>
-<li>  规定小圆盘上不能放大圆盘；</li>
-<li>  在三根柱子之间一次只能移动一个圆盘。</li>
-</ul>
-<p><strong>分析</strong></p>
-<ol>
-<li> 如果只有一个盘，<code>A-&gt;C</code></li>
-<li>如果有 2 个盘：<ul>
-<li>  <code>A上-&gt;B</code></li>
-<li>  <code>A下-&gt;C</code></li>
-<li>  <code>B-&gt;C</code></li>
-</ul>
-</li>
-<li>如果有 n（n&gt;=2）个盘，可以把整座塔视为两部分，即下层的一个盘和上层的 (n-1) 个盘。思路也非常简单，就是:<ul>
-<li>  <code>A上 -&gt; B</code></li>
-<li>  <code>A下 -&gt; C</code></li>
-<li>  <code>B -&gt; C</code></li>
-</ul>
-</li>
-</ol>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.dac;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/25 19:34</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 汉诺塔游戏 --&gt;&gt; 分治算法</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      * 1.  如果只有一个盘，A-&gt;C</span></span><br><span class="line"><span class="comment"> *      * 2.  如果有 2 个盘：</span></span><br><span class="line"><span class="comment"> *      *     -   A上-&gt;B</span></span><br><span class="line"><span class="comment"> *      *     -   A下-&gt;C</span></span><br><span class="line"><span class="comment"> *      *     -   B-&gt;C</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HanoiTower</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        hanoiTower(<span class="number">5</span>,<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  该方法用于将 A塔上的所有圆盘转移到 C塔上</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num   总共有多少个盘</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> A A塔</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> B B塔</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> C C塔</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hanoiTower</span><span class="params">(<span class="keyword">int</span> num, <span class="keyword">char</span> A, <span class="keyword">char</span> B, <span class="keyword">char</span> C)</span></span>&#123;</span><br><span class="line">        <span class="comment">/* 如果只有一个圆盘， A-&gt;C */</span></span><br><span class="line">        <span class="keyword">if</span> (num == <span class="number">1</span>)&#123;</span><br><span class="line">            System.out.println(A + <span class="string">&quot;-&gt;&quot;</span> + C);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 如果有2个以上的盘，A上-&gt;B A下-&gt;C B-&gt;C*/</span></span><br><span class="line">        <span class="keyword">if</span> (num &gt;= <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="comment">// A上(num-1)-&gt;B</span></span><br><span class="line">            hanoiTower(num-<span class="number">1</span>, A, C, B);</span><br><span class="line">            <span class="comment">// A下(1)—&gt;C</span></span><br><span class="line">            System.out.println(A + <span class="string">&quot;-&gt;&quot;</span> + C);</span><br><span class="line">            <span class="comment">// B(全部)-&gt;C</span></span><br><span class="line">            hanoiTower(num-<span class="number">1</span>, B, A, C); <span class="comment">// 只看第2个和第4个参数就能确定源头塔和目标塔</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><p><strong>动态规划的基础就是穷举</strong></p>
-<p>用于计算最大/小值，最优解等</p>
-<p>动态规划是一个自底向上的类递归算法。</p>
-<p><strong>动态规划就是 【选/不选】 的问题！！！</strong></p>
-<h2 id="最优解问题"><a href="#最优解问题" class="headerlink" title="最优解问题"></a>最优解问题</h2><p>我们通过一个实际问题来学习动态规划。</p>
-<blockquote>
-<p>  <strong>题目：</strong></p>
-</blockquote>
-<p>下图共有 7 项任务，横轴表示每项任务的工作时间，红字表示完成每项任务可以得到的报酬。比如任务一需要在 1<del>4 时间段进行，任务二需要在 3</del>5 时间段进行。也就是说想要完成任务一就必须放弃任务二、三、五，因为这几个任务的时间段冲突了。现在的问题是想知道从 0~11 时间段内最高报酬的任务组合是什么。</p>
-<img src="/2021/07/25/%E7%AE%97%E6%B3%95/image-20210727171453446.png" alt="image-20210727171453446" style="zoom:50%;">
-
-
-
-<blockquote>
-<p>  <strong>分析：</strong></p>
-</blockquote>
-<p><strong>动态规划就是【选/不选】的问题！！！</strong></p>
-<p>我们用 <strong>OPT(i)</strong> 函数表示包含第 i 个任务的情况下报酬最高的任务组合。【OPT：最优解】</p>
-<p>比如选了任务 ⑧，肯定就不能再选任务 ⑥ 和 ⑦ 了。这时就会存在两种情况，到底是选择任务 ⑧ 后得到的总薪资最高还是不选任务⑧得到的总薪资最高呢？这就是 【选/不选】的问题。<br>$$<br>OPT(8) = max<br>    \begin{cases}<br>        V_8+OPT(5)    &amp;\text{// 选⑧就要放弃⑥和⑦}<br>    \<br>        OPT(7)    &amp;\text{//不选⑧就相当于放弃⑧}<br>    \end{cases}<br>$$</p>
-<blockquote>
-<p>  <strong>公式：</strong></p>
-</blockquote>
-<p>以此类推，可以得到一个公式，<br>$$<br>OPT(i) = max<br>    \begin{cases}<br>        V_i+OPT(prev(i))    &amp;\text{// prev(i)表示在选择了第i个任务后剩余任务中的最优解下标}<br>    \<br>        OPT(i-1)    &amp;\text{//不选}<br>    \end{cases}<br>$$</p>
-<ol>
-<li><p>建立 <strong>V<del>i</del> 表</strong>与 <strong>prev(i) 表</strong>如下：</p>
-<ul>
-<li><p>  <strong>V<del>i</del></strong> 表示第 i 个任务的薪资；</p>
-</li>
-<li><p><strong>prev(i)</strong> 表示选择第 i 个任务后，剩下任务中的最优解下标。</p>
-<table>
-<thead>
-<tr>
-<th align="center">i</th>
-<th align="center">V<del>i</del></th>
-<th align="center">prev(i)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><code>1</code></td>
-<td align="center">5</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center"><code>2</code></td>
-<td align="center">1</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center"><code>3</code></td>
-<td align="center">8</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center"><code>4</code></td>
-<td align="center">4</td>
-<td align="center">1</td>
-</tr>
-<tr>
-<td align="center"><code>5</code></td>
-<td align="center">6</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center"><code>6</code></td>
-<td align="center">3</td>
-<td align="center">2</td>
-</tr>
-<tr>
-<td align="center"><code>7</code></td>
-<td align="center">2</td>
-<td align="center">3</td>
-</tr>
-<tr>
-<td align="center"><code>8</code></td>
-<td align="center">4</td>
-<td align="center">5</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-</li>
-<li><p>建立 OPT(i) 最优解的树形结构【递归思路】。</p>
-<p> <img src="/2021/07/25/%E7%AE%97%E6%B3%95/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92.png" alt="动态规划"></p>
-<ul>
-<li>  我们可以看到，在递归【自顶向下】的过程中，我们会多次用到已经计算过的 OPT(i) 的值，如果能够将已计算过的值保存起来，在需要使用的时候直接调用，就可以节省很大的计算性能。</li>
-<li>  所以可以采用动态规划的算法，【自底向上】建立一个动态规划的数组，保存从 <code>OPT(0)~OPT(n)</code> 的所有值。</li>
-</ul>
-</li>
-<li><p>建立动态规划数组。</p>
-<table>
-<thead>
-<tr>
-<th align="center">OPT(0)</th>
-<th align="center">OPT(1)</th>
-<th align="center">OPT(2)</th>
-<th align="center">OPT(3)</th>
-<th align="center">OPT(4)</th>
-<th align="center">OPT(5)</th>
-<th align="center">OPT(6)</th>
-<th align="center">OPT(7)</th>
-<th align="center">OPT(8)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">0</td>
-<td align="center">5</td>
-<td align="center">5</td>
-<td align="center">8</td>
-<td align="center">9</td>
-<td align="center">9</td>
-<td align="center">9</td>
-<td align="center">10</td>
-<td align="center">13</td>
-</tr>
-</tbody></table>
-</li>
-</ol>
-<p><img src="/2021/07/25/%E7%AE%97%E6%B3%95/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92_%E6%9C%80%E9%AB%98%E8%96%AA%E8%B5%84%E7%BB%84%E5%90%88.png" alt="动态规划_最高薪资组合"></p>
-<hr>
-<h2 id="动态规划算法介绍"><a href="#动态规划算法介绍" class="headerlink" title="动态规划算法介绍"></a>动态规划算法介绍</h2><ol>
-<li> <strong>动态规划（Dynamic Programming）</strong>算法的核心思想是：将大问题划分为小问题进行解决，从而一步步获取最优解的处理算法。</li>
-<li> 动态规划算法与分治算法类似，其基本思想也是将待求解问题分解成若干个子问题，先求解子问题，然后从这些子问题的解得到原问题的解。</li>
-<li> 与分治法不同的是，<strong>适合于用动态规划求解的问题，经分解得到的子问题往往不是互相独立的。</strong>即下一个子问题的求解是建立在上一个子问题解的基础上得到的。</li>
-<li> 动态规划可以通过<strong>填表的方式</strong>来逐步推进，得到最优解.</li>
-</ol>
-<h2 id="背包问题"><a href="#背包问题" class="headerlink" title="背包问题"></a>背包问题</h2><p>给定一个固定容量的背包，若干具有一定价值和重量的物品，如何选择物品放入背包使物品的价值最大。</p>
-<p><strong>需求：</strong></p>
-<p>有一个背包，容量为 4 磅，现有如下物品：</p>
-<ul>
-<li>  要求装入的背包的<u>总价值最大</u>，并且<u>重量不超出</u>。</li>
-<li>  要求<u>装入的物品不能重复</u>。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center"><strong>物品</strong></th>
-<th align="center"><strong>重量</strong></th>
-<th align="center"><strong>价格</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">吉他(G)</td>
-<td align="center">1</td>
-<td align="center">1500</td>
-</tr>
-<tr>
-<td align="center">音响(S)</td>
-<td align="center">4</td>
-<td align="center">3000</td>
-</tr>
-<tr>
-<td align="center">电脑(L)</td>
-<td align="center">3</td>
-<td align="center">2000</td>
-</tr>
-</tbody></table>
-<p><strong>背包问题分类：</strong></p>
-<p>背包可分为 <strong>01背包</strong> 和 <strong>完全背包</strong>：</p>
-<ul>
-<li>  01 背包：同类物品只能放入一件，背包的物品种类不能重复。</li>
-<li>  完全背包：每类物品可以放入多件到背包中。</li>
-</ul>
-<p><strong>思路分析：</strong></p>
-<p>这里的问题属于 <strong>01背包</strong>，即每种物品最多放一件。【无限背包可以转化为01背包解决】</p>
-<ul>
-<li>  给定的 n 个物品，每次遍历到的第 i 个物品，根据 <code>w[i]</code> 和 <code>v[i]</code> 来确定是否需要将该物品放入背包中。</li>
-<li>  设 <code>v[i]</code>、<code>w[i]</code> 分别为第 <code>i</code> 个物品的价值和重量，<code>C</code> 为背包的容量。</li>
-<li>再令 <code>v[i][j]</code> 表示在前 <code>i</code> 个物品中能够装入容量为 <code>j</code> 的背包中的最大价值。则我们有下面的结果：<ol>
-<li> <code>vi=v0=0</code>，表示填入表第一行和第一列是 0</li>
-<li> 当 <code>w[i]&gt; j</code> 时 <code>vi=vi-1</code>，当准备加入新增的商品的容量大于当前背包的容量时，就直接使用上一个单元格的装入策略</li>
-<li> 当 <code>j&gt;=w[i]</code> 时，<code>vi=max&#123;vi-1, v[i]+vi-1]&#125;</code> </li>
-</ol>
-</li>
-</ul>
-<p>// 当 准备加入的新增的商品的容量小于等于当前背包的容量,</p>
-<p>// 装入的方式:</p>
-<p>v[i-1][j]： 就是上一个单元格的装入的最大值</p>
-<p>v[i] : 表示当前商品的价值 </p>
-<p>v[i-1][j-w[i]] ： 装入i-1商品，到剩余空间j-w[i]的最大值</p>
-<p>当j&gt;=w[i]时： v[i][j]=max{v[i-1][j], v[i]+v[i-1][j-w[i]]} :</p>
-<p>w[i]：第 i 个物品的重量</p>
-<p>v[i]：第  i 件物品的价值</p>
 
       
     </div>

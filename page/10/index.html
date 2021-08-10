@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,129 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/08/keyset-%E5%92%8Centryset-%E7%9A%84%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/12/08/keyset-%E5%92%8Centryset-%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">Map中keyset()和entryset()的区别</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-08 21:25:02" itemprop="dateCreated datePublished" datetime="2020-12-08T21:25:02+08:00">2020-12-08</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-02 21:10:54" itemprop="dateModified" datetime="2021-08-02T21:10:54+08:00">2021-08-02</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaExt/" itemprop="url" rel="index"><span itemprop="name">JavaExt</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>  <strong>Map中的方法（部分）</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>keySet()</code></td>
+<td align="center">获取 map 中的所有 key 的集合，集合类型是 Set</td>
+</tr>
+<tr>
+<td align="center"><code>get(key)</code></td>
+<td align="center">通过 map 集合的 key 获取 value</td>
+</tr>
+<tr>
+<td align="center"><code>entrySet()</code></td>
+<td align="center">获取 map 中的所有 entry 的集合，集合类型是 Set</td>
+</tr>
+</tbody></table>
+<h2 id="keySet-方法"><a href="#keySet-方法" class="headerlink" title="keySet() 方法"></a>keySet() 方法</h2><blockquote>
+<p>  <strong>作用：</strong></p>
+</blockquote>
+<ul>
+<li>  获取 map 中的所有 key 的集合，集合类型是 Set 类型。</li>
+<li>  因为 Map 中 key 的不可重复性，所以用 Set 保存 key 的集合</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Map map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;01&quot;</span>, <span class="string">&quot;派大星&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;02&quot;</span>, <span class="string">&quot;海绵宝宝&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;03&quot;</span>, <span class="string">&quot;痞老板&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Map.keySet()方法：</span></span><br><span class="line">    <span class="comment">// 1、获取map集合中的所有key的集合</span></span><br><span class="line">    Set keySet = map.keySet();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2、有了Set集合，就可以获取其迭代器。(因为Set集合实现了Iterable接口)</span></span><br><span class="line">    Iterator iterator = keySet.iterator();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    <span class="keyword">while</span> (iterator.hasNext())&#123;</span><br><span class="line">        <span class="comment">// 获取Map集合中的每个键</span></span><br><span class="line">        String key = (String) iterator.next();</span><br><span class="line">        <span class="comment">//有了键可以通过map集合的get方法获取其对应的值。</span></span><br><span class="line">        String value = (String) map.get(key);</span><br><span class="line">        <span class="comment">// 打印输出</span></span><br><span class="line">        System.out.println(<span class="string">&quot;&#123;&quot;</span>+key+<span class="string">&quot;：&quot;</span>+value+<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="entrySet-方法"><a href="#entrySet-方法" class="headerlink" title="entrySet() 方法"></a>entrySet() 方法</h2><ul>
+<li>获取 map 中的所有 entry 的集合，集合类型是 Set 类型。</li>
+<li>entrySet 集合中元素的类型是 Map 的一个内部类类型，即<strong>Map.Entry</strong>。</li>
+<li>每一个 <strong>Map.Entry</strong> 对象就是 Map 集合中的一对键值对，就是把 <code>key-value</code> 作为一个整体，存放到 Set 集合当中。</li>
+<li>Map.Entry 类中提供了 <strong>getKey()</strong> 和 <strong>getValue()</strong> 方法。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Map map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;01&quot;</span>, <span class="string">&quot;派大星&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;02&quot;</span>, <span class="string">&quot;海绵宝宝&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;03&quot;</span>, <span class="string">&quot;痞老板&quot;</span>);</span><br><span class="line">	<span class="comment">// </span></span><br><span class="line">    Set&lt;Map.Entry&lt;String, String&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">    Iterator&lt;Map.Entry&lt;String, String&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line">    <span class="keyword">while</span> (iterator.hasNext())&#123;</span><br><span class="line">        Map.Entry&lt;String, String&gt; entry = iterator.next();</span><br><span class="line">        String key = entry.getKey();</span><br><span class="line">        String value = entry.getValue();</span><br><span class="line">        System.out.println(<span class="string">&quot;&#123;&quot;</span>+key+<span class="string">&quot;：&quot;</span>+value+<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1398,7 +1521,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-20 22:22:41" itemprop="dateModified" datetime="2021-07-20T22:22:41+08:00">2021-07-20</time>
+        <time title="Modified: 2021-08-10 16:16:32" itemprop="dateModified" datetime="2021-08-10T16:16:32+08:00">2021-08-10</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1600,7 +1723,473 @@
 </li>
 </ol>
 <hr>
-<h1 id="5-Redis的应用场景"><a href="#5-Redis的应用场景" class="headerlink" title="5    Redis的应用场景"></a>5    Redis的应用场景</h1><blockquote>
+<h1 id="5-Redis-事务"><a href="#5-Redis-事务" class="headerlink" title="5    Redis 事务"></a>5    Redis 事务</h1><h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><ul>
+<li>  之前我们使用的 Redis 命令都是输入一条指令，得到一个结果。</li>
+<li>  而<strong>Redis 事务</strong>可以一次执行多条命令，本质上就是一组命令的集合。</li>
+<li>  一个事务中的所有命令都会序列化，按顺序地串行化执行而不会被其它命令加塞。</li>
+<li>  Redis 事务的主要作用就是串联多个命令防止别的命令插队。</li>
+</ul>
+<hr>
+<h2 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用"></a>怎么用</h2><ul>
+<li>  <strong>MULTI</strong> 命令用于开启一个事务，它总是返回 OK 。</li>
+<li>  <strong>MULTI</strong> 执行之后， 客户端可以继续向服务器发送任意多条命令， 这些命令不会立即被执行， 而是被放到一个队列中， 当 <strong>EXEC</strong> 命令被调用时， 所有队列中的命令才会被执行。</li>
+<li>  另一方面， 通过调用 <strong>DISCARD</strong>， 客户端可以清空事务队列， 并放弃执行事务。</li>
+</ul>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><blockquote>
+<p>  <strong>Redis 事务命令</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DISCARD</strong></td>
+<td>取消事务，并清空事务块内所有命令</td>
+</tr>
+<tr>
+<td><strong>EXEC</strong></td>
+<td>执行事务块内的所有命令</td>
+</tr>
+<tr>
+<td><strong>MULTI</strong></td>
+<td>标记一个事务块的开始</td>
+</tr>
+<tr>
+<td><strong>UNWATCH</strong></td>
+<td>取消 WATCH 命令对所有 key 的监视</td>
+</tr>
+<tr>
+<td><strong>WATCH key [key…]</strong></td>
+<td>监视一个（或多个key），如果在事务执行之前这个（或这些）key 被其它命令所改动，那么事务将被打断。</td>
+</tr>
+</tbody></table>
+<h3 id="Case1：正常执行"><a href="#Case1：正常执行" class="headerlink" title="Case1：正常执行"></a>Case1：正常执行</h3><ol>
+<li> 从 <strong>MULTI 开始</strong>，标记一个事务块的开始，并创建一个命令队列用于保存命令的集合；</li>
+<li> 在遇到 <strong>EXEC 之前</strong>，所有正确的命令都会被添加到命令队列中；</li>
+<li> 直到遇到 <strong>EXEC 命令后</strong>，立即执行队列中的所有命令。 </li>
+</ol>
+<img src="/2020/11/21/Redis/image-20210809100102082.png" alt="image-20210809100102082" style="zoom:80%;">
+
+
+
+<hr>
+<h3 id="Case2：放弃事务"><a href="#Case2：放弃事务" class="headerlink" title="Case2：放弃事务"></a>Case2：放弃事务</h3><ol>
+<li> 从 <strong>MULTI 开始</strong>，标记一个事务块的开始，并创建一个命令队列用于保存命令的集合；</li>
+<li> 所有正确的命令都会被添加到命令队列中；</li>
+<li> 但是遇到 <strong>DISCARD</strong> 命令后，会删除命令队列并放弃队列中所有命令的执行。</li>
+<li> 在这之后，我们通过 <code>get k1</code> 试图查找 Redis 中是否存在键为 k1 的值，发现不存在，这就证明该事务内的所有命令都没有被执行。</li>
+</ol>
+<img src="/2020/11/21/Redis/image-20210809100735411.png" alt="image-20210809100735411" style="zoom:80%;">
+
+
+
+<hr>
+<h3 id="Case3：全体连坐"><a href="#Case3：全体连坐" class="headerlink" title="Case3：全体连坐"></a>Case3：全体连坐</h3><ol>
+<li> 从 <strong>MULTI 开始</strong>，标记一个事务块的开始，并创建一个命令队列用于保存命令的集合；</li>
+<li> 所有命令都会被添加到命令队列中；</li>
+<li> 在执行 <code>gte k2</code> 命令时，由于操作人员的疏忽，命令打错了；并继续添加命令 <code>set k3 v3</code>；</li>
+<li> 直到遇到 <strong>EXEC 命令后</strong>，立即执行队列中的所有命令。</li>
+<li> 但是<strong>由于此时队列中存在一个错误的命令，这条命令执行失败了，并且连带着整个事务中所有的命令都执行失败了</strong>。 </li>
+<li> 在这之后，执行 <code>get k1</code> 操作，发现没有对应的 value，这也从侧面验证了事务块中所有的命令都没有执行成功。</li>
+<li> 这就是 Redis 的事务性。</li>
+</ol>
+<img src="/2020/11/21/Redis/image-20210809101749283.png" alt="image-20210809101749283" style="zoom:80%;">
+
+
+
+<hr>
+<h3 id="Case4：冤头债主"><a href="#Case4：冤头债主" class="headerlink" title="Case4：冤头债主"></a>Case4：冤头债主</h3><ol>
+<li> 从 <strong>MULTI 开始</strong>，标记一个事务块的开始，并创建一个命令队列用于保存命令的集合；</li>
+<li> 所有命令都会被添加到命令队列中；</li>
+<li> 在执行 <code>incr k1</code> 命令时，由于 <code>k1</code> 位置上存储的值 <code>v1</code> 是一个字符串，且不能转型成为对应的 <code>Integer</code> 类型，所以这条命令在真实执行时会报错，但在编译时不会报错，因为命令是正确的。</li>
+<li> 直到遇到 <strong>EXEC 命令后</strong>，立即执行队列中的所有命令。</li>
+<li> <strong>由于 <code>incr k1</code> 命令在执行时会报错，所以这条命令执行失败。但是与上面不同的是，此时事务中的其它正确的命令还是可以正常被执行。</strong></li>
+<li> 在这之后，执行 <code>get k2</code> 操作，发现可以找到对应的 value，这也从侧面验证了事务块中其它正确的命令都执行成功了。</li>
+<li> 这就是 Redis 的非事务性。</li>
+</ol>
+<p><strong>Incr</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Redis Incr 命令将 key 中储存的数字值 +<span class="number">1</span>。</span><br><span class="line">如果 key 不存在，那么 key 的值会先被初始化为 <span class="number">0</span> ，然后再执行 INCR 操作。</span><br><span class="line">如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2020/11/21/Redis/image-20210809102642290.png" alt="image-20210809102642290"></p>
+<blockquote>
+<p>  <strong>二者的区别：</strong></p>
+</blockquote>
+<ul>
+<li>  我们发现，在 Case3 和 Case4 中，同样都出现了某条命令执行失败，但 Case3 中整个事务都回滚了，在 Case4 中却只是对应错误命令执行失败，而事务中的其它命令依然可以正常执行成功。那么这两者有什么区别呢？</li>
+<li>  这就有点类似于 Java 中的编译时异常和运行时异常了。</li>
+<li>  在 Case3 中出现的错误是非常明显的语法错误，Redis 的编译器在我们敲下回车的那一刻就会直接返回 Error 错误信息提示我们该条命令是有问题的。发生这类错误时是需要回滚整个事务的。类比于 Java 中的编译时错误，当我们的代码写错的那一刹那，IDE 的编译器就会用红色的下划线提醒我们代码错了。</li>
+<li>  而在 Case4 中出现的错误，它是语法正确，但在执行过程中由于类型不匹配而导致的错误，这种错误在编译时不会报错，在执行中出现错误以后也无需回滚整个事务。类比于 Java 中的运行时错误，比如我们在 Java 代码中插入一行 <code>int i = 10/2;</code>，这行代码在编译时是没有问题的，因为它符合语法规范，但在运行时由于除数不能为0而会抛出异常。</li>
+<li>  简而言之就是：<strong>开启事务后，如果在添加命令的过程中，Redis 的编译器没有报错，那么即使程序在执行过程中出现了错误，也只是某条错误命令执行失败了，而不会影响到事务中的其它命令。如果在添加命令的过程中，某条命令在编译后直接报错，那么在执行过程中出错后会回滚整个事务中的所有命令。</strong></li>
+</ul>
+<hr>
+<h3 id="Case5：watch-监控"><a href="#Case5：watch-监控" class="headerlink" title="Case5：watch 监控"></a>Case5：watch 监控</h3><p><strong>watch 监控：在执行 <code>multi</code> 之前，先执行 <code>watch key1 [key2]</code>，可以监视一个或多个 key，如果在事务执行之前这个（或这些）key 被其它命令所改动，那么事务将被打断。</strong></p>
+<blockquote>
+<p>  先模拟一个场景，假设某用户花呗额度为 100 元，在淘宝上购买某本书需要 40 元。通过花呗买书的一个事务为：花呗余额减到 60 元，待还款金额增加到 40 元。</p>
+</blockquote>
+<ol>
+<li><p>初始化数据：花呗余额100，欠款 0</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Connecting...</span><br><span class="line">已连接。</span><br><span class="line">Tencent_Redis:0&gt;set balance 100</span><br><span class="line">&quot;OK&quot;</span><br><span class="line">Tencent_Redis:0&gt;set debt 0</span><br><span class="line">&quot;OK&quot;</span><br></pre></td></tr></table></figure></li>
+<li><p> 先监控一个属性 balance</p>
+</li>
+<li><p> 再开启事务</p>
+</li>
+<li><p>如果在事务执行之前，没有其它命令修改 balance 这个属性，正常结果为：</p>
+<p> <img src="/2020/11/21/Redis/image-20210809175349825.png" alt="image-20210809175349825"></p>
+</li>
+<li><p>如果在事务执行之前，存在另一个线程修改了 balance 这个属性，则这个事务将被打断，所有数据会回滚到事务执行之前。</p>
+<p> <img src="/2020/11/21/Redis/watch.png" alt="watch"></p>
+</li>
+<li><p> 最后通过 <code>get balance</code> 命令查看发现，Session1 中的事务并没有执行成功。</p>
+</li>
+</ol>
+<h3 id="Case6：unwatch-取消监控"><a href="#Case6：unwatch-取消监控" class="headerlink" title="Case6：unwatch 取消监控"></a>Case6：unwatch 取消监控</h3><blockquote>
+<p>  <strong>UNWATCH 在什么时候使用？</strong></p>
+</blockquote>
+<ul>
+<li>  在执行 WATCH 命令监控某个字段后，如果在下一个命令还没有执行之前就知道被监控的字段被另一个 Session 修改了，那么此时可以直接 UNWATCH 取消原有的监控；重新监控该字段的最新值，重写编写命令。</li>
+<li>  如果在执行了 WATCH 命令后，EXEC 或 DISCARD 命令先被执行了的话，那么就不需要再执行 UNWATCH 了。因为一旦执行了 EXEC 或 DISCARD 后。之前加的监控锁都会被取消掉了</li>
+</ul>
+<hr>
+<h2 id="事务冲突问题"><a href="#事务冲突问题" class="headerlink" title="事务冲突问题"></a>事务冲突问题</h2><blockquote>
+<ul>
+<li>  乐观锁</li>
+<li>  CAS</li>
+<li>  悲观锁</li>
+</ul>
+</blockquote>
+<h3 id="乐观锁-CAS"><a href="#乐观锁-CAS" class="headerlink" title="乐观锁 + CAS"></a>乐观锁 + CAS</h3><p><strong>乐观锁不会真正的对某一数据上锁，但是写数据时会用到 CAS 机制。</strong></p>
+<blockquote>
+<p>  <strong>乐观锁（Optimistic Lock）</strong></p>
+</blockquote>
+<ul>
+<li>  顾名思义，就是很乐观，想的贼好，每次在操作数据时都认为别人不会修改，所以不会上锁。</li>
+<li>  但是如果不上锁的话，在线程 A 操作数据期间线程 B 也同时操作了数据，这时候就会发生数据冲突了。</li>
+<li>  所以，对乐观锁而言，在更新数据的时候会判断一下在此期间别人有没有去更新这个数据，如果没有其它线程操作过这个数据则可以更新成功，如果有线程操作过这个数据则会重新读取最新的数据进行更新，直到更新成功。</li>
+<li>  如果判断某一段时间内是否有其它线程更新过某个数据用到了 <strong>CAS</strong> 机制，常见的有版本号等机制。</li>
+<li>  乐观锁适用于多读的应用类型，这样可以提高吞吐量，</li>
+</ul>
+<blockquote>
+<p>  <strong>CAS（Check And Set）</strong></p>
+</blockquote>
+<ul>
+<li>  CAS 最常见的机制就是版本号机制。</li>
+<li>  所谓版本号机制，就是每个线程在得到操作共享数据的时候，同时会得到该数据的版本号，在完成数据操作想要覆盖原数据时，首先会判断线程中保存的版本号与共享数据的版本号是否一致，如果版本号一致则更新成功，并将共享数据的版本号 +1；若线程中保存的版本号与共享数据的版本号不一致的话，则不能更新成功。需要重新拉取最新的共享数据（包括最新的版本号），重新更新数据，直到更新成功为止。</li>
+</ul>
+<h3 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h3><blockquote>
+<p>  <strong>悲观锁（Pessimistic Lock）</strong></p>
+</blockquote>
+<p>顾名思义，就是很悲观，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会被阻塞知道它拿到锁。传统的关系型数据库中很多地方都用到了这个锁机制，比如行锁、表锁、读锁、写锁等，都是在做操作之前先上锁。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><h3 id="三阶段"><a href="#三阶段" class="headerlink" title="三阶段"></a>三阶段</h3><ol>
+<li> <strong>开启</strong>：以 <strong>MULTI</strong> 开启一个事务；</li>
+<li> <strong>入队</strong>：将多个命令入队到事务中，接到这些命令并不会立即执行，而是加入到待执行的事务队列中；</li>
+<li> <strong>执行</strong>：由 <strong>EXEC</strong> 命令触发事务执行。</li>
+</ol>
+<h3 id="三特性"><a href="#三特性" class="headerlink" title="三特性"></a>三特性</h3><blockquote>
+<p>  <strong>单独的隔离操作</strong></p>
+</blockquote>
+<p>事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其它客户端发送来的命令请求所打断。</p>
+<blockquote>
+<p>  <strong>没有隔离级别的概念</strong></p>
+</blockquote>
+<p>队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在“事务内的查询要看到事务里的更新，在是屋外查询不能看到”这个让人万分头疼的问题。</p>
+<blockquote>
+<p>  <strong>不保证原子性</strong></p>
+</blockquote>
+<p>Redis 中同一个事务如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚。</p>
+<hr>
+<h1 id="6-Redis-的发布订阅"><a href="#6-Redis-的发布订阅" class="headerlink" title="6    Redis 的发布订阅"></a>6    Redis 的发布订阅</h1><p>Redis 的发布订阅类似于 MQ 中的发布订阅，不过我们在企业级开发中一般不太使用 Redis 作为消息队列，而是采用更专业的消息中间件，如  ActiveMQ、RabbitMQ 或者 Kafka 等。</p>
+<h2 id="是什么-1"><a href="#是什么-1" class="headerlink" title="是什么"></a>是什么</h2><p>发布订阅是进程间的一种通信模式：发送者（pub）发送消息，订阅者（sub）接收消息。</p>
+<ul>
+<li>  类似于微信公众号，只要你关注了某个公众号，当公众号再发布消息的时候，就会通知到你的微信上。</li>
+</ul>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>psubscribe pattern [pattern]</td>
+<td>订阅一个或多个符合给定模式的频道</td>
+</tr>
+<tr>
+<td>pubsub subcommand [argument [argument…]]</td>
+<td>查看订阅与发布系统状态</td>
+</tr>
+<tr>
+<td>publish channel message</td>
+<td>将信息发送到指定的频道</td>
+</tr>
+<tr>
+<td>punsubscribe [pattern [pattern …]]</td>
+<td>退订所有给定模式的频道</td>
+</tr>
+<tr>
+<td>unsubscribe [channel [channel…]]</td>
+<td>退订指定的频道</td>
+</tr>
+</tbody></table>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>先订阅后发布才能收到消息</p>
+<ol>
+<li> 可以一次性订阅多个；<code>subscribe c1 c2 c3</code></li>
+<li> 消息发布；<code>publish c2 hello-redis</code></li>
+<li> 一次性订阅多个（以通配符的形式）：<code>psubscribe hell*</code></li>
+</ol>
+<h1 id="7-Redis-主从复制（Master-Slave）"><a href="#7-Redis-主从复制（Master-Slave）" class="headerlink" title="7    Redis 主从复制（Master/Slave）"></a>7    Redis 主从复制（Master/Slave）</h1><h2 id="是什么-2"><a href="#是什么-2" class="headerlink" title="是什么"></a>是什么</h2><blockquote>
+<p>  <strong>主从复制</strong></p>
+</blockquote>
+<p>主机数据更新后根据配置和策略，自动同步到从机的 Master/Slave 机制，<strong>Master 以写为主，Slave 以读为主</strong>。</p>
+<img src="/2020/11/21/Redis/image-20210810151248584.png" alt="image-20210810151248584" style="zoom:200%;">
+
+
+
+<h2 id="有什么用"><a href="#有什么用" class="headerlink" title="有什么用"></a>有什么用</h2><ul>
+<li>  读写分离，性能扩展</li>
+<li>  容灾快速恢复</li>
+</ul>
+<h2 id="怎么用（主从复制）"><a href="#怎么用（主从复制）" class="headerlink" title="怎么用（主从复制）"></a>怎么用（主从复制）</h2><h3 id="修改配置文件细节"><a href="#修改配置文件细节" class="headerlink" title="修改配置文件细节"></a>修改配置文件细节</h3><ol>
+<li> 拷贝多个 <code>redis.conf</code> 文件，分别用作多台服务器的配置文件；</li>
+<li> 开启 <code>daemonize yes</code>；</li>
+<li> 修改 Pid 文件名字；</li>
+<li> 为每台服务器指定端口；</li>
+<li> 修改 Log 文件名字；</li>
+<li> 修改 Dump.rab 名字；</li>
+<li> Appendonly 关掉或者修改名字</li>
+</ol>
+<h3 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h3><h4 id="1、修改配置文件"><a href="#1、修改配置文件" class="headerlink" title="1、修改配置文件"></a>1、修改配置文件</h4><ol>
+<li><p>新建 <code>redis6379.conf</code>，填写以下内容</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">include /myredis/redis.conf</span><br><span class="line">pidfile /<span class="keyword">var</span>/run/redis_6379.pid</span><br><span class="line">port <span class="number">6379</span></span><br><span class="line">dbfilename dump6379.rdb</span><br></pre></td></tr></table></figure>
+
+ <img src="/2020/11/21/Redis/image-20210810151819939.png" alt="image-20210810151819939" style="zoom: 150%;"></li>
+<li><p>新建 <code>redis6380.conf</code>，填写以下内容</p>
+ <img src="/2020/11/21/Redis/image-20210810151900331.png" alt="image-20210810151900331" style="zoom:150%;"></li>
+<li><p>新建 <code>redis6381.conf</code>，填写以下内容</p>
+ <img src="/2020/11/21/Redis/image-20210810151913759.png" alt="image-20210810151913759" style="zoom:150%;"></li>
+</ol>
+<p>​                               </p>
+<h4 id="2、启动三台redis服务器"><a href="#2、启动三台redis服务器" class="headerlink" title="2、启动三台redis服务器"></a>2、启动三台redis服务器</h4><img src="/2020/11/21/Redis/image-20210810152048413.png" alt="image-20210810152048413" style="zoom:150%;">
+
+
+
+
+
+<blockquote>
+<p>  <strong>查看系统进程，看看三台服务器是否启动</strong></p>
+</blockquote>
+<img src="/2020/11/21/Redis/image-20210810152122261.png" alt="image-20210810152122261" style="zoom:150%;">
+
+
+
+
+
+<h4 id="3、查看三台主机运行情况"><a href="#3、查看三台主机运行情况" class="headerlink" title="3、查看三台主机运行情况"></a>3、查看三台主机运行情况</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 打印主从复制的相关信息</span></span><br><span class="line">info replication	</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/11/21/Redis/image-20210810152243500.png" alt="image-20210810152243500" style="zoom:150%;">
+
+<h4 id="4、配从-库-不配主-库"><a href="#4、配从-库-不配主-库" class="headerlink" title="4、配从(库)不配主(库)"></a>4、配从(库)不配主(库)</h4><ul>
+<li>  主库使用默认的 6379 端口号，使用默认的配置信息即可；</li>
+<li>  主要修改从库的端口号及配置信息；</li>
+<li>  当然如果你非要改主库的配置信息也可以。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 成为某个实例的从服务器</span></span><br><span class="line">slaveof &lt;ip&gt; &lt;port&gt;</span><br><span class="line"></span><br><span class="line">SLAVEOF 127.0.0.1 6379</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>在 6380 和 6381 上执行: <code>slaveof 127.0.0.1 6379</code>，成为 6379 的备机。</p>
+ <img src="/2020/11/21/Redis/image-20210810152453011.png" alt="image-20210810152453011" style="zoom: 150%;"></li>
+<li><p><strong>在主机上写，从机上可以读取数据；[在从机上写数据报错]</strong></p>
+ <img src="/2020/11/21/Redis/image-20210810152631660.png" alt="image-20210810152631660" style="zoom:150%;"></li>
+<li><p><strong>主机挂掉，重启就行，一切如初；</strong></p>
+<blockquote>
+<p>  <strong>注解：</strong>主机宕机后，两个从机不会顶替主机称为新的 Master，而是依然安心当一个 Slave。当原来的 Master 重新启动后，依然会是这两台服务器的主机。</p>
+</blockquote>
+</li>
+<li><p>从机重启后需重设：<code>slaveof 127.0.0.1 6379</code></p>
+<blockquote>
+<p>  <strong>注解：</strong>从机宕机后重启，默认情况下不会自动称为某个 Master 的备机，必须重新调用 <code>Slaveof</code> 命令才能让其成为某台 Master 的 Slave。但是可以将这条命令增加到配置文件中，从机启动时会加载配置文件，这样就可以实现从机启动后直接自动绑定某一台 Master。</p>
+<p>  <img src="/2020/11/21/Redis/image-20210810153112350.png" alt="image-20210810153112350"></p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="常用3招（常用的配置策略）"><a href="#常用3招（常用的配置策略）" class="headerlink" title="常用3招（常用的配置策略）"></a>常用3招（常用的配置策略）</h2><blockquote>
+<ul>
+<li>  一主二仆</li>
+<li>  薪火相传</li>
+<li>  反客为主</li>
+</ul>
+</blockquote>
+<h3 id="一主二仆"><a href="#一主二仆" class="headerlink" title="一主二仆"></a>一主二仆</h3><ul>
+<li>  一主二仆就是上文中演示的一个 Master 两个 Slave 的形态。</li>
+</ul>
+<img src="/2020/11/21/Redis/image-20210810153916067.png" alt="image-20210810153916067" style="zoom:150%;">
+
+<hr>
+<h3 id="薪火相传"><a href="#薪火相传" class="headerlink" title="薪火相传"></a>薪火相传</h3><img src="/2020/11/21/Redis/image-20210810153935273.png" alt="image-20210810153935273" style="zoom:150%;">
+
+<blockquote>
+<p>  <strong>为什么有？</strong></p>
+</blockquote>
+<p>如果一个 Redis 集群中只有一台 Master，那么每次 Master 中的数据发生变化时，其余所有的 Slave 都需要从这台 Master 中备份数据，假设有 100 台甚至更多台的 Slave 存在，Master 可能就会因为承受不了这么大的流量而宕机。为了解决这种问题，我们可以采用“薪火相传”的策略。</p>
+<blockquote>
+<p>  <strong>是什么？</strong></p>
+</blockquote>
+<p>“薪火相传”的策略就是：上一个 Slave 可以是下一个 Slave 的 Master ，Slave 同样可以接受其它 Slaves 的连接和同步请求，那么该 Slave 作为链条中一个的 Master，可以有效减轻 master  的压力。</p>
+<blockquote>
+<p>  <strong>注意：</strong></p>
+</blockquote>
+<ul>
+<li><p>  <strong>中间机器的角色仍然是一个 Slave ，但是它可以有自己的 Slave。</strong></p>
+</li>
+<li><p>  中间机器的 Slave 虽然可以承担了部分 Master 的功能，但是并不能进行数据的写操作。</p>
+</li>
+<li><p>  Master 挂了，Slave 还是从机，无法写数据了。</p>
+</li>
+<li><p>中途变更转向：会清除之前的数据，重新建立拷贝最新的。</p>
+<blockquote>
+<p>  注解：假设 6381 一开始的 Master 是 6379，中途使用 <code>slaveof 127.0.0.1 6380</code> 将 Master 变更为 6380，那么这是需要先清除掉从 6379 中得到的数据，重新拉取 6380 中最新的数据。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>缺点：</strong></p>
+</blockquote>
+<ol>
+<li> <strong>失真</strong>。数据传递的过程中可能会发生数据丢失。最严重的情况是：一旦某个 slave 宕机，后面的 slave 都无法备份。</li>
+<li> <strong>延时</strong>。由于数据是链式的逐个向后备份，所以存在较严重的数据延时。</li>
+</ol>
+<blockquote>
+<p>  <strong>使用方法：</strong></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Slaveof 新主库IP 新主库端口</span></span><br><span class="line">Slaveof &lt;ip&gt; &lt;port&gt;</span><br><span class="line"></span><br><span class="line">slaveof 127.0.0.1 6380</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/11/21/Redis/image-20210810154249590.png" alt="image-20210810154249590" style="zoom: 200%;">
+
+
+
+
+
+
+
+<h3 id="反客为主"><a href="#反客为主" class="headerlink" title="反客为主"></a>反客为主</h3><blockquote>
+<p>  <strong>是什么？</strong></p>
+</blockquote>
+<ul>
+<li>主机宕机后，从机上位</li>
+<li>当一个 Master 宕机后，后面的 Slave 可以立刻升为 Master，其后面的 Slave 不用做任何修改。</li>
+<li>从机上位：Slaveof no one</li>
+<li>另外的从机有两种选择：<ol>
+<li> 另外的从机改换门庭：<code>Slaveof 127.0.0.1 6380</code></li>
+<li> 另外的从机忠贞不屈：死等</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>怎么用？</strong></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 让当前从机变为主机</span></span><br><span class="line">Slaveof no one </span><br></pre></td></tr></table></figure>
+
+<img src="/2020/11/21/Redis/image-20210810155315761.png" alt="image-20210810155315761" style="zoom:150%;">
+
+
+
+
+
+
+
+<hr>
+<h2 id="复制原理"><a href="#复制原理" class="headerlink" title="复制原理"></a>复制原理</h2><blockquote>
+<ul>
+<li>  <strong>全量复制</strong></li>
+<li>  <strong>增量复制</strong></li>
+</ul>
+</blockquote>
+<ol>
+<li> Slave 在连接到 Master 后首先会发送一个同步（sync）命令；</li>
+<li> Master 接到命令后，启动后台的存盘进程，同时收集所有接收到的修改数据的命令，在后台进程执行完毕之后，Master 将传送整个数据文件到 Slave，完成一次<strong>完全同步</strong>。</li>
+<li> <strong>全量复制</strong>：Slave 在接收到数据库文件数据后，将其存盘并加载到内存中。</li>
+<li> <strong>增量复制</strong>：Master 继续将新的所有收集到的命令依次传递给 Slave ，完成同步</li>
+<li> 但是只要是重新连接 Master，一次完全同步（全量复制）将被自动执行。</li>
+</ol>
+<p><strong>总结：</strong></p>
+<ul>
+<li>  Slave 启动时，必先进行一次全量复制；</li>
+<li>  在 Slave 启动期间，Master 中的数据发生变化时，Slave 只需要进行增量复制即可。</li>
+</ul>
+<img src="/2020/11/21/Redis/image-20210810160117746.png" alt="image-20210810160117746" style="zoom:150%;">
+
+
+
+
+
+<h2 id="哨兵模式（sentinel）"><a href="#哨兵模式（sentinel）" class="headerlink" title="哨兵模式（sentinel）"></a>哨兵模式（sentinel）</h2><h3 id="是什么-3"><a href="#是什么-3" class="headerlink" title="是什么"></a>是什么</h3><ul>
+<li>  <strong>反客为主的自动版</strong>。</li>
+<li>  能够在后台监控 Master 是否故障，如果出现故障了所有 Slave 进行投票，根据票选结果自动将从机转换为新的主机。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 设置从机的优先级，值越小，优先级越高，用于选举主机时使用。默认100</span></span><br><span class="line">slave-priority 10</span><br></pre></td></tr></table></figure>
+
+<img src="/2020/11/21/Redis/image-20210810160314929.png" alt="image-20210810160314929" style="zoom:150%;">
+
+
+
+
+
+<h3 id="怎么用-1"><a href="#怎么用-1" class="headerlink" title="怎么用"></a>怎么用</h3><blockquote>
+<ol>
+<li> 初始化结构：一主二仆，6379 带着 6380、6381</li>
+</ol>
+</blockquote>
+<img src="/2020/11/21/Redis/image-20210810160420195.png" alt="image-20210810160420195" style="zoom:150%;">
+
+
+
+<blockquote>
+<ol start="2">
+<li> 自定义的配置文件 <code>/myredis</code>目录下新建 <strong>sentinel.conf</strong> 文件。名字绝不能错。配置文件内容。</li>
+</ol>
+</blockquote>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 其中mymaster是为监控对象起的服务器名称； 1 表示至少有多少个哨兵同意迁移的数量。</span></span><br><span class="line">sentinel monitor mymaster <span class="number">127.0</span>.<span class="number">0.1</span> <span class="number">6379</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="3">
+<li> 启动哨兵</li>
+</ol>
+</blockquote>
+<ul>
+<li>  执行 <code>redis-sentinel /myredis/sentinel.conf</code></li>
+</ul>
+<img src="/2020/11/21/Redis/image-20210810160748119.png" alt="image-20210810160748119" style="zoom: 150%;">
+
+
+
+<blockquote>
+<ol start="4">
+<li> 当主机挂掉后，会从备机选举中产生新的主机。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="5">
+<li> 原主机重启后会自动变为从机。</li>
+</ol>
+</blockquote>
+<img src="/2020/11/21/Redis/image-20210810161028961.png" alt="image-20210810161028961" style="zoom:150%;">
+
+
+
+<p><strong>注意</strong></p>
+<ul>
+<li>  一组 Sentinel 能同时监控多个 Master</li>
+</ul>
+<h2 id="复制的缺点"><a href="#复制的缺点" class="headerlink" title="复制的缺点"></a>复制的缺点</h2><blockquote>
+<p>  <strong>复制延时</strong></p>
+</blockquote>
+<p>由于写操作都是在 Master 上操作，然后同步更新到 Slave 上，所以从 Master 同步到 Slave 机器有一定的延迟，当系统很繁忙的时候，延迟问题会更加严重，Slave 机器数量的增加也会使这个问题更加严重</p>
+<h1 id="8-Redis的应用场景"><a href="#8-Redis的应用场景" class="headerlink" title="8    Redis的应用场景"></a>8    Redis的应用场景</h1><blockquote>
 <ul>
 <li>缓存（数据查询、短连接、新闻内容、商品内容等等）</li>
 <li>聊天室的在线好友列表</li>
@@ -1796,7 +2385,7 @@
 
 
 <hr>
-<h1 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">案例需求：</span><br><span class="line">	1. 提供index.html页面，页面中有一个省份 下拉列表</span><br><span class="line">	2. 当 页面加载完成后 发送ajax请求，加载所有省份</span><br></pre></td></tr></table></figure>
+<h1 id="案例-1"><a href="#案例-1" class="headerlink" title="案例"></a>案例</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">案例需求：</span><br><span class="line">	1. 提供index.html页面，页面中有一个省份 下拉列表</span><br><span class="line">	2. 当 页面加载完成后 发送ajax请求，加载所有省份</span><br></pre></td></tr></table></figure>
 
 
 
@@ -2535,432 +3124,6 @@
 <h3 id="3、测试代码"><a href="#3、测试代码" class="headerlink" title="3、测试代码"></a>3、测试代码</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tr</span> <span class="attr">v-for</span>=<span class="string">&quot;user in userList&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123;user.name&#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123;user.age&#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;vue.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;axios.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">new</span> Vue(&#123;</span></span><br><span class="line"><span class="javascript">        el: <span class="string">&#x27;#app&#x27;</span>,</span></span><br><span class="line">        data: &#123;</span><br><span class="line">            userList:[]</span><br><span class="line">        &#125;,</span><br><span class="line"><span class="javascript">        <span class="function"><span class="title">created</span>(<span class="params"></span>)</span> &#123; <span class="comment">//在页面渲染之前执行</span></span></span><br><span class="line"><span class="javascript">            <span class="comment">//调用方法，得到返回json数据</span></span></span><br><span class="line"><span class="javascript">            <span class="built_in">this</span>.getList()</span></span><br><span class="line">        &#125;,</span><br><span class="line">        methods:&#123;</span><br><span class="line"><span class="javascript">            <span class="function"><span class="title">getList</span>(<span class="params"></span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">                <span class="comment">//使用axios方式ajax请求</span></span></span><br><span class="line"><span class="javascript">                axios.get(<span class="string">&quot;user.json&quot;</span>)</span></span><br><span class="line"><span class="javascript">                    .then(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">                    <span class="comment">//console.log(response)</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">this</span>.userList =  response.data.data.items	<span class="comment">// 获取json数据内层的数据</span></span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(<span class="built_in">this</span>.userList)</span></span><br><span class="line">                &#125;) </span><br><span class="line"><span class="javascript">                    .catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">                    <span class="built_in">console</span>.log(error)</span></span><br><span class="line"><span class="javascript">                &#125;) <span class="comment">//请求失败</span></span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>这里请求回调后得到的是一个json数据，我们分别使用了<code>response</code>和 <code>error</code> 接收回调的数据。实际上我们可以使用任意名字来接收回调的数据，他都会将回调的结果封装起来并命名为你起的名字！ </p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/13/XML/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/11/13/XML/" class="post-title-link" itemprop="url">XML</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-11-13 20:05:05 / Modified: 22:08:12" itemprop="dateCreated datePublished" datetime="2020-11-13T20:05:05+08:00">2020-11-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="XML"><a href="#XML" class="headerlink" title="XML"></a>XML</h1><blockquote>
-<p><strong>XML</strong>：Extensible Markup Language，可扩展标记语言</p>
-<ul>
-<li><strong>可扩展</strong>：标签都是自定义的。 如可以定义<code>&lt;user&gt;  &lt;student&gt;</code>等标签。</li>
-<li><strong>标记语言</strong>：标签构成的语言</li>
-</ul>
-</blockquote>
-<h2 id="XML的功能"><a href="#XML的功能" class="headerlink" title="XML的功能"></a>XML的功能</h2><blockquote>
-<p>XML的功能：<strong>存储数据</strong></p>
-<ul>
-<li>存储的数据一般作为配置文件，在网络中传输。</li>
-</ul>
-</blockquote>
-<h2 id="XML-vs-HTML"><a href="#XML-vs-HTML" class="headerlink" title="XML  vs.  HTML"></a>XML  vs.  HTML</h2><blockquote>
-<ol>
-<li>xml标签都是自定义的，html标签是预定义的。</li>
-<li>xml的语法严格，html语法松散</li>
-<li>xml是存储数据的，html是展示数据</li>
-</ol>
-</blockquote>
-<hr>
-<h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><blockquote>
-<ol>
-<li>xml文档的后缀名<code>.xml</code></li>
-<li>xml第一行必须定义为文档声明，且必须顶行写</li>
-<li>xml文档中有且仅有一个根标签</li>
-<li>属性值必须使用引号(单双都可)引起来</li>
-<li>标签必须正确关闭</li>
-<li>xml标签名称区分大小写</li>
-</ol>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&#x27;1.0&#x27; ?&gt;</span>		<span class="comment">&lt;!--文档声明--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">users</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">user</span> <span class="attr">id</span>=<span class="string">&#x27;1&#x27;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>zhangsan<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">age</span>&gt;</span>23<span class="tag">&lt;/<span class="name">age</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">gender</span>&gt;</span>male<span class="tag">&lt;/<span class="name">gender</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">user</span> <span class="attr">id</span>=<span class="string">&#x27;2&#x27;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>lisi<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">age</span>&gt;</span>24<span class="tag">&lt;/<span class="name">age</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">gender</span>&gt;</span>female<span class="tag">&lt;/<span class="name">gender</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">users</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h1 id="XML文档的组成部分"><a href="#XML文档的组成部分" class="headerlink" title="XML文档的组成部分"></a>XML文档的组成部分</h1><h2 id="文档声明"><a href="#文档声明" class="headerlink" title="文档声明"></a>文档声明</h2><ol>
-<li>格式：</li>
-</ol>
-<blockquote>
-<p><code>&lt;?xml 属性列表 ?&gt;</code></p>
-</blockquote>
-<ol start="2">
-<li>属性列表：</li>
-</ol>
-<blockquote>
-<ul>
-<li><p><code>version</code>：版本号（必须有）</p>
-</li>
-<li><p><code>encoding</code>：编码方式。告知解析引擎当前文档使用的字符集，默认值：ISO-8859-1</p>
-</li>
-<li><p><code>standalone</code>：是否独立。取值：</p>
-<blockquote>
-<ul>
-<li>yes：不依赖其他文件</li>
-<li>no：依赖其他文件</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="指令-了解"><a href="#指令-了解" class="headerlink" title="指令(了解)"></a>指令(了解)</h2><blockquote>
-<p>XML最初被设计出来是用于HTML的。在XML中。指令就是用于关联CSS的。目前基本已经被弃用。</p>
-</blockquote>
-<hr>
-<h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><blockquote>
-<p>自定义标签的的规则：</p>
-<ul>
-<li>名称可以包含字母、数字以及其他的字符 </li>
-<li>名称不能以数字或者标点符号开始 </li>
-<li>名称不能以字母 xml（或者 XML、Xml 等等）开始 </li>
-<li>名称不能包含空格 </li>
-</ul>
-</blockquote>
-<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><blockquote>
-<p>类似于HTML</p>
-</blockquote>
-<h3 id="Tip："><a href="#Tip：" class="headerlink" title="Tip："></a>Tip：</h3><blockquote>
-<ul>
-<li>标签中的id属性值是唯一的</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="文本"><a href="#文本" class="headerlink" title="文本"></a>文本</h2><blockquote>
-<p>类似于HTML</p>
-</blockquote>
-<h3 id="CDATA区"><a href="#CDATA区" class="headerlink" title="CDATA区"></a>CDATA区</h3><blockquote>
-<p>CDATA区中的数据会被原样展示</p>
-</blockquote>
-<p>格式：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;![CDATA[ 数据 ]]&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>​        </p>
-<hr>
-<h1 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h1><blockquote>
-<ul>
-<li>约束就是xml文档的书写规则，是用来限制xml文件的。</li>
-<li>约束位于XML文件的文档声明部分。</li>
-<li>每个规范的XML文档都应该有自己的约束</li>
-</ul>
-</blockquote>
-<p>作为一个开发人员需要做到：</p>
-<ol>
-<li>能够在xml中引入约束文档</li>
-<li>能够简单的读懂约束文档</li>
-</ol>
-<blockquote>
-<p>作为一个开发人员，在使用框架时配置文件中经常会给出一些约束。        框架是一个半成品的软件，且xml可以自定义标签，如果不加约束全部采用自定义的标签，显然框架的底层实现是无法识别这些自定义标签的。        所以在使用框架时一般都会手动（或自动）引入框架自带的一些约束，程序员可以在约束范围内最大程序的修改xml文件，但不能根据自己的喜好随意更改xml文件。</p>
-</blockquote>
-<hr>
-<h2 id="常见的约束技术"><a href="#常见的约束技术" class="headerlink" title="常见的约束技术"></a>常见的约束技术</h2><h3 id="DTD"><a href="#DTD" class="headerlink" title="DTD"></a>DTD</h3><blockquote>
-<p>一种简单的约束技术</p>
-</blockquote>
-<h4 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h4><blockquote>
-<p>引入dtd文档到xml文档中</p>
-</blockquote>
-<h5 id="内部dtd"><a href="#内部dtd" class="headerlink" title="内部dtd"></a>内部dtd</h5><blockquote>
-<p>将约束规则定义在xml文档中</p>
-</blockquote>
-<h5 id="外部dtd"><a href="#外部dtd" class="headerlink" title="外部dtd"></a>外部dtd</h5><blockquote>
-<p>将约束的规则定义在外部的dtd文件中</p>
-</blockquote>
-<p>格式：</p>
-<blockquote>
-<ol>
-<li>从本地引入dtd约束文件</li>
-<li>从网络上引入dtd约束文件</li>
-</ol>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--1、从本地引入dtd约束文件	system表示本地系统--&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE 根标签名 <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;dtd文件的位置&quot;</span>&gt;</span>	 	</span><br><span class="line"><span class="comment">&lt;!--2、从网络上引入dtd约束文件	  dtd文件的位置URL&quot;--&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE 根标签名 <span class="meta-keyword">PUBLIC</span> “dtd文件名字” “dtd文件的位置URL”&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h3 id="Schema"><a href="#Schema" class="headerlink" title="Schema"></a>Schema</h3><blockquote>
-<p>一种复杂的约束技术</p>
-</blockquote>
-<ul>
-<li>Schema约束文件的后缀名：<code>*.xsd</code></li>
-<li>schema文档本身就是一个xml文档</li>
-</ul>
-<h4 id="为什么要使用Schema-（DTD的缺点）"><a href="#为什么要使用Schema-（DTD的缺点）" class="headerlink" title="为什么要使用Schema?（DTD的缺点）"></a>为什么要使用Schema?（DTD的缺点）</h4><blockquote>
-<p>DTD约束是一种弱约束类型。</p>
-<p>在DTD约束中，标签内的值的数据类型可以是任意的，比如一个人的年龄可以是无限大或负数，姓名可以是数字等等。这些在schema中都能得到解决。</p>
-</blockquote>
-<h4 id="如何在xml配置文件中引入schema约束文档？"><a href="#如何在xml配置文件中引入schema约束文档？" class="headerlink" title="如何在xml配置文件中引入schema约束文档？"></a>如何在xml配置文件中引入schema约束文档？</h4><ol>
-<li>填写xml文档的根元素。</li>
-<li>引入xsi前缀（固定格式）。<code>xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</code></li>
-<li>引入xsd文件命名空间。<code>xsi:schemaLocation=&quot;http://www.itcast.cn/xml&quot;</code></li>
-<li>为每一个xsd约束声明一个前缀（别名），作为标识。<code>  student.xsd</code></li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">students</span>   <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xmlns</span>=<span class="string">&quot;http://www.itcast.cn/xml&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.itcast.cn/xml  </span></span></span><br><span class="line"><span class="tag"><span class="string">                              student.xsd&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>​    </p>
-<h1 id="XML文档解析"><a href="#XML文档解析" class="headerlink" title="XML文档解析"></a>XML文档解析</h1><blockquote>
-<p>XML文档的作用就是存储数据，但是计算机是无法直接使用这些数据的，必须通过解析器把XML文档转化为计算机可以识别的二进制数据。    <strong>解析</strong>就是操作XML文档，将文档中的数据读取到内存中</p>
-</blockquote>
-<h2 id="对XML文档的操作"><a href="#对XML文档的操作" class="headerlink" title="对XML文档的操作"></a>对XML文档的操作</h2><blockquote>
-<ol>
-<li>解析(读取)：将文档中的数据读取到内存中</li>
-<li>写入：将内存中的数据保存到xml文档中。持久化的存储</li>
-</ol>
-</blockquote>
-<h3 id="解析XML文档的方式"><a href="#解析XML文档的方式" class="headerlink" title="解析XML文档的方式"></a>解析XML文档的方式</h3><ol>
-<li><p><strong>DOM</strong></p>
-<blockquote>
-<p>将标记语言文档一次性加载进内存，在内存中形成一一棵DOM树</p>
-<ul>
-<li>优点：操作方便，可以对文档进行CRUD的所有操作</li>
-<li>缺点：占内存</li>
-</ul>
-</blockquote>
-</li>
-<li><p><strong>SAX</strong></p>
-</li>
-</ol>
-<blockquote>
-<p>逐行读取，基于事件驱动的。</p>
-<ul>
-<li>优点：不占内存。</li>
-<li>缺点：只能读取，不能增删改</li>
-</ul>
-</blockquote>
-<p>​    </p>
-<h2 id="常见的XML解析器"><a href="#常见的XML解析器" class="headerlink" title="常见的XML解析器"></a>常见的XML解析器</h2><blockquote>
-<ul>
-<li><code>JAXP</code>：sun公司提供的解析器，支持dom和sax两种思想</li>
-<li><code>DOM4J</code>：一款非常优秀的解析器</li>
-<li><code>Jsoup</code>：Jsoup 是一款Java 的HTML解析器，可直接解析某个URL地址、HTML文本内容。它提供了一套非常省力的API，可通过DOM，CSS以及类似于jQuery的操作方法来取出和操作数据。</li>
-<li><code>PULL</code>：Android操作系统内置的解析器，sax方式的。</li>
-</ul>
-</blockquote>
-<h2 id="Jsoup"><a href="#Jsoup" class="headerlink" title="Jsoup"></a>Jsoup</h2><blockquote>
-<p>Jsoup是一款Java的<strong>HTML/XML</strong>解析器，可直接解析某个HTML/XML文本内容。</p>
-<p>它提供了一套非常省力的API，可通过DOM，CSS以及类似于jQuery的操作方法来取出和操作数据。</p>
-</blockquote>
-<h3 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h3><blockquote>
-<ol>
-<li>导入依赖库（jar包/Maven依赖）</li>
-<li>获取Document对象</li>
-<li>获取对应的标签Element对象</li>
-<li>获取数据</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 1、获取student.xml的path</span></span><br><span class="line">    String path = JsoupDemo1.class.getClassLoader().getResource(<span class="string">&quot;student.xml&quot;</span>).getPath();</span><br><span class="line">    <span class="comment">// 2、解析xml文档，加载文档进内存，获取dom树---&gt;Document</span></span><br><span class="line">    Document document = Jsoup.parse(<span class="keyword">new</span> File(path), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">    <span class="comment">// 3、获取元素对象 Element</span></span><br><span class="line">    Elements elements = document.getElementsByTag(<span class="string">&quot;name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    System.out.println(elements.size());</span><br><span class="line">    <span class="comment">// 3.1、获取第一个name的Element对象</span></span><br><span class="line">    Element element = elements.get(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">// 3.2、获取数据</span></span><br><span class="line">    String name = element.text();</span><br><span class="line">    System.out.println(name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​    </p>
-<h3 id="Jsoup对象"><a href="#Jsoup对象" class="headerlink" title="Jsoup对象"></a>Jsoup对象</h3><blockquote>
-<p>Jsoup类是一个工具类，可以解析XML/HTML文档，返回Document对象</p>
-</blockquote>
-<h4 id="Jsoup对象中的方法（重载）"><a href="#Jsoup对象中的方法（重载）" class="headerlink" title="Jsoup对象中的方法（重载）"></a>Jsoup对象中的方法（重载）</h4><table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>parse(String html)</code></td>
-<td align="center">解析HTML/XML字符串，返回字符串的DOM对象</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>parse(File in, String charsetName)</code></td>
-<td align="center">解析本地磁盘上的HTML/XML文档，返回文档的DOM对象</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center"><code>parse(URL url, int timeoutMillis)</code></td>
-<td align="center">解析指定URL上的的HTML/XML文档，返回文档的DOM对象，<br><code>timeoutMillis</code>是超时时间</td>
-</tr>
-</tbody></table>
-<h4 id="Document对象中的方法"><a href="#Document对象中的方法" class="headerlink" title="Document对象中的方法"></a>Document对象中的方法</h4><blockquote>
-<p>Document：这里的Document对象是XML文档的DOM对象，代表内存中的DOM树。与JS中的DOM对象类似但本质上是不同的。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th align="center">作用</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">获取Element对象</td>
-<td align="center"><code>getElementById(String id)</code></td>
-<td align="center">根据id属性值获取唯一的element对象</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>getElementsByTag(String tagName)</code></td>
-<td align="center">根据标签名称获取元素对象集合</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>getElementsByAttribute(String key)</code></td>
-<td align="center">根据属性名称获取元素对象集合</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>getElementsByAttributeValue(String key, String value)</code></td>
-<td align="center">根据对应的属性名和属性值获取元素对象集合</td>
-</tr>
-</tbody></table>
-<h4 id="Elements对象"><a href="#Elements对象" class="headerlink" title="Elements对象"></a>Elements对象</h4><blockquote>
-<p>元素Element对象的集合。可以当做 <code>ArrayList&lt;Element&gt;</code>来使用</p>
-</blockquote>
-<h4 id="Element对象"><a href="#Element对象" class="headerlink" title="Element对象"></a>Element对象</h4><blockquote>
-<p>元素对象</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th align="center">作用</th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1、获取子元素对象</td>
-<td align="center"><code>getElementById(String id)</code></td>
-<td align="center">根据id属性值获取唯一的element对象</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>getElementsByTag(String tagName)</code></td>
-<td align="center">根据标签名称获取元素对象集合</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>getElementsByAttribute(String key)</code></td>
-<td align="center">根据属性名称获取元素对象集合</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>getElementsByAttributeValue(String key, String value)</code></td>
-<td align="center">根据对应的属性名和属性值获取元素对象集合</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">获取属性值</td>
-<td align="center"><code>String attr(String key)</code></td>
-<td align="center">根据属性名称获取属性值</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">获取文本内容</td>
-<td align="center"><code>String text()</code></td>
-<td align="center">获取文本内容</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"><code>String html()</code></td>
-<td align="center">获取标签体的所有内容(包括字标签的字符串内容)</td>
-</tr>
-<tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-<h4 id="Node对象"><a href="#Node对象" class="headerlink" title="Node对象"></a>Node对象</h4><blockquote>
-<p>Node，节点对象，是Document和Element的父类    </p>
-</blockquote>
-<hr>
-<h2 id="XPath"><a href="#XPath" class="headerlink" title="XPath"></a>XPath</h2><ol>
-<li>XPath：XPath即为XML路径语言，它是一种用来确定XML（标准通用标记语言的子集）文档中某部分位置的语言。</li>
-</ol>
-<ul>
-<li>使用Jsoup的Xpath需要额外导入类库（jar包/Maven依赖）。</li>
-<li>查询w3cshool参考手册，使用xpath的语法完成查询。</li>
-</ul>
-<ol start="2">
-<li><p>代码：</p>
-   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.获取student.xml的path</span></span><br><span class="line">String path = JsoupDemo6.class.getClassLoader().getResource(<span class="string">&quot;student.xml&quot;</span>).getPath();</span><br><span class="line"><span class="comment">//2.获取Document对象</span></span><br><span class="line">Document document = Jsoup.parse(<span class="keyword">new</span> File(path), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line"><span class="comment">//3.根据document对象，创建JXDocument对象</span></span><br><span class="line">JXDocument jxDocument = <span class="keyword">new</span> JXDocument(document);</span><br><span class="line"></span><br><span class="line"><span class="comment">//4.结合xpath语法查询</span></span><br><span class="line"><span class="comment">//4.1查询所有student标签</span></span><br><span class="line">List&lt;JXNode&gt; jxNodes = jxDocument.selN(<span class="string">&quot;//student&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (JXNode jxNode : jxNodes) &#123;</span><br><span class="line">    System.out.println(jxNode);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;--------------------&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//4.2查询所有student标签下的name标签</span></span><br><span class="line">List&lt;JXNode&gt; jxNodes2 = jxDocument.selN(<span class="string">&quot;//student/name&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (JXNode jxNode : jxNodes2) &#123;</span><br><span class="line">    System.out.println(jxNode);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;--------------------&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//4.3查询student标签下带有id属性的name标签</span></span><br><span class="line">List&lt;JXNode&gt; jxNodes3 = jxDocument.selN(<span class="string">&quot;//student/name[@id]&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (JXNode jxNode : jxNodes3) &#123;</span><br><span class="line">    System.out.println(jxNode);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(<span class="string">&quot;--------------------&quot;</span>);</span><br><span class="line"><span class="comment">//4.4查询student标签下带有id属性的name标签 并且id属性值为itcast</span></span><br><span class="line"></span><br><span class="line">List&lt;JXNode&gt; jxNodes4 = jxDocument.selN(<span class="string">&quot;//student/name[@id=&#x27;itcast&#x27;]&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (JXNode jxNode : jxNodes4) &#123;</span><br><span class="line">    System.out.println(jxNode);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//3.根据document对象，创建JXDocument对象</span></span><br><span class="line">JXDocument jxDocument = <span class="keyword">new</span> JXDocument(document);</span><br><span class="line"></span><br><span class="line"><span class="comment">//4.结合xpath语法查询</span></span><br><span class="line"><span class="comment">//4.1查询所有student标签</span></span><br><span class="line">List&lt;JXNode&gt; jxNodes = jxDocument.selN(<span class="string">&quot;//student&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (JXNode jxNode : jxNodes) &#123;</span><br><span class="line">    System.out.println(jxNode);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;--------------------&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//4.2查询所有student标签下的name标签</span></span><br><span class="line">List&lt;JXNode&gt; jxNodes2 = jxDocument.selN(<span class="string">&quot;//student/name&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (JXNode jxNode : jxNodes2) &#123;</span><br><span class="line">    System.out.println(jxNode);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;--------------------&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//4.3查询student标签下带有id属性的name标签</span></span><br><span class="line">List&lt;JXNode&gt; jxNodes3 = jxDocument.selN(<span class="string">&quot;//student/name[@id]&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (JXNode jxNode : jxNodes3) &#123;</span><br><span class="line">    System.out.println(jxNode);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(<span class="string">&quot;--------------------&quot;</span>);</span><br><span class="line"><span class="comment">//4.4查询student标签下带有id属性的name标签 并且id属性值为itcast</span></span><br><span class="line"></span><br><span class="line">List&lt;JXNode&gt; jxNodes4 = jxDocument.selN(<span class="string">&quot;//student/name[@id=&#x27;itcast&#x27;]&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (JXNode jxNode : jxNodes4) &#123;</span><br><span class="line">    System.out.println(jxNode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
 
       
     </div>
