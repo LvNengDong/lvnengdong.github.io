@@ -23,16 +23,17 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="AtomicInteger 为什么要用 CAS 而不是 synchronized ？  CAS 是什么CAS 是一种思想，可以保证在多线程环境下，不加锁就能保证对象的一致性（同步性）。    在 JDK5 之前，Java 语言是靠 synchronized 关键字来保证同步的，也就是加锁。锁机制在同一时间段只允许一个线程来修改变量，一致性得到了保障，但并发性下降；   CAS 在不加锁的情况">
+<meta name="description" content="1    乐观锁和悲观锁锁可以从不同的⻆度分类。其中，乐观锁和悲观锁是⼀种分类⽅式。    悲观锁：  悲观锁就是我们常说的锁。对于悲观锁来说，它总是认为每次访问共享资源时会发⽣冲突，所以必须对每次数据操作加上锁，以保证临界区中的代码同⼀时间只能有⼀个线程在执⾏。    乐观锁：     乐观锁⼜称为“⽆锁”，顾名思义，它是乐观派。乐观锁总是假设对共享资源的访问没有冲突，线程可以不停地执⾏，⽆需加">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CAS">
 <meta property="og:url" content="http://example.com/2021/07/10/CAS/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="AtomicInteger 为什么要用 CAS 而不是 synchronized ？  CAS 是什么CAS 是一种思想，可以保证在多线程环境下，不加锁就能保证对象的一致性（同步性）。    在 JDK5 之前，Java 语言是靠 synchronized 关键字来保证同步的，也就是加锁。锁机制在同一时间段只允许一个线程来修改变量，一致性得到了保障，但并发性下降；   CAS 在不加锁的情况">
+<meta property="og:description" content="1    乐观锁和悲观锁锁可以从不同的⻆度分类。其中，乐观锁和悲观锁是⼀种分类⽅式。    悲观锁：  悲观锁就是我们常说的锁。对于悲观锁来说，它总是认为每次访问共享资源时会发⽣冲突，所以必须对每次数据操作加上锁，以保证临界区中的代码同⼀时间只能有⼀个线程在执⾏。    乐观锁：     乐观锁⼜称为“⽆锁”，顾名思义，它是乐观派。乐观锁总是假设对共享资源的访问没有冲突，线程可以不停地执⾏，⽆需加">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/07/10/CAS/image-20210710163343519.png">
 <meta property="og:image" content="http://example.com/2021/07/10/CAS/image-20210711174059615.png">
 <meta property="og:image" content="http://example.com/2021/07/10/CAS/image-20210711174640841.png">
+<meta property="og:image" content="http://example.com/2021/07/10/CAS/image-20210811165621045.png">
 <meta property="og:image" content="http://example.com/2021/07/10/CAS/CAS.png">
 <meta property="og:image" content="http://example.com/2021/07/10/CAS/ABA%E5%AD%98%E5%9C%A8.png">
 <meta property="og:image" content="http://example.com/2021/07/10/CAS/image-20210711132742276.png">
@@ -40,7 +41,7 @@
 <meta property="og:image" content="http://example.com/2021/07/10/CAS/image-20210710221251706.png">
 <meta property="og:image" content="http://example.com/2021/07/10/CAS/image-20210710222525576.png">
 <meta property="article:published_time" content="2021-07-10T07:51:36.000Z">
-<meta property="article:modified_time" content="2021-07-11T10:56:43.876Z">
+<meta property="article:modified_time" content="2021-08-11T10:08:36.415Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/07/10/CAS/image-20210710163343519.png">
@@ -157,7 +158,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CAS-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">CAS 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%BC%94%E7%A4%BA"><span class="nav-number">1.2.</span> <span class="nav-text">代码演示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicInteger-compareAndSet-%E6%BA%90%E7%A0%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">AtomicInteger#compareAndSet 源码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAS-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">CAS 底层原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AtomicInteger-%E7%B1%BB"><span class="nav-number">2.1.</span> <span class="nav-text">AtomicInteger 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usafe-%E7%B1%BB"><span class="nav-number">2.2.</span> <span class="nav-text">Usafe 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS-%E5%B9%B6%E5%8F%91%E5%8E%9F%E8%AF%AD"><span class="nav-number">2.3.</span> <span class="nav-text">CAS 并发原语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#atomicInteger-getAndIncrement"><span class="nav-number">2.4.</span> <span class="nav-text">atomicInteger#getAndIncrement</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAS-%E7%BC%BA%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">CAS 缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ABA-%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">ABA 问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81-ABA-%E7%9A%84%E5%AD%98%E5%9C%A8%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">代码验证 ABA 的存在性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-ABA-%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">4.3.</span> <span class="nav-text">如何解决 ABA 问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ABA-%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%EF%BC%88%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="nav-number">4.4.</span> <span class="nav-text">ABA 问题解决方法（代码）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AtomicStampedReference-compareAndSet-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">4.4.1.</span> <span class="nav-text">AtomicStampedReference#compareAndSet 源码分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">原子引用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AtomicReference"><span class="nav-number">5.1.</span> <span class="nav-text">AtomicReference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">5.1.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%BC%94%E7%A4%BA-1"><span class="nav-number">5.1.2.</span> <span class="nav-text">代码演示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AtomicStampedReference"><span class="nav-number">5.2.</span> <span class="nav-text">AtomicStampedReference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">构造函数</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%B9%90%E8%A7%82%E9%94%81%E5%92%8C%E6%82%B2%E8%A7%82%E9%94%81"><span class="nav-number">1.</span> <span class="nav-text">1    乐观锁和悲观锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-CAS"><span class="nav-number">2.</span> <span class="nav-text">2    CAS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%9C%89-CAS%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要有 CAS？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">CAS 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.3.</span> <span class="nav-text">详细描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%BC%94%E7%A4%BA"><span class="nav-number">2.4.</span> <span class="nav-text">代码演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AtomicInteger-compareAndSet-%E6%BA%90%E7%A0%81"><span class="nav-number">2.5.</span> <span class="nav-text">AtomicInteger#compareAndSet 源码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-CAS-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">3    CAS 底层原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS-%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="nav-number">3.1.</span> <span class="nav-text">CAS 保证原子性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AtomicInteger-%E7%B1%BB"><span class="nav-number">3.2.</span> <span class="nav-text">AtomicInteger 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Usafe-%E7%B1%BB"><span class="nav-number">3.3.</span> <span class="nav-text">Usafe 类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS-%E5%B9%B6%E5%8F%91%E5%8E%9F%E8%AF%AD"><span class="nav-number">3.4.</span> <span class="nav-text">CAS 并发原语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E2%BC%A6%E6%93%8D%E4%BD%9C-AtomicInteger%E7%B1%BB%E6%BA%90%E7%A0%81%E7%AE%80%E6%9E%90"><span class="nav-number">3.5.</span> <span class="nav-text">原⼦操作-AtomicInteger类源码简析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#atomicInteger-getAndIncrement%E6%BA%90%E7%A0%81"><span class="nav-number">3.6.</span> <span class="nav-text">atomicInteger#getAndIncrement源码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-CAS-%E7%BC%BA%E7%82%B9"><span class="nav-number">4.</span> <span class="nav-text">4    CAS 缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-ABA-%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">5    ABA 问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">5.1.</span> <span class="nav-text">5.1    是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81-ABA-%E7%9A%84%E5%AD%98%E5%9C%A8%E6%80%A7"><span class="nav-number">5.2.</span> <span class="nav-text">5.2    代码验证 ABA 的存在性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-ABA-%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">5.3.</span> <span class="nav-text">5.3    如何解决 ABA 问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-ABA-%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%EF%BC%88%E4%BB%A3%E7%A0%81%EF%BC%89"><span class="nav-number">5.4.</span> <span class="nav-text">5.4    ABA 问题解决方法（代码）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-AtomicStampedReference-compareAndSet-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">5.4.1.</span> <span class="nav-text">5.5    AtomicStampedReference#compareAndSet 源码分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">6    原子引用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-AtomicReference"><span class="nav-number">6.1.</span> <span class="nav-text">6.1    AtomicReference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">6.1.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%BC%94%E7%A4%BA-1"><span class="nav-number">6.1.2.</span> <span class="nav-text">代码演示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-AtomicStampedReference"><span class="nav-number">6.2.</span> <span class="nav-text">6.2    AtomicStampedReference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0-1"><span class="nav-number">6.2.1.</span> <span class="nav-text">构造函数</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -250,7 +251,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-11 18:56:43" itemprop="dateModified" datetime="2021-07-11T18:56:43+08:00">2021-07-11</time>
+        <time title="Modified: 2021-08-11 18:08:36" itemprop="dateModified" datetime="2021-08-11T18:08:36+08:00">2021-08-11</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -272,151 +273,250 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <blockquote>
-<p>  AtomicInteger 为什么要用 CAS 而不是 synchronized ？</p>
+        <h1 id="1-乐观锁和悲观锁"><a href="#1-乐观锁和悲观锁" class="headerlink" title="1    乐观锁和悲观锁"></a>1    乐观锁和悲观锁</h1><p>锁可以从不同的⻆度分类。其中，乐观锁和悲观锁是⼀种分类⽅式。</p>
+<blockquote>
+<p>  悲观锁：</p>
 </blockquote>
-<h1 id="CAS-是什么"><a href="#CAS-是什么" class="headerlink" title="CAS 是什么"></a>CAS 是什么</h1><p>CAS 是一种思想，可以保证在多线程环境下，不加锁就能保证对象的一致性（同步性）。</p>
+<p>悲观锁就是我们常说的锁。对于悲观锁来说，它总是认为每次访问共享资源时会发⽣冲突，所以必须对每次数据操作加上锁，以保证临界区中的代码同⼀时间只能有⼀个线程在执⾏。</p>
+<blockquote>
+<p>  乐观锁：</p>
+</blockquote>
+<ul>
+<li>  乐观锁⼜称为“⽆锁”，顾名思义，它是乐观派。乐观锁总是假设对共享资源的访问没有冲突，线程可以不停地执⾏，⽆需加锁也⽆需等待。⽽⼀旦多个线程发⽣冲突，<strong>乐观锁通常是使⽤⼀种称为 CAS 的技术来保证线程执⾏的安全性</strong>。</li>
+<li>  由于⽆锁操作中没有锁的存在，因此不可能出现死锁的情况，也就是说<strong>乐观锁天⽣免疫死锁</strong>。乐观锁多⽤于“读多写少“的环境，避免频繁加锁影响性能；⽽悲观锁多⽤于”写多读少“的环境，避免频繁失败和重试影响性能。</li>
+</ul>
+<hr>
+<h1 id="2-CAS"><a href="#2-CAS" class="headerlink" title="2    CAS"></a>2    CAS</h1><h2 id="为什么要有-CAS？"><a href="#为什么要有-CAS？" class="headerlink" title="为什么要有 CAS？"></a>为什么要有 CAS？</h2><p>CAS 是一种思想，可以保证在多线程环境下，不加锁就能保证共享数据的一致性。</p>
 <ul>
 <li>  在 JDK5 之前，Java 语言是靠 synchronized 关键字来保证同步的，也就是加锁。锁机制在同一时间段只允许一个线程来修改变量，一致性得到了保障，但并发性下降；</li>
-<li>  CAS 在不加锁的情况下保证了变量的一致性，并发性高。</li>
+<li>  而 CAS 实现了在不加锁的情况下保证共享变量的一致性，并发性高。</li>
 </ul>
-<p><strong>独占锁</strong>是一种悲观锁，synchronized 就是一种独占锁，会导致其它所有需要该锁的线程挂起，等待有锁的线程释放锁。</p>
-<p>另一种更加有效的锁就是<strong>乐观锁</strong>，所谓乐观锁就是，每次不加锁而是假设在没有冲突的情况下去完成某项工作，如果最后因发生冲突失败就重试，直到成功为止，乐观锁用到的机制就是 CAS。</p>
-<blockquote>
+<h2 id="CAS-是什么？"><a href="#CAS-是什么？" class="headerlink" title="CAS 是什么？"></a>CAS 是什么？</h2><blockquote>
 <p>  <strong>CAS；Compare And Swap；比较并交换</strong></p>
 </blockquote>
-<p>​        <strong>在线程从本地内存向主内存写回数据时，如果线程的期望值与主内存的真实值相等，则执行更新（交换）操作；如果线程的期望值与主内存的真实值不相等，不执行更新操作。</strong></p>
-<h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><p>​        CAS 不是真正的加锁，也就是说允许多个线程同时访问一个变量。在 JMM 内存模型中我们已经了解到，线程在工作时不会直接操作主内存中的数据，而是会将主内存中的数据拷贝回自己的本地内存中后再进行操作，操作完成之后再将数据写回主内存中。</p>
-<p>​        原子性不安全的问题就是：根据 JMM 模型，每个线程操作主内存中的变量都需要经历 <code>从主内存中复制到本地内存 --&gt;&gt; 本地内存中对变量进行运算 --&gt;&gt; 将运算结果写回主内存中</code> 三个步骤。原子性就是这三个步骤<strong>读、更新、写回</strong>是一体的、不可分割的，要么全部执行成功，要么全部执行失败。如果原子性不能得到保证，在多个线程同时操作一份本地变量 X 时，就会出现 T1 线程在经过<code>读、更新</code>后被挂起，然后 T2 线程完整的执行了 <code>读、更新、写回</code> 三个步骤，修改了主内存中的变量 X 为 Y。这时候 T1 线程继续执行，这时候写回主内存的数据是错误的，因为它没有基于主内存中最新的值来进行计算。</p>
-<p>​        CAS 思想要求每个线程在拷贝主内存中的数据时在本地内存中保存一份主内存数据的快照，在本地内存中执行完运算任务要写回主内存时，首先会拿着这个快照与当前时刻主内存中数据进行对比，如果快照数据与主内存当前数据一致，则校验成功，再将线程本地内存中的数据写回主内存中；反之，如果校验，则不会将本地内存数据写回主内存。而是让线程重新获取主内存中的数据，重新运算，重新判断是否可以写回主内存中，直到 CAS 校验成功，将本地内存数据写回主内存中为止。</p>
+<p>​    <strong>在线程从本地内存向主内存写回数据时，如果线程的期望值与主内存的真实值相等，则执行更新（交换）操作；如果线程的期望值与主内存的真实值不相等，不执行更新操作。</strong></p>
+<p>在 CAS 中，有这样三个值：</p>
+<blockquote>
+<ul>
+<li>  <strong>V：要更新的变量(var)</strong></li>
+<li>  <strong>E：期望值(expected)</strong></li>
+<li>  <strong>N：新值(new)</strong></li>
+</ul>
+</blockquote>
+<p>⽐较并交换的过程如下：</p>
+<ul>
+<li>  判断 V 是否等于 E，如果等于，将 V 的值设置为 N；如果不等，说明已经有其它线程更新了 V，则当前线程放弃更新，什么都不做。所以这⾥的预期值 E 本质上指的是“旧值”。</li>
+</ul>
+<h2 id="详细描述"><a href="#详细描述" class="headerlink" title="详细描述"></a>详细描述</h2><ul>
+<li>  CAS 不是真正的加锁，也就是说允许多个线程同时访问一个变量。在 JMM 内存模型中我们已经了解到，线程在工作时不会直接操作主内存中的数据，而是会将主内存中的数据拷贝回线程本地内存中进行操作，操作完成之后再将数据写回主内存中。</li>
+<li>  但是在多线程环境下，这一过程是不满足原子性的。根据 JMM 模型，每个线程操作主内存中的变量都需要经历 <code>从主内存中复制到本地内存 --&gt;&gt; 本地内存中对变量进行运算 --&gt;&gt; 将运算结果写回主内存中</code> 三个步骤。原子性就是这三个步骤<strong>读、更新、写回</strong>是一体的、不可分割的，要么全部执行成功，要么全部执行失败。如果原子性不能得到保证，在多个线程同时操作一份本地变量 X 时，就会出现 T1 线程在经过<code>读、更新</code>后被挂起，然后 T2 线程完整的执行了 <code>读、更新、写回</code> 三个步骤，修改了主内存中的变量 X 为 Y。这时候 T1 线程继续执行，这时候写回主内存的数据是错误的，因为它没有基于主内存中最新的值来进行计算。</li>
+<li>  CAS 的思想就是要求每个线程在拷贝主内存中的数据时在本地内存中保存一份主内存数据的快照，在本地内存中执行完运算任务要写回主内存时，首先会拿着这个快照与当前时刻主内存中数据进行对比，如果快照数据与主内存当前数据一致，则校验成功，再将线程本地内存中的数据写回主内存中；反之，如果校验失败，则不会将本地内存数据写回主内存。而是让线程重新获取主内存中的最新数据，重新运算，重新判断是否可以写回主内存中，直到 CAS 校验成功，将本地内存数据写回主内存中为止。</li>
+</ul>
 <blockquote>
 <ul>
 <li>  线程的期望值</li>
 <li>  主内存中的真实值</li>
 </ul>
 </blockquote>
-<p>​        在 CAS 的具体操作中，我们习惯将快照值称为<strong>线程的期望值</strong>，因为多线程中每个线程肯定期望自己在本地内存中运算的这段时间内没有其它线程去更新主内存中的值，这样就不会产生线程不一致。</p>
-<p>​        但实际上在多线程环境下，由于多个线程操作同一变量，且每个线程执行的时间长短不一致，时间较短的线程肯定会先于时间较长的线程修改主内存中的共享变量，当长时间的线程执行完线程任务准备将更新后的数据写回主内存中时，这一时刻主内存中的共享变量可能发生了改变，也可能没发生改变，<strong>这个值就叫做主内存中的真实值</strong>。</p>
-<p>​        CAS 就是当主内存中的真实值和线程的期望值相同时，才执行交换（即将线程本地内存中值写回主内存）动作；如果真实值和期望值不相同，则拒绝执行交换操作。</p>
-<p>​        这就类似于 Git 或 Svn 中代码的提交，多个人协同办公就相当于多线程，假设最初的时候每个人都拿到了 1.0 版本的代码，之后在这个版本上进行迭代更新，小A每工作一小时就提交一次代码，而小B则是每天下班之前才提交一次代码。当第一天工作结束后，小B直接提交代码时就会报错，因为他没有兼容最新版的代码，只有在拉取最新的代码、并检查与自己的代码无冲突时，它才可以进行提交。</p>
+<ul>
+<li>  在 CAS 的具体操作中，我们习惯将快照值称为<strong>线程的期望值</strong>，因为多线程中每个线程肯定期望自己在本地内存中运算的这段时间内没有其它线程去更新主内存中的值，这样就不会产生线程不一致。</li>
+<li>  但实际上在多线程环境下，由于多个线程操作同一变量，且每个线程执行的时间长短不一致，时间较短的线程肯定会先于时间较长的线程修改主内存中的共享变量，当长时间的线程执行完线程任务准备将更新后的数据写回主内存中时，这一时刻主内存中的共享变量可能发生了改变，也可能没发生改变，<strong>这个值就叫做主内存中的真实值</strong>。</li>
+<li>  CAS 就是当主内存中的真实值和线程的期望值相同时，才执行交换（即将线程本地内存中值写回主内存）动作；如果真实值和期望值不相同，则拒绝执行交换操作。</li>
+<li>  这优点类似于 Git 或 Svn 中代码的提交，多个人协同办公就相当于多线程，假设最初的时候每个人都拿到了 1.0 版本的代码，之后在这个版本上进行迭代更新，小A每工作一小时就提交一次代码，而小B则是每天下班之前才提交一次代码。当第一天工作结束后，小B直接提交代码时就会报错，因为他没有兼容最新版的代码，只有在拉取最新的代码、并检查与自己的代码无冲突时，它才可以进行提交。</li>
+</ul>
 <hr>
 <h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CASTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        AtomicInteger atomicInteger = <span class="keyword">new</span> AtomicInteger(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> b = atomicInteger.compareAndSet(<span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line">        System.out.println(b + <span class="string">&quot;，主内存中的值为：&quot;</span> + atomicInteger.get());</span><br><span class="line">        System.out.println(atomicInteger.compareAndSet(<span class="number">3</span>, <span class="number">7</span>) + <span class="string">&quot;，主内存中的值为：&quot;</span> + atomicInteger.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	输出结果：</span></span><br><span class="line"><span class="comment">		true，主内存中的值为：4</span></span><br><span class="line"><span class="comment">		false，主内存中的值为：4</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    而在下一行代码期望值还为<span class="number">3</span>，但是此时主内存中 atomicInteger的值已经变成了<span class="number">4</span>，所以比较条件不能满足，修改失败</span><br></pre></td></tr></table></figure>
 
-<p>我们来分析一下这段代码，</p>
+<blockquote>
+<p>  <strong>代码分析</strong></p>
+</blockquote>
 <ol>
 <li> 首先创建了一个 AtomicInteger 对象，该对象保存在主内存中（堆中）。</li>
 <li> 因为 main 线程要操作这个对象，所以先将主内存中的 <code>atomicInteger == 3</code> 拷贝到本地内存中操作，并记录一个快照值。</li>
 <li>  main 线程调用 <code>compareAndSet</code> 方法，在本地内存中更新 <code>atomicInteger == 4</code>；，并打算将更新后的值写回主内存中。</li>
-<li> 在将本地内存写回主内存时，要先进行 CAS 校验，由于当前程序是一个单线程应用，没有其它线程更改主内存中的共享变量，所以此时主内存中的共享变量值也为 3，与快照值相等，所以校验成功。</li>
-<li> 由于上一步符合原子性，更新成功了，所以主内存中的共享变量变成了 <code>atomicInteger == 4</code>。</li>
+<li> 在将本地内存写回主内存时，要先进行 CAS 校验，由于当前程序是一个单线程应用，没有其它线程更改主内存中的共享变量，所以此时主内存中的共享变量值也为 3，与快照值相等，所以校验成功，并更新主内存中的值。</li>
+<li> 由于上一步满足了期望值，更新成功了，所以主内存中的共享变量变成了 <code>atomicInteger == 4</code>。</li>
 <li> 此时 main 线程再次将主内存中的 <code>atomicInteger == 4</code> 拷贝到本地内存中，并记录快照值。</li>
 <li> 之后在本地内存中更新 <code>atomicInteger == 7</code> 并要将该值写回主内存中，在 CAS 校验中，由于这时候我们手动设置了 main 线程的期望值是 <code>atomicInteger == 3</code> ，而此时 mian 线程的真实值是 <code>atomicInteger == 4</code>，所以校验失败，不会将 <code>atomicInteger == 7</code> 写回主内存中。</li>
 </ol>
-<h3 id="AtomicInteger-compareAndSet-源码"><a href="#AtomicInteger-compareAndSet-源码" class="headerlink" title="AtomicInteger#compareAndSet 源码"></a><strong>AtomicInteger#compareAndSet 源码</strong></h3><p><img src="/2021/07/10/CAS/image-20210710163343519.png" alt="image-20210710163343519"></p>
-<p><strong>compareAndSet，比较并设置</strong>，该方法用于将线程本地内存中的值写回主内存时进行 CAS 校验，返回值为 boolean 类型。</p>
+<h2 id="AtomicInteger-compareAndSet-源码"><a href="#AtomicInteger-compareAndSet-源码" class="headerlink" title="AtomicInteger#compareAndSet 源码"></a><strong>AtomicInteger#compareAndSet 源码</strong></h2><p><img src="/2021/07/10/CAS/image-20210710163343519.png" alt="image-20210710163343519"></p>
+<blockquote>
+<p>  <strong>compareAndSet()：</strong></p>
+</blockquote>
+<p><strong>比较并设置</strong>，该方法用于将线程本地内存中的值写回主内存时进行 CAS 校验，返回值为 boolean 类型。</p>
 <ul>
 <li>  <strong>expect</strong> 是每个线程的期望值。每个线程都期望在自己进下本地运算的时间中没有其它线程修改过主内存中的值，这样可以保证变量的一致性，所以这个值一般都是线程创建时从主内存拷贝过来的那个值。当然这个值也可以自定义，只是用得比较少。</li>
 <li>  <strong>update</strong> 是线程在本地内存中进行运算后要写回主内存中的值。</li>
 </ul>
 <p>只有该方法的返回结果为真，才能将本地内存中的值写回主内存中；如果判断结果为假，则不能将本地内存中的值写回主内存中。</p>
 <hr>
-<h1 id="CAS-底层原理"><a href="#CAS-底层原理" class="headerlink" title="CAS 底层原理"></a>CAS 底层原理</h1><p><strong>CAS 底层原理 –&gt;&gt; 自旋锁 + UnSafe类</strong></p>
-<blockquote>
-<p>  <strong>问题：AtomicInteger 凭什么能在多线程环境下保证变量的原子性?（一致性）</strong></p>
+<h1 id="3-CAS-底层原理"><a href="#3-CAS-底层原理" class="headerlink" title="3    CAS 底层原理"></a>3    CAS 底层原理</h1><blockquote>
+<p>  <strong>CAS 底层原理：自旋锁 + UnSafe类</strong></p>
 </blockquote>
-<h2 id="AtomicInteger-类"><a href="#AtomicInteger-类" class="headerlink" title="AtomicInteger 类"></a>AtomicInteger 类</h2><p><img src="/2021/07/10/CAS/image-20210711174059615.png" alt="image-20210711174059615"></p>
+<h2 id="CAS-保证原子性"><a href="#CAS-保证原子性" class="headerlink" title="CAS 保证原子性"></a>CAS 保证原子性</h2><ol>
+<li>如果有⼀个多个线程共享的变量 i 原本等于5，我现在在线程 A 中，想把它设置为新的值6；</li>
+<li>我们使⽤ CAS 来做这个事情；</li>
+<li>⾸先我们⽤ i 去与 5 对⽐，发现它等于 5 ，说明没有被其它线程改过，那我就把它设置为新的值6，此次CAS成功，i 的值被设置成了6；</li>
+<li>如果不等于5，说明 i 被其它线程改过了（⽐如现在 i 的值为2），那么我就什么也不做，此次 CAS 失败，i 的值仍然为 2。</li>
+</ol>
+<p>在这个例⼦中， i 就是 V，5 就是 E，6 就是 N。那有没有可能我在判断了 i 为 5 之后，正准备更新它的新值的时候，被其它线程更改了 i 的值呢？</p>
+<ul>
+<li>  这是不会发生的，因为 CAS 是⼀种原⼦操作，它是⼀种系统原语，是⼀条 CPU 的原⼦指令，从CPU层⾯保证它的原⼦性。</li>
+<li>  当多个线程同时使⽤ CAS 操作⼀个变量时，只有⼀个会胜出，并成功更新，其余均会失败，但失败的线程并不会被挂起，仅是被告知失败，并且允许再次尝试，当然也允许失败的线程放弃操作。</li>
+</ul>
+<hr>
+<h2 id="AtomicInteger-类"><a href="#AtomicInteger-类" class="headerlink" title="AtomicInteger 类"></a>AtomicInteger 类</h2><blockquote>
+<p>  <strong>问题：AtomicInteger 凭什么能在多线程环境下保证变量的原子性?</strong></p>
+</blockquote>
+<p><img src="/2021/07/10/CAS/image-20210711174059615.png" alt="image-20210711174059615"></p>
 <ol>
 <li><p> <strong>AtomicInteger 是一个 Integer 类型的包装类，构造方法中接收 initialValue 值后用 volatile 修饰该值，保证了多线程操作时改变量在线程间的可见性。</strong></p>
 </li>
-<li><p><strong>valueOffset</strong> 表示当前对象中 value 值的内存偏移量，通过 <strong>unsafe.objectFieldOffset</strong> 方法获取，该方法是一个本地方法，底层是用 C 写的。</p>
+<li><p><strong>valueOffset</strong> 表示当前对象中 value 值的内存偏移量，通过 <strong>unsafe.objectFieldOffset</strong> 方法获取，该方法是一个本地方法，底层是用 C++ 写的。</p>
 <p> <img src="/2021/07/10/CAS/image-20210711174640841.png" alt="image-20210711174640841"></p>
 </li>
 </ol>
-<h2 id="Usafe-类"><a href="#Usafe-类" class="headerlink" title="Usafe 类"></a>Usafe 类</h2><p>​        用 Java 语言实现的方法无法直接访问底层的操作系统，需要通过本地（Native）方法来访问。</p>
-<p>​        <strong>sun.misc.Unsafe</strong> 类是 CAS 的核心类，该类中含有大量的本地方法，可以可以像 C 的指针一样直接操作内存，直接从操作系统层面操作指定内存位置的数据。</p>
-<p>​        Java 中 CAS 操作的执行依赖于 Unsafe 类中的方法。Unsafe 类中大多数的方法都是 native 修饰的，可以直接调用操作系统的底层资源执行相应的任务。</p>
-<p>​        <strong>Unsafe 类中的本地方法都具有原子性，因为其底层是采用 CAS 并发原语实现的</strong>。</p>
-<h2 id="CAS-并发原语"><a href="#CAS-并发原语" class="headerlink" title="CAS 并发原语"></a>CAS 并发原语</h2><p>​        CAS（Compare-And-Swap）是一条 <strong>CPU 并发原语</strong>。它的功能是判断内存中某个位置的值是否为预期值，如果是则更改为新的值，这个过程是原子的。</p>
-<p>​        CAS 并发原语在 Java 中的体现就是 <code>sun.misc.Unsafe</code> 类中的各个本地方法都具有原子性。调用 Unsafe 类的中的本地方法（CAS 方法），JVM 会帮我们实现出 CAS 汇编指令。<strong>CAS 原语能保证原子性则完全依赖于硬件的功能</strong>。再次强调，由于 CAS 是一种系统原语，具有原子性，所以不会造成多线程下数据不一致的问题。</p>
+<hr>
+<h2 id="Usafe-类"><a href="#Usafe-类" class="headerlink" title="Usafe 类"></a>Usafe 类</h2><ul>
+<li>  CAS是⼀种原⼦操作，它是⼀种系统原语，从 CPU 层⾯保证操作的原⼦性，而 Java 语言是无法直接访问底层操作系统的，需要通过本地（Native）方法来访问。那么 Java 是怎样使用 CAS 的呢？</li>
+<li>  在 Java 中，CAS 操作的执行依赖于 Unsafe 类中的方法。Unsafe 类中大多数的方法都是 native 修饰的，可以直接调用操作系统的底层资源执行相应的任务。</li>
+<li>  <strong>sun.misc.Unsafe</strong> 类是 CAS 的核心类，该类中含有大量的本地方法，由 C++ 实现，可以直接从操作系统层面操作指定内存位置的数据。</li>
+<li>  <strong>Unsafe 类中的本地方法都具有原子性，因为其底层是采用 CAS 并发原语实现的</strong>。</li>
+</ul>
 <blockquote>
-<p>  <strong>原语</strong>是由若干条指令组成的、用于完成某个功能的一组指令集，这组指令集的执行顺序是确定的，且在执行过程中不允许被中断，具有原子性。可以直接将原语视为一条大的、执行时间较长的指令。</p>
-<p>  <strong>系统原语</strong>就是操作系统把一些常用的原语直接实现在硬件上，以便遇到时方便调用。</p>
+<p>  <strong>Unsafe类中关于 CAS 的部分方法：</strong></p>
 </blockquote>
-<h2 id="atomicInteger-getAndIncrement"><a href="#atomicInteger-getAndIncrement" class="headerlink" title="atomicInteger#getAndIncrement"></a>atomicInteger#getAndIncrement</h2><p>​        在单线程环境下，getAndIncrement() 与 i++ 的作用是相同的，但是由于 i++ 不能保证原子性，在多线程环境下继续使用 i++ 存在线程安全问题。</p>
-<p>​        而 atomicInteger#getAndIncrement 可以实现多线程环境下，不用加锁就可以保证线程的原子性，这使用到了 CAS 的思想，其具体的底层源码是怎样的呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapObject</span><span class="params">(Object o, <span class="keyword">long</span> offset,Object expected, Object x)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapInt</span><span class="params">(Object o, <span class="keyword">long</span> offset,<span class="keyword">int</span> expected,<span class="keyword">int</span> x)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapLong</span><span class="params">(Object o, <span class="keyword">long</span> offset,<span class="keyword">long</span> expected,<span class="keyword">long</span> x)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>其它</strong></p>
+</blockquote>
+<ul>
+<li>  当然，Unsafe 类⾥⾯还有其它⽅法⽤于不同的⽤途。⽐如⽀持线程挂起和恢复的 park 和 unpark ， LockSupport类底层就是调⽤了这两个⽅法。</li>
+<li>  还有⽀持反射操作的 allocateInstance() ⽅法。</li>
+</ul>
+<hr>
+<h2 id="CAS-并发原语"><a href="#CAS-并发原语" class="headerlink" title="CAS 并发原语"></a>CAS 并发原语</h2><blockquote>
+<ul>
+<li>  <strong>原语</strong>是由若干条指令组成的、用于完成某个功能的一组指令集，这组指令集的执行顺序是确定的，且在执行过程中不允许被中断，具有原子性。可以直接将原语视为一条大的、执行时间较长的指令。</li>
+<li>  <strong>系统原语</strong>就是操作系统把一些常用的原语直接实现在硬件上，以便遇到时方便调用。</li>
+</ul>
+</blockquote>
+<ul>
+<li>  CAS（Compare-And-Swap）是一条 <strong>CPU 并发原语</strong>。它的功能是判断内存中某个位置的值是否为预期值，如果是则更改为新的值，这个过程是原子的。</li>
+<li>  CAS 并发原语在 Java 中的体现就是 <code>sun.misc.Unsafe</code> 类中的各个本地方法都具有原子性。调用 Unsafe 类的中的本地方法（CAS 方法），JVM 会帮我们实现出 CAS 汇编指令。<strong>CAS 原语能保证原子性则完全依赖于硬件的功能</strong>。再次强调，由于 CAS 是一种系统原语，具有原子性，所以不会造成多线程下数据不一致的问题。</li>
+</ul>
+<hr>
+<h2 id="原⼦操作-AtomicInteger类源码简析"><a href="#原⼦操作-AtomicInteger类源码简析" class="headerlink" title="原⼦操作-AtomicInteger类源码简析"></a>原⼦操作-AtomicInteger类源码简析</h2><p>上⾯介绍了 Unsafe 类的⼏个⽀持 CAS 的⽅法。那 Java 具体是如何使⽤这⼏个⽅法来实现原⼦操作的呢？</p>
+<p>JDK提供了⼀些⽤于原⼦操作的类，在 java.util.concurrent.atomic 包下⾯。在 JDK8 中，有如下16 个类：</p>
+<p><img src="/2021/07/10/CAS/image-20210811165621045.png" alt="image-20210811165621045"></p>
+<p>从名字就可以看得出来这些类⼤概的⽤途：</p>
+<ul>
+<li>  原⼦更新基本类型</li>
+<li>  原⼦更新数组</li>
+<li>  原⼦更新引⽤</li>
+<li>  原⼦更新字段（属性）</li>
+</ul>
+<p>这⾥我们以 AtomicInteger 类的 getAndIncrement() ⽅法为例，来看看Java是如何实现原⼦操作的。</p>
+<hr>
+<h2 id="atomicInteger-getAndIncrement源码"><a href="#atomicInteger-getAndIncrement源码" class="headerlink" title="atomicInteger#getAndIncrement源码"></a>atomicInteger#getAndIncrement源码</h2><ul>
+<li>  在单线程环境下，<code>getAndIncrement()</code> 与 <code>i++</code> 的作用是相同的，但是由于 <code>i++</code> 不能保证原子性，在多线程环境下继续使用 <code>i++</code> 存在线程安全问题。</li>
+<li>  而 <code>atomicInteger#getAndIncrement()</code> 可以实现多线程环境下，不用加锁就可以保证线程的原子性，这里用到了 CAS 的思想，具体的底层源码如下：</li>
+</ul>
 <p><img src="/2021/07/10/CAS/CAS.png" alt="CAS"></p>
 <ol>
-<li><p> <code>new AtomicInteger(100)</code> 这句代码会在主内存（堆）中创建出一个 volatile 修饰的整型变量 <code>volatile int value = 100</code></p>
+<li><p> <code>new AtomicInteger(100)</code> 这句代码会在主内存中创建出一个 volatile 修饰的整型变量 <code>volatile int value = 100</code></p>
 </li>
 <li><p> 由于此时还运行着一个 main 线程，所以 mian 线程会将主内存中的数据拷贝一份到自己的工作内存中。</p>
 </li>
 <li><p>继续调用 <code>atomicInteger.getAndIncrement()</code> 方法，底层调用的是 <code>unsafe.getAndAddInt(this, valueOffset, 1)</code> 方法。</p>
 <ul>
-<li><p>  this 代表当前对象的引用，即当前对象在内存中的地址；</p>
+<li><p>  <code>this</code> 代表当前对象的引用，即当前对象在内存中的地址；</p>
 </li>
-<li><p>valueOffset 代表当前（atomicInteger）对象中 value 变量的内存偏移量。该偏移量通过 Unsafe 类中的一个本地方法获得。</p>
-<p>  通过 <strong>this + valueOffSet</strong>（对象地址 + 对象中 value 变量的偏移地址）的组合可以在内存中定位到唯一一个变量的地址。</p>
+<li><p><code>valueOffset</code> 代表当前（atomicInteger）对象中 <code>value</code> 变量的内存偏移量。该偏移量通过 <code>Unsafe</code> 类中的一个本地方法获得。</p>
+<p>  通过 <strong>this + valueOffSet</strong>（对象地址 + 对象中 value 变量的偏移地址）的组合可以在内存中唯一确定一个变量的地址。</p>
 </li>
 </ul>
 </li>
-<li><p>继续向下调用 <strong>Unsafe#getAndAddInt</strong> 方法，该方法接收三个参数，<em>当前对象的内存地址（var1）、当前对象中 value 变量的内存偏移量（var2），value 将要增加的值（var4）</em></p>
+<li><p>继续向下调用 <strong>Unsafe#getAndAddInt</strong> 方法，该方法接收三个参数：①当前对象的内存地址（var1）；②当前对象中 value 变量的内存偏移量（var2）；③value 将要增加的值（var4）。</p>
 <ul>
-<li>  <code>var5 = this.getIntVolatile(var1, var2);</code> 是 Unsafe 类中的一个本地方法（具有原子性），作用是通过当前对象的内存地址和对象中value的偏移量唯一定位到一个值，所以此时 var5 的值就是线程从主内存中拷贝过来的快照值。</li>
+<li>  <code>var5 = this.getIntVolatile(var1, var2);</code> 是 Unsafe 类中的一个本地方法（具有原子性），作用是通过当前对象的内存地址和对象中 <code>value</code> 变量的偏移量确定唯一的 <code>value</code> 值并使用 <code>var5</code> 保存，所以此时 <code>var5</code> 的值是一个期望值。</li>
 <li>  <code>this.compareAndSwapInt(var1, var2, var5, var5 + var4)</code> 是 Unsafe 类中的另一个本地方法（具有原子性）。</li>
-<li>  上图中黄色字体前后都是 Unsafe 类中的本地方法，编译成的 CAS 原语具有原子性，所以在这两个方法中不会发生线程切换的情况。而在这两个方法执行的间隙则是可能会发生线程切换的，假设此时发生了线程切换，由另一个线程执行了 3s 再切回来。 </li>
+<li>  上图中黄色字体前后都是 Unsafe 类中的本地方法，编译成的原语具有原子性，所以在这两个方法中不会发生线程切换的情况。而在这两个方法执行的间隙则是可能会发生线程切换的，假设此时发生了线程切换，由另一个线程执行了 3s 再切回来。 </li>
 <li>接下来要执行 <strong>compareAndSwapInt</strong> 方法了，该方法执行过程中不能被其它线程打断，<ul>
-<li>  该方法首先根据 var1 + var2 得到主内存中当前时刻 value 的值；</li>
-<li>   var5 是线程的本地内存在创建快照的时刻主内存中 value 的值。</li>
-<li>  比较这两个值是否相等，若相等，则执行 var5+var4 操作，方法返回值为 true，取反之后是 false，退出循环，将更新后的值 var5 写回主内存。（由于该方法对标的是 i++，所以返回的是 i 而不是加一后的 i）</li>
-<li>  若不相等，方法返回值为 false，取反之后为 true，则循环继续执行。重新从 <code>var1+var2</code> 指向的地址获取主内存中最新的 value 值，重新记录快照值，重新计算，重新判断，直到方法执行结束。</li>
+<li>  该方法首先根据 <strong>var1 + var2</strong> 得到主内存中当前时刻 <code>value</code> 的值；</li>
+<li>   <strong>var5</strong> 是线程的本地内存在创建快照的时刻主内存中 value 的值，即期望值。</li>
+<li>  比较这两个值是否相等，若相等，则执行 <code>var5 + var4</code> 操作，方法返回值为 true，取反之后是 false，退出循环，将更新后的值 var5 写回主内存。（由于该方法对标的是 <code>i++</code>，所以返回的是 <code>i</code> 而不是加一后的 i）</li>
+<li>  若不相等，方法返回值为 false，取反之后为 true，则循环继续执行。重新从 <code>var1 + var2</code> 指向的地址获取主内存中最新的 value 值，重新记录快照值，重新计算，重新判断，直到方法执行结束。</li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
 <blockquote>
+<p>  <strong>注意</strong></p>
+</blockquote>
 <ul>
-<li>  由于 getIntVolatile 和 compareAndSwapInt 都是 Unsafe 类的本地方法，都使用了 CAS 原语，所以执行时是具有原子性的，但是在这两个方法之间的时刻，可能会 CPU 资源会被其它线程占用。</li>
-</ul>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">假设线程A和线程B同时执行 getAndAddInt 操作</span><br><span class="line"></span><br><span class="line"><span class="number">1</span>、AtomicInteger 里面的 value 原始值为<span class="number">3.</span>即主内存中的AtomicInteger的value为<span class="number">3</span>，根据 JMM 模型，线程 A和线程B各自持有一份值为<span class="number">3</span>的 vlue 的副本拷贝到各自的工作内存中；</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>、线程A通过 getIntVolatile(var1, var2) 拿到value的值<span class="number">3</span>，然后线程A被挂起；</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>、线程B也通过 getIntVolatile(var1, var2) 拿到value的值<span class="number">3</span>，但是线程B没有被挂起，继续执行 compareAndSwapInt 方法比较内存值也为<span class="number">3</span>，成功修改主内存中的值为<span class="number">4</span>，线程B执行结束。</span><br><span class="line"></span><br><span class="line"><span class="number">4</span>、这时线程A恢复，执行 compareAndSwapInt 方法比较，发现自己手里的值<span class="number">3</span>和主内存中的值<span class="number">4</span>不一致（因为变量 value 被 <span class="keyword">volatile</span> 修饰，所以其它线程对它的修改，线程A总是能够看到），说明该值已经被其它线程抢先一步修改过了，那A线程本次修改失败，只能再重新从主内存中读取最新的值重新计算一遍了</span><br><span class="line"></span><br><span class="line"><span class="number">5</span>、线程A重新获取value值，线程A继续执行 compareAndSwapInt 进行比较替换，直到成功。</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p><strong>一句话总结</strong></p>
-<p>​        <strong>atomicInteger#getAndIncrement</strong> 方法就是 20000 个线程执行 num++，但是每次执行完要写会主内存时要先经过 CAS 校验，校验成功了就写回去，校验不成功则重写读取主内存中的值，重新执行 num++，重写写回主内存，反复执行，直到成功为止。</p>
-<hr>
-<h1 id="CAS-缺点"><a href="#CAS-缺点" class="headerlink" title="CAS 缺点"></a>CAS 缺点</h1><ol>
-<li><p><strong>循环时间长开销大</strong></p>
-<p> ​        如果 CAS 失败（数据从线程本地内存写回主内存时一直校验不成功），就会一直进行尝试（自旋）。如果 CAS 长时间一直不成功，可能会给 CPU 带来很大的开销。</p>
+<li><p>  由于 <code>getIntVolatile</code> 和 <code>compareAndSwapInt</code> 都是 Unsafe 类的本地方法，都使用了原语，所以都具有原子性，但是在这两个方法之间的时刻，可能会 CPU 资源会被其它线程占用。</p>
 </li>
-<li><p><strong>只能保证一个共享变量的原子操作</strong>（源码中就只有一个）</p>
-<p> ​        当对一个共享变量执行操作时，可以使用 CAS 循环的方式来保证变量的原子性。但是，对于多个共享变量进行操作时，CAS 循环就无法保证操作的原子性，这个时候只能用锁来保证原子性。</p>
-</li>
-<li><p> <strong>CAS 会导致 ABA 问题</strong></p>
-</li>
+<li><p>假设线程 A 和线程 B 同时执行 <code>getAndAddInt</code> 操作</p>
+<ol>
+<li> AtomicInteger 里面的 value 原始值为3。即主内存中的 AtomicInteger 的 value 为 3，根据 JMM 模型，线程 A 和线程 B 各自持有一份值为 3 的 value 的副本拷贝到各自的工作内存中；</li>
+<li> 线程 A 通过 <code>getIntVolatile(var1, var2)</code> 拿到 value 的值 3，然后线程A被挂起；</li>
+<li> 线程 B 也通过 <code>getIntVolatile(var1, var2)</code> 拿到 value 的值3，但是线程B没有被挂起，继续执行 <code>compareAndSwapInt</code> 方法比较内存值也为 3，成功修改主内存中的值为 4，线程 B 执行结束。</li>
+<li> 这时线程 A 恢复，执行 <code>compareAndSwapInt</code> 方法比较，发现自己手里的值 3 和主内存中的值 4 不一致（因为变量 value 被 volatile 修饰，所以其它线程对它的修改，线程 A 总是能够看到），说明该值已经被其它线程抢先一步修改过了，那 A 线程本次修改失败，只能再重新从主内存中读取最新的值重新计算一遍了.</li>
+<li> 线程 A 重新获取 value 值，线程A继续执行 <code>compareAndSwapInt</code> 进行比较替换，直到成功。</li>
 </ol>
-<hr>
-<h1 id="ABA-问题"><a href="#ABA-问题" class="headerlink" title="ABA 问题"></a>ABA 问题</h1><blockquote>
-<p>  原子类 AtomicInteger 的 ABA 问题谈谈？原子更新引用知道吗</p>
-</blockquote>
+</li>
+</ul>
 <blockquote>
-<p>  AtomicInteger –&gt; CAS –&gt; UnSafe –&gt; CAS底层思想 –&gt; ABA问题 –&gt; 原子引用更新 –&gt; 如何规避ABA问题</p>
+<p>  <strong>一句话总结</strong></p>
 </blockquote>
-<p>ABA：狸猫换太子</p>
-<p>CAS 算法只关注头和尾，只要头和尾是正确就判断为真，但是中间数据可能被改过多次。正是因为这样，才会出现由于时间差引起的 ABA 问题。</p>
+<ul>
+<li>  <strong>atomicInteger#getAndIncrement</strong> 方法就是 20000 个线程执行 num++，但是每次执行完要写会主内存时要先经过 CAS 校验，校验成功了就写回去，校验不成功则重写读取主内存中的值，重新执行 num++，重写写回主内存，反复执行，直到成功为止。</li>
+</ul>
 <hr>
-<h2 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h2><p><strong>ABA 问题是什么？</strong></p>
-<p>​        ABA 问题是 CAS 算法的遗留问题。</p>
-<p>​        CAS 算法的一个重要前提是需要取出主内存中某时刻的数据并在当前时刻<strong>比较并替换</strong>，由于当前时刻与某一时刻存在时间差，这个时间差就会导致数据的变化。</p>
-<p>​        比如说一个线程 T1 从主内存位置 V 取出 A，这时候另一个线程 T2 也从主内存中取出 A，并且线程 T2 进行了一些操作将值变成了 B，然后线程 T2 又将 V 位置的数据变成 A，这时候线程 T1 进行 CAS 操作时发现内存中仍然是 A，然后线程 T1 操作成功。<strong>尽管线程 T1 的 CAS 操作成功，但不代表这个过程是没有问题的。</strong></p>
+<h1 id="4-CAS-缺点"><a href="#4-CAS-缺点" class="headerlink" title="4    CAS 缺点"></a>4    CAS 缺点</h1><blockquote>
+<ol>
+<li> <strong>循环时间长开销大</strong></li>
+</ol>
+</blockquote>
+<p>​    如果 CAS 失败（数据从线程本地内存写回主内存时一直校验不成功），就会一直进行尝试（自旋）。如果 CAS 长时间一直不成功，可能会给 CPU 带来很大的开销。</p>
+<blockquote>
+<ol start="2">
+<li> <strong>只能保证一个共享变量的原子操作</strong>（源码中就只有一个）</li>
+</ol>
+</blockquote>
+<p>​    当对一个共享变量执行操作时，可以使用 CAS 循环的方式来保证变量的原子性。但是，对于多个共享变量进行操作时，CAS 循环就无法保证操作的原子性，这个时候只能用锁来保证原子性。</p>
+<blockquote>
+<ol start="3">
+<li> <strong>CAS 会导致 ABA 问题</strong></li>
+</ol>
+</blockquote>
+<p>​    CAS 算法只关注头和尾，只要头和尾是正确就判断为真，但是中间数据可能被改过多次。正是因为这样，才会出现由于时间差引起的 ABA 问题。</p>
 <hr>
-<h2 id="代码验证-ABA-的存在性"><a href="#代码验证-ABA-的存在性" class="headerlink" title="代码验证 ABA 的存在性"></a>代码验证 ABA 的存在性</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ABAExist</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> AtomicReference&lt;Integer&gt; atomicReference = <span class="keyword">new</span> AtomicReference&lt;&gt;(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace();&#125;</span><br><span class="line">            <span class="comment">// T1 线程进行一次 ABA 操作（主内存中：100 -&gt; 101 -&gt; 100）</span></span><br><span class="line">            atomicReference.compareAndSet(<span class="number">100</span>, <span class="number">101</span>);</span><br><span class="line">            atomicReference.compareAndSet(<span class="number">101</span>, <span class="number">100</span>);</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="comment">// 保证 T2 线程执行之前，T1 线程已经完成了一次 ABA 操作</span></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace();&#125;</span><br><span class="line">            <span class="keyword">boolean</span> b = atomicReference.compareAndSet(<span class="number">100</span>, <span class="number">999</span>);</span><br><span class="line">            System.out.println(b + <span class="string">&quot;\t&quot;</span> + atomicReference.get());</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="5-ABA-问题"><a href="#5-ABA-问题" class="headerlink" title="5    ABA 问题"></a>5    ABA 问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">AtomicInteger&#x2F;乐观锁</span><br><span class="line">--&gt; CAS</span><br><span class="line">--&gt; UnSafe</span><br><span class="line">--&gt; CAS原语 </span><br><span class="line">--&gt; CAS缺点</span><br><span class="line">--&gt; ABA问题 </span><br><span class="line">--&gt; 原子引用更新 </span><br><span class="line">--&gt; 如何规避ABA问题</span><br></pre></td></tr></table></figure>
 
+
+
+
+
+<h2 id="5-1-是什么？"><a href="#5-1-是什么？" class="headerlink" title="5.1    是什么？"></a>5.1    是什么？</h2><p>“狸猫换太子”</p>
+<blockquote>
+<p>  <strong>ABA 问题是什么？</strong></p>
+</blockquote>
+<ul>
+<li>  ABA 问题是 CAS 算法的遗留问题。</li>
+<li>  CAS 算法的一个重要前提是需要取出主内存中某时刻的数据并在当前时刻<strong>比较并替换</strong>，由于当前时刻与某一时刻存在时间差，这个时间差就会导致数据的变化。</li>
+<li>  比如说一个线程 T1 从主内存位置 V 取出 A，这时候另一个线程 T2 也从主内存中取出 A，并且线程 T2 进行了一些操作将值变成了 B，然后线程 T2 又将 V 位置的数据变成 A，这时候线程 T1 再进行 CAS 操作时发现内存中仍然是 A，然后线程 T1 操作成功。<strong>尽管线程 T1 的 CAS 操作成功，但不代表这个过程是没有问题的。</strong></li>
+</ul>
+<hr>
+<h2 id="5-2-代码验证-ABA-的存在性"><a href="#5-2-代码验证-ABA-的存在性" class="headerlink" title="5.2    代码验证 ABA 的存在性"></a>5.2    代码验证 ABA 的存在性</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ABAExist</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> AtomicReference&lt;Integer&gt; atomicReference = <span class="keyword">new</span> AtomicReference&lt;&gt;(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace();&#125;</span><br><span class="line">            <span class="comment">// T1 线程进行一次 ABA 操作（主内存中：100 -&gt; 101 -&gt; 100）</span></span><br><span class="line">            atomicReference.compareAndSet(<span class="number">100</span>, <span class="number">101</span>);</span><br><span class="line">            atomicReference.compareAndSet(<span class="number">101</span>, <span class="number">100</span>);</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="comment">// 保证 T2 线程执行之前，T1 线程已经完成了一次 ABA 操作</span></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace();&#125;</span><br><span class="line">            <span class="keyword">boolean</span> b = atomicReference.compareAndSet(<span class="number">100</span>, <span class="number">999</span>);</span><br><span class="line">            System.out.println(b + <span class="string">&quot;\t&quot;</span> + atomicReference.get());</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>代码分析</strong></p>
+</blockquote>
 <p><img src="/2021/07/10/CAS/ABA%E5%AD%98%E5%9C%A8.png" alt="ABA存在"></p>
-<p><strong>分析</strong></p>
 <ol>
 <li><p> main 线程开始执行</p>
 </li>
@@ -427,15 +527,20 @@
 </li>
 <li><p> T1 在 1s 后醒来，这时 T2 还需睡眠 2s，在这段时间内，T1 在本地内存中将 <code>100-&gt;101</code>，并写回主内存；然后又将 101 读到本地内存中，修改 <code>101-&gt;100</code>，再次写回主内存。此时主内存中的值为黄色的 100。</p>
 </li>
-<li><p>之后 T2 线程终于睡醒了，将粉色100修改为999，然后准备写回主内存中，在进行 CAS 比较时，发现主内存中的值也为 100，与自己的期望值吻合，T2 就很高兴地将主内存中的 100 修改为 999 了。</p>
-<p> 但是我们会发现，T2 的期望值是粉色的 100，而主内存中的实际值是黄色的100，虽然这二者的值是一样的，但它们并不是同一个对象。这其实是有问题的，也就是我们常说的 “<strong>ABA 问题</strong>“</p>
+<li><p> 之后 T2 线程终于睡醒了，将粉色100 修改为 999，然后准备写回主内存中，在进行 CAS 比较时，发现主内存中的值也为 100，与自己的期望值吻合，T2 就高高兴兴地将主内存中的 100 修改为 999 了。</p>
+</li>
+<li><p> 但是我们会发现，T2 的期望值是粉色的 100，而主内存中的实际值是黄色的 100，虽然这二者的值是一样的，但它们并不是同一个对象。这其实是有问题的，也就是我们常说的 “<strong>ABA 问题</strong>“</p>
 </li>
 </ol>
 <hr>
-<h2 id="如何解决-ABA-问题？"><a href="#如何解决-ABA-问题？" class="headerlink" title="如何解决 ABA 问题？"></a>如何解决 ABA 问题？</h2><p><strong>时间戳的原子引用</strong></p>
-<p>​        CAS 算法中，每次线程从本地内存将数据写回主内存中时，只比较线程的期望值与主内存中的当前值是否相同，而不关心主内存中的当前值是否与线程的期望值是不是同一个值，所以会存在 ABA 问题。</p>
-<p>​        但是如果我们给每个值都加一个版本号，<strong>在线程从本地内存将数据写回主内存时除了比较数据值还要额外增加版本号的比较</strong>，就可以解决 ABA 问题了。</p>
-<p>​        我们来看一个简单的加了时间戳原子引用的例子：</p>
+<h2 id="5-3-如何解决-ABA-问题？"><a href="#5-3-如何解决-ABA-问题？" class="headerlink" title="5.3    如何解决 ABA 问题？"></a>5.3    如何解决 ABA 问题？</h2><blockquote>
+<p>  <strong>时间戳的原子引用</strong></p>
+</blockquote>
+<ul>
+<li>  CAS 算法中，每次线程从本地内存将数据写回主内存中时，只比较线程的期望值与主内存中的当前值是否相同，而不关心主内存中的当前值是否与线程的期望值是不是同一个值，所以会存在 ABA 问题。</li>
+<li>  但是如果我们给每个值都加一个版本号，<strong>在线程从本地内存将数据写回主内存时除了比较数据值还要额外增加版本号的比较</strong>，就可以解决 ABA 问题了。</li>
+</ul>
+<p>我们来看一个简单的加了时间戳原子引用的例子：</p>
 <table>
 <thead>
 <tr>
@@ -481,11 +586,11 @@
 <li> 又过了 2s ，T2 线程终于执行完毕了，将100（1）更新为  999（2），准备将 999（2）写回主内存中。由于当前数据是加了时间戳原子引用，所以写回主内存前需要经过 CAS 验证（包含时间戳的 CAS 验证），即比较 100（1）和 100（3），发现这时候虽然这两个变量值相等，但是版本号却不同，也即期望版本号与主内存中当前数据的版本号不同，所以验证不能通过，即写回主内存的操作失败，这个线程只能再重新读取主内存中的最新值重新在本地内存中计算了。这就可以很好的解决 ABA 问题。</li>
 </ol>
 <hr>
-<h2 id="ABA-问题解决方法（代码）"><a href="#ABA-问题解决方法（代码）" class="headerlink" title="ABA 问题解决方法（代码）"></a>ABA 问题解决方法（代码）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ABAResolve</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> AtomicStampedReference&lt;Integer&gt; atomicStampedInteger = <span class="keyword">new</span> AtomicStampedReference&lt;Integer&gt;(<span class="number">100</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程T1</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第1次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">            <span class="keyword">boolean</span> b1 = atomicStampedInteger.compareAndSet(<span class="number">100</span>, <span class="number">101</span>, atomicStampedInteger.getStamp(), atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第2次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">            <span class="keyword">boolean</span> b2 = atomicStampedInteger.compareAndSet(<span class="number">101</span>, <span class="number">100</span>, atomicStampedInteger.getStamp(), atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第3次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// main线程睡眠 100ms</span></span><br><span class="line">        <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程T2</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">int</span> stamp = atomicStampedInteger.getStamp();</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2第1次从主内存中获取到的版本号========= &quot;</span> + stamp);</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">5000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">boolean</span> result = atomicStampedInteger.compareAndSet(<span class="number">100</span>, <span class="number">999</span>, stamp, atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;修改结果========= &quot;</span> + (result?<span class="string">&quot;成功&quot;</span>:<span class="string">&quot;失败&quot;</span>));</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2第2次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        线程T2第1次从主内存中获取到的版本号========= 1</span></span><br><span class="line"><span class="comment">        线程T1第1次从主内存中获取到的版本号========= 1</span></span><br><span class="line"><span class="comment">        线程T1第2次从主内存中获取到的版本号========= 2</span></span><br><span class="line"><span class="comment">        线程T1第3次从主内存中获取到的版本号========= 3</span></span><br><span class="line"><span class="comment">        修改结果========= 失败</span></span><br><span class="line"><span class="comment">        线程T2第3次从主内存中获取到的版本号========= 3</span></span><br><span class="line"><span class="comment">    * */</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="5-4-ABA-问题解决方法（代码）"><a href="#5-4-ABA-问题解决方法（代码）" class="headerlink" title="5.4    ABA 问题解决方法（代码）"></a>5.4    ABA 问题解决方法（代码）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ABAResolve</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> AtomicStampedReference&lt;Integer&gt; atomicStampedInteger = <span class="keyword">new</span> AtomicStampedReference&lt;Integer&gt;(<span class="number">100</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程T1</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第1次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">            <span class="keyword">boolean</span> b1 = atomicStampedInteger.compareAndSet(<span class="number">100</span>, <span class="number">101</span>, atomicStampedInteger.getStamp(), atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第2次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">            <span class="keyword">boolean</span> b2 = atomicStampedInteger.compareAndSet(<span class="number">101</span>, <span class="number">100</span>, atomicStampedInteger.getStamp(), atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第3次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// main线程睡眠 100ms</span></span><br><span class="line">        <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程T2</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">int</span> stamp = atomicStampedInteger.getStamp();</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2第1次从主内存中获取到的版本号========= &quot;</span> + stamp);</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">5000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">boolean</span> result = atomicStampedInteger.compareAndSet(<span class="number">100</span>, <span class="number">999</span>, stamp, atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2修改结果========= &quot;</span> + (result?<span class="string">&quot;成功&quot;</span>:<span class="string">&quot;失败&quot;</span>));</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2第2次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        线程T2第1次从主内存中获取到的版本号========= 1</span></span><br><span class="line"><span class="comment">        线程T1第1次从主内存中获取到的版本号========= 1</span></span><br><span class="line"><span class="comment">        线程T1第2次从主内存中获取到的版本号========= 2</span></span><br><span class="line"><span class="comment">        线程T1第3次从主内存中获取到的版本号========= 3</span></span><br><span class="line"><span class="comment">        线程T2修改结果========= 失败</span></span><br><span class="line"><span class="comment">        线程T2第3次从主内存中获取到的版本号========= 3</span></span><br><span class="line"><span class="comment">    * */</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p><strong>代码分析：</strong></p>
 <ol>
-<li> 类加载阶段就创建一个<strong>加了时间戳的原子引用对象 atomicStampedInteger</strong>，值为 100，初始版本号为 1。</li>
+<li> 类加载阶段就创建一个<strong>加了时间戳的原子引用对象 atomicStampedInteger</strong>，初始值为 100，初始版本号为 1。</li>
 <li> mian 线程开始执行，保证先创建线程 T1，T1 在复制主内存中的共享变量 100（1）到本地内存中后挂起 1s；</li>
 <li> 在 T1 挂起的时间段内，T2 线程也复制主内存中的变量 100（1）到本地工作内存中，并挂起 5s。</li>
 <li>由于 T2 的休眠时间比较长，这段时间足够 T1 完成线程中的所有工作任务了：<ul>
@@ -497,24 +602,27 @@
 </li>
 <li> 在 T1 线程全部执行完毕后，T2 线程睡醒，将 100（1）改为 999（2），并准备写回到主内存中，在进行 CAS + ABA 校验时，CAS 校验时可以通过的，因为值相等，但 ABA 校验不能通过，因为版本号不一致，T2 线程中版本号为（1），而主内存中版本号则是（3），也就是线程 T2 的期望版本号与主内存中的实际版本号不同，所以导致修改失败。</li>
 </ol>
-<h3 id="AtomicStampedReference-compareAndSet-源码分析"><a href="#AtomicStampedReference-compareAndSet-源码分析" class="headerlink" title="AtomicStampedReference#compareAndSet 源码分析"></a>AtomicStampedReference#compareAndSet 源码分析</h3><p><img src="/2021/07/10/CAS/image-20210711132742276.png" alt="image-20210711132742276"></p>
+<hr>
+<h3 id="5-5-AtomicStampedReference-compareAndSet-源码分析"><a href="#5-5-AtomicStampedReference-compareAndSet-源码分析" class="headerlink" title="5.5    AtomicStampedReference#compareAndSet 源码分析"></a>5.5    AtomicStampedReference#compareAndSet 源码分析</h3><p><img src="/2021/07/10/CAS/image-20210711132742276.png" alt="image-20210711132742276"></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* <span class="meta">@param</span> expectedReference 	某个线程期望的主内存中的对象值（对象引用）</span><br><span class="line">* <span class="meta">@param</span> newReference 			要写回主内存中的更新后的对象值（对象引用）</span><br><span class="line">* <span class="meta">@param</span> expectedStamp 		某个线程期望的主内存中对象值的版本号</span><br><span class="line">* <span class="meta">@param</span> newStamp 				要写回主内存中的更新后的版本号</span><br><span class="line">* <span class="meta">@return</span> &#123;<span class="meta">@code</span> <span class="keyword">true</span>&#125; <span class="keyword">if</span> successful	是否可以将更新内容写回主内存中</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>  可以看到，<strong>只有当期望值和期望版本号都与主内存中当前值和当前版本号吻合的时候，才可以将修改值和修改版本号写回主内存中</strong>。</li>
 </ul>
 <hr>
-<h1 id="原子引用"><a href="#原子引用" class="headerlink" title="原子引用"></a>原子引用</h1><p><strong>原子引用可以让任何一个对象变成具有原子性的对象。</strong></p>
-<p><strong>原子性是在多线程环境下才需要研究的，单线程环境不会出现原子性的问题。</strong></p>
-<hr>
-<h2 id="AtomicReference"><a href="#AtomicReference" class="headerlink" title="AtomicReference"></a>AtomicReference</h2><p>​        在 JUC<code>（java.util.concurrent.atomic）</code> 包中，提供了 AtomicBoolean、AtomicInteger、AtomicLong 等具有原子性的基本数据类型和常见的引用变量类型。</p>
-<p>​        但是对于一些程序员自定义类型的对象，比如，想让一个自定义的 User、Employee 对象具有原子性应该怎么办？我们可以通过 <strong><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a></strong> 实现。</p>
+<h1 id="6-原子引用"><a href="#6-原子引用" class="headerlink" title="6    原子引用"></a>6    原子引用</h1><ul>
+<li>  <strong>原子引用可以让任何一个对象变成具有原子性的对象。</strong></li>
+<li>  <strong>原子性是在多线程环境下才需要研究的，单线程环境不会出现原子性的问题。</strong></li>
+</ul>
+<h2 id="6-1-AtomicReference"><a href="#6-1-AtomicReference" class="headerlink" title="6.1    AtomicReference"></a>6.1    AtomicReference</h2><p>​        在 JUC<code>（java.util.concurrent.atomic）</code> 包中，提供了 AtomicBoolean、AtomicInteger、AtomicLong 等具有原子性的基本数据类型和常见的引用变量类型。</p>
+<p>​        但是对于一些开发人员自定义类型的对象，比如，想让一个自定义的 User、Employee 对象具有原子性应该怎么办？我们可以通过 <strong><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a></strong> 实现。</p>
 <p>​        如图所示，创建 <code>AtomicReference&lt;V&gt;</code> 对象时可以指定一个任意类型的泛型，如果你想让 User 对象具有原子性就指定泛型为 User 类型，如果想让 Student 对象具有原子性就指定泛型为 Student 类型。</p>
 <p><img src="/2021/07/10/CAS/image-20210710211109304.png" alt="image-20210710211109304"></p>
-<p>​        </p>
 <h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p><img src="/2021/07/10/CAS/image-20210710221251706.png" alt="image-20210710221251706"></p>
-<p>​        我们可以把 AtomicReference 看做是普通对象的包装类，一个普通的对象是不具有原子性的，而在使用 AtomicReference 包装后，它就具有了原子性。</p>
-<p>​        AtomicReference 类提供了两个构造函数。我们可以直接在构造函数中包装一个普通对象让其具有原子性；也可以使用无参构造器创建一个 AtomicReference 对象，然后再调用 <strong>AtomicReference#set(V newValue)</strong> 方法让普通对象 V newValue 具有原子性。</p>
+<ul>
+<li>  我们可以把 AtomicReference 看做是普通对象的包装类，一个普通的对象是不具有原子性的，而在使用 AtomicReference 包装后，它就具有了原子性。</li>
+<li>  AtomicReference 类提供了两个构造函数。我们可以直接在构造函数中包装一个普通对象让其具有原子性；也可以使用无参构造器创建一个 AtomicReference 对象，然后再调用 <strong>AtomicReference#set(V newValue)</strong> 方法让普通对象 V newValue 具有原子性。</li>
+</ul>
 <hr>
 <h3 id="代码演示-1"><a href="#代码演示-1" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Person&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// zs、ls 不具备原子性，在多线程环境下线程不安全</span></span><br><span class="line">        Person zs = <span class="keyword">new</span> Person(<span class="string">&quot;张三&quot;</span>, <span class="number">13</span>);</span><br><span class="line">        Person ls = <span class="keyword">new</span> Person(<span class="string">&quot;李四&quot;</span>, <span class="number">24</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 让 zs 对象具备原子性</span></span><br><span class="line">        AtomicReference&lt;Object&gt; atomicReference = <span class="keyword">new</span> AtomicReference&lt;&gt;();</span><br><span class="line">        atomicReference.set(zs);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// CAS 验证</span></span><br><span class="line">        System.out.println(atomicReference.compareAndSet(zs, ls) + <span class="string">&quot;\t&quot;</span> + atomicReference.get());</span><br><span class="line">        System.out.println(atomicReference.compareAndSet(zs, ls) + <span class="string">&quot;\t&quot;</span> + atomicReference.get());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">            输出结果：</span></span><br><span class="line"><span class="comment">                true	Person&#123;name=&#x27;李四&#x27;, age=24&#125;</span></span><br><span class="line"><span class="comment">                false	Person&#123;name=&#x27;李四&#x27;, age=24&#125;</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -522,12 +630,14 @@
 
 
 
-<h2 id="AtomicStampedReference"><a href="#AtomicStampedReference" class="headerlink" title="AtomicStampedReference"></a>AtomicStampedReference</h2><blockquote>
-<p>  可以解决 ABA 问题</p>
+<h2 id="6-2-AtomicStampedReference"><a href="#6-2-AtomicStampedReference" class="headerlink" title="6.2    AtomicStampedReference"></a>6.2    AtomicStampedReference</h2><blockquote>
+<p>  <strong>可以解决 ABA 问题的原子引用</strong></p>
 </blockquote>
 <p><strong>AtomicStampedReference</strong> 和 <strong>AtomicReference</strong> 的作用类似，都是包装一个普通对象让其具有原子性。在不考虑 ABA 问题的前提下，这两个类是类似的。如果考虑 ABA 问题，则应该使用 <strong>AtomicStampedReference</strong> ，因为它既可以解决原子性问题，也可以解决 ABA 问题。</p>
 <h3 id="构造函数-1"><a href="#构造函数-1" class="headerlink" title="构造函数"></a>构造函数</h3><p><img src="/2021/07/10/CAS/image-20210710222525576.png" alt="image-20210710222525576"></p>
-<p>​        <strong>AtomicStampedReference</strong> 没有无参的构造器，所以在创建对象时必须指定要包装的对象和一个 int 类型的版本号。</p>
+<ul>
+<li>  <strong>AtomicStampedReference</strong> 没有无参的构造器，所以在创建对象时必须指定要包装的对象和一个 int 类型的版本号。</li>
+</ul>
 
     </div>
 

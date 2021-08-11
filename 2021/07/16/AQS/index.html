@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式指模板设计模式   为什么学Java –&gt;&gt; JVM JUC –&gt;&gt; AQS –&gt; 前置知识（可重入锁、LockSupport） JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。  是什么   AQS；AbstractQueuedSynchroni">
+<meta name="description" content="前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式指模板设计模式   为什么学Java –&gt;&gt; JVM JUC –&gt;&gt; AQS –&gt; 前置知识（可重入锁、LockSupport） JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。学习 AQS 需要先了解 LockSupport 和 可重入锁。  是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AQS">
 <meta property="og:url" content="http://example.com/2021/07/16/AQS/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式指模板设计模式   为什么学Java –&gt;&gt; JVM JUC –&gt;&gt; AQS –&gt; 前置知识（可重入锁、LockSupport） JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。  是什么   AQS；AbstractQueuedSynchroni">
+<meta property="og:description" content="前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式指模板设计模式   为什么学Java –&gt;&gt; JVM JUC –&gt;&gt; AQS –&gt; 前置知识（可重入锁、LockSupport） JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。学习 AQS 需要先了解 LockSupport 和 可重入锁。  是">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/image-20210716222211925.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/image-20210716222347766.png">
@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/ReentrantLock%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%8101.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/fair_nonfair$tryAcquire.png">
 <meta property="article:published_time" content="2021-07-16T09:27:18.000Z">
-<meta property="article:modified_time" content="2021-07-19T08:31:23.671Z">
+<meta property="article:modified_time" content="2021-08-10T10:19:53.500Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/07/16/AQS/image-20210716222211925.png">
@@ -256,7 +256,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-19 16:31:23" itemprop="dateModified" datetime="2021-07-19T16:31:23+08:00">2021-07-19</time>
+        <time title="Modified: 2021-08-10 18:19:53" itemprop="dateModified" datetime="2021-08-10T18:19:53+08:00">2021-08-10</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -290,7 +290,7 @@
 </blockquote>
 <h1 id="为什么学"><a href="#为什么学" class="headerlink" title="为什么学"></a>为什么学</h1><p>Java –&gt;&gt; JVM</p>
 <p>JUC –&gt;&gt; AQS –&gt; 前置知识（可重入锁、LockSupport）</p>
-<p>JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。</p>
+<p>JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。学习 AQS 需要先了解 LockSupport 和 可重入锁。</p>
 <hr>
 <h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><blockquote>
 <p>  <strong>AQS；AbstractQueuedSynchronizer；抽象队列同步器</strong></p>
@@ -509,8 +509,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/07/18/%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" rel="next" title="线程间通信">
-                  线程间通信 <i class="fa fa-chevron-right"></i>
+                <a href="/2021/07/19/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" rel="next" title="设计模式——代理模式">
+                  设计模式——代理模式 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

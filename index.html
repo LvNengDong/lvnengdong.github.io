@@ -203,6 +203,267 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/10/LockSupport/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/10/LockSupport/" class="post-title-link" itemprop="url">LockSupport</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-10 18:16:57" itemprop="dateCreated datePublished" datetime="2021-08-10T18:16:57+08:00">2021-08-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-11 16:03:05" itemprop="dateModified" datetime="2021-08-11T16:03:05+08:00">2021-08-11</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="1-是什么？"><a href="#1-是什么？" class="headerlink" title="1    是什么？"></a>1    是什么？</h1><img src="/2021/08/10/LockSupport/image-20210716173307046.png" alt="image-20210716173307046" style="zoom:80%;">
+
+<ul>
+<li>  <strong>LockSupport</strong> 是 JUC 包下的一个类，也用于多线程间的通信，<strong>是 <code>wait / notify</code> 机制的改良加强版</strong>。</li>
+<li>  LockSupport 是一个线程阻塞唤醒的工具类，<strong>类中所有的方法都是静态方法</strong>，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。</li>
+<li>  LockSupport 提供了 <code>park()</code> 和 <code>unpark()</code> 方法实现阻塞线程和解除线程阻塞的过程。</li>
+<li>  归根结底，<strong>LockSupport 调用的是 Unsafe 类中的 native 方法</strong>。</li>
+<li>  LockSupport 是用来创建锁和其它同步类的基本线程阻塞原语。</li>
+</ul>
+<p><img src="/2021/08/10/LockSupport/image-20210716173522862.png" alt="image-20210716173522862"></p>
+<hr>
+<h1 id="2-为什么学-LockSupport"><a href="#2-为什么学-LockSupport" class="headerlink" title="2    为什么学 LockSupport"></a>2    为什么学 LockSupport</h1><ol>
+<li> LockSupport 是学习 AQS 的前置知识。</li>
+<li> 传统的 等待/唤醒 机制在某些情况下不适用。</li>
+</ol>
+<hr>
+<h1 id="3-三组让线程等待-唤醒的方法（传统等待-唤醒方法存在的缺陷）"><a href="#3-三组让线程等待-唤醒的方法（传统等待-唤醒方法存在的缺陷）" class="headerlink" title="3    三组让线程等待/唤醒的方法（传统等待/唤醒方法存在的缺陷）"></a>3    三组让线程等待/唤醒的方法（传统等待/唤醒方法存在的缺陷）</h1><blockquote>
+<ol>
+<li> <strong>Object</strong>：<code>wait()</code> 和 <code>notify()</code></li>
+<li> <strong>Condition</strong>：<code>await()</code> 和 <code>signal()</code></li>
+<li> <strong>LockSupport</strong>：<code>park()</code> 和 <code>unpark()</code></li>
+</ol>
+</blockquote>
+<h2 id="3-1-wait-notify"><a href="#3-1-wait-notify" class="headerlink" title="3.1    wait / notify"></a>3.1    wait / notify</h2><blockquote>
+<p>  <strong>Object 类中的 wait 和 notify 方法实现线程的等待和唤醒（wait/notify 限制）</strong></p>
+</blockquote>
+<h3 id="正常"><a href="#正常" class="headerlink" title="正常"></a>正常</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.one;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 18:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行结果：</span></span><br><span class="line"><span class="comment"> *      T1 come in</span></span><br><span class="line"><span class="comment"> *      T1 进入Waiting状态</span></span><br><span class="line"><span class="comment"> *      T2 come in</span></span><br><span class="line"><span class="comment"> *      T2 唤醒Waiting中的线程</span></span><br><span class="line"><span class="comment"> *      T1 被唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="异常1"><a href="#异常1" class="headerlink" title="异常1"></a>异常1</h3><ul>
+<li>  将 <code>wait</code> 和 <code>notify</code> 方法，两个都去掉同步代码块。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            synchronized (obj)&#123;</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            synchronized (obj)&#123;</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>执行结果：</strong></p>
+</blockquote>
+<p><img src="/2021/08/10/LockSupport/image-20210716181135743.png" alt="image-20210716181135743"></p>
+<blockquote>
+<p>  <strong>结论</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>Object 类中的 wait、notify、notifyAll 方法必须放在 synchronized 同步代码（同步代码块或同步方法）中才能正常使用。</strong></li>
+<li>  <strong>编译时不会报错，但是运行时会抛出 <code>IllegalMonitorStateException</code> 异常。</strong>【非法监听状态异常】</li>
+</ul>
+<hr>
+<h3 id="异常2"><a href="#异常2" class="headerlink" title="异常2"></a>异常2</h3><ul>
+<li>  让 <code>notify()</code> 先于 <code>wait()</code> 执行，会导致某个线程进入 Waiting 状态后无法被唤醒，程序无法结束。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();		<span class="comment">// 13行</span></span><br><span class="line"><span class="comment">//                    obj.wait(1000);      // 超时唤醒可以单独出现              </span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>执行结果</strong></p>
+</blockquote>
+<p><img src="/2021/08/10/LockSupport/image-20210716181509277.png" alt="image-20210716181509277"></p>
+<blockquote>
+<p>  <strong>代码分析</strong></p>
+</blockquote>
+<ol>
+<li> 在线程 T1 争夺锁对象之前让其先暂停 1s，让 T2 线程能先于 T1 执行；</li>
+<li> T2 线程先得到锁对象，在控制台上输出指定的内容，并随机唤醒当前锁对象维护的等待队列中的一个线程，将其移动到锁对象的同步队列中，最后执行完毕释放锁对象。（由于当前锁对象的等待队列为空，所以这里并没有发生真正的唤醒线程的过程）</li>
+<li> T1 线程休眠 1s 后醒来获得锁对象，执行代码块中的方法，将指定内容打印输出到控制台上。执行到 13 行 <code>obj.wait();</code> 代码后 T1 线程被挂起。</li>
+<li> 但是由于锁对象的唤醒动作已经先于阻塞动作执行了，并且在此之后锁对象也没有其它的唤醒动作了，所以 T1 会一直陷入 Waiting 状态，该行代码之后的打印输出动作也就不会被执行到。</li>
+<li> 整个进程无法结束。</li>
+</ol>
+<blockquote>
+<p>  <strong>附加</strong></p>
+</blockquote>
+<ul>
+<li>  如果将唤醒操作设置成超时唤醒，则 <strong>wait(long timeout)</strong> 可以不用与 <code>notify()</code> 方法成对出现，也可以不用关心与 <code>notify()</code> 方法出现的顺序。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>  <code>wait()</code> 和 <code>notify()</code> 方法必须<strong>要在 synchronized 同步代码里面</strong>且<strong>成对使用</strong>，且使用时必须先 <code>wait</code> 后 <code>notify</code>。【注意这里的 <code>wait()</code> 方法一定是空参的 wait 方法】</li>
+</ul>
+<hr>
+<h2 id="3-2-await-signal"><a href="#3-2-await-signal" class="headerlink" title="3.2    await  / signal"></a>3.2    await  / signal</h2><blockquote>
+<p>  <strong>Condition 接口中的 await 和 signal 方法实现线程的等待和唤醒</strong></p>
+</blockquote>
+<p>与<code>Object#wait</code>、<code>Object#notify</code> 方法遇到的问题基本一样。</p>
+<h3 id="正常-1"><a href="#正常-1" class="headerlink" title="正常"></a>正常</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.one;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 18:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">        Condition condition = lock.newCondition();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            try &#123; Thread.sleep(1000); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125;</span></span><br><span class="line"></span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line"></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                condition.await();  <span class="comment">// 当前线程被阻塞</span></span><br><span class="line"></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                condition.signal();</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行结果：</span></span><br><span class="line"><span class="comment"> *      T1 come in</span></span><br><span class="line"><span class="comment"> *      T1 进入Waiting状态</span></span><br><span class="line"><span class="comment"> *      T2 come in</span></span><br><span class="line"><span class="comment"> *      T2 唤醒Waiting中的线程</span></span><br><span class="line"><span class="comment"> *      T1 被唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="异常1-1"><a href="#异常1-1" class="headerlink" title="异常1"></a>异常1</h3><p>如果注释掉 lock 和 unlock 方法，程序将会抛出 <strong>IllegalMonitorStateException</strong> 异常。</p>
+<p><img src="/2021/08/10/LockSupport/image-20210716184240464.png" alt="image-20210716184240464"></p>
+<h3 id="异常2-1"><a href="#异常2-1" class="headerlink" title="异常2"></a>异常2</h3><p>如果调换 <code>await()</code> 和 <code>signal()</code> 的执行顺序，将有一个线程永远处于 Waiting 状态，导致线程无法结束。</p>
+<hr>
+<h2 id="3-3-总结"><a href="#3-3-总结" class="headerlink" title="3.3    总结"></a>3.3    总结</h2><blockquote>
+<p>  <strong>传统的 synchronized 和 Lock 实现等待唤醒的约束</strong></p>
+</blockquote>
+<ol>
+<li> 等待和唤醒的方法必须写在锁代码块（synchronized 或 lock）中；</li>
+<li> 必须先等待后唤醒。如果先唤醒后等待，线程将陷入死等。</li>
+</ol>
+<hr>
+<h2 id="3-4-park-unpark"><a href="#3-4-park-unpark" class="headerlink" title="3.4    park / unpark"></a>3.4    park / unpark</h2><blockquote>
+<p>  <strong>LockSupport 类中 park 等待和 unpark 唤醒</strong></p>
+</blockquote>
+<ul>
+<li>  见下文</li>
+</ul>
+<hr>
+<h1 id="4-LockSupport"><a href="#4-LockSupport" class="headerlink" title="4    LockSupport"></a>4    LockSupport</h1><h2 id="4-1-常用方法"><a href="#4-1-常用方法" class="headerlink" title="4.1    常用方法"></a>4.1    常用方法</h2><p>在 LockSupport 中，通过 <code>park()</code> 和 <code>unpark(Thread thread)</code> 方法来实现阻塞和唤醒线程的操作。</p>
+<p><img src="/2021/08/10/LockSupport/image-20210716203238382.png" alt="image-20210716203238382"></p>
+<h2 id="4-2-原理"><a href="#4-2-原理" class="headerlink" title="4.2    原理"></a>4.2    原理</h2><ul>
+<li>  LockSupport 中使用了一种名为 Permit（许可证）的概念来实现阻塞和唤醒线程的功能，Permit 与线程绑定。</li>
+<li>  Permit 只有两个值 1 和 0，默认是 0。</li>
+<li>  0 表示线程没有许可证，1 表示线程拥有许可证。每个线程允许携带的许可证的最大上限是 1。</li>
+</ul>
+<h2 id="4-3-阻塞"><a href="#4-3-阻塞" class="headerlink" title="4.3    阻塞"></a>4.3    阻塞</h2><blockquote>
+<p>  <strong>阻塞方法</strong></p>
+</blockquote>
+<ul>
+<li>  <code>park()</code>：阻塞当前线程（会消耗掉一个许可证）</li>
+<li>  <code>park(Object blocker)</code>：阻塞指定线程（会消耗掉一个许可证）</li>
+</ul>
+<blockquote>
+<p>  <strong>阻塞原理</strong></p>
+</blockquote>
+<p>调用 <code>LockSupport#park()</code> 方法时，底层调用的是 <code>UNSAFE.park()</code> 方法</p>
+<p><img src="/2021/08/10/LockSupport/image-20210716203521212.png" alt="image-20210716203521212"></p>
+<p>默认情况 <code>permit == 0</code>，对于一个新的线程直接调用 <code>park()</code> 方法，该线程没有许可证可以被消耗，所以当前线程会直接阻塞，直到其它线程给该线程颁发一个许可证，即设置该线程的 <code>permit == 1</code> 时，该线程才会从阻塞状态中恢复运行，并消耗掉一个许可证，设置 <code>permit == 0</code> ，继续执行 <code>park()</code> 方法之后的代码。</p>
+<h2 id="4-4-唤醒"><a href="#4-4-唤醒" class="headerlink" title="4.4    唤醒"></a>4.4    唤醒</h2><blockquote>
+<p>  <strong>唤醒方法</strong></p>
+</blockquote>
+<ul>
+<li>   <code>unpark(Thread thread)</code>：唤醒某个线程。</li>
+</ul>
+<blockquote>
+<p>  <strong>唤醒原理</strong></p>
+</blockquote>
+<p><strong>严格意义上将并不是唤醒线程，而是给线程颁发了一个许可证，这个许可证并不会立即被消耗，而是保存在线程实例中，在遇到 park() 方法造成的阻塞时，消耗该许可证可以保证线程不被阻塞。</strong></p>
+<p><img src="/2021/08/10/LockSupport/image-20210716203852897.png" alt="image-20210716203852897"></p>
+<p>调用 <code>unpark(thread)</code> 方法后，设置 thread 线程的许可证 <code>permit == 1</code>（注意多次调用 <code>unpark()</code>，permit 的值不会累加，最高只能是 1），自动唤醒 thread 线程，即之前阻塞中的 <code>LockSupport.park()</code> 方法会立即返回。</p>
+<h2 id="4-5-形象的理解"><a href="#4-5-形象的理解" class="headerlink" title="4.5    形象的理解"></a>4.5    形象的理解</h2><p><em>permit 许可证与线程绑定。</em></p>
+<p><em>permit  是一张万能的通行证，可以提前发给线程，线程每遇到一个关卡（阻塞）就需要消耗一张通行证。如果有则通过关卡，没有则不让通过，即阻塞。且每个线程最大只能持有一张许可证。</em></p>
+<p>线程阻塞时需要消耗凭证（permit），这个凭证每个线程最多只有 1 个。</p>
+<ol>
+<li>当调用 <code>park()</code> 方法时，<ul>
+<li>  如果有凭证，则会直接消耗掉这个凭证，然后程序继续执行。</li>
+<li>  如果无凭证，则必须阻塞等待凭证可用</li>
+</ul>
+</li>
+<li> 而 <code>unpark()</code> 正好相反，它会增加一个凭证，但凭证最多只能有一个，累加无效。</li>
+</ol>
+<hr>
+<h1 id="5-代码"><a href="#5-代码" class="headerlink" title="5    代码"></a>5    代码</h1><blockquote>
+<p>  <strong>LockSupport 的优势</strong></p>
+</blockquote>
+<ul>
+<li>  优势1：不需要锁块，唤醒和阻塞的代码可以写在任意位置。（之前的两组方法都只能写在锁代码块中）</li>
+<li>  优势2：支持 <code>unpark()</code> 可以在 <code>park()</code> 之前执行（先唤醒后等待）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockSupportDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t come in \t&quot;</span> + System.currentTimeMillis());</span><br><span class="line">            LockSupport.park(); <span class="comment">// 阻塞当前线程</span></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t 被唤醒 \t&quot;</span> + System.currentTimeMillis());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>);</span><br><span class="line">        t1.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;唤醒&quot;</span> + t1.getName() + <span class="string">&quot;线程&quot;</span>);</span><br><span class="line">            LockSupport.unpark(t1); </span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>代码分析</strong></p>
+</blockquote>
+<ol>
+<li> T1 线程即使抢到 CPU 资源后也会立即睡眠 3s，所以 T2 线程中的内容必定先于 T1 执行。</li>
+<li> T2 调用 <code>unpark()</code> 方法给 t1 线程发放了一个通行证；</li>
+<li> 3s 后 T1 线程睡醒，接着上次的位置继续执行，打印 <code>... come in ...</code> 在控制台上，接着执行 <code>park()</code> 方法阻塞线程，但是由于此时 T1 线程是有一个通行证 permit 的，所以这个阻塞校验可以通过，紧接着继续执行下面的操作。</li>
+</ol>
+<p><strong>最终的运行结果为</strong>：</p>
+<p><img src="/2021/08/10/LockSupport/image-20210716213814924.png" alt="image-20210716213814924"></p>
+<p>可以看到：<code>LockSupport.park()</code>前后执行时间是一样的，也就说明阻塞没有生效。</p>
+<hr>
+<h1 id="6-面试题"><a href="#6-面试题" class="headerlink" title="6    面试题"></a>6    面试题</h1><blockquote>
+<ol>
+<li> <strong>为什么可以先唤醒线程后阻塞线程？</strong></li>
+</ol>
+</blockquote>
+<p><code>unpark()</code> 方法并不是直接唤醒阻塞的线程，而是相当于给线程发放了一个万能的通行证，只要有这个通行证在，线程在遇到阻塞时，直接消费这个通行证就可以通过而不会被阻塞。</p>
+<blockquote>
+<ol start="2">
+<li> <strong>为什么唤醒两次后阻塞两次，但最终结果还会阻塞线程？</strong></li>
+</ol>
+</blockquote>
+<p>因为一个线程持有通行证的最大数量只能为 1，所以调用两次 <code>unpark()</code> 和调用一次 <code>unpark()</code> 效果一样，最多只能获得一个通行证。而调用两次 <code>park()</code> 则会消费两个通行证，证不够就不能放行。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/09/BlockingQueue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2214,203 +2475,6 @@
 <p>  <strong>如何自定义一个异常类？</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 如何自定义异常类？</span></span><br><span class="line"><span class="comment"> * 1. 继承于现的异常结构：RuntimeException 、Exception</span></span><br><span class="line"><span class="comment"> * 2. 提供全局常量：serialVersionUID</span></span><br><span class="line"><span class="comment"> * 3. 提供重载的构造器</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyException</span> <span class="keyword">extends</span> <span class="title">Exception</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">7034897193246939L</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">()</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(msg);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/25/LeetCode/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/07/25/LeetCode/" class="post-title-link" itemprop="url">LeetCode</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-07-25 21:11:47" itemprop="dateCreated datePublished" datetime="2021-07-25T21:11:47+08:00">2021-07-25</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-02 20:48:36" itemprop="dateModified" datetime="2021-08-02T20:48:36+08:00">2021-08-02</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="斐波那契数列的多种解法"><a href="#斐波那契数列的多种解法" class="headerlink" title="斐波那契数列的多种解法"></a>斐波那契数列的多种解法</h1><blockquote>
-<p>  <strong>斐波那契数列</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* 斐波那契数列</span><br><span class="line">*      F(<span class="number">0</span>) = <span class="number">0</span>，</span><br><span class="line">*      F(<span class="number">1</span>) = <span class="number">1</span></span><br><span class="line">*      F(n) = F(n - <span class="number">1</span>) + F(n - <span class="number">2</span>)，其中 n &gt; <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="普通递归解法（性能最差）"><a href="#普通递归解法（性能最差）" class="headerlink" title="普通递归解法（性能最差）"></a>普通递归解法（性能最差）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.binarySearch;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/25 20:51</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  需求：给出 n计算 F(n)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution509</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fib = fib(<span class="number">6</span>);</span><br><span class="line">        System.out.println(fib);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span>  n;</span><br><span class="line">        <span class="keyword">return</span> fib(n-<span class="number">1</span>)+fib(n-<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h2 id="递归优化解法"><a href="#递归优化解法" class="headerlink" title="递归优化解法"></a>递归优化解法</h2><p>斐波那契数列递归的时候会造成大量的重复计算，比如就计算 <code>fib(6)</code> 为例来看：<code>F(6) = F(5)+F(4)</code>，当我们计算出 F(5) 的时候，F(4) 也已经被计算出来了，如果我们在 F(6) 的右子节点中能够调用已经计算出来的值的话，那么该节点就不用继续向下展开了。这在 n 非常大时，节省的效率很高，接近于一半。</p>
-<p><img src="/2021/07/25/LeetCode/a6f819589ee5e50ec378f2c10835e9a510529bac44618444beb2202486062eee-image.png" alt="image.png"></p>
-<p>我们看到上面相同颜色的都是重复计算，当 n 越大，重复的就会越多。</p>
-<p>所以我们可以使用一个 map 把计算过的值存起来，每次计算的时候先查看 map 中有没有，</p>
-<ul>
-<li>  如果有就表示计算过，直接从 map 中取；</li>
-<li>  如果没有就先计算，计算完之后再把结果存到map中。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.binarySearch;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/25 20:51</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 斐波那契数列</span></span><br><span class="line"><span class="comment"> *      F(0) = 0，</span></span><br><span class="line"><span class="comment"> *      F(1) = 1</span></span><br><span class="line"><span class="comment"> *      F(n) = F(n - 1) + F(n - 2)，其中 n &gt; 1</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  需求：给出 n计算 F(n)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution509</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="keyword">new</span> Solution509().fib(<span class="number">7</span>);</span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  fib(int n, HashMap&lt;Integer, Integer&gt; map) 的重载方法，简化调用</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        HashMap&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">return</span> fib(n, map);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  计算斐波那契数的方法（递归优化）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> n</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> map</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n, HashMap&lt;Integer, Integer&gt; map)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> n;</span><br><span class="line">        <span class="comment">// 每次计算的时候先查看 map 中有没有，</span></span><br><span class="line">        <span class="keyword">if</span> (map.containsKey(n))&#123;</span><br><span class="line">            <span class="comment">// 如果有直接从 map 中取；</span></span><br><span class="line">            <span class="keyword">return</span> map.get(n);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果没有就先计算，计算完之后再把结果存到map中。</span></span><br><span class="line">            <span class="keyword">int</span> value = fib(n - <span class="number">1</span>, map) + fib(n - <span class="number">2</span>, map);</span><br><span class="line">            map.put(n, value);</span><br><span class="line">            <span class="keyword">return</span> value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h2 id="动态规划（非递归解法）"><a href="#动态规划（非递归解法）" class="headerlink" title="动态规划（非递归解法）"></a>动态规划（非递归解法）</h2><ul>
-<li>  想要计算 <strong>F(n)</strong> 的值，就需要知道 F(n-1) 和 F(n-2) 的值；</li>
-<li>  想要计算 F(n-1) 的值，就要知道 F(n-2) 和 F(n-3) 的值；</li>
-<li>  以此类推，一直到 F(0) 和 F(1)。</li>
-</ul>
-<p>​        正如上面讲的普通的递归算法的弊端一样，如果每次 F(n-1) 和 F(n-2) 都独立运算，那么重复计算的值就太多了。上面的优化方式是将已经计算过的值保存到一个 Map  中避免重复运算，而且采用的是<strong>自顶向下</strong>的计算方式，即从 F(n-1) 算到 F(1)。</p>
-<p>​        而所谓的斐波那契的动态规划解法，其实可以看做是一种穷举法。就是将从 F(1) 到 F(n-1) 的所有值都计算出来，保存到一个 List（或者 Map 均可）中，但是这里采用的是<strong>自底向上</strong>，即从 F(1) 计算到 F(n-1) 。</p>
-<p>​        所以，在计算 F(n) 之前，动态规划必定已经建立好了一个从 <code>F(0) ~ F(n-1)</code> 的数组。而结算结果就是从数组中取出对应的元素即可。</p>
-<p><img src="/2021/07/25/LeetCode/1600679988-ufqRKk-file_1600679988859" alt="img"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.binarySearch;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/25 20:51</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 斐波那契数列</span></span><br><span class="line"><span class="comment"> *      F(0) = 0，</span></span><br><span class="line"><span class="comment"> *      F(1) = 1</span></span><br><span class="line"><span class="comment"> *      F(n) = F(n - 1) + F(n - 2)，其中 n &gt; 1</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  需求：给出 n计算 F(n)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution509</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="keyword">new</span> Solution509().fib(<span class="number">0</span>);</span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 动态规划：</span></span><br><span class="line"><span class="comment">     *    自底向上构建一个数组，数组中保存着每个 F(n) 的值</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 从 0~n 共有 n+1 个元素，length 设为 n+2 是为了满足初始条件。</span></span><br><span class="line">        <span class="comment">// 即 f(0)=0 和 f(1)=1 是初始状态，数组的最小长度为 2</span></span><br><span class="line">        <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">2</span>];</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 构建一个保存了从 f(0) 到 f(n) 的数组</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            dp[i] = dp[i - <span class="number">1</span>] + dp[i - <span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<hr>
-<h1 id="977-有序数组的平方（双指针）"><a href="#977-有序数组的平方（双指针）" class="headerlink" title="977. 有序数组的平方（双指针）"></a>977. 有序数组的平方（双指针）</h1><blockquote>
-<p>  <strong>题目</strong>：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/squares-of-a-sorted-array/">977. 有序数组的平方</a></p>
-</blockquote>
-<h3 id="暴力解法"><a href="#暴力解法" class="headerlink" title="暴力解法"></a>暴力解法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.cursor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/26 9:59</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 977. 有序数组的平方</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 需求：</span></span><br><span class="line"><span class="comment"> *      给你一个按 非递减顺序 排序的整数数组 nums，返回 每个数字的平方 组成的新数组，要求也按 非递减顺序 排序。</span></span><br><span class="line"><span class="comment"> *      【非递减顺序 = 递增顺序】</span></span><br><span class="line"><span class="comment"> * 分析：</span></span><br><span class="line"><span class="comment"> *      难点在于如何让新数组也按非递减顺序排列</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 思路一：暴力解法，先计算出所有数字的平方，再进行排序</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution977</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] nums = &#123;-<span class="number">4</span>, -<span class="number">1</span>, <span class="number">0</span>, <span class="number">3</span>, <span class="number">10</span>&#125;;</span><br><span class="line">        <span class="keyword">int</span>[] squares = <span class="keyword">new</span> Solution977().sortedSquares(nums);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> square : squares) &#123;</span><br><span class="line">            System.out.println(square);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(squares);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 暴力解法：</span></span><br><span class="line"><span class="comment">     *  1、计算出 nums 数组中每个元素的平方，保存到一个新的数组中；</span></span><br><span class="line"><span class="comment">     *  2、对新数组按非递减顺序排序</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     *  -- 毋庸置疑，虽然通过了，但时间复杂度很高</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] sortedSquares(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">        <span class="comment">// 1、计算出 nums 数组中每个元素的平方，保存到一个 sq 数组中；</span></span><br><span class="line">        <span class="keyword">int</span>[] sq = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            sq[i] = nums[i]*nums[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2、对 sq 数组排序</span></span><br><span class="line">        Arrays.sort(sq);</span><br><span class="line">        <span class="keyword">return</span> sq;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="双指针-归并排序"><a href="#双指针-归并排序" class="headerlink" title="双指针 + 归并排序"></a>双指针 + 归并排序</h3><blockquote>
-<p>  <strong>思路</strong></p>
-</blockquote>
-<p>暴力解法没有利用【数组 <code>nums</code> 已经按照升序排列】这个条件。显然，</p>
-<ul>
-<li>  如果数组 <code>nums</code> 中的所有数都是非负数，那么将每个数平方后，数组仍然保持升序；</li>
-<li>  如果数组 <code>nums</code> 中的所有数都是负数，那么将每个数平方后，数组会保持降序。</li>
-</ul>
-<p>这样一来，如果我们能够<strong>找到升序数组 <code>nums</code> 中负数与非负数的分界线</strong>，那么就可以用类似<strong>「归并排序」</strong>的方法了。</p>
-<p>​        具体地，我们设 <strong>neg</strong> 为数组 nums 中负数与非负数的分界线。也就是说，<code>nums[0] ~ nums[neg]</code> 均为负数，而 <code>nums[neg+1] ~ nums[n−1]</code> 均为非负数。当我们将数组 nums 中的数平方后，那么 <code>nums[0] ~ nums[neg]</code> 单调递减，<code>nums[neg+1] ~ nums[n−1]</code> 单调递增。 </p>
-<p>​        由于我们得到了两个已经有序的子数组，因此就可以使用归并的方法进行排序了。具体地，使用两个指针分别指向位置  <code>neg</code> 和 <code>neg+1</code>，每次比较两个指针对应的数，选择较小的那个放入答案数组并移动指针。<strong>当某一指针移至边界时，将另一指针还未遍历到的数依次放入答案。</strong></p>
-<p>示例一：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-<span class="number">4</span>,-<span class="number">1</span>,<span class="number">0</span>,<span class="number">3</span>,<span class="number">10</span>]</span><br><span class="line">输出：[<span class="number">0</span>,<span class="number">1</span>,<span class="number">9</span>,<span class="number">16</span>,<span class="number">100</span>]</span><br><span class="line"></span><br><span class="line"><span class="number">1</span>、首先取到正数和负数的分界点 neg;</span><br><span class="line"><span class="number">2</span>、构建一个 nums 数组的平方数组 sq；可以看到neg右边数组升序，neg右边数组降序;</span><br><span class="line"><span class="number">3</span>、用两个指针left和right分别进行正序和倒序遍历，每次取出较小的值放入新的数组中！！！</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/07/25/LeetCode/977%E5%8F%8C%E6%8C%87%E9%92%88.png" alt="977双指针"></p>
-<p>​    </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 归并排序 + 双指针 解法</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    *  1、找到正数与负数的分隔点，</span></span><br><span class="line"><span class="comment">    *  2、由于nums数组是升序的，所以求平方之后，分隔点之前的数降序排列，分隔点之后的数升序排列</span></span><br><span class="line"><span class="comment">    *  3、进行归并排序</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">int</span>[] sortedSquares(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">       <span class="comment">// 1、找到正数与负数的分隔点。(0,neg)&lt;0； [neg, length)&gt;=0</span></span><br><span class="line">       <span class="keyword">int</span> neg = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">           <span class="keyword">if</span> (nums[i] &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">               neg = i;</span><br><span class="line">               <span class="keyword">break</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">// 如果整个数组全为负数，就将 length 设置为分界点</span></span><br><span class="line">           neg = nums.length;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 2、构建 nums 的平方数组 sq</span></span><br><span class="line">       <span class="keyword">int</span>[] sq = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">           sq[i] = nums[i]*nums[i];</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       <span class="comment">// 3、进行归并排序【双指针】【可以利用之前的 nums 数组，该数组现在没有用了，这里为了方便理解新建了数组】</span></span><br><span class="line">       <span class="keyword">int</span> left = neg-<span class="number">1</span>;</span><br><span class="line">       <span class="keyword">int</span> right = neg;</span><br><span class="line">       <span class="keyword">int</span> t = <span class="number">0</span>;  <span class="comment">// 结果值数组的指针</span></span><br><span class="line">       <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">       <span class="keyword">while</span> (left&gt;=<span class="number">0</span> &amp;&amp; right&lt;sq.length)&#123;</span><br><span class="line">           <span class="keyword">if</span> (sq[left] &lt; sq[right])&#123;</span><br><span class="line">               res[t++] = sq[left--];</span><br><span class="line">           &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">               res[t++] = sq[right++];</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">while</span> (left &lt; <span class="number">0</span> &amp;&amp; right &lt; sq.length)&#123;   <span class="comment">// 将右边剩余的元素全部追加到res数组中</span></span><br><span class="line">           res[t++] = sq[right++];</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">while</span> (right &gt; nums.length-<span class="number">1</span> &amp;&amp; left &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">           res[t++] = sq[left--];</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> res;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<h1 id="350-两个数组的交集-II"><a href="#350-两个数组的交集-II" class="headerlink" title="350. 两个数组的交集 II"></a>350. 两个数组的交集 II</h1><blockquote>
-<p>  <strong>题目</strong>：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/">350. 两个数组的交集 II</a></p>
-</blockquote>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums1 &#x3D; [4,9,5,4,4], nums2 &#x3D; [9,4,9,8,4,6]</span><br><span class="line">输出：[9,4,4]</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="HashMap-解法"><a href="#HashMap-解法" class="headerlink" title="HashMap 解法"></a>HashMap 解法</h2><p><img src="/2021/07/25/LeetCode/350%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E4%BA%A4%E9%9B%86.png" alt="350两个数组的交集"></p>
-<p><strong>思路：</strong></p>
-<ol>
-<li><p> 分别为两个数组 nums1 和 nums2 建立各自对应的 HashMap map1 和 map2，其中 key 为数组中出现过的值，value 为数组中 key 值出现过的次数。</p>
-</li>
-<li><p>数组的交集为：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">map1&#123;4,3&#125; ∩ map2&#123;4,2&#125; &#x3D;&#x3D;&gt; &#123;4,2&#125;</span><br><span class="line">map1&#123;9,1&#125; ∩ map2&#123;9,2&#125; &#x3D;&#x3D;&gt; &#123;9,1&#125;</span><br><span class="line">map1&#123;5,1&#125; ∩ map2&#123;null&#125; &#x3D;&#x3D;&gt; null</span><br><span class="line">map1&#123;null&#125; ∩ map2&#123;8,1&#125; &#x3D;&#x3D;&gt; null</span><br><span class="line">map1&#123;null&#125; ∩ map2&#123;6,1&#125; &#x3D;&#x3D;&gt; null</span><br></pre></td></tr></table></figure></li>
-<li><p> 所以得到的最终结果是：<code>[4,4,9]</code></p>
-</li>
-</ol>
-<p><strong>代码思路：</strong></p>
-<p><img src="/2021/07/25/LeetCode/350_fig1.gif" alt="fig1"></p>
-<ol>
-<li> 建立起 nums1 的 hashMap 表；</li>
-<li> 遍历 nums2 ，每发现一个元素在 hashMap 中存在，代表这就是 nums1 和 nums2 的交集部分，将该元素保存到 result 数组中，将 hashMap 中对应的元素个数减一。 </li>
-<li> 这样最后得到的 result 数组就是 nums1 和 nums2 的交集。</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.shuzu;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/27 10:15</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 给定两个数组，编写一个函数来计算它们的交集。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      输入：nums1 = [1,2,2,1], nums2 = [2,2]</span></span><br><span class="line"><span class="comment"> *      输出：[2,2]</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]</span></span><br><span class="line"><span class="comment"> *      输出：[4,9]</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  思路一：暴力解法</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  思路二：HashTable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution350</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] nums1 = &#123;<span class="number">4</span>,<span class="number">9</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">4</span>&#125;;</span><br><span class="line">        <span class="keyword">int</span>[] nums2 = &#123;<span class="number">9</span>,<span class="number">4</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">6</span>&#125;;</span><br><span class="line">        <span class="keyword">int</span>[] res = <span class="keyword">new</span> Solution350().intersect(nums1, nums2);</span><br><span class="line">        System.out.println(Arrays.toString(res));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * HashTable 解法</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] intersect(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2) &#123;</span><br><span class="line">        <span class="comment">// 1、创建一个数组，用于保存交集的数组</span></span><br><span class="line">        <span class="keyword">int</span>[] res;</span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nums1.length &lt; nums2.length)&#123;</span><br><span class="line">            res = <span class="keyword">new</span> <span class="keyword">int</span>[nums1.length];</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            res = <span class="keyword">new</span> <span class="keyword">int</span>[nums2.length];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1、建立 nums1 的 HashMap</span></span><br><span class="line">        HashMap&lt;Integer, Integer&gt; map1 = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums1.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!map1.containsKey(nums1[i]))&#123;</span><br><span class="line">                map1.put(nums1[i], <span class="number">1</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span> (map1.containsKey(nums1[i]))&#123;</span><br><span class="line">                map1.put(nums1[i], map1.get(nums1[i])+<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2、遍历 nums2，与 map1 进行比较</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; nums2.length; j++) &#123;</span><br><span class="line">            <span class="comment">// 存在重复元素</span></span><br><span class="line">            <span class="keyword">if</span> (map1.containsKey(nums2[j]))&#123;</span><br><span class="line">                <span class="keyword">if</span> (map1.get(nums2[j]) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="comment">// 输出到结果数组中</span></span><br><span class="line">                    res[t] = nums2[j];</span><br><span class="line">                    ++t;</span><br><span class="line">                    <span class="comment">// 更新 map</span></span><br><span class="line">                    <span class="keyword">if</span> (map1.get(nums2[j])-<span class="number">1</span> &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                        map1.put(nums2[j], map1.get(nums2[j])-<span class="number">1</span>);</span><br><span class="line">                    &#125;<span class="keyword">else</span> &#123; <span class="comment">// 小于等于0</span></span><br><span class="line">                        map1.remove(nums2[j]);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3、仅截取需要的那一段</span></span><br><span class="line">        <span class="keyword">return</span> Arrays.copyOfRange(res, <span class="number">0</span>, t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="双指针解法"><a href="#双指针解法" class="headerlink" title="双指针解法"></a>双指针解法</h2><p>如果两个数组是有序的，则可以使用双指针的方法得到两个数组的交集。</p>
-<ol>
-<li> 首先对两个数组进行排序，然后使用两个指针遍历两个数组。</li>
-<li> 初始时，两个指针分别指向两个数组的头部。</li>
-<li> 每次比较两个指针指向的两个数组中的数字，如果两个数字不相等，则将指向较小数字的指针右移一位，如果两个数字相等，将该数字添加到答案，并将两个指针都右移一位。</li>
-<li> 当至少有一个指针超出数组范围时，遍历结束。</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    *  双指针解法</span></span><br><span class="line"><span class="comment">    * 1.  首先对两个数组进行排序，然后使用两个指针遍历两个数组。</span></span><br><span class="line"><span class="comment">    * 2.  初始时，两个指针分别指向两个数组的头部。</span></span><br><span class="line"><span class="comment">    * 3.  每次比较两个指针指向的两个数组中的数字，如果两个数字不相等，则将指向较小数字的指针右移一位，</span></span><br><span class="line"><span class="comment">    *     如果两个数字相等，将该数字添加到答案，并将两个指针都右移一位。</span></span><br><span class="line"><span class="comment">    * 4.  当至少有一个指针超出数组范围时，遍历结束。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">int</span>[] intersect(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2) &#123;</span><br><span class="line">       <span class="comment">// 0、创建一个数组，用于保存交集的数组</span></span><br><span class="line">       <span class="keyword">int</span>[] res;</span><br><span class="line">       <span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (nums1.length &lt; nums2.length)&#123;</span><br><span class="line">           res = <span class="keyword">new</span> <span class="keyword">int</span>[nums1.length];</span><br><span class="line">       &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">           res = <span class="keyword">new</span> <span class="keyword">int</span>[nums2.length];</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 1、对两个数组进行排序</span></span><br><span class="line">       Arrays.sort(nums1);</span><br><span class="line">       Arrays.sort(nums2);</span><br><span class="line">       <span class="comment">// 2、初始化两个指针</span></span><br><span class="line">       <span class="keyword">int</span> i = <span class="number">0</span>, j=<span class="number">0</span>;</span><br><span class="line">       <span class="comment">// 3、遍历比较</span></span><br><span class="line">       <span class="keyword">while</span>(i&lt; nums1.length &amp;&amp; j &lt; nums2.length)&#123;</span><br><span class="line">           <span class="comment">// 如果两个数字相等，将该数字添加到答案，并将两个指针都右移一位。</span></span><br><span class="line">           <span class="keyword">if</span> (nums1[i] == nums2[j])&#123;</span><br><span class="line">               res[t] = nums1[i];</span><br><span class="line">               i++;</span><br><span class="line">               j++;</span><br><span class="line">               t++;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">// 如果两个数字不相等，则将指向较小数字的指针右移一位，</span></span><br><span class="line">           <span class="keyword">else</span> <span class="keyword">if</span> (nums1[i] &lt; nums2[j])&#123;</span><br><span class="line">               i++;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">else</span> &#123;</span><br><span class="line">               j++;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="comment">// 4、当至少有一个指针超出数组范围时，遍历结束。</span></span><br><span class="line"></span><br><span class="line">       <span class="comment">// 5、仅截取需要的那一段</span></span><br><span class="line">       <span class="keyword">return</span> Arrays.copyOfRange(res, <span class="number">0</span>, t);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
 
 
       
