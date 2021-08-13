@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-count">136</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,150 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/" class="post-title-link" itemprop="url">SpringBoot与数据访问</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-01-17 23:09:30 / Modified: 23:49:28" itemprop="dateCreated datePublished" datetime="2021-01-17T23:09:30+08:00">2021-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h1><h1 id="1、整合JDBC"><a href="#1、整合JDBC" class="headerlink" title="1、整合JDBC"></a>1、整合JDBC</h1><h1 id="2、整合数据库连接池"><a href="#2、整合数据库连接池" class="headerlink" title="2、整合数据库连接池"></a>2、整合数据库连接池</h1><h1 id="3、整合MyBatis"><a href="#3、整合MyBatis" class="headerlink" title="3、整合MyBatis"></a>3、整合MyBatis</h1><blockquote>
+<ol>
+<li><p>准备MySQL数据库</p>
+</li>
+<li><p>导入依赖</p>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--MyBatis启动依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>	</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--MySql--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>配置数据库连接属性</li>
+</ol>
+</blockquote>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据库连接</span></span><br><span class="line"><span class="meta">spring.datasource.url</span>=<span class="string">jdbc:mysql://localhost:3306/springboot01?serverTimezone=Asia/Shanghai</span></span><br><span class="line"><span class="meta">spring.datasource.username</span>=<span class="string">root</span></span><br><span class="line"><span class="meta">spring.datasource.password</span>=<span class="string">root</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>创建一个Web项目</li>
+</ol>
+</blockquote>
+<p><img src="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/image-20210117233128526.png" alt="image-20210117233128526"></p>
+<blockquote>
+<ol>
+<li>使用<code>@Mapper</code>或<code>@MapperScan</code>将接口扫描装配到容器中</li>
+</ol>
+</blockquote>
+<p>在MyBatis中，需要在类上使用<code>@Mapper</code>注解表明当前类是一个操作数据库的Mapper。</p>
+<p><code>@Mapper</code>注解的源代码中包含了<code>@Component</code>注解。</p>
+<p>对于一个复杂的项目，随着开发迭代的版本越来越多，代码越来越复杂，如果给每新增一个操作数据库的类都添加一次<code>@Mapper</code>注解，显然是非常不方便的，这时候就可以使用<code>@MapperScan</code>注解，该注解可以指定一个包，该包下的所有子类都相当于自动添加了一个<code>@Mapper</code>注解，我们一般把<code>@MapperScan</code>注解添加在SpringBoot的启动类上。</p>
+<ul>
+<li><strong>@Mapper</strong></li>
+</ul>
+<p><img src="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/image-20210117233506600.png" alt="image-20210117233506600"></p>
+<ul>
+<li><strong>@MapperScan</strong></li>
+</ul>
+<p><img src="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/image-20210117233800222.png" alt="image-20210117233800222"></p>
+<blockquote>
+<ol>
+<li>引入全局配置文件和映射配置文件<code>[只有使用Mapper.xml配置文件书写SQL语句时才需要]</code></li>
+</ol>
+<p>官网参考文档：<a target="_blank" rel="noopener" href="https://mybatis.org/mybatis-3/getting-started.html#">https://mybatis.org/mybatis-3/getting-started.html#</a></p>
+</blockquote>
+<p><img src="/2021/01/17/SpringBoot%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE/image-20210117233252854.png" alt="image-20210117233252854"></p>
+<ol>
+<li>设置全局配置文件：<code>mybatis-config.xml</code></li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">configuration</span></span></span><br><span class="line"><span class="meta">        <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>设置映射配置文件：<code>CityMapper.xml</code></li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mapper</span></span></span><br><span class="line"><span class="meta">  <span class="meta-keyword">PUBLIC</span> <span class="meta-string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">  <span class="meta-string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;org.mybatis.example.BlogMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectBlog&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;Blog&quot;</span>&gt;</span></span><br><span class="line">        select * from Blog where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>Spring boot读取MyBatis的两个配置文件</li>
+</ol>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># MyBatis全局配置文件位置</span></span><br><span class="line"><span class="meta">mybatis.config-location</span>=<span class="string">classpath:mybatis/mybatis-config.xml</span></span><br><span class="line"><span class="comment"># MyBatis映射配置文件位置</span></span><br><span class="line"><span class="meta">mybatis.mapper-locations</span>=<span class="string">classpath:mybatis/mapper/*.xml</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>在<code>CityDao接口</code>中定义操作数据库的抽象方法，在<code>CityMapper.xml</code>中定义具体的SQL语句。</li>
+</ol>
+<ol>
+<li>给自定义的实体类统一起别名</li>
+</ol>
+</blockquote>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 给自定义的实体类起别名</span></span><br><span class="line"><span class="meta">mybatis.type-aliases-package</span>=<span class="string">cn.xsyu.dao</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>其它配置</li>
+</ol>
+</blockquote>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#开启MyBatis驼峰式命名规则自动转换功能</span></span><br><span class="line"><span class="meta">mybatis.configuration.map-underscore-to-camel-case</span>=<span class="string">true</span></span><br></pre></td></tr></table></figure>
+<h1 id="4、整合SpringData-JPA"><a href="#4、整合SpringData-JPA" class="headerlink" title="4、整合SpringData JPA"></a>4、整合SpringData JPA</h1>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1958,164 +2102,6 @@
 <li>Map.Entry 类中提供了 <strong>getKey()</strong> 和 <strong>getValue()</strong> 方法。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Map map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;01&quot;</span>, <span class="string">&quot;派大星&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;02&quot;</span>, <span class="string">&quot;海绵宝宝&quot;</span>);</span><br><span class="line">    map.put(<span class="string">&quot;03&quot;</span>, <span class="string">&quot;痞老板&quot;</span>);</span><br><span class="line">	<span class="comment">// </span></span><br><span class="line">    Set&lt;Map.Entry&lt;String, String&gt;&gt; entrySet = map.entrySet();</span><br><span class="line">    Iterator&lt;Map.Entry&lt;String, String&gt;&gt; iterator = entrySet.iterator();</span><br><span class="line">    <span class="keyword">while</span> (iterator.hasNext())&#123;</span><br><span class="line">        Map.Entry&lt;String, String&gt; entry = iterator.next();</span><br><span class="line">        String key = entry.getKey();</span><br><span class="line">        String value = entry.getValue();</span><br><span class="line">        System.out.println(<span class="string">&quot;&#123;&quot;</span>+key+<span class="string">&quot;：&quot;</span>+value+<span class="string">&quot;&#125;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/07/VO%E3%80%81DTO%E3%80%81DO%E3%80%81PO%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/12/07/VO%E3%80%81DTO%E3%80%81DO%E3%80%81PO%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/" class="post-title-link" itemprop="url">VO、DTO、DO、PO的区别与联系</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-12-07 21:52:18" itemprop="dateCreated datePublished" datetime="2020-12-07T21:52:18+08:00">2020-12-07</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-11 23:28:41" itemprop="dateModified" datetime="2021-04-11T23:28:41+08:00">2021-04-11</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="应用分层"><a href="#应用分层" class="headerlink" title="应用分层"></a>应用分层</h1><p>推荐分层结构如下图所示，默认上层依赖于下层，箭头关系表示<strong>可</strong>直接依赖。如：开放API层可以依赖于Web层（Controller层），也可以直接依赖于Service层。</p>
-<p><img src="/2020/12/07/VO%E3%80%81DTO%E3%80%81DO%E3%80%81PO%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB/%E3%80%8AJava%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E5%B5%A9%E5%B1%B1%E7%89%88%EF%BC%89%E3%80%8B.jpg" alt></p>
-<blockquote>
-<p>开放API层</p>
-</blockquote>
-<ul>
-<li>可通过Web层封装成HTTP接口；</li>
-<li>可直接封装Service层接口暴露成RPC接口；</li>
-</ul>
-<blockquote>
-<p>终端显示层</p>
-</blockquote>
-<ul>
-<li>各个端的模板渲染并执行显示的层。如JS渲染，JSP渲染，移动端展示等。</li>
-</ul>
-<blockquote>
-<p>Web层</p>
-</blockquote>
-<ul>
-<li>主要是对访问控制进行转发，各类基本参数校验，或者不复用的业务简单处理等。</li>
-</ul>
-<blockquote>
-<p>Service层</p>
-</blockquote>
-<ul>
-<li>相对具体的业务逻辑服务层</li>
-</ul>
-<blockquote>
-<p>Manager层</p>
-</blockquote>
-<ul>
-<li>通用业务层，它有如下特征：<ol>
-<li>是对Service层通用能力的下沉，如缓存方案、中间件通用处理等；</li>
-<li>与Dao层交互，对多个Dao的组合复用；</li>
-<li>是对第三方平台封装的层。</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>Dao层</p>
-</blockquote>
-<ul>
-<li>数据访问层，与底层MySql、Hbase、OB等进行数据交互。</li>
-</ul>
-<blockquote>
-<p>第三方服务</p>
-</blockquote>
-<ul>
-<li>包括其他部门的RPC服务接口，其他公司的HTTP接口等。如淘宝开放平台、支付宝付款等。</li>
-</ul>
-<blockquote>
-<p>外部数据接口</p>
-</blockquote>
-<ul>
-<li>外部应用数据存储服务提供的接口，多用于数据迁移场景中。</li>
-</ul>
-<hr>
-<h1 id="分层领域的模型规约"><a href="#分层领域的模型规约" class="headerlink" title="分层领域的模型规约"></a>分层领域的模型规约</h1><ul>
-<li><strong>DO</strong>（Data Object）：此对象与数据库表结构一一对应，通过Dao层向上传输数据源对象。</li>
-<li><strong>DTO</strong>（Data Transfer Object）：数据传输对象，Service层或Manager层向外传输的对象。</li>
-<li><strong>BO</strong>（Business Object）：业务对象，可以由Service层输出的封装业务逻辑的对象。</li>
-<li><strong>VO</strong>（View Object）：显示层对象，通常是Web层向模板渲染引擎层传输的对象。</li>
-<li><strong>Query</strong>：数据查询对象，各层接收上层的查询请求。注意超过2个参数的查询封装，禁止使用Map类来传输。</li>
-</ul>
-<h2 id="VO-与-DTO-的区别"><a href="#VO-与-DTO-的区别" class="headerlink" title="VO 与 DTO 的区别"></a>VO 与 DTO 的区别</h2><blockquote>
-<p>既然DTO是Service/Manager层向上层（Web层/开放API层）传递的数据对象，为什么还需要一个VO呢？</p>
-</blockquote>
-<p>对于绝大部分的应用场景来说，DTO和VO的属性值基本上是一致的，而且他们统称都是POJO，因此没有必要多此一举，但不要忘记这是实现层的思维，对于设计层面来说，概念上还是应该存在VO和DTO，因为两者有着本质上的区别，<strong>DTO是Service层与其直接上层（Web层和开放API层）进行数据交互的对象，而VO是Web层与其直接上层（终端显示层和开放API层）进行数据交互的对象</strong>。</p>
-<blockquote>
-<p>例1：</p>
-</blockquote>
-<p>Service层有一个<code>getUser()</code>方法返回一个用户，其中有一个属性是<code>gender</code>，对于服务层来说，只是从语义上定义：1-男性、2-女性、3-未指定，而对于Web层而言，他可能需要用“帅哥”代表男性，“美女”代表女性，“秘密”代表未指定。当然，也可以直接在service返回“帅哥美女”就可实现这一功能。对于大部分的应用来说，这是可以的，但是如果需求客户可以定制化风格，而不同风格对于“性别”的表现方式不一样，又或者这个服务同时供多个客户端使用，而不同的客户端对于表现层的要求有所不同，那么问题就来了。再者，回到设计层面上分析，<strong>从职责单一原则来看，服务层只负责业务，与业务的表现形式无关，因此，它返回的DTO，不应该表现出与表现形式的耦合。</strong></p>
-<h3 id="VO与DTO的应用"><a href="#VO与DTO的应用" class="headerlink" title="VO与DTO的应用"></a>VO与DTO的应用</h3><p>上面只是用了一个简单的例子来说明VO与DTO在概念上的区别，接下来我将会告诉你如何在应用中做出正确的选择。</p>
-<blockquote>
-<p>在以下场景中，我们可以考虑把VO与DTO二合为一（注意：是实现层面）：</p>
-</blockquote>
-<ul>
-<li>当需求非常清晰稳定，而且客户端很明确只有一个的时候，没有必要把VO和DTO区分开来，这时候VO可以退隐，只使用DTO即可。</li>
-</ul>
 
       
     </div>
