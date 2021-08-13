@@ -160,7 +160,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -273,18 +273,12 @@
 </ul>
 <p>@RequestParam案例<br>使用@RequestParm用于绑定controller上的参数，可以是多个参数，也可以是一个Map集合，GET，POST均可。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestParam&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Boolean <span class="title">requestParam</span><span class="params">(<span class="meta">@RequestParam(name = &quot;code&quot;,required = false)</span> String code)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;code:&quot;</span>+code);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>@RequestParm中name属性是指定参数名，required属性默认为ture，表示必传。若为false则为非必传。属性有defaultValue默认值选项，若该参数为null时，会将默认值填充到参数上。<br>在项目中还可以使用map来接收多个参数：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestParam</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
 <p>@RequestBody案例<br>@RequestBody绑定一个实体。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestBody&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">requestBody</span><span class="params">(<span class="meta">@RequestBody</span>  User user)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;user:&quot;</span>+user.getName());</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>@RequestBody也能采用map来接收多个参数。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestBody</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
 <h1 id="RequestBody"><a href="#RequestBody" class="headerlink" title="@RequestBody"></a>@RequestBody</h1><ul>
 <li>不支持GET请求。</li>
 <li>必须要在请求头中申明 content-Type（如application/json）。springMvc通过HandlerAdapter配置的HttpMessageConverters解析httpEntity的数据，并绑定到相应的bean上。</li>

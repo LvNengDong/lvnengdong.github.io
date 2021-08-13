@@ -166,7 +166,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -266,7 +266,7 @@
 <li><a target="_blank" rel="noopener" href="https://github.com/Netflix/Hystrix/wiki">Hystrix官方文档</a></li>
 </ul>
 <h1 id="雪崩效应"><a href="#雪崩效应" class="headerlink" title="雪崩效应"></a>雪崩效应</h1><p>分布式系统环境下，<strong>服务间的依赖</strong>非常常见，一个业务调用通常以来多个基础服务。如下图，当库存服务不可用时，商品服务的请求线程被阻塞，当有大批量请求调用库存服务时，最终可能导致整个商品服务的资源耗尽（主要是线程池资源，虽然库存服务不可用，但是每个商品服务的请求还会占用一个线程，并且因为不会获取到响应，也就不会归还线程，这样当线程池资源耗尽时商品服务就会被阻塞），无法继续对外提供服务。并且这种不可用可能沿请求调用链向上传递，这种现象称为<strong>雪崩效应</strong>。</p>
-<p><img src="/2020/11/07/Hystrix/%E9%9B%AA%E5%B4%A9%E6%95%88%E5%BA%94.png"></p>
+<p><img src="/2020/11/07/Hystrix/%E9%9B%AA%E5%B4%A9%E6%95%88%E5%BA%94.png" alt></p>
 <h2 id="雪崩效应的常见场景"><a href="#雪崩效应的常见场景" class="headerlink" title="雪崩效应的常见场景"></a>雪崩效应的常见场景</h2><blockquote>
 <ul>
 <li>硬件故障</li>
@@ -322,7 +322,7 @@
 <li>近实时的监控指标和配置的修改</li>
 </ul>
 </blockquote>
-<h1 id="Hystrix处理流程"><a href="#Hystrix处理流程" class="headerlink" title="Hystrix处理流程"></a>Hystrix处理流程</h1><p><img src="/2020/11/07/Hystrix/hystrix%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png"></p>
+<h1 id="Hystrix处理流程"><a href="#Hystrix处理流程" class="headerlink" title="Hystrix处理流程"></a>Hystrix处理流程</h1><p><img src="/2020/11/07/Hystrix/hystrix%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt></p>
 <p>Hystrix的整个工作流程如下：</p>
 <blockquote>
 <ol>
@@ -352,45 +352,49 @@
 <h3 id="线程隔离——线程池"><a href="#线程隔离——线程池" class="headerlink" title="线程隔离——线程池"></a>线程隔离——线程池</h3><h3 id="线程隔离——信号量"><a href="#线程隔离——信号量" class="headerlink" title="线程隔离——信号量"></a>线程隔离——信号量</h3><hr>
 <h2 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h2><h3 id="熔断器简介"><a href="#熔断器简介" class="headerlink" title="熔断器简介"></a>熔断器简介</h3><p>在现实生活中，家用电路中都会安装一个保险盒，当负载过载时，保险盒中的保险丝就会自动熔断，保护下游部件不被烧毁。            Hystrix中的熔断器（Circuit Breaker）也是起类似作用。Hystrix在运行过程中回向每个CommandKey对应的熔断器报告成功、失败、超时和拒绝的状态，熔断器维护并统计这些数据，并根据这些信息来决策熔断器是否打开。如果打开，则熔断后续请求，快速返回。            隔一段时间后熔断器尝试半开，放一部分流量请求进来，相当于对依赖服务做一次健康检查，如果请求成功熔断器关闭。</p>
 <h3 id="熔断器配置"><a href="#熔断器配置" class="headerlink" title="熔断器配置"></a>熔断器配置</h3><p>熔断器主要包括以下6个参数：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center"></th>
-<th align="center">参数</th>
-<th align="center">说明</th>
+<th style="text-align:center"></th>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>circuitBreaker.enabled</code></td>
-<td align="center">是否启用熔断器，默认true</td>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center"><code>circuitBreaker.enabled</code></td>
+<td style="text-align:center">是否启用熔断器，默认true</td>
 </tr>
 <tr>
-<td align="center">2</td>
-<td align="center"><code>circuitBreaker.forceOpen</code></td>
-<td align="center">强制打开熔断器，默认false</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center"><code>circuitBreaker.forceOpen</code></td>
+<td style="text-align:center">强制打开熔断器，默认false</td>
 </tr>
 <tr>
-<td align="center">3</td>
-<td align="center"><code>circuitBreaker.forceClosed</code></td>
-<td align="center">强制关闭熔断器，默认false</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center"><code>circuitBreaker.forceClosed</code></td>
+<td style="text-align:center">强制关闭熔断器，默认false</td>
 </tr>
 <tr>
-<td align="center">4</td>
-<td align="center"><code>circuitBreaker.errorThresholdPercentage</code></td>
-<td align="center">错误率阈值，默认值是50%</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center"><code>circuitBreaker.errorThresholdPercentage</code></td>
+<td style="text-align:center">错误率阈值，默认值是50%</td>
 </tr>
 <tr>
-<td align="center">5</td>
-<td align="center"><code>circuitBreaker.requestVolumeThreshold</code></td>
-<td align="center">统计请求的最小数量，默认值是20</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center"><code>circuitBreaker.requestVolumeThreshold</code></td>
+<td style="text-align:center">统计请求的最小数量，默认值是20</td>
 </tr>
 <tr>
-<td align="center">6</td>
-<td align="center"><code>circuitBreaker.sleepWindowMillseconds</code></td>
-<td align="center">半开状态试探睡眠时间，默认值5000ms</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center"><code>circuitBreaker.sleepWindowMillseconds</code></td>
+<td style="text-align:center">半开状态试探睡眠时间，默认值5000ms</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <blockquote>
 <ul>
 <li><code>circuitBreaker.errorThresholdPercentage</code>是错误率的阈值，例如一段时间内有100个请求，其中有54个超时或异常，那么这段时间内的错误率就是54%，大于阈值50%，这种情况下就会触发熔断器打开。</li>
@@ -398,7 +402,7 @@
 <li><code>circuitBreaker.sleepWindowMillseconds</code>的含义是：当熔断器开启5000s之后，会尝试放一部分流量过去进行试探，确定依赖服务是否恢复。</li>
 </ul>
 </blockquote>
-<h3 id="熔断器工作原理"><a href="#熔断器工作原理" class="headerlink" title="熔断器工作原理"></a>熔断器工作原理</h3><p><img src="/2020/11/07/Hystrix/%E7%86%94%E6%96%AD%E5%99%A8%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png"></p>
+<h3 id="熔断器工作原理"><a href="#熔断器工作原理" class="headerlink" title="熔断器工作原理"></a>熔断器工作原理</h3><p><img src="/2020/11/07/Hystrix/%E7%86%94%E6%96%AD%E5%99%A8%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png" alt></p>
 <p>熔断器的工作流程如下：</p>
 <blockquote>
 <ol>
@@ -433,7 +437,7 @@
 <li>正常工作的情况下，客户端请求调用服务API接口：</li>
 </ol>
 <p><img src="/2020/11/07/Hystrix/1525658906255.png" alt="1525658906255"></p>
-<ol start="2">
+<ol>
 <li>当有服务出现异常时，直接进行失败回滚，服务降级处理：</li>
 </ol>
 <p><img src="/2020/11/07/Hystrix/1525658983518.png" alt="1525658983518"></p>

@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="超链接：ArrayList、HashSet、HashMap源码分析  容器：是将多个数据存储到一起，每个数据称为该容器的元素。  数组（Array）    1    是什么   定义     相同类型数据的集合，并使用一个名字命名，通过编号的方式对这些数据进行统一管理。   数组是一种定长、定类型的容器。     数组相关的概念：     数组名   元素   角标、下标、索引   数组的长">
+<meta name="description" content="超链接：ArrayList、HashSet、HashMap源码分析  容器：是将多个数据存储到一起，每个数据称为该容器的元素。  数组（Array） 1    是什么   定义   相同类型数据的集合，并使用一个名字命名，通过编号的方式对这些数据进行统一管理。 数组是一种定长、定类型的容器。     数组相关的概念：   数组名 元素 角标、下标、索引 数组的长度：元素的个数     数组的特点">
 <meta property="og:type" content="article">
 <meta property="og:title" content="容器（数组+集合）">
 <meta property="og:url" content="http://example.com/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="超链接：ArrayList、HashSet、HashMap源码分析  容器：是将多个数据存储到一起，每个数据称为该容器的元素。  数组（Array）    1    是什么   定义     相同类型数据的集合，并使用一个名字命名，通过编号的方式对这些数据进行统一管理。   数组是一种定长、定类型的容器。     数组相关的概念：     数组名   元素   角标、下标、索引   数组的长">
+<meta property="og:description" content="超链接：ArrayList、HashSet、HashMap源码分析  容器：是将多个数据存储到一起，每个数据称为该容器的元素。  数组（Array） 1    是什么   定义   相同类型数据的集合，并使用一个名字命名，通过编号的方式对这些数据进行统一管理。 数组是一种定长、定类型的容器。     数组相关的概念：   数组名 元素 角标、下标、索引 数组的长度：元素的个数     数组的特点">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E5%AE%B9%E5%99%A8.png">
 <meta property="og:image" content="http://example.com/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E6%95%B0%E7%BB%84Array.png">
@@ -173,7 +173,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -276,55 +276,52 @@
     
     <div class="post-body" itemprop="articleBody">
         <ul>
-<li>  <a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/">超链接：ArrayList、HashSet、HashMap源码分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/">超链接：ArrayList、HashSet、HashMap源码分析</a></li>
 </ul>
 <p><strong>容器</strong>：是将多个数据存储到一起，每个数据称为该容器的元素。</p>
-<p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E5%AE%B9%E5%99%A8.png"></p>
-<h1 id="数组（Array）"><a href="#数组（Array）" class="headerlink" title="数组（Array）"></a>数组（Array）</h1><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E6%95%B0%E7%BB%84Array.png" alt="数组Array" style="zoom: 50%;">
-
-
-
+<p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E5%AE%B9%E5%99%A8.png" alt></p>
+<h1 id="数组（Array）"><a href="#数组（Array）" class="headerlink" title="数组（Array）"></a>数组（Array）</h1><p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E6%95%B0%E7%BB%84Array.png" alt="数组Array" style="zoom: 50%;"></p>
 <h2 id="1-是什么"><a href="#1-是什么" class="headerlink" title="1    是什么"></a>1    是什么</h2><blockquote>
 <p>  <strong>定义</strong></p>
 </blockquote>
 <ul>
-<li>  相同类型数据的集合，并使用一个名字命名，通过编号的方式对这些数据进行统一管理。</li>
-<li>  数组是一种<strong>定长</strong>、<strong>定类型</strong>的容器。</li>
+<li>相同类型数据的集合，并使用一个名字命名，通过编号的方式对这些数据进行统一管理。</li>
+<li>数组是一种<strong>定长</strong>、<strong>定类型</strong>的容器。</li>
 </ul>
 <blockquote>
 <p>  <strong>数组相关的概念：</strong></p>
 </blockquote>
 <ul>
-<li>  数组名</li>
-<li>  元素</li>
-<li>  角标、下标、索引</li>
-<li>  数组的长度：元素的个数</li>
+<li>数组名</li>
+<li>元素</li>
+<li>角标、下标、索引</li>
+<li>数组的长度：元素的个数</li>
 </ul>
 <blockquote>
 <p>  <strong>数组的特点：</strong></p>
 </blockquote>
 <ol>
-<li> 数组的长度一旦确定，就不能修改。</li>
-<li> 数组中元素的数据类型一致。</li>
-<li> 在内存中占用一整块连续的空间。</li>
+<li>数组的长度一旦确定，就不能修改。</li>
+<li>数组中元素的数据类型一致。</li>
+<li>在内存中占用一整块连续的空间。</li>
 </ol>
 <hr>
 <h2 id="2-分类"><a href="#2-分类" class="headerlink" title="2    分类"></a>2    分类</h2><blockquote>
 <p>  <strong>数组分类</strong></p>
 </blockquote>
 <ul>
-<li>  按维数划分：一维数组、二维数组、…..</li>
-<li>  按元素类型划分：基本数据类型元素的数组，引用数据类型元素的数组</li>
+<li>按维数划分：一维数组、二维数组、…..</li>
+<li>按元素类型划分：基本数据类型元素的数组，引用数据类型元素的数组</li>
 </ul>
 <h3 id="一维数组"><a href="#一维数组" class="headerlink" title="一维数组"></a>一维数组</h3><blockquote>
 <p>  <strong>数组的默认初始值</strong>：</p>
 </blockquote>
 <ul>
-<li>  数组元素是整型：0</li>
-<li>  数组元素是浮点型：0.0</li>
-<li>  <strong>数组元素是char型：0 或 ‘\u0000’，而非’0’</strong></li>
-<li>  数组元素是boolean型：false</li>
-<li>  数组元素是引用数据类型：null</li>
+<li>数组元素是整型：0</li>
+<li>数组元素是浮点型：0.0</li>
+<li><strong>数组元素是char型：0 或 ‘\u0000’，而非’0’</strong></li>
+<li>数组元素是boolean型：false</li>
+<li>数组元素是引用数据类型：null</li>
 </ul>
 <h3 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h3><blockquote>
 <p>  <strong>如何理解二维数组？</strong></p>
@@ -334,39 +331,30 @@
 <p>  <strong>二维数组的属性</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] arr[] = <span class="keyword">new</span> <span class="keyword">int</span>[][]&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">9</span>,<span class="number">10</span>&#125;,&#123;<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;&#125;;</span><br><span class="line"></span><br><span class="line">System.out.println(arr.length);		<span class="comment">// 3</span></span><br><span class="line">System.out.println(arr[<span class="number">0</span>].length);	<span class="comment">// 3</span></span><br><span class="line">System.out.println(arr[<span class="number">1</span>].length);	<span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
 <p>  <strong>二维数组元素的默认初始化值</strong></p>
 </blockquote>
 <p><strong>规定</strong>：二维数组分为外层数组的元素，内层数组的元素</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[][] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>][<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">外层元素：arr[<span class="number">0</span>], arr[<span class="number">1</span>]等</span><br><span class="line">内层元素：arr[<span class="number">0</span>][<span class="number">0</span>], arr[<span class="number">1</span>][<span class="number">2</span>]等;</span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>二维数组元素的默认初始化值</strong> </p>
 <ol>
 <li>针对于初始化方式一：比如：<code>int[][] arr = new int[4][3];</code><ul>
-<li>  外层元素的初始值为：地址值</li>
-<li>  内层元素的初始值为：与一维数组初始化情况相同</li>
+<li>外层元素的初始值为：地址值</li>
+<li>内层元素的初始值为：与一维数组初始化情况相同</li>
 </ul>
 </li>
 <li>针对于初始化方式二：比如：<code>int[][] arr = new int[4][];</code><ul>
-<li>  外层元素的初始化值为：null；【因为外层数组的元素也是一个引用类型，所以初始值为null】</li>
-<li>  内层元素的初始化值为：不能调用，否则报错。</li>
+<li>外层元素的初始化值为：null；【因为外层数组的元素也是一个引用类型，所以初始值为null】</li>
+<li>内层元素的初始化值为：不能调用，否则报错。</li>
 </ul>
 </li>
 </ol>
 <p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/image-20210801174210274.png" alt="image-20210801174210274"></p>
 <hr>
 <h2 id="3-创建方式（3种）"><a href="#3-创建方式（3种）" class="headerlink" title="3    创建方式（3种）"></a>3    创建方式（3种）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方式1：</span></span><br><span class="line">数组存储的数据类型[] 数组名字 = <span class="keyword">new</span> 数组存储的数据类型[长度]    <span class="comment">// []表示数组</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment">// 方式2：</span></span><br><span class="line">数据类型[] 数组名字 = <span class="keyword">new</span> 数据类型[]&#123;元素<span class="number">1</span>，元素<span class="number">2</span>，...&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式3：</span></span><br><span class="line">数据类型[] 数组名字 = &#123;元素<span class="number">1</span>，元素<span class="number">2</span>，...&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <hr>
 <h2 id="4-数组的成员"><a href="#4-数组的成员" class="headerlink" title="4    数组的成员"></a>4    数组的成员</h2><h3 id="4-1-索引"><a href="#4-1-索引" class="headerlink" title="4.1    索引"></a>4.1    索引</h3><ul>
-<li>数组会自动为其中的每个元素分配一个**索引(index)**，索引从0开始。</li>
+<li>数组会自动为其中的每个元素分配一个<strong>索引(index)</strong>，索引从0开始。</li>
 </ul>
 <blockquote>
 <p>   <strong>索引的作用：</strong></p>
@@ -377,9 +365,6 @@
 <li>为数组中的元素赋值。</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 访问数组中的元素</span></span><br><span class="line">数据类型 变量名 = 数组名[索引]</span><br><span class="line"><span class="comment">// 为数组中的元素赋值。</span></span><br><span class="line">数组名[索引]=数值：为组中的元素赋值</span><br></pre></td></tr></table></figure>
-
-
-
 <hr>
 <h3 id="4-2-数组的长度属性"><a href="#4-2-数组的长度属性" class="headerlink" title="4.2    数组的长度属性"></a>4.2    数组的长度属性</h3><ul>
 <li><code>length</code>是数组类中的一个属性。数组的长度是固定的，可以通过数组的长度属性<code>length</code>访问到数组的长度。</li>
@@ -387,8 +372,7 @@
 </ul>
 <hr>
 <h2 id="5-数组的内存布局"><a href="#5-数组的内存布局" class="headerlink" title="5    数组的内存布局"></a>5    数组的内存布局</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>];</span><br><span class="line">        System.out.println(arr);    <span class="comment">// [I@5fd0d5ae  ；arr数组在堆内存中的地址，存储在方法栈中</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">3</span>; i++)&#123;</span><br><span class="line">            System.out.println(arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E5%86%85%E5%AD%98%E5%9B%BE.png"></p>
+<p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E5%86%85%E5%AD%98%E5%9B%BE.png" alt></p>
 <blockquote>
 <p>  程序的执行流程：</p>
 </blockquote>
@@ -404,14 +388,11 @@
 </ol>
 <hr>
 <h2 id="6-数组中常见的操作"><a href="#6-数组中常见的操作" class="headerlink" title="6    数组中常见的操作"></a>6    数组中常见的操作</h2><h3 id="6-1-通过下标存取"><a href="#6-1-通过下标存取" class="headerlink" title="6.1    通过下标存取"></a>6.1    通过下标存取</h3><h3 id="6-2-遍历"><a href="#6-2-遍历" class="headerlink" title="6.2    遍历"></a>6.2    遍历</h3><ol>
-<li> for 循环</li>
-<li> 增强 for 循环：<code>for-each</code></li>
-<li> <strong>注意</strong>：数组不能使用迭代器<code>Iterator</code>遍历，因为 Array 类没有实现<code>Iterable</code>接口。</li>
+<li>for 循环</li>
+<li>增强 for 循环：<code>for-each</code></li>
+<li><strong>注意</strong>：数组不能使用迭代器<code>Iterator</code>遍历，因为 Array 类没有实现<code>Iterable</code>接口。</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</span><br><span class="line">        <span class="comment">// 1.遍历数组，给数组赋值。</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">            arr[i] = <span class="keyword">new</span> Random().nextInt(<span class="number">100</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.遍历数组，查看所有元素</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">            System.out.println(arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.遍历数组，获取最大值。</span></span><br><span class="line">        <span class="keyword">int</span> max = arr[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;arr.length; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (max&lt;arr[i])&#123;</span><br><span class="line">                max = arr[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(max);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4.数组反转。【数组的最远端元素互换位置】</span></span><br><span class="line">        <span class="keyword">int</span> temp;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> start=<span class="number">0</span>, end=arr.length-<span class="number">1</span>; start&lt;end; start++,end--)&#123;</span><br><span class="line">            temp = arr[start];</span><br><span class="line">            arr[start] = arr[end];</span><br><span class="line">            arr[end] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(Arrays.toString(arr););</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <hr>
 <h2 id="7-数组中常见的异常"><a href="#7-数组中常见的异常" class="headerlink" title="7    数组中常见的异常"></a>7    数组中常见的异常</h2><ol>
 <li><p>数组下标越界异常</p>
@@ -429,131 +410,133 @@
 <h2 id="8-数组工具类：Arrays"><a href="#8-数组工具类：Arrays" class="headerlink" title="8    数组工具类：Arrays"></a>8    数组工具类：Arrays</h2><blockquote>
 <p><strong>java.util.Arrays</strong>：此类包含了用来操作数组的各种方法。 该类中所有的方法均为静态方法，可通过类名直接调用。</p>
 </blockquote>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="left">方法</th>
-<th align="left">说明</th>
+<th style="text-align:left">方法</th>
+<th style="text-align:left">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="left"><code>String toString（int[] a）</code></td>
-<td align="left">返回指定数组内容的字符串表示形式。</td>
+<tbody>
+<tr>
+<td style="text-align:left"><code>String toString（int[] a）</code></td>
+<td style="text-align:left">返回指定数组内容的字符串表示形式。</td>
 </tr>
 <tr>
-<td align="left"><code>void sort（int[] a）</code></td>
-<td align="left">对<code>int[] a</code>数组进行升序排序</td>
+<td style="text-align:left"><code>void sort（int[] a）</code></td>
+<td style="text-align:left">对<code>int[] a</code>数组进行升序排序</td>
 </tr>
 <tr>
-<td align="left"><code>boolean equals(int[] a,int[] b)</code></td>
-<td align="left">判断两个数组是否相等</td>
+<td style="text-align:left"><code>boolean equals(int[] a,int[] b)</code></td>
+<td style="text-align:left">判断两个数组是否相等</td>
 </tr>
 <tr>
-<td align="left"><code>void fill(int[] a,int val)</code></td>
-<td align="left">将指定值填充到数组之中（数组中的全部元素都用该值填充）</td>
+<td style="text-align:left"><code>void fill(int[] a,int val)</code></td>
+<td style="text-align:left">将指定值填充到数组之中（数组中的全部元素都用该值填充）</td>
 </tr>
 <tr>
-<td align="left"><code>int binarySearch(int[] a,int key)</code></td>
-<td align="left">二分查找某个元素</td>
+<td style="text-align:left"><code>int binarySearch(int[] a,int key)</code></td>
+<td style="text-align:left">二分查找某个元素</td>
 </tr>
 <tr>
-<td align="left"><code>T[] copyOf(T[] original, int newLength)</code></td>
-<td align="left">数组复制</td>
+<td style="text-align:left"><code>T[] copyOf(T[] original, int newLength)</code></td>
+<td style="text-align:left">数组复制</td>
 </tr>
 <tr>
-<td align="left">……</td>
-<td align="left">……</td>
+<td style="text-align:left">……</td>
+<td style="text-align:left">……</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <hr>
 <h1 id="数组-vs-集合"><a href="#数组-vs-集合" class="headerlink" title="数组 vs. 集合"></a>数组 vs. 集合</h1><h2 id="1-集合与数组存储数据概述"><a href="#1-集合与数组存储数据概述" class="headerlink" title="1    集合与数组存储数据概述"></a>1    集合与数组存储数据概述</h2><ul>
-<li>  集合、数组都是对多个数据进行存储操作的结构，简称 Java 容器。</li>
-<li>  <strong>说明：</strong>此时的存储，主要指的是内存层面的存储，不涉及到持久化的存储（.txt,.jpg,.avi，数据库中)</li>
+<li>集合、数组都是对多个数据进行存储操作的结构，简称 Java 容器。</li>
+<li><strong>说明：</strong>此时的存储，主要指的是内存层面的存储，不涉及到持久化的存储（.txt,.jpg,.avi，数据库中)</li>
 </ul>
 <h2 id="2-为什么要有集合？"><a href="#2-为什么要有集合？" class="headerlink" title="2    为什么要有集合？"></a>2    为什么要有集合？</h2><ul>
-<li>  为了解决数组存储数据方面的弊端。</li>
+<li>为了解决数组存储数据方面的弊端。</li>
 </ul>
 <hr>
 <h2 id="3-数组存储的弊端"><a href="#3-数组存储的弊端" class="headerlink" title="3    数组存储的弊端"></a>3    数组存储的弊端</h2><ol>
-<li> 一旦初始化以后，其长度就不可修改；</li>
-<li> 数组中提供的方法非常限，对于添加、删除、插入数据等操作，非常不便，同时效率不高；</li>
-<li> 获取数组中<strong>实际元素</strong>的个数的需求，数组没有现成的属性或方法可用；</li>
-<li> 数组存储的数据是可重复的。对于不可重复的需求，不能满足。</li>
+<li>一旦初始化以后，其长度就不可修改；</li>
+<li>数组中提供的方法非常限，对于添加、删除、插入数据等操作，非常不便，同时效率不高；</li>
+<li>获取数组中<strong>实际元素</strong>的个数的需求，数组没有现成的属性或方法可用；</li>
+<li>数组存储的数据是可重复的。对于不可重复的需求，不能满足。</li>
 </ol>
 <p><strong>总结：长度固定、类型固定、功能少。</strong></p>
 <hr>
-<h2 id="4-集合和数组的区别："><a href="#4-集合和数组的区别：" class="headerlink" title="4    集合和数组的区别："></a>4    集合和数组的区别：</h2><table>
+<h2 id="4-集合和数组的区别："><a href="#4-集合和数组的区别：" class="headerlink" title="4    集合和数组的区别："></a>4    集合和数组的区别：</h2><div class="table-container">
+<table>
 <thead>
 <tr>
-<th align="center"></th>
-<th align="left">数组</th>
+<th style="text-align:center"></th>
+<th style="text-align:left">数组</th>
 <th>集合</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="left">长度是固定的</td>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">长度是固定的</td>
 <td>长度是可变的</td>
 </tr>
 <tr>
-<td align="center">2</td>
-<td align="left">只能存储同一类型的元素</td>
+<td style="text-align:center">2</td>
+<td style="text-align:left">只能存储同一类型的元素</td>
 <td>可以存储不同类型的元素[但不建议]</td>
 </tr>
 <tr>
-<td align="center">3</td>
-<td align="left">可以存储任意类型的数据</td>
+<td style="text-align:center">3</td>
+<td style="text-align:left">可以存储任意类型的数据</td>
 <td>只能存储引用类型数据对象（即存储基础类型数据时会自动装箱）</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <hr>
 <h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/image-20210801183135587.png" alt="image-20210801183135587"></p>
 <h2 id="迭代器接口：Iterable"><a href="#迭代器接口：Iterable" class="headerlink" title="迭代器接口：Iterable"></a>迭代器接口：Iterable</h2><h3 id="1-遍历Collection的两种方式"><a href="#1-遍历Collection的两种方式" class="headerlink" title="1    遍历Collection的两种方式"></a>1    遍历Collection的两种方式</h3><blockquote>
 <ol>
-<li> <strong>使用迭代器 Iterator</strong></li>
-<li> <strong>for-each循环（或增强for循环）</strong></li>
+<li><strong>使用迭代器 Iterator</strong></li>
+<li><strong>for-each循环（或增强for循环）</strong></li>
 </ol>
 </blockquote>
 <ul>
-<li>  使用<code>for-each</code>循环遍历不需要实现 <strong>Iterable</strong> 接口，所以数组和集合都可以使用 for-each 遍历；</li>
-<li>  <strong>数组可以使用<code>for-each</code>循环遍历，但是数组不能使用<code>iterator</code>迭代器遍历，因为其没有实现 Iterable 接口</strong>。</li>
+<li>使用<code>for-each</code>循环遍历不需要实现 <strong>Iterable</strong> 接口，所以数组和集合都可以使用 for-each 遍历；</li>
+<li><strong>数组可以使用<code>for-each</code>循环遍历，但是数组不能使用<code>iterator</code>迭代器遍历，因为其没有实现 Iterable 接口</strong>。</li>
 </ul>
 <h3 id="2-Iterable-接口"><a href="#2-Iterable-接口" class="headerlink" title="2    Iterable 接口"></a>2    Iterable 接口</h3><h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><ul>
-<li>  <code>Collection接口</code> 是 <code>Iterable接口</code>的子接口。</li>
-<li>  Iterator 对象称为迭代器(设计模式的一种)，主要用于遍历 Collection 集合中的元素。</li>
-<li>  GOF 给迭代器模式的定义为：提供一种方法访问一个容器(container)对象中各个元素，而又不需暴露该对象的内部细节。迭代器模式，就是为容器而生。</li>
+<li><code>Collection接口</code> 是 <code>Iterable接口</code>的子接口。</li>
+<li>Iterator 对象称为迭代器(设计模式的一种)，主要用于遍历 Collection 集合中的元素。</li>
+<li>GOF 给迭代器模式的定义为：提供一种方法访问一个容器(container)对象中各个元素，而又不需暴露该对象的内部细节。迭代器模式，就是为容器而生。</li>
 </ul>
 <h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul>
-<li>  遍历集合Collectiton元素</li>
+<li>遍历集合Collectiton元素</li>
 </ul>
 <h4 id="如何获取实例"><a href="#如何获取实例" class="headerlink" title="如何获取实例"></a>如何获取实例</h4><ul>
-<li>  通过 <strong>Collection#iterator()</strong> 方法返回一个迭代器实例。</li>
+<li>通过 <strong>Collection#iterator()</strong> 方法返回一个迭代器实例。</li>
 </ul>
 <h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Iterator iterator = coll.iterator();</span><br><span class="line"><span class="comment">// hasNext()：判断是否还有下一个元素</span></span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">    <span class="comment">// next()：①指针下移  ②将下移以后集合位置上的元素返回</span></span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/image-20210802102325927.png" alt="image-20210802102325927"></p>
 <h4 id="接口源码"><a href="#接口源码" class="headerlink" title="接口源码"></a>接口源码</h4><blockquote>
 <p>  <strong>Iterable 接口的源码</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*	Iterable接口的源码</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Iterable</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function">Iterator&lt;T&gt; <span class="title">iterator</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">forEach</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> T&gt; action)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(action);</span><br><span class="line">        <span class="keyword">for</span> (T t : <span class="keyword">this</span>) &#123;</span><br><span class="line">            action.accept(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">default</span> Spliterator&lt;T&gt; <span class="title">spliterator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Spliterators.spliteratorUnknownSize(iterator(), <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>  <code>Iterable</code> 接口中有一个成员方法 <strong>iterator()<strong>，该方法的作用是返回一个<code>Iterator实例</code>，这个实例被称为</strong>迭代器</strong>。</li>
-<li>  所有实现了<code>Iterable接口</code>的类必须重写<code>iterator()</code>方法，通过该方法可以获得一个<code>迭代器</code>，通过<code>迭代器</code>中的方法可以遍历集合。</li>
+<li><code>Iterable</code> 接口中有一个成员方法 <strong>iterator()</strong>，该方法的作用是返回一个<code>Iterator实例</code>，这个实例被称为<strong>迭代器</strong>。</li>
+<li>所有实现了<code>Iterable接口</code>的类必须重写<code>iterator()</code>方法，通过该方法可以获得一个<code>迭代器</code>，通过<code>迭代器</code>中的方法可以遍历集合。</li>
 </ul>
 <blockquote>
 <p>  <strong>迭代器（Iterator）接口源码：</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*	Iterator接口的源码（部分）</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Iterator</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">E <span class="title">next</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">forEachRemaining</span><span class="params">(Consumer&lt;? <span class="keyword">super</span> E&gt; action)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(action);</span><br><span class="line">        <span class="keyword">while</span> (hasNext())</span><br><span class="line">            action.accept(next());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>  迭代器（Iterator）接口中定义了 4 个方法，常用的有 3 个</li>
+<li>迭代器（Iterator）接口中定义了 4 个方法，常用的有 3 个</li>
 </ul>
 <hr>
 <h3 id="3-Iterator-接口"><a href="#3-Iterator-接口" class="headerlink" title="3    Iterator 接口"></a>3    Iterator 接口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java.util.Iterator&lt;E&gt;;	</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Iterator</span>&lt;<span class="title">E</span>&gt;	// 接口</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h4 id="说明-1"><a href="#说明-1" class="headerlink" title="说明"></a>说明</h4><p>迭代是获取 Collection 集合中元素的通用方式。</p>
 <ol>
 <li>在取出元素之前要先判断集合中有没有元素，如果有，就把这个元素取出来，</li>
@@ -564,47 +547,49 @@
 <li>它的<strong>内部原理其实是一个Iterator迭代器</strong>，在遍历的过程中，不能对集合中的元素进行增删操作。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(元素的数据类型 变量名 : Collection集合or数组)&#123;</span><br><span class="line">    <span class="comment">// 操作代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="4-操作"><a href="#4-操作" class="headerlink" title="4    操作"></a>4    操作</h3><blockquote>
 <ol>
-<li> <strong>获取迭代器对象；</strong></li>
+<li><strong>获取迭代器对象；</strong></li>
 </ol>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Iterator&lt;E&gt; it = Collection对象.iterator()</span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<ol start="2">
-<li> <strong>Iterator 接口中的方法：</strong></li>
+<ol>
+<li><strong>Iterator 接口中的方法：</strong></li>
 </ol>
 </blockquote>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">ID</th>
-<th align="center">方法</th>
-<th align="center">返回值</th>
-<th align="left">说明</th>
+<th style="text-align:center">ID</th>
+<th style="text-align:center">方法</th>
+<th style="text-align:center">返回值</th>
+<th style="text-align:left">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>hasNext()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="left">如果仍有元素可以迭代，则返回 <code>true</code></td>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center"><code>hasNext()</code></td>
+<td style="text-align:center"><code>boolean</code></td>
+<td style="text-align:left">如果仍有元素可以迭代，则返回 <code>true</code></td>
 </tr>
 <tr>
-<td align="center">2</td>
-<td align="center"><code>next()</code></td>
-<td align="center"><code>E</code></td>
-<td align="left">返回迭代的下一个元素</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center"><code>next()</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:left">返回迭代的下一个元素</td>
 </tr>
 <tr>
-<td align="center">3</td>
-<td align="center"><code>remove()</code></td>
-<td align="center"><code>void</code></td>
-<td align="left">从迭代器指向的 collection 中移除迭代器返回的最后一个元素</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center"><code>remove()</code></td>
+<td style="text-align:center"><code>void</code></td>
+<td style="text-align:left">从迭代器指向的 collection 中移除迭代器返回的最后一个元素</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <hr>
 <h2 id="单列集合：Collection接口"><a href="#单列集合：Collection接口" class="headerlink" title="单列集合：Collection接口"></a>单列集合：Collection接口</h2><p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/Collection%E6%8E%A5%E5%8F%A3.png" alt="Collection接口"></p>
 <ol>
@@ -615,128 +600,129 @@
 </ul>
 </li>
 </ol>
-<h3 id="Collection接口中常用的公共方法"><a href="#Collection接口中常用的公共方法" class="headerlink" title="Collection接口中常用的公共方法"></a>Collection接口中常用的公共方法</h3><table>
+<h3 id="Collection接口中常用的公共方法"><a href="#Collection接口中常用的公共方法" class="headerlink" title="Collection接口中常用的公共方法"></a>Collection接口中常用的公共方法</h3><div class="table-container">
+<table>
 <thead>
 <tr>
-<th align="center">类别</th>
-<th align="left">方法</th>
-<th align="center">返回值</th>
-<th align="left">说明</th>
+<th style="text-align:center">类别</th>
+<th style="text-align:left">方法</th>
+<th style="text-align:center">返回值</th>
+<th style="text-align:left">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">增</td>
-<td align="left"><code>add(E e)</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="left">添加对象到集合中</td>
+<tbody>
+<tr>
+<td style="text-align:center">增</td>
+<td style="text-align:left"><code>add(E e)</code></td>
+<td style="text-align:center"><code>boolean</code></td>
+<td style="text-align:left">添加对象到集合中</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>addAll(Collection coll)</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="left">添加集合对象到集合中</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>addAll(Collection coll)</code></td>
+<td style="text-align:center"><code>boolean</code></td>
+<td style="text-align:left">添加集合对象到集合中</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">删</td>
-<td align="left"><code>remove(E e)</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="left">删除集合中指定的元素（只是删除元素，即使全都删除完，集合也存在）</td>
+<td style="text-align:center">删</td>
+<td style="text-align:left"><code>remove(E e)</code></td>
+<td style="text-align:center"><code>boolean</code></td>
+<td style="text-align:left">删除集合中指定的元素（只是删除元素，即使全都删除完，集合也存在）</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>removeAll(Collection coll)</code></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>removeAll(Collection coll)</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>clear()</code></td>
-<td align="center"><code>void</code></td>
-<td align="left">清空集合中所有的元素，但不删除集合</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>clear()</code></td>
+<td style="text-align:center"><code>void</code></td>
+<td style="text-align:left">清空集合中所有的元素，但不删除集合</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">查</td>
-<td align="left"><code>size()</code></td>
-<td align="center"><code>int</code></td>
-<td align="left">返回当前集合中有效元素的个数</td>
+<td style="text-align:center">查</td>
+<td style="text-align:left"><code>size()</code></td>
+<td style="text-align:center"><code>int</code></td>
+<td style="text-align:left">返回当前集合中有效元素的个数</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>isEmpty()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="left">判断集合是否为空</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>isEmpty()</code></td>
+<td style="text-align:center"><code>boolean</code></td>
+<td style="text-align:left">判断集合是否为空</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">判断</td>
-<td align="left"><code>isEmpty()</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="left"></td>
+<td style="text-align:center">判断</td>
+<td style="text-align:left"><code>isEmpty()</code></td>
+<td style="text-align:center"><code>boolean</code></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>contains(E e)</code></td>
-<td align="center"><code>boolean</code></td>
-<td align="left">判断集合中是否包含元素e</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>contains(E e)</code></td>
+<td style="text-align:center"><code>boolean</code></td>
+<td style="text-align:left">判断集合中是否包含元素e</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>containsAll(Collection coll)</code></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>containsAll(Collection coll)</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">其它</td>
-<td align="left"><code>toArray()</code></td>
-<td align="center"><code>Object[]</code></td>
-<td align="left">把集合中的元素存储到数组中</td>
+<td style="text-align:center">其它</td>
+<td style="text-align:left"><code>toArray()</code></td>
+<td style="text-align:center"><code>Object[]</code></td>
+<td style="text-align:left">把集合中的元素存储到数组中</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>iterator()</code></td>
-<td align="center"><code>Iterator</code></td>
-<td align="left">返回在此 collection 集合的迭代器。</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>iterator()</code></td>
+<td style="text-align:center"><code>Iterator</code></td>
+<td style="text-align:left">返回在此 collection 集合的迭代器。</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>retainsAll(Collection coll)</code></td>
-<td align="center"></td>
-<td align="left">返回交集</td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>retainsAll(Collection coll)</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:left">返回交集</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="Collection-接口与数组间的相互转换"><a href="#Collection-接口与数组间的相互转换" class="headerlink" title="Collection 接口与数组间的相互转换"></a>Collection 接口与数组间的相互转换</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 集合 --&gt; 数组：toArray()</span></span><br><span class="line">Object[] arr = coll.toArray();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++)&#123;</span><br><span class="line">    System.out.println(arr[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数组 --&gt; 集合：调用Arrays类的静态方法 asList(T ... t)</span></span><br><span class="line">List&lt;String&gt; list = Arrays.asList(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;AA&quot;</span>, <span class="string">&quot;BB&quot;</span>, <span class="string">&quot;CC&quot;</span>&#125;);</span><br><span class="line">System.out.println(list);</span><br><span class="line"></span><br><span class="line">List arr1 = Arrays.asList(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">123</span>, <span class="number">456</span>&#125;);</span><br><span class="line">System.out.println(arr1.size());<span class="comment">//1</span></span><br><span class="line"></span><br><span class="line">List arr2 = Arrays.asList(<span class="keyword">new</span> Integer[]&#123;<span class="number">123</span>, <span class="number">456</span>&#125;);</span><br><span class="line">System.out.println(arr2.size());<span class="comment">//2</span></span><br></pre></td></tr></table></figure>
-
-
-
 <hr>
 <h3 id="存储元素的要求"><a href="#存储元素的要求" class="headerlink" title="存储元素的要求"></a>存储元素的要求</h3><blockquote>
 <p>  <strong>使用 Collection 集合存储对象，要求对象所属的类满足：</strong></p>
@@ -744,139 +730,138 @@
 <p>向 Collection 接口的实现类的对象中添加数据 obj 时，要求 obj 所在类要重写 <code>equals()</code>。</p>
 <hr>
 <h2 id="List-接口"><a href="#List-接口" class="headerlink" title="List 接口"></a>List 接口</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; </span></span><br><span class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="List-接口的特点"><a href="#List-接口的特点" class="headerlink" title="List 接口的特点"></a>List 接口的特点</h3><ol>
-<li> 元素有序（存入和取出顺序一致）</li>
-<li> 元素可重复</li>
+<li>元素有序（存入和取出顺序一致）</li>
+<li>元素可重复</li>
 </ol>
 <blockquote>
 <p>  <strong>集合或数组中关于有序、无序的概念：</strong></p>
 </blockquote>
 <p>在集合或数组中的有序性指的是先后顺序，而不是那种按年龄、按大小、按价格之类的排序。有序、无序是指在进行插入操作时，插入位置的顺序性。先插的位置在前，后插的位置在后，则为有序，反之无序</p>
-<h3 id="成员方法"><a href="#成员方法" class="headerlink" title="成员方法"></a>成员方法</h3><table>
+<h3 id="成员方法"><a href="#成员方法" class="headerlink" title="成员方法"></a>成员方法</h3><div class="table-container">
+<table>
 <thead>
 <tr>
-<th align="center">类别</th>
-<th align="left">方法</th>
-<th align="center">返回值</th>
-<th align="left">说明</th>
+<th style="text-align:center">类别</th>
+<th style="text-align:left">方法</th>
+<th style="text-align:center">返回值</th>
+<th style="text-align:left">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">增</td>
-<td align="left"><code>add(int index，E e)</code></td>
-<td align="center"><code>void</code></td>
-<td align="left">追加</td>
+<tbody>
+<tr>
+<td style="text-align:center">增</td>
+<td style="text-align:left"><code>add(int index，E e)</code></td>
+<td style="text-align:center"><code>void</code></td>
+<td style="text-align:left">追加</td>
 </tr>
 <tr>
-<td align="center">插</td>
-<td align="left"><code>add(int index, Object ele)</code></td>
-<td align="center"></td>
-<td align="left">插入</td>
+<td style="text-align:center">插</td>
+<td style="text-align:left"><code>add(int index, Object ele)</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:left">插入</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">删</td>
-<td align="left"><code>remove(int index）</code></td>
-<td align="center"><code>E</code></td>
-<td align="left"></td>
+<td style="text-align:center">删</td>
+<td style="text-align:left"><code>remove(int index）</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"><code>remove(Object obj)</code></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"><code>remove(Object obj)</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">改</td>
-<td align="left"><code>set(int index， E e）</code></td>
-<td align="center"><code>E</code></td>
-<td align="left"></td>
+<td style="text-align:center">改</td>
+<td style="text-align:left"><code>set(int index， E e）</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">查</td>
-<td align="left"><code>get(int index）</code></td>
-<td align="center"><code>E</code></td>
-<td align="left"></td>
+<td style="text-align:center">查</td>
+<td style="text-align:left"><code>get(int index）</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">长度</td>
-<td align="left"><code>size()</code></td>
-<td align="center"></td>
-<td align="left">是元素的个数，不是数组长度</td>
+<td style="text-align:center">长度</td>
+<td style="text-align:left"><code>size()</code></td>
+<td style="text-align:center"></td>
+<td style="text-align:left">是元素的个数，不是数组长度</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left"></td>
 </tr>
 <tr>
-<td align="center">遍历</td>
-<td align="left"></td>
-<td align="center"></td>
-<td align="left">① Iterator迭代器方式<br>② 增强for循环<br>③ 普通的循环</td>
+<td style="text-align:center">遍历</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+<td style="text-align:left">① Iterator迭代器方式<br>② 增强for循环<br>③ 普通的循环</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <hr>
 <h3 id="常用实现类"><a href="#常用实现类" class="headerlink" title="常用实现类"></a>常用实现类</h3><blockquote>
 <ol>
-<li>  <strong>ArrayList</strong></li>
-<li> <strong>LinkedList</strong></li>
-<li> <strong>Vector</strong></li>
+<li><strong>ArrayList</strong></li>
+<li><strong>LinkedList</strong></li>
+<li><strong>Vector</strong></li>
 </ol>
-</blockquote>
-<blockquote>
 <p>  <strong>ArrayList</strong></p>
 </blockquote>
 <p>作为 List 接口的主要实现类，具有以下特点：</p>
 <ul>
-<li>  线程不安全，效率高；</li>
-<li>  底层使用 <code>Object[] elementData</code> 数组存储元素，查找快。</li>
+<li>线程不安全，效率高；</li>
+<li>底层使用 <code>Object[] elementData</code> 数组存储元素，查找快。</li>
 </ul>
 <blockquote>
 <p>  <strong>LinkedList</strong></p>
 </blockquote>
 <ul>
-<li>  底层使用<strong>双向链表</strong>存储元素，对于频繁的插入、删除操作，效率比 ArrayList 高；</li>
+<li>底层使用<strong>双向链表</strong>存储元素，对于频繁的插入、删除操作，效率比 ArrayList 高；</li>
 </ul>
 <blockquote>
 <p>  <strong>Vector</strong></p>
 </blockquote>
 <ul>
-<li>  作为 List 接口的古老实现类，是线程安全的(Sychnronized)，效率低；</li>
-<li>  底层使用 <code>Object[] elementData</code> 存储。</li>
+<li>作为 List 接口的古老实现类，是线程安全的(Sychnronized)，效率低；</li>
+<li>底层使用 <code>Object[] elementData</code> 存储。</li>
 </ul>
 <hr>
 <h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p><em>ArrayList集合的特点：</em></p>
@@ -888,173 +873,181 @@
 <p>  <strong>JDK7 中：</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ArrayList list = <span class="keyword">new</span> ArrayList();	<span class="comment">// 底层创建了长度是10的Object[]数组elementData</span></span><br><span class="line"></span><br><span class="line">list.add(<span class="number">123</span>);	<span class="comment">// elementData[0] = new Integer(123);</span></span><br><span class="line"></span><br><span class="line">list.add(<span class="number">11</span>);	<span class="comment">// 如果此次的添加导致底层elementData数组容量不够，则扩容。</span></span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>  默认情况下，扩容为原来的容量的 1.5 倍，同时需要将原有数组中的数据复制到新的数组中。</li>
-<li>  <strong>结论</strong>：建议开发中使用带参的构造器：ArrayList list = new ArrayList(int capacity)</li>
+<li>默认情况下，扩容为原来的容量的 1.5 倍，同时需要将原有数组中的数据复制到新的数组中。</li>
+<li><strong>结论</strong>：建议开发中使用带参的构造器：ArrayList list = new ArrayList(int capacity)</li>
 </ul>
 <blockquote>
 <p>  <strong>JDK8 中 ArrayList 的变化：</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ArrayList list = <span class="keyword">new</span> ArrayList();	<span class="comment">// 底层Object[] elementData初始化为&#123;&#125;.并没创建长度为10的数组</span></span><br><span class="line">list.add(<span class="number">123</span>);	<span class="comment">// 第一次调用 add() 时，底层才创建了长度10的数组，并将数据123添加到elementData[0]</span></span><br><span class="line"><span class="comment">// ...... 后续的添加和扩容操作与 JDK7 无异。</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>  <strong>小结：</strong></p>
 </blockquote>
 <ul>
-<li>  JDK7 中的 ArrayList 的对象的创建类似于单例的饿汉式，</li>
-<li>  而 JDK8 中的 ArrayList 的对象的创建类似于单例的懒汉式，延迟了数组的创建，节省内存。</li>
+<li>JDK7 中的 ArrayList 的对象的创建类似于单例的饿汉式，</li>
+<li>而 JDK8 中的 ArrayList 的对象的创建类似于单例的懒汉式，延迟了数组的创建，节省内存。</li>
 </ul>
 <hr>
-<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><table>
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><div class="table-container">
+<table>
 <thead>
 <tr>
-<th align="center">ID</th>
-<th align="left">方法</th>
-<th align="left">说明</th>
+<th style="text-align:center">ID</th>
+<th style="text-align:left">方法</th>
+<th style="text-align:left">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="left"><code>ArrayList()</code></td>
-<td align="left">创建一个初始容量为 0 的对象</td>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left"><code>ArrayList()</code></td>
+<td style="text-align:left">创建一个初始容量为 0 的对象</td>
 </tr>
 <tr>
-<td align="center">2</td>
-<td align="left"><code>ArrayList(Collection&lt;? extends E&gt; c)</code></td>
-<td align="left">构造一个包含指定 collection 的元素的列表。</td>
+<td style="text-align:center">2</td>
+<td style="text-align:left"><code>ArrayList(Collection&lt;? extends E&gt; c)</code></td>
+<td style="text-align:left">构造一个包含指定 collection 的元素的列表。</td>
 </tr>
 <tr>
-<td align="center">3</td>
-<td align="left"><code>ArrayList(int initialCapacity)</code></td>
-<td align="left">构造一个具有指定初始容量的对象</td>
+<td style="text-align:center">3</td>
+<td style="text-align:left"><code>ArrayList(int initialCapacity)</code></td>
+<td style="text-align:left">构造一个具有指定初始容量的对象</td>
 </tr>
-</tbody></table>
-<h3 id="成员方法-1"><a href="#成员方法-1" class="headerlink" title="成员方法"></a>成员方法</h3><table>
+</tbody>
+</table>
+</div>
+<h3 id="成员方法-1"><a href="#成员方法-1" class="headerlink" title="成员方法"></a>成员方法</h3><div class="table-container">
+<table>
 <thead>
 <tr>
-<th align="center">ID</th>
-<th align="center">方法</th>
-<th align="center">返回值</th>
-<th align="center">说明</th>
+<th style="text-align:center">ID</th>
+<th style="text-align:center">方法</th>
+<th style="text-align:center">返回值</th>
+<th style="text-align:center">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>add(E e)</code></td>
-<td align="center">boolean</td>
-<td align="center">将指定的元素添加到此列表的尾部。</td>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center"><code>add(E e)</code></td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">将指定的元素添加到此列表的尾部。</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>add(int index, E e)</code></td>
-<td align="center">void</td>
-<td align="center">将指定的元素插入此列表中的指定位置。</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>add(int index, E e)</code></td>
+<td style="text-align:center">void</td>
+<td style="text-align:center">将指定的元素插入此列表中的指定位置。</td>
 </tr>
 <tr>
-<td align="center">2</td>
-<td align="center"><code>addAll(Collection&lt;? extends E&gt; c)</code></td>
-<td align="center">boolean</td>
-<td align="center">将指定的集合添加到此列表的尾部。</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center"><code>addAll(Collection&lt;? extends E&gt; c)</code></td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">将指定的集合添加到此列表的尾部。</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>addAll(int index, Collection&lt;? extends E&gt; c)</code></td>
-<td align="center">boolean</td>
-<td align="center">将指定的集合插入此列表中的指定位置。</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>addAll(int index, Collection&lt;? extends E&gt; c)</code></td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">将指定的集合插入此列表中的指定位置。</td>
 </tr>
 <tr>
-<td align="center">3</td>
-<td align="center"><code>clear()</code></td>
-<td align="center">void</td>
-<td align="center">移除此列表中的所有元素。</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center"><code>clear()</code></td>
+<td style="text-align:center">void</td>
+<td style="text-align:center">移除此列表中的所有元素。</td>
 </tr>
 <tr>
-<td align="center">4</td>
-<td align="center"><code>clone()</code></td>
-<td align="center">Object</td>
-<td align="center">返回此 <code>ArrayList</code> 实例浅拷贝</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center"><code>clone()</code></td>
+<td style="text-align:center">Object</td>
+<td style="text-align:center">返回此 <code>ArrayList</code> 实例浅拷贝</td>
 </tr>
 <tr>
-<td align="center">5</td>
-<td align="center"><code>contains(Object o)</code></td>
-<td align="center">boolean</td>
-<td align="center"></td>
+<td style="text-align:center">5</td>
+<td style="text-align:center"><code>contains(Object o)</code></td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center">6</td>
-<td align="center"><code>get(int index)</code></td>
-<td align="center">E</td>
-<td align="center">返回此列表中指定位置上的元素。</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center"><code>get(int index)</code></td>
+<td style="text-align:center">E</td>
+<td style="text-align:center">返回此列表中指定位置上的元素。</td>
 </tr>
 <tr>
-<td align="center">7</td>
-<td align="center"><code>indexOf(Object o)</code></td>
-<td align="center">int</td>
-<td align="center">返回此列表中首次出现的指定元素的索引，或如果此列表不包含元素，则返回 -1。</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center"><code>indexOf(Object o)</code></td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">返回此列表中首次出现的指定元素的索引，或如果此列表不包含元素，则返回 -1。</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>lastIndexOf(Object o)</code></td>
-<td align="center">int</td>
-<td align="center">返回此列表中最后一次出现的指定元素的索引，或如果此列表不包含元素，则返回 -1。</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>lastIndexOf(Object o)</code></td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">返回此列表中最后一次出现的指定元素的索引，或如果此列表不包含元素，则返回 -1。</td>
 </tr>
 <tr>
-<td align="center">8</td>
-<td align="center"><code>set(int index, E e)</code></td>
-<td align="center">E</td>
-<td align="center">用指定的元素替代此列表中指定位置上的元素。</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center"><code>set(int index, E e)</code></td>
+<td style="text-align:center">E</td>
+<td style="text-align:center">用指定的元素替代此列表中指定位置上的元素。</td>
 </tr>
 <tr>
-<td align="center">9</td>
-<td align="center"><code>isEmpty()</code></td>
-<td align="center">boolean</td>
-<td align="center">如果此列表中没有元素，则返回 <code>true</code></td>
+<td style="text-align:center">9</td>
+<td style="text-align:center"><code>isEmpty()</code></td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">如果此列表中没有元素，则返回 <code>true</code></td>
 </tr>
 <tr>
-<td align="center">10</td>
-<td align="center"><code>remove(int index)</code></td>
-<td align="center">E</td>
-<td align="center">移除此列表中指定位置上的元素。</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center"><code>remove(int index)</code></td>
+<td style="text-align:center">E</td>
+<td style="text-align:center">移除此列表中指定位置上的元素。</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>remove(Object o)</code></td>
-<td align="center">boolean</td>
-<td align="center">移除此列表中首次出现的指定元素（如果存在）。</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>remove(Object o)</code></td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">移除此列表中首次出现的指定元素（如果存在）。</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>removeRange(int fromIndex, int toIndex)</code></td>
-<td align="center">void</td>
-<td align="center">移除列表中索引在 <code>[fromIndex，toIndex)</code>之间的所有元素。</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>removeRange(int fromIndex, int toIndex)</code></td>
+<td style="text-align:center">void</td>
+<td style="text-align:center">移除列表中索引在 <code>[fromIndex，toIndex)</code>之间的所有元素。</td>
 </tr>
 <tr>
-<td align="center">11</td>
-<td align="center"><code>size()</code></td>
-<td align="center">int</td>
-<td align="center">返回此列表中的元素数。</td>
+<td style="text-align:center">11</td>
+<td style="text-align:center"><code>size()</code></td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">返回此列表中的元素数。</td>
 </tr>
 <tr>
-<td align="center">12</td>
-<td align="center"><code>toArray()</code></td>
-<td align="center">Object[]</td>
-<td align="center">返回包含此列表中所有元素的数组</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center"><code>toArray()</code></td>
+<td style="text-align:center">Object[]</td>
+<td style="text-align:center">返回包含此列表中所有元素的数组</td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>toArray(T[] a)</code></td>
-<td align="center">T[]</td>
-<td align="center">返回包含此列表中所有元素的数组；返回数组的运行时类型是指定数组的运行时类型。</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>toArray(T[] a)</code></td>
+<td style="text-align:center">T[]</td>
+<td style="text-align:center">返回包含此列表中所有元素的数组；返回数组的运行时类型是指定数组的运行时类型。</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><ol>
 <li><p>生成6个1~33之间的随机整数，添加到集合，并遍历。</p>
  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    生成6个1~33之间的随机整数，添加到集合，并遍历。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.生成6个1~33之间的随机整数,并添加到集合</span></span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">6</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">6</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> randNum = random.nextInt(<span class="number">33</span>) + <span class="number">1</span>;</span><br><span class="line">            list.add(randNum);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 遍历集合</span></span><br><span class="line">        <span class="keyword">for</span> (Integer num : list) &#123;</span><br><span class="line">            System.out.println(num);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 </li>
+</ol>
+<ol>
 <li><p>定义所有获取偶数元素集合的方法</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    定义所有获取偶数元素集合的方法.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.生成10个0~100之间的随机整数,并添加到集合list中</span></span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">6</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">6</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> randNum = random.nextInt(<span class="number">33</span>) + <span class="number">1</span>;</span><br><span class="line">            list.add(randNum);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 获取集合中的所有偶数,添加到子集合subList中</span></span><br><span class="line">        ArrayList&lt;Integer&gt; subList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (Integer num : list) &#123;</span><br><span class="line">            <span class="keyword">if</span> (num%<span class="number">2</span>==<span class="number">0</span>)&#123;</span><br><span class="line">                subList.add(num);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.遍历subList子集合</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;subList.size(); i++)&#123;</span><br><span class="line">            System.out.println(subList.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    定义所有获取偶数元素集合的方法.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.生成10个0~100之间的随机整数,并添加到集合list中</span></span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">6</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">6</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> randNum = random.nextInt(<span class="number">33</span>) + <span class="number">1</span>;</span><br><span class="line">            list.add(randNum);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 获取集合中的所有偶数,添加到子集合subList中</span></span><br><span class="line">        ArrayList&lt;Integer&gt; subList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (Integer num : list) &#123;</span><br><span class="line">            <span class="keyword">if</span> (num%<span class="number">2</span>==<span class="number">0</span>)&#123;</span><br><span class="line">                subList.add(num);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.遍历subList子集合</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;subList.size(); i++)&#123;</span><br><span class="line">            System.out.println(subList.get(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 <hr>
 <h2 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h2><h3 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h3><blockquote>
@@ -1068,99 +1061,99 @@
 </ol>
 </blockquote>
 <h3 id="源码分析-1"><a href="#源码分析-1" class="headerlink" title="源码分析"></a>源码分析</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">LinkedList list = <span class="keyword">new</span> LinkedList(); <span class="comment">// 内部声明了Node类型的first和last属性，默认值为null</span></span><br><span class="line">list.add(<span class="number">123</span>);	<span class="comment">// 创建一个Node对象，并将123封装到Node中，</span></span><br><span class="line"></span><br><span class="line"> <span class="comment">// Node 节点的定义：体现了LinkedList的双向链表的说法</span></span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">      E item;</span><br><span class="line">      Node&lt;E&gt; next;</span><br><span class="line">      Node&lt;E&gt; prev;</span><br><span class="line"></span><br><span class="line">      Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">      <span class="keyword">this</span>.item = element;</span><br><span class="line">      <span class="keyword">this</span>.next = next;</span><br><span class="line">      <span class="keyword">this</span>.prev = prev;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="成员方法-2"><a href="#成员方法-2" class="headerlink" title="成员方法"></a>成员方法</h3><ul>
 <li>LinkedList中特有的成员方法：</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">类别</th>
-<th align="center">方法</th>
-<th align="center">返回值</th>
-<th align="center">说明</th>
+<th style="text-align:center">类别</th>
+<th style="text-align:center">方法</th>
+<th style="text-align:center">返回值</th>
+<th style="text-align:center">说明</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">增</td>
-<td align="center"><code>addFirst（E e）</code></td>
-<td align="center"><code>void</code></td>
-<td align="center"></td>
+<tbody>
+<tr>
+<td style="text-align:center">增</td>
+<td style="text-align:center"><code>addFirst（E e）</code></td>
+<td style="text-align:center"><code>void</code></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>addLast（E e）</code></td>
-<td align="center"><code>void</code></td>
-<td align="center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>addLast（E e）</code></td>
+<td style="text-align:center"><code>void</code></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>push（E e）</code></td>
-<td align="center"><code>void</code></td>
-<td align="center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>push（E e）</code></td>
+<td style="text-align:center"><code>void</code></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center">删</td>
-<td align="center"><code>removeFirst（）</code></td>
-<td align="center"><code>E</code></td>
-<td align="center"></td>
+<td style="text-align:center">删</td>
+<td style="text-align:center"><code>removeFirst（）</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>removeLast（）</code></td>
-<td align="center"><code>E</code></td>
-<td align="center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>removeLast（）</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>pop（）</code></td>
-<td align="center"><code>E</code></td>
-<td align="center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>pop（）</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center">查</td>
-<td align="center"><code>getFirst（E e）</code></td>
-<td align="center"><code>E</code></td>
-<td align="center"></td>
+<td style="text-align:center">查</td>
+<td style="text-align:center"><code>getFirst（E e）</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"><code>getLast（E e）</code></td>
-<td align="center"><code>E</code></td>
-<td align="center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"><code>getLast（E e）</code></td>
+<td style="text-align:center"><code>E</code></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="Vector"><a href="#Vector" class="headerlink" title="Vector"></a>Vector</h2><h3 id="源码分析-2"><a href="#源码分析-2" class="headerlink" title="源码分析"></a>源码分析</h3><ul>
-<li>  JDK7 和 JDK8 中通过 <code>Vector()</code> 构造器创建对象时，底层都创建了<strong>长度为10的数组</strong>。</li>
-<li>  在扩容方面，默认扩容为原来的数组长度的 <strong>2 倍</strong>。</li>
+<li>JDK7 和 JDK8 中通过 <code>Vector()</code> 构造器创建对象时，底层都创建了<strong>长度为10的数组</strong>。</li>
+<li>在扩容方面，默认扩容为原来的数组长度的 <strong>2 倍</strong>。</li>
 </ul>
 <hr>
 <h2 id="Set-接口"><a href="#Set-接口" class="headerlink" title="Set 接口"></a>Set 接口</h2><h3 id="数据特点"><a href="#数据特点" class="headerlink" title="数据特点"></a>数据特点</h3><blockquote>
 <p>  <strong>存储的数据特点：</strong></p>
 </blockquote>
 <ol>
-<li> 元素无序</li>
-<li> 元素不可重复</li>
+<li>元素无序</li>
+<li>元素不可重复</li>
 </ol>
 <hr>
 <h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><h3 id="特点-2"><a href="#特点-2" class="headerlink" title="特点"></a>特点</h3><blockquote>
@@ -1175,22 +1168,22 @@
 <blockquote>
 <p>  <strong>底层数据结构：</strong></p>
 </blockquote>
-<p><strong>HashSet 底层是通过 HashMap 实现的，底层也是一个数组（HashTable）</strong>，初始容量16，当如果使用率超过 0.75（16<em>0.75=12）就会扩大容量为原来的 2 倍。</em>*</p>
+<p><strong>HashSet 底层是通过 HashMap 实现的，底层也是一个数组（HashTable）</strong>，初始容量16，当如果使用率超过 0.75（16<em>0.75=12）就会扩大容量为原来的 2 倍。*</em></p>
 <ul>
-<li>  在 JDK7中，HashMap 的底层还是通过：数组+链表的结构 实现的。</li>
-<li>  从 JDK8 开始，HashMap 的底层结构更改为<strong>链表长度大于等于 8 时，开始由链表转换为红黑树</strong>。</li>
+<li>在 JDK7中，HashMap 的底层还是通过：数组+链表的结构 实现的。</li>
+<li>从 JDK8 开始，HashMap 的底层结构更改为<strong>链表长度大于等于 8 时，开始由链表转换为红黑树</strong>。</li>
 </ul>
 <hr>
 <h3 id="元素添加过程"><a href="#元素添加过程" class="headerlink" title="元素添加过程"></a>元素添加过程</h3><ol>
-<li> 我们向 <code>HashSet</code> 中添加元素 a 时，首先调用元素 a 所在类的 <code>hashCode()</code> 方法，计算元素 a 的哈希值，</li>
-<li> 此哈希值接着通过某种算法计算出在 HashSet 底层数组中的存放位置（即：索引位置）</li>
+<li>我们向 <code>HashSet</code> 中添加元素 a 时，首先调用元素 a 所在类的 <code>hashCode()</code> 方法，计算元素 a 的哈希值，</li>
+<li>此哈希值接着通过某种算法计算出在 HashSet 底层数组中的存放位置（即：索引位置）</li>
 <li>判断数组此位置上是否已经元素：<ul>
-<li>  如果此位置上没有其它元素，则元素 a 添加成功。【Case1】</li>
+<li>如果此位置上没有其它元素，则元素 a 添加成功。【Case1】</li>
 <li>如果此位置上其他元素 b（或以链表形式存在的多个元素，则比较元素 a 与元素 b 的 hash 值）：<ul>
-<li>  如果 hash 值不相同，则元素 a 添加成功。【Case2】</li>
+<li>如果 hash 值不相同，则元素 a 添加成功。【Case2】</li>
 <li>如果 hash 值相同，进而需要调用元素 a 所在类的 <code>equals()</code> 方法：<ul>
-<li>  <code>equals()</code> 返回 true，元素 a 添加失败。【Case3】</li>
-<li>  <code>equals()</code> 返回 false，则元素 a 添加成功。【Case4】</li>
+<li><code>equals()</code> 返回 true，元素 a 添加失败。【Case3】</li>
+<li><code>equals()</code> 返回 false，则元素 a 添加成功。【Case4】</li>
 </ul>
 </li>
 </ul>
@@ -1199,22 +1192,17 @@
 </li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hashCode --&gt; 计算哈希值 --&gt; 索引位置 --&gt; 此位置没有其他元素 --&gt;添加成功</span><br><span class="line">                                    --&gt; 此位置有其他元素 --&gt; hash值不同 --&gt; 添加成功</span><br><span class="line">                                    			      --&gt; hash值相同 --&gt; 调用equals方法 --&gt; 返回true --&gt; 添加失败</span><br><span class="line">                                                                                        --&gt; 返回false --&gt; 添加成功</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><ul>
-<li>  Set 接口中没额外定义新的方法，使用的都是 Collection 中声明过的方法。</li>
+<li>Set 接口中没额外定义新的方法，使用的都是 Collection 中声明过的方法。</li>
 </ul>
 <h3 id="常用实现类-1"><a href="#常用实现类-1" class="headerlink" title="常用实现类"></a>常用实现类</h3><ul>
 <li><strong>Collection</strong> 接口：单列集合，用来存储一个一个的对象。<ul>
 <li><strong>Set</strong> 接口：存储无序的、不可重复的数据。<ul>
 <li><strong>HashSet</strong>：作为 Set 接口的主要实现类；线程不安全的；可以存储 null 值；<ul>
-<li>  <strong>LinkedHashSet</strong>：作为 HashSet 的子类；遍历其内部数据时，可以按照添加的顺序遍历。在添加数据的同时，每个数据还维护了两个引用，记录此数据前一个数据和后一个数据。</li>
+<li><strong>LinkedHashSet</strong>：作为 HashSet 的子类；遍历其内部数据时，可以按照添加的顺序遍历。在添加数据的同时，每个数据还维护了两个引用，记录此数据前一个数据和后一个数据。</li>
 </ul>
 </li>
-<li>  <strong>TreeSet</strong>：可以照添加对象的指定属性，进行排序。</li>
+<li><strong>TreeSet</strong>：可以照添加对象的指定属性，进行排序。</li>
 </ul>
 </li>
 </ul>
@@ -1224,101 +1212,85 @@
 <p>  <strong>HashSet/LinkedHashSet：</strong></p>
 </blockquote>
 <ol>
-<li> 要求：向 HashSet（主要指：HashSet、LinkedHashSet）中添加的数据时，元素对象所在的类一定要重写 <code>hashCode()</code>和 <code>equals()</code> 方法、【因为 HashSet 插入元素时的主要判断标准就是哈希值和 <code>equals()</code> 方法】</li>
-<li> 要求：重写的 <code>hashCode()</code>和 <code>equals()</code> 尽可能保持一致性，即相等的对象必须具有相等的散列码。</li>
+<li>要求：向 HashSet（主要指：HashSet、LinkedHashSet）中添加的数据时，元素对象所在的类一定要重写 <code>hashCode()</code>和 <code>equals()</code> 方法、【因为 HashSet 插入元素时的主要判断标准就是哈希值和 <code>equals()</code> 方法】</li>
+<li>要求：重写的 <code>hashCode()</code>和 <code>equals()</code> 尽可能保持一致性，即相等的对象必须具有相等的散列码。</li>
 </ol>
 <p>重写两个方法的小技巧：对象中用作 <code>equals()</code> 方法比较的 Field，都应该用来计算 hashCode 值。</p>
 <hr>
 <h2 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h2><h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><ol>
-<li> 向 TreeSet 中添加的数据，要求是<strong>相同类的对象</strong>。</li>
-<li> 两种排序方式：自然排序（实现Comparable接口）和 定制排序（Comparator）</li>
+<li>向 TreeSet 中添加的数据，要求是<strong>相同类的对象</strong>。</li>
+<li>两种排序方式：自然排序（实现Comparable接口）和 定制排序（Comparator）</li>
 </ol>
 <h3 id="常用的排序方式"><a href="#常用的排序方式" class="headerlink" title="常用的排序方式"></a>常用的排序方式</h3><blockquote>
 <p>  <strong>方式一：自然排序</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    TreeSet set = <span class="keyword">new</span> TreeSet();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 失败：不能添加不同类的对象</span></span><br><span class="line"><span class="comment">//        set.add(123);</span></span><br><span class="line"><span class="comment">//        set.add(456);</span></span><br><span class="line"><span class="comment">//        set.add(&quot;AA&quot;);</span></span><br><span class="line"><span class="comment">//        set.add(new User(&quot;Tom&quot;,12));</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 举例一：</span></span><br><span class="line"><span class="comment">//        set.add(34);</span></span><br><span class="line"><span class="comment">//        set.add(-34);</span></span><br><span class="line"><span class="comment">//        set.add(43);</span></span><br><span class="line"><span class="comment">//        set.add(11);</span></span><br><span class="line"><span class="comment">//        set.add(8);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 举例二：</span></span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Tom&quot;</span>,<span class="number">12</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Jerry&quot;</span>,<span class="number">32</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Jim&quot;</span>,<span class="number">2</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Mike&quot;</span>,<span class="number">65</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Jack&quot;</span>,<span class="number">33</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Iterator iterator = set.iterator();</span><br><span class="line">    <span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">        System.out.println(iterator.next());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
 <p>  <strong>方式二：定制排序</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Comparator com = <span class="keyword">new</span> Comparator() &#123;</span><br><span class="line">        <span class="comment">//照年龄从小到大排列</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Object o1, Object o2)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(o1 <span class="keyword">instanceof</span> User &amp;&amp; o2 <span class="keyword">instanceof</span> User)&#123;</span><br><span class="line">                User u1 = (User)o1;</span><br><span class="line">                User u2 = (User)o2;</span><br><span class="line">                <span class="keyword">return</span> Integer.compare(u1.getAge(),u2.getAge());</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;输入的数据类型不匹配&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    TreeSet set = <span class="keyword">new</span> TreeSet(com);</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Tom&quot;</span>,<span class="number">12</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Jerry&quot;</span>,<span class="number">32</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Jim&quot;</span>,<span class="number">2</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Mike&quot;</span>,<span class="number">65</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Mary&quot;</span>,<span class="number">33</span>));</span><br><span class="line">    set.add(<span class="keyword">new</span> User(<span class="string">&quot;Jack&quot;</span>,<span class="number">33</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Iterator iterator = set.iterator();</span><br><span class="line">    <span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">        System.out.println(iterator.next());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <hr>
-<h2 id="双列集合：Map-接口"><a href="#双列集合：Map-接口" class="headerlink" title="双列集合：Map 接口"></a>双列集合：Map 接口</h2><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/Map%E6%8E%A5%E5%8F%A3.png" alt="Map接口" style="zoom: 50%;">
-
-
-
+<h2 id="双列集合：Map-接口"><a href="#双列集合：Map-接口" class="headerlink" title="双列集合：Map 接口"></a>双列集合：Map 接口</h2><p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/Map%E6%8E%A5%E5%8F%A3.png" alt="Map接口" style="zoom: 50%;"></p>
 <h3 id="常用实现类结构"><a href="#常用实现类结构" class="headerlink" title="常用实现类结构"></a>常用实现类结构</h3><ul>
 <li><p><strong>Map</strong>：双列数据，存储键值对数据</p>
 <ul>
 <li><p><strong>HashMap</strong>：作为 Map 的主要实现类；线程不安全的，效率高；存储null的key和value</p>
 <ul>
 <li><p><strong>LinkedHashMap</strong>：保证在遍历 map 元素时，可以照添加的顺序实现遍历。</p>
-<p>  原因：在原的 HashMap 底层结构基础上，添加了一对指针，指向前一个和后一个元素。</p>
-<p>  对于频繁的遍历操作，此类执行效率高于HashMap。</p>
+<p>原因：在原的 HashMap 底层结构基础上，添加了一对指针，指向前一个和后一个元素。</p>
+<p>对于频繁的遍历操作，此类执行效率高于HashMap。</p>
 </li>
 </ul>
 </li>
 <li><p><strong>TreeMap</strong>：保证照添加的 key-value 对进行排序，实现排序遍历。</p>
-<p>  此时考虑key的自然排序或定制排序</p>
-<p>  底层使用红黑树</p>
+<p>此时考虑key的自然排序或定制排序</p>
+<p>底层使用红黑树</p>
 </li>
 </ul>
 </li>
 <li><p><strong>Hashtable</strong>：作为古老的实现类；线程安全的，效率低；不能存储null的key和value</p>
 <ul>
-<li>  Properties:常用来处理配置文件。key和value都是String类型</li>
+<li>Properties:常用来处理配置文件。key和value都是String类型</li>
 </ul>
 </li>
 </ul>
 <h3 id="存储结构的理解"><a href="#存储结构的理解" class="headerlink" title="存储结构的理解"></a>存储结构的理解</h3><ul>
 <li><p><strong>Map 中的 key</strong>：无序的、不可重复的。</p>
-<p>  使用 Set 存储所有的 key  —&gt; key 所在的类要重写 <code>equals()</code> 和 <code>hashCode()</code> （以HashMap为例)</p>
+<p>使用 Set 存储所有的 key  —-&gt; key 所在的类要重写 <code>equals()</code> 和 <code>hashCode()</code> （以HashMap为例)</p>
 </li>
 <li><p><strong>Map中的value</strong>：无序的、可重复的。</p>
-<p>  使用 Collection 存储所有的 value —&gt; value 所在的类要重写 <code>equals()</code></p>
+<p>使用 Collection 存储所有的 value —-&gt; value 所在的类要重写 <code>equals()</code></p>
 </li>
-<li><p>  一个键值对：key-value 构成了一个 Entry 对象。</p>
+<li><p>一个键值对：key-value 构成了一个 Entry 对象。</p>
 </li>
-<li><p>  Map 中的 entry：无序的、不可重复的，使用 Set 存储所的 entry</p>
+<li><p>Map 中的 entry：无序的、不可重复的，使用 Set 存储所的 entry</p>
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Map map1=<span class="keyword">new</span> HashMap();</span><br><span class="line">    map1.put(<span class="string">&quot;AA&quot;</span>,<span class="number">123</span>);</span><br><span class="line">    map1.put(<span class="string">&quot;BB&quot;</span>,<span class="number">345</span>);</span><br><span class="line">    map1.put(<span class="string">&quot;cc&quot;</span>,<span class="number">345</span>);</span><br><span class="line">    map1.put(<span class="string">&quot;AA&quot;</span>,<span class="number">001</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//key</span></span><br><span class="line">    Set set1 = map1.keySet();	<span class="comment">// HashMap中的key是set无序不可重复,可以用iterator遍历</span></span><br><span class="line">    Iterator iterator1 = set1.iterator();</span><br><span class="line">    <span class="keyword">while</span> (iterator1.hasNext())&#123;</span><br><span class="line">        System.out.println(iterator1.next());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// values</span></span><br><span class="line">    Collection values = map1.values(); <span class="comment">// HashMap中的values是Collection</span></span><br><span class="line">    <span class="keyword">for</span> (Object obj:values) &#123;</span><br><span class="line">        System.out.println(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// key-value</span></span><br><span class="line">    Set entrySet = map1.entrySet();	<span class="comment">// HashMap中的entry是set</span></span><br><span class="line">    Iterator iterator = entrySet.iterator();</span><br><span class="line">    <span class="keyword">while</span> (iterator.hasNext())&#123;</span><br><span class="line">        Object obj = iterator.next();</span><br><span class="line">        <span class="comment">// entrySet集合中的元素都是entry</span></span><br><span class="line">        Map.Entry entry=(Map.Entry)obj;</span><br><span class="line">        System.out.println(entry.getKey()+<span class="string">&quot;----&gt;&quot;</span>+entry.getValue());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/image-20210802115642845.png" alt="image-20210802115642845"></p>
 <hr>
 <h3 id="常用方法-1"><a href="#常用方法-1" class="headerlink" title="常用方法"></a>常用方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">* 添加：put(Object key,Object value)</span><br><span class="line">* 删除：remove(Object key)</span><br><span class="line">* 修改：put(Object key,Object value)</span><br><span class="line">* 查询：get(Object key)</span><br><span class="line">* 长度：size()</span><br><span class="line">* 遍历：keySet() &#x2F; values() &#x2F; entrySet()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><ol>
-<li> HashMap的底层实现原理？</li>
-<li> HashMap 和 Hashtable的异同？</li>
-<li> CurrentHashMap 与 Hashtable的异同？（暂时不讲)</li>
+<li>HashMap的底层实现原理？</li>
+<li>HashMap 和 Hashtable的异同？</li>
+<li>CurrentHashMap 与 Hashtable的异同？（暂时不讲)</li>
 </ol>
 <hr>
 <h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h3 id="HashMap-底层结构"><a href="#HashMap-底层结构" class="headerlink" title="HashMap 底层结构"></a>HashMap 底层结构</h3><blockquote>
 <p>  <strong>JDK7</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HashMap map = <span class="keyword">new</span> HashMap():</span><br><span class="line"><span class="comment">// ...可能已经执行过多次put...</span></span><br><span class="line">map.put(key1,value1);     </span><br></pre></td></tr></table></figure>
-
 <ol>
-<li> 执行 <code>new HashMap()</code> 的指令，底层会创建一个长度为16 的一维数组 <strong>Entry[] table</strong>；</li>
-<li>  ….可能已经执行过多次 <code>put</code> …</li>
+<li>执行 <code>new HashMap()</code> 的指令，底层会创建一个长度为16 的一维数组 <strong>Entry[] table</strong>；</li>
+<li>….可能已经执行过多次 <code>put</code> …</li>
 <li>执行 <code>map.put(key1,value1)</code> 方法：<ul>
 <li>首先，调用 <code>key1</code> 所在类的 <code>hashCode()</code> 计算 <code>key1</code> 的哈希值，此哈希值经过某种算法计算以后，得到在 <code>Entry</code> 数组中的存放位置。<ul>
-<li>  如果此位置上的数据为空，此时的 <code>key1-value1</code> 添加成功。【Case1】</li>
+<li>如果此位置上的数据为空，此时的 <code>key1-value1</code> 添加成功。【Case1】</li>
 <li>如果此位置上的数据不为空（意味着此位置上存在一个或多个数据(以链表形式存在)），比较 <code>key1</code> 和已经存在的一个或多个数据的哈希值：<ul>
-<li>  如果 <code>key1</code> 的哈希值与已经存在的数据的哈希值都不相同，此时 <code>key1-value1</code> 添加成功。【Case2】</li>
+<li>如果 <code>key1</code> 的哈希值与已经存在的数据的哈希值都不相同，此时 <code>key1-value1</code> 添加成功。【Case2】</li>
 <li>如果 <code>key1</code> 的哈希值和已经存在的某一个数据 <code>(key2-value2)</code> 的哈希值相同，继续比较.调用 <code>key1</code> 所在类的<code>equals(key2)</code>方法，比较：<ul>
-<li>  如果 <code>equals()</code>返回 false，此时 <code>key1-value1</code> 添加成功。【Case3】</li>
-<li>  如果 <code>equals()</code> 返回 true，使用 <code>value1</code> 替换 <code>value2</code>。【Case4】</li>
+<li>如果 <code>equals()</code>返回 false，此时 <code>key1-value1</code> 添加成功。【Case3】</li>
+<li>如果 <code>equals()</code> 返回 true，使用 <code>value1</code> 替换 <code>value2</code>。【Case4】</li>
 </ul>
 </li>
 </ul>
@@ -1332,69 +1304,65 @@
 <p>  <strong>Tip：</strong></p>
 </blockquote>
 <ul>
-<li>  在不断的添加过程中，会涉及到扩容问题，当<strong>超出临界值 0.75 (且要存放的位置非空)时，扩容</strong>。</li>
-<li>  默认的扩容方式：<strong>扩容为原来容量的 2 倍</strong>，并将原的数据复制过来。</li>
+<li>在不断的添加过程中，会涉及到扩容问题，当<strong>超出临界值 0.75 (且要存放的位置非空)时，扩容</strong>。</li>
+<li>默认的扩容方式：<strong>扩容为原来容量的 2 倍</strong>，并将原的数据复制过来。</li>
 </ul>
 <blockquote>
 <p>  <strong>JDK8</strong>：HashMap 在 JDK8 中相较于 JDK7 在底层实现方面的不同：</p>
 </blockquote>
 <ol>
-<li> <code>new HashMap()</code> 底层没有创建一个长度为16的数组，而是使用一个类加载阶段就创建好的空数组；</li>
-<li> JDK8 底层的数组是：**Node[]**，而非Entry[]；</li>
-<li> <strong>首次调用<code>put()</code>方法时，底层才会创建长度为16的数组；</strong></li>
-<li> JDK7 底层结构：数组+链表。JDK8 中底层结构：数组+链表+红黑树。</li>
-<li> 当数组的某一个索引位置上的元素以链表形式存在的数据个数 &gt; 8 <strong>且</strong>当前数组的长度 &gt; 64时，此时此索引位置上的所数据改为使用红黑树存储。<code>[链表长度 &gt;= 8 &amp;&amp; 数组长度 =&lt; 64]</code></li>
+<li><code>new HashMap()</code> 底层没有创建一个长度为16的数组，而是使用一个类加载阶段就创建好的空数组；</li>
+<li>JDK8 底层的数组是：<strong>Node[]</strong>，而非Entry[]；</li>
+<li><strong>首次调用<code>put()</code>方法时，底层才会创建长度为16的数组；</strong></li>
+<li>JDK7 底层结构：数组+链表。JDK8 中底层结构：数组+链表+红黑树。</li>
+<li>当数组的某一个索引位置上的元素以链表形式存在的数据个数 &gt; 8 <strong>且</strong>当前数组的长度 &gt; 64时，此时此索引位置上的所数据改为使用红黑树存储。<code>[链表长度 &gt;= 8 &amp;&amp; 数组长度 =&lt; 64]</code></li>
 </ol>
 <blockquote>
 <p>  <strong>HashMap 底层结构典型属性的说明（源码中属性的说明）：</strong></p>
 </blockquote>
 <ul>
-<li>  <strong>DEFAULT_INITIAL_CAPACITY</strong> ：HashMap的默认容量，16</li>
-<li>  <strong>DEFAULT_LOAD_FACTOR</strong>：HashMap的默认加载因子，0.75；</li>
-<li>  <strong>threshold</strong>：扩容的临界值， 等于 <strong>容量*填充因子</strong>：16 * 0.75 =&gt; 12；</li>
-<li>  <strong>TREEIFY_THRESHOLD</strong>：Bucket 中链表长度大于该默认值时转化为红黑树，8；</li>
-<li>  <strong>MIN_TREEIFY_CAPACITY</strong>：桶中的Node被树化时最小的 hash 表容量，64</li>
+<li><strong>DEFAULT_INITIAL_CAPACITY</strong> ：HashMap的默认容量，16</li>
+<li><strong>DEFAULT_LOAD_FACTOR</strong>：HashMap的默认加载因子，0.75；</li>
+<li><strong>threshold</strong>：扩容的临界值， 等于 <strong>容量*填充因子</strong>：16 * 0.75 =&gt; 12；</li>
+<li><strong>TREEIFY_THRESHOLD</strong>：Bucket 中链表长度大于该默认值时转化为红黑树，8；</li>
+<li><strong>MIN_TREEIFY_CAPACITY</strong>：桶中的Node被树化时最小的 hash 表容量，64</li>
 </ul>
 <h2 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h2><blockquote>
 <p>  <strong>LinkedHashMap的底层实现原理</strong></p>
 </blockquote>
 <ul>
-<li>  LinkedHashMap 底层使用的结构与 HashMap 相同，因为 LinkedHashMap 继承于 HashMap。</li>
-<li>  区别就在于：<strong>LinkedHashMap 内部提供了 Entry，替换了 HashMap 中的 Node</strong>。</li>
+<li>LinkedHashMap 底层使用的结构与 HashMap 相同，因为 LinkedHashMap 继承于 HashMap。</li>
+<li>区别就在于：<strong>LinkedHashMap 内部提供了 Entry，替换了 HashMap 中的 Node</strong>。</li>
 </ul>
 <p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/image-20210802122626223.png" alt="image-20210802122626223"></p>
 <h2 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h2><ul>
-<li>  向 TreeMap 中添加 <code>key-value</code>，<strong>要求 <code>key</code> 必须是由同一个类创建的对象</strong>。</li>
-<li>  因为要根据 key 进行排序：自然排序 、定制排序。</li>
+<li>向 TreeMap 中添加 <code>key-value</code>，<strong>要求 <code>key</code> 必须是由同一个类创建的对象</strong>。</li>
+<li>因为要根据 key 进行排序：自然排序 、定制排序。</li>
 </ul>
 <hr>
 <h2 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Properties</span> <span class="keyword">extends</span> <span class="title">Hashtable</span>&lt;<span class="title">Object</span>,<span class="title">Object</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>Properties 是 Hashtable 的一个子类，<code>key</code> 和 <code>value</code> 都是 String 类型，常用来处理配置文件。</p>
 <blockquote>
 <p>  <strong>代码演示</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span>&#123;</span><br><span class="line">    FileInputStream fis = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Properties pros = <span class="keyword">new</span> Properties();</span><br><span class="line"></span><br><span class="line">        fis = <span class="keyword">new</span> FileInputStream(<span class="string">&quot;jdbc.properties&quot;</span>);</span><br><span class="line">        pros.load(fis);	<span class="comment">// 加载流对应的文件</span></span><br><span class="line"></span><br><span class="line">        String name = pros.getProperty(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        String password = pros.getProperty(<span class="string">&quot;password&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;name = &quot;</span> + name + <span class="string">&quot;, password = &quot;</span> + password);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(fis != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                fis.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <hr>
 <h2 id="Collections-工具类"><a href="#Collections-工具类" class="headerlink" title="Collections 工具类"></a>Collections 工具类</h2><h3 id="作用-1"><a href="#作用-1" class="headerlink" title="作用"></a>作用</h3><ul>
-<li>  <strong>操作 Collection 和 Map 的工具类</strong></li>
+<li><strong>操作 Collection 和 Map 的工具类</strong></li>
 </ul>
 <h3 id="常用方法-2"><a href="#常用方法-2" class="headerlink" title="常用方法"></a>常用方法</h3><ul>
-<li>  **reverse(List)**：反转 List 中元素的顺序</li>
-<li>  **shuffle(List)**：对 List 集合元素进行随机排序</li>
-<li>  **sort(List)**：根据元素的自然顺序对指定 List 集合元素升序排序</li>
-<li>  **sort(List，Comparator)**：根据指定的 Comparator 产生的顺序对 List 集合元素进行排序</li>
-<li>  **swap(List，int， int)**：将指定 list 集合中的 i 处元素和 j 处元素进行交换</li>
-<li>  **Object max(Collection)**：根据元素的自然顺序，返回给定集合中的最大元素</li>
-<li>  **Object max(Collection，Comparator)**：根据 Comparator 指定的顺序，返回给定集合中的最大元素</li>
-<li>  <strong>Object min(Collection)</strong></li>
-<li>  <strong>Object min(Collection，Comparator)</strong></li>
-<li>  **int frequency(Collection，Object)**：返回指定集合中指定元素的出现次数</li>
-<li>  **void copy(List dest,List src)**：将src中的内容复制到dest中</li>
-<li>  **replaceAll(List list，Object oldVal，Object newVal)**：使用新值替换 List 对象的所有旧值</li>
+<li><strong>reverse(List)</strong>：反转 List 中元素的顺序</li>
+<li><strong>shuffle(List)</strong>：对 List 集合元素进行随机排序</li>
+<li><strong>sort(List)</strong>：根据元素的自然顺序对指定 List 集合元素升序排序</li>
+<li><strong>sort(List，Comparator)</strong>：根据指定的 Comparator 产生的顺序对 List 集合元素进行排序</li>
+<li><strong>swap(List，int， int)</strong>：将指定 list 集合中的 i 处元素和 j 处元素进行交换</li>
+<li><strong>Object max(Collection)</strong>：根据元素的自然顺序，返回给定集合中的最大元素</li>
+<li><strong>Object max(Collection，Comparator)</strong>：根据 Comparator 指定的顺序，返回给定集合中的最大元素</li>
+<li><strong>Object min(Collection)</strong></li>
+<li><strong>Object min(Collection，Comparator)</strong></li>
+<li><strong>int frequency(Collection，Object)</strong>：返回指定集合中指定元素的出现次数</li>
+<li><strong>void copy(List dest,List src)</strong>：将src中的内容复制到dest中</li>
+<li><strong>replaceAll(List list，Object oldVal，Object newVal)</strong>：使用新值替换 List 对象的所有旧值</li>
 </ul>
 <h3 id="可以创建线程安全的-List-、Set-、Map"><a href="#可以创建线程安全的-List-、Set-、Map" class="headerlink" title="可以创建线程安全的 List 、Set 、Map"></a>可以创建线程安全的 List 、Set 、Map</h3><blockquote>
 <p>  <strong>说明：</strong></p>
@@ -1402,7 +1370,7 @@
 <p>ArrayList、HashSet 和 HashMap 都是线程不安全的，如果程序要求线程安全，我们可以使用 Collections 工具类将 ArrayList、HashSet 或 HashMap 转换为线程的。</p>
 <p><img src="file://E:/blog/source/_posts/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/image-20210705213534400.png?lastModify=1627872363" alt="image-20210705213534400"></p>
 <hr>
-<p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E9%9B%86%E5%90%88.png"></p>
+<p><img src="/2020/07/25/%E5%AE%B9%E5%99%A8%EF%BC%88%E6%95%B0%E7%BB%84-%E9%9B%86%E5%90%88%EF%BC%89/%E9%9B%86%E5%90%88.png" alt></p>
 
     </div>
 

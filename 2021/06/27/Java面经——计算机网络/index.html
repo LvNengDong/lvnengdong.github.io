@@ -23,14 +23,14 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="1    什么是通信协议？通信协议就是通信的双方共同规定的都要实现的标准。 2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？2.1    TCP 和 UDP 的区别： TCP（Transfer Control Protocol）是一种 面向连接的、可靠的 传输层通信协议。   类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多   UDP（U">
+<meta name="description" content="1    什么是通信协议？通信协议就是通信的双方共同规定的都要实现的标准。 2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？2.1    TCP 和 UDP 的区别： TCP（Transfer Control Protocol）是一种 面向连接的、可靠的 传输层通信协议。 类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多   UDP（Use">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java面经——计算机网络">
 <meta property="og:url" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1    什么是通信协议？通信协议就是通信的双方共同规定的都要实现的标准。 2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？2.1    TCP 和 UDP 的区别： TCP（Transfer Control Protocol）是一种 面向连接的、可靠的 传输层通信协议。   类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多   UDP（U">
+<meta property="og:description" content="1    什么是通信协议？通信协议就是通信的双方共同规定的都要实现的标准。 2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？2.1    TCP 和 UDP 的区别： TCP（Transfer Control Protocol）是一种 面向连接的、可靠的 传输层通信协议。 类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多   UDP（Use">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP%E4%B8%A4%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98.png">
+<meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP两次握手存在的问题.png">
 <meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/BIO.png">
 <meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/NIO.png">
 <meta property="og:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/AIO.png">
@@ -38,7 +38,7 @@
 <meta property="article:modified_time" content="2021-06-27T14:12:52.789Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP%E4%B8%A4%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98.png">
+<meta name="twitter:image" content="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP两次握手存在的问题.png">
 
 
 <link rel="canonical" href="http://example.com/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -264,17 +264,17 @@
         <h1 id="1-什么是通信协议？"><a href="#1-什么是通信协议？" class="headerlink" title="1    什么是通信协议？"></a>1    什么是通信协议？</h1><p>通信协议就是通信的双方共同规定的都要实现的标准。</p>
 <h1 id="2-TCP-和-UDP-有什么区别-？TCP-为什么是三次握手，而不是两次？"><a href="#2-TCP-和-UDP-有什么区别-？TCP-为什么是三次握手，而不是两次？" class="headerlink" title="2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？"></a>2    TCP 和 UDP 有什么区别 ？TCP 为什么是三次握手，而不是两次？</h1><h2 id="2-1-TCP-和-UDP-的区别："><a href="#2-1-TCP-和-UDP-的区别：" class="headerlink" title="2.1    TCP 和 UDP 的区别："></a>2.1    TCP 和 UDP 的区别：</h2><ul>
 <li>TCP（Transfer Control Protocol）是一种 <strong>面向连接的、可靠的</strong> 传输层通信协议。<ul>
-<li>  类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多</li>
+<li>类似于 打电话，点对点的通信，高可靠的，效率比较低，占用的系统资源比较多</li>
 </ul>
 </li>
 <li>UDP（User Datagram Protocol）是一种 <strong>无连接的、不可靠的</strong> 传输层通信协议<ul>
-<li>  类似于 广播，不需要建立连接，发送方不管接收方有没有准备好，直接发送消息；可以进行广播发送。传输不可靠，有可能丢失消息。效率比较高；协议比较简单，占用的系统资源比较少。</li>
+<li>类似于 广播，不需要建立连接，发送方不管接收方有没有准备好，直接发送消息；可以进行广播发送。传输不可靠，有可能丢失消息。效率比较高；协议比较简单，占用的系统资源比较少。</li>
 </ul>
 </li>
 </ul>
 <hr>
 <h2 id="2-2-TCP-为什么是三次握手，而不是两次"><a href="#2-2-TCP-为什么是三次握手，而不是两次" class="headerlink" title="2.2    TCP 为什么是三次握手，而不是两次"></a>2.2    TCP 为什么是三次握手，而不是两次</h2><p>答：如果是两次握手，可能会造成连接资源浪费的情况。</p>
-<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP%E4%B8%A4%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98.png" alt="TCP两次握手存在的问题"></p>
+<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/TCP两次握手存在的问题.png" alt="TCP两次握手存在的问题"></p>
 <p>网络是一种非常不稳定的资源，TCP 建立连接三次握手，断开连接四次挥手。</p>
 <p>假设只有两次握手，</p>
 <ul>
@@ -283,8 +283,8 @@
 </ul>
 <p>​        此时若服务器同意与客户端建立连接，就会将“同意建立连接”的消息发送给客户端并建立服务器与客户端之间的网络通道。由于网络是一种非常不稳定的资源，假设这个在过程中由于网络波动服务器发出的“同意建立连接”消息丢失了，客户端就无法收到服务器“同意建立连接”的消息，也就不会知道其实它与服务器间通信的信道已经建立好了。客户端在这次请求超时后，会做出两种选择：</p>
 <ol>
-<li> 重新发送请求与服务器建立连接；</li>
-<li> 不再发送请求放弃与服务器建立连接。</li>
+<li>重新发送请求与服务器建立连接；</li>
+<li>不再发送请求放弃与服务器建立连接。</li>
 </ol>
 <p>​        假设请求超时后客户端放弃与服务器建立连接：我们可以看到，此时服务器与客户端之间的网络通道其实是存在的，只不过客户端没并不知道这个网络通道的存在，就不会去用这个通道与服务器交互。在无其它操作的情况下，这个网络通道就会一直存在并浪费客户端和服务器的资源。</p>
 <hr>
@@ -335,7 +335,7 @@
 </li>
 </ol>
 <p>BIO    同步阻塞IO</p>
-<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/BIO.png"></p>
+<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/BIO.png" alt></p>
 <ol>
 <li><p>当有一个客户端向服务器发起请求时，服务器就调用一个线程去处理这个请求。</p>
 </li>
@@ -353,7 +353,7 @@
 </ol>
 </blockquote>
 <p>NIO    同步非阻塞IO</p>
-<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/NIO.png"></p>
+<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/NIO.png" alt></p>
 <p>为了解决服务器一次开启多个线程压力过大的问题。JDK 1.4 中新增了 <strong>Selector</strong>，用于接收多个请求，并决定处理这些请求的优先级。这样就可以实现服务端线程与客户端请求的一对多关系，在一定程度上解决了BIO模式下服务器压力过大的问题。</p>
 <blockquote>
 <p>可靠性比较好</p>
@@ -361,7 +361,7 @@
 <p>适用于连接比较多并且连接比较短的场景（轻操作）</p>
 </blockquote>
 <p>AIO    异步非阻塞IO</p>
-<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/AIO.png"></p>
+<p><img src="/2021/06/27/Java%E9%9D%A2%E7%BB%8F%E2%80%94%E2%80%94%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/AIO.png" alt></p>
 <p>AIO 又解决了 NIO 模型服务端需要一直守着线程的这个问题。可靠性最好，吞吐量也是非常高的，适用于连接比较多，并且连接比较长的场景（重操作）。例如：相册服务器。从JDK 7版本开始支持。</p>
 <p>客户端在发送完请求后，可以执行任何操作，不需要一直等待或每隔一段时间来询问服务器请求是否处理完毕。相应的服务器在处理完请求后，会将处理结果保存到一个队列中，并逐一发送通知给请求的客户端，客户端在接收到通知后获取返回消息即可。</p>
 <blockquote>

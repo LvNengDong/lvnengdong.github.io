@@ -23,16 +23,16 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="现代计算机内存模型   早期计算机中 CPU 和内存的速度是差不多的，CPU 执行指令的速度与内存读写数据的速度基本可以达到一种平衡。   但是在现代计算机中，CPU 执行指令的速度要远高于内存的存取速度，当 CPU 运算结束后，只能空闲等待，直到再次读取到内存中的数据，这是非常浪费新能的。   所以现代计算机系统一般都会加入一层读写速度尽可能接近 CPU 运算速度的高速缓存（Cache）来作为内">
+<meta name="description" content="现代计算机内存模型 早期计算机中 CPU 和内存的速度是差不多的，CPU 执行指令的速度与内存读写数据的速度基本可以达到一种平衡。 但是在现代计算机中，CPU 执行指令的速度要远高于内存的存取速度，当 CPU 运算结束后，只能空闲等待，直到再次读取到内存中的数据，这是非常浪费新能的。 所以现代计算机系统一般都会加入一层读写速度尽可能接近 CPU 运算速度的高速缓存（Cache）来作为内存和处理器之">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JMM">
 <meta property="og:url" content="http://example.com/2021/07/08/JMM/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="现代计算机内存模型   早期计算机中 CPU 和内存的速度是差不多的，CPU 执行指令的速度与内存读写数据的速度基本可以达到一种平衡。   但是在现代计算机中，CPU 执行指令的速度要远高于内存的存取速度，当 CPU 运算结束后，只能空闲等待，直到再次读取到内存中的数据，这是非常浪费新能的。   所以现代计算机系统一般都会加入一层读写速度尽可能接近 CPU 运算速度的高速缓存（Cache）来作为内">
+<meta property="og:description" content="现代计算机内存模型 早期计算机中 CPU 和内存的速度是差不多的，CPU 执行指令的速度与内存读写数据的速度基本可以达到一种平衡。 但是在现代计算机中，CPU 执行指令的速度要远高于内存的存取速度，当 CPU 运算结束后，只能空闲等待，直到再次读取到内存中的数据，这是非常浪费新能的。 所以现代计算机系统一般都会加入一层读写速度尽可能接近 CPU 运算速度的高速缓存（Cache）来作为内存和处理器之">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/07/08/JMM/JMM.png">
 <meta property="og:image" content="http://example.com/2021/07/08/JMM/image-20210807154853861.png">
-<meta property="og:image" content="http://example.com/2021/07/08/JMM/JMM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png">
+<meta property="og:image" content="http://example.com/2021/07/08/JMM/JMM内存结构.png">
 <meta property="og:image" content="http://example.com/2021/07/08/JMM/ThreadLocal.png">
 <meta property="article:published_time" content="2021-07-08T14:00:54.000Z">
 <meta property="article:modified_time" content="2021-08-09T04:17:09.628Z">
@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -268,24 +268,24 @@
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="现代计算机内存模型"><a href="#现代计算机内存模型" class="headerlink" title="现代计算机内存模型"></a>现代计算机内存模型</h1><ul>
-<li>  早期计算机中 CPU 和内存的速度是差不多的，CPU 执行指令的速度与内存读写数据的速度基本可以达到一种平衡。</li>
-<li>  但是在现代计算机中，CPU 执行指令的速度要远高于内存的存取速度，当 CPU 运算结束后，只能空闲等待，直到再次读取到内存中的数据，这是非常浪费新能的。</li>
-<li>  所以现代计算机系统一般都会加入一层读写速度尽可能接近 CPU 运算速度的高速缓存（Cache）来作为内存和处理器之间的缓冲。将运算需要使用到的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。</li>
+<li>早期计算机中 CPU 和内存的速度是差不多的，CPU 执行指令的速度与内存读写数据的速度基本可以达到一种平衡。</li>
+<li>但是在现代计算机中，CPU 执行指令的速度要远高于内存的存取速度，当 CPU 运算结束后，只能空闲等待，直到再次读取到内存中的数据，这是非常浪费新能的。</li>
+<li>所以现代计算机系统一般都会加入一层读写速度尽可能接近 CPU 运算速度的高速缓存（Cache）来作为内存和处理器之间的缓冲。将运算需要使用到的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。</li>
 </ul>
 <blockquote>
 <p>  <strong>为什么不把数据直接存在 CPU 中呢？这样读写速度岂不是更快了？</strong></p>
 </blockquote>
 <ul>
-<li>  现代计算机中，硬件性能的速度从高到低为：<code>CPU &gt; Cache &gt; 内存 &gt; 硬盘</code>。而在同等价值下，内存大小则是刚好反过来的，也就是说，运算速度越快，可存储的数据量就越小。所以说使用 CPU 来存储程序运行时需要使用到的所有数据是不现实的，在计算机系统中，<strong>CPU 主要用于数据计算，其它硬件则用于数据存取</strong>。</li>
-<li>  <strong>为了防止 CPU 被阻塞</strong>。如果直接将数据放在 CPU 中，当运算阻塞时整个 CPU 就废了，而放在高速缓存中，如果某个运算发生阻塞超过一定时间后，CPU 可以放弃该运算转去执行其它缓存中的运算。</li>
+<li>现代计算机中，硬件性能的速度从高到低为：<code>CPU &gt; Cache &gt; 内存 &gt; 硬盘</code>。而在同等价值下，内存大小则是刚好反过来的，也就是说，运算速度越快，可存储的数据量就越小。所以说使用 CPU 来存储程序运行时需要使用到的所有数据是不现实的，在计算机系统中，<strong>CPU 主要用于数据计算，其它硬件则用于数据存取</strong>。</li>
+<li><strong>为了防止 CPU 被阻塞</strong>。如果直接将数据放在 CPU 中，当运算阻塞时整个 CPU 就废了，而放在高速缓存中，如果某个运算发生阻塞超过一定时间后，CPU 可以放弃该运算转去执行其它缓存中的运算。</li>
 </ul>
 <blockquote>
 <p>  <strong>磁盘中的数据什么时候加载到高速缓存（Cache）中呢？</strong></p>
 </blockquote>
 <ol>
-<li> 程序开始运行的时候，需要把运行时需要使用到的数据加载到内存中。在这个阶段就可以把一些高频的、可能会经常用到的数据（如加减乘除等运算符）直接加载到高速缓存中。</li>
-<li> 程序在运行过程中，如果发现有一部分数据是被反复使用的（如通过阈值来筛选高频出现的数据），就可以把这一部分数据在运行期再加载到高速缓存中。</li>
-<li> 高速缓存中放的只是主内存中的一部分高频使用的数据，并不能把全部数据都复制到高速缓存中，但即使这样，也大大增加了 CPU的利用率。</li>
+<li>程序开始运行的时候，需要把运行时需要使用到的数据加载到内存中。在这个阶段就可以把一些高频的、可能会经常用到的数据（如加减乘除等运算符）直接加载到高速缓存中。</li>
+<li>程序在运行过程中，如果发现有一部分数据是被反复使用的（如通过阈值来筛选高频出现的数据），就可以把这一部分数据在运行期再加载到高速缓存中。</li>
+<li>高速缓存中放的只是主内存中的一部分高频使用的数据，并不能把全部数据都复制到高速缓存中，但即使这样，也大大增加了 CPU的利用率。</li>
 </ol>
 <h2 id="缓存一致性问题"><a href="#缓存一致性问题" class="headerlink" title="缓存一致性问题"></a>缓存一致性问题</h2><p>​    绝大多数的运算任务都不可能只靠处理器“计算”就能完成，处理器至少要与内存交互，如读取内存数据、存储运算结果等，这个 I/O 是很难消除的。即程序运行时 CPU 需要经历 <code>从内存取数据 --&gt; CPU 运算 --&gt; 将运算结果写回内存</code>，由于 CPU 的运算速度远快于内存的读写速度，就会出现这样一种情况，内存花了 10s 才将要运算的数据传递到 CPU 中，但是 CPU 只用了 1s 就计算完了，那么中间的 9s CPU 就一直没有活干。写出到内存中也存在类似的情况。<strong>基于高速缓存的存储很好地解决了处理器与内存的速度矛盾，但是引入了一个新的问题：缓存一致性</strong>。</p>
 <p>​    在多处理器系统中，每个处理器都有自己的高速缓存，而它们又共享同一主内存（物理意义上的内存，可以看做是内存条）（比如 3 个 CPU，一根内存条）。当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致。举例说明就是某个变量在多个 CPU 之间共享，并且这些 CPU 都对这个变量进行了运算，那么当缓存数据同步回主内存时以谁的缓存数据为主呢？</p>
@@ -300,20 +300,17 @@
 <p>​        其实 JVM 也是一种内存模型，因为真实的物理内存空间并未划分什么栈空间、堆空间、方法区等，只不过 JVM 在实现时利用一部分物理空间存储具有相似性的数据，所以才把内存抽象成一块一块不同的区域。</p>
 <p>​        从抽象的角度看，<strong>JMM 定义了线程和主内存之间的抽象关系</strong>：线程之间共享的变量存储在<strong>主内存（Main Memory）</strong>中，每个线程都有一个私有的<strong>本地内存（Local Memory）</strong>，本地内存中存储了该线程读/写共享变量的副本。</p>
 <p>​        <strong>本地内存是 JMM 的一个抽象概念</strong>，并不真实存在，它由缓存、写缓冲区、寄存器以及其它的编译期优化共同实现的。它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（包括实例字段、静态字段和构成数组对象的元素）的访问方式。</p>
-<h2 id="运行时内存的划分"><a href="#运行时内存的划分" class="headerlink" title="运行时内存的划分"></a>运行时内存的划分</h2><img src="/2021/07/08/JMM/image-20210807154853861.png" alt="image-20210807154853861" style="zoom: 33%;">
-
-
-
+<h2 id="运行时内存的划分"><a href="#运行时内存的划分" class="headerlink" title="运行时内存的划分"></a>运行时内存的划分</h2><p><img src="/2021/07/08/JMM/image-20210807154853861.png" alt="image-20210807154853861" style="zoom: 33%;"></p>
 <ul>
-<li>  对于每一个线程来说，栈都是私有的，而堆是共有的。</li>
-<li>  也就是说在栈中的变量（局部变量、⽅法定义参数、异常处理器参数）不会在线程之间共享，也就不会有内存可见性的问题，也不受内存模型的影响。</li>
-<li>  而在堆中的变量是共享的，称为共享变量。所以，<strong>内存可见性是针对的共享变量</strong>。</li>
+<li>对于每一个线程来说，栈都是私有的，而堆是共有的。</li>
+<li>也就是说在栈中的变量（局部变量、⽅法定义参数、异常处理器参数）不会在线程之间共享，也就不会有内存可见性的问题，也不受内存模型的影响。</li>
+<li>而在堆中的变量是共享的，称为共享变量。所以，<strong>内存可见性是针对的共享变量</strong>。</li>
 </ul>
 <h2 id="既然堆是共享的，为什么在堆中会有内存不可见问题？"><a href="#既然堆是共享的，为什么在堆中会有内存不可见问题？" class="headerlink" title="既然堆是共享的，为什么在堆中会有内存不可见问题？"></a>既然堆是共享的，为什么在堆中会有内存不可见问题？</h2><ul>
-<li>  这是因为现代计算机为了高效，往往会在高速缓存区中缓存共享变量，因为 CPU 访问缓存区比访问内存要快得多。</li>
-<li>  线程之间的共享变量存在主内存中，每个线程都有一个私有的本地内存，存储了该线程读、写共享变量的副本。</li>
-<li>  本地内存是 Java 内存模型的一个抽象概念，并不真实存在。它涵盖了缓存、写缓冲区、寄存器等。</li>
-<li>  Java 线程之间的通信由 Java 内存模型（简称JMM）控制，从抽象的角度来说，<strong>JMM 定义了线程和主内存之间的抽象关系</strong>。</li>
+<li>这是因为现代计算机为了高效，往往会在高速缓存区中缓存共享变量，因为 CPU 访问缓存区比访问内存要快得多。</li>
+<li>线程之间的共享变量存在主内存中，每个线程都有一个私有的本地内存，存储了该线程读、写共享变量的副本。</li>
+<li>本地内存是 Java 内存模型的一个抽象概念，并不真实存在。它涵盖了缓存、写缓冲区、寄存器等。</li>
+<li>Java 线程之间的通信由 Java 内存模型（简称JMM）控制，从抽象的角度来说，<strong>JMM 定义了线程和主内存之间的抽象关系</strong>。</li>
 </ul>
 <h2 id="JMM与Java内存区域划分的区别与联系"><a href="#JMM与Java内存区域划分的区别与联系" class="headerlink" title="JMM与Java内存区域划分的区别与联系"></a>JMM与Java内存区域划分的区别与联系</h2><p>上面两小节分别提到了JMM 和 Java 运行时内存区域的划分，这两者既有差别又有联系：</p>
 <blockquote>
@@ -324,130 +321,118 @@
 <p>  <strong>联系</strong></p>
 </blockquote>
 <ul>
-<li>  都存在私有数据区域和共享数据区域。⼀般来说，<strong>JMM中的主内存属于共享数据区域，他是包含了堆和方法区</strong>；</li>
-<li>  同样，<strong>JMM 中的本地内存属于私有数据区域，包含了程序计数器、本地方法栈、虚拟机栈</strong>。</li>
-<li>  实际上，他们表达的是同⼀种含义，这⾥不做区分。</li>
+<li>都存在私有数据区域和共享数据区域。⼀般来说，<strong>JMM中的主内存属于共享数据区域，他是包含了堆和方法区</strong>；</li>
+<li>同样，<strong>JMM 中的本地内存属于私有数据区域，包含了程序计数器、本地方法栈、虚拟机栈</strong>。</li>
+<li>实际上，他们表达的是同⼀种含义，这⾥不做区分。</li>
 </ul>
 <hr>
 <h1 id="JMM-工作原理"><a href="#JMM-工作原理" class="headerlink" title="JMM 工作原理"></a>JMM 工作原理</h1><p>​    上面我们讲了：JMM 定义了线程与主内存之间的抽象关系。</p>
 <p>​    在一个运行的 Java 程序中，JVM 是一个进程，运行时包含多个线程，而每个线程创建时 JVM 都会为其创建一个<strong>工作内存</strong>，工作内存是每个线程私有的数据区域，而 JMM 中规定所有变量都要存储在<strong>主内存</strong>，主内存是共享内存区域，所有线程都可以访问，但 <strong>线程对变量的操作（读取、赋值等）必须要在工作内存中进行，首先要将变量从主内存拷贝到自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存</strong>，而不能直接操作主内存中的变量，各个线程中的工作内存中存储着主内存中的变量副本拷贝，因此不同的线程间无法访问对方的工作内存。<strong>若多个线程间想要通信，必须通过主内存来完成</strong>。其简要访问过程如下图：</p>
-<p><img src="/2021/07/08/JMM/JMM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png" alt="JMM内存结构"></p>
+<p><img src="/2021/07/08/JMM/JMM内存结构.png" alt="JMM内存结构"></p>
 <p>从图中可以看出：</p>
 <ol>
 <li>所有的共享变量都存在主内存中。</li>
 <li>每个线程都保存了⼀份该线程使用到的共享变量的副本。</li>
-<li>如果线程A与线程B之间要通信的话，必须经历下面2个步骤：</li>
-</ol>
-<ul>
-<li>  线程A将本地内存A中更新过的共享变量刷新到主内存中去。</li>
-<li>  线程B到主内存中去读取线程A之前已经更新过的共享变量。</li>
+<li>如果线程A与线程B之间要通信的话，必须经历下面2个步骤：<ul>
+<li>线程A将本地内存A中更新过的共享变量刷新到主内存中去。</li>
+<li>线程B到主内存中去读取线程A之前已经更新过的共享变量。</li>
 </ul>
+</li>
+</ol>
 <p>所以，<strong>线程A无法直接访问线程B的工作内存，线程间通信必须经过主内存</strong>。<br>注意，根据JMM的规定，<strong>线程对共享变量的所有操作都必须在自己的本地内存中进行，不能直接从主内存中读取</strong>。</p>
 <p>所以线程B并不是直接去主内存中读取共享变量的值，⽽是先在本地内存B中找到这个共享变量，发现这个共享变量已经被更新了，然后本地内存B去主内存中读取这个共享变量的新值，并拷贝到本地内存B中，最后线程B再读取本地内存B中的新值。</p>
 <p>那么怎么知道这个共享变量的被其他线程更新了呢？这就是JMM的功劳了，也是 JMM 存在的必要性之一。JMM通过控制主内存与每个线程的本地内存之间的交互，来提供内存可见性保证。</p>
 <ul>
-<li>  Java中的 volatile 关键字可以保证多线程操作共享变量的可见性以及禁止指令重排，</li>
-<li>  synchronized 关键字不仅保证可见性，同时也保证了原子性（互斥性）。</li>
-<li>  在更底层，JMM通过内存屏障来实现内存的可见性以及禁止指令重排。</li>
+<li>Java中的 volatile 关键字可以保证多线程操作共享变量的可见性以及禁止指令重排，</li>
+<li>synchronized 关键字不仅保证可见性，同时也保证了原子性（互斥性）。</li>
+<li>在更底层，JMM通过内存屏障来实现内存的可见性以及禁止指令重排。</li>
 </ul>
 <hr>
 <h1 id="JMM-三大特性"><a href="#JMM-三大特性" class="headerlink" title="JMM 三大特性"></a>JMM 三大特性</h1><blockquote>
 <ol>
-<li> <strong>可见性</strong></li>
-<li> <strong>原子性</strong></li>
-<li> <strong>有序性</strong></li>
+<li><strong>可见性</strong></li>
+<li><strong>原子性</strong></li>
+<li><strong>有序性</strong></li>
 </ol>
 </blockquote>
 <p>​    JMM 三大特性是大多数多线程开发需要遵守的规定。但是 volatile 只支持可见性、有序性（禁止指令重排），而不支持原子性。</p>
 <h2 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h2><ul>
-<li>  每个线程对主内存中共享变量的读写操作都是先将主内存中的共享变量拷贝到自己的工作内存进行运算，然后再写回到主内存中的。</li>
-<li>  这就可能会造成：线程 A 修改了共享变量 X 的值但还未写回主内存时，另一个线程 B 又对主内存中同一个共享变量 X 进行操作，但此时 A 线程工作内存中的共享变量 X 对线程 B 来说并不可见。这种工作内存与主内存同步延迟现象造成了可见性问题。</li>
+<li>每个线程对主内存中共享变量的读写操作都是先将主内存中的共享变量拷贝到自己的工作内存进行运算，然后再写回到主内存中的。</li>
+<li>这就可能会造成：线程 A 修改了共享变量 X 的值但还未写回主内存时，另一个线程 B 又对主内存中同一个共享变量 X 进行操作，但此时 A 线程工作内存中的共享变量 X 对线程 B 来说并不可见。这种工作内存与主内存同步延迟现象造成了可见性问题。</li>
 </ul>
 <h2 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h2><blockquote>
 <p>  <strong>什么是原子性？</strong></p>
 </blockquote>
 <ul>
-<li><pre><code>     不可分割性，完整性，即某个线程正在做某个具体业务时，中间不可以被加塞或者被分隔，需要整体完整。
-</code></pre>
-</li>
-<li><pre><code>     要么同时成功，要么同时失败。有点类似于关系型数据库中的事务。
-</code></pre>
-</li>
+<li>不可分割性，完整性，即某个线程正在做某个具体业务时，中间不可以被加塞或者被分隔，需要整体完整。</li>
+<li>要么同时成功，要么同时失败。有点类似于关系型数据库中的事务。</li>
 </ul>
 <h2 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h2><h1 id="JMM-关于同步的规定"><a href="#JMM-关于同步的规定" class="headerlink" title="JMM 关于同步的规定"></a>JMM 关于同步的规定</h1><ol>
-<li> 线程加锁前，必须把共享变量的值刷新回<strong>主内存</strong>；</li>
-<li> 线程加锁前，必须读取主内存的最新值到<strong>自己的工作内存</strong>；</li>
-<li> 加锁解锁是同一把锁。</li>
+<li>线程加锁前，必须把共享变量的值刷新回<strong>主内存</strong>；</li>
+<li>线程加锁前，必须读取主内存的最新值到<strong>自己的工作内存</strong>；</li>
+<li>加锁解锁是同一把锁。</li>
 </ol>
 <hr>
 <h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><h2 id="1-知识点"><a href="#1-知识点" class="headerlink" title="1    知识点"></a>1    知识点</h2><blockquote>
 <p>  <strong>使用 ThreadLocal 进行线程本地存储</strong></p>
 </blockquote>
 <ul>
-<li>  <strong>ThreadLocal</strong> 是 Java 中提供的<strong>线程本地存储机制</strong>，可以利用该机制将数据缓存在某个线程内部，该线程可以在任意时刻、任意方法中获取缓存中的数据。</li>
-<li>  ThreadLocal 底层是通过 <strong>ThreadLocalMap</strong> 来实现的（ThreadLocalMap是ThreadLocal的一个静态内部类），每个 Thread 对象（注意不是 ThreadLocal 对象）中都存在一个 ThreadLocalMap ，map 的 key 为 ThreadLocal 对象，map 的 value 为需要缓存的值。</li>
-<li>  ThreadLocalMap 的 key 始终为 ThreadLocal 的引用，但其值是一个 Object 类型，可以将其声明为一个 Map 类型，这样就可以存储多对元素了。</li>
+<li><strong>ThreadLocal</strong> 是 Java 中提供的<strong>线程本地存储机制</strong>，可以利用该机制将数据缓存在某个线程内部，该线程可以在任意时刻、任意方法中获取缓存中的数据。</li>
+<li>ThreadLocal 底层是通过 <strong>ThreadLocalMap</strong> 来实现的（ThreadLocalMap是ThreadLocal的一个静态内部类），每个 Thread 对象（注意不是 ThreadLocal 对象）中都存在一个 ThreadLocalMap ，map 的 key 为 ThreadLocal 对象，map 的 value 为需要缓存的值。</li>
+<li>ThreadLocalMap 的 key 始终为 ThreadLocal 的引用，但其值是一个 Object 类型，可以将其声明为一个 Map 类型，这样就可以存储多对元素了。</li>
 </ul>
 <p><img src="/2021/07/08/JMM/ThreadLocal.png" alt="ThreadLocal"></p>
 <blockquote>
 <p>  <strong>线程池中的 ThreadLocal 存在的内存泄露问题</strong></p>
 </blockquote>
 <ul>
-<li>  如果在线程池中使用 ThreadLocal 会造成内存泄露，因为正常情况下，线程死亡后，需要把线程对象使用过的资源全部释放。即  ThreadLocal 使用完之后，应该要把使用过的 <code>Entry&lt;K, V&gt;</code> 对象进行回收。</li>
-<li>  但是由于线程池中的部分线程是不会被回收的，而线程池中的线程对象通过强引用指向了 ThreadLocalMap，ThreadLocalMap 又通过强引用指向 Entry 对象。所以如果线程对象不被回收的话，Entry 对象也就不会被回收。</li>
-<li>  如果反复使用线程池中线程对象的 ThreadLocalMap 缓存数据，就会导致内存泄露。</li>
-<li>  <strong>解决方法是：在使用完 ThreadLocal 对象后，手动调用 ThreadLocal 中的 remove() 方法，手动清除 Entry 对象。</strong></li>
-<li>  ThreadLocal 经典的应用场景就是连接管理（一个线程持有一个连接，该连接对象可以在不同的方法之间进行传递，线程之间共享一个连接）。</li>
+<li>如果在线程池中使用 ThreadLocal 会造成内存泄露，因为正常情况下，线程死亡后，需要把线程对象使用过的资源全部释放。即  ThreadLocal 使用完之后，应该要把使用过的 <code>Entry&lt;K, V&gt;</code> 对象进行回收。</li>
+<li>但是由于线程池中的部分线程是不会被回收的，而线程池中的线程对象通过强引用指向了 ThreadLocalMap，ThreadLocalMap 又通过强引用指向 Entry 对象。所以如果线程对象不被回收的话，Entry 对象也就不会被回收。</li>
+<li>如果反复使用线程池中线程对象的 ThreadLocalMap 缓存数据，就会导致内存泄露。</li>
+<li><strong>解决方法是：在使用完 ThreadLocal 对象后，手动调用 ThreadLocal 中的 remove() 方法，手动清除 Entry 对象。</strong></li>
+<li>ThreadLocal 经典的应用场景就是连接管理（一个线程持有一个连接，该连接对象可以在不同的方法之间进行传递，线程之间共享一个连接）。</li>
 </ul>
 <h2 id="2-代码验证"><a href="#2-代码验证" class="headerlink" title="2    代码验证"></a>2    代码验证</h2><h3 id="Before：未使用-ThreadLocal-前"><a href="#Before：未使用-ThreadLocal-前" class="headerlink" title="Before：未使用 ThreadLocal 前"></a>Before：未使用 ThreadLocal 前</h3><blockquote>
 <ol>
-<li> <strong>定义一个 Person 类</strong></li>
+<li><strong>定义一个 Person 类</strong></li>
 </ol>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
-<ol start="2">
-<li> <strong>测试</strong></li>
+<ol>
+<li><strong>测试</strong></li>
 </ol>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.tmp;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/9 11:31</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Person person = <span class="keyword">new</span> Person();  <span class="comment">// 堆中</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            person.setName(<span class="string">&quot;张学友&quot;</span>);  </span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">2000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1==========&quot;</span>+ person.getName());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            person.setName(<span class="string">&quot;乌蝇哥&quot;</span>);  </span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2==========&quot;</span>+ person.getName());</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>  <strong>代码分析：</strong></p>
 </blockquote>
 <ul>
-<li>  测试程序中的两个线程 T1 和 T2，T1 和 T2 都有可能先被执行。</li>
+<li>测试程序中的两个线程 T1 和 T2，T1 和 T2 都有可能先被执行。</li>
 <li>如果 T1 先执行，<ol>
-<li> 则会先执行 <code>person.name = &quot;张学友&quot;</code>，再切换到线程 T2 执行 <code>person.name = &quot;乌蝇哥&quot;</code>；</li>
-<li> 最终两个线程输出的结果都是： <code>person.name = &quot;乌蝇哥&quot;</code>。</li>
+<li>则会先执行 <code>person.name = &quot;张学友&quot;</code>，再切换到线程 T2 执行 <code>person.name = &quot;乌蝇哥&quot;</code>；</li>
+<li>最终两个线程输出的结果都是： <code>person.name = &quot;乌蝇哥&quot;</code>。</li>
 </ol>
 </li>
 <li>如果 T2 先执行，<ol>
-<li> 则会先执行 <code>person.name = &quot;乌蝇哥&quot;</code>，再切换到线程 T1 执行 <code>person.name = &quot;张学友&quot;</code>；</li>
-<li> 最终两个线程输出的结果都是： <code>person.name = &quot;张学友&quot;</code>。</li>
+<li>则会先执行 <code>person.name = &quot;乌蝇哥&quot;</code>，再切换到线程 T1 执行 <code>person.name = &quot;张学友&quot;</code>；</li>
+<li>最终两个线程输出的结果都是： <code>person.name = &quot;张学友&quot;</code>。</li>
 </ol>
 </li>
 </ul>
 <p>对于这种不确定的结果，在生产中是不可以接受的。如果要求，线程 T1 的输出结果始终是 “张学友”，而线程 T2 的输出结果始终是 “乌蝇哥”，就可以使用 ThreadLocal ，将 <code>Person.name</code> 属性保存在线程的本地内存中。</p>
 <h3 id="After：使用-ThreadLocal-后"><a href="#After：使用-ThreadLocal-后" class="headerlink" title="After：使用 ThreadLocal 后"></a>After：使用 ThreadLocal 后</h3><blockquote>
 <ol>
-<li> <strong>修改 Person 类</strong></li>
+<li><strong>修改 Person 类</strong></li>
 </ol>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    ThreadLocal&lt;String&gt; threadLocalName = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line"><span class="comment">//    private String name;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.threadLocalName.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.threadLocalName.set(name);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">     <span class="function"><span class="keyword">public</span> ThreadLocal&lt;String&gt; <span class="title">getThreadLocalName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> threadLocalName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<ol start="2">
-<li> <strong>测试</strong></li>
+<ol>
+<li><strong>测试</strong></li>
 </ol>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/9 11:31</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Person person = <span class="keyword">new</span> Person();  <span class="comment">// 堆中</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            person.setName(<span class="string">&quot;张学友&quot;</span>);  <span class="comment">// T1线程的栈中</span></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">2000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1==========&quot;</span>+ person.getName());</span><br><span class="line">            </span><br><span class="line">            person.getThreadLocalName().remove();</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            person.setName(<span class="string">&quot;乌蝇哥&quot;</span>);  <span class="comment">// T2线程的栈中</span></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2==========&quot;</span>+ person.getName());</span><br><span class="line">            </span><br><span class="line">            person.getThreadLocalName().remove();</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 
     </div>
 

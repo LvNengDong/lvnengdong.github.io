@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -283,7 +283,7 @@
 </ul>
 <p>这就实现了服务的自动注册、发现、状态监控。</p>
 <hr>
-<h2 id="Eureka架构"><a href="#Eureka架构" class="headerlink" title="Eureka架构"></a>Eureka架构</h2><p><img src="/2020/11/07/Eureka/Eureka%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84.png"></p>
+<h2 id="Eureka架构"><a href="#Eureka架构" class="headerlink" title="Eureka架构"></a>Eureka架构</h2><p><img src="/2020/11/07/Eureka/Eureka%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84.png" alt></p>
 <blockquote>
 <p>Eureka架构中的三个核心角色</p>
 <ul>
@@ -322,24 +322,16 @@
 <p>这个会对我们开发带来极大的不变，你对服务重启，隔了60秒Eureka才反应过来。开发阶段可以适当减小。</p>
 </blockquote>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">server:</span></span><br><span class="line">  	<span class="attr">eviction-interval-timer-in-ms:</span> <span class="number">60</span><span class="string">*1000</span>	<span class="comment"># 失效剔除时间</span></span><br></pre></td></tr></table></figure>
-
-
-
 <ul>
 <li><strong>自我保护</strong>（EurekaServer）</li>
 </ul>
 <p>我们关停一个服务，就会在Eureka面板看到一条警告：这是触发了Eureka的自我保护机制。</p>
-<p><img src="/2020/11/07/Eureka/1525618396076.png"></p>
+<p><img src="/2020/11/07/Eureka/1525618396076.png" alt></p>
 <blockquote>
 <p>当一个<code>服务提供者</code>未按时心跳续约时，Eureka会统计该服务实例最近15分钟心跳失败的比例是否超过了85%。在生产环境下，因为网络延迟等原因，心跳失败的比例很有可能超标，但此时直接把服务剔除并不妥当，因为服务可能没有宕机。Eureka就把当前实例的注册信心保护起来，不予剔除。生产环境下这很有用，保证了大多数服务依然可用。</p>
 <p>但是这给我们的开发带来了麻烦，因此开发阶段我们都会关闭自我保护模式：</p>
 </blockquote>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">server:</span></span><br><span class="line">  	<span class="attr">enable-self-preservation:</span> <span class="literal">false</span>	<span class="comment"># 关闭自我保护模式（缺省为true）</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h3 id="服务提供者"><a href="#服务提供者" class="headerlink" title="服务提供者"></a>服务提供者</h3><blockquote>
 <ul>
 <li><p>提供服务的应用，可以是SpringBoot应用，也可以是其它任意技术实现，只要对外提供Rest风格服务即可。</p>
@@ -361,12 +353,12 @@
 <p>在注册完成以后，<code>服务提供者</code>与<code>Eureka</code>之间会维持一个”心跳”（定时向EurekaServer发送Rest请求），告诉EurekaServer：“我还活着”。我们将这个过程称为<strong>服务续约（renew）</strong>。</p>
 </blockquote>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">instance:</span> </span><br><span class="line">  	<span class="attr">lease-expiration-duration-in-seconds:</span> <span class="number">90</span>	<span class="comment"># 服务失效时间，默认为90s</span></span><br><span class="line">    <span class="attr">lease-renewal-interval-in-seconds:</span> <span class="number">30</span>	<span class="comment"># 服务续约时间，默认为30s</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>也就是说，默认情况下每个30秒服务会向注册中心发送一次心跳，证明自己还活着。如果超过90秒没有发送心跳，EurekaServer就会认为该服务宕机，会从服务列表中移除，这两个值在生产环境不要修改，默认即可。</p>
 <p>但是在开发时，这个值有点太长了，经常我们关掉一个服务，会发现Eureka依然认为服务在活着。所以我们在开发阶段可以适当调小。</p>
 </blockquote>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">lease-expiration-duration-in-seconds:</span> <span class="number">10</span> <span class="comment"># 10秒即过期</span></span><br><span class="line">    <span class="attr">lease-renewal-interval-in-seconds:</span> <span class="number">5</span> <span class="comment"># 5秒一次心跳</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">lease-expiration-duration-in-seconds:</span> <span class="number">10</span> <span class="comment"># 10秒即过期</span></span><br><span class="line">    <span class="attr">lease-renewal-interval-in-seconds:</span> <span class="number">5</span> <span class="comment"># 5秒一次心跳</span></span><br></pre></td></tr></table></figure>
+</li>
 <li><p><strong>实例ID</strong></p>
 <p>先来看一下服务状态信息：</p>
 <p>在Eureka监控页面，查看服务注册信息：</p>
@@ -382,7 +374,6 @@
 </ul>
 <p>我们可以通过instance-id属性来修改它的构成：</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">instance-id:</span> <span class="string">$&#123;spring.application.name&#125;:$&#123;server.port&#125;</span></span><br></pre></td></tr></table></figure>
-
 <p>重启服务再试试看：</p>
 <p><img src="/2020/11/07/Eureka/1525617542081.png" alt="1525617542081"></p>
 </li>
@@ -397,16 +388,13 @@
 <p>当<code>服务消费者</code>启动时，会检测<code>eureka.client.fetch-registry=true</code>参数的值，如果为true（默认为true），则会从EurekaServer中拉取服务列表的备份，然后缓存在本地。并且每隔30s会重新获取并更新数据。我们可以通过下面的参数来进行修改：</p>
 </blockquote>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">  	<span class="attr">registry-fetch-interval-seconds:</span> <span class="number">30</span>		<span class="comment"># 默认值是30s</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>生产环境中，我们不需要修改这个值。</p>
 <p>但是为了开发环境下，能够快速得到服务的最新状态，我们可以将其设置小一点。</p>
 </blockquote>
 <hr>
 <h2 id="Eureka中常见的配置信息"><a href="#Eureka中常见的配置信息" class="headerlink" title="Eureka中常见的配置信息"></a>Eureka中常见的配置信息</h2><h3 id="Eureka服务端"><a href="#Eureka服务端" class="headerlink" title="Eureka服务端"></a>Eureka服务端</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">10086</span> <span class="comment"># 当前服务的端口号</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">eureka-server</span> <span class="comment"># 当前服务的名称（ID），会在Eureka中显示</span></span><br><span class="line"></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">	<span class="attr">register-with-eureka:</span> <span class="literal">false</span> <span class="comment"># 是否注册自己的信息到EurekaServer，默认是true</span></span><br><span class="line">	<span class="attr">fetch-registry:</span> <span class="literal">false</span> <span class="comment"># 是否拉取其它服务的信息，默认是true</span></span><br><span class="line">	<span class="attr">service-url:</span> <span class="comment"># EurekaServer的地址，现在是自己的地址，如果是集群，需要加上其它Server的地址。</span></span><br><span class="line">	  <span class="attr">defaultZone:</span> <span class="string">http://127.0.0.1:$&#123;server.port&#125;/eureka</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="Eureka客户端"><a href="#Eureka客户端" class="headerlink" title="Eureka客户端"></a>Eureka客户端</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8081</span>	<span class="comment"># 当前服务器的端口号</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">	<span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/mydb01</span></span><br><span class="line">	<span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">	<span class="attr">password:</span> <span class="number">123</span></span><br><span class="line">	<span class="attr">hikari:</span></span><br><span class="line">	  <span class="attr">maximum-pool-size:</span> <span class="number">20</span>		<span class="comment"># 最大连接池数量</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">	<span class="attr">name:</span> <span class="string">user-service</span> <span class="comment"># 应用名称</span></span><br><span class="line"></span><br><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">type-aliases-package:</span> <span class="string">com.leyou.userservice.pojo</span>	<span class="comment"># mybatis实体类包扫描并起别名[用于封装查询到的数据]</span></span><br><span class="line"></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">	<span class="attr">service-url:</span> <span class="comment"># EurekaServer服务器的地址，多个地址以 [，] 隔开</span></span><br><span class="line">	  <span class="attr">defaultZone:</span> <span class="string">http://127.0.0.1:10086/eureka,http://127.0.0.1:10087/eureka</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">	<span class="attr">prefer-ip-address:</span> <span class="literal">true</span> <span class="comment"># 当调用getHostname获取实例的hostname时，返回ip而不是host名称</span></span><br><span class="line">	<span class="attr">ip-address:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>   <span class="comment"># 指定自己的ip信息，不指定的话会自己寻找</span></span><br><span class="line">	<span class="attr">lease-expiration-duration-in-seconds:</span> <span class="number">90</span>	<span class="comment"># 默认值，服务失效时间</span></span><br><span class="line">	<span class="attr">lease-renewal-interval-in-seconds:</span> <span class="number">30</span>	<span class="comment"># 默认值，服务续约间隔时间</span></span><br><span class="line">	<span class="attr">registry-fetch-interval-seconds:</span> <span class="number">30</span> 	<span class="comment"># 默认值，注册列表拉取时间间隔</span></span><br><span class="line">  <span class="attr">server:</span></span><br><span class="line">	<span class="attr">enable-self-preservation:</span> <span class="literal">false</span> <span class="comment"># 自我保护（缺省为打开）</span></span><br><span class="line">	<span class="attr">eviction-interval-timer-in-ms:</span> <span class="number">1000</span> <span class="comment"># 失效剔除（缺省为60*1000ms）</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>不用指定<code>register-with-eureka</code>和<code>fetch-registry</code>，因为默认是true。</p>
 </blockquote>

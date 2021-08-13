@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="阻塞队列；BlockingQueue  阻塞队列的由来   生产者-消费者模式     我们假设一种场景，生产者一直生产资源，消费者一直消费资源，资源存储在一个缓冲池中，生产者将生产的资源存进缓冲池中，消费者从缓冲池中拿到资源进行消费，这就是⼤名鼎鼎的生产者-消费者模式。   该模式能够简化开发过程，一方⾯消除了生产者类与消费者类之间的代码依赖性，另一方⾯将生产数据的过程与使用数据的过程解耦">
+<meta name="description" content="阻塞队列；BlockingQueue  阻塞队列的由来   生产者-消费者模式   我们假设一种场景，生产者一直生产资源，消费者一直消费资源，资源存储在一个缓冲池中，生产者将生产的资源存进缓冲池中，消费者从缓冲池中拿到资源进行消费，这就是⼤名鼎鼎的生产者-消费者模式。 该模式能够简化开发过程，一方⾯消除了生产者类与消费者类之间的代码依赖性，另一方⾯将生产数据的过程与使用数据的过程解耦简化负载">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BlockingQueue">
 <meta property="og:url" content="http://example.com/2021/08/09/BlockingQueue/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="阻塞队列；BlockingQueue  阻塞队列的由来   生产者-消费者模式     我们假设一种场景，生产者一直生产资源，消费者一直消费资源，资源存储在一个缓冲池中，生产者将生产的资源存进缓冲池中，消费者从缓冲池中拿到资源进行消费，这就是⼤名鼎鼎的生产者-消费者模式。   该模式能够简化开发过程，一方⾯消除了生产者类与消费者类之间的代码依赖性，另一方⾯将生产数据的过程与使用数据的过程解耦">
+<meta property="og:description" content="阻塞队列；BlockingQueue  阻塞队列的由来   生产者-消费者模式   我们假设一种场景，生产者一直生产资源，消费者一直消费资源，资源存储在一个缓冲池中，生产者将生产的资源存进缓冲池中，消费者从缓冲池中拿到资源进行消费，这就是⼤名鼎鼎的生产者-消费者模式。 该模式能够简化开发过程，一方⾯消除了生产者类与消费者类之间的代码依赖性，另一方⾯将生产数据的过程与使用数据的过程解耦简化负载">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/08/09/BlockingQueue/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97.png">
 <meta property="og:image" content="http://example.com/2021/08/09/BlockingQueue/BlockingQueue.png">
@@ -168,7 +168,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -271,253 +271,228 @@
 <p>  <strong>生产者-消费者模式</strong></p>
 </blockquote>
 <ul>
-<li>  我们假设一种场景，生产者一直生产资源，消费者一直消费资源，资源存储在一个缓冲池中，生产者将生产的资源存进缓冲池中，消费者从缓冲池中拿到资源进行消费，这就是⼤名鼎鼎的生产者-消费者模式。</li>
-<li>  该模式能够简化开发过程，一方⾯消除了生产者类与消费者类之间的代码依赖性，另一方⾯将生产数据的过程与使用数据的过程解耦简化负载。</li>
-<li>  我们自己编码实现这个模式的时候，因为需要让多个线程操作共享变量（即资源），所以很容易引发线程安全问题，造成重复消费和死锁，尤其是生产者和消费者存在多个的情况。另外，当缓冲池空了，我们需要阻塞消费者，唤醒生产者；当缓冲池满了，我们需要阻塞生产者，唤醒消费者，这些个等待-唤醒逻辑都需要自己实现。</li>
+<li>我们假设一种场景，生产者一直生产资源，消费者一直消费资源，资源存储在一个缓冲池中，生产者将生产的资源存进缓冲池中，消费者从缓冲池中拿到资源进行消费，这就是⼤名鼎鼎的生产者-消费者模式。</li>
+<li>该模式能够简化开发过程，一方⾯消除了生产者类与消费者类之间的代码依赖性，另一方⾯将生产数据的过程与使用数据的过程解耦简化负载。</li>
+<li>我们自己编码实现这个模式的时候，因为需要让多个线程操作共享变量（即资源），所以很容易引发线程安全问题，造成重复消费和死锁，尤其是生产者和消费者存在多个的情况。另外，当缓冲池空了，我们需要阻塞消费者，唤醒生产者；当缓冲池满了，我们需要阻塞生产者，唤醒消费者，这些个等待-唤醒逻辑都需要自己实现。</li>
 </ul>
 <blockquote>
 <p>  <strong>为什么需要 BlockingQueue？有什么好处？</strong></p>
 </blockquote>
 <ul>
-<li>  在多线程领域，所谓阻塞，就是指在某些情况下会挂起线程（即阻塞），一旦条件满足，被挂起的线程又会被唤醒。[但是这些都是需要人工去判断挂起和唤醒的] [<strong>手动挂起和唤醒</strong>]</li>
-<li>  在 juc 包发布以前，在多线程环境下，我们每个程序员都必须自己去控制这些细节，尤其还要兼顾效率和线程安全，这会给开发带来不小的难度。</li>
-<li>  由程序员手动去判断阻塞和唤醒条件是非常容易出错的，所以 JDK 中新增了 **阻塞队列(BlockingQueue)**，你只管往里面存、取就行，而不用担心多线程环境下存、取共享变量的线程安全问题。</li>
-<li>  好处是我们不需要关心什么时候阻塞线程，什么时候唤醒线程，因为这一切都由 BlockingQueue 自动实现了。[<strong>自动挂起和唤醒</strong>]</li>
-<li>  BlockingQueue⼀般用于⽣产者-消费者模式，⽣产者是往队列里添加元素的线程，消费者是从队列里拿元素的线程。BlockingQueue就是存放元素的容器。</li>
+<li>在多线程领域，所谓阻塞，就是指在某些情况下会挂起线程（即阻塞），一旦条件满足，被挂起的线程又会被唤醒。[但是这些都是需要人工去判断挂起和唤醒的] [<strong>手动挂起和唤醒</strong>]</li>
+<li>在 juc 包发布以前，在多线程环境下，我们每个程序员都必须自己去控制这些细节，尤其还要兼顾效率和线程安全，这会给开发带来不小的难度。</li>
+<li>由程序员手动去判断阻塞和唤醒条件是非常容易出错的，所以 JDK 中新增了 <strong>阻塞队列(BlockingQueue)</strong>，你只管往里面存、取就行，而不用担心多线程环境下存、取共享变量的线程安全问题。</li>
+<li>好处是我们不需要关心什么时候阻塞线程，什么时候唤醒线程，因为这一切都由 BlockingQueue 自动实现了。[<strong>自动挂起和唤醒</strong>]</li>
+<li>BlockingQueue⼀般用于⽣产者-消费者模式，⽣产者是往队列里添加元素的线程，消费者是从队列里拿元素的线程。BlockingQueue就是存放元素的容器。</li>
 </ul>
 <hr>
 <h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><ol>
-<li> 阻塞队列首先是一个对垒，满足队列 FIFO 的特性；</li>
+<li>阻塞队列首先是一个对垒，满足队列 FIFO 的特性；</li>
 <li>阻塞队列<ul>
-<li>  当阻塞队列为空时，从队列中<strong>获取</strong>元素的操作将会被阻塞。</li>
-<li>  当阻塞队列为满时，往队列里<strong>添加</strong>元素的操作将会被阻塞。</li>
+<li>当阻塞队列为空时，从队列中<strong>获取</strong>元素的操作将会被阻塞。</li>
+<li>当阻塞队列为满时，往队列里<strong>添加</strong>元素的操作将会被阻塞。</li>
 </ul>
 </li>
-<li> 阻塞队列空了消费者阻塞，满了生产者阻塞。</li>
+<li>阻塞队列空了消费者阻塞，满了生产者阻塞。</li>
 </ol>
 <p><img src="/2021/08/09/BlockingQueue/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97.png" alt="阻塞队列"></p>
 <hr>
 <h1 id="核心方法"><a href="#核心方法" class="headerlink" title="核心方法"></a>核心方法</h1><p>阻塞队列提供了四组不同的方法用于插入、移除、检查元素：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">方法类型</th>
-<th align="center">抛出异常</th>
-<th align="center">返回特殊值</th>
-<th align="center">阻塞</th>
-<th align="center">超时</th>
+<th style="text-align:center">方法类型</th>
+<th style="text-align:center">抛出异常</th>
+<th style="text-align:center">返回特殊值</th>
+<th style="text-align:center">阻塞</th>
+<th style="text-align:center">超时</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">插入</td>
-<td align="center"><code>add(e)</code></td>
-<td align="center"><code>offer(e)</code></td>
-<td align="center"><code>put(e)</code></td>
-<td align="center"><code>offer(e, time, unit)</code></td>
+<tbody>
+<tr>
+<td style="text-align:center">插入</td>
+<td style="text-align:center"><code>add(e)</code></td>
+<td style="text-align:center"><code>offer(e)</code></td>
+<td style="text-align:center"><code>put(e)</code></td>
+<td style="text-align:center"><code>offer(e, time, unit)</code></td>
 </tr>
 <tr>
-<td align="center">移出</td>
-<td align="center"><code>remove()</code></td>
-<td align="center"><code>poll()</code></td>
-<td align="center"><code>take()</code></td>
-<td align="center"><code>poll(time, unit)</code></td>
+<td style="text-align:center">移出</td>
+<td style="text-align:center"><code>remove()</code></td>
+<td style="text-align:center"><code>poll()</code></td>
+<td style="text-align:center"><code>take()</code></td>
+<td style="text-align:center"><code>poll(time, unit)</code></td>
 </tr>
 <tr>
-<td align="center">检查</td>
-<td align="center"><code>element()</code></td>
-<td align="center"><code>peek()</code></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td style="text-align:center">检查</td>
+<td style="text-align:center"><code>element()</code></td>
+<td style="text-align:center"><code>peek()</code></td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <ul>
-<li>  检查：检查队列是否为空，不为空则查到队头元素的值</li>
+<li>检查：检查队列是否为空，不为空则查到队头元素的值</li>
 </ul>
 <blockquote>
 <p>  <strong>抛出异常：</strong></p>
 </blockquote>
 <p>如果试图的操作无法立即执行，则抛出异常。</p>
 <ul>
-<li>  当阻塞队列满时，再往队列里插入元素会抛出 <strong>IllegalStateException: Queue full</strong> 异常；</li>
-<li>  当阻塞队列空时，再从队列里删除元素会抛出 <strong>NoSuchElementException</strong> 异常。</li>
+<li>当阻塞队列满时，再往队列里插入元素会抛出 <strong>IllegalStateException: Queue full</strong> 异常；</li>
+<li>当阻塞队列空时，再从队列里删除元素会抛出 <strong>NoSuchElementException</strong> 异常。</li>
 </ul>
 <blockquote>
 <p>  <strong>返回特殊值：</strong></p>
 </blockquote>
 <p>如果试图的操作无法立即执行，会返回一个特殊值。</p>
 <ul>
-<li>  对于插入方法，成功返回 <strong>true</strong> 失败返回 <strong>false</strong>；</li>
-<li>  对于移除方法，成功返回出队的元素，队列为空就返回 <strong>null</strong>。</li>
+<li>对于插入方法，成功返回 <strong>true</strong> 失败返回 <strong>false</strong>；</li>
+<li>对于移除方法，成功返回出队的元素，队列为空就返回 <strong>null</strong>。</li>
 </ul>
 <blockquote>
 <p>  <strong>一直阻塞：</strong></p>
 </blockquote>
 <p>如果试图的操作无法立即执行，则一直阻塞或者响应中断。</p>
 <ul>
-<li>  当阻塞队列满时，生产者线程继续往队列里 put 元素，队列会一直阻塞生产线程；</li>
-<li>  当阻塞队列空时，消费者线程继续试图从队列中 take 元素，队列会一直阻塞消费者线程直到队列可用。</li>
+<li>当阻塞队列满时，生产者线程继续往队列里 put 元素，队列会一直阻塞生产线程；</li>
+<li>当阻塞队列空时，消费者线程继续试图从队列中 take 元素，队列会一直阻塞消费者线程直到队列可用。</li>
 </ul>
 <blockquote>
 <p>  <strong>超时退出：</strong></p>
 </blockquote>
 <p>如果试图的操作无法立即执行，该方法调用将会发⽣阻塞，直到能够执行，但等待时间不会超过给定值。返回一个特定值以告知该操作是否成功，通常是 <code>true / false</code>。</p>
 <ul>
-<li>  当阻塞队列满时，继续向队列中添加元素，会阻塞生产者线程一段时间，若该段时间内队列中可以添加元素了，则添加成功，超过时间后生产者线程会退出，返回一个特定值告知该操作是否成功。</li>
-<li>  当阻塞队列空时，继续从队列中移出元素，会阻塞消费者线程一段时间，若该段时间内可以从队列中移除元素了，则移除成功，超过时间后消费者线程会退出，返回一个特定值告知该操作是否成功。</li>
+<li>当阻塞队列满时，继续向队列中添加元素，会阻塞生产者线程一段时间，若该段时间内队列中可以添加元素了，则添加成功，超过时间后生产者线程会退出，返回一个特定值告知该操作是否成功。</li>
+<li>当阻塞队列空时，继续从队列中移出元素，会阻塞消费者线程一段时间，若该段时间内可以从队列中移除元素了，则移除成功，超过时间后消费者线程会退出，返回一个特定值告知该操作是否成功。</li>
 </ul>
 <blockquote>
 <p>  <strong>注意</strong></p>
 </blockquote>
 <ul>
-<li>  不能往阻塞队列中插⼊null，会抛出空指针异常。</li>
-<li>  可以访问阻塞队列中的任意元素，调⽤ <code>remove(o)</code> 可以将队列之中的特定对象移除，但并不⾼效，尽量避免使⽤。</li>
+<li>不能往阻塞队列中插⼊null，会抛出空指针异常。</li>
+<li>可以访问阻塞队列中的任意元素，调⽤ <code>remove(o)</code> 可以将队列之中的特定对象移除，但并不⾼效，尽量避免使⽤。</li>
 </ul>
 <hr>
-<h1 id="BlockingQueue-架构"><a href="#BlockingQueue-架构" class="headerlink" title="BlockingQueue 架构"></a>BlockingQueue 架构</h1><img src="/2021/08/09/BlockingQueue/BlockingQueue.png" alt="BlockingQueue">
-
-
-
+<h1 id="BlockingQueue-架构"><a href="#BlockingQueue-架构" class="headerlink" title="BlockingQueue 架构"></a>BlockingQueue 架构</h1><p><img src="/2021/08/09/BlockingQueue/BlockingQueue.png" alt="BlockingQueue"></p>
 <ul>
-<li>  <strong>ArrayBlockingQueue：由数组结构组成的有界阻塞队列。类似于ArrayList</strong></li>
-<li>  <strong>LinkedBlockedQueue：由链表结构组成的有界阻塞队列（但大小默认值为 Integer.MAX_VALUE）。类似于 LinkedArrayList</strong></li>
-<li>  PriorityBlockingQueue：支持优先级排序的无界阻塞队列</li>
-<li>  DelayQueue：使用优先级队列实现的延迟无界阻塞队列。</li>
-<li>  <strong>SynchronousQueue：不存储元素的阻塞队列。</strong></li>
-<li>  LinkedTransferQueue：由链表结构组成的无界阻塞队列。</li>
-<li>  LinkedBlockingDeque：由链表结构组成的双向阻塞队列。</li>
+<li><strong>ArrayBlockingQueue：由数组结构组成的有界阻塞队列。类似于ArrayList</strong></li>
+<li><strong>LinkedBlockedQueue：由链表结构组成的有界阻塞队列（但大小默认值为 Integer.MAX_VALUE）。类似于 LinkedArrayList</strong></li>
+<li>PriorityBlockingQueue：支持优先级排序的无界阻塞队列</li>
+<li>DelayQueue：使用优先级队列实现的延迟无界阻塞队列。</li>
+<li><strong>SynchronousQueue：不存储元素的阻塞队列。</strong></li>
+<li>LinkedTransferQueue：由链表结构组成的无界阻塞队列。</li>
+<li>LinkedBlockingDeque：由链表结构组成的双向阻塞队列。</li>
 </ul>
 <h2 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><blockquote>
 <p>  <strong>构造方法</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayBlockingQueue</span><span class="params">(<span class="keyword">int</span> capacity, <span class="keyword">boolean</span> fair)</span></span>&#123;</span><br><span class="line">    <span class="comment">//...省略代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>  ArrayBlockingQueue 是由数组结构组成的<strong>有界</strong>阻塞队列。</li>
-<li>  内部结构是<strong>数组</strong>，故具有数组的特性。</li>
-<li>  可以初始化队列大小， 且一旦初始化不能改变。构造方法中的 <strong>fair</strong> 表示控制对象的内部锁是否采⽤公平锁，默认是非公平锁。</li>
+<li>ArrayBlockingQueue 是由数组结构组成的<strong>有界</strong>阻塞队列。</li>
+<li>内部结构是<strong>数组</strong>，故具有数组的特性。</li>
+<li>可以初始化队列大小， 且一旦初始化不能改变。构造方法中的 <strong>fair</strong> 表示控制对象的内部锁是否采⽤公平锁，默认是非公平锁。</li>
 </ul>
 <h2 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h2><ul>
-<li>  由链表结构组成的<strong>有界</strong>阻塞队列。默认队列的大小是 <strong>Integer.MAX_VALUE</strong>，也可以指定大小。</li>
-<li>  内部结构是链表，具有链表的特性。</li>
-<li>  此队列按照先进先出的原则对元素进行排序。</li>
+<li>由链表结构组成的<strong>有界</strong>阻塞队列。默认队列的大小是 <strong>Integer.MAX_VALUE</strong>，也可以指定大小。</li>
+<li>内部结构是链表，具有链表的特性。</li>
+<li>此队列按照先进先出的原则对元素进行排序。</li>
 </ul>
 <h2 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><ul>
-<li>  这个队列比较特殊，没有任何内部容量，甚至连一个队列的容量都没有。并且每个 <code>put</code> 必须等待一个 <code>take</code>，反之亦然。</li>
+<li>这个队列比较特殊，没有任何内部容量，甚至连一个队列的容量都没有。并且每个 <code>put</code> 必须等待一个 <code>take</code>，反之亦然。</li>
 </ul>
 <blockquote>
 <p>  <strong>SynchronousQueue 与容量为 1 的 ArrayBlockingQueue、LinkedBlockingQueue 有什么区别？</strong></p>
 </blockquote>
 <p>在 SynchronousQueue 中：</p>
 <ul>
-<li>  <code>iterator()</code> 永远返回空，因为里面没有东西；</li>
-<li>  <code>isEmpty()</code> 永远返回 true；</li>
-<li>  <code>peek()</code> 永远返回 <strong>null</strong>；</li>
-<li>  <code>put()</code> 往 queue 放进去一个 element 以后就一直 wait，直到有其他 thread 进来把这个 element 取走。</li>
-<li>  <code>offer()</code> 往 queue 里放一个 element 后立即返回，如果碰巧这个 element 被另一个thread取走了，<code>offer()</code> 返回 true，认为 <code>offer()</code> 成功；否则返回 false。</li>
-<li>  <code>take()</code> 取出并且 remove 掉 queue 里 的 element，取不到东西他会一直等。</li>
-<li>  <code>poll()</code> 取出并且 remove 掉 queue 里的 element，只有到碰巧另外一个线程正在往 queue 里 offer 数据或者 put 数据的时候，该方法才会取到东西。否则立即返回 null。</li>
-<li>  <code>remove()</code> &amp; <code>removeAll()</code> 永远返回 false。</li>
+<li><code>iterator()</code> 永远返回空，因为里面没有东西；</li>
+<li><code>isEmpty()</code> 永远返回 true；</li>
+<li><code>peek()</code> 永远返回 <strong>null</strong>；</li>
+<li><code>put()</code> 往 queue 放进去一个 element 以后就一直 wait，直到有其他 thread 进来把这个 element 取走。</li>
+<li><code>offer()</code> 往 queue 里放一个 element 后立即返回，如果碰巧这个 element 被另一个thread取走了，<code>offer()</code> 返回 true，认为 <code>offer()</code> 成功；否则返回 false。</li>
+<li><code>take()</code> 取出并且 remove 掉 queue 里 的 element，取不到东西他会一直等。</li>
+<li><code>poll()</code> 取出并且 remove 掉 queue 里的 element，只有到碰巧另外一个线程正在往 queue 里 offer 数据或者 put 数据的时候，该方法才会取到东西。否则立即返回 null。</li>
+<li><code>remove()</code> &amp; <code>removeAll()</code> 永远返回 false。</li>
 </ul>
 <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
-<li>  PriorityBlockingQueue 不会阻塞数据⽣产者（因为队列是无界的），⽽只会在没有可消费的数据时，阻塞数据的消费者。</li>
-<li>  因此使⽤的时候要特别注意，⽣产者⽣产数据的速度绝对不能快于消费者消费数据的速度，否则时间一⻓，会最终耗尽所有的可⽤堆内存空间。</li>
-<li>  对于使⽤默认大小的LinkedBlockingQueue也是一样的。</li>
+<li>PriorityBlockingQueue 不会阻塞数据⽣产者（因为队列是无界的），⽽只会在没有可消费的数据时，阻塞数据的消费者。</li>
+<li>因此使⽤的时候要特别注意，⽣产者⽣产数据的速度绝对不能快于消费者消费数据的速度，否则时间一⻓，会最终耗尽所有的可⽤堆内存空间。</li>
+<li>对于使⽤默认大小的LinkedBlockingQueue也是一样的。</li>
 </ul>
 <hr>
 <h1 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h1><h2 id="ArrayBlockingQueue-1"><a href="#ArrayBlockingQueue-1" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h2><h3 id="Case1：add-remove"><a href="#Case1：add-remove" class="headerlink" title="Case1：add / remove"></a>Case1：add / remove</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.blk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/13 17:18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产*/</span></span><br><span class="line">        <span class="keyword">boolean</span> b1 = blockingQueue.add(<span class="string">&quot;A&quot;</span>);    <span class="comment">// 正常添加返回值为Boolean类型的true</span></span><br><span class="line">        blockingQueue.add(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        blockingQueue.add(<span class="string">&quot;C&quot;</span>);</span><br><span class="line"><span class="comment">//        blockingQueue.add(&quot;X&quot;);   // 队列满时再向队列时添加元素会抛出异常：IllegalStateException: Queue full</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*检索*/</span></span><br><span class="line">        String element = blockingQueue.element();   <span class="comment">// 正常检索返回队首元素</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费*/</span></span><br><span class="line">        String q1 = blockingQueue.remove();     <span class="comment">// 正常出队返回值为队首元素</span></span><br><span class="line">        String q2 = blockingQueue.remove();</span><br><span class="line">        String q3 = blockingQueue.remove();</span><br><span class="line"><span class="comment">//        String q4 = blockingQueue.remove();   // 队列空时继续出队会抛出异常：NoSuchElementException</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>  队列满时继续入队</li>
+<li>队列满时继续入队</li>
 </ul>
 <p><img src="/2021/08/09/BlockingQueue/image-20210713172132018.png" alt="image-20210713172132018"></p>
 <ul>
-<li>  队列为空时继续出队</li>
+<li>队列为空时继续出队</li>
 </ul>
 <p><img src="/2021/08/09/BlockingQueue/image-20210713172625099.png" alt="image-20210713172625099"></p>
 <h3 id="Case2：offer-poll"><a href="#Case2：offer-poll" class="headerlink" title="Case2：offer / poll"></a>Case2：offer / poll</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.blk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/13 17:18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产*/</span></span><br><span class="line">        <span class="keyword">boolean</span> b1 = blockingQueue.offer(<span class="string">&quot;A&quot;</span>);    <span class="comment">// 正常添加返回值为Boolean类型的true</span></span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;C&quot;</span>);</span><br><span class="line">        System.out.println(blockingQueue.offer(<span class="string">&quot;X&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*检索*/</span></span><br><span class="line">        String element = blockingQueue.peek();   <span class="comment">// 正常检索返回队首元素</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费*/</span></span><br><span class="line">        String q1 = blockingQueue.poll();     <span class="comment">// 正常出队返回值为队首元素</span></span><br><span class="line">        String q2 = blockingQueue.poll();</span><br><span class="line">        String q3 = blockingQueue.poll();</span><br><span class="line">        System.out.println(blockingQueue.poll());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 输出结果：</span></span><br><span class="line"><span class="comment"> *      false</span></span><br><span class="line"><span class="comment"> *      null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="Case3：put-take"><a href="#Case3：put-take" class="headerlink" title="Case3：put / take"></a>Case3：put / take</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.blk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/13 17:18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产*/</span></span><br><span class="line">        blockingQueue.put(<span class="string">&quot;A&quot;</span>);    <span class="comment">// 正常添加无返回值</span></span><br><span class="line">        blockingQueue.put(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        blockingQueue.put(<span class="string">&quot;C&quot;</span>);</span><br><span class="line"><span class="comment">//        blockingQueue.put(&quot;X&quot;);     // 当队列满时，继续入队元素，就会阻塞当前线程</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费*/</span></span><br><span class="line">        String q1 = blockingQueue.take();     <span class="comment">// 正常出队返回队首元素</span></span><br><span class="line">        String q2 = blockingQueue.take();</span><br><span class="line">        String q3 = blockingQueue.take();</span><br><span class="line">        System.out.println(<span class="string">&quot;==========&quot;</span>);</span><br><span class="line">        String q4 = blockingQueue.take();       <span class="comment">// 当队列空时，继续出队，也会阻塞当前线程</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h3 id="Case4：offer-poll"><a href="#Case4：offer-poll" class="headerlink" title="Case4：offer / poll"></a>Case4：offer / poll</h3><p><img src="/2021/08/09/BlockingQueue/image-20210713173931729.png" alt="image-20210713173931729"></p>
 <p><img src="/2021/08/09/BlockingQueue/image-20210713174208204.png" alt="image-20210713174208204"></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.blk;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ArrayBlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.BlockingQueue;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/13 17:18</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产*/</span></span><br><span class="line">        <span class="keyword">boolean</span> b1 = blockingQueue.offer(<span class="string">&quot;A&quot;</span>,<span class="number">2</span>, TimeUnit.SECONDS);    <span class="comment">// 正常添加返回值为Boolean类型的true</span></span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;B&quot;</span>, <span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;C&quot;</span>, <span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">        blockingQueue.offer(<span class="string">&quot;X&quot;</span>, <span class="number">2</span>, TimeUnit.SECONDS);  <span class="comment">// 队列满时继续添加，会阻塞当前线程 2s，之后继续运行线程</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费*/</span></span><br><span class="line">        String q1 = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);    <span class="comment">// 正常出队返回值为队首元素</span></span><br><span class="line">        String q2 = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">        String q3 = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">        String q4 = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);    <span class="comment">// 队列空时继续出队，会阻塞当前线程线程2s，</span></span><br><span class="line">        <span class="comment">// 如果2s后队列还为空，则返回null，若2s后队列被其它线程入队了值，则返回队首的值</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="SynchronousQueue-1"><a href="#SynchronousQueue-1" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h2><p><strong>原理</strong></p>
 <ul>
-<li>  SynchronousQueue 没有容量。与其它 BlockingQueue 不同，SynchronousQueue 是一个不存储元素的 BlockingQueue，每一个 put 元素操作必须等待一个 take 操作，否则不能继续添加元素，反之亦然。</li>
-<li>  也可以理解为 SynchronousQueue 容量为 1，即每生产一个必须等消费之后才能继续生产下一个。</li>
+<li>SynchronousQueue 没有容量。与其它 BlockingQueue 不同，SynchronousQueue 是一个不存储元素的 BlockingQueue，每一个 put 元素操作必须等待一个 take 操作，否则不能继续添加元素，反之亦然。</li>
+<li>也可以理解为 SynchronousQueue 容量为 1，即每生产一个必须等消费之后才能继续生产下一个。</li>
 </ul>
 <p><strong>代码</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronousQueueDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> SynchronousQueue&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*生产者线程*/</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; put A&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.put(<span class="string">&quot;A&quot;</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; put B&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.put(<span class="string">&quot;B&quot;</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">&quot; put C&quot;</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.put(<span class="string">&quot;C&quot;</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;producer&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*消费者线程*/</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.take(); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">2000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.take(); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123; blockingQueue.take(); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;customer&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><strong>代码分析</strong></p>
 <ol>
-<li> main 线程启动，创建 SynchronousQueue 类的实例对象，创建两个线程，生产者线程和消费者线程并发执行。</li>
-<li> 生产者线程连续生产 3 个元素，但是由于 blockingQueue 是一个同步队列，最大容量是 1，所以只能添加进去一个，然后被挂起；</li>
-<li> 消费者线程在 3s 后消费一个线程，消费完成后，生产者线程才能被唤醒继续生产。</li>
+<li>main 线程启动，创建 SynchronousQueue 类的实例对象，创建两个线程，生产者线程和消费者线程并发执行。</li>
+<li>生产者线程连续生产 3 个元素，但是由于 blockingQueue 是一个同步队列，最大容量是 1，所以只能添加进去一个，然后被挂起；</li>
+<li>消费者线程在 3s 后消费一个线程，消费完成后，生产者线程才能被唤醒继续生产。</li>
 </ol>
 <p>所有程序的输出结果是：</p>
 <ol>
-<li> 生产者线程添加 “A” 到同步阻塞队列，然后被挂起，等待队列中元素被消费；</li>
-<li> 3s 后消费者线程被唤醒消费队列中队首元素，然后继续挂起 2s；</li>
-<li> 生产者线程检测到阻塞队列为空，生产 “B” 到同步队列中，等待队列中的元素被消费；</li>
-<li> 2s 后消费者线程被唤醒消费队列中队首元素，然后继续挂起 1s；</li>
-<li> 生产者线程检测到阻塞队列为空，生产 “C” 到同步队列中，等待队列中的元素被消费，生产线程结束；</li>
-<li> 1s 后消费者线程被唤醒消费队列中队首元素，消费者线程结束；</li>
-<li> main 线程结束，程序执行完成。</li>
+<li>生产者线程添加 “A” 到同步阻塞队列，然后被挂起，等待队列中元素被消费；</li>
+<li>3s 后消费者线程被唤醒消费队列中队首元素，然后继续挂起 2s；</li>
+<li>生产者线程检测到阻塞队列为空，生产 “B” 到同步队列中，等待队列中的元素被消费；</li>
+<li>2s 后消费者线程被唤醒消费队列中队首元素，然后继续挂起 1s；</li>
+<li>生产者线程检测到阻塞队列为空，生产 “C” 到同步队列中，等待队列中的元素被消费，生产线程结束；</li>
+<li>1s 后消费者线程被唤醒消费队列中队首元素，消费者线程结束；</li>
+<li>main 线程结束，程序执行完成。</li>
 </ol>
 <p>输出结果为：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">producer put A</span><br><span class="line">producer put B</span><br><span class="line">producer put C</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <hr>
 <h1 id="用在哪里"><a href="#用在哪里" class="headerlink" title="用在哪里"></a>用在哪里</h1><h2 id="生产者消费者模式"><a href="#生产者消费者模式" class="headerlink" title="生产者消费者模式"></a>生产者消费者模式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/14 10:31</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 知识点： volatile/CAS/atomicInteger/BlockQueue/线程交互/原子引用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyData3</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;   <span class="comment">// 默认开启，进行 生产+消费 。需要被多个线程知道，使用 volatile 修饰</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> AtomicInteger atomicInteger = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line"></span><br><span class="line">    BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">null</span>;     <span class="comment">// 定义为接口类型，可以接受该接口的所有实现类</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*构造器注入*/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyData3</span><span class="params">(BlockingQueue&lt;String&gt; blockingQueue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.blockingQueue = blockingQueue;</span><br><span class="line">        System.out.println(blockingQueue.getClass().getName()); <span class="comment">// 通过反射的方式获取调用对象的全限定类名，方便出错时检查</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">product</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        String data = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> result;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// flag == true</span></span><br><span class="line">        <span class="keyword">while</span> (flag)&#123;</span><br><span class="line">            data = atomicInteger.incrementAndGet()+<span class="string">&quot;&quot;</span>; <span class="comment">// i++</span></span><br><span class="line">            result = blockingQueue.offer(data, <span class="number">2L</span>, TimeUnit.SECONDS);    <span class="comment">// 加入阻塞队列，并返回执行结果</span></span><br><span class="line">            <span class="keyword">if</span> (result)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;加入队列成功***&quot;</span> + data);</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;加入队列失败***&quot;</span> + data);</span><br><span class="line">            &#125;</span><br><span class="line">            TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// flag == false</span></span><br><span class="line">        System.out.println(Thread.currentThread().getName()+<span class="string">&quot;生产线程执行结束&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">consumer</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        String result = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">while</span> (flag)&#123;</span><br><span class="line">            result = blockingQueue.poll(<span class="number">2</span>, TimeUnit.SECONDS);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">null</span> == result)&#123;</span><br><span class="line">                flag = <span class="keyword">false</span>;</span><br><span class="line">                System.out.println(<span class="string">&quot;超过2s没有取到阻塞队列中的数据，消费线程退出&quot;</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;消费&quot;</span> + result +<span class="string">&quot;成功&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.flag = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*测试类*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProdConsumerDemo03</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        MyData3 myData3 = <span class="keyword">new</span> MyData3(<span class="keyword">new</span> ArrayBlockingQueue&lt;String&gt;(<span class="number">3</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;生产线程启动&quot;</span>);</span><br><span class="line">                myData3.product();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;Product&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;消费线程启动&quot;</span>);</span><br><span class="line">                myData3.consumer();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;Consumer&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5s钟后，生产和消费都结束</span></span><br><span class="line">        <span class="keyword">try</span> &#123; TimeUnit.SECONDS.sleep(<span class="number">5</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">        myData3.stop();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><strong>执行结果</strong></p>
-<img src="/2021/08/09/BlockingQueue/image-20210714203155396.png" alt="image-20210714203155396" style="zoom:80%;">
-
-
-
+<p><img src="/2021/08/09/BlockingQueue/image-20210714203155396.png" alt="image-20210714203155396" style="zoom:80%;"></p>
 <p><strong>代码分析</strong></p>
 <ol>
-<li> main 线程启动，创建一个资源类，传入一个阻塞队列。</li>
-<li> 启动一个生产线程（Product）和一个消费线程（Consumer），两个线程并发执行。</li>
-<li> main 线程可以直接叫停这两个线程</li>
+<li>main 线程启动，创建一个资源类，传入一个阻塞队列。</li>
+<li>启动一个生产线程（Product）和一个消费线程（Consumer），两个线程并发执行。</li>
+<li>main 线程可以直接叫停这两个线程</li>
 </ol>
 <p><em>生产线程：</em></p>
 <ol>
-<li> 生产线程执行具有原子性的 i++ 操作，并将 i 加入阻塞队列（阻塞队列的最大容量为 3），每加入一次暂停 1s</li>
+<li>生产线程执行具有原子性的 i++ 操作，并将 i 加入阻塞队列（阻塞队列的最大容量为 3），每加入一次暂停 1s</li>
 </ol>
 <p><em>消费线程</em>：</p>
 <ol>
 <li>消费线程消费阻塞队列中的值，<ul>
-<li>  如果阻塞队列中有值，则消费成功；</li>
-<li>  如果超过 2s 消费队列中都没有值，则消费失败，消费线程退出。</li>
+<li>如果阻塞队列中有值，则消费成功；</li>
+<li>如果超过 2s 消费队列中都没有值，则消费失败，消费线程退出。</li>
 </ul>
 </li>
 </ol>
 <hr>
 <h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><ul>
-<li>  <a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">超链接：线程池</a></li>
+<li><a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">超链接：线程池</a></li>
 </ul>
 <blockquote>
 <p>  <strong>线程池 ThreadPoolExecutor 的构造方法</strong></p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</span><br><span class="line">         Executors.defaultThreadFactory(), defaultHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="消息中间件"><a href="#消息中间件" class="headerlink" title="消息中间件"></a>消息中间件</h2><blockquote>
 <p>  …TODO</p>
 </blockquote>

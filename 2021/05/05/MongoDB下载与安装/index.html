@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="下载 &amp; 安装 使用宝塔的一键安装！   远端访问在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：    是否放开了服务器的防火墙。   MongoDB 对外开放的端口号是 27017，必须放开此端口的防火墙。    设置允许所有地址访问。   MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需">
+<meta name="description" content="下载 &amp; 安装 使用宝塔的一键安装！   远端访问在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：   是否放开了服务器的防火墙。   MongoDB 对外开放的端口号是 27017，必须放开此端口的防火墙。   设置允许所有地址访问。   MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需要修">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MongoDB下载与安装">
 <meta property="og:url" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="下载 &amp; 安装 使用宝塔的一键安装！   远端访问在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：    是否放开了服务器的防火墙。   MongoDB 对外开放的端口号是 27017，必须放开此端口的防火墙。    设置允许所有地址访问。   MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需">
+<meta property="og:description" content="下载 &amp; 安装 使用宝塔的一键安装！   远端访问在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：   是否放开了服务器的防火墙。   MongoDB 对外开放的端口号是 27017，必须放开此端口的防火墙。   设置允许所有地址访问。   MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需要修">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505103207460.png">
 <meta property="og:image" content="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504220804360.png">
@@ -171,7 +171,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -274,22 +274,26 @@
 <h2 id="远端访问"><a href="#远端访问" class="headerlink" title="远端访问"></a>远端访问</h2><p>在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：</p>
 <blockquote>
 <ol>
-<li> 是否放开了服务器的防火墙。</li>
+<li>是否放开了服务器的防火墙。</li>
 </ol>
 </blockquote>
 <p>MongoDB 对外开放的端口号是 <strong>27017</strong>，必须放开此端口的防火墙。</p>
 <blockquote>
-<ol start="2">
-<li> 设置允许所有地址访问。</li>
+<ol>
+<li>设置允许所有地址访问。</li>
 </ol>
 </blockquote>
 <p>MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需要修改配置文件。（下图是默认配置文件的配置信息）</p>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505103207460.png" alt="image-20210505103207460"></p>
 <ul>
 <li><p>可直接设置配置文件为 <code>bindIpAll: true</code>，即允许所有的IPv4和IPv6地址访问</p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIpAll</span>: <span class="string">true</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIpAll</span>: <span class="string">true</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
 <li><p>也可以将 bindIp 修改为 <code>0.0.0.0</code></p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIp</span>: <span class="string">0.0.0.0</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIp</span>: <span class="string">0.0.0.0</span></span><br></pre></td></tr></table></figure>
+</li>
 <li><p>注意事项：<br><strong>net.bindIp</strong> 和 <strong>net.bindIpAll</strong> 是互斥的。也就是说，你可以指定其中一个，但不能同时指定两者。</p>
 </li>
 </ul>
@@ -302,57 +306,45 @@
 <p>  如果 MongoDB 安装在 Docker 中，首先进入 Docker 的 MongoDB 环境中！</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it [容器id&#x2F;容器名] mongo</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504220804360.png" alt="image-20210504220804360"></p>
 <h3 id="1-2-通过宝塔安装的-MongoDB"><a href="#1-2-通过宝塔安装的-MongoDB" class="headerlink" title="1.2    通过宝塔安装的 MongoDB"></a>1.2    通过宝塔安装的 MongoDB</h3><blockquote>
 <p>  如果是通过宝塔安装的 MongoDB ，其默认的安装位置为：<code>/www/server/mongodb</code> （通过宝塔安装的所有应用都保存在 <strong>/www/server</strong> 目录下）</p>
 </blockquote>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505105819882.png" alt="image-20210505105819882"></p>
 <ol>
-<li> 进入 MongoDB 的安装目录：</li>
+<li>进入 MongoDB 的安装目录：</li>
 </ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /www/server/mongodb/bin</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li> 输入命令 <code>mongo</code> ，进入 MongoDB 环境</li>
+<ol>
+<li>输入命令 <code>mongo</code> ，进入 MongoDB 环境</li>
 </ol>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h2 id="2、切换到-‘admin’-数据库"><a href="#2、切换到-‘admin’-数据库" class="headerlink" title="2、切换到 ‘admin’ 数据库"></a>2、切换到 ‘admin’ 数据库</h2><blockquote>
 <p>  <strong>admin</strong> 数据库是 MongoDB 初始化时创建的，用于管理用户角色。</p>
 </blockquote>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221215610.png" alt="image-20210504221215610"></p>
 <h2 id="3、设置超级管理员用户"><a href="#3、设置超级管理员用户" class="headerlink" title="3、设置超级管理员用户"></a>3、设置超级管理员用户</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user: <span class="string">&#x27;superPanda&#x27;</span>, <span class="built_in">pwd</span>: <span class="string">&#x27;pandaMaster&#x27;</span>, roles:[<span class="string">&#x27;root&#x27;</span>]&#125;)</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <ul>
-<li>  user：超级管理员的用户名</li>
-<li>  pwd：超级管理员的用户密码</li>
-<li>  roles：用于设置用户的权限，如：读、写等等。<strong>root</strong> 代表所有权限</li>
+<li>user：超级管理员的用户名</li>
+<li>pwd：超级管理员的用户密码</li>
+<li>roles：用于设置用户的权限，如：读、写等等。<strong>root</strong> 代表所有权限</li>
 </ul>
 </blockquote>
 <p>验证是否添加成功：如果返回 “1” 表示添加成功，返回 “0” 表示添加失败。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.auth(<span class="string">&#x27;用户名&#x27;</span>, <span class="string">&#x27;用户密码&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221640941.png" alt="image-20210504221640941"></p>
 <h2 id="4、给特定的数据库设置权限"><a href="#4、给特定的数据库设置权限" class="headerlink" title="4、给特定的数据库设置权限"></a>4、给特定的数据库设置权限</h2><blockquote>
 <p>  第3步是给超级管理员设置账号和密码，现在要给特定的库设置权限。我这里以 <strong>beauty_dev</strong> 库为例。</p>
 </blockquote>
 <h3 id="4-1-切换到-beauty-dev-数据库"><a href="#4-1-切换到-beauty-dev-数据库" class="headerlink" title="4.1    切换到 beauty_dev 数据库"></a>4.1    切换到 beauty_dev 数据库</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use beauty_dev</span><br></pre></td></tr></table></figure>
-
 <h3 id="4-2-添加用户"><a href="#4-2-添加用户" class="headerlink" title="4.2    添加用户"></a>4.2    添加用户</h3><blockquote>
 <p>  为 beauty_dev 库添加一个用户，并赋予权限。</p>
 </blockquote>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user:<span class="string">&#x27;用户名&#x27;</span>, <span class="built_in">pwd</span>:<span class="string">&#x27;密码&#x27;</span>, roles: [&#123;role: <span class="string">&#x27;readWrite&#x27;</span>, db: <span class="string">&#x27;beauty_dev&#x27;</span>&#125;]&#125;)</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>  这段命令的意思是：创建一个普通用户，并给予读写权限，<code>db</code> 表示用户可操作的数据库名。</li>
+<li>这段命令的意思是：创建一个普通用户，并给予读写权限，<code>db</code> 表示用户可操作的数据库名。</li>
 </ul>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504222318840.png" alt="image-20210504222318840"></p>
 <blockquote>
@@ -373,19 +365,16 @@
 <p>  MongoDB 默认不开启访问控制，我们要通过 <code>--auth</code> 参数开启安全登录。<code>--auth</code> 一旦开启了，用户连接 MongoDB 的数据库时必须制定用户名和密码。</p>
 </blockquote>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo --dbpath 存放数据库文件夹路径 --auth</span><br><span class="line"></span><br><span class="line">mongod --dbpath /www/server/mongodb/data --auth		<span class="comment"># 宝塔中存放数据库数据的文件路径</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="5-1-宝塔可视化界面修改"><a href="#5-1-宝塔可视化界面修改" class="headerlink" title="5.1    宝塔可视化界面修改"></a>5.1    宝塔可视化界面修改</h3><ul>
-<li>  修改前</li>
+<li>修改前</li>
 </ul>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111109060.png" alt="image-20210505111109060"></p>
 <ul>
-<li>  修改后</li>
+<li>修改后</li>
 </ul>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111159182.png" alt="image-20210505111159182"></p>
 <ul>
-<li>  重启即可完成加密登录</li>
+<li>重启即可完成加密登录</li>
 </ul>
 <h2 id="6、效果展示"><a href="#6、效果展示" class="headerlink" title="6、效果展示"></a>6、效果展示</h2><p>此时通过无密登录已经无法正常访问数据库了。</p>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111544758.png" alt="image-20210505111544758"></p>

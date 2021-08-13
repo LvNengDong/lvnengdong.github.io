@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,147 +194,6 @@
 
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-02%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-02%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8/" class="post-title-link" itemprop="url">JVM——运行时数据区:02程序计数器</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-31 20:40:58" itemprop="dateCreated datePublished" datetime="2021-05-31T20:40:58+08:00">2021-05-31</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-03 15:14:52" itemprop="dateModified" datetime="2021-08-03T15:14:52+08:00">2021-08-03</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h1><blockquote>
-<p><strong>Program Counter Register；程序计数寄存器；程序计数器；PC Register；PC寄存器；</strong></p>
-</blockquote>
-<ul>
-<li><p>PC Register 的命名起源于 CPU 的寄存器，CPU 中的寄存器存储指令相关的现场信息，只有先把数据装载到寄存器后才能够在 CPU上运行。</p>
-</li>
-<li><p>JVM 中的 PC寄存器 是对 物理PC寄存器 的一种抽象模拟。</p>
-</li>
-<li><p>JVM 中的 PC寄存器 并非是广义上所指的物理寄存器，称其为 <strong>PC计数器（或指令计数器）</strong> 会更加贴切，并且也不容易引起一些不必要的误会。</p>
-</li>
-<li><p>PC计数器 在JVM内存中只占一块很小的内存空间，几乎可以忽略不计。</p>
-</li>
-<li><p>PC计数器 是JVM内存中运行速度最快的存储区域。</p>
-</li>
-<li><p>PC计数器是线程私有的，每个线程都有自己的 PC计数器，生命周期与线程的生命周期保持一致。</p>
-</li>
-<li><p>任何一个线程在同一时间都只能有一个方法被执行，这个方法也被称为<strong>当前方法</strong>。</p>
-</li>
-<li><p>PC寄存器中记录的是当前线程当前方法对应的的字节码指令的地址。</p>
-<p>或者，如果当前线程正在执行的是 Native 方法，PC寄存器保存的指令地址则是<code>undefined</code>。</p>
-</li>
-<li><p>PC寄存器 是程序控制流的指示器。分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖PC寄存器来完成。</p>
-</li>
-<li><p>PC计数器 是唯一一个在《Java虚拟机规范》中没有规定任何 <code>OutOfMemoryError</code> 情况的区域。</p>
-</li>
-</ul>
-<hr>
-<h1 id="PC计数器的作用（重要）"><a href="#PC计数器的作用（重要）" class="headerlink" title="PC计数器的作用（重要）"></a>PC计数器的作用（重要）</h1><blockquote>
-<p>  <strong>问题：PC计数器的作用（重要）</strong></p>
-</blockquote>
-<ul>
-<li>PC 计数器可以看做是当前线程所执行的字节码指令的行号指示器，即执行引擎要执行的指令的地址，执行引擎根据这个地址执行字节码指令。当该行的指令执行结束后，PC 计数器变更为下一条指令的地址，执行引擎继续通过读取程序计数器中的指令地址来执行具体的字节码指令。</li>
-</ul>
-<blockquote>
-<p>  <strong>举例说明</strong></p>
-</blockquote>
-<ol>
-<li><strong>执行引擎</strong> 从 <strong>PC计数器</strong> 中取出下一条要执行的字节码指令的地址。</li>
-<li><strong>执行引擎</strong> 根据这个地址去加载具体要执行的字节码指令。</li>
-<li><strong>执行引擎</strong> 将 字节码指令 编译成底层的二进制机器指令，最后交给 CPU 去执行。</li>
-</ol>
-<hr>
-<h1 id="两个常见问题"><a href="#两个常见问题" class="headerlink" title="两个常见问题"></a>两个常见问题</h1><blockquote>
-<p>  <strong>问题一：为什么要使用程序计数器记录当前线程的执行地址呢 ？</strong></p>
-</blockquote>
-<p>答：当多个线程并发执行时，CPU需要不停的切换各个线程，当线程切换回来以后，它必须得知道上一次执行到哪条指令了，接下来才能续着上次指令的位置继续执行程序。JVM 的字节码解释器就需要通过改变 PC寄存器 的值来明确下一条要执行的字节码指令的在内存中的位置。</p>
-<blockquote>
-<p>  <strong>问题二：程序计数器为什么会被设定为线程私有？</strong></p>
-</blockquote>
-<ul>
-<li><p>线程并发执行时CPU会在多个线程间不停地做任务切换，这就导致单个线程需要经常中断和恢复。当线程切换回来后，为了能够接着从上次执行执行的位置开始执行，就必须利用程序计数器来记录线程当前方法的指令地址。</p>
-</li>
-<li><p>如果程序计数器设置为多个线程共享：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">假设现有2个线程共用1个程序计数器。</span><br><span class="line">	线程1 执行字节码指令，执行到了第5条指令，将要执行第6条指令。将指令6的地址保存到PC寄存器中，切换到线程2执行。</span><br><span class="line">	线程2 执行字节码指令，执行到了11条指令，将要执行12条指令，将地址12保存到PC寄存器中。</span><br><span class="line"></span><br><span class="line">由于2个线程共用1个PC寄存器，当CPU再次切回线程1时，我们会发现PC寄存器中保存的是最新的指令的地址，也就是说线程1保存到寄存器</span><br><span class="line">中的地址已经被线程2替换掉了，当再次切换到线程1执行时，它已经无法从线程1上次暂停的位置继续往下执行，显然这是不合适的。</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>为了能够准确的记录各个线程下一条要执行的字节码指令的地址，最好的办法就是为每一个线程都分配一个 PC寄存器。</strong>  这样一来各个线程之间的程序计数器独立计算，就不会出现互相干扰的情况。</p>
-</li>
-</ul>
-<p><strong>专业解释：</strong></p>
-<ul>
-<li>  由于 CPU 时间片轮的限制，多个线程在并发执行过程中，任何一个确定的时刻，一个处理器或者多核处理器的一个内核，只会执行某个线程中的一条指令。</li>
-<li>  在多线程并发执行过程中，这样必然导致线程经常中断或恢复，如何保证每次切换线程都能准确续到上次执行的位置呢？需要每个线程在创建后，都产生自己的程序计数器和栈帧，这样程序计数器在各个线程之间互不影响。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -397,7 +256,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E5%BC%95%E5%85%A5%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.jpg"></p>
+          <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/第03章_引入运行时数据区-1622464561115.jpg" alt></p>
 <h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><hr>
 <p><strong>问题：什么是内存？</strong></p>
 <ul>
@@ -412,7 +271,7 @@
 <hr>
 <p><strong>JVM内存布局（经典）</strong></p>
 <p>下图是一种经典的 JVM 内存布局：</p>
-<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.png"></p>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/运行时数据区-1622464561115.png" alt></p>
 <p><strong>Part1：</strong></p>
 <p>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域有各自的用途，创建和销毁时间。</p>
 <ul>
@@ -428,7 +287,7 @@
 <li>JVM中每个线程私有的内存区域包括： 1、程序计数器    2、虚拟机栈    3、本地方法栈</li>
 <li>JVM中所有线程共享内存区域包括：1、堆    2、方法区（永久代或元空间、代码缓存）</li>
 </ul>
-<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E7%BA%BF%E7%A8%8B%E5%85%B1%E4%BA%AB%E5%92%8C%E7%A7%81%E6%9C%89%E7%9A%84%E7%BB%93%E6%9E%84-1622464561115.jpg"></p>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/第03章_线程共享和私有的结构-1622464561115.jpg" alt></p>
 <blockquote>
 <p>PC：PC寄存器（程序计数器）</p>
 <p>VMS：虚拟机栈</p>
@@ -445,8 +304,9 @@
 <p>当一个 Java 线程开始执行时，本地操作系统同时也会创建一个本地线程；当 Java 线程执行结束后，本地线程也会回收。</p>
 </blockquote>
 </li>
-<li><p>操作系统负责线程的安排调度，将所有的线程安排到任一可用的CPU上（如果本地机器有多个CPU的话）。一旦本地线程初始化成功，它就会调用 Java 线程中的 run() 方法。</p>
-</li>
+</ul>
+<ul>
+<li>操作系统负责线程的安排调度，将所有的线程安排到任一可用的CPU上（如果本地机器有多个CPU的话）。一旦本地线程初始化成功，它就会调用 Java 线程中的 run() 方法。</li>
 </ul>
 <hr>
 <h2 id="JVM-系统线程"><a href="#JVM-系统线程" class="headerlink" title="JVM 系统线程"></a>JVM 系统线程</h2><ul>
@@ -544,20 +404,15 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="本地方法接口"><a href="#本地方法接口" class="headerlink" title="本地方法接口"></a>本地方法接口</h1><h2 id="什么是本地方法？"><a href="#什么是本地方法？" class="headerlink" title="什么是本地方法？"></a>什么是本地方法？</h2><ul>
-<li>  使用 <strong>native</strong> 关键字修饰的方法。</li>
-<li>  该方法由非 Java 语言实现的，比如 C 或 C++。</li>
-<li>  在定义一个 <code>Native Method</code> 时，并不提供实现体（有点像定义接口中的抽象方法），因为其具体实现是由非 Java 语言在外面实现的。</li>
-<li>  <strong>标识符 native 可以与所有其它的 java 标识符连用，但 abstract 除外</strong>。</li>
-<li>  <strong>一个 <code>Native Method</code> 就是一个Java调用非Java代码的接口</strong>。</li>
-<li>  这个特征并非 Java 特有的，很多其它的编程语言都有这一机制，比如在 C++ 中，就可以用 <code>extern &quot;C&quot;</code> 告知 C++ 编译器去调用一个 C 的函数。</li>
-<li>  本地接口的作用是融合不同的编程语言为 Java 所用，它的初衷是融合 C/C++ 程序。</li>
+<li>使用 <strong>native</strong> 关键字修饰的方法。</li>
+<li>该方法由非 Java 语言实现的，比如 C 或 C++。</li>
+<li>在定义一个 <code>Native Method</code> 时，并不提供实现体（有点像定义接口中的抽象方法），因为其具体实现是由非 Java 语言在外面实现的。</li>
+<li><strong>标识符 native 可以与所有其它的 java 标识符连用，但 abstract 除外</strong>。</li>
+<li><strong>一个 <code>Native Method</code> 就是一个Java调用非Java代码的接口</strong>。</li>
+<li>这个特征并非 Java 特有的，很多其它的编程语言都有这一机制，比如在 C++ 中，就可以用 <code>extern &quot;C&quot;</code> 告知 C++ 编译器去调用一个 C 的函数。</li>
+<li>本地接口的作用是融合不同的编程语言为 Java 所用，它的初衷是融合 C/C++ 程序。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">native 关键字表明了当前方法是一个本地方法，是有实现体的，但实现体是采用非Java语言实现的；</span><br><span class="line">而 abstract 关键字表明无无方法实现体。</span><br><span class="line">这两个关键字是相互矛盾的。</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <hr>
 <h2 id="为什么要使用-Native-Method-？"><a href="#为什么要使用-Native-Method-？" class="headerlink" title="为什么要使用 Native Method ？"></a>为什么要使用 Native Method ？</h2><p>Java 语言使用起来非常方便，然而有些层次的任务用 Java 实现起来不容易，或者我们对程序的效率很在意时，问题就来了。</p>
 <blockquote>
@@ -567,103 +422,24 @@
 </blockquote>
 <p><strong>有时Java应用需要与Java外面的环境交互，这是本地方法存在的主要原因</strong>。有时Java需要与一些底层系统，如操作系统或某些硬件交换信息，本地方法正是这样的一种交流机制，它为我们提供了一个非常简洁的接口，类似于一个黑盒，我们无需去了解Java应用之外的繁琐的细节。</p>
 <blockquote>
-<ol start="2">
+<ol>
 <li><strong>与操作系统交互</strong></li>
 </ol>
 </blockquote>
 <ul>
-<li>  JVM 虚拟机是一个虚拟机系统，支持 Java 语言本身和运行时库，它是Java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。</li>
-<li>  然而不管怎样，它毕竟不是一个完整的系统，它经常需要依赖一些底层系统的支持。这些底层系统常常是强大的操作系统。</li>
-<li>  <strong>通过使用本地方法，我们得以用 Java 与底层的操作系统交互，甚至JVM的一些部分就是用C写的</strong>。</li>
-<li>  还有，如果我们要使用一些 Java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</li>
+<li>JVM 虚拟机是一个虚拟机系统，支持 Java 语言本身和运行时库，它是Java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。</li>
+<li>然而不管怎样，它毕竟不是一个完整的系统，它经常需要依赖一些底层系统的支持。这些底层系统常常是强大的操作系统。</li>
+<li><strong>通过使用本地方法，我们得以用 Java 与底层的操作系统交互，甚至JVM的一些部分就是用C写的</strong>。</li>
+<li>还有，如果我们要使用一些 Java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</li>
 </ul>
 <blockquote>
-<ol start="3">
+<ol>
 <li><strong>Sun’s Java</strong></li>
 </ol>
 </blockquote>
 <p><strong>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互</strong>。JRE 大部分是用 Java 实现的，它也通过一些本地方法与外界交互。例如：java.lamg.Thread 的 <code>setPriority()</code> 方法是用Java实现的，但是它的具体实现调用的是该类里的本地方法<code>setPriority0()</code>。这个本地方法是用C实现的，并被植入JVM内部。</p>
 <h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><p><strong>目前本地方法的使用越来越少了，除非是与硬件有关的应用</strong>，比如通过 Java 程序驱动打印机或者 Java 系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/14/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/14/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AD%90%E7%B3%BB%E7%BB%9F/" class="post-title-link" itemprop="url">类加载器子系统</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-14 21:13:51" itemprop="dateCreated datePublished" datetime="2021-05-14T21:13:51+08:00">2021-05-14</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-06-10 17:27:28" itemprop="dateModified" datetime="2021-06-10T17:27:28+08:00">2021-06-10</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
       
     </div>
 
@@ -745,16 +521,12 @@
           <h1 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h1><p>完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。</p>
 <p>Token 就是将这些信息包装成一个编码后的字符串，如</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Jack#14692866513#192.0.0.1#...</span><br></pre></td></tr></table></figure>
-
 <p>并且将这个字符串放入请求头 header 中。</p>
 <p>在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。</p>
 <p>在请求头中，查看是否包含 token 字符串，</p>
 <p>如果包含，对 token 字符串进行校验，比较该 token 与我们生成的 token 是否相同，相同则校验通过，表示目前就处于登录状态。否则不通过。</p>
 <p>token 可以设置有效时间！</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">token 的作用：</span><br><span class="line">	1、存储用户信息</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="Token-的生成"><a href="#Token-的生成" class="headerlink" title="Token  的生成"></a>Token  的生成</h2><p>Token 需要按照一定的规则来生成。这个规则可以由开发者自己决定，也可以借助一些 token 生成工具来生成。</p>
 <p>JWT 就是一个生产 token 的工具包。</p>
 <h1 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h1><ul>
@@ -774,7 +546,7 @@
 <li>Key=ATGUIGU</li>
 </ul>
 <blockquote>
-<ol start="2">
+<ol>
 <li>私有部分</li>
 </ol>
 </blockquote>
@@ -783,7 +555,7 @@
 <li>如：user { “userId”：”192321”，”name”：”张三”}</li>
 </ul>
 <blockquote>
-<ol start="3">
+<ol>
 <li>签名部分</li>
 </ol>
 </blockquote>
@@ -791,21 +563,15 @@
 <li>SaltiP：当前服务器的 IP 地址！{linux 中配置代理服务器的ip}</li>
 <li>主要用户对 JWT 生成字符串的时候，进行加密{盐值}</li>
 </ul>
-<p>最终组成：key+salt+userInfo –&gt;&gt;token</p>
+<p>最终组成：key+salt+userInfo —&gt;&gt;token</p>
 <p>base64 编码，并不是加密，只是把明文信息变成了不可见的字符串。但是其实只要用一些工具就可以把 base64 编码解成明文，所以不要在JWT中放入涉及私密的信息。</p>
 <h2 id="SpringBoot-整合-JWT"><a href="#SpringBoot-整合-JWT" class="headerlink" title="SpringBoot 整合 JWT"></a>SpringBoot 整合 JWT</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.jsonwebtoken.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang3.StringUtils;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JwtHelper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// token 的过期时间</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> tokenExpiration = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;</span><br><span class="line">    <span class="comment">// token 的签名秘钥（根据秘钥进行编码、加密等操作）</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String tokenSignKey = <span class="string">&quot;123456&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据参数生成 token 字符串（加密）</span></span><br><span class="line"><span class="comment">     * 这里的参数是：1、用户id（userId）  2、用户姓名（userName）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userId</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userName</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">createToken</span><span class="params">(Long userId, String userName)</span> </span>&#123;</span><br><span class="line">        String token = Jwts.builder()</span><br><span class="line">            .setSubject(<span class="string">&quot;YYGH-USER&quot;</span>)    <span class="comment">// 设置分类</span></span><br><span class="line">            .setExpiration(<span class="keyword">new</span> Date(System.currentTimeMillis() + tokenExpiration))  <span class="comment">// 设置过期时间</span></span><br><span class="line">            .claim(<span class="string">&quot;userId&quot;</span>, userId)</span><br><span class="line">            .claim(<span class="string">&quot;userName&quot;</span>, userName)</span><br><span class="line">            .signWith(SignatureAlgorithm.HS512, tokenSignKey)</span><br><span class="line">            .compressWith(CompressionCodecs.GZIP)</span><br><span class="line">            .compact();</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户id：userid（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title">getUserId</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        Integer userId = (Integer) claims.get(<span class="string">&quot;userId&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> userId.longValue();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户名称：userName（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getUserName</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws</span><br><span class="line">            = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        <span class="keyword">return</span> (String) claims.get(<span class="string">&quot;userName&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String token = JwtHelper.createToken(<span class="number">1L</span>, <span class="string">&quot;Jack&quot;</span>);</span><br><span class="line">        System.out.println(token);</span><br><span class="line">        System.out.println(JwtHelper.getUserId(token));</span><br><span class="line">        System.out.println(JwtHelper.getUserName(token));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>测试结果：</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ</span><br><span class="line">.H4sIAAAAAAAAAKtWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDMyMDM2NbUw11EqLU4t8kwBikGYfom5qUAtXonJ2Uq1AA6KXZ1BAAAA</span><br><span class="line">.ajuC6Hj7TCbklRN238jTyQSL-gQEGG55UkUxnP64IuL41C5OVvVZnKH3VQiZSrVtOQhHh5XnEKV3nr5xKWWzvw</span><br><span class="line"><span class="comment">// 可以看到，token 由3部分组成，中间用 . 隔开 ！</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br><span class="line">Jack</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
 
       
     </div>
@@ -897,7 +663,6 @@
 <hr>
 <h3 id="2、使用-Jackson-的全局配置"><a href="#2、使用-Jackson-的全局配置" class="headerlink" title="2、使用 Jackson 的全局配置"></a>2、使用 Jackson 的全局配置</h3><p>我们可以在<code>application.properties</code>配置文件中设置全局属性：</p>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.jackson.date-format</span>=<span class="string">yyyy-MM-dd HH:mm:ss</span></span><br><span class="line"><span class="meta">spring.jackson.time-zone</span>=<span class="string">GMT+8</span></span><br><span class="line"><span class="meta">spring.jackson.serialization.write-dates-as-timestamps</span>=<span class="string">false</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p><strong>注意事项：</strong></p>
 </blockquote>
@@ -983,22 +748,26 @@
 <h2 id="远端访问"><a href="#远端访问" class="headerlink" title="远端访问"></a>远端访问</h2><p>在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：</p>
 <blockquote>
 <ol>
-<li> 是否放开了服务器的防火墙。</li>
+<li>是否放开了服务器的防火墙。</li>
 </ol>
 </blockquote>
 <p>MongoDB 对外开放的端口号是 <strong>27017</strong>，必须放开此端口的防火墙。</p>
 <blockquote>
-<ol start="2">
-<li> 设置允许所有地址访问。</li>
+<ol>
+<li>设置允许所有地址访问。</li>
 </ol>
 </blockquote>
 <p>MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需要修改配置文件。（下图是默认配置文件的配置信息）</p>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505103207460.png" alt="image-20210505103207460"></p>
 <ul>
 <li><p>可直接设置配置文件为 <code>bindIpAll: true</code>，即允许所有的IPv4和IPv6地址访问</p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIpAll</span>: <span class="string">true</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIpAll</span>: <span class="string">true</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
 <li><p>也可以将 bindIp 修改为 <code>0.0.0.0</code></p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIp</span>: <span class="string">0.0.0.0</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIp</span>: <span class="string">0.0.0.0</span></span><br></pre></td></tr></table></figure>
+</li>
 <li><p>注意事项：<br><strong>net.bindIp</strong> 和 <strong>net.bindIpAll</strong> 是互斥的。也就是说，你可以指定其中一个，但不能同时指定两者。</p>
 </li>
 </ul>
@@ -1011,57 +780,45 @@
 <p>  如果 MongoDB 安装在 Docker 中，首先进入 Docker 的 MongoDB 环境中！</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it [容器id&#x2F;容器名] mongo</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504220804360.png" alt="image-20210504220804360"></p>
 <h3 id="1-2-通过宝塔安装的-MongoDB"><a href="#1-2-通过宝塔安装的-MongoDB" class="headerlink" title="1.2    通过宝塔安装的 MongoDB"></a>1.2    通过宝塔安装的 MongoDB</h3><blockquote>
 <p>  如果是通过宝塔安装的 MongoDB ，其默认的安装位置为：<code>/www/server/mongodb</code> （通过宝塔安装的所有应用都保存在 <strong>/www/server</strong> 目录下）</p>
 </blockquote>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505105819882.png" alt="image-20210505105819882"></p>
 <ol>
-<li> 进入 MongoDB 的安装目录：</li>
+<li>进入 MongoDB 的安装目录：</li>
 </ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /www/server/mongodb/bin</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li> 输入命令 <code>mongo</code> ，进入 MongoDB 环境</li>
+<ol>
+<li>输入命令 <code>mongo</code> ，进入 MongoDB 环境</li>
 </ol>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h2 id="2、切换到-‘admin’-数据库"><a href="#2、切换到-‘admin’-数据库" class="headerlink" title="2、切换到 ‘admin’ 数据库"></a>2、切换到 ‘admin’ 数据库</h2><blockquote>
 <p>  <strong>admin</strong> 数据库是 MongoDB 初始化时创建的，用于管理用户角色。</p>
 </blockquote>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221215610.png" alt="image-20210504221215610"></p>
 <h2 id="3、设置超级管理员用户"><a href="#3、设置超级管理员用户" class="headerlink" title="3、设置超级管理员用户"></a>3、设置超级管理员用户</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user: <span class="string">&#x27;superPanda&#x27;</span>, <span class="built_in">pwd</span>: <span class="string">&#x27;pandaMaster&#x27;</span>, roles:[<span class="string">&#x27;root&#x27;</span>]&#125;)</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <ul>
-<li>  user：超级管理员的用户名</li>
-<li>  pwd：超级管理员的用户密码</li>
-<li>  roles：用于设置用户的权限，如：读、写等等。<strong>root</strong> 代表所有权限</li>
+<li>user：超级管理员的用户名</li>
+<li>pwd：超级管理员的用户密码</li>
+<li>roles：用于设置用户的权限，如：读、写等等。<strong>root</strong> 代表所有权限</li>
 </ul>
 </blockquote>
 <p>验证是否添加成功：如果返回 “1” 表示添加成功，返回 “0” 表示添加失败。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.auth(<span class="string">&#x27;用户名&#x27;</span>, <span class="string">&#x27;用户密码&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221640941.png" alt="image-20210504221640941"></p>
 <h2 id="4、给特定的数据库设置权限"><a href="#4、给特定的数据库设置权限" class="headerlink" title="4、给特定的数据库设置权限"></a>4、给特定的数据库设置权限</h2><blockquote>
 <p>  第3步是给超级管理员设置账号和密码，现在要给特定的库设置权限。我这里以 <strong>beauty_dev</strong> 库为例。</p>
 </blockquote>
 <h3 id="4-1-切换到-beauty-dev-数据库"><a href="#4-1-切换到-beauty-dev-数据库" class="headerlink" title="4.1    切换到 beauty_dev 数据库"></a>4.1    切换到 beauty_dev 数据库</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use beauty_dev</span><br></pre></td></tr></table></figure>
-
 <h3 id="4-2-添加用户"><a href="#4-2-添加用户" class="headerlink" title="4.2    添加用户"></a>4.2    添加用户</h3><blockquote>
 <p>  为 beauty_dev 库添加一个用户，并赋予权限。</p>
 </blockquote>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user:<span class="string">&#x27;用户名&#x27;</span>, <span class="built_in">pwd</span>:<span class="string">&#x27;密码&#x27;</span>, roles: [&#123;role: <span class="string">&#x27;readWrite&#x27;</span>, db: <span class="string">&#x27;beauty_dev&#x27;</span>&#125;]&#125;)</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li>  这段命令的意思是：创建一个普通用户，并给予读写权限，<code>db</code> 表示用户可操作的数据库名。</li>
+<li>这段命令的意思是：创建一个普通用户，并给予读写权限，<code>db</code> 表示用户可操作的数据库名。</li>
 </ul>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504222318840.png" alt="image-20210504222318840"></p>
 <blockquote>
@@ -1082,19 +839,16 @@
 <p>  MongoDB 默认不开启访问控制，我们要通过 <code>--auth</code> 参数开启安全登录。<code>--auth</code> 一旦开启了，用户连接 MongoDB 的数据库时必须制定用户名和密码。</p>
 </blockquote>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo --dbpath 存放数据库文件夹路径 --auth</span><br><span class="line"></span><br><span class="line">mongod --dbpath /www/server/mongodb/data --auth		<span class="comment"># 宝塔中存放数据库数据的文件路径</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="5-1-宝塔可视化界面修改"><a href="#5-1-宝塔可视化界面修改" class="headerlink" title="5.1    宝塔可视化界面修改"></a>5.1    宝塔可视化界面修改</h3><ul>
-<li>  修改前</li>
+<li>修改前</li>
 </ul>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111109060.png" alt="image-20210505111109060"></p>
 <ul>
-<li>  修改后</li>
+<li>修改后</li>
 </ul>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111159182.png" alt="image-20210505111159182"></p>
 <ul>
-<li>  重启即可完成加密登录</li>
+<li>重启即可完成加密登录</li>
 </ul>
 <h2 id="6、效果展示"><a href="#6、效果展示" class="headerlink" title="6、效果展示"></a>6、效果展示</h2><p>此时通过无密登录已经无法正常访问数据库了。</p>
 <p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111544758.png" alt="image-20210505111544758"></p>
@@ -1190,19 +944,14 @@
 <p>如果请求参数的形式和 JavaBean 相同，可以直接用对应的 JavaBean 来接收。  </p>
 </blockquote>
  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> Hosp hosp)</span></span>&#123;	<span class="comment">// 这里的 Hosp 是一个自定义的 JavaBean</span></span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h2><blockquote>
 <p>可以使用一个 Map 集合接收 json 字符串，然后再一个一个的从Map 中拿值。</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> Map&lt;String,Object&gt; json)</span></span>&#123;	</span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h2><blockquote>
 <p>可以使用 String 类型的变量接收 json 字符串，然后在将其转换为 JSONObject 对象，再一个一个的从 JSONObject 对象中拿值。</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> String json)</span></span>&#123;	</span><br><span class="line">    Hosp hosp = JSONObject.parseObject(parameter, Hosp.class);</span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 
       
     </div>
@@ -1287,16 +1036,16 @@
 <li>进入官网并登录/注册。</li>
 </ol>
 </blockquote>
-<p>官网地址：<a target="_blank" rel="noopener" href="http://www.aliyun.com/">www.aliyun.com</a></p>
+<p>官网地址：www.aliyun.com</p>
 <p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420210414796.png" alt="image-20210420210414796"></p>
 <blockquote>
-<ol start="2">
+<ol>
 <li>首次进入选择免费开通短信服务。</li>
 </ol>
 </blockquote>
 <p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420210558936.png" alt="image-20210420210558936"></p>
 <blockquote>
-<ol start="3">
+<ol>
 <li>进入<em>短信服务管理控制台</em>。</li>
 </ol>
 </blockquote>
@@ -1308,7 +1057,7 @@
 </blockquote>
 <p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420211108672.png" alt="image-20210420211108672"></p>
 <blockquote>
-<ol start="2">
+<ol>
 <li>填写签名需要的资料，并发起申请。</li>
 </ol>
 </blockquote>
@@ -1320,7 +1069,7 @@
 </blockquote>
 <p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420212430982.png" alt="image-20210420212430982"></p>
 <blockquote>
-<ol start="2">
+<ol>
 <li>添加自定义的模板信息。其中：<ul>
 <li><strong>${xxx}</strong> 格式的属性是由从自己的服务器端上传到阿里云上的。</li>
 </ul>
@@ -1340,25 +1089,19 @@
 <p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420213613810.png" alt="image-20210420213613810"></p>
 <h1 id="SpringBoot-整合阿里云服务"><a href="#SpringBoot-整合阿里云服务" class="headerlink" title="SpringBoot 整合阿里云服务"></a>SpringBoot 整合阿里云服务</h1><h2 id="初始化-SpringBoot-项目"><a href="#初始化-SpringBoot-项目" class="headerlink" title="初始化 SpringBoot 项目"></a>初始化 SpringBoot 项目</h2><blockquote>
 <ol>
-<li>创建一个 SpringBoot 项目</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol start="2">
-<li>添加依赖</li>
+<li><p>创建一个 SpringBoot 项目</p>
+</li>
+<li><p>添加依赖</p>
+</li>
 </ol>
 </blockquote>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
-<ol start="3">
+<ol>
 <li>添加配置文件 application.properties</li>
 </ol>
 </blockquote>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
 
       
     </div>
@@ -1433,17 +1176,802 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="高精度数值计算工具类"><a href="#高精度数值计算工具类" class="headerlink" title="高精度数值计算工具类"></a>高精度数值计算工具类</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.util.StringUtils;</span><br><span class="line"><span class="keyword">import</span> java.math.BigDecimal;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BigDecimalUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置默认的运算精度</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_DIV_SCALE = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的加法运算。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的和</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">add</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2)</span> </span>&#123;</span><br><span class="line">        BigDecimal b1 = <span class="keyword">new</span> BigDecimal(Double.toString(v1));</span><br><span class="line">        BigDecimal b2 = <span class="keyword">new</span> BigDecimal(Double.toString(v2));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> b1.add(b2).doubleValue();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的加法运算</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数数学加和，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">add</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2, <span class="keyword">int</span> scale)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> round(add(v1, v2), <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的加法运算</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数数学加和，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">add</span><span class="params">(String v1, String v2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v1)) v1 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v2)) v2 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line"></span><br><span class="line">        BigDecimal b1 = <span class="keyword">new</span> BigDecimal(v1);</span><br><span class="line"></span><br><span class="line">        BigDecimal b2 = <span class="keyword">new</span> BigDecimal(v2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b1.add(b2).toString();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的加法运算</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数数学加和，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">add</span><span class="params">(String v1, String v2, <span class="keyword">int</span> scale)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v1)) v1 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v2)) v2 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> round(add(v1, v2), <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的减法运算。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的差</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">subtract</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        BigDecimal b1 = <span class="keyword">new</span> BigDecimal(Double.toString(v1));</span><br><span class="line"></span><br><span class="line">        BigDecimal b2 = <span class="keyword">new</span> BigDecimal(Double.toString(v2));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b1.subtract(b2).doubleValue();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的减法运算。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的差</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">subtract</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2, <span class="keyword">int</span> scale)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> round(subtract(v1, v2), scale);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的减法运算</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数数学差，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">subtract</span><span class="params">(String v1, String v2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v1)) v1 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v2)) v2 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line"></span><br><span class="line">        BigDecimal b1 = <span class="keyword">new</span> BigDecimal(v1);</span><br><span class="line"></span><br><span class="line">        BigDecimal b2 = <span class="keyword">new</span> BigDecimal(v2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b1.subtract(b2).toString();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的减法运算</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数数学差，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">subtract</span><span class="params">(String v1, String v2, <span class="keyword">int</span> scale)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> round(subtract(v1, v2), <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的乘法运算。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的积</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">multiply</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2, <span class="keyword">int</span> scale)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> round(multiply(v1, v2), scale);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的乘法运算。</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的积</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">multiply</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        BigDecimal b1 = <span class="keyword">new</span> BigDecimal(Double.toString(v1));</span><br><span class="line"></span><br><span class="line">        BigDecimal b2 = <span class="keyword">new</span> BigDecimal(Double.toString(v2));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b1.multiply(b2).doubleValue();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的乘法运算</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的数学积，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">multiply</span><span class="params">(String v1, String v2, <span class="keyword">int</span> scale)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> round(multiply(v1, v2), scale);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的乘法运算</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的数学积，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">multiply</span><span class="params">(String v1, String v2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v1)) v1 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v2)) v2 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line"></span><br><span class="line">        BigDecimal b1 = <span class="keyword">new</span> BigDecimal(v1);</span><br><span class="line"></span><br><span class="line">        BigDecimal b2 = <span class="keyword">new</span> BigDecimal(v2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b1.multiply(b2).toString();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供（相对）精确的除法运算，当发生除不尽的情况时，精确到</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 小数点以后10位，以后的数字四舍五入,舍入模式采用ROUND_HALF_EVEN</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的商</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">divide</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> divide(v1, v2, DEFAULT_DIV_SCALE);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 定精度，以后的数字四舍五入。舍入模式采用ROUND_HALF_EVEN</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的商</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">divide</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2, <span class="keyword">int</span> scale)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> divide(v1, v2, scale, BigDecimal.ROUND_HALF_EVEN);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 定精度，以后的数字四舍五入。舍入模式采用用户指定舍入模式</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale      表示需要精确到小数点以后几位</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> round_mode 表示用户指定的舍入模式</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的商</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">divide</span><span class="params">(<span class="keyword">double</span> v1, <span class="keyword">double</span> v2, <span class="keyword">int</span> scale, <span class="keyword">int</span> round_mode)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                    <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        BigDecimal b1 = <span class="keyword">new</span> BigDecimal(Double.toString(v1));</span><br><span class="line"></span><br><span class="line">        BigDecimal b2 = <span class="keyword">new</span> BigDecimal(Double.toString(v2));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b1.divide(b2, scale, round_mode).doubleValue();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供（相对）精确的除法运算，当发生除不尽的情况时，精确到</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 小数点以后10位，以后的数字四舍五入,舍入模式采用ROUND_HALF_EVEN</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的商，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">divide</span><span class="params">(String v1, String v2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v1)) v1 = <span class="string">&quot;0&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v2) || Double.parseDouble(v2) == <span class="number">0</span>) v2 = <span class="string">&quot;1&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> divide(v1, v2, DEFAULT_DIV_SCALE);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 定精度，以后的数字四舍五入。舍入模式采用ROUND_HALF_EVEN</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的商，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">divide</span><span class="params">(String v1, String v2, <span class="keyword">int</span> scale)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(v2) || Double.parseDouble(v2) == <span class="number">0</span>) v2 = <span class="string">&quot;1&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> divide(v1, v2, scale, BigDecimal.ROUND_HALF_EVEN);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 定精度，以后的数字四舍五入。舍入模式采用用户指定舍入模式</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale      表示需要精确到小数点以后几位</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> round_mode 表示用户指定的舍入模式</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的商，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">divide</span><span class="params">(String v1, String v2, <span class="keyword">int</span> scale, <span class="keyword">int</span> round_mode)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                    <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        BigDecimal b1 = <span class="keyword">new</span> BigDecimal(v1);</span><br><span class="line"></span><br><span class="line">        BigDecimal b2 = <span class="keyword">new</span> BigDecimal(v2);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b1.divide(b2, scale, round_mode).toString();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的小数位四舍五入处理,舍入模式采用ROUND_HALF_EVEN</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v     需要四舍五入的数字</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 小数点后保留几位</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 四舍五入后的结果</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">round</span><span class="params">(<span class="keyword">double</span> v, <span class="keyword">int</span> scale)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> round(v, scale, BigDecimal.ROUND_HALF_EVEN);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的小数位四舍五入处理</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v          需要四舍五入的数字</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale      小数点后保留几位</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> round_mode 指定的舍入模式</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 四舍五入后的结果</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">round</span><span class="params">(<span class="keyword">double</span> v, <span class="keyword">int</span> scale, <span class="keyword">int</span> round_mode)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                    <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        BigDecimal b = <span class="keyword">new</span> BigDecimal(Double.toString(v));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b.setScale(scale, round_mode).doubleValue();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的小数位四舍五入处理,舍入模式采用ROUND_HALF_EVEN</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v     需要四舍五入的数字</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale 小数点后保留几位</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 四舍五入后的结果，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">round</span><span class="params">(String v, <span class="keyword">int</span> scale)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> round(v, scale, BigDecimal.ROUND_HALF_EVEN);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的小数位四舍五入处理</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v          需要四舍五入的数字</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> scale      小数点后保留几位</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> round_mode 指定的舍入模式</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 四舍五入后的结果，以字符串格式返回</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">round</span><span class="params">(String v, <span class="keyword">int</span> scale, <span class="keyword">int</span> round_mode)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                    <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        BigDecimal b = <span class="keyword">new</span> BigDecimal(v);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> b.setScale(scale, round_mode).toString();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h1 id="处理-HTTP-请求的工具类"><a href="#处理-HTTP-请求的工具类" class="headerlink" title="处理 HTTP 请求的工具类"></a>处理 HTTP 请求的工具类</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.hospital.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.JSONObject;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.TreeMap;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpRequestHelper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//private final static String signKey = &quot;09c1ff67d1ae4999e137f34b0dff1046&quot;;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Map&lt;String, Object&gt; paramMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        paramMap.put(<span class="string">&quot;d&quot;</span>, <span class="string">&quot;4&quot;</span>);</span><br><span class="line">        paramMap.put(<span class="string">&quot;b&quot;</span>, <span class="string">&quot;2&quot;</span>);</span><br><span class="line">        paramMap.put(<span class="string">&quot;c&quot;</span>, <span class="string">&quot;3&quot;</span>);</span><br><span class="line">        paramMap.put(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;1&quot;</span>);</span><br><span class="line">        log.info(getSign(paramMap, <span class="string">&quot;&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> paramMap</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Object&gt; <span class="title">switchMap</span><span class="params">(Map&lt;String, String[]&gt; paramMap)</span> </span>&#123;</span><br><span class="line">        Map&lt;String, Object&gt; resultMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;String, String[]&gt; param : paramMap.entrySet()) &#123;</span><br><span class="line">            resultMap.put(param.getKey(), param.getValue()[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> resultMap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求数据获取签名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> paramMap</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getSign</span><span class="params">(Map&lt;String, Object&gt; paramMap, String signKey)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(paramMap.containsKey(<span class="string">&quot;sign&quot;</span>)) &#123;</span><br><span class="line">            paramMap.remove(<span class="string">&quot;sign&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        TreeMap&lt;String, Object&gt; sorted = <span class="keyword">new</span> TreeMap&lt;&gt;(paramMap);</span><br><span class="line">        StringBuilder str = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; param : sorted.entrySet()) &#123;</span><br><span class="line">            str.append(param.getValue()).append(<span class="string">&quot;|&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        str.append(signKey);</span><br><span class="line">        log.info(<span class="string">&quot;加密前：&quot;</span> + str.toString());</span><br><span class="line">        String md5Str = MD5.encrypt(str.toString());</span><br><span class="line">        log.info(<span class="string">&quot;加密后：&quot;</span> + md5Str);</span><br><span class="line">        <span class="keyword">return</span> md5Str;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 签名校验</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> paramMap</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isSignEquals</span><span class="params">(Map&lt;String, Object&gt; paramMap, String signKey)</span> </span>&#123;</span><br><span class="line">        String sign = (String)paramMap.get(<span class="string">&quot;sign&quot;</span>);</span><br><span class="line">        String md5Str = getSign(paramMap, signKey);</span><br><span class="line">        <span class="keyword">if</span>(!sign.equals(md5Str)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取时间戳</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">getTimestamp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Date().getTime();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 封装同步请求</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> paramMap</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JSONObject <span class="title">sendRequest</span><span class="params">(Map&lt;String, Object&gt; paramMap, String url)</span></span>&#123;</span><br><span class="line">        String result = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//封装post参数</span></span><br><span class="line">            StringBuilder postdata = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">            <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; param : paramMap.entrySet()) &#123;</span><br><span class="line">                postdata.append(param.getKey()).append(<span class="string">&quot;=&quot;</span>)</span><br><span class="line">                        .append(param.getValue()).append(<span class="string">&quot;&amp;&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            log.info(String.format(<span class="string">&quot;--&gt; 发送请求：post data %1s&quot;</span>, postdata));</span><br><span class="line">            <span class="keyword">byte</span>[] reqData = postdata.toString().getBytes(<span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">            <span class="keyword">byte</span>[] respdata = HttpUtil.doPost(url,reqData);</span><br><span class="line">            result = <span class="keyword">new</span> String(respdata);</span><br><span class="line">            log.info(String.format(<span class="string">&quot;--&gt; 应答结果：result data %1s&quot;</span>, result));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">            ex.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> JSONObject.parseObject(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
 <h1 id="加密-解密工具类"><a href="#加密-解密工具类" class="headerlink" title="加密/解密工具类"></a>加密/解密工具类</h1><h2 id="MD5加密工具类"><a href="#MD5加密工具类" class="headerlink" title="MD5加密工具类"></a>MD5加密工具类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.hospital.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.security.MessageDigest;</span><br><span class="line"><span class="keyword">import</span> java.security.NoSuchAlgorithmException;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">MD5</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">encrypt</span><span class="params">(String strSrc)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">char</span> hexChars[] = &#123; <span class="string">&#x27;0&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;4&#x27;</span>, <span class="string">&#x27;5&#x27;</span>, <span class="string">&#x27;6&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;8&#x27;</span>,</span><br><span class="line">                    <span class="string">&#x27;9&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span> &#125;;</span><br><span class="line">            <span class="keyword">byte</span>[] bytes = strSrc.getBytes();</span><br><span class="line">            MessageDigest md = MessageDigest.getInstance(<span class="string">&quot;MD5&quot;</span>);</span><br><span class="line">            md.update(bytes);</span><br><span class="line">            bytes = md.digest();</span><br><span class="line">            <span class="keyword">int</span> j = bytes.length;</span><br><span class="line">            <span class="keyword">char</span>[] chars = <span class="keyword">new</span> <span class="keyword">char</span>[j * <span class="number">2</span>];</span><br><span class="line">            <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; bytes.length; i++) &#123;</span><br><span class="line">                <span class="keyword">byte</span> b = bytes[i];</span><br><span class="line">                chars[k++] = hexChars[b &gt;&gt;&gt; <span class="number">4</span> &amp; <span class="number">0xf</span>];</span><br><span class="line">                chars[k++] = hexChars[b &amp; <span class="number">0xf</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> String(chars);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchAlgorithmException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;MD5加密出错！！+&quot;</span> + e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">SpringMVC中常见的处理HTTP请求的方法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-15 23:58:00" itemprop="dateCreated datePublished" datetime="2021-04-15T23:58:00+08:00">2021-04-15</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-04-16 00:18:59" itemprop="dateModified" datetime="2021-04-16T00:18:59+08:00">2021-04-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SpringMVC/" itemprop="url" rel="index"><span itemprop="name">SpringMVC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="自动绑定"><a href="#自动绑定" class="headerlink" title="自动绑定"></a>自动绑定</h1><blockquote>
+<p><em>SpringMVC 绑定请求参数是自动实现的，但是想要使用，必须遵循使用要求。</em></p>
+</blockquote>
+<p>使用情况较少！！！</p>
+<hr>
+<h1 id="RequestParam"><a href="#RequestParam" class="headerlink" title="@RequestParam"></a>@RequestParam</h1><ul>
+<li>支持POST和GET请求。</li>
+<li>只支持Content-Type：为application/x-www-form-urlencoded编码的内容。Http协议中，如果不指定Content-Type，则默认传递的参数就是application/x-www-form-urlencoded类型</li>
+</ul>
+<p>@RequestParam案例<br>使用@RequestParm用于绑定controller上的参数，可以是多个参数，也可以是一个Map集合，GET，POST均可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestParam&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Boolean <span class="title">requestParam</span><span class="params">(<span class="meta">@RequestParam(name = &quot;code&quot;,required = false)</span> String code)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;code:&quot;</span>+code);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@RequestParm中name属性是指定参数名，required属性默认为ture，表示必传。若为false则为非必传。属性有defaultValue默认值选项，若该参数为null时，会将默认值填充到参数上。<br>在项目中还可以使用map来接收多个参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestParam</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@RequestBody案例<br>@RequestBody绑定一个实体。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestBody&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">requestBody</span><span class="params">(<span class="meta">@RequestBody</span>  User user)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;user:&quot;</span>+user.getName());</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@RequestBody也能采用map来接收多个参数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestBody</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="RequestBody"><a href="#RequestBody" class="headerlink" title="@RequestBody"></a>@RequestBody</h1><ul>
+<li>不支持GET请求。</li>
+<li>必须要在请求头中申明 content-Type（如application/json）。springMvc通过HandlerAdapter配置的HttpMessageConverters解析httpEntity的数据，并绑定到相应的bean上。</li>
+</ul>
+<h1 id="PathVaribale"><a href="#PathVaribale" class="headerlink" title="@PathVaribale"></a>@PathVaribale</h1><h1 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h1>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" class="post-title-link" itemprop="url">文件的上传与下载</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-04-13 22:08:33" itemprop="dateCreated datePublished" datetime="2021-04-13T22:08:33+08:00">2021-04-13</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-04-15 23:52:00" itemprop="dateModified" datetime="2021-04-15T23:52:00+08:00">2021-04-15</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h1><blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2020/11/03/HTTP%E5%8D%8F%E8%AE%AE/">HTTP协议</a></p>
+</blockquote>
+<h1 id="HTTP-请求头中的-content-type-属性"><a href="#HTTP-请求头中的-content-type-属性" class="headerlink" title="HTTP 请求头中的 content-type 属性"></a>HTTP 请求头中的 content-type 属性</h1><h2 id="什么是-Content-Type-？"><a href="#什么是-Content-Type-？" class="headerlink" title="什么是 Content-Type ？"></a>什么是 Content-Type ？</h2><p>HTTP 消息的请求头/响应头数据是以键值对<code>&lt;K, V&gt;</code>形式存储的。 <strong>Content-Type</strong> 就是 HTTP 请求头消息中的一个键值对的 key ，用来描述客户端浏览器向服务器发送的请求时请求数据的数据类型，其对应的 Value 是 MIME 类型的数据。</p>
+<blockquote>
+<p><strong>Tip：</strong></p>
+<p>HTTP 协议不仅是一个数据传输的工具，还能改变数据在网络中传输的类型。</p>
+<p>具体想要数据以什么样的类型在网络中传输传递则是由前端人员提前规定好的。！！！</p>
+</blockquote>
+<h2 id="Content-Type-的格式"><a href="#Content-Type-的格式" class="headerlink" title="Content-Type 的格式"></a>Content-Type 的格式</h2><blockquote>
+<p>Content-Type 中 Value 的格式：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type: subtype[;parameter:type]</span><br><span class="line">-- 主类型: 子类型[;参数: 参数类型]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Content-Type 对应的 Value 值的数据类型与 MIME 类似。但是在 Content-Type 中还可以额外添加一些参数。常见的有设置请求消息的编码方式，如<code>charset:utf-8</code>。</li>
+</ul>
+<blockquote>
+<p>Demo</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Type: text/html;charset:utf-8;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>描述</p>
+</blockquote>
+<p><code>Content-Type</code> 键对应的值 Value 语法的格式，可分为三个部分，分别是：1、主类型（type）    2、子类型（subtype）    3、参数（parameter）[可选]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1、主类型（type）</span><br><span class="line">-- 主类型与MIME类型一致，比如 text。如果是 * 号则代表所有类型。</span><br><span class="line"></span><br><span class="line">2、子类型（subtype）</span><br><span class="line">-- 子类型也与MIME类型一致，比如html。如果是 * 号则代表所有类型。</span><br><span class="line"></span><br><span class="line">3、参数（parameter）</span><br><span class="line">-- 参数是可选的，可以在 Content-Type 的 Value 中加入一些特殊的参数，比如 Accept 请求头的参数，常见的有用于设置字符编码的 charset 参数。</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>props</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Content-Type：&quot;表示发送的数据类型（MIME类型）&quot;</span><br><span class="line">   -- 常见的属性： </span><br><span class="line">    	application&#x2F;x-www-form-urlencoded</span><br><span class="line">			# 表示以键值对的格式发送请求数据（数据封装在请求体中）。如：name1&#x3D;value1&amp;name2&#x3D;value2，然后对其进行url编码</span><br><span class="line">	    	# url编码是把非英文的内容转换为：%xx%xxx 的格式</span><br><span class="line">	    multipart&#x2F;form-data</span><br><span class="line">			# 表示以多段的形式提交数据给服务器（以流的形式提交，用于上传）</span><br></pre></td></tr></table></figure>
+<h2 id="Content-Type中常见的媒体格式类型"><a href="#Content-Type中常见的媒体格式类型" class="headerlink" title="Content-Type中常见的媒体格式类型"></a>Content-Type中常见的媒体格式类型</h2><blockquote>
+<p>参考 MIME 类型：</p>
+</blockquote>
+<h3 id="以-text-开头的媒体格式类型"><a href="#以-text-开头的媒体格式类型" class="headerlink" title="以 text 开头的媒体格式类型"></a>以 text 开头的媒体格式类型</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">文件</th>
+<th style="text-align:center">文件后缀名</th>
+<th style="text-align:center">MIME类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">超文本标记语言</td>
+<td style="text-align:center">.html 或 .htm</td>
+<td style="text-align:center">text/html</td>
+</tr>
+<tr>
+<td style="text-align:center">普通文本</td>
+<td style="text-align:center">.txt</td>
+<td style="text-align:center">text/plain</td>
+</tr>
+<tr>
+<td style="text-align:center">XML文本</td>
+<td style="text-align:center">.xml</td>
+<td style="text-align:center">text/xml</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="以-image-开头的媒体格式类型"><a href="#以-image-开头的媒体格式类型" class="headerlink" title="以 image 开头的媒体格式类型"></a>以 image 开头的媒体格式类型</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">文件</th>
+<th style="text-align:center">文件后缀名</th>
+<th style="text-align:center">MIME类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">GIF图片格式</td>
+<td style="text-align:center">.gif</td>
+<td style="text-align:center">image/img</td>
+</tr>
+<tr>
+<td style="text-align:center">JPEG图片格式</td>
+<td style="text-align:center">.jpeg 或 .jpg</td>
+<td style="text-align:center">image/jpeg</td>
+</tr>
+<tr>
+<td style="text-align:center">png图片格式</td>
+<td style="text-align:center">.png</td>
+<td style="text-align:center">image/png</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="以application开头的媒体格式类型"><a href="#以application开头的媒体格式类型" class="headerlink" title="以application开头的媒体格式类型"></a>以application开头的媒体格式类型</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">文件</th>
+<th style="text-align:left">MIME类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">XHTML格式</td>
+<td style="text-align:left">application/xhtml+xml</td>
+</tr>
+<tr>
+<td style="text-align:left">XML数据格式</td>
+<td style="text-align:left">application/xml</td>
+</tr>
+<tr>
+<td style="text-align:left">Atom XML聚合格式</td>
+<td style="text-align:left">application/atom+xml</td>
+</tr>
+<tr>
+<td style="text-align:left">JSON数据格式</td>
+<td style="text-align:left">application/json</td>
+</tr>
+<tr>
+<td style="text-align:left">pdf格式</td>
+<td style="text-align:left">application/pdf</td>
+</tr>
+<tr>
+<td style="text-align:left">Word文档格式</td>
+<td style="text-align:left">application/msword</td>
+</tr>
+<tr>
+<td style="text-align:left">二进制流数据（如常见的文件下载）</td>
+<td style="text-align:left">application/octet-stream</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h1 id="文件上传前置知识"><a href="#文件上传前置知识" class="headerlink" title="文件上传前置知识"></a>文件上传前置知识</h1><h2 id="使用HTTP协议上传文件时数据传输的类型"><a href="#使用HTTP协议上传文件时数据传输的类型" class="headerlink" title="使用HTTP协议上传文件时数据传输的类型"></a>使用HTTP协议上传文件时数据传输的类型</h2><blockquote>
+<p><strong><code>Content-Type: multipart/form-data</code> ： 使用HTTP协议进行文件传输时数据的格式</strong></p>
+<p><em>表示将客户端提交的数据，以<strong>多段</strong>的形式进行拼接，然后以二进制流的形式发送给服务器。</em></p>
+<ul>
+<li><strong>多段</strong>：一次可上传多条数据，每条数据之间以分隔符分开。每条属性都是二进制的字符流。</li>
+</ul>
+</blockquote>
+<p>在通过HTTP协议（一般是浏览器）上传文件（如图片）时，显然简单的<code>&lt;K, V&gt;</code>值是不能描述图片对象的，所以我们在上传文件的同时要指定<code>Content-Type: multipart/form-data</code>属性值，这样 HTTP 协议在接收到这两个条件后，就会将客户端的上传的图片文件转化成（多段）二进制字节流数据，封装到请求体中，最后将这个HTTP请求中包含的所有信息交给到服务器处理。</p>
+<p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/image-20210414233936188.png" alt="image-20210414233936188"></p>
+<h2 id="文件上传的必要前提（前端）"><a href="#文件上传的必要前提（前端）" class="headerlink" title="文件上传的必要前提（前端）"></a>文件上传的必要前提（前端）</h2><blockquote>
+<ol>
+<li>设置表单属性：<code>&lt;from enctype = &quot;multipart/form-data&quot;&gt;</code></li>
+</ol>
+</blockquote>
+<ul>
+<li>如果想要 HTTP 协议能够将表单中的数据转化成多段二进制流数据的话，在上传文件的同时我们就要声明上传的文件在HTTP中的数据类型是<code>Content-Type: multipart/form-data</code>，在前端中的做法就是设置表单属性为：<code>&lt;from enctype = &quot;multipart/form-data&quot;&gt;</code></li>
+<li>在前端的表单中，<code>&lt;form encType=&quot;&quot;&gt;</code> 中默认的 encType 是 <strong>application/x-www-form-urlencoded</strong>，这表示 <code>&lt;form/&gt;</code> 表单中的数据将被HTTP协议编码为 <code>&lt;K, V&gt;</code> 格式发送到服务器。而如果我们想通过表单进行文件上传的话，需要修改表单的属性为：<code>&lt;from encType=multipart/form-data&gt;</code></li>
+<li>不管我们通过前端页面还是通过 Postman 等工具进行文件上传时都必须设置请求头中 <code>Content-Type</code> 的值为 <strong>multipart/form-data</strong> 。</li>
+</ul>
+<blockquote>
+<ol>
+<li>请求方式必须是<strong>POST</strong></li>
+</ol>
+</blockquote>
+<p>原因：GET 请求有长度的限制，使用 GET 请求上传图片的话往往会超出请求URL 的长度限制，导致上传图片不能正常显示！！！</p>
+<blockquote>
+<ol>
+<li>提供一个文件选择域<code>&lt;input type=&quot;file&quot;/&gt;</code></li>
+</ol>
+</blockquote>
+<h2 id="HTML-lt-form-gt-标签的-enctype-属性"><a href="#HTML-lt-form-gt-标签的-enctype-属性" class="headerlink" title="HTML &lt;form&gt; 标签的 enctype 属性"></a>HTML <code>&lt;form&gt;</code> 标签的 enctype 属性</h2><blockquote>
+<p>说明：</p>
+</blockquote>
+<p>enctype 属性规定在发送到服务器之前HTTP协议应该如何对<code>&lt;form&gt;</code>表单中的数据进行编码。</p>
+<p>默认地，表单数据会编码为 “application/x-www-form-urlencoded”。也就是说，在发送到服务器之前，所有字符都会进行 url 编码（空格转换为 “+” 加号，特殊符号转换为 ASCII HEX 值）。</p>
+<blockquote>
+<p>语法：</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">enctype</span>=<span class="string">&quot;value&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>属性值：</p>
+</blockquote>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">值</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">application/x-www-form-urlencoded</td>
+<td style="text-align:left">在发送前编码所有字符（默认）</td>
+</tr>
+<tr>
+<td style="text-align:left">multipart/form-data</td>
+<td style="text-align:left">不对字符编码。在使用包含文件上传控件的表单时，必须使用该值。</td>
+</tr>
+<tr>
+<td style="text-align:left">text/plain</td>
+<td style="text-align:left">空格转换为 “+” 加号，但不对特殊字符编码。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h1 id="文件上传的原理分析"><a href="#文件上传的原理分析" class="headerlink" title="文件上传的原理分析"></a>文件上传的原理分析</h1><blockquote>
+<p>当<code>&lt;form enctype=&quot;application/x-www-form-urlencoded/&gt;</code> 时（即使用默认值），form表单的正文内容是键值对的形式，如：key=value&amp;key=value&amp;……</p>
+<ul>
+<li>当 <code>&lt;form enctype=&quot;multipart/form-data&quot;/&gt;</code> 时（不使用默认值），请求正文内容如下，这时 <strong>request.getParameter()</strong> 方法就会失效。</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 每一部分都是MIME类型描述的正文</span></span><br><span class="line"></span><br><span class="line">-----------------------------7de1a433602ac 				<span class="comment">// 分界符</span></span><br><span class="line">Content-Disposition: form-data; name=<span class="string">&quot;userName&quot;</span> 		<span class="comment">// 协议头</span></span><br><span class="line">aaa	 												<span class="comment">// 协议的正文 </span></span><br><span class="line">-----------------------------7de1a433602ac </span><br><span class="line">Content-Disposition: form-data; name=<span class="string">&quot;file&quot;</span>; filename=<span class="string">&quot;C:\Users\zhy\Desktop\fileupload_demofile\b.txt&quot;</span> </span><br><span class="line">Content-Type: text/plain 							  <span class="comment">// 协议的类型（MIME类型） ;</span></span><br><span class="line">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb </span><br><span class="line">-----------------------------7de1a433602ac--</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="原生-Servlet-实现文件上传"><a href="#原生-Servlet-实现文件上传" class="headerlink" title="原生 Servlet 实现文件上传"></a>原生 Servlet 实现文件上传</h1><h2 id="1、创建-Maven-工程并导入依赖"><a href="#1、创建-Maven-工程并导入依赖" class="headerlink" title="1、创建 Maven 工程并导入依赖"></a>1、创建 Maven 工程并导入依赖</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 文件上传相关的jar包依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="2、编写一个文件上传的-jsp-页面"><a href="#2、编写一个文件上传的-jsp-页面" class="headerlink" title="2、编写一个文件上传的 jsp 页面"></a>2、编写一个文件上传的 jsp 页面</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h3&gt;文件上传&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">    &lt;form method=<span class="string">&quot;post&quot;</span> enctype=<span class="string">&quot;multipart/form-data&quot;</span> action=<span class="string">&quot;$&#123;pageContext.request.contextPath&#125;/user/fileUpload&quot;</span>&gt;</span><br><span class="line">        选择文件&lt;input type=<span class="string">&quot;file&quot;</span> name=<span class="string">&quot;upload&quot;</span>&gt;</span><br><span class="line">        &lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;上传文件&quot;</span>&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="3、编写控制器Controller"><a href="#3、编写控制器Controller" class="headerlink" title="3、编写控制器Controller"></a>3、编写控制器Controller</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 处理文件上传的业务逻辑</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 跳转到成功页面</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RequestMapping(value = &quot;fileUpload&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testFileUpload</span><span class="params">(HttpServletRequest request)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.设置文件上传后保存的目录</span></span><br><span class="line">    String path = request.getSession().getServletContext().getRealPath(<span class="string">&quot;uploads&quot;</span>);</span><br><span class="line">    <span class="comment">// 判断该路径是否存在，如果不存在，则创建该文件夹</span></span><br><span class="line">    File file = <span class="keyword">new</span> File(path);</span><br><span class="line">    <span class="keyword">if</span> (!file.exists())&#123;</span><br><span class="line">        file.mkdirs();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.解析Request请求，获取上传的文件</span></span><br><span class="line">    DiskFileItemFactory factory = <span class="keyword">new</span> DiskFileItemFactory();</span><br><span class="line">    <span class="comment">// 创建一个上传工具，指定使用缓存区与临时文件存储位置.</span></span><br><span class="line">    ServletFileUpload upload = <span class="keyword">new</span> ServletFileUpload(factory);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析Request请求</span></span><br><span class="line">    <span class="comment">// 解析上传文件的multipart/form-data流，返回按照传输顺序解析出的FileItem实例列表</span></span><br><span class="line">    List&lt;FileItem&gt; items = upload.parseRequest(request);</span><br><span class="line">    <span class="keyword">for</span> (FileItem item : items) &#123;</span><br><span class="line">        <span class="comment">// 判断当前item对象是否是待上传的文件项</span></span><br><span class="line">        <span class="keyword">if</span> (item.isFormField())&#123;</span><br><span class="line">            <span class="comment">// 说明是普通表单项</span></span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 说明是上传文件项</span></span><br><span class="line">            <span class="comment">// 设置文件名称</span></span><br><span class="line">            <span class="comment">// 获取上传的文件名称</span></span><br><span class="line">            String filename = item.getName();</span><br><span class="line">            <span class="comment">// 将文件名设置为唯一值</span></span><br><span class="line">            String uuid = UUID.randomUUID().toString().replace(<span class="string">&quot;-&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">            filename = uuid+<span class="string">&quot;-&quot;</span>+filename;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 完成文件上传</span></span><br><span class="line">            item.write(<span class="keyword">new</span> File(path,filename));</span><br><span class="line">            <span class="comment">// 删除临时文件</span></span><br><span class="line">            item.delete();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">&quot;文件上传成功&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4、跳转到成功页面"><a href="#4、跳转到成功页面" class="headerlink" title="4、跳转到成功页面"></a>4、跳转到成功页面</h2><hr>
+<h1 id="SpringMVC-实现文件上传"><a href="#SpringMVC-实现文件上传" class="headerlink" title="SpringMVC 实现文件上传"></a>SpringMVC 实现文件上传</h1><ul>
+<li>SpringMVC 的传统方式上传，指的是我们上传的文件和访问的应用在同一台服务器上。</li>
+<li>并且上传完成之后，浏览器可以跳转。</li>
+</ul>
+<h2 id="1、SpringMVC文件上传原理分析"><a href="#1、SpringMVC文件上传原理分析" class="headerlink" title="1、SpringMVC文件上传原理分析"></a>1、SpringMVC文件上传原理分析</h2><p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/SpringMVC文件上传原理分析.png" alt></p>
+<ol>
+<li><p>SpringMVC 框架文件上传的优势就在于可以手动配置一个<strong>文件解析器</strong>，这个文件解析器可以自动帮助我们把文件项从Request 请求中把文件项分离出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 即在文件上传中，Request请求中包含的数据也不仅仅是文件本身，还有其它很多附带的数据。</span><br><span class="line">2. 在 JavaWeb 文件上传的案例中，我们必须从 Request 请求中将待上传的文件项手动分离出来，这非常麻烦。</span><br><span class="line">3. 而 SpringMVC 只需要配置一个&#96;文件解析器&#96;，就可以让框架自动完成对文件项的提取。对于开发人员来说，只需要直接处	理文件项即可。</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/03-原理.bmp" alt></p>
+<h2 id="2、实现步骤"><a href="#2、实现步骤" class="headerlink" title="2、实现步骤"></a>2、实现步骤</h2><h3 id="1、初始化-Maven-工程并导入依赖"><a href="#1、初始化-Maven-工程并导入依赖" class="headerlink" title="1、初始化 Maven 工程并导入依赖"></a>1、初始化 Maven 工程并导入依赖</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 文件上传相关的jar包依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-fileupload<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-io<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2、配置文件解析器-SpringMVC-xml"><a href="#2、配置文件解析器-SpringMVC-xml" class="headerlink" title="2、配置文件解析器[SpringMVC.xml]"></a>2、配置文件解析器[<code>SpringMVC.xml</code>]</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置文件上传解析器--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;multipartResolver&quot;</span>      <span class="attr">class</span>=<span class="string">&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--设置上传文件的最大尺寸为5MB--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;maxUploadSize&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>5242880<span class="tag">&lt;/<span class="name">value</span>&gt;</span>  <span class="comment">&lt;!--1024*1024*5--&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>注意：<strong>文件上传解析器中的<code>id</code>属性是固定的</strong>，不能起别的名称，否则无法实现请求参数的绑定。</li>
+</ul>
+<h3 id="2、编写一个文件上传的jsp页面"><a href="#2、编写一个文件上传的jsp页面" class="headerlink" title="2、编写一个文件上传的jsp页面"></a>2、编写一个文件上传的jsp页面</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=<span class="string">&quot;post&quot;</span> enctype=<span class="string">&quot;multipart/form-data&quot;</span></span><br><span class="line">      action=<span class="string">&quot;$&#123;pageContext.request.contextPath&#125;/user/fileUpload2&quot;</span>&gt;</span><br><span class="line">    选择文件&lt;input type=<span class="string">&quot;file&quot;</span> name=<span class="string">&quot;img3&quot;</span>&gt;</span><br><span class="line">    &lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;上传文件&quot;</span>&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>选择文件<code>&lt;input type=type=&quot;file&quot; name=&quot;img3&quot;&gt;</code>中的<code>name</code>属性的值必须和<code>Controller控制器</code>中具体方法中的参数<code>MultipartFile img3</code> 的名称一致，否则就会接收不到数据。</li>
+</ul>
+</blockquote>
+<h3 id="3、编写控制器Controller-1"><a href="#3、编写控制器Controller-1" class="headerlink" title="3、编写控制器Controller"></a>3、编写控制器Controller</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(path = &quot;fileUpload2&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testFileUpload2</span><span class="params">(MultipartFile img3, HttpServletRequest request)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">// 1.设置文件上传后的保存位置</span></span><br><span class="line">    String filepath = request.getSession().getServletContext().getRealPath(<span class="string">&quot;/uploads/&quot;</span>);</span><br><span class="line">    File file = <span class="keyword">new</span> File(filepath);</span><br><span class="line">    <span class="keyword">if</span> (!file.exists())&#123;</span><br><span class="line">        file.mkdirs();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 2.设置文件上传后的文件名</span></span><br><span class="line">    String uuid = UUID.randomUUID().toString().replace(<span class="string">&quot;-&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    String filename = img3.getOriginalFilename();</span><br><span class="line">    filename = filename+uuid;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.上传文件</span></span><br><span class="line">    img3.transferTo(<span class="keyword">new</span> File(filepath, filename));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4、跳转到成功页面-1"><a href="#4、跳转到成功页面-1" class="headerlink" title="4、跳转到成功页面"></a>4、跳转到成功页面</h3><h1 id="SpringMVC-实现跨服务器文件上传"><a href="#SpringMVC-实现跨服务器文件上传" class="headerlink" title="SpringMVC 实现跨服务器文件上传"></a>SpringMVC 实现跨服务器文件上传</h1><h2 id="1、分服务器的目的"><a href="#1、分服务器的目的" class="headerlink" title="1、分服务器的目的"></a>1、分服务器的目的</h2><ol>
+<li>在实际开发中，我们会有很多处理不同功能的服务器。如：<ul>
+<li>应用服务器：负责部署我们的应用</li>
+<li>数据库服务器：运行我们的数据库</li>
+<li>缓存和消息队列服务器：负责处理大并发访问的缓存和消息</li>
+<li>文件服务器：负责存储用户上传文件的服务器</li>
+</ul>
+</li>
+<li>分服务器处理的目的是为了让服务器各司其职，从而提高我们项目的运行效率。</li>
+</ol>
+<p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/SpringMVC跨服务器文件上传.png" alt></p>
+<h2 id="2、实现步骤-1"><a href="#2、实现步骤-1" class="headerlink" title="2、实现步骤"></a>2、实现步骤</h2><h3 id="1、准备2个Maven工程"><a href="#1、准备2个Maven工程" class="headerlink" title="1、准备2个Maven工程"></a>1、准备2个Maven工程</h3><ol>
+<li><p>创建2个Maven工程</p>
+<ul>
+<li>准备2个TomCat服务器，并且创建一个用于存放图片的web工程</li>
+</ul>
+</li>
+<li><p>导入依赖的坐标</p>
+<ul>
+<li>跨服务器文件上传需要额外导入的依赖坐标</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--跨服务器文件上传的依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.sun.jersey<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jersey-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.18.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.sun.jersey<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jersey-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.18.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="2、编写一个文件上传的jsp页面-1"><a href="#2、编写一个文件上传的jsp页面-1" class="headerlink" title="2、编写一个文件上传的jsp页面"></a>2、编写一个文件上传的jsp页面</h3><h3 id="3、编写控制器Controller-2"><a href="#3、编写控制器Controller-2" class="headerlink" title="3、编写控制器Controller"></a>3、编写控制器Controller</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 跨服务器文件上传</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@RequestMapping(path = &quot;fileUpload3&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testFileUpload3</span><span class="params">(MultipartFile img3)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="comment">// 1.设置文件上传后保存的路径</span></span><br><span class="line">    String filepath = <span class="string">&quot;http://localhost:9090/uploads/&quot;</span>;</span><br><span class="line">    <span class="comment">// 2.设置文件上传后的文件名</span></span><br><span class="line">    String uuid = UUID.randomUUID().toString().replace(<span class="string">&quot;-&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    String filename = img3.getOriginalFilename();</span><br><span class="line">    filename = filename+uuid;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.跨服务器上传文件</span></span><br><span class="line">    <span class="comment">// 3.1 创建客户端对象[jersey提供的]</span></span><br><span class="line">    Client client = Client.create();</span><br><span class="line">    <span class="comment">// 3.2 和图片服务器建立连接</span></span><br><span class="line">    WebResource resource = client.resource(filepath+filename);</span><br><span class="line">    <span class="comment">// 3.3 上传文件</span></span><br><span class="line">    resource.put(img3.getBytes());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4、跳转到成功页面-2"><a href="#4、跳转到成功页面-2" class="headerlink" title="4、跳转到成功页面"></a>4、跳转到成功页面</h3><hr>
+<p><strong>Spring MVC中关于Content-Type类型信息的使用</strong></p>
+<p>在Spring MVC中，主要就是使用@RequestMapping注解来处理请求，因此首先我们来看看@RequestMapping注解的Class定义。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span> </span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Mapping</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> RequestMapping &#123;</span><br><span class="line">    String[] value() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    RequestMethod[] method() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    String[] params() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    String[] headers() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    String[] consumes() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">    String[] produces() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面对注解提供的参数进行简单解析。</p>
+<p>value：指定请求的 URL</p>
+<p>method： 指定请求的method类型， 比如GET、POST、PUT、DELETE等。</p>
+<p><strong>consumes：指定处理请求的提交内容类型（Content-Type），例如application/json、text/html;等。</strong></p>
+<p>produces：指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回。</p>
+<p>params：指定request中必须包含某些参数值，才让该方法处理。</p>
+<p>headers：指定request中必须包含某些指定的header值，才能让该方法处理请求。</p>
+<p>其中，consumes、produces可以使用Content-type中的信息对不需要的信息进行过滤，仅接受需要的数据；headers则可以使用Content-Type中的信息对请求进行过滤和判断。</p>
+<p><strong>Request Headers和Response Headers中的候选属性</strong></p>
+<p>这里列举出 Request Headers（请求头）和Response Headers（响应头）中的候选属性。</p>
+<p>Request Headers的候选属性</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>候选属性</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accept</td>
+<td>指定客户端能够接收的内容类型</td>
+<td>Accept: text/plain, text/html</td>
+</tr>
+<tr>
+<td>Accept-Charset</td>
+<td>浏览器可以接受的字符编码集</td>
+<td>Accept-Charset: iso-8859-5</td>
+</tr>
+<tr>
+<td>Accept-Encoding</td>
+<td>指定浏览器可以支持的web服务器返回内容压缩编码类型</td>
+<td>Accept-Encoding: compress, gzip</td>
+</tr>
+<tr>
+<td>Accept-Language</td>
+<td>浏览器可接受的语言</td>
+<td>Accept-Language: en,zh</td>
+</tr>
+<tr>
+<td>Accept-Ranges</td>
+<td>可以请求网页实体的一个或者多个子范围字段</td>
+<td>Accept-Ranges: bytes</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>HTTP授权的授权证书</td>
+<td>Authorization: Basic QWxhZLRpbjpvcGVuIHNoc2FtZQ==</td>
+</tr>
+<tr>
+<td>Cache-Control</td>
+<td>指定请求和响应遵循的缓存机制</td>
+<td>Cache-Control: no-cache</td>
+</tr>
+<tr>
+<td>Connection</td>
+<td>表示是否需要持久连接。（HTTP 1.1默认进行持久连接）</td>
+<td>Connection: close</td>
+</tr>
+<tr>
+<td>Cookie</td>
+<td>HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器</td>
+<td>Cookie: $Version=1; Skin=new;</td>
+</tr>
+<tr>
+<td>Content-Length</td>
+<td>请求的内容长度</td>
+<td>Content-Length: 348</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>请求的与实体对应的MIME信息</td>
+<td>Content-Type: application/x-www-form-urlencoded</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>请求发送的日期和时间</td>
+<td>Date: Tue, 15 Nov 2018 08:22:31 GMT</td>
+</tr>
+<tr>
+<td>Expect</td>
+<td>请求的特定的服务器行为</td>
+<td>Expect: 100-continue</td>
+</tr>
+<tr>
+<td>From</td>
+<td>发出请求的用户的Email</td>
+<td>From: user@email.com</td>
+</tr>
+<tr>
+<td>Host</td>
+<td>指定请求的服务器的域名和端口号</td>
+<td>Host: www.yanggb.com</td>
+</tr>
+<tr>
+<td>If-Match</td>
+<td>只有请求内容与实体相匹配才有效</td>
+<td>If-Match: “737060ff8c284d8af7ad2082f209582d”</td>
+</tr>
+<tr>
+<td>If-Modified-Since</td>
+<td>如果请求的部分在指定时间之后被修改则请求成功，未被修改则返回304代码</td>
+<td>If-Modified-Since: Sat, 29 Oct 2018 19:43:31 GMT</td>
+</tr>
+<tr>
+<td>If-None-Match</td>
+<td>如果内容未改变返回304代码，参数为服务器先前发送的Etag，与服务器回应的Etag比较判断是否改变</td>
+<td>If-None-Match: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>If-Range</td>
+<td>如果实体未改变，服务器发送客户端丢失的部分，否则发送整个实体。参数也为Etag</td>
+<td>If-Range: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>If-Unmodified-Since</td>
+<td>只在实体在指定时间之后未被修改才请求成功</td>
+<td>If-Unmodified-Since: Sat, 29 Oct 2018 19:23:11 GMT</td>
+</tr>
+<tr>
+<td>Max-Forwards</td>
+<td>限制信息通过代理和网关传送的时间</td>
+<td>Max-Forwards: 10</td>
+</tr>
+<tr>
+<td>Pragma</td>
+<td>用来包含实现特定的指令</td>
+<td>Pragma: no-cache</td>
+</tr>
+<tr>
+<td>Proxy-Authorization</td>
+<td>连接到代理的授权证书</td>
+<td>Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==</td>
+</tr>
+<tr>
+<td>Range</td>
+<td>只请求实体的一部分，指定范围</td>
+<td>Range: bytes=500-999</td>
+</tr>
+<tr>
+<td>Referer</td>
+<td>先前网页的地址，当前请求网页紧随其后，即来路</td>
+<td>Referer: <a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb1.html">http://www.yanggb.com/yanggb1.html</a></td>
+</tr>
+<tr>
+<td>TE</td>
+<td>客户端愿意接受的传输编码，并通知服务器接受接受尾加头信息</td>
+<td>TE: trailers,deflate;q=0.5</td>
+</tr>
+<tr>
+<td>Upgrade</td>
+<td>向服务器指定某种传输协议以便服务器进行转换（如果支持）</td>
+<td>Upgrade: HTTP/2.0, SHTTP/1.3, IRC/6.9, RTA/x11</td>
+</tr>
+<tr>
+<td>User-Agent</td>
+<td>User-Agent的内容包含发出请求的用户信息</td>
+<td>User-Agent: Mozilla/5.0 (Linux; X11)</td>
+</tr>
+<tr>
+<td>Via</td>
+<td>通知中间网关或代理服务器地址，通信协议</td>
+<td>Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>关于消息实体的警告信息</td>
+<td>Warn: 199 Miscellaneous warning</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>可以看到，Content-Type是Request Headers中的一个候选属性。</p>
+<p>Response Headers的候选属性</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>候选属性</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Accept-Ranges</td>
+<td>表明服务器是否支持指定范围请求及哪种类型的分段请求</td>
+<td>Accept-Ranges: bytes</td>
+</tr>
+<tr>
+<td>Age</td>
+<td>从原始服务器到代理缓存形成的估算时间（以秒计，非负）</td>
+<td>Age: 12</td>
+</tr>
+<tr>
+<td>Allow</td>
+<td>对某网络资源的有效的请求行为，不允许则返回405</td>
+<td>Allow: GET, HEAD</td>
+</tr>
+<tr>
+<td>Cache-Control</td>
+<td>告诉所有的缓存机制是否可以缓存及哪种类型</td>
+<td>Cache-Control: no-cache</td>
+</tr>
+<tr>
+<td>Content-Encoding</td>
+<td>web服务器支持的返回内容压缩编码类型</td>
+<td>Content-Encoding: gzip</td>
+</tr>
+<tr>
+<td>Content-Language</td>
+<td>响应体的语言</td>
+<td>Content-Language: en,zh</td>
+</tr>
+<tr>
+<td>Content-Length</td>
+<td>响应体的长度</td>
+<td>Content-Length: 348</td>
+</tr>
+<tr>
+<td>Content-Location</td>
+<td>请求资源可替代的备用的另一地址</td>
+<td>Content-Location: /index.htm</td>
+</tr>
+<tr>
+<td>Content-MD5</td>
+<td>返回资源的MD5校验值</td>
+<td>Content-MD5: Q2hlY2sgSW50ZWdyaXR5IQ==</td>
+</tr>
+<tr>
+<td>Content-Range</td>
+<td>在整个返回体中本部分的字节位置</td>
+<td>Content-Range: bytes 21010-47021/47022</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>返回内容的MIME类型</td>
+<td>Content-Type: text/html; charset=utf-8</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>原始服务器消息发出的时间</td>
+<td>Date: Tue, 15 Nov 2018 08:22:22 GMT</td>
+</tr>
+<tr>
+<td>ETag</td>
+<td>请求变量的实体标签的当前值</td>
+<td>ETag: “737060cd8c284d8af7ad3082f209582d”</td>
+</tr>
+<tr>
+<td>Expires</td>
+<td>响应过期的日期和时间</td>
+<td>Expires: Thu, 01 Dec 2018 16:00:00 GMT</td>
+</tr>
+<tr>
+<td>Last-Modified</td>
+<td>请求资源的最后修改时间</td>
+<td>Last-Modified: Tue, 15 Nov 2018 12:25:26 GMT</td>
+</tr>
+<tr>
+<td>Location</td>
+<td>用来重定向接收方到非请求URL的位置来完成请求或标识新的资源</td>
+<td>Location: <a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb2.html">http://www.yanggb.com/yanggb2.html</a></td>
+</tr>
+<tr>
+<td>Pragma</td>
+<td>包括实现特定的指令，它可应用到响应链上的任何接收方</td>
+<td>Pragma: no-cache</td>
+</tr>
+<tr>
+<td>Proxy-Authenticate</td>
+<td>它指出认证方案和可应用到代理的该URL上的参数</td>
+<td>Proxy-Authenticate: Basic</td>
+</tr>
+<tr>
+<td>refresh</td>
+<td>应用于重定向或一个新的资源被创造，在5秒之后重定向（由网景提出，被大部分浏览器支持）</td>
+<td>Refresh: 5; url=<a target="_blank" rel="noopener" href="http://www.yanggb.com/yanggb9.html">http://www.yanggb.com/yanggb9.html</a></td>
+</tr>
+<tr>
+<td>Retry-After</td>
+<td>如果实体暂时不可取，通知客户端在指定时间之后再次尝试</td>
+<td>Retry-After: 120</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>web服务器软件名称</td>
+<td>Server: Apache/1.3.27 (Unix) (Red-Hat/Linux)</td>
+</tr>
+<tr>
+<td>Set-Cookie</td>
+<td>设置Http Cookie</td>
+<td>Set-Cookie: UserID=JohnDoe; Max-Age=3600; Version=1</td>
+</tr>
+<tr>
+<td>Trailer</td>
+<td>指出头域在分块传输编码的尾部存在</td>
+<td>Trailer: Max-Forwards</td>
+</tr>
+<tr>
+<td>Transfer-Encoding</td>
+<td>文件传输编码</td>
+<td>Transfer-Encoding:chunked</td>
+</tr>
+<tr>
+<td>Vary</td>
+<td>告诉下游代理是使用缓存响应还是从原始服务器请求</td>
+<td>Vary: *</td>
+</tr>
+<tr>
+<td>Via</td>
+<td>告知代理客户端响应是通过哪里发送的</td>
+<td>Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>警告实体可能存在的问题</td>
+<td>Warning: 199 Miscellaneous warning</td>
+</tr>
+<tr>
+<td>WWW-Authenticate</td>
+<td>表明客户端请求实体应该使用的授权方案</td>
+<td>WWW-Authenticate: Basic</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>具体使用示例</strong></p>
+<p>这里通过几个具体的实例来了解怎么在Spring MVC中使用两个Headers中的信息。</p>
+<p>示例1：headers属性取Request Headers中的Referer属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value &#x3D; &quot;&#x2F;yanggb2&quot;, method &#x3D; RequestMethod.GET, headers&#x3D;&quot;Referer&#x3D;http:&#x2F;&#x2F;www.yanggb.com&#x2F;yanggb1&quot;)</span><br><span class="line">public void yanggb2() &#123;   </span><br><span class="line">    &#x2F;&#x2F; 如果上一个页面的地址不是上面headers属性中Referer指定的地址，不会执行此方法</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>这里的headers里面可以匹配所有Headers里面可以出现的信息，不局限于Referer信息。</p>
+<p>示例2：headers属性取Request Headers中的Accept属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value &#x3D; &quot;&#x2F;yanggb2&quot;, headers &#x3D; &quot;Accept&#x3D;application&#x2F;json&quot;) </span><br><span class="line">public void yanggb3(HttpServletResponse response) throws IOException &#123; </span><br><span class="line">    &#x2F;&#x2F; 表示响应的内容区数据的媒体类型为json格式，且编码为utf-8（客户端应该以utf-8解码）</span><br><span class="line">    response.setContentType(&quot;application&#x2F;json;charset&#x3D;utf-8&quot;); </span><br><span class="line">    &#x2F;&#x2F; 写出响应体内容</span><br><span class="line">    String jsonData &#x3D; &quot;&#123;\&quot;username\&quot;:\&quot;yanggb\&quot;,\&quot;password\&quot;:\&quot;123\&quot;&#125;&quot;; </span><br><span class="line">    response.getWriter().write(jsonData);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，服务器就会根据请求头【Accept=application/json】生产json数据。</p>
+<p>当你有如下Accept头，将遵守如下规则进行应用：</p>
+<p>①Accept：text/html,application/xml,application/json</p>
+<p>将按照如下顺序进行produces的匹配 ①text/html ②application/xml ③application/json。</p>
+<p>②Accept：application/xml;q=0.5,application/json;q=0.9,text/html。</p>
+<p>将按照如下顺序进行produces的匹配 ①text/html ②application/json ③application/xml。</p>
+<p>参数为媒体类型的质量因子，越大则优先权越高(从0到1)。</p>
+<p>③Accept：<em>/</em>,text/*,text/html</p>
+<p>将按照如下顺序进行produces的匹配 ①text/html ②text/<em> ③</em>/*。</p>
+<p>即匹配规则为：最明确的优先匹配。</p>
+<p>示例3：params属性取参数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value &#x3D; &quot;&#x2F;yanggb&#x2F;&#123;userId&#125;&quot;, method &#x3D; RequestMethod.GET, params &#x3D; &quot;yanggb1&#x3D;yanggb2&quot;) </span><br><span class="line">public void findUser(@PathVariable String userId) &#123;</span><br><span class="line">    &#x2F;&#x2F; 当请求中包含参数yanggb1时才会执行此方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，就起到了一个过滤的作用。</p>
+<p>实例4：consumes/produces属性过滤请求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Controller </span><br><span class="line">@RequestMapping(value &#x3D; &quot;&#x2F;users&quot;, method &#x3D; RequestMethod.POST, consumes&#x3D;&quot;application&#x2F;json&quot;, produces &#x3D; &quot;application&#x2F;json&quot;) </span><br><span class="line">@ResponseBody</span><br><span class="line">public List&lt;User&gt; addUser(@RequestBody User userl) &#123;   </span><br><span class="line">    return List&lt;User&gt; users;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个方法仅处理请求Content-Type为【application/json】类型的请求，produces标识处理请求中Accept头中包含了【application/json】的请求，同时暗示了返回的内容类型为【application/json】。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang&#x3D;&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;测试文件上传&lt;&#x2F;title&gt;</span><br><span class="line">    &lt;div id&#x3D;&quot;app&quot;&gt;</span><br><span class="line">        &lt;form method&#x3D;&quot;post&quot; enctype&#x3D;&quot;multipart&#x2F;form-data&quot;&gt;</span><br><span class="line">            用户名：&lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;username&quot;&gt;&lt;br&gt;</span><br><span class="line">            头像：&lt;input type&#x3D;&quot;file&quot; name&#x3D;&quot;photo&quot;&gt;&lt;br&gt;</span><br><span class="line">            &lt;input type&#x3D;submit value&#x3D;&quot;上传&quot; @click&#x3D;&quot;upload&quot;&gt;</span><br><span class="line">        &lt;&#x2F;form&gt;</span><br><span class="line">        &lt;button  @click&#x3D;&quot;upload&quot;&gt;点我&lt;&#x2F;button&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;&#x2F;html&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src&#x3D;&quot;.&#x2F;node_modules&#x2F;axios&#x2F;dist&#x2F;axios.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line">&lt;script src&#x3D;&quot;.&#x2F;node_modules&#x2F;vue&#x2F;dist&#x2F;vue.min.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    const vm &#x3D; new Vue(&#123;</span><br><span class="line">        el: &quot;#app&quot;,</span><br><span class="line">        methods: &#123;</span><br><span class="line">            upload()&#123;</span><br><span class="line">                alert(&quot;哈哈&quot;)</span><br><span class="line">                axios.post(&quot;localhost:8080&#x2F;user&#x2F;2&quot;)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="文件上传时发送的HTTP协议的内容"><a href="#文件上传时发送的HTTP协议的内容" class="headerlink" title="文件上传时发送的HTTP协议的内容"></a>文件上传时发送的HTTP协议的内容</h1><p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/image-20210414233855135.png" alt="image-20210414233855135"></p>
 
       
     </div>

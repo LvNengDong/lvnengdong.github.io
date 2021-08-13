@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="1    是什么？     LockSupport 是 JUC 包下的一个类，也用于多线程间的通信，是 wait &#x2F; notify 机制的改良加强版。   LockSupport 是一个线程阻塞唤醒的工具类，类中所有的方法都是静态方法，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。   LockSupport 提供了 park() 和 unpark() 方法实现阻塞线程和解除线程阻塞的过程">
+<meta name="description" content="1    是什么？  LockSupport 是 JUC 包下的一个类，也用于多线程间的通信，是 wait &#x2F; notify 机制的改良加强版。 LockSupport 是一个线程阻塞唤醒的工具类，类中所有的方法都是静态方法，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。 LockSupport 提供了 park() 和 unpark() 方法实现阻塞线程和解除线程阻塞的过程。 归根结底，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LockSupport">
 <meta property="og:url" content="http://example.com/2021/08/10/LockSupport/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1    是什么？     LockSupport 是 JUC 包下的一个类，也用于多线程间的通信，是 wait &#x2F; notify 机制的改良加强版。   LockSupport 是一个线程阻塞唤醒的工具类，类中所有的方法都是静态方法，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。   LockSupport 提供了 park() 和 unpark() 方法实现阻塞线程和解除线程阻塞的过程">
+<meta property="og:description" content="1    是什么？  LockSupport 是 JUC 包下的一个类，也用于多线程间的通信，是 wait &#x2F; notify 机制的改良加强版。 LockSupport 是一个线程阻塞唤醒的工具类，类中所有的方法都是静态方法，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。 LockSupport 提供了 park() 和 unpark() 方法实现阻塞线程和解除线程阻塞的过程。 归根结底，">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/08/10/LockSupport/image-20210716173307046.png">
 <meta property="og:image" content="http://example.com/2021/08/10/LockSupport/image-20210716173522862.png">
@@ -170,7 +170,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -272,43 +272,36 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="1-是什么？"><a href="#1-是什么？" class="headerlink" title="1    是什么？"></a>1    是什么？</h1><img src="/2021/08/10/LockSupport/image-20210716173307046.png" alt="image-20210716173307046" style="zoom:80%;">
-
+        <h1 id="1-是什么？"><a href="#1-是什么？" class="headerlink" title="1    是什么？"></a>1    是什么？</h1><p><img src="/2021/08/10/LockSupport/image-20210716173307046.png" alt="image-20210716173307046" style="zoom:80%;"></p>
 <ul>
-<li>  <strong>LockSupport</strong> 是 JUC 包下的一个类，也用于多线程间的通信，<strong>是 <code>wait / notify</code> 机制的改良加强版</strong>。</li>
-<li>  LockSupport 是一个线程阻塞唤醒的工具类，<strong>类中所有的方法都是静态方法</strong>，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。</li>
-<li>  LockSupport 提供了 <code>park()</code> 和 <code>unpark()</code> 方法实现阻塞线程和解除线程阻塞的过程。</li>
-<li>  归根结底，<strong>LockSupport 调用的是 Unsafe 类中的 native 方法</strong>。</li>
-<li>  LockSupport 是用来创建锁和其它同步类的基本线程阻塞原语。</li>
+<li><strong>LockSupport</strong> 是 JUC 包下的一个类，也用于多线程间的通信，<strong>是 <code>wait / notify</code> 机制的改良加强版</strong>。</li>
+<li>LockSupport 是一个线程阻塞唤醒的工具类，<strong>类中所有的方法都是静态方法</strong>，可以让线程在任意位置阻塞，阻塞之后也有对应的唤醒方法。</li>
+<li>LockSupport 提供了 <code>park()</code> 和 <code>unpark()</code> 方法实现阻塞线程和解除线程阻塞的过程。</li>
+<li>归根结底，<strong>LockSupport 调用的是 Unsafe 类中的 native 方法</strong>。</li>
+<li>LockSupport 是用来创建锁和其它同步类的基本线程阻塞原语。</li>
 </ul>
 <p><img src="/2021/08/10/LockSupport/image-20210716173522862.png" alt="image-20210716173522862"></p>
 <hr>
 <h1 id="2-为什么学-LockSupport"><a href="#2-为什么学-LockSupport" class="headerlink" title="2    为什么学 LockSupport"></a>2    为什么学 LockSupport</h1><ol>
-<li> LockSupport 是学习 AQS 的前置知识。</li>
-<li> 传统的 等待/唤醒 机制在某些情况下不适用。</li>
+<li>LockSupport 是学习 AQS 的前置知识。</li>
+<li>传统的 等待/唤醒 机制在某些情况下不适用。</li>
 </ol>
 <hr>
 <h1 id="3-三组让线程等待-唤醒的方法（传统等待-唤醒方法存在的缺陷）"><a href="#3-三组让线程等待-唤醒的方法（传统等待-唤醒方法存在的缺陷）" class="headerlink" title="3    三组让线程等待/唤醒的方法（传统等待/唤醒方法存在的缺陷）"></a>3    三组让线程等待/唤醒的方法（传统等待/唤醒方法存在的缺陷）</h1><blockquote>
 <ol>
-<li> <strong>Object</strong>：<code>wait()</code> 和 <code>notify()</code></li>
-<li> <strong>Condition</strong>：<code>await()</code> 和 <code>signal()</code></li>
-<li> <strong>LockSupport</strong>：<code>park()</code> 和 <code>unpark()</code></li>
+<li><strong>Object</strong>：<code>wait()</code> 和 <code>notify()</code></li>
+<li><strong>Condition</strong>：<code>await()</code> 和 <code>signal()</code></li>
+<li><strong>LockSupport</strong>：<code>park()</code> 和 <code>unpark()</code></li>
 </ol>
 </blockquote>
 <h2 id="3-1-wait-notify"><a href="#3-1-wait-notify" class="headerlink" title="3.1    wait / notify"></a>3.1    wait / notify</h2><blockquote>
 <p>  <strong>Object 类中的 wait 和 notify 方法实现线程的等待和唤醒（wait/notify 限制）</strong></p>
 </blockquote>
 <h3 id="正常"><a href="#正常" class="headerlink" title="正常"></a>正常</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.one;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 18:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行结果：</span></span><br><span class="line"><span class="comment"> *      T1 come in</span></span><br><span class="line"><span class="comment"> *      T1 进入Waiting状态</span></span><br><span class="line"><span class="comment"> *      T2 come in</span></span><br><span class="line"><span class="comment"> *      T2 唤醒Waiting中的线程</span></span><br><span class="line"><span class="comment"> *      T1 被唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="异常1"><a href="#异常1" class="headerlink" title="异常1"></a>异常1</h3><ul>
-<li>  将 <code>wait</code> 和 <code>notify</code> 方法，两个都去掉同步代码块。</li>
+<li>将 <code>wait</code> 和 <code>notify</code> 方法，两个都去掉同步代码块。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            synchronized (obj)&#123;</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            synchronized (obj)&#123;</span></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
 <p>  <strong>执行结果：</strong></p>
 </blockquote>
@@ -317,15 +310,14 @@
 <p>  <strong>结论</strong></p>
 </blockquote>
 <ul>
-<li>  <strong>Object 类中的 wait、notify、notifyAll 方法必须放在 synchronized 同步代码（同步代码块或同步方法）中才能正常使用。</strong></li>
-<li>  <strong>编译时不会报错，但是运行时会抛出 <code>IllegalMonitorStateException</code> 异常。</strong>【非法监听状态异常】</li>
+<li><strong>Object 类中的 wait、notify、notifyAll 方法必须放在 synchronized 同步代码（同步代码块或同步方法）中才能正常使用。</strong></li>
+<li><strong>编译时不会报错，但是运行时会抛出 <code>IllegalMonitorStateException</code> 异常。</strong>【非法监听状态异常】</li>
 </ul>
 <hr>
 <h3 id="异常2"><a href="#异常2" class="headerlink" title="异常2"></a>异常2</h3><ul>
-<li>  让 <code>notify()</code> 先于 <code>wait()</code> 执行，会导致某个线程进入 Waiting 状态后无法被唤醒，程序无法结束。</li>
+<li>让 <code>notify()</code> 先于 <code>wait()</code> 执行，会导致某个线程进入 Waiting 状态后无法被唤醒，程序无法结束。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SyncDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Object obj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                    obj.wait();		<span class="comment">// 13行</span></span><br><span class="line"><span class="comment">//                    obj.wait(1000);      // 超时唤醒可以单独出现              </span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (obj)&#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                obj.notify();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>  <strong>执行结果</strong></p>
 </blockquote>
@@ -334,20 +326,20 @@
 <p>  <strong>代码分析</strong></p>
 </blockquote>
 <ol>
-<li> 在线程 T1 争夺锁对象之前让其先暂停 1s，让 T2 线程能先于 T1 执行；</li>
-<li> T2 线程先得到锁对象，在控制台上输出指定的内容，并随机唤醒当前锁对象维护的等待队列中的一个线程，将其移动到锁对象的同步队列中，最后执行完毕释放锁对象。（由于当前锁对象的等待队列为空，所以这里并没有发生真正的唤醒线程的过程）</li>
-<li> T1 线程休眠 1s 后醒来获得锁对象，执行代码块中的方法，将指定内容打印输出到控制台上。执行到 13 行 <code>obj.wait();</code> 代码后 T1 线程被挂起。</li>
-<li> 但是由于锁对象的唤醒动作已经先于阻塞动作执行了，并且在此之后锁对象也没有其它的唤醒动作了，所以 T1 会一直陷入 Waiting 状态，该行代码之后的打印输出动作也就不会被执行到。</li>
-<li> 整个进程无法结束。</li>
+<li>在线程 T1 争夺锁对象之前让其先暂停 1s，让 T2 线程能先于 T1 执行；</li>
+<li>T2 线程先得到锁对象，在控制台上输出指定的内容，并随机唤醒当前锁对象维护的等待队列中的一个线程，将其移动到锁对象的同步队列中，最后执行完毕释放锁对象。（由于当前锁对象的等待队列为空，所以这里并没有发生真正的唤醒线程的过程）</li>
+<li>T1 线程休眠 1s 后醒来获得锁对象，执行代码块中的方法，将指定内容打印输出到控制台上。执行到 13 行 <code>obj.wait();</code> 代码后 T1 线程被挂起。</li>
+<li>但是由于锁对象的唤醒动作已经先于阻塞动作执行了，并且在此之后锁对象也没有其它的唤醒动作了，所以 T1 会一直陷入 Waiting 状态，该行代码之后的打印输出动作也就不会被执行到。</li>
+<li>整个进程无法结束。</li>
 </ol>
 <blockquote>
 <p>  <strong>附加</strong></p>
 </blockquote>
 <ul>
-<li>  如果将唤醒操作设置成超时唤醒，则 <strong>wait(long timeout)</strong> 可以不用与 <code>notify()</code> 方法成对出现，也可以不用关心与 <code>notify()</code> 方法出现的顺序。</li>
+<li>如果将唤醒操作设置成超时唤醒，则 <strong>wait(long timeout)</strong> 可以不用与 <code>notify()</code> 方法成对出现，也可以不用关心与 <code>notify()</code> 方法出现的顺序。</li>
 </ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li>  <code>wait()</code> 和 <code>notify()</code> 方法必须<strong>要在 synchronized 同步代码里面</strong>且<strong>成对使用</strong>，且使用时必须先 <code>wait</code> 后 <code>notify</code>。【注意这里的 <code>wait()</code> 方法一定是空参的 wait 方法】</li>
+<li><code>wait()</code> 和 <code>notify()</code> 方法必须<strong>要在 synchronized 同步代码里面</strong>且<strong>成对使用</strong>，且使用时必须先 <code>wait</code> 后 <code>notify</code>。【注意这里的 <code>wait()</code> 方法一定是空参的 wait 方法】</li>
 </ul>
 <hr>
 <h2 id="3-2-await-signal"><a href="#3-2-await-signal" class="headerlink" title="3.2    await  / signal"></a>3.2    await  / signal</h2><blockquote>
@@ -355,9 +347,6 @@
 </blockquote>
 <p>与<code>Object#wait</code>、<code>Object#notify</code> 方法遇到的问题基本一样。</p>
 <h3 id="正常-1"><a href="#正常-1" class="headerlink" title="正常"></a>正常</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.one;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 18:02</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Lock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">        Condition condition = lock.newCondition();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line"><span class="comment">//            try &#123; Thread.sleep(1000); &#125; catch (InterruptedException e) &#123; e.printStackTrace(); &#125;</span></span><br><span class="line"></span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line"></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 进入Waiting状态&quot;</span>);</span><br><span class="line">                condition.await();  <span class="comment">// 当前线程被阻塞</span></span><br><span class="line"></span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 被唤醒&quot;</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in&quot;</span>);</span><br><span class="line">                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 唤醒Waiting中的线程&quot;</span>);</span><br><span class="line">                condition.signal();</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                lock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行结果：</span></span><br><span class="line"><span class="comment"> *      T1 come in</span></span><br><span class="line"><span class="comment"> *      T1 进入Waiting状态</span></span><br><span class="line"><span class="comment"> *      T2 come in</span></span><br><span class="line"><span class="comment"> *      T2 唤醒Waiting中的线程</span></span><br><span class="line"><span class="comment"> *      T1 被唤醒</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="异常1-1"><a href="#异常1-1" class="headerlink" title="异常1"></a>异常1</h3><p>如果注释掉 lock 和 unlock 方法，程序将会抛出 <strong>IllegalMonitorStateException</strong> 异常。</p>
 <p><img src="/2021/08/10/LockSupport/image-20210716184240464.png" alt="image-20210716184240464"></p>
 <h3 id="异常2-1"><a href="#异常2-1" class="headerlink" title="异常2"></a>异常2</h3><p>如果调换 <code>await()</code> 和 <code>signal()</code> 的执行顺序，将有一个线程永远处于 Waiting 状态，导致线程无法结束。</p>
@@ -366,30 +355,30 @@
 <p>  <strong>传统的 synchronized 和 Lock 实现等待唤醒的约束</strong></p>
 </blockquote>
 <ol>
-<li> 等待和唤醒的方法必须写在锁代码块（synchronized 或 lock）中；</li>
-<li> 必须先等待后唤醒。如果先唤醒后等待，线程将陷入死等。</li>
+<li>等待和唤醒的方法必须写在锁代码块（synchronized 或 lock）中；</li>
+<li>必须先等待后唤醒。如果先唤醒后等待，线程将陷入死等。</li>
 </ol>
 <hr>
 <h2 id="3-4-park-unpark"><a href="#3-4-park-unpark" class="headerlink" title="3.4    park / unpark"></a>3.4    park / unpark</h2><blockquote>
 <p>  <strong>LockSupport 类中 park 等待和 unpark 唤醒</strong></p>
 </blockquote>
 <ul>
-<li>  见下文</li>
+<li>见下文</li>
 </ul>
 <hr>
 <h1 id="4-LockSupport"><a href="#4-LockSupport" class="headerlink" title="4    LockSupport"></a>4    LockSupport</h1><h2 id="4-1-常用方法"><a href="#4-1-常用方法" class="headerlink" title="4.1    常用方法"></a>4.1    常用方法</h2><p>在 LockSupport 中，通过 <code>park()</code> 和 <code>unpark(Thread thread)</code> 方法来实现阻塞和唤醒线程的操作。</p>
 <p><img src="/2021/08/10/LockSupport/image-20210716203238382.png" alt="image-20210716203238382"></p>
 <h2 id="4-2-原理"><a href="#4-2-原理" class="headerlink" title="4.2    原理"></a>4.2    原理</h2><ul>
-<li>  LockSupport 中使用了一种名为 Permit（许可证）的概念来实现阻塞和唤醒线程的功能，Permit 与线程绑定。</li>
-<li>  Permit 只有两个值 1 和 0，默认是 0。</li>
-<li>  0 表示线程没有许可证，1 表示线程拥有许可证。每个线程允许携带的许可证的最大上限是 1。</li>
+<li>LockSupport 中使用了一种名为 Permit（许可证）的概念来实现阻塞和唤醒线程的功能，Permit 与线程绑定。</li>
+<li>Permit 只有两个值 1 和 0，默认是 0。</li>
+<li>0 表示线程没有许可证，1 表示线程拥有许可证。每个线程允许携带的许可证的最大上限是 1。</li>
 </ul>
 <h2 id="4-3-阻塞"><a href="#4-3-阻塞" class="headerlink" title="4.3    阻塞"></a>4.3    阻塞</h2><blockquote>
 <p>  <strong>阻塞方法</strong></p>
 </blockquote>
 <ul>
-<li>  <code>park()</code>：阻塞当前线程（会消耗掉一个许可证）</li>
-<li>  <code>park(Object blocker)</code>：阻塞指定线程（会消耗掉一个许可证）</li>
+<li><code>park()</code>：阻塞当前线程（会消耗掉一个许可证）</li>
+<li><code>park(Object blocker)</code>：阻塞指定线程（会消耗掉一个许可证）</li>
 </ul>
 <blockquote>
 <p>  <strong>阻塞原理</strong></p>
@@ -401,7 +390,7 @@
 <p>  <strong>唤醒方法</strong></p>
 </blockquote>
 <ul>
-<li>   <code>unpark(Thread thread)</code>：唤醒某个线程。</li>
+<li><code>unpark(Thread thread)</code>：唤醒某个线程。</li>
 </ul>
 <blockquote>
 <p>  <strong>唤醒原理</strong></p>
@@ -414,29 +403,28 @@
 <p>线程阻塞时需要消耗凭证（permit），这个凭证每个线程最多只有 1 个。</p>
 <ol>
 <li>当调用 <code>park()</code> 方法时，<ul>
-<li>  如果有凭证，则会直接消耗掉这个凭证，然后程序继续执行。</li>
-<li>  如果无凭证，则必须阻塞等待凭证可用</li>
+<li>如果有凭证，则会直接消耗掉这个凭证，然后程序继续执行。</li>
+<li>如果无凭证，则必须阻塞等待凭证可用</li>
 </ul>
 </li>
-<li> 而 <code>unpark()</code> 正好相反，它会增加一个凭证，但凭证最多只能有一个，累加无效。</li>
+<li>而 <code>unpark()</code> 正好相反，它会增加一个凭证，但凭证最多只能有一个，累加无效。</li>
 </ol>
 <hr>
 <h1 id="5-代码"><a href="#5-代码" class="headerlink" title="5    代码"></a>5    代码</h1><blockquote>
 <p>  <strong>LockSupport 的优势</strong></p>
 </blockquote>
 <ul>
-<li>  优势1：不需要锁块，唤醒和阻塞的代码可以写在任意位置。（之前的两组方法都只能写在锁代码块中）</li>
-<li>  优势2：支持 <code>unpark()</code> 可以在 <code>park()</code> 之前执行（先唤醒后等待）</li>
+<li>优势1：不需要锁块，唤醒和阻塞的代码可以写在任意位置。（之前的两组方法都只能写在锁代码块中）</li>
+<li>优势2：支持 <code>unpark()</code> 可以在 <code>park()</code> 之前执行（先唤醒后等待）</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockSupportDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t come in \t&quot;</span> + System.currentTimeMillis());</span><br><span class="line">            LockSupport.park(); <span class="comment">// 阻塞当前线程</span></span><br><span class="line">            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t 被唤醒 \t&quot;</span> + System.currentTimeMillis());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>);</span><br><span class="line">        t1.start();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;唤醒&quot;</span> + t1.getName() + <span class="string">&quot;线程&quot;</span>);</span><br><span class="line">            LockSupport.unpark(t1); </span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>  <strong>代码分析</strong></p>
 </blockquote>
 <ol>
-<li> T1 线程即使抢到 CPU 资源后也会立即睡眠 3s，所以 T2 线程中的内容必定先于 T1 执行。</li>
-<li> T2 调用 <code>unpark()</code> 方法给 t1 线程发放了一个通行证；</li>
-<li> 3s 后 T1 线程睡醒，接着上次的位置继续执行，打印 <code>... come in ...</code> 在控制台上，接着执行 <code>park()</code> 方法阻塞线程，但是由于此时 T1 线程是有一个通行证 permit 的，所以这个阻塞校验可以通过，紧接着继续执行下面的操作。</li>
+<li>T1 线程即使抢到 CPU 资源后也会立即睡眠 3s，所以 T2 线程中的内容必定先于 T1 执行。</li>
+<li>T2 调用 <code>unpark()</code> 方法给 t1 线程发放了一个通行证；</li>
+<li>3s 后 T1 线程睡醒，接着上次的位置继续执行，打印 <code>... come in ...</code> 在控制台上，接着执行 <code>park()</code> 方法阻塞线程，但是由于此时 T1 线程是有一个通行证 permit 的，所以这个阻塞校验可以通过，紧接着继续执行下面的操作。</li>
 </ol>
 <p><strong>最终的运行结果为</strong>：</p>
 <p><img src="/2021/08/10/LockSupport/image-20210716213814924.png" alt="image-20210716213814924"></p>
@@ -444,13 +432,13 @@
 <hr>
 <h1 id="6-面试题"><a href="#6-面试题" class="headerlink" title="6    面试题"></a>6    面试题</h1><blockquote>
 <ol>
-<li> <strong>为什么可以先唤醒线程后阻塞线程？</strong></li>
+<li><strong>为什么可以先唤醒线程后阻塞线程？</strong></li>
 </ol>
 </blockquote>
 <p><code>unpark()</code> 方法并不是直接唤醒阻塞的线程，而是相当于给线程发放了一个万能的通行证，只要有这个通行证在，线程在遇到阻塞时，直接消费这个通行证就可以通过而不会被阻塞。</p>
 <blockquote>
-<ol start="2">
-<li> <strong>为什么唤醒两次后阻塞两次，但最终结果还会阻塞线程？</strong></li>
+<ol>
+<li><strong>为什么唤醒两次后阻塞两次，但最终结果还会阻塞线程？</strong></li>
 </ol>
 </blockquote>
 <p>因为一个线程持有通行证的最大数量只能为 1，所以调用两次 <code>unpark()</code> 和调用一次 <code>unpark()</code> 效果一样，最多只能获得一个通行证。而调用两次 <code>park()</code> 则会消费两个通行证，证不够就不能放行。</p>

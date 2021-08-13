@@ -160,7 +160,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -315,14 +315,15 @@
 <li><p>线程并发执行时CPU会在多个线程间不停地做任务切换，这就导致单个线程需要经常中断和恢复。当线程切换回来后，为了能够接着从上次执行执行的位置开始执行，就必须利用程序计数器来记录线程当前方法的指令地址。</p>
 </li>
 <li><p>如果程序计数器设置为多个线程共享：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">假设现有2个线程共用1个程序计数器。</span><br><span class="line">	线程1 执行字节码指令，执行到了第5条指令，将要执行第6条指令。将指令6的地址保存到PC寄存器中，切换到线程2执行。</span><br><span class="line">	线程2 执行字节码指令，执行到了11条指令，将要执行12条指令，将地址12保存到PC寄存器中。</span><br><span class="line"></span><br><span class="line">由于2个线程共用1个PC寄存器，当CPU再次切回线程1时，我们会发现PC寄存器中保存的是最新的指令的地址，也就是说线程1保存到寄存器</span><br><span class="line">中的地址已经被线程2替换掉了，当再次切换到线程1执行时，它已经无法从线程1上次暂停的位置继续往下执行，显然这是不合适的。</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">假设现有2个线程共用1个程序计数器。</span><br><span class="line">	线程1 执行字节码指令，执行到了第5条指令，将要执行第6条指令。将指令6的地址保存到PC寄存器中，切换到线程2执行。</span><br><span class="line">	线程2 执行字节码指令，执行到了11条指令，将要执行12条指令，将地址12保存到PC寄存器中。</span><br><span class="line"></span><br><span class="line">由于2个线程共用1个PC寄存器，当CPU再次切回线程1时，我们会发现PC寄存器中保存的是最新的指令的地址，也就是说线程1保存到寄存器</span><br><span class="line">中的地址已经被线程2替换掉了，当再次切换到线程1执行时，它已经无法从线程1上次暂停的位置继续往下执行，显然这是不合适的。</span><br></pre></td></tr></table></figure>
+</li>
 <li><p><strong>为了能够准确的记录各个线程下一条要执行的字节码指令的地址，最好的办法就是为每一个线程都分配一个 PC寄存器。</strong>  这样一来各个线程之间的程序计数器独立计算，就不会出现互相干扰的情况。</p>
 </li>
 </ul>
 <p><strong>专业解释：</strong></p>
 <ul>
-<li>  由于 CPU 时间片轮的限制，多个线程在并发执行过程中，任何一个确定的时刻，一个处理器或者多核处理器的一个内核，只会执行某个线程中的一条指令。</li>
-<li>  在多线程并发执行过程中，这样必然导致线程经常中断或恢复，如何保证每次切换线程都能准确续到上次执行的位置呢？需要每个线程在创建后，都产生自己的程序计数器和栈帧，这样程序计数器在各个线程之间互不影响。</li>
+<li>由于 CPU 时间片轮的限制，多个线程在并发执行过程中，任何一个确定的时刻，一个处理器或者多核处理器的一个内核，只会执行某个线程中的一条指令。</li>
+<li>在多线程并发执行过程中，这样必然导致线程经常中断或恢复，如何保证每次切换线程都能准确续到上次执行的位置呢？需要每个线程在创建后，都产生自己的程序计数器和栈帧，这样程序计数器在各个线程之间互不影响。</li>
 </ul>
 
     </div>

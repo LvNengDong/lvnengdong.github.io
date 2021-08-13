@@ -30,14 +30,14 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="内存 问题：什么是内存？  内存是非常重要的系统资源，是硬盘和CPU的中间仓库及桥梁，承载着操作系统和应用程序的实时运行。     问题：什么是JVM内存布局？  JVM 内存布局规定了 Java 程序在运行过程中内存申请、分配、管理的策略，保证了 JVM 高效稳定的运行。 不同的 JVM 对于内存布局的划分方式和管理机制存在着差异。   JVM内存布局（经典） 下图是一种经典的 JVM 内存布">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E5%BC%95%E5%85%A5%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.jpg">
-<meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.png">
-<meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E7%BA%BF%E7%A8%8B%E5%85%B1%E4%BA%AB%E5%92%8C%E7%A7%81%E6%9C%89%E7%9A%84%E7%BB%93%E6%9E%84-1622464561115.jpg">
+<meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/第03章_引入运行时数据区-1622464561115.jpg">
+<meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/运行时数据区-1622464561115.png">
+<meta property="og:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/第03章_线程共享和私有的结构-1622464561115.jpg">
 <meta property="article:published_time" content="2021-05-31T12:33:06.000Z">
 <meta property="article:modified_time" content="2021-08-03T06:49:08.379Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E5%BC%95%E5%85%A5%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.jpg">
+<meta name="twitter:image" content="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/第03章_引入运行时数据区-1622464561115.jpg">
 
 
 <link rel="canonical" href="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/">
@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -266,7 +266,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E5%BC%95%E5%85%A5%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.jpg"></p>
+        <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/第03章_引入运行时数据区-1622464561115.jpg" alt></p>
 <h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><hr>
 <p><strong>问题：什么是内存？</strong></p>
 <ul>
@@ -281,7 +281,7 @@
 <hr>
 <p><strong>JVM内存布局（经典）</strong></p>
 <p>下图是一种经典的 JVM 内存布局：</p>
-<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.png"></p>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/运行时数据区-1622464561115.png" alt></p>
 <p><strong>Part1：</strong></p>
 <p>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域有各自的用途，创建和销毁时间。</p>
 <ul>
@@ -297,7 +297,7 @@
 <li>JVM中每个线程私有的内存区域包括： 1、程序计数器    2、虚拟机栈    3、本地方法栈</li>
 <li>JVM中所有线程共享内存区域包括：1、堆    2、方法区（永久代或元空间、代码缓存）</li>
 </ul>
-<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E7%BA%BF%E7%A8%8B%E5%85%B1%E4%BA%AB%E5%92%8C%E7%A7%81%E6%9C%89%E7%9A%84%E7%BB%93%E6%9E%84-1622464561115.jpg"></p>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/第03章_线程共享和私有的结构-1622464561115.jpg" alt></p>
 <blockquote>
 <p>PC：PC寄存器（程序计数器）</p>
 <p>VMS：虚拟机栈</p>
@@ -314,8 +314,9 @@
 <p>当一个 Java 线程开始执行时，本地操作系统同时也会创建一个本地线程；当 Java 线程执行结束后，本地线程也会回收。</p>
 </blockquote>
 </li>
-<li><p>操作系统负责线程的安排调度，将所有的线程安排到任一可用的CPU上（如果本地机器有多个CPU的话）。一旦本地线程初始化成功，它就会调用 Java 线程中的 run() 方法。</p>
-</li>
+</ul>
+<ul>
+<li>操作系统负责线程的安排调度，将所有的线程安排到任一可用的CPU上（如果本地机器有多个CPU的话）。一旦本地线程初始化成功，它就会调用 Java 线程中的 run() 方法。</li>
 </ul>
 <hr>
 <h2 id="JVM-系统线程"><a href="#JVM-系统线程" class="headerlink" title="JVM 系统线程"></a>JVM 系统线程</h2><ul>

@@ -32,6 +32,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/02/10/Hadoop/image-20210210110619991.png">
 <meta property="og:image" content="http://example.com/2021/02/10/Hadoop/image-20210210111631179.png">
+<meta property="og:image" content="http://example.com/2021/02/10/Hadoop/HDFS%20核心进程.png">
 <meta property="og:image" content="http://example.com/2021/02/10/Hadoop/image-20210210113413297.png">
 <meta property="og:image" content="http://example.com/2021/02/10/Hadoop/image-20210210114157414.png">
 <meta property="article:published_time" content="2021-02-10T02:49:09.000Z">
@@ -165,7 +166,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">135</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -289,7 +290,8 @@
 <li><p>Variety（多样）</p>
 </li>
 <li><p>Value（低价值密度）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">因为低价值密度的特点，所以需要：</span><br><span class="line">    （1）我们的计算机有足够好的算力；</span><br><span class="line">    （2）优良的算法。</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">因为低价值密度的特点，所以需要：</span><br><span class="line">    （1）我们的计算机有足够好的算力；</span><br><span class="line">    （2）优良的算法。</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
 <blockquote>
 <p>大数据应用场景</p>
@@ -314,20 +316,20 @@
 <p>Hadoop 底层维护多个数据副本，所以即使 Hadoop 某个计算元素或存储出现故障（即使 Hadoop 集群中的某个数据副本所在的节点出现故障），也不会导致数据的丢失。</p>
 <p>而且 Hadoop 会实时动态的监测集群中的副本，如果集群中的某个节点发生故障导致副本数小于集群预设的副本数，那么 Hadoop 就会自动创建一个新的副本，维护副本数量等于预设的副本数量。</p>
 <blockquote>
-<ol start="2">
+<ol>
 <li>高扩展性</li>
 </ol>
 </blockquote>
 <p>在集群间分配任务数据，可方便的扩展数以千计的节点。</p>
 <p>在处理数据时如果发现集群中的节点不够使用了，可以很方便的增加一些节点扩展整个 Hadoop 集群。</p>
 <blockquote>
-<ol start="3">
+<ol>
 <li>高效性</li>
 </ol>
 </blockquote>
 <p>在 MapReduce 的思想下，Hadoop 是并行工作的，以加快任务处理速度。</p>
 <blockquote>
-<ol start="4">
+<ol>
 <li>高容错性</li>
 </ol>
 </blockquote>
@@ -349,9 +351,6 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">完成Java程序运行 vs. 完成大数据的计算</span><br><span class="line"></span><br><span class="line">1、写程序，程序需要复合计算框架的要求！</span><br><span class="line">		java----&gt;main-----&gt;运行</span><br><span class="line">		MapReduce(编程模型)-----&gt;Map--Reducer</span><br><span class="line">2、运行程序，申请计算资源(cpu+内存，磁盘IO，网络IO)</span><br><span class="line">		java-----&gt;JVM------&gt;OS-----&gt;申请计算资源</span><br><span class="line">		1.0: MapReduce(编程模型)----&gt;JobTracker-----&gt;JVM-----&gt;申请计算资源</span><br><span class="line">		2.0: MapReduce(编程模型)----&gt;jar------&gt;运行时，将jar包中的任务，提交给YARN，和YARN进行通信，由YARN中的组件-----&gt;JVM------&gt;申请计算资源</span><br><span class="line">				</span><br><span class="line">	1.x和2.x的区别是将资源调度和管理进行分离！由同一的资源调度平台YARN进行大数据计算资源的调度！</span><br><span class="line">    提升了Hadoop的通用性！Hadoop搭建的集群中的计算资源，不仅可以运行 Hadoop 中的 MR 程序！</span><br><span class="line">    也可以运行其他计算框架的程序！</span><br><span class="line">	在hadoop不久之后，由于MR的低效性，出现了许多更为高效的计算框架！</span><br><span class="line">	例如： Tez，Storm,Spark，Flink</span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="Hadoop-2-0"><a href="#Hadoop-2-0" class="headerlink" title="Hadoop 2.0"></a>Hadoop 2.0</h3><ul>
 <li>HDFS（框架）：负责大数据的存储</li>
 <li>YARN（框架）：负责大数据的资源调度。[只有在计算时才会用到 YRAN ，因为在计算时需要申请很多资源，由 YARN 统一分配]</li>
@@ -362,7 +361,7 @@
 <p>在 2.x 版本中，MR 只负责 MR 程序的计算，资源的调度和管理由 YARN 负责！Hadoop 集群不仅能为自身的 MR 程序提供服务，还可以为第三方计算引擎，例如 TeZ，Spark，Flink 等提供计算资源的调度服务！</p>
 <hr>
 <h2 id="HDFS-架构概述"><a href="#HDFS-架构概述" class="headerlink" title="HDFS 架构概述"></a>HDFS 架构概述</h2><p>HDFS（Hadoop Distribute File System）：负责大数据的存储。</p>
-<p>![](Hadoop/HDFS 核心进程.png)</p>
+<p><img src="/2021/02/10/Hadoop/HDFS 核心进程.png" alt></p>
 <blockquote>
 <ol>
 <li>NameNode（nn）：负责存储文件的<strong>元数据</strong>。。</li>
@@ -378,7 +377,7 @@
 </li>
 </ul>
 <blockquote>
-<ol start="2">
+<ol>
 <li>DataNode（dn）：负责文件中数据的存储。</li>
 </ol>
 </blockquote>
@@ -391,7 +390,7 @@
 </li>
 </ul>
 <blockquote>
-<ol start="3">
+<ol>
 <li>Secondary NameNode（2nn）：负责辅助 NameNode 工作！</li>
 </ol>
 </blockquote>
@@ -429,7 +428,7 @@
 </li>
 </ul>
 <blockquote>
-<ol start="2">
+<ol>
 <li>NodeManager（N个）：负责单台计算机所有资源的管理 ！</li>
 </ol>
 </blockquote>
@@ -442,9 +441,6 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">计算资源：内存、CPU、硬盘等等。</span><br><span class="line"></span><br><span class="line">1、NM 负责单台计算机所有计算资源的管理调度。	</span><br><span class="line">	* 即 NM 会统计出当前计算机已经使用了多少计算资源。</span><br><span class="line">2、RM 负责整个集群所有计算资源的管理调度。	</span><br><span class="line">	* 即每台 NM 统计出自己已使用和可使用的计算资源后，都会上报给 RM 。</span><br><span class="line">	* RM 接收并统计集群中所有已使用和可使用计算资源。	</span><br><span class="line">	* 这样当客户端提交 Job 请求时，RM 就可宏观调控根据需求分配具体的计算资源到每台机器上。 </span><br></pre></td></tr></table></figure>
-
-
-
 <p><strong>概念</strong>：</p>
 <blockquote>
 <p>Container（容器）：</p>
@@ -465,7 +461,7 @@
 <li>资源的分配与调度</li>
 </ol>
 <blockquote>
-<ol start="2">
+<ol>
 <li>NodeManager（NM）</li>
 </ol>
 </blockquote>
@@ -475,7 +471,7 @@
 <li>处理来自ApplicationMaster的命令</li>
 </ol>
 <blockquote>
-<ol start="3">
+<ol>
 <li>ApplicationMaster（AM）</li>
 </ol>
 </blockquote>
@@ -485,7 +481,7 @@
 <li>任务的监控与容错</li>
 </ol>
 <blockquote>
-<ol start="4">
+<ol>
 <li>Container</li>
 </ol>
 </blockquote>
@@ -506,51 +502,24 @@
 <li>ZooKeeper：它是一个针对大型分布式系统的可靠协调系统，提供的功能包括：配置维护、名字服务、分布式同步、组服务等。</li>
 </ol>
 <h1 id="Hadoop-的安装"><a href="#Hadoop-的安装" class="headerlink" title="Hadoop 的安装"></a>Hadoop 的安装</h1><h2 id="安装前的注意事项"><a href="#安装前的注意事项" class="headerlink" title="安装前的注意事项"></a>安装前的注意事项</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1. Hadoop 运行的前提是本机已经安装了 JDK ，并且配置了 JAVA_HOME 变量。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. 在 Hadoop 中需要启动多种不同类型的进程，如：NN，DN，RM，NM 等，这些进程之间需要进行通信，在通信时，常用主机名进行通信。</span><br><span class="line">   需求：在 192.168.1.100 机器上的 DN 进程，希望访问 192.168.1.104 机器上的 NN 进程。</span><br><span class="line">   实现：那么就需要在集群的每台机器上，配置集群中所有机器的 host 映射。</span><br><span class="line">   配置：</span><br><span class="line">       &gt; Linux：&#96;&#x2F;etc&#x2F;hosts&#96;</span><br><span class="line">       &gt; Windows：&#96;C:\Windows\System32\drivers\etc\hosts&#96;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3. 注意权限</span><br><span class="line">   Hadoop 框架在运行时会产生很多数据（日志），对于数据保存的目录，必须让当前启动 Hadoop 进程的用户拥有写权限。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4. 关闭防火墙，并且关闭开机自启。</span><br></pre></td></tr></table></figure>
-
 <h2 id="使用普通用户操作-Hadoop"><a href="#使用普通用户操作-Hadoop" class="headerlink" title="使用普通用户操作 Hadoop"></a>使用普通用户操作 Hadoop</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1. 创建普通用户 Xxx</span><br><span class="line">2. 为 Xxx 设置密码</span><br><span class="line">3. 赋予 Xxx 用户 root 权限</span><br><span class="line">4. 将 &#x2F;opt 目录下创建的 software 目录和 module 目录的所属主改为 Xxx</span><br></pre></td></tr></table></figure>
-
 <h2 id="Hadoop-的目录介绍"><a href="#Hadoop-的目录介绍" class="headerlink" title="Hadoop 的目录介绍"></a>Hadoop 的目录介绍</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- bin ：使用 HDFS 和 MR 运算时，常用命令所在的目录！</span><br><span class="line"></span><br><span class="line">- sbin ：管理员启动和停止集群时使用的命令所在的目录。</span><br><span class="line"></span><br><span class="line">- etc ：Hadoop 配置文件所在的目录。</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="使用-HDFS"><a href="#使用-HDFS" class="headerlink" title="使用 HDFS"></a>使用 HDFS</h2><ul>
 <li>HDFS 的运行模式：取决于参数<code>fs.defaultFS</code></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. 本地模式</span><br><span class="line">	概念：在本机上使用 HDFS ，使用的是本机的文件系统。</span><br><span class="line">	参数：fs.defaultFS&#x3D;file:&#x2F;&#x2F;&#x2F;	（默认）</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2. 分布式模式</span><br><span class="line">	概念：要使用的文件系统是一个分布式的文件系统！一个分布式的文件系统，必须由 NN,DN 等若干进程共同运行完成文件系统的读写操作！</span><br><span class="line">	参数：fs.defaultFS&#x3D;hdfs:&#x2F;&#x2F; 	代表一种分布式协议</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">3. 如何判断 HDFS 的运行模式？</span><br><span class="line">* 取决于参数：fs.defaultFS&#x3D;file:&#x2F;&#x2F;&#x2F;	（默认值，表示本地模式。 file 代表文件系统。 :&#x2F;&#x2F; 是一种协议，代表本地文件系统协议）</span><br><span class="line">* fs.defaultFS 参数的默认值在 core-default.xml 配置文件中！</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>启动 Hadoop 中的进程</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在 sbin 目录中的脚本【sbin 已经被添加到环境变量中了】</span><br><span class="line"></span><br><span class="line">启动 NN：hadoop-daemon.sh start namenode</span><br><span class="line">停止 NN：hadoop-daemon.sh stop namenod</span><br><span class="line">启动 DN：hadoop-daemon.sh start datanode</span><br><span class="line">停止 DN：hadoop-daemon.sh stop datanode</span><br></pre></td></tr></table></figure>
-
-
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用：hadoop fs 命令 文件路径</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="运行-MapReduce"><a href="#运行-MapReduce" class="headerlink" title="运行 MapReduce"></a>运行 MapReduce</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">1. 按照 MR 的规范编写一个程序</span><br><span class="line">2. 将程序打包为 jar</span><br><span class="line">3. 运行 jar 中的程序。(运行 jar 包有两种模式)</span><br><span class="line">   取决于参数：mapreduce.framework.name&#x3D;local	（默认值，在本地运行）</span><br><span class="line">   </span><br><span class="line">   1. 本地模式	（在本机上运行 MR）在本机运行MR！在本机使用多线程的方式，运行多个Task!</span><br><span class="line">      参数：mapreduce.framework.name&#x3D;local</span><br><span class="line"></span><br><span class="line">   2. 在 YARN 上运行   （需要启动YARN，YARN 由 RM 和 NM 进程组成！即需要启动 RM 和 NM）</span><br><span class="line">      将 MR 提交给 YARN ，由 YARN 将 Job 中的多个 Task 分配到多台机器中，启动 Container 运行 Task!</span><br><span class="line">      参数：mapreduce.framework.name&#x3D;yarn</span><br><span class="line"></span><br><span class="line">* fs.defaultFS 参数的默认值在 core-default.xml 配置文件中！</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
 <h2 id="Hadoop-的配置文件"><a href="#Hadoop-的配置文件" class="headerlink" title="Hadoop 的配置文件"></a>Hadoop 的配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">4个用户可以自定义的配置文件： xxx-site.xml</span><br><span class="line">		core-site.xml： 用户自定义的设置hadoop最核心的参数！</span><br><span class="line">		hdfs-site.xml   用户自定义的保存的是hdfs相关的参数！</span><br><span class="line">		</span><br><span class="line">		mapred-site.xml: 用户自定义的MR程序在运行时，需要使用的参数！</span><br><span class="line">		yarn-site.xml: 用户自定义的yarn在启动时，需要的参数！</span><br><span class="line"></span><br><span class="line">用户自定义的配置文件，可以覆盖默认配置文件中同名的参数的值！</span><br><span class="line"></span><br><span class="line">Hadoop在启动时，先加载4个默认的配置文件，再加载用户自定义的配置文件，如果用户自定义的配置文件</span><br><span class="line">中有和4个默认配置文件中门的参数，可以覆盖之前已经加载的值！</span><br></pre></td></tr></table></figure>
-
-
-
 <p>Hadoop 安装后，Hadoop 的性能和表现取决于用户的配置！</p>
 <blockquote>
 <p>4 个默认的配置文件：</p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">位置：</span><br><span class="line">	HADOOP_HOME&#x2F;share	该目录下保存着 Hadoop 启动时需要加载的所有 jar 包。</span><br><span class="line">	HADOOP_HOME&#x2F;share&#x2F;xxx.jar&#x2F;xxx-default.xml	配置文件的保存路径，4个配置文件分别保存在4个不同的 jar 包的类路径下</span><br><span class="line"></span><br><span class="line">配置文件：</span><br><span class="line">    - core-default.xml	保存 Hadoop 最核心的设置参数</span><br><span class="line">    - hdfs-default.xml	保存 HDFS 相关的参数</span><br><span class="line">    - mapred-default.xml	保存 MR 在运行时，需要使用的参数</span><br><span class="line">    - yarn-default.xml	保存 YARN 在启动时需要的参数</span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
 <p>4 个用户可以自定义的配置文件：<code>xxx-site.xml</code></p>
 </blockquote>
@@ -559,17 +528,7 @@
 <li>Hadoop 在启动时，首先加载 4 个默认的配置文件，再加载用户自定义的配置文件，如果用户自定义的配置文件中有和 4 个默认配置文件中重名的参数，可以覆盖之前已经加载的值！</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">配置文件：</span><br><span class="line">	- core-site.xml	保存用户自定义的 Hadoop 最核心的参数</span><br><span class="line">    - hdfs-site.xml	保存用户自定义的 HDFS 相关的参数</span><br><span class="line">    - mapred-site.xml	保存用户自定义的 MR 在运行时，需要使用的参数</span><br><span class="line">    - yarn-site.xml	保存用户自定义的 YARN 在启动时需要的参数</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <h2 id="在使用-Hadoop-命令时"><a href="#在使用-Hadoop-命令时" class="headerlink" title="在使用 Hadoop 命令时"></a>在使用 Hadoop 命令时</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1、可以使用自定义配置文件的目录：	</span><br><span class="line">	通过：&#96;hadoop --config 配置文件的目录&#96; 命令来指定配置文件的目录</span><br><span class="line"></span><br><span class="line">2、如果不特别指定自定义配置文件的目录，默认读取	&#96;HADOOP_HOME&#x2F;etc&#x2F;hadoop&#96; 目录下对应的配置文件！</span><br><span class="line"></span><br><span class="line">3、如：hadoop-daemon.sh start namenode 脚本在执行时，只会去默认的目录中读取配置文件。因为该命令没有 &#96;--config&#96; 参数来指定配置文件的目录</span><br></pre></td></tr></table></figure>
-
-
-
-
-
 <hr>
 <h1 id="分布式-HDFS-配置总结"><a href="#分布式-HDFS-配置总结" class="headerlink" title="分布式 HDFS 配置总结"></a>分布式 HDFS 配置总结</h1><p>分布式HDFS的安装和启动</p>
 <blockquote>
@@ -578,29 +537,25 @@
 </ol>
 </blockquote>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">	1、使用分布式文件存储系统</span></span><br><span class="line"><span class="comment">	2、告知NN在哪个机器，NN使用哪个端口号接收客户端和DN的RPC请求.</span></span><br><span class="line"><span class="comment">	[Hadoop 集群中的各个进程之间需要互相通信，通过 RPC 方式通信：</span></span><br><span class="line"><span class="comment">		（1）客户端与 NN 直接通信；</span></span><br><span class="line"><span class="comment">		（2）DN 与 NN 也要进行通信。</span></span><br><span class="line"><span class="comment">	所以我们必须在集群中每台机器的配置文件 core-site.xml 中配置 NN 的通信地址]</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://mypc:9000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">	配置 Hadoop 框架在运行时产生的数据的存储地址。</span></span><br><span class="line"><span class="comment">		Hadoop 在运行时产生的日志信息，NN 上保存的元数据等信息都保存在该地址下。</span></span><br><span class="line"><span class="comment"> --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>/opt/module/hadoop-2.7.2/data<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<ol start="2">
+<ol>
 <li>格式化Namenode（只需要格式化一次）</li>
 </ol>
 </blockquote>
 <p>在上面的配置文件中，我们规定了 Hadoop 产生的数据要保存的位置。所以我们就需要在 NN 节点的电脑上创建对应的目录来保存 Hadoop 运行产生的数据。但如果我们直接手动创建对应的目录的话，会发现我们的 NN 还是无法正常运行，这是因为我们手动创建目录的是一个空文件夹，而对于 Hadoop 来说，它还需要该文件夹中有一些验证文件来证明这就是自定义的保存数据的文件，所以我们需要借助格式化这一操作来让 Hadoop 框架自动帮我们创建保存数据的目录（文件夹）。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">命令： </span><br><span class="line">	hadoop namenode -format</span><br><span class="line">目的：  </span><br><span class="line">	1、生成&#x2F;opt&#x2F;module&#x2F;hadoop-2.7.2&#x2F;data&#x2F;tmp目录</span><br><span class="line">	2、在目录中生成一些文件。如：fsimage_0000000000000000000文件等</span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<ol start="3">
+<ol>
 <li>启动</li>
 </ol>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* 启动Namenode</span><br><span class="line">	hadoop-daemon.sh start namenode</span><br><span class="line"></span><br><span class="line">* 启动datanode</span><br><span class="line">	hadoop-daemon.sh start datanode</span><br></pre></td></tr></table></figure>
-
 <blockquote>
-<ol start="4">
+<ol>
 <li>查看</li>
 </ol>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1、Jps</span><br><span class="line">2、通过浏览器访问  http:&#x2F;&#x2F;NameNode 所在的主机名或者ip:50070</span><br></pre></td></tr></table></figure>
-
 <p>如果 NN 和 DN 都在一台机器，且只有一个 DN 节点，称为伪分布式！</p>
 <hr>
 <h1 id="在-YARN-上运行-MR"><a href="#在-YARN-上运行-MR" class="headerlink" title="在 YARN 上运行 MR"></a>在 YARN 上运行 MR</h1><blockquote>
@@ -611,11 +566,8 @@
 </ol>
 </blockquote>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">	将 MapReduce 从本地模式改为在 YARN 上运行</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
-<ol start="2">
+<ol>
 <li><p>启动YARN</p>
 <p>配置RM到底在哪个机器启动</p>
 <p>修改 <code>$HADOOP_HOME/etc/hadoop/yarn-site.xml</code> 文件</p>
@@ -623,29 +575,21 @@
 </ol>
 </blockquote>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--</span></span><br><span class="line"><span class="comment">	配置 RM 在哪个机器上运行</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>mypc<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment">	配置 Reducer 获取数据的方式</span></span><br><span class="line"><span class="comment"> 	Map 阶段处理好的数据最后要传递到 Reducer 上使用。</span></span><br><span class="line"><span class="comment">	而传递数据的方式称为 shuffle ，所以 YARN 中必须配置shuffle 才能正常运行</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
-<ol start="3">
+<ol>
 <li>启动</li>
 </ol>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、启动 RM</span><br><span class="line">yarn-daemon.sh start resourcemanager</span><br><span class="line"></span><br><span class="line">2、启动 NM</span><br><span class="line">yarn-daemon.sh start nodemanager</span><br></pre></td></tr></table></figure>
-
-
-
 <blockquote>
-<ol start="4">
+<ol>
 <li>查看</li>
 </ol>
 </blockquote>
 <pre><code>1、jps
 
 2、http://RM所运行的机器主机名/ip:8088    
-</code></pre>
-<h1 id="提交任务"><a href="#提交任务" class="headerlink" title="提交任务"></a>提交任务</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar  jar包  主类名 参数&#123;多个输入目录，一个输出目录&#125;</span><br></pre></td></tr></table></figure>
-
+</code></pre><h1 id="提交任务"><a href="#提交任务" class="headerlink" title="提交任务"></a>提交任务</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar  jar包  主类名 参数&#123;多个输入目录，一个输出目录&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>输入目录中必须全部是文件！</li>
 <li>输出目录必须不存在！</li>
@@ -658,15 +602,11 @@
 <li>同质进程尽量分散。</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">解析：</span><br><span class="line">	1、核心进程尽量分散：</span><br><span class="line">		在 Hadoop 集群中，HDFS 中的 NM 和 YARN 中的 RM 都属于核心进程，一个集群中只能有一个。	</span><br><span class="line">		对于这些进程来说，一旦集群中的某个节点上的机器突然宕机，整个集群就会立即停止运转，所以我们在进程规划时尽量会把 NM 和 RM 分配到不同的节点上，这样能有效的避免单点故障。</span><br><span class="line">		</span><br><span class="line">	2、同质进程尽量分散：</span><br><span class="line">		所谓同质进程，就是指 运行某两个进程需求的相同或类似的资源。</span><br><span class="line">		比如 NN 和 2NN ，在运行时都需要分配大量的内存空间，所以我们一般把这两个进程分配到不同的节点上去，这样可以提高内存资源的利用率。</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="执行群起"><a href="#执行群起" class="headerlink" title="执行群起"></a>执行群起</h2><ul>
 <li><code>start-dfs.sh</code> 命令可以在集群中的任意一台机器上执行。</li>
 <li><code>start-yarn.sh</code> 如果在没有配置 RM 的机器上执行，那么不会启动 RM，只能启动 NM！</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Tip：</span><br><span class="line">	1、建议所有的群起脚本都在 RM 所在的机器上执行！</span><br><span class="line">	2、只需要配置 RM 所在的机器到集群中其它机器的 SSH 免密登录即可。</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>在执行群起脚本时，默认读取当前机器中的 <code>$HADOOP_HOME/etc/hadoop/slaves</code> 文件，所以要在该文件中配置当前集群中所有的主机IP地址。</li>
 </ul>
