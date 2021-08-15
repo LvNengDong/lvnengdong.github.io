@@ -166,7 +166,7 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -285,33 +285,31 @@
 <p><strong>或者可以在带有<code>@Configuration</code>的类上添加<code>@MapperScan</code>注解</strong>，或直接配置到SpringBoot的启动类上，如：</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@tk</span>.mybatis.spring.annotation.MapperScan(basePackages = <span class="string">&quot;扫描包&quot;</span>)</span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SampleMapperApplication</span> <span class="keyword">implements</span> <span class="title">CommandLineRunner</span> </span>&#123;</span><br></pre></td></tr></table></figure>
+
 <p><em>Tip：与SpringBoot整合MyBatis不同的是：通用Mapper使用<code>tk.mybatis.spring.annotation.MapperScan</code>包下的<code>@MapperScan</code>注解，MyBatis的<code>org.mybatis.spring.annotation.MapperScan</code>包下的<code>@MapperScan</code>注解。</em></p>
 <h3 id="1-3-3-实现步骤"><a href="#1-3-3-实现步骤" class="headerlink" title="1.3.3    实现步骤"></a>1.3.3    实现步骤</h3><ol>
 <li><p>创建项目，添加通用Mapper依赖</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>tk.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mapper-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>版本号<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>tk.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mapper-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>版本号<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
 <li><p>使用<code>@Mapper/@MapperScan</code>注解</p>
 </li>
 <li><p>如果需要覆盖通用Mapper的默认配置，可以在<code>application.yml</code>文件中进行。如：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mapper:</span></span><br><span class="line">  <span class="attr">mappers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">tk.mybatis.mapper.common.Mapper</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">tk.mybatis.mapper.common.Mapper2</span></span><br><span class="line">  <span class="attr">notEmpty:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mapper:</span></span><br><span class="line">  <span class="attr">mappers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">tk.mybatis.mapper.common.Mapper</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">tk.mybatis.mapper.common.Mapper2</span></span><br><span class="line">  <span class="attr">notEmpty:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <hr>
 <h1 id="2、对象关系映射"><a href="#2、对象关系映射" class="headerlink" title="2、对象关系映射"></a>2、对象关系映射</h1><h2 id="2-1-简单入门"><a href="#2-1-简单入门" class="headerlink" title="2.1    简单入门"></a>2.1    简单入门</h2><ol>
 <li><p>数据库表（MySQL）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE &#96;country&#96; (</span><br><span class="line">    &#96;id&#96; int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;主键&#39;,</span><br><span class="line">    &#96;countryname&#96; varchar(255) DEFAULT NULL COMMENT &#39;名称&#39;,</span><br><span class="line">    &#96;countrycode&#96; varchar(255) DEFAULT NULL COMMENT &#39;代码&#39;,</span><br><span class="line">    PRIMARY KEY (&#96;Id&#96;)</span><br><span class="line">) ENGINE&#x3D;InnoDB AUTO_INCREMENT&#x3D;10011 DEFAULT CHARSET&#x3D;utf8 COMMENT&#x3D;&#39;国家信息&#39;;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE &#96;country&#96; (</span><br><span class="line">    &#96;id&#96; int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;主键&#39;,</span><br><span class="line">    &#96;countryname&#96; varchar(255) DEFAULT NULL COMMENT &#39;名称&#39;,</span><br><span class="line">    &#96;countrycode&#96; varchar(255) DEFAULT NULL COMMENT &#39;代码&#39;,</span><br><span class="line">    PRIMARY KEY (&#96;Id&#96;)</span><br><span class="line">) ENGINE&#x3D;InnoDB AUTO_INCREMENT&#x3D;10011 DEFAULT CHARSET&#x3D;utf8 COMMENT&#x3D;&#39;国家信息&#39;;</span><br></pre></td></tr></table></figure></li>
 <li><p>对应的Java实体类型如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Country</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String  countryname;</span><br><span class="line">    <span class="keyword">private</span> String  countrycode;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//省略 getter 和 setter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>最简单的情况下，数据库中的字段名和是JavaBean中的属性名是完全相同的，可以直接产生一一映射关系，只需要添加一个<code>@Id</code>注解标记当前属性为主键数据库中的主键字段即可。</p>
 <blockquote>
 <p><strong>Tip：如果实体类中没有一个标记为<code>@Id</code>的字段，当你使用带有<code>ByPrimaryKey</code>的方法时，所有的字段会作为联合主键来使用。</strong></p>
 </blockquote>
 </li>
-</ol>
-<ol>
 <li><p>通用Mapper接口提供了大量已封装好的方法，我们自定义的Mapper接口只需要继承该接口就能调用这些方法。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tk.mybatis.mapper.common.Mapper;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	前提：该接口必须实现 @Mapper 或 @MapperScan  注解</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CountryMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">Country</span>&gt; </span>&#123;	<span class="comment">// 继承通用Mapper接口必须指定接口的泛型类型是与数据库表对应的实体类的类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>通用Mapper接口中常见的方法：</p>
 <ul>
@@ -325,13 +323,9 @@
 </blockquote>
 </li>
 <li><p>使用该接口的类对象调用接口中的方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取 countryMapper 对象，并调用 selectAll 方法</span></span><br><span class="line">List&lt;Country&gt; countries = countryMapper.selectAll();</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据主键查询</span></span><br><span class="line">Country country = countryMapper.selectByPrimaryKey(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者使用对象传参，适用于1个字段或者多个字段联合主键使用。通用Mapper的会把对象中的所有非空属性联合起来作为一个主键查询</span></span><br><span class="line">Country query = <span class="keyword">new</span> Country();</span><br><span class="line">query.setId(<span class="number">1</span>);</span><br><span class="line">country = countryMapper.selectByPrimaryKey(query);</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取 countryMapper 对象，并调用 selectAll 方法</span></span><br><span class="line">List&lt;Country&gt; countries = countryMapper.selectAll();</span><br><span class="line"></span><br><span class="line"><span class="comment">//根据主键查询</span></span><br><span class="line">Country country = countryMapper.selectByPrimaryKey(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者使用对象传参，适用于1个字段或者多个字段联合主键使用。通用Mapper的会把对象中的所有非空属性联合起来作为一个主键查询</span></span><br><span class="line">Country query = <span class="keyword">new</span> Country();</span><br><span class="line">query.setId(<span class="number">1</span>);</span><br><span class="line">country = countryMapper.selectByPrimaryKey(query);</span><br></pre></td></tr></table></figure></li>
 <li><p>如果想要自定义操作数据库的方法，可以直接在<code>CountryMapper</code>中增加。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Select;</span><br><span class="line"><span class="keyword">import</span> tk.mybatis.mapper.common.Mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CountryMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">Country</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Select(&quot;select * from country where countryname = #&#123;countryname&#125;&quot;)</span></span><br><span class="line">    <span class="function">Country <span class="title">selectByCountryName</span><span class="params">(String countryname)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Select;</span><br><span class="line"><span class="keyword">import</span> tk.mybatis.mapper.common.Mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CountryMapper</span> <span class="keyword">extends</span> <span class="title">Mapper</span>&lt;<span class="title">Country</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Select(&quot;select * from country where countryname = #&#123;countryname&#125;&quot;)</span></span><br><span class="line">    <span class="function">Country <span class="title">selectByCountryName</span><span class="params">(String countryname)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
 <hr>
 <h2 id="2-2-数据库映射"><a href="#2-2-数据库映射" class="headerlink" title="2.2    数据库映射"></a>2.2    数据库映射</h2><blockquote>
@@ -346,10 +340,10 @@
 </ul>
 <h3 id="2-2-1-NameStyle注解"><a href="#2-2-1-NameStyle注解" class="headerlink" title="2.2.1    @NameStyle注解"></a>2.2.1    <code>@NameStyle</code>注解</h3><ul>
 <li><p>这个注解可以在类上进行配置，优先级高于对应的<code>style</code>全局配置。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">normal,                     <span class="comment">//原值</span></span><br><span class="line">camelhump,                  <span class="comment">//驼峰转下划线</span></span><br><span class="line">uppercase,                  <span class="comment">//转换为大写</span></span><br><span class="line">lowercase,                  <span class="comment">//转换为小写</span></span><br><span class="line">camelhumpAndUppercase,      <span class="comment">//驼峰转下划线大写形式</span></span><br><span class="line">camelhumpAndLowercase,      <span class="comment">//驼峰转下划线小写形式</span></span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">normal,                     <span class="comment">//原值</span></span><br><span class="line">camelhump,                  <span class="comment">//驼峰转下划线</span></span><br><span class="line">uppercase,                  <span class="comment">//转换为大写</span></span><br><span class="line">lowercase,                  <span class="comment">//转换为小写</span></span><br><span class="line">camelhumpAndUppercase,      <span class="comment">//驼峰转下划线大写形式</span></span><br><span class="line">camelhumpAndLowercase,      <span class="comment">//驼峰转下划线小写形式</span></span><br></pre></td></tr></table></figure></li>
 <li><p>使用时，直接在类上配置即可。例如：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@NameStyle(Style.camelhumpAndUppercase)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Country</span></span></span><br></pre></td></tr></table></figure>
+
 <p>配置该注解后，对该类和其中的字段进行转换时，会将形如<code>userName</code>的字段转换为表中的<code>user_name</code>字段。</p>
 </li>
 </ul>
@@ -358,6 +352,7 @@
 </li>
 <li><p>示例：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Table(name = &quot;sys_user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span></span></span><br></pre></td></tr></table></figure>
+
 <p>将<code>User</code>实体类映射到<code>sys_user</code>表。</p>
 </li>
 </ul>
@@ -369,6 +364,7 @@
 </li>
 <li><p>示例：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Column(name = &quot;user_name&quot;)</span></span><br><span class="line"><span class="keyword">private</span> String name;</span><br></pre></td></tr></table></figure>
+
 <p>直接映射<code>name</code>到<code>user_name</code>。</p>
 </li>
 </ul>
@@ -378,20 +374,19 @@
 <p><code>typeHandler</code>用于设置特殊类型处理器，常见的是枚举。</p>
 </li>
 <li><p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ColumnType(</span></span><br><span class="line"><span class="meta">        column = &quot;countryname&quot;,</span></span><br><span class="line"><span class="meta">        jdbcType = JdbcType.VARCHAR,</span></span><br><span class="line"><span class="meta">        typeHandler = StringTypeHandler.class)</span></span><br><span class="line"><span class="keyword">private</span> String  countryname;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ColumnType(</span></span><br><span class="line"><span class="meta">        column = &quot;countryname&quot;,</span></span><br><span class="line"><span class="meta">        jdbcType = JdbcType.VARCHAR,</span></span><br><span class="line"><span class="meta">        typeHandler = StringTypeHandler.class)</span></span><br><span class="line"><span class="keyword">private</span> String  countryname;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="2-2-5-Transient注解"><a href="#2-2-5-Transient注解" class="headerlink" title="2.2.5    @Transient注解"></a>2.2.5    <code>@Transient</code>注解</h3><ul>
 <li><p>一般情况下，实体中的字段和数据库中的字段是一一对应的，但是有时候我们会在实体类中定义一些额外的属性并希望这些属性不会与数据库表中的字段产生映射，这种情况下，就需要使用<code>@Transient</code>注解来告诉通用Mapper这不是表中的字段。</p>
 </li>
 <li><p>默认情况下，只有简单类型会被自动认为是表中的字段（可以通过配置中的<code>useSimpleType</code>控制）。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> 这里说的简单类型不包含Java中的8种类基本型：</span><br><span class="line">byte、short、int、long、float、double、char、boolean</span><br><span class="line"> 这是因为在类中，基本类型会有默认值，而MyBatis中经常会要判断属性值是否为空，所以不要在类中使用基本类型，否则会遇到莫名其妙的错误。</span><br><span class="line"> 如果要使用基本类型的数据，应该使用其包装类。	</span><br></pre></td></tr></table></figure>
+
 <p>对于类中的复杂对象，以及<code>Map</code>、<code>List</code>等属性不需要配置这个注解。</p>
 <p>对于枚举类型作为数据库字段的情况，需要看配置中的<code>enumAsSimpleType</code>参数</p>
 </li>
 <li><p>示例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transient</span></span><br><span class="line"><span class="keyword">private</span> String otherThings; <span class="comment">//非数据库表中字段</span></span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transient</span></span><br><span class="line"><span class="keyword">private</span> String otherThings; <span class="comment">//非数据库表中字段</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="2-2-6-Id注解"><a href="#2-2-6-Id注解" class="headerlink" title="2.2.6    @Id注解"></a>2.2.6    <code>@Id</code>注解</h3><ul>
 <li><p>上面的几个注解都涉及到映射。<code>@Id</code>注解和映射无关，它是一个特殊的标记，用于标识数据库中的主键字段。</p>
@@ -404,9 +399,9 @@
 </li>
 <li><p>示例：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> Integer id;</span><br></pre></td></tr></table></figure>
+
 <p>或联合主键：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> Integer userId;</span><br><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> Integer roleId;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> Integer userId;</span><br><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="keyword">private</span> Integer roleId;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="2-2-7-KeySql注解"><a href="#2-2-7-KeySql注解" class="headerlink" title="2.2.7    @KeySql注解"></a>2.2.7    <code>@KeySql</code>注解</h3><ul>
 <li>主键策略注解，用于配置如何生成主键。</li>
@@ -436,8 +431,10 @@
 </li>
 <li><p>这种情况下，配置主键策略最简单。用法如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="meta">@KeySql(useGeneratedKeys = true)</span></span><br><span class="line"><span class="keyword">private</span> Long id;</span><br></pre></td></tr></table></figure>
+
 <p>或：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="meta">@GeneratedValue(strategy = GenerationType.IDENTITY)</span></span><br><span class="line"><span class="keyword">private</span> Long id;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>SqlServer中使用时，需要设置<code>id</code>的<code>insertable=false</code></li>
 </ul>

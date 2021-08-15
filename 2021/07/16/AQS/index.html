@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="AQS简介 AQS数据结构 资源共享模式 AQS 源码分析 释放资源   前置知识  公平锁和非公平锁 可重入锁 LockSupport 自旋锁 数据结构链表 设计模式指模板设计模式    概念为什么学JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。 是什么   AQS；AbstractQueuedSynchronizer；抽象队列同步器   抽象：抽象类，只实现⼀些主要逻辑，">
+<meta name="description" content="AQS简介   AQS数据结构   资源共享模式   AQS 源码分析   释放资源   前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式指模板设计模式    概念为什么学JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。 是什么   AQS；AbstractQueuedSynchronizer；抽象队列同步器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AQS">
 <meta property="og:url" content="http://example.com/2021/07/16/AQS/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="AQS简介 AQS数据结构 资源共享模式 AQS 源码分析 释放资源   前置知识  公平锁和非公平锁 可重入锁 LockSupport 自旋锁 数据结构链表 设计模式指模板设计模式    概念为什么学JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。 是什么   AQS；AbstractQueuedSynchronizer；抽象队列同步器   抽象：抽象类，只实现⼀些主要逻辑，">
+<meta property="og:description" content="AQS简介   AQS数据结构   资源共享模式   AQS 源码分析   释放资源   前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式指模板设计模式    概念为什么学JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。 是什么   AQS；AbstractQueuedSynchronizer；抽象队列同步器">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/image-20210716222211925.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/image-20210716222347766.png">
@@ -40,10 +40,10 @@
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/ReentrantLock_AQS_03.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/ReentrantLock_AQS_03_02.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/image-20210717091946871.png">
-<meta property="og:image" content="http://example.com/2021/07/16/AQS/AQS数据结构.png">
+<meta property="og:image" content="http://example.com/2021/07/16/AQS/AQS%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/AbstractQueuedSynchronizer.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/ReentrantLock.png">
-<meta property="og:image" content="http://example.com/2021/07/16/AQS/ReentrantLock底层源码01.png">
+<meta property="og:image" content="http://example.com/2021/07/16/AQS/ReentrantLock%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%8101.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/fair_nonfair$tryAcquire.png">
 <meta property="article:published_time" content="2021-07-16T09:27:18.000Z">
 <meta property="article:modified_time" content="2021-08-11T11:53:59.882Z">
@@ -182,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -280,21 +280,21 @@
     <div class="post-body" itemprop="articleBody">
         <blockquote>
 <ul>
-<li>AQS简介</li>
-<li>AQS数据结构</li>
-<li>资源共享模式</li>
-<li>AQS 源码分析</li>
-<li>释放资源</li>
+<li>  AQS简介</li>
+<li>  AQS数据结构</li>
+<li>  资源共享模式</li>
+<li>  AQS 源码分析</li>
+<li>  释放资源</li>
 </ul>
 </blockquote>
 <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><blockquote>
 <ol>
-<li>公平锁和非公平锁</li>
-<li>可重入锁</li>
-<li>LockSupport</li>
-<li>自旋锁</li>
-<li>数据结构链表</li>
-<li>设计模式指模板设计模式</li>
+<li> 公平锁和非公平锁</li>
+<li> 可重入锁</li>
+<li> LockSupport</li>
+<li> 自旋锁</li>
+<li> 数据结构链表</li>
+<li> 设计模式指模板设计模式</li>
 </ol>
 </blockquote>
 <hr>
@@ -303,9 +303,9 @@
 <p>  <strong>AQS；AbstractQueuedSynchronizer；抽象队列同步器</strong></p>
 </blockquote>
 <ul>
-<li><strong>抽象</strong>：抽象类，只实现⼀些主要逻辑，有些⽅法由⼦类实现；</li>
-<li><strong>队列</strong>：使⽤先进先出（FIFO）队列存储数据；</li>
-<li><strong>同步</strong>：实现了同步的功能。</li>
+<li>  <strong>抽象</strong>：抽象类，只实现⼀些主要逻辑，有些⽅法由⼦类实现；</li>
+<li>  <strong>队列</strong>：使⽤先进先出（FIFO）队列存储数据；</li>
+<li>  <strong>同步</strong>：实现了同步的功能。</li>
 </ul>
 <p>AQS 是用来构建锁或者其它同步器组件的重量级基础框架及整个 JUC 体系的基石，通过内置的 FIFO <strong>队列</strong>来完成资源获取线程的排队工作，并通过一个 <strong>int 类型变量</strong>表示持有锁的状态。</p>
 <h2 id="有什么用"><a href="#有什么用" class="headerlink" title="有什么用"></a>有什么用</h2><p>AQS 是一个用来构建锁或者其它同步器的框架，使⽤AQS能简单⾼效地构造出应⽤⼴泛的同步器。</p>
@@ -316,10 +316,10 @@
 </blockquote>
 <ul>
 <li><p>锁：面向锁的<strong>使用者</strong></p>
-<p>定义了程序员和锁交互的 API ，隐藏了实现细节。</p>
+<p>  定义了程序员和锁交互的 API ，隐藏了实现细节。</p>
 </li>
 <li><p>同步器：面向锁的<strong>实现者</strong></p>
-<p>提出了统一规范并简化了锁的实现，屏蔽了同步状态管理、阻塞线程排队和通知、唤醒机制等。</p>
+<p>  提出了统一规范并简化了锁的实现，屏蔽了同步状态管理、阻塞线程排队和通知、唤醒机制等。</p>
 </li>
 </ul>
 <p>​    </p>
@@ -327,27 +327,27 @@
 <h2 id="AQS为什么是JUC内容中最重要的基石"><a href="#AQS为什么是JUC内容中最重要的基石" class="headerlink" title="AQS为什么是JUC内容中最重要的基石"></a>AQS为什么是JUC内容中最重要的基石</h2><p>JUC 中和 AQS 有关的类：</p>
 <blockquote>
 <ul>
-<li>ReentrantLock</li>
-<li>CountDownLatch</li>
-<li>ReentrantReadWriteLock</li>
-<li>Semaphore</li>
-<li>……</li>
+<li>  ReentrantLock</li>
+<li>  CountDownLatch</li>
+<li>  ReentrantReadWriteLock</li>
+<li>  Semaphore</li>
+<li>  ……</li>
 </ul>
 </blockquote>
 <ol>
-<li><strong>ReentrantLock</strong></li>
+<li> <strong>ReentrantLock</strong></li>
 </ol>
 <p><img src="/2021/07/16/AQS/image-20210716222211925.png" alt="image-20210716222211925"></p>
-<ol>
-<li><strong>CountDownLatch</strong></li>
+<ol start="2">
+<li> <strong>CountDownLatch</strong></li>
 </ol>
 <p><img src="/2021/07/16/AQS/image-20210716222347766.png" alt="image-20210716222347766"></p>
-<ol>
-<li><strong>ReentrantReadWriteLock</strong></li>
+<ol start="3">
+<li> <strong>ReentrantReadWriteLock</strong></li>
 </ol>
 <p><img src="/2021/07/16/AQS/image-20210716222507442.png" alt="image-20210716222507442"></p>
-<ol>
-<li><strong>Semaphore</strong></li>
+<ol start="4">
+<li> <strong>Semaphore</strong></li>
 </ol>
 <p><img src="/2021/07/16/AQS/image-20210716222601965.png" alt="image-20210716222601965"></p>
 <hr>
@@ -355,7 +355,7 @@
 <p>​        ReentrantLock 类有一个内部类 Sync 继承了 AbstractQueuedSynchronizer 抽象类，说白了就是 ReentrantLock 中包含了一个 AQS 对象，AQS 对象是 ReentrantLock 实现加锁和释放锁的关键性核心组件。</p>
 <h2 id="ReentrantLock-加锁和释放锁的底层原理"><a href="#ReentrantLock-加锁和释放锁的底层原理" class="headerlink" title="ReentrantLock 加锁和释放锁的底层原理"></a>ReentrantLock 加锁和释放锁的底层原理</h2><blockquote>
 <ol>
-<li><strong>线程 T1 加锁</strong></li>
+<li> <strong>线程 T1 加锁</strong></li>
 </ol>
 </blockquote>
 <p>如果现在有一个线程尝试调用 <code>ReentrantLock</code> 的 <code>lock()</code> 方法进行加锁，会发生什么事情呢？</p>
@@ -370,33 +370,33 @@
 <p>ReentrantLock 顾名思义是一个可重入锁，即可以使用一个 ReentrantLock 对象执行多次 <code>lock()</code> 和 <code>unlock()</code> 方法。</p>
 <p>那么 AQS 是如何实现可重入加锁的呢？线程 T1 每调用一次 <code>lock()</code> 方法，如果 CAS 比较发现 state != 0，接着会再判断当前加锁线程是不是自己，如果是就把 state 的值累加 1，其余不变。同理，调用 <code>unlock()</code> 释放锁的时候就是把 state 值累减 1。</p>
 <blockquote>
-<ol>
-<li><strong>线程 T2 加锁</strong></li>
+<ol start="2">
+<li> <strong>线程 T2 加锁</strong></li>
 </ol>
 </blockquote>
 <p>如果线程 T1 加锁之后，线程 T2 想要争夺锁会怎么样？（<strong>互斥锁</strong>）</p>
 <ol>
-<li>线程 T2 尝试获取锁，调用 <code>lock()</code> 方法，首先会去检查 <code>ReentrantLock.AQS.state</code> 变量是否为 0，发现不为 0，说明有线程正在使用锁，CAS 校验失败；</li>
-<li>接着线程 T2 会继续查看当前加锁的线程是不是自己，“<strong>加锁线程</strong>”这个变量明确记录了是线程 T1 占用了这个锁，所以此时线程 T2 会加锁失败。</li>
+<li> 线程 T2 尝试获取锁，调用 <code>lock()</code> 方法，首先会去检查 <code>ReentrantLock.AQS.state</code> 变量是否为 0，发现不为 0，说明有线程正在使用锁，CAS 校验失败；</li>
+<li> 接着线程 T2 会继续查看当前加锁的线程是不是自己，“<strong>加锁线程</strong>”这个变量明确记录了是线程 T1 占用了这个锁，所以此时线程 T2 会加锁失败。</li>
 </ol>
 <p><img src="/2021/07/16/AQS/ReentrantLock_AQS_03.png" alt="ReentrantLock_AQS_03"></p>
 <blockquote>
-<ol>
-<li><strong>加锁失败</strong></li>
+<ol start="3">
+<li> <strong>加锁失败</strong></li>
 </ol>
 </blockquote>
 <p>接着，线程 T2 会将自己放入 AQS 的同步等待队列中，因为自己尝试加锁失败了，此时就要将自己放入等待队列中，直到线程 T1 释放锁之后，自己就可以重新尝试加锁了。</p>
 <p>所以 AQS 内部还有一个同步等待队列，专门存放那些加锁失败的线程。</p>
 <p><img src="/2021/07/16/AQS/ReentrantLock_AQS_03_02.png" alt="ReentrantLock_AQS_03_02"></p>
 <blockquote>
-<ol>
-<li><strong>释放锁</strong></li>
+<ol start="4">
+<li> <strong>释放锁</strong></li>
 </ol>
 </blockquote>
 <p>接着，线程 T1 在执行完自己的业务逻辑代码之后，就会释放锁。释放锁的过程非常简单，就是将 AQS 内的 state 变量的值递减 1，如果 state 为 0，则彻底释放锁，会将“加锁线程”变量的值也设置为 null。</p>
 <blockquote>
-<ol>
-<li><strong>释放锁之后</strong></li>
+<ol start="5">
+<li> <strong>释放锁之后</strong></li>
 </ol>
 </blockquote>
 <p>接下来，会从等待队列的队头唤醒线程 T2 重新尝试加锁。</p>
@@ -411,14 +411,14 @@
 <blockquote>
 <p>  AQS 是一个<strong>队列</strong>：</p>
 <ul>
-<li>private volatile int <strong>state</strong>：同步状态，有 3 种状态。0 表示无人占用，1 表示有线程正在占用，大于 1 表示可重入锁。</li>
-<li>static final class <strong>Node</strong>：节点是线程的抽象</li>
-<li>private transient volatile Node <strong>head</strong>：代表头结点 </li>
-<li>private transient volatile Node <strong>tail</strong>：代表尾节点</li>
+<li>  private volatile int <strong>state</strong>：同步状态，有 3 种状态。0 表示无人占用，1 表示有线程正在占用，大于 1 表示可重入锁。</li>
+<li>  static final class <strong>Node</strong>：节点是线程的抽象</li>
+<li>  private transient volatile Node <strong>head</strong>：代表头结点 </li>
+<li>  private transient volatile Node <strong>tail</strong>：代表尾节点</li>
 </ul>
 </blockquote>
 <p><img src="/2021/07/16/AQS/image-20210717091946871.png" alt="image-20210717091946871"></p>
-<p><img src="/2021/07/16/AQS/AQS数据结构.png" alt="AQS数据结构"></p>
+<p><img src="/2021/07/16/AQS/AQS%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png" alt="AQS数据结构"></p>
 <hr>
 <h2 id="AQS内部体系架构"><a href="#AQS内部体系架构" class="headerlink" title="AQS内部体系架构"></a>AQS内部体系架构</h2><p><img src="/2021/07/16/AQS/AbstractQueuedSynchronizer.png" alt="AbstractQueuedSynchronizer"></p>
 <p>AQS 有两个内部类：ConditionObject 和 Node</p>
@@ -427,20 +427,23 @@
 <hr>
 <h2 id="AQS自身"><a href="#AQS自身" class="headerlink" title="AQS自身"></a>AQS自身</h2><ol>
 <li><p>AQS 的 int 变量：AQS 的同步状态 State 成员变量。</p>
-<p><code>state==0</code> 就是没人，<code>state&gt;=1</code> 就是有线程占用，必须等待</p>
+<p> <code>state==0</code> 就是没人，<code>state&gt;=1</code> 就是有线程占用，必须等待</p>
 </li>
 <li><p>AQS 的 CLH 队列</p>
-<p>CLH 队列（三个大牛的名字组成），默认是单向的队列，这里改为了一个双向队列</p>
+<p> CLH 队列（三个大牛的名字组成），默认是单向的队列，这里改为了一个双向队列</p>
 </li>
 <li><p>小总结</p>
 <ul>
-<li>有阻塞就需要排队，实现排队必然需要队列</li>
-<li>AQS = state 变量 + CLH队列变种的双向队列</li>
+<li>  有阻塞就需要排队，实现排队必然需要队列</li>
+<li>  AQS = state 变量 + CLH队列变种的双向队列</li>
 </ul>
 </li>
 </ol>
 <h2 id="内部类Node"><a href="#内部类Node" class="headerlink" title="内部类Node"></a>内部类Node</h2><p><strong>AQS$Node 类源码</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 共享</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node SHARED = <span class="keyword">new</span> Node();</span><br><span class="line">        <span class="comment">// 独占</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node EXCLUSIVE = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程被取消了</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED =  <span class="number">1</span>;</span><br><span class="line">       	<span class="comment">// 后继线程需要被唤醒</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIGNAL    = -<span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 等待 Condition 唤醒</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONDITION = -<span class="number">2</span>;</span><br><span class="line">        </span><br><span class="line">    	<span class="comment">// 共享式同步获取状态将会无条件的传播下去</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PROPAGATE = -<span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 初始值是0，状态是上面的几种</span></span><br><span class="line">        <span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 前置节点</span></span><br><span class="line">        <span class="keyword">volatile</span> Node prev;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 后继节点</span></span><br><span class="line">        <span class="keyword">volatile</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * The thread that enqueued this node.  Initialized on</span></span><br><span class="line"><span class="comment">         * construction and nulled out after use.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">volatile</span> Thread thread;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Link to next node waiting on condition, or the special</span></span><br><span class="line"><span class="comment">         * value SHARED.  Because condition queues are accessed only</span></span><br><span class="line"><span class="comment">         * when holding in exclusive mode, we just need a simple</span></span><br><span class="line"><span class="comment">         * linked queue to hold nodes while they are waiting on</span></span><br><span class="line"><span class="comment">         * conditions. They are then transferred to the queue to</span></span><br><span class="line"><span class="comment">         * re-acquire. And because conditions can only be exclusive,</span></span><br><span class="line"><span class="comment">         * we save a field by using special value to indicate shared</span></span><br><span class="line"><span class="comment">         * mode.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Node nextWaiter;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Returns true if node is waiting in shared mode.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">isShared</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> nextWaiter == SHARED;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Returns previous node, or throws NullPointerException if null.</span></span><br><span class="line"><span class="comment">         * Use when predecessor cannot be null.  The null check could</span></span><br><span class="line"><span class="comment">         * be elided, but is present to help the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> the predecessor of this node</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">final</span> Node <span class="title">predecessor</span><span class="params">()</span> <span class="keyword">throws</span> NullPointerException </span>&#123;</span><br><span class="line">            Node p = prev;</span><br><span class="line">            <span class="keyword">if</span> (p == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node() &#123;    <span class="comment">// Used to establish initial head or SHARED marker</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node(Thread thread, Node mode) &#123;     <span class="comment">// Used by addWaiter</span></span><br><span class="line">            <span class="keyword">this</span>.nextWaiter = mode;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node(Thread thread, <span class="keyword">int</span> waitStatus) &#123; <span class="comment">// Used by Condition</span></span><br><span class="line">            <span class="keyword">this</span>.waitStatus = waitStatus;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <p>Node 类在 AQS 类的内部</p>
 <p><strong>Node 的 int 变量</strong></p>
 <p>Node 的等待状态 waitState 成员变量</p>
@@ -450,10 +453,10 @@
 <p><img src="/2021/07/16/AQS/ReentrantLock.png" alt="ReentrantLock"></p>
 <p>ReentrantLock 类：</p>
 <ol>
-<li>实现了 Lock 接口</li>
+<li> 实现了 Lock 接口</li>
 <li>包含一个内部抽象类 Sync<ul>
-<li>Sync 实现了 AbstractQueuedSynchronizer 接口</li>
-<li>Sync 包含两个实现类 FairSync 和 NonfairSync </li>
+<li>  Sync 实现了 AbstractQueuedSynchronizer 接口</li>
+<li>  Sync 包含两个实现类 FairSync 和 NonfairSync </li>
 </ul>
 </li>
 </ol>
@@ -462,9 +465,9 @@
 <p>非公平锁：不管是否有等待队列，如果可以获取锁，就马上占有锁对象。也就是说等待队列中的第一个线程在 unpark() 之后还是需要 竞争锁（存在线程竞争锁的情况）</p>
 <p>整个 ReentrantLock 加锁（非公平）的过程可以分为三个阶段：</p>
 <ol>
-<li>尝试加锁</li>
-<li>加锁失败，线程进入AQS队列</li>
-<li>线程进入队列后，进入阻塞状态</li>
+<li> 尝试加锁</li>
+<li> 加锁失败，线程进入AQS队列</li>
+<li> 线程进入队列后，进入阻塞状态</li>
 </ol>
 <blockquote>
 <p>  lock()</p>
@@ -476,25 +479,30 @@
 <p>acquire(1) 表示占用 1 个</p>
 <blockquote>
 <ol>
-<li><strong>ReentrantLock 底层源码01</strong></li>
+<li> <strong>ReentrantLock 底层源码01</strong></li>
 </ol>
 </blockquote>
-<p><img src="/2021/07/16/AQS/ReentrantLock底层源码01.png" alt="ReentrantLock底层源码01"></p>
+<p><img src="/2021/07/16/AQS/ReentrantLock%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%8101.png" alt="ReentrantLock底层源码01"></p>
 <blockquote>
-<ol>
-<li><strong>公平锁和非公平锁的 tryAcquire() 方法</strong></li>
+<ol start="2">
+<li> <strong>公平锁和非公平锁的 tryAcquire() 方法</strong></li>
 </ol>
 </blockquote>
 <p><img src="/2021/07/16/AQS/fair_nonfair$tryAcquire.png" alt="fair_nonfair$tryAcquire"></p>
 <ul>
-<li>hasQueuedPredecessors是公平锁加锁时判断等待队列中是否存在有效节点的方法</li>
+<li>  hasQueuedPredecessors是公平锁加锁时判断等待队列中是否存在有效节点的方法</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用 reentrantLock.lock() 方法</span></span><br><span class="line">reentrantLock.lock();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 底层调用的是 sync.lock(); 方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    sync.lock();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// sync 是 AQS 的一个静态抽象子类，包含两个实现类 FairSync 和 NonfairSync。</span></span><br><span class="line"><span class="comment">// 在 sync 中，lock 方法被声明为一个抽象方法，具体的方法实现包含在子类 FairSync 和 NonfairSync 中，我们以 ReentrantLock 默认的非公平锁 NonfairSync 为例。NonfairSync#lock 方法为：</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>))	</span><br><span class="line">        setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        acquire(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 分支1：CAS 比较  state 的值是否为 0，如果为 0 则更新为 1，并设置锁的占用线程为当前线程。【锁对象空闲时】</span></span><br><span class="line"><span class="comment">// 分支2：在非公平锁中，即使发现锁对象被占用，也会调用 acquire(1) 方法尝试抢占锁。【锁对象已被占用】</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 接下来我们来看一下 acquire() 方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;	</span><br><span class="line">    <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;	</span><br><span class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">        selfInterrupt();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// tryAcquire(1) 方法：返回 true 表示加锁成功，返回 false 表示加锁失败。如果加锁成功，取反后为 false ，则不执行 &amp;&amp; 后面的方法。如果加锁失败，取反后为 true，则还需判断 acquireQueued(addWaiter(Node.EXCLUSIVE), arg)) 方法的执行结果。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// addWaiter(Node.EXCLUSIVE) 方法</span></span><br><span class="line"><span class="comment">// acquireQueued(__, 1)) 方法</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 <p>s</p>
 <p><strong>tryAcquire()</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tryAcquire() 方法是一个顶级方法，具体的实现在其实现类中，我们选择了 NonfairSync#tryAcquire 方法</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;	 	<span class="comment">// tryAcquire(1)</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NonfairSync#tryAcquire</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;	<span class="comment">// tryAcquire(1)</span></span><br><span class="line">    <span class="keyword">return</span> nonfairTryAcquire(acquires);		<span class="comment">// nonfairTryAcquire(1)</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 返回 true 表示加锁成功，false 表示加锁失败</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Sync#nonfairTryAcquire()</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">nonfairTryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Thread current = Thread.currentThread();</span><br><span class="line">    <span class="keyword">int</span> c = getState();</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, acquires)) &#123;</span><br><span class="line">            setExclusiveOwnerThread(current);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">        <span class="keyword">int</span> nextc = c + acquires;</span><br><span class="line">        <span class="keyword">if</span> (nextc &lt; <span class="number">0</span>) <span class="comment">// overflow</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">&quot;Maximum lock count exceeded&quot;</span>);</span><br><span class="line">        setState(nextc);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 分支1：如果 state==0（代表当前锁无线程占用），就更新 state 为 1，并设置锁对象的占用线程为为当前线程，返回 true；</span></span><br><span class="line"><span class="comment">// 分支2：state!=0，但是当前线程与锁对象绑定的线程相同（可重入锁），就将 state 累加 1，返回 true；</span></span><br><span class="line"><span class="comment">// 分支3：state!=0 &amp;&amp; 加锁线程！=当前线程，则说明加锁失败，返回 false</span></span><br></pre></td></tr></table></figure>
+
+
+
 <p><strong>addWaiter(Node.EXCLUSIVE)</strong>  加强</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、将线程封装成 node 节点</span></span><br><span class="line"><span class="comment">// 2、Node 的</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">addWaiter</span><span class="params">(Node mode)</span> </span>&#123;</span><br><span class="line">    Node node = <span class="keyword">new</span> Node(Thread.currentThread(), mode);</span><br><span class="line">    <span class="comment">// Try the fast path of enq; backup to full enq on failure</span></span><br><span class="line">    Node pred = tail;</span><br><span class="line">    <span class="keyword">if</span> (pred != <span class="keyword">null</span>) &#123;</span><br><span class="line">        node.prev = pred;</span><br><span class="line">        <span class="keyword">if</span> (compareAndSetTail(pred, node)) &#123;</span><br><span class="line">            pred.next = node;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    enq(node);</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
     </div>
 

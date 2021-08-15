@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="Token完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。 Token 就是将这些信息包装成一个编码后的字符串，如 1Jack#14692866513#192.0.0.1#... 并且将这个字符串放入请求头 header 中。 在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。 在请求头中，查看是否包含 token 字符串， 如果包含，">
+<meta name="description" content="Token完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。 Token 就是将这些信息包装成一个编码后的字符串，如 1Jack#14692866513#192.0.0.1#...  并且将这个字符串放入请求头 header 中。 在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。 在请求头中，查看是否包含 token 字符串， 如果包含">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JWT">
 <meta property="og:url" content="http://example.com/2021/05/09/JWT/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Token完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。 Token 就是将这些信息包装成一个编码后的字符串，如 1Jack#14692866513#192.0.0.1#... 并且将这个字符串放入请求头 header 中。 在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。 在请求头中，查看是否包含 token 字符串， 如果包含，">
+<meta property="og:description" content="Token完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。 Token 就是将这些信息包装成一个编码后的字符串，如 1Jack#14692866513#192.0.0.1#...  并且将这个字符串放入请求头 header 中。 在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。 在请求头中，查看是否包含 token 字符串， 如果包含">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/05/09/JWT/image-20210509161913888.png">
 <meta property="article:published_time" content="2021-05-09T08:05:40.000Z">
@@ -168,7 +168,7 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -267,12 +267,16 @@
         <h1 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h1><p>完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。</p>
 <p>Token 就是将这些信息包装成一个编码后的字符串，如</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Jack#14692866513#192.0.0.1#...</span><br></pre></td></tr></table></figure>
+
 <p>并且将这个字符串放入请求头 header 中。</p>
 <p>在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。</p>
 <p>在请求头中，查看是否包含 token 字符串，</p>
 <p>如果包含，对 token 字符串进行校验，比较该 token 与我们生成的 token 是否相同，相同则校验通过，表示目前就处于登录状态。否则不通过。</p>
 <p>token 可以设置有效时间！</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">token 的作用：</span><br><span class="line">	1、存储用户信息</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="Token-的生成"><a href="#Token-的生成" class="headerlink" title="Token  的生成"></a>Token  的生成</h2><p>Token 需要按照一定的规则来生成。这个规则可以由开发者自己决定，也可以借助一些 token 生成工具来生成。</p>
 <p>JWT 就是一个生产 token 的工具包。</p>
 <h1 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h1><ul>
@@ -292,7 +296,7 @@
 <li>Key=ATGUIGU</li>
 </ul>
 <blockquote>
-<ol>
+<ol start="2">
 <li>私有部分</li>
 </ol>
 </blockquote>
@@ -301,7 +305,7 @@
 <li>如：user { “userId”：”192321”，”name”：”张三”}</li>
 </ul>
 <blockquote>
-<ol>
+<ol start="3">
 <li>签名部分</li>
 </ol>
 </blockquote>
@@ -309,15 +313,21 @@
 <li>SaltiP：当前服务器的 IP 地址！{linux 中配置代理服务器的ip}</li>
 <li>主要用户对 JWT 生成字符串的时候，进行加密{盐值}</li>
 </ul>
-<p>最终组成：key+salt+userInfo —&gt;&gt;token</p>
+<p>最终组成：key+salt+userInfo –&gt;&gt;token</p>
 <p>base64 编码，并不是加密，只是把明文信息变成了不可见的字符串。但是其实只要用一些工具就可以把 base64 编码解成明文，所以不要在JWT中放入涉及私密的信息。</p>
 <h2 id="SpringBoot-整合-JWT"><a href="#SpringBoot-整合-JWT" class="headerlink" title="SpringBoot 整合 JWT"></a>SpringBoot 整合 JWT</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.jsonwebtoken.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang3.StringUtils;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JwtHelper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// token 的过期时间</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> tokenExpiration = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;</span><br><span class="line">    <span class="comment">// token 的签名秘钥（根据秘钥进行编码、加密等操作）</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String tokenSignKey = <span class="string">&quot;123456&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据参数生成 token 字符串（加密）</span></span><br><span class="line"><span class="comment">     * 这里的参数是：1、用户id（userId）  2、用户姓名（userName）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userId</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userName</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">createToken</span><span class="params">(Long userId, String userName)</span> </span>&#123;</span><br><span class="line">        String token = Jwts.builder()</span><br><span class="line">            .setSubject(<span class="string">&quot;YYGH-USER&quot;</span>)    <span class="comment">// 设置分类</span></span><br><span class="line">            .setExpiration(<span class="keyword">new</span> Date(System.currentTimeMillis() + tokenExpiration))  <span class="comment">// 设置过期时间</span></span><br><span class="line">            .claim(<span class="string">&quot;userId&quot;</span>, userId)</span><br><span class="line">            .claim(<span class="string">&quot;userName&quot;</span>, userName)</span><br><span class="line">            .signWith(SignatureAlgorithm.HS512, tokenSignKey)</span><br><span class="line">            .compressWith(CompressionCodecs.GZIP)</span><br><span class="line">            .compact();</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户id：userid（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title">getUserId</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        Integer userId = (Integer) claims.get(<span class="string">&quot;userId&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> userId.longValue();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户名称：userName（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getUserName</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws</span><br><span class="line">            = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        <span class="keyword">return</span> (String) claims.get(<span class="string">&quot;userName&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String token = JwtHelper.createToken(<span class="number">1L</span>, <span class="string">&quot;Jack&quot;</span>);</span><br><span class="line">        System.out.println(token);</span><br><span class="line">        System.out.println(JwtHelper.getUserId(token));</span><br><span class="line">        System.out.println(JwtHelper.getUserName(token));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>测试结果：</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ</span><br><span class="line">.H4sIAAAAAAAAAKtWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDMyMDM2NbUw11EqLU4t8kwBikGYfom5qUAtXonJ2Uq1AA6KXZ1BAAAA</span><br><span class="line">.ajuC6Hj7TCbklRN238jTyQSL-gQEGG55UkUxnP64IuL41C5OVvVZnKH3VQiZSrVtOQhHh5XnEKV3nr5xKWWzvw</span><br><span class="line"><span class="comment">// 可以看到，token 由3部分组成，中间用 . 隔开 ！</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br><span class="line">Jack</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
 
     </div>
 

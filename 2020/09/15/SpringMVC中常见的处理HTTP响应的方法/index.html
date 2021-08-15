@@ -166,7 +166,7 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -290,24 +290,21 @@
 <ol>
 <li><p><strong>设置响应体和响应状态码</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line"><span class="function">ResponseEntity&lt;String&gt; <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">&quot;Hello World!&quot;</span>, HttpStatus.OK);		<span class="comment">// 响应体|响应状态码</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 这里设置字符串&quot;Hello World&quot;作为字符串返回给请求客户端</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>如果响应体是一个对象，</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/hello&quot;)</span></span><br><span class="line"><span class="function">ResponseEntity&lt;String&gt; <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="keyword">new</span> User(), HttpStatus.OK);		<span class="comment">// 响应体|响应状态码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>则返回的是json字符串。</p>
 </li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p><strong>设置响应头信息</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/customHeader&quot;)</span></span><br><span class="line"><span class="function">ResponseEntity&lt;String&gt; <span class="title">customHeader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 设置自定义响应头</span></span><br><span class="line">    HttpHeaders headers = <span class="keyword">new</span> HttpHeaders();</span><br><span class="line">    headers.add(<span class="string">&quot;Custom-Header&quot;</span>, <span class="string">&quot;foo&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(</span><br><span class="line">      <span class="string">&quot;Custom header set&quot;</span>, headers, HttpStatus.OK);	<span class="comment">// 响应体|响应头信息|响应状态码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/customHeader&quot;)</span></span><br><span class="line"><span class="function">ResponseEntity&lt;String&gt; <span class="title">customHeader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 设置自定义响应头</span></span><br><span class="line">    HttpHeaders headers = <span class="keyword">new</span> HttpHeaders();</span><br><span class="line">    headers.add(<span class="string">&quot;Custom-Header&quot;</span>, <span class="string">&quot;foo&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(</span><br><span class="line">      <span class="string">&quot;Custom header set&quot;</span>, headers, HttpStatus.OK);	<span class="comment">// 响应体|响应头信息|响应状态码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li><p><strong>另一种设置方式</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/customHeader&quot;)</span></span><br><span class="line"><span class="function">ResponseEntity&lt;String&gt; <span class="title">customHeader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ResponseEntity</span><br><span class="line">        .ok()</span><br><span class="line">        .header(<span class="string">&quot;Custom-Header&quot;</span>, <span class="string">&quot;foo&quot;</span>)</span><br><span class="line">        .body(<span class="string">&quot;Custom header set&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 该方法的效果与上面方法相同，但是使用的是ResponseEntity中的静态方法。</span></span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/customHeader&quot;)</span></span><br><span class="line"><span class="function">ResponseEntity&lt;String&gt; <span class="title">customHeader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ResponseEntity</span><br><span class="line">        .ok()</span><br><span class="line">        .header(<span class="string">&quot;Custom-Header&quot;</span>, <span class="string">&quot;foo&quot;</span>)</span><br><span class="line">        .body(<span class="string">&quot;Custom header set&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 该方法的效果与上面方法相同，但是使用的是ResponseEntity中的静态方法。</span></span><br></pre></td></tr></table></figure></li>
 <li><p>ResponseEntity类有多个构造函数：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>、ResponseEntity(HttpStatus)</span><br><span class="line"><span class="number">2</span>、ResponseEntity(T, HttpStatus)</span><br><span class="line"><span class="number">3</span>、ResponseEntity(MultiValueMap&lt;String, String&gt;, HttpStatus)</span><br><span class="line"><span class="number">4</span>、ResponseEntity(T, MultiValueMap&lt;String, String&gt;, HttpStatus)</span><br><span class="line"><span class="number">5</span>、ResponseEntity(T, MultiValueMap&lt;String, String&gt;, Object)</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>、ResponseEntity(HttpStatus)</span><br><span class="line"><span class="number">2</span>、ResponseEntity(T, HttpStatus)</span><br><span class="line"><span class="number">3</span>、ResponseEntity(MultiValueMap&lt;String, String&gt;, HttpStatus)</span><br><span class="line"><span class="number">4</span>、ResponseEntity(T, MultiValueMap&lt;String, String&gt;, HttpStatus)</span><br><span class="line"><span class="number">5</span>、ResponseEntity(T, MultiValueMap&lt;String, String&gt;, Object)</span><br></pre></td></tr></table></figure></li>
 <li><p>尽管ResponseEntity非常强大，但不应该过度使用。在一些简单的情况下，还有其他方法能满足我们的需求，使代码更整洁。</p>
 </li>
 </ol>
@@ -321,6 +318,7 @@
 </ul>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyController</span></span>&#123;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@ResponseBody</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> User <span class="title">postResponseController</span><span class="params">(<span class="meta">@RequestBody</span> LoginForm loginForm)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> User();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>如果在类上使用了<code>@RestController</code>注解，那我们就不需要使用<code>@ResponseBody</code>了。</p>
 <p>因为<code>@RestController = @Controller + @ResponseBody</code>。</p>
@@ -334,46 +332,48 @@
 </ul>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XXXController</span></span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="meta">@ResponseStatus(HttpStatus.FOUND)</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> User <span class="title">postResponseController</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> User(<span class="string">&quot;Thanks For Posting!!!&quot;</span>);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 <hr>
 <h1 id="4-直接操控响应"><a href="#4-直接操控响应" class="headerlink" title="4    直接操控响应"></a>4    直接操控响应</h1><blockquote>
 <p>Spring允许我们直接使用<code>javax.servlet.http.HttpServletResponse</code>对象，我们只需要将它声明为方法参数即可。</p>
 <p>但不推荐使用。因为Spring在底层之上提供了抽象和附加功能，因此如果以这种方式直接操作响应，会失去很多Spring提供的封装好的方便的功能。</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/manual&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">manual</span><span class="params">(HttpServletResponse response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      response.setHeader(<span class="string">&quot;Custom-Header&quot;</span>, <span class="string">&quot;foo&quot;</span>);</span><br><span class="line">      response.setStatus(<span class="number">200</span>);</span><br><span class="line">      response.getWriter().println(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>​    </p>
 <hr>
-<h1 id="5-ResponseEntity，-ResponseBody，-ResponseStatus比较"><a href="#5-ResponseEntity，-ResponseBody，-ResponseStatus比较" class="headerlink" title="5    ResponseEntity，@ResponseBody，@ResponseStatus比较"></a>5    ResponseEntity，@ResponseBody，@ResponseStatus比较</h1><div class="table-container">
-<table>
+<h1 id="5-ResponseEntity，-ResponseBody，-ResponseStatus比较"><a href="#5-ResponseEntity，-ResponseBody，-ResponseStatus比较" class="headerlink" title="5    ResponseEntity，@ResponseBody，@ResponseStatus比较"></a>5    ResponseEntity，@ResponseBody，@ResponseStatus比较</h1><table>
 <thead>
 <tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">ResponseEntity</th>
-<th style="text-align:center">@ResponseBody</th>
-<th style="text-align:center">@ResponseStatus</th>
+<th align="center"></th>
+<th align="center">ResponseEntity</th>
+<th align="center">@ResponseBody</th>
+<th align="center">@ResponseStatus</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">本质</td>
-<td style="text-align:center">对象</td>
-<td style="text-align:center">注解</td>
-<td style="text-align:center">注解</td>
+<tbody><tr>
+<td align="center">本质</td>
+<td align="center">对象</td>
+<td align="center">注解</td>
+<td align="center">注解</td>
 </tr>
 <tr>
-<td style="text-align:center">作用范围</td>
-<td style="text-align:center">作为方法的返回值</td>
-<td style="text-align:center">作用在方法上</td>
-<td style="text-align:center">作用在方法上</td>
+<td align="center">作用范围</td>
+<td align="center">作为方法的返回值</td>
+<td align="center">作用在方法上</td>
+<td align="center">作用在方法上</td>
 </tr>
 <tr>
-<td style="text-align:center">含义</td>
-<td style="text-align:center">表示整个响应消息</td>
-<td style="text-align:center">表示响应消息中的响应体</td>
-<td style="text-align:center">表示响应消息中的响应状态码</td>
+<td align="center">含义</td>
+<td align="center">表示整个响应消息</td>
+<td align="center">表示响应消息中的响应体</td>
+<td align="center">表示响应消息中的响应状态码</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 
     </div>
 

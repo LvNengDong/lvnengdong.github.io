@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="MySQL 架构1.1    MySQL逻辑架构​    MySQL 可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，插件式的存储引擎架构将查询处理和其它的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。其主要逻辑架构可分为四层，从上到下分别是：   连接层 服务层 引擎层 存储层     第三层的存储引擎主要负责数据存储和提取，存储引">
+<meta name="description" content="MySQL 架构1.1    MySQL逻辑架构MySQL 可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，插件式的存储引擎架构将查询处理和其它的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。其主要逻辑架构可分为四层，从上到下分别是：     连接层   服务层   引擎层   存储层     1.1.1    连接层   连接层主要">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL高级">
 <meta property="og:url" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="MySQL 架构1.1    MySQL逻辑架构​    MySQL 可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，插件式的存储引擎架构将查询处理和其它的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。其主要逻辑架构可分为四层，从上到下分别是：   连接层 服务层 引擎层 存储层     第三层的存储引擎主要负责数据存储和提取，存储引">
+<meta property="og:description" content="MySQL 架构1.1    MySQL逻辑架构MySQL 可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，插件式的存储引擎架构将查询处理和其它的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。其主要逻辑架构可分为四层，从上到下分别是：     连接层   服务层   引擎层   存储层     1.1.1    连接层   连接层主要">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/1411859-20180617124155105-273948974.png">
 <meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/1411859-20180617123859211-1860022440.png">
@@ -41,8 +41,12 @@
 <meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/%E8%AF%BB%E9%94%81.png">
 <meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210727220206563.png">
 <meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210729091146048.png">
+<meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814164014357.png">
+<meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814175705485.png">
+<meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814180055407.png">
+<meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814172920328.png">
 <meta property="article:published_time" content="2021-07-23T07:24:27.000Z">
-<meta property="article:modified_time" content="2021-08-02T12:47:05.527Z">
+<meta property="article:modified_time" content="2021-08-14T10:11:23.216Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/1411859-20180617124155105-273948974.png">
@@ -159,7 +163,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL-%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">MySQL 架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">1.1    MySQL逻辑架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-1-%E8%BF%9E%E6%8E%A5%E5%B1%82"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1.1    连接层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-%E6%9C%8D%E5%8A%A1%E5%B1%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.1.2    服务层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Management-Serveices-amp-Utilities%EF%BC%9A%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">Management Serveices &amp; Utilities：系统管理控制工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL-Interface%EF%BC%9ASQL-%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">SQL Interface：SQL 接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parser%EF%BC%9A%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">Parser：解析器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Optimizer%EF%BC%9A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">Optimizer：查询优化器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cache%E5%92%8CBuffer%EF%BC%9A%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.2.5.</span> <span class="nav-text">Cache和Buffer：查询缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3-%E5%BC%95%E6%93%8E%E5%B1%82"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.1.3    引擎层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-4-%E5%AD%98%E5%82%A8%E5%B1%82"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.1.4    存储层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-number">1.2.</span> <span class="nav-text">1.2    存储引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B-MySQL-%E6%94%AF%E6%8C%81%E7%9A%84%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-number">1.2.1.</span> <span class="nav-text">查看 MySQL 支持的存储引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM-vs-InnoDB"><span class="nav-number">1.2.2.</span> <span class="nav-text">MyISAM vs. InnoDB</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%A4%A7%E8%87%B4%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">1.3    大致查询流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">SQL 的执行顺序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Join%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">Join图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.1.</span> <span class="nav-text">3.1    内连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%B7%A6%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.2.</span> <span class="nav-text">3.2    左外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E5%B7%A6%E5%A4%96%E8%BF%9E%E6%8E%A5%E6%89%A9%E5%B1%95"><span class="nav-number">3.3.</span> <span class="nav-text">3.3    左外连接扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E5%8F%B3%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.4.</span> <span class="nav-text">3.4    右外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-%E5%8F%B3%E5%A4%96%E8%BF%9E%E6%8E%A5%E6%89%A9%E5%B1%95"><span class="nav-number">3.5.</span> <span class="nav-text">3.5    右外连接扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%85%A8%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.6.</span> <span class="nav-text">3.6    全外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E5%85%A8%E5%A4%96%E8%BF%9E%E6%8E%A5%E6%89%A9%E5%B1%95"><span class="nav-number">3.7.</span> <span class="nav-text">3.7    全外连接扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="nav-number">3.8.</span> <span class="nav-text">注意：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-%E6%80%A7%E8%83%BD%E4%B8%8B%E9%99%8D%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">4.</span> <span class="nav-text">SQL 性能下降的原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">5.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">5.1.</span> <span class="nav-text">是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">5.2.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="nav-number">5.3.</span> <span class="nav-text">索引分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">5.3.1.</span> <span class="nav-text">基本语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%BB%93%E6%9E%84%EF%BC%88BTree%EF%BC%89"><span class="nav-number">5.4.</span> <span class="nav-text">索引结构（BTree）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E5%8E%9F%E7%90%86"><span class="nav-number">5.4.1.</span> <span class="nav-text">检索原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%AA%E4%BA%9B%E6%83%85%E5%86%B5%E9%9C%80%E8%A6%81%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="nav-number">5.5.</span> <span class="nav-text">哪些情况需要创建索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%AA%E4%BA%9B%E6%83%85%E5%86%B5%E4%B8%8D%E9%9C%80%E8%A6%81%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="nav-number">5.6.</span> <span class="nav-text">哪些情况不需要创建索引</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">6.</span> <span class="nav-text">性能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Query-Qptimizer%EF%BC%88MySQL%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8%EF%BC%89"><span class="nav-number">6.1.</span> <span class="nav-text">MySQL Query Qptimizer（MySQL查询优化器）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-%E7%9A%84%E5%B8%B8%E8%A7%81%E7%93%B6%E9%A2%88"><span class="nav-number">6.2.</span> <span class="nav-text">MySQL 的常见瓶颈</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-number">7.</span> <span class="nav-text">MySQL锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88-1"><span class="nav-number">7.1.</span> <span class="nav-text">是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">7.2.</span> <span class="nav-text">锁的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-%E9%94%81%E6%9C%BA%E5%88%B6"><span class="nav-number">7.3.</span> <span class="nav-text">MySQL 锁机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E9%94%81%EF%BC%88%E5%81%8F%E8%AF%BB%EF%BC%89"><span class="nav-number">7.4.</span> <span class="nav-text">表锁（偏读）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">7.4.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">7.4.2.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90"><span class="nav-number">7.4.3.</span> <span class="nav-text">案例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%99%E8%A1%A8%E5%8A%A0%E8%AF%BB%E9%94%81"><span class="nav-number">7.4.3.1.</span> <span class="nav-text">给表加读锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%99%E8%A1%A8%E5%8A%A0%E5%86%99%E9%94%81"><span class="nav-number">7.4.3.2.</span> <span class="nav-text">给表加写锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.4.3.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E9%94%81%E5%88%86%E6%9E%90"><span class="nav-number">7.4.4.</span> <span class="nav-text">表锁分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E9%94%81"><span class="nav-number">7.5.</span> <span class="nav-text">行锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-1"><span class="nav-number">7.5.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90-1"><span class="nav-number">7.5.2.</span> <span class="nav-text">案例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BB%BA%E8%A1%A8"><span class="nav-number">7.5.2.1.</span> <span class="nav-text">建表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%8C%E9%94%81%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%BC%94%E7%A4%BA"><span class="nav-number">7.5.2.2.</span> <span class="nav-text">行锁的基本演示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E8%A1%8C%E9%94%81%E5%8D%87%E7%BA%A7%E4%B8%BA%E8%A1%A8%E9%94%81"><span class="nav-number">7.5.2.3.</span> <span class="nav-text">索引失效行锁升级为表锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%B4%E9%9A%99%E9%94%81%E5%8D%B1%E5%AE%B3"><span class="nav-number">7.5.2.4.</span> <span class="nav-text">间隙锁危害</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E5%8A%A0%E8%A1%8C%E9%94%81"><span class="nav-number">7.5.2.5.</span> <span class="nav-text">手动加行锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E7%BB%93%E8%AE%BA"><span class="nav-number">7.5.3.</span> <span class="nav-text">案例结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E9%94%81%E5%88%86%E6%9E%90"><span class="nav-number">7.5.4.</span> <span class="nav-text">行锁分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-number">7.5.5.</span> <span class="nav-text">优化建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B5%E9%94%81"><span class="nav-number">7.6.</span> <span class="nav-text">页锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-number">8.</span> <span class="nav-text">主从复制</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL-%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">MySQL 架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">1.1    MySQL逻辑架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-1-%E8%BF%9E%E6%8E%A5%E5%B1%82"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1.1    连接层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-%E6%9C%8D%E5%8A%A1%E5%B1%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.1.2    服务层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81Management-Serveices-amp-Utilities%EF%BC%9A%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1、Management Serveices &amp; Utilities：系统管理控制工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81SQL-Interface%EF%BC%9ASQL-%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">2、SQL Interface：SQL 接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81Parser%EF%BC%9A%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">3、Parser：解析器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%E3%80%81Optimizer%EF%BC%9A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">4、Optimizer：查询优化器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%E3%80%81Cache%E5%92%8CBuffer%EF%BC%9A%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.2.5.</span> <span class="nav-text">5、Cache和Buffer：查询缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3-%E5%BC%95%E6%93%8E%E5%B1%82"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.1.3    引擎层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-4-%E5%AD%98%E5%82%A8%E5%B1%82"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.1.4    存储层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-number">1.2.</span> <span class="nav-text">1.2    存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%A4%A7%E8%87%B4%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">1.3    大致查询流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">SQL 的执行顺序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Join%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">Join图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.1.</span> <span class="nav-text">3.1    内连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%B7%A6%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.2.</span> <span class="nav-text">3.2    左外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E5%B7%A6%E5%A4%96%E8%BF%9E%E6%8E%A5%E6%89%A9%E5%B1%95"><span class="nav-number">3.3.</span> <span class="nav-text">3.3    左外连接扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E5%8F%B3%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.4.</span> <span class="nav-text">3.4    右外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-%E5%8F%B3%E5%A4%96%E8%BF%9E%E6%8E%A5%E6%89%A9%E5%B1%95"><span class="nav-number">3.5.</span> <span class="nav-text">3.5    右外连接扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%85%A8%E5%A4%96%E8%BF%9E%E6%8E%A5"><span class="nav-number">3.6.</span> <span class="nav-text">3.6    全外连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E5%85%A8%E5%A4%96%E8%BF%9E%E6%8E%A5%E6%89%A9%E5%B1%95"><span class="nav-number">3.7.</span> <span class="nav-text">3.7    全外连接扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="nav-number">3.8.</span> <span class="nav-text">注意：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">4.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">4.1.</span> <span class="nav-text">是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">4.2.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="nav-number">4.3.</span> <span class="nav-text">索引分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">4.4.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">4.5.</span> <span class="nav-text">常见的索引数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91"><span class="nav-number">4.5.1.</span> <span class="nav-text">二叉排序树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">4.5.2.</span> <span class="nav-text">平衡二叉树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%A0%91"><span class="nav-number">4.5.3.</span> <span class="nav-text">B-树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BTree"><span class="nav-number">4.5.4.</span> <span class="nav-text">BTree</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">4.6.</span> <span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E4%B8%AD%E7%9A%84%E9%94%81"><span class="nav-number">5.</span> <span class="nav-text">MySQL中的锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88-1"><span class="nav-number">5.1.</span> <span class="nav-text">是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E5%88%86%E7%B1%BB"><span class="nav-number">5.2.</span> <span class="nav-text">锁分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-%E4%B8%AD%E7%9A%84%E9%94%81"><span class="nav-number">5.3.</span> <span class="nav-text">MySQL 中的锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E9%94%81%EF%BC%88%E5%81%8F%E8%AF%BB%EF%BC%89"><span class="nav-number">5.4.</span> <span class="nav-text">表锁（偏读）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">5.4.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">5.4.2.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90"><span class="nav-number">5.4.3.</span> <span class="nav-text">案例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%99%E8%A1%A8%E5%8A%A0%E8%AF%BB%E9%94%81"><span class="nav-number">5.4.3.1.</span> <span class="nav-text">给表加读锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%99%E8%A1%A8%E5%8A%A0%E5%86%99%E9%94%81"><span class="nav-number">5.4.3.2.</span> <span class="nav-text">给表加写锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">5.4.3.3.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.4.3.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E9%94%81%E5%88%86%E6%9E%90"><span class="nav-number">5.4.4.</span> <span class="nav-text">表锁分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E9%94%81%EF%BC%88%E5%81%8F%E5%86%99%EF%BC%89"><span class="nav-number">5.5.</span> <span class="nav-text">行锁（偏写）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-1"><span class="nav-number">5.5.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%EF%BC%88%E6%89%8B%E5%8A%A8%E5%8A%A0%E8%A1%8C%E9%94%81%EF%BC%89"><span class="nav-number">5.5.2.</span> <span class="nav-text">语法（手动加行锁）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E9%94%81%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E6%BC%94%E7%A4%BA"><span class="nav-number">5.5.3.</span> <span class="nav-text">行锁基本操作演示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E8%A1%8C%E9%94%81%E5%8D%87%E7%BA%A7%E4%B8%BA%E8%A1%A8%E9%94%81"><span class="nav-number">5.5.4.</span> <span class="nav-text">索引失效行锁升级为表锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%B4%E9%9A%99%E9%94%81"><span class="nav-number">5.5.5.</span> <span class="nav-text">间隙锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">5.5.6.</span> <span class="nav-text">InnoDB 优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E9%94%81%E5%88%86%E6%9E%90"><span class="nav-number">5.5.7.</span> <span class="nav-text">行锁分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-number">5.5.8.</span> <span class="nav-text">优化建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B5%E9%94%81"><span class="nav-number">5.6.</span> <span class="nav-text">页锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">6.</span> <span class="nav-text">性能分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%88MySQL-%E9%9B%86%E7%BE%A4%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">主从复制（MySQL 集群）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="nav-number">8.</span> <span class="nav-text">分库分表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%9B%E8%A1%8C%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%EF%BC%9F"><span class="nav-number">8.1.</span> <span class="nav-text">为什么要进行分库分表？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%87%8F%E9%9C%80%E8%A6%81%E8%BF%9B%E8%A1%8C%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%EF%BC%9F"><span class="nav-number">8.2.</span> <span class="nav-text">多大数据量需要进行分库分表？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">8.3.</span> <span class="nav-text">分库分表的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%88%86%E7%89%87"><span class="nav-number">8.3.1.</span> <span class="nav-text">垂直分片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E5%88%86%E7%89%87"><span class="nav-number">8.3.2.</span> <span class="nav-text">水平分片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E5%90%8E%EF%BC%8CSQL%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">8.4.</span> <span class="nav-text">分库分表后，SQL语句的执行流程是怎样的？</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -178,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -252,7 +256,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-02 20:47:05" itemprop="dateModified" datetime="2021-08-02T20:47:05+08:00">2021-08-02</time>
+        <time title="Modified: 2021-08-14 18:11:23" itemprop="dateModified" datetime="2021-08-14T18:11:23+08:00">2021-08-14</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -260,7 +264,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+          <a href="/categories/MySql/" itemprop="url" rel="index"><span itemprop="name">MySql</span></a>
         </span>
     </span>
 
@@ -274,30 +278,31 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="MySQL-架构"><a href="#MySQL-架构" class="headerlink" title="MySQL 架构"></a>MySQL 架构</h1><h2 id="1-1-MySQL逻辑架构"><a href="#1-1-MySQL逻辑架构" class="headerlink" title="1.1    MySQL逻辑架构"></a>1.1    MySQL逻辑架构</h2><p>​    MySQL 可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，<strong>插件式的存储引擎架构</strong>将查询处理和其它的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。其主要逻辑架构可分为四层，从上到下分别是：</p>
+        <h1 id="MySQL-架构"><a href="#MySQL-架构" class="headerlink" title="MySQL 架构"></a>MySQL 架构</h1><h2 id="1-1-MySQL逻辑架构"><a href="#1-1-MySQL逻辑架构" class="headerlink" title="1.1    MySQL逻辑架构"></a>1.1    MySQL逻辑架构</h2><p>MySQL 可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，<strong>插件式的存储引擎架构</strong>将查询处理和其它的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。其主要逻辑架构可分为四层，从上到下分别是：</p>
 <blockquote>
 <ol>
-<li><strong>连接层</strong></li>
-<li><strong>服务层</strong></li>
-<li><strong>引擎层</strong></li>
-<li><strong>存储层</strong></li>
+<li>  <strong>连接层</strong></li>
+<li>  <strong>服务层</strong></li>
+<li>  <strong>引擎层</strong></li>
+<li>  <strong>存储层</strong></li>
 </ol>
 </blockquote>
 <p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/1411859-20180617124155105-273948974.png" alt="img"></p>
 <p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/1411859-20180617123859211-1860022440.png" alt="img"></p>
-<p>第三层的存储引擎主要负责数据存储和提取，存储引擎不会去解析 sql，不同存储引擎之间不会通讯，只会简单地响应上层服务器的请求。</p>
-<h3 id="1-1-1-连接层"><a href="#1-1-1-连接层" class="headerlink" title="1.1.1    连接层"></a>1.1.1    连接层</h3><p><strong>连接层主要处理客户端与 MySQL 服务端的连接、授权认证、安全等问题</strong>。包含本地 socket 通信和大多数基于客户端/服务端工具实现的类似于 TCP/IP 的网络通信。主要完成一些类似于连接处理、授权认证、及相关的安全方案。在该层上引入了线程池的概念，为通过认证安全接入的客户端提供线程。同样在该层上可以实现基于 SSL 的安全链接。服务器也会为安全接入的每个客户端验证它所具有的操作权限。</p>
-<p>​    </p>
-<h3 id="1-1-2-服务层"><a href="#1-1-2-服务层" class="headerlink" title="1.1.2    服务层"></a>1.1.2    服务层</h3><div class="table-container">
-<table>
+<h3 id="1-1-1-连接层"><a href="#1-1-1-连接层" class="headerlink" title="1.1.1    连接层"></a>1.1.1    连接层</h3><ul>
+<li>  <strong>连接层主要处理客户端与 MySQL 服务端的连接、授权认证、连接安全等问题</strong>。包含本地 socket 通信和大多数基于客户端/服务端工具实现的网络通信。</li>
+<li>  主要完成一些类似于连接处理、授权认证、及相关的安全方案。同样在该层上可以实现基于 SSL 的安全链接。服务器也会为安全接入的每个客户端验证它所具有的操作权限。</li>
+<li>  在该层上<strong>引入了线程池的概念</strong>，为通过认证安全接入的客户端提供线程。</li>
+</ul>
+<hr>
+<h3 id="1-1-2-服务层"><a href="#1-1-2-服务层" class="headerlink" title="1.1.2    服务层"></a>1.1.2    服务层</h3><table>
 <thead>
 <tr>
 <th>名字</th>
 <th>介绍</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><strong>Management Serveices &amp; Utilities</strong></td>
 <td>系统管理和控制工具</td>
 </tr>
@@ -317,83 +322,105 @@
 <td><strong>Cache 和Buffer</strong></td>
 <td>查询缓存。</td>
 </tr>
-</tbody>
-</table>
-</div>
-<h4 id="Management-Serveices-amp-Utilities：系统管理控制工具"><a href="#Management-Serveices-amp-Utilities：系统管理控制工具" class="headerlink" title="Management Serveices &amp; Utilities：系统管理控制工具"></a>Management Serveices &amp; Utilities：系统管理控制工具</h4><p>​        可以看做是类似于 Hadoop 中的 Zookeeper，或者是 SpringCloud 中的配置中心，主要作用是协调整管理个系统的各个模块。</p>
-<h4 id="SQL-Interface：SQL-接口"><a href="#SQL-Interface：SQL-接口" class="headerlink" title="SQL Interface：SQL 接口"></a>SQL Interface：SQL 接口</h4><p>​        类似于 MVC 三层架构中的 Controller 层，只是负责接收请求和返回最终的结果，具体的业务逻辑交给更底层的服务去做。比如 <code>select ... from ...</code> 就会调用 SQL Interface。</p>
-<h4 id="Parser：解析器"><a href="#Parser：解析器" class="headerlink" title="Parser：解析器"></a>Parser：解析器</h4><p>SQL Interface 中的 SQL 命令传递到解析器的时候会被解析器验证和解析。主要功能有：</p>
-<ul>
-<li><strong>验证</strong>：对接收的 SQL 语句进行语义和语法的分析，如果在分解构成中遇到错误，那么就说明这个 SQL 语句是不合理的，验证失败，不继续网下执行，直接抛出错误。</li>
-<li><strong>解析</strong>：如果验证成功，则根据语义和语法，将 SQL 语句划分为不同的操作类型，然后进行针对性的转发到后续步骤。比如查询语句就转发到查询对应的服务，更新操作就转发到更新对应的服务。</li>
-</ul>
-<h4 id="Optimizer：查询优化器"><a href="#Optimizer：查询优化器" class="headerlink" title="Optimizer：查询优化器"></a>Optimizer：查询优化器</h4><p>SQL 语句在查询之前会使用查询优化器对查询进行优化。就是优化客户端请求的 SQL 语句，根据客户端请求的 SQL 语句，和数据库中的一些统计信息，在一系列算法的基础上进行分析，得出一个最优的策略，告诉后面的程序如何执行这个 SQL 语句。</p>
-<p>查询优化器就类似于指令重排，对于开发人员来说，写一条 SQL 可能自我感觉良好，性能天下第一，但是对于底层机器来说，它有自己的优化标准，经过查询优化器优化后的 SQL 语句的执行顺序并不一定与开发人员设计的 SQL 执行顺序相同。</p>
-<h4 id="Cache和Buffer：查询缓存"><a href="#Cache和Buffer：查询缓存" class="headerlink" title="Cache和Buffer：查询缓存"></a>Cache和Buffer：查询缓存</h4><p>如果查询缓存有命中的查询结果，查询语句就可以直接去查询缓存中取数据。这个缓存机制是由一系列小缓存组成的。比如表缓存，记录缓存，key 缓存，权限缓存等。</p>
+</tbody></table>
+<h4 id="1、Management-Serveices-amp-Utilities：系统管理控制工具"><a href="#1、Management-Serveices-amp-Utilities：系统管理控制工具" class="headerlink" title="1、Management Serveices &amp; Utilities：系统管理控制工具"></a>1、Management Serveices &amp; Utilities：系统管理控制工具</h4><p>可以看做是类似于 Hadoop 中的 Zookeeper，或者是 SpringCloud 中的配置中心，主要作用是协调整管理个系统的各个模块。</p>
 <hr>
-<h3 id="1-1-3-引擎层"><a href="#1-1-3-引擎层" class="headerlink" title="1.1.3    引擎层"></a>1.1.3    引擎层</h3><p>​        存储引擎真正的负责了 MySQL 中数据的存储和提取，服务器通过 API 与存储引擎进行通信。        </p>
-<p>​        存储引擎接口模块可以说是 MySQL 数据库中最有特色的一点了。目前各种数据库产品中，基本上只有 MySQL 可以实现其底层<strong>数据存储引擎的插件式管理</strong>。这个模块实际上只是 一个抽象类，但正是因为它成功地将各种数据处理高度抽象化，才成就了今天 MySQL <strong>可插拔存储引擎的特色</strong>。</p>
-<p>​        可插拔的存储引擎的实现，让 MySQL 在处理不同的业务逻辑时，可以根据实际应用场景选择效率尽可能高的存储引擎。这就是 MySQL 相较于其它同类数据库产品的最大优势。</p>
+<h4 id="2、SQL-Interface：SQL-接口"><a href="#2、SQL-Interface：SQL-接口" class="headerlink" title="2、SQL Interface：SQL 接口"></a>2、SQL Interface：SQL 接口</h4><p>类似于 MVC 三层架构中的 Controller 层，只是负责接收请求和返回最终的结果，具体的业务逻辑交给更底层的服务去做。比如 <code>select ... from ...</code> 就会调用 SQL Interface。</p>
+<hr>
+<h4 id="3、Parser：解析器"><a href="#3、Parser：解析器" class="headerlink" title="3、Parser：解析器"></a>3、Parser：解析器</h4><p>SQL Interface 中的 SQL 命令传递到解析器的时候会被解析器验证和解析。主要功能有：</p>
 <ul>
-<li>注意：<strong>存储引擎是基于表的，而不是数据库</strong>。</li>
+<li>  <strong>验证</strong>：对接收的 SQL 语句进行语义和语法的分析，如果在分解构成中遇到错误，那么就说明这个 SQL 语句是不合理的，验证失败，不继续网下执行，直接抛出错误。</li>
+<li>  <strong>解析</strong>：如果验证成功，则根据语义和语法，将 SQL 语句划分为不同的操作类型，然后进行针对性的转发到后续步骤。比如查询语句就转发到查询对应的服务，更新操作就转发到更新对应的服务。</li>
 </ul>
+<hr>
+<h4 id="4、Optimizer：查询优化器"><a href="#4、Optimizer：查询优化器" class="headerlink" title="4、Optimizer：查询优化器"></a>4、Optimizer：查询优化器</h4><ul>
+<li>  SQL 语句在查询之前会使用查询优化器对查询进行优化。就是优化客户端请求的 SQL 语句，根据客户端请求的 SQL 语句，和数据库中的一些统计信息，在一系列算法的基础上进行分析，得出一个最优的策略，告诉后面的程序如何执行这个 SQL 语句。（机器认为最优的数据检索方式，但 BDA 不一定认为是最优的）</li>
+<li>  查询优化器就类似于指令重排，对于开发人员来说，写一条 SQL 可能自我感觉良好，性能天下第一，但是对于底层机器来说，它有自己的优化标准，经过查询优化器优化后的 SQL 语句的执行顺序并不一定与开发人员设计的 SQL 执行顺序相同。</li>
+<li>  当客户端向 MySQL 服务器请求一条 SQL ，命令解析器模块完成请求分类，区别出是 SELECT 并转发给 MySQL_Query_Qptimizer 时， MySQL_Query_Qptimizer 首先会对整条 SQL 进行优化，处理掉一些常量表达式的预算，直接转换成常量值。并对 SQL 中的查询条件进行简化和转换，如去掉一些无用或显而易见的条件、结构调整等。</li>
+</ul>
+<hr>
+<h4 id="5、Cache和Buffer：查询缓存"><a href="#5、Cache和Buffer：查询缓存" class="headerlink" title="5、Cache和Buffer：查询缓存"></a>5、Cache和Buffer：查询缓存</h4><p>如果查询缓存有命中的查询结果，查询语句就可以直接去查询缓存中取数据。这个缓存机制是由一系列小缓存组成的。比如表缓存，记录缓存，key 缓存，权限缓存等。</p>
+<hr>
+<h3 id="1-1-3-引擎层"><a href="#1-1-3-引擎层" class="headerlink" title="1.1.3    引擎层"></a>1.1.3    引擎层</h3><ul>
+<li>  存储引擎主要负责数据存储和提取，存储引擎不会去解析 sql，不同存储引擎之间不会通讯，只会简单地响应上层服务器的请求。</li>
+<li>  存储引擎真正的负责了 MySQL 中数据的存储和提取，服务器通过 API 与存储引擎进行通信。</li>
+<li>  存储引擎接口模块可以说是 MySQL 数据库中最有特色的一点了。目前各种数据库产品中，基本上只有 MySQL 可以实现其底层<strong>数据存储引擎的插件式管理</strong>。这个模块实际上只是 一个抽象类，但正是因为它成功地将各种数据处理高度抽象化，才成就了今天 MySQL <strong>可插拔存储引擎的特色</strong>。</li>
+<li>  可插拔的存储引擎的实现，让 MySQL 在处理不同的业务逻辑时，可以根据实际应用场景选择效率尽可能高的存储引擎。这就是 MySQL 相较于其它同类数据库产品的最大优势。</li>
+<li>  注意：<strong>存储引擎是基于表的，而不是数据库</strong>。</li>
+</ul>
+<hr>
 <h3 id="1-1-4-存储层"><a href="#1-1-4-存储层" class="headerlink" title="1.1.4    存储层"></a>1.1.4    存储层</h3><p>数据存储层，主要是将数据存储在硬件层面的文件系统上，并与存储引擎交互。</p>
 <hr>
-<h2 id="1-2-存储引擎"><a href="#1-2-存储引擎" class="headerlink" title="1.2    存储引擎"></a>1.2    存储引擎</h2><h3 id="查看-MySQL-支持的存储引擎"><a href="#查看-MySQL-支持的存储引擎" class="headerlink" title="查看 MySQL 支持的存储引擎"></a>查看 MySQL 支持的存储引擎</h3><p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210723163415302.png" alt="image-20210723163415302"></p>
-<h3 id="MyISAM-vs-InnoDB"><a href="#MyISAM-vs-InnoDB" class="headerlink" title="MyISAM vs. InnoDB"></a>MyISAM vs. InnoDB</h3><div class="table-container">
+<h2 id="1-2-存储引擎"><a href="#1-2-存储引擎" class="headerlink" title="1.2    存储引擎"></a>1.2    存储引擎</h2><blockquote>
+<p>  <strong>如何查看 MySQL 支持的存储引擎</strong></p>
+</blockquote>
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210723163415302.png" alt="image-20210723163415302"></p>
+<blockquote>
+<p>  <strong>MyISAM vs. InnoDB</strong></p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">对比项</th>
-<th style="text-align:center">MyISAM</th>
-<th style="text-align:center">InnoDB</th>
+<th align="center">对比项</th>
+<th align="center">MyISAM</th>
+<th align="center">InnoDB</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">主/外键</td>
-<td style="text-align:center">不支持</td>
-<td style="text-align:center">支持</td>
+<tbody><tr>
+<td align="center">主/外键</td>
+<td align="center">不支持</td>
+<td align="center">支持</td>
 </tr>
 <tr>
-<td style="text-align:center">事务</td>
-<td style="text-align:center">不支持</td>
-<td style="text-align:center">支持</td>
+<td align="center">事务</td>
+<td align="center">不支持</td>
+<td align="center">支持</td>
 </tr>
 <tr>
-<td style="text-align:center">行/表锁</td>
-<td style="text-align:center">表锁</td>
-<td style="text-align:center">行锁</td>
+<td align="center">行/表锁</td>
+<td align="center">表锁</td>
+<td align="center">行锁</td>
 </tr>
 <tr>
-<td style="text-align:center">缓存</td>
-<td style="text-align:center">只缓存索引，不缓存真实数据</td>
-<td style="text-align:center">既缓存索引，还缓存真实数据</td>
+<td align="center">索引</td>
+<td align="center">非聚簇索引</td>
+<td align="center">聚簇索引</td>
 </tr>
 <tr>
-<td style="text-align:center">表空间</td>
-<td style="text-align:center">小</td>
-<td style="text-align:center">大</td>
+<td align="center">表空间</td>
+<td align="center">小</td>
+<td align="center">大</td>
 </tr>
 <tr>
-<td style="text-align:center">关注点</td>
-<td style="text-align:center">性能</td>
-<td style="text-align:center">事务</td>
+<td align="center">关注点</td>
+<td align="center">性能</td>
+<td align="center">事务</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
-<li><strong>行锁</strong>：操作时只锁某一行，不会对其它行产生影响。<strong>适合高并发的操作</strong>。</li>
-<li><strong>表锁</strong>：即使只操作一条记录也会锁住整张表，不适合高并发的操作。【这是 MyISAM 被逐渐淘汰的主要原因之一】</li>
-<li>既缓存索引又缓存真实数据堆内存要求高，而内存大小对性能有着决定性的影响，已使用的内存越大，性能就越差。</li>
+<li>  <strong>行锁</strong>：操作时只锁某一行，不会对其它行产生影响。<strong>适合高并发的操作</strong>。</li>
+<li>  <strong>表锁</strong>：即使只操作一条记录也会锁住整张表，不适合高并发的操作。【这是 MyISAM 被逐渐淘汰的主要原因之一】</li>
+<li>  既缓存索引又缓存真实数据对内存要求高，而内存大小对性能有着决定性的影响，已使用的内存越大，性能就越差。</li>
 </ul>
+<blockquote>
+<p>  <strong>聚簇索引 和 非聚簇索引</strong></p>
+</blockquote>
+<ul>
+<li>  MySQL 的 MyISAM 引擎在建立索引时，会专门维护一张索引表，索引表中除了索引值外，还有一列用于存储真实数据的内存地址，这就叫做非聚簇索引。</li>
+<li>  <strong>非聚簇索引</strong>就是真实数据和索引物理上不保存在一起，要获取表中的真实时还需要通过索引对应的地址空间到另一张专门保存数据的表中去找。</li>
+<li>  而<strong>聚簇索引</strong>就是索引和真实数据在物理上是保存在一起的。即会将数据表中的建立了索引的列的数据复制一份保存在索引表中，当通过索引检索到数据后，无需再回到数据表中读取数据，直接在索引表中就可以读取到数据。</li>
+<li>  MyISAM 使用的就是非聚簇索引，树的叶子节点上的 Data 不是数据本身，而是数据存放的地址。</li>
+<li>  InnoDB 采用的是聚簇索引，树的叶子节点上的 Data 就是数据本身。</li>
+<li>  因为聚簇索引中要求真实数据的存放顺序和索引顺序要一致，所以<strong>一个表当中只能有一个聚簇索引</strong>，而非聚簇索引可以有多个。</li>
+<li>  InnoDB 中，如果表定义了 PrimaryKey，那么 PrimaryKey 就是聚簇索引。如果没有 PrimaryKey ，就会找第一个非空的 unique 列作用聚簇索引。否则，InnoDB 会创建一个隐藏的 row_id 作为聚簇索引。</li>
+</ul>
+<hr>
 <h2 id="1-3-大致查询流程"><a href="#1-3-大致查询流程" class="headerlink" title="1.3    大致查询流程"></a>1.3    大致查询流程</h2><p>MySQL 查询的流程大致是：</p>
 <ol>
-<li>MySQL 客户端通过协议与 MySQL 服务器建连接；</li>
-<li>发送查询语句，先查询缓存，如果命中，直接返回结果；</li>
-<li>否则进行语句解析，也就是说，在解析查询之前，服务器会先访问查询缓存（Query Cache）——它存储了 SQL 语句以及<br>相应的查询结果集。</li>
-<li>如果某个查询结果已经位于缓存中，服务器就不会再对 SQL 语句进行解析、优化、以及执行。它仅仅将缓存中的结果返回给用户即可，这将大大提高系统的性能。</li>
+<li> MySQL 客户端通过协议与 MySQL 服务器建连接；</li>
+<li> 发送查询语句，先查询缓存，如果命中，直接返回结果；</li>
+<li>否则进行语句解析，也就是说，在解析查询之前，服务器会先访问查询缓存（Query Cache）——它存储了 SQL 语句以及<br> 相应的查询结果集。</li>
+<li> 如果某个查询结果已经位于缓存中，服务器就不会再对 SQL 语句进行解析、优化、以及执行。它仅仅将缓存中的结果返回给用户即可，这将大大提高系统的性能。</li>
 </ol>
 <hr>
 <h1 id="SQL-的执行顺序"><a href="#SQL-的执行顺序" class="headerlink" title="SQL 的执行顺序"></a>SQL 的执行顺序</h1><p>随着 MySQL 版本的更新换代，其优化器也在不断的升级，优化器会根据同一条 SQL 语句的不同执行顺序产生的性能消耗不同而动<br>态调整执行顺序。下面是比较常见的一种的查询顺序：</p>
@@ -401,698 +428,922 @@
 <p>  <strong>SQL语句</strong></p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  <span class="operator">&lt;</span> select_list <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">  <span class="operator">&lt;</span> left_table <span class="operator">&gt;</span> </span><br><span class="line"><span class="operator">&lt;</span> join_type <span class="operator">&gt;</span> <span class="keyword">JOIN</span> </span><br><span class="line">  <span class="operator">&lt;</span> right_table <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">ON</span> </span><br><span class="line">  <span class="operator">&lt;</span> join_condition <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">  <span class="operator">&lt;</span> where_condition <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> </span><br><span class="line">  <span class="operator">&lt;</span> group_by_list <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">HAVING</span></span><br><span class="line">  <span class="operator">&lt;</span> having_condition <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> </span><br><span class="line">  <span class="operator">&lt;</span> order_by_condition <span class="operator">&gt;</span> </span><br><span class="line">LIMIT </span><br><span class="line">  <span class="operator">&lt;</span> limit_number <span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
 <blockquote>
 <p>  <strong>底层执行顺序</strong></p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span>  <span class="operator">&lt;</span> left_table <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">ON</span>  <span class="operator">&lt;</span> join_condition <span class="operator">&gt;</span> </span><br><span class="line"><span class="operator">&lt;</span> join_type <span class="operator">&gt;</span> <span class="keyword">JOIN</span> <span class="operator">&lt;</span> right_table <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">WHERE</span> <span class="operator">&lt;</span> where_condition <span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="operator">&lt;</span> group_by_list <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">HAVING</span> <span class="operator">&lt;</span> having_condition <span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">&lt;</span> select_list <span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="operator">&lt;</span> order_by_condition <span class="operator">&gt;</span></span><br><span class="line">LIMIT <span class="operator">&lt;</span> limit_number <span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
 <p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210724120203199.png" alt="image-20210724120203199"></p>
 <h1 id="Join图"><a href="#Join图" class="headerlink" title="Join图"></a>Join图</h1><p>基础的 Join 关系有 4 种：</p>
 <blockquote>
 <ol>
-<li>内连接</li>
-<li>左外连接</li>
-<li>右外连接</li>
-<li>全外连接</li>
+<li> 内连接</li>
+<li> 左外连接</li>
+<li> 右外连接</li>
+<li> 全外连接</li>
 </ol>
 </blockquote>
 <p>由此演化出来的常见的 Join 关系有 7 种，如图所示：</p>
-<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210724120245430.png" alt="image-20210724120245430" style="zoom:100%;"></p>
+<img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210724120245430.png" alt="image-20210724120245430" style="zoom:100%;">
+
+
+
+
+
 <h2 id="3-1-内连接"><a href="#3-1-内连接" class="headerlink" title="3.1    内连接"></a>3.1    内连接</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 <h2 id="3-2-左外连接"><a href="#3-2-左外连接" class="headerlink" title="3.2    左外连接"></a>3.2    左外连接</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br></pre></td></tr></table></figure>
+
 <p>左外连接保存 LEFT_TABLE（这里是 tb_A） 中的全部记录，对于 tb_A 中存在而 tb_B 中不存在的记录，则用 null 填充。所以查询结果中可能会存在这样一类记录。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">A.id</th>
-<th style="text-align:center">A.name</th>
-<th style="text-align:center">B.id</th>
-<th style="text-align:center">B.dep</th>
-<th style="text-align:center"></th>
+<th align="center">A.id</th>
+<th align="center">A.name</th>
+<th align="center">B.id</th>
+<th align="center">B.dep</th>
+<th align="center"></th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">余则成</td>
-<td style="text-align:center">NULL</td>
-<td style="text-align:center">NULL</td>
-<td style="text-align:center">（A独有）</td>
+<tbody><tr>
+<td align="center">10</td>
+<td align="center">余则成</td>
+<td align="center">NULL</td>
+<td align="center">NULL</td>
+<td align="center">（A独有）</td>
 </tr>
 <tr>
-<td style="text-align:center">11</td>
-<td style="text-align:center">王大治</td>
-<td style="text-align:center">5</td>
-<td style="text-align:center">体育部</td>
-<td style="text-align:center">（A、B共有）</td>
+<td align="center">11</td>
+<td align="center">王大治</td>
+<td align="center">5</td>
+<td align="center">体育部</td>
+<td align="center">（A、B共有）</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <hr>
 <h2 id="3-3-左外连接扩展"><a href="#3-3-左外连接扩展" class="headerlink" title="3.3    左外连接扩展"></a>3.3    左外连接扩展</h2><p>在左外连接的基础上，只选择左表独有的数据。（即对于两表的公共数据不要）</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key</span><br><span class="line"><span class="keyword">WHERE</span> B.KEY <span class="keyword">IS</span> <span class="keyword">NULL</span> ;</span><br></pre></td></tr></table></figure>
+
+
+
 <hr>
 <h2 id="3-4-右外连接"><a href="#3-4-右外连接" class="headerlink" title="3.4    右外连接"></a>3.4    右外连接</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br></pre></td></tr></table></figure>
+
 <p>右外连接保存 RIGHT_TABLE（这里是 tb_B） 中的全部记录，对于 tb_B 中存在而 tb_A 中不存在的记录，则用 NULL 填充。所以查询结果中可能会存在这样一类记录。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">A.id</th>
-<th style="text-align:center">A.name</th>
-<th style="text-align:center">B.id</th>
-<th style="text-align:center">B.dep</th>
-<th style="text-align:center"></th>
+<th align="center">A.id</th>
+<th align="center">A.name</th>
+<th align="center">B.id</th>
+<th align="center">B.dep</th>
+<th align="center"></th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">NULL</td>
-<td style="text-align:center">NULL</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">“市场部”</td>
-<td style="text-align:center">B独有</td>
+<tbody><tr>
+<td align="center">NULL</td>
+<td align="center">NULL</td>
+<td align="center">7</td>
+<td align="center">“市场部”</td>
+<td align="center">B独有</td>
 </tr>
 <tr>
-<td style="text-align:center">11</td>
-<td style="text-align:center">王大治</td>
-<td style="text-align:center">5</td>
-<td style="text-align:center">体育部</td>
-<td style="text-align:center">（A、B共有）</td>
+<td align="center">11</td>
+<td align="center">王大治</td>
+<td align="center">5</td>
+<td align="center">体育部</td>
+<td align="center">（A、B共有）</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <hr>
 <h2 id="3-5-右外连接扩展"><a href="#3-5-右外连接扩展" class="headerlink" title="3.5    右外连接扩展"></a>3.5    右外连接扩展</h2><p>在右外连接的基础上，只选择右表独有的数据。（即对于两表的公共数据不要）</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key</span><br><span class="line"><span class="keyword">WHERE</span> A.KEY <span class="keyword">IS</span> <span class="keyword">NULL</span> ;</span><br></pre></td></tr></table></figure>
+
+
+
 <hr>
 <h2 id="3-6-全外连接"><a href="#3-6-全外连接" class="headerlink" title="3.6    全外连接"></a>3.6    全外连接</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">FULL</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br></pre></td></tr></table></figure>
+
 <p>全外连接会保存 LEFT_TABLE 和 RIGHT_TABLE 中共有的数据和独有的数据。查询结果的类型如下：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">A.id</th>
-<th style="text-align:center">A.name</th>
-<th style="text-align:center">B.id</th>
-<th style="text-align:center">B.dep</th>
+<th align="center">A.id</th>
+<th align="center">A.name</th>
+<th align="center">B.id</th>
+<th align="center">B.dep</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">NULL</td>
-<td style="text-align:center">NULL</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">“市场部”</td>
+<tbody><tr>
+<td align="center">NULL</td>
+<td align="center">NULL</td>
+<td align="center">7</td>
+<td align="center">“市场部”</td>
 </tr>
 <tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">“余则成”</td>
-<td style="text-align:center">NULL</td>
-<td style="text-align:center">NULL</td>
+<td align="center">10</td>
+<td align="center">“余则成”</td>
+<td align="center">NULL</td>
+<td align="center">NULL</td>
 </tr>
 <tr>
-<td style="text-align:center">18</td>
-<td style="text-align:center">“派大星”</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">“营销部”</td>
+<td align="center">18</td>
+<td align="center">“派大星”</td>
+<td align="center">4</td>
+<td align="center">“营销部”</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h2 id="3-7-全外连接扩展"><a href="#3-7-全外连接扩展" class="headerlink" title="3.7    全外连接扩展"></a>3.7    全外连接扩展</h2><p>在全外连接的基础上，只选择左表和右表独有的部分记录。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">FULL</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br><span class="line"><span class="keyword">WHERE</span> A.key <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">OR</span> B.key <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h2><p><strong>MySQL 不支持 FULL OUTER JOIN 查询</strong>（Oracle 支持），但是 ，所以 MySQL 中要想实现同样的效果，需要使用 <strong>union</strong> 关键字。</p>
 <ul>
-<li>UNION 操作符用于合并两个或多个 SELECT 语句的结果。</li>
-<li>UNION 内部的每个 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每个 SELECT 语句中的列的顺序必须相同。</li>
-<li>默认地，UNION 操作符选取不同的值（默认去重）。如果允许重复的值，请使用 UNION ALL。</li>
+<li>  UNION 操作符用于合并两个或多个 SELECT 语句的结果。</li>
+<li>  UNION 内部的每个 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每个 SELECT 语句中的列的顺序必须相同。</li>
+<li>  默认地，UNION 操作符选取不同的值（默认去重）。如果允许重复的值，请使用 UNION ALL。</li>
 </ul>
 <hr>
-<h1 id="SQL-性能下降的原因"><a href="#SQL-性能下降的原因" class="headerlink" title="SQL 性能下降的原因"></a>SQL 性能下降的原因</h1><p><strong>SQL 性能下降的表现</strong>：1、执行时间长    2、等待时间长</p>
-<p><strong>SQL 性能下降的原因：</strong></p>
-<ol>
-<li>SQL 语句写得烂</li>
-<li>索引失效</li>
-<li>关联查询太多join（设计缺陷或不得已的需求）【某些业务涉及的表太多，需要关联查询太多】</li>
-<li>服务器调优及各个参数设置不合理（缓存、线程数等）</li>
-<li>….</li>
-</ol>
 <h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><blockquote>
-<p>  <strong>官方定义：</strong></p>
+<p>  <strong>定义：</strong></p>
 </blockquote>
-<p><strong>索引（Index）是</strong>帮助 MySQL 高效获取数据的<strong>数据结构</strong>。</p>
-<p><strong>索引的目的</strong>在于提高查询效率。</p>
-<p>​        可以类比为字典。如果想要查询 “mysql” 这个单词，首先肯定要定位到 m 字母，然后在 m 字母的范围内继续找第 2 个 y 字母，以此类型，找到剩下的三个字母。</p>
-<p>​        如果没有索引，那么每找一个字母都需要全部查找一遍。</p>
-<p>索引可以理解为“<strong>排好序的快速查找的数据结构</strong>”！！！</p>
+<ul>
+<li>  <strong>索引（Index）是一种数据结构</strong>，用于提高数据查询速率。</li>
+<li>  <strong>这个数据结构的具体实现可以有多种</strong>，常见的有 B-树、B+树、AVL树、Hash 等等。</li>
+<li>  索引可以理解为“<strong>排好序的可以实现快速查找的数据结构</strong>”！</li>
+</ul>
 <blockquote>
-<p>  索引会影响到两大功能的执行效率：</p>
-<ol>
-<li>排序：ORDER BY </li>
-<li>查找：WHERE；HAVING</li>
-</ol>
+<p>  <strong>解释说明：</strong></p>
 </blockquote>
-<p>​        <em>在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些数据结构以某种方式指向数据（记录了真实真实数据的地址），在这些数据结构上我们可以实现高效的查找算法。这种数据结构，就是<strong>索引</strong>。</em></p>
+<ul>
+<li>  <strong>Before：</strong></li>
+</ul>
+<p>如果没有索引，想要查询 <code>tb_user</code> 表中 <code>name=&quot;张三&quot;</code> 的这条数据，我们需要挨个查询 <code>tb_user</code> 表中的所有数据，直到找到 <code>name=&quot;张三&quot;</code> 的数据。当然这种查询存在随机性，可能第一个就直接查到了，也有可能直到最后一个才查到，平均时间复杂度为 O<del>n</del> 。</p>
+<ul>
+<li>  <strong>After：</strong></li>
+</ul>
+<p>假设我们为 name 这一列建立了一个索引（假设索引的数据结构为 BTree），这时 name 列中的所有数据就会按照某种规则映射到 BTree 上，想要查询 <code>name=&quot;张三&quot;</code> 的这条数据时，用 <code>“张三”</code> 对应的值与 BTree 第一层的多个范围空间进行对比，找到满足条件的范围进入下一层对比，这样只需要很少的几次比较，就能够定位到 “张三” 在 BTree 中的位置，再从索引直接关联到数据库中真实数据的内存地址，即完成了一次查询。</p>
+<blockquote>
+<p>  <strong>一种索引实现</strong></p>
+</blockquote>
+<p>在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些数据结构以某种方式指向数据（记录了真实真实数据的地址），在这些数据结构上我们可以实现高效的查找算法。这种数据结构，就是<strong>索引</strong>。</p>
 <p>下图就是一种可能的索引方式示例：</p>
 <p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210724170912841.png" alt="image-20210724170912841"></p>
 <ul>
-<li>左边是索引表，一共有两列七条记录，最左边记录的是真实数据的物理地址，Col1 是主键字段，Col2 是索引字段。</li>
-<li>为了加快 Col2 的查找，可以维护一个右边所示的二叉查找树，每个节点分别包含索引键值和一个指向对应数据记录物理地址的指针，这样就可以运用二叉查找在一定的复杂度内获取到相应数据，从而快速的检索出符合条件的记录。</li>
-<li>一般来说索引本身也很大，不可能全部存储在内存中，因此索引往往以索引文件的形式存储的磁盘上。</li>
+<li>  左边是索引表，一共有两列七条记录，最左边记录的是真实数据的物理地址，Col1 是主键字段，Col2 是索引字段。</li>
+<li>  为了加快 Col2 的查找，可以维护一个右边所示的二叉查找树，每个节点分别包含索引键值和一个指向对应数据记录物理地址的指针，这样就可以运用二叉查找在一定的复杂度内获取到相应数据，从而快速的检索出符合条件的记录。</li>
+<li>  一般来说索引本身也很大，不可能全部存储在内存中，因此索引往往以索引文件的形式存储的磁盘上。</li>
 </ul>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优势</strong>：</p>
-<ul>
-<li><p>索引能提高数据检索速率，对于一些经常被用于查询的字段，如果将其设置为索引，能大大地提高查询的速率。将频繁使用的字段就将其设置为索引，比不设索引时查询速度要快。</p>
-</li>
-<li><p>通过索引列对数据进行排序，降低数据排序的成本。</p>
-</li>
-</ul>
-<p><strong>劣势</strong>：</p>
-<ul>
-<li>实际上索引也是一张表，该表保存了主键与索引字段，并指向实体表的记录。所以索引也是要占用空间的。</li>
-<li>虽然索引大大提高了查询速度，但同时却会降低更新表的速度。比如在对表进行 INSERT、UPDATE 和 DELETE 操作时，因为更新表时 MySQL 不仅要更新数据，还要更新索引表。<ul>
-<li>对于 UPDATE 操作，记录变更后索引字段在索引表中的位置就可能发生变化，需要更新。</li>
-<li>对于 INSERT 操作，添加记录后需要将新记录的索引字段加到索引表中。同理 DELETE 需要删除索引表中的记录。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h2><blockquote>
-<ul>
-<li>单值索引：一个索引只包含单个列，一个表可以有多个单列索引。</li>
-<li>唯一索引：索引列的值必须唯一（即用于建立索引的列必须符合 UNIQUE），但允许有空值。</li>
-<li>复合索引：即一个索引包含多个列。</li>
-</ul>
+<blockquote>
+<p>  <strong>索引会影响到两大功能的执行效率：</strong></p>
 </blockquote>
-<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><blockquote>
 <ol>
-<li>创建</li>
-<li>删除</li>
-<li>查看表的所有索引</li>
+<li> 排序：<code>ORDER BY</code> </li>
+<li> 查找：<code>WHERE；HAVING</code></li>
 </ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-- 创建：</span><br><span class="line">CREATE [UNIQUE] INDEX [indexName] ON table_name(column1, column2);	# 方式一</span><br><span class="line"></span><br><span class="line">-- 删除</span><br><span class="line">DROP INDEX [indexName] ON table_name;</span><br><span class="line"></span><br><span class="line">-- 查看</span><br><span class="line">SHOW INDEX FROM table_name;</span><br><span class="line"></span><br><span class="line">-- 使用 Alter 命令</span><br><span class="line">ALTER TABLE tb_name ADD PRIMARY KEY(column_list);	# 该语句添加一个主键，这意味着索引值必须是唯一的，且不能为NULL。</span><br><span class="line">ALTER TABLE tb_name ADD INDEX index_name(column_list) # 添加普通索引，索引值可出现多次。</span><br><span class="line">ALTER TABLE tb_name ADD UNIQUE INDEX index_name(column_list) # 添加唯一索引，要求被添加的列必须是唯一的</span><br><span class="line">ALTER TABLE tb_name ADD FULLTEXT index_name (column_list) # 该语句指定了索引为FULLTEXT ，用于全文索引。</span><br></pre></td></tr></table></figure>
+<p><strong>解释：</strong></p>
 <ul>
-<li>主键自动就是一种唯一索引。</li>
+<li>  查找时，如果对应的字段建立了索引，就不会出现在某张表中挨个查找的情况，而是跳着查找，效率更高。</li>
+<li>  排序时，因为索引结构本身就是有序的，所以对应的字段直接按照索引顺序正序或倒序排列即可。</li>
 </ul>
-<p><strong>案例</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 假设 name 和 openid 这两个字段在查询时频繁被使用，就可以将其设置为索引来增加查询速度</span><br><span class="line">SELECT * FROM USER WHERE NAME&#x3D;&quot;&quot; AND openid&#x3D;&quot;&quot;;</span><br><span class="line"></span><br><span class="line">-- 单值索引</span><br><span class="line">CREATE INDEX idx_user_name ON USER(NAME)</span><br><span class="line"></span><br><span class="line">-- 复合索引</span><br><span class="line">CREATE INDEX idx_user_nameOpenid ON USER(NAME, openid) </span><br></pre></td></tr></table></figure>
 <hr>
-<h2 id="索引结构（BTree）"><a href="#索引结构（BTree）" class="headerlink" title="索引结构（BTree）"></a>索引结构（BTree）</h2><blockquote>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><blockquote>
+<p>  <strong>优点</strong>：</p>
+</blockquote>
 <ul>
-<li><strong>BTree 索引</strong> </li>
-<li>Hash 索引</li>
-<li>Full-Text 全文索引</li>
-<li>R-Tree 索引</li>
+<li>  索引能提高数据检索速率，对于一些常用于查询的字段，如果将其设置为索引，能大大地提高查询的速率。</li>
+<li>  将频繁使用的字段就将其设置为索引，比不设索引时查询速度要快。</li>
+<li>  通过索引列对数据进行排序，降低数据排序的成本。</li>
+</ul>
+<blockquote>
+<p>  <strong>缺点</strong>：</p>
+</blockquote>
+<ul>
+<li>  实际上索引也是一张表，该表保存了索引字段（主键天生就是索引字段），并指向实体表的记录。所以索引也是要占用空间的。</li>
+<li>虽然索引大大提高了查询速度，但同时却会降低更新表的速度。比如在对表进行 CRUD 操作时，不仅需要更新表中的数据，还要更新对应的索引表。<ul>
+<li>  对于 UPDATE 操作，记录变更后索引字段在索引表中的位置就可能发生变化，需要更新。</li>
+<li>  对于 INSERT 操作，添加记录后需要将新记录的索引字段加到索引表中。</li>
+<li>  同理 DELETE 需要删除索引表中的记录。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h2><ul>
+<li>  <strong>单值索引</strong>：一个索引只包含单个列，一个表可以有多个单列索引。</li>
+<li>  <strong>复合索引</strong>：即一个索引包含多个列。</li>
+<li>  唯一索引：索引列的值必须唯一（即用于建立索引的列必须符合 UNIQUE），但允许有空值。</li>
+</ul>
+<hr>
+<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><blockquote>
+<p>  <strong>语法</strong></p>
+</blockquote>
+<ol>
+<li> 创建：</li>
+<li> 删除</li>
+<li> 查看表的所有索引</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-- 创建：</span><br><span class="line">CREATE [UNIQUE] INDEX [indexName] ON table_name(column1, column2);	# 方式一</span><br><span class="line"></span><br><span class="line">-- 删除</span><br><span class="line">DROP INDEX [indexName] ON table_name;</span><br><span class="line"></span><br><span class="line">-- 查看</span><br><span class="line">SHOW INDEX FROM table_name;</span><br><span class="line"></span><br><span class="line">-- 使用 Alter 命令</span><br><span class="line">ALTER TABLE tb_name ADD PRIMARY KEY(column_list);	# 该语句添加一个主键，这意味着索引值必须是唯一的，且不能为NULL。</span><br><span class="line">ALTER TABLE tb_name ADD INDEX index_name(column_list) # 添加普通索引，索引值可出现多次。</span><br><span class="line">ALTER TABLE tb_name ADD UNIQUE INDEX index_name(column_list) # 添加唯一索引，要求被添加的列必须是唯一的</span><br><span class="line">ALTER TABLE tb_name ADD FULLTEXT index_name (column_list) # 该语句指定了索引为FULLTEXT ，用于全文索引。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>注意</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>主键天生就是一种唯一索引</strong></li>
+</ul>
+<blockquote>
+<p>  <strong>案例</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 假设 name 和 openid 这两个字段在查询时频繁被使用，就可以将其设置为索引来增加查询速度</span><br><span class="line">SELECT * FROM USER WHERE NAME&#x3D;&quot;&quot; AND openid&#x3D;&quot;&quot;;</span><br><span class="line"></span><br><span class="line">-- 单值索引</span><br><span class="line">CREATE INDEX idx_user_name ON USER(NAME)</span><br><span class="line"></span><br><span class="line">-- 复合索引</span><br><span class="line">CREATE INDEX idx_user_nameOpenid ON USER(NAME, openid) </span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="常见的索引数据结构"><a href="#常见的索引数据结构" class="headerlink" title="常见的索引数据结构"></a>常见的索引数据结构</h2><blockquote>
+<ul>
+<li>  二叉排序树（BST）</li>
+<li>  平衡二叉树（AVL）</li>
+<li>  B-树（B树）</li>
+<li>  <strong>B+树</strong></li>
+<li>  Hash 索引</li>
+<li>  Full-Text 全文索引</li>
+<li>  R-Tree 索引</li>
 </ul>
 </blockquote>
-<p>MySQL 使用的是 BTree 索引。</p>
-<h3 id="检索原理"><a href="#检索原理" class="headerlink" title="检索原理"></a>检索原理</h3><p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/BTree.png" alt="BTree"></p>
+<ul>
+<li>  <strong>MySQL 的 InnoDB 引擎使用的是 BTree 索引。</strong></li>
+</ul>
+<h3 id="二叉排序树"><a href="#二叉排序树" class="headerlink" title="二叉排序树"></a>二叉排序树</h3><ul>
+<li>  若它的左子树不为空，则左子树上所有关键字的值均小于根关键字的值；</li>
+<li>  若它的右子树不为空，则右子树上所有关键字的值均大于根关键字的值；</li>
+<li>  左右子树又是一棵二叉排序树。</li>
+</ul>
+<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h3><ul>
+<li>  平衡二叉树首先是一棵二叉排序树，但是其要满足左右子树高度之差的绝对值不超过 1。</li>
+<li>  平衡二叉树的左右子树也是平衡二叉树。</li>
+</ul>
+<h3 id="B-树"><a href="#B-树" class="headerlink" title="B-树"></a>B-树</h3><h3 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h3><p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/BTree.png" alt="BTree"></p>
 <blockquote>
 <p>  <strong>【初始化介绍】</strong></p>
 </blockquote>
-<p>一颗 B 树，浅蓝色的块我们称之为一个磁盘块，可以看到每个磁盘块包含了<strong>数据项</strong>（深蓝色所示）和<strong>指针</strong>（黄色所示）。如磁盘块1 包含数据项 17 和35，包含指针 P1、P2、P3。</p>
+<p>一颗 B 树，浅蓝色的块我们称之为一个磁盘块，可以看到每个磁盘块包含了<strong>数据项</strong>（深蓝色所示）和<strong>指针</strong>（黄色所示）。如磁盘块1 包含数据项 17 和 35，包含指针 P1、P2、P3。</p>
 <ul>
-<li>P1 指向数据项小于 17 的磁盘块，P2 指向数据项在17~35 之间的磁盘块，P3 指向数据项大于 35 的磁盘块。</li>
-<li>真实的数据存储在于叶子节点中，即 3、5、9、10、13、15、28、29、36、60、75、79、90、99。</li>
-<li><strong>非叶子节点只不存储真实的数据，只存储指引搜索方向的数据项</strong>。如 17、35 并不真实存在于数据表中。</li>
+<li>  P1 指向数据项小于 17 的磁盘块，P2 指向数据项在17~35 之间的磁盘块，P3 指向数据项大于 35 的磁盘块。</li>
+<li>  真实的数据存储在于叶子节点中，即 3、5、9、10、13、15、28、29、36、60、75、79、90、99。</li>
+<li>  <strong>非叶子节点只不存储真实的数据，只存储指引搜索方向的数据项</strong>。如 17、35 并不真实存在于数据表中。</li>
 </ul>
 <blockquote>
 <p>  <strong>【查找过程】</strong></p>
 </blockquote>
 <ol>
-<li>如果要查找数据项 29，那么首先会把磁盘块 1 由磁盘加载到内存中，此时发生一次 IO，在内存中用二分查找确定 29 在17~35 之间，锁定磁盘块 1 的 P2 指针；</li>
-<li>通过磁盘块 1 的 P2 指针的磁盘地址把磁盘块 3 由磁盘加载到内存中，发生第二次 IO，在内存中用二分查找确定 29 在 26~30 之间，锁定磁盘块 3 的 P2 指针；</li>
-<li>通过指针加载磁盘块 8 到内存中，发生第三次IO，同时内存中做二分查找找到29，结束查询，总计三次 IO。</li>
+<li> 如果要查找数据项 29，那么首先会把磁盘块 1 中的数据加载到内存中，发生第一次 IO，在内存中用二分查找确定 29 在17~35 之间，锁定磁盘块 1 的 P2 指针；</li>
+<li> 通过磁盘块 1 的 P2 指针的磁盘地址把磁盘块 3 中的数据加载到内存中，发生第二次 IO，在内存中用二分查找确定 29 在 26~30 之间，锁定磁盘块 3 的 P2 指针；</li>
+<li> 加载磁盘块 8 中的数据到内存中，发生第三次 IO，同时内存中做二分查找找到 29，结束查询，总计三次 IO。</li>
 </ol>
-<p>在实际生产中，3 层的 b 树可以表示上百万的数据，如果上百万的数据查找只需要三次IO，性能提高将是巨大的，如果没有索引，每个数据项都要发生一次 IO，那么总共需要百万次的IO，显然成本非常非常高。</p>
-<h2 id="哪些情况需要创建索引"><a href="#哪些情况需要创建索引" class="headerlink" title="哪些情况需要创建索引"></a>哪些情况需要创建索引</h2><ol>
-<li><strong>主键</strong>自动建立唯一索引；</li>
-<li><strong>频繁作为查询条件的字段</strong>应该创建索引；</li>
-<li>查询中与其它表关联的字段，<strong>外键</strong>关系应该建立索引；</li>
-<li>查询中<strong>排序的字段</strong>。排序字段若通过索引去访问将大大提高排序速度；</li>
-<li>单键/组合索引的选择问题，组合索引性价比更高；</li>
-<li>查询中统计或者分组字段；</li>
-</ol>
-<h2 id="哪些情况不需要创建索引"><a href="#哪些情况不需要创建索引" class="headerlink" title="哪些情况不需要创建索引"></a>哪些情况不需要创建索引</h2><ol>
-<li><p>表记录太少</p>
-</li>
-<li><p>频繁更新的字段（经常增删改的表或者字段）不适合创建索引；【因为每次更新不单单要更新数据库表记录还会更新索引表记录】</p>
-</li>
-<li><p>Where 条件里用不到的字段不创建索引（不用做查询条件的字段）</p>
-</li>
-<li><p>过滤性不好的不适合建索引。</p>
-<p>【假如一个表中有 10w 条记录，有一个字段 gender 只有 0 和 1 两种值，且每个值的分布概率大约为 50%，那么对这种字段建立索引一般不会提高数据库的查询速度】</p>
-<p>【索引的选择是指索引列中不同值的数量与表中记录数的比。如果一个表中有 2000 条记录，表索引列有 1980 个不同的值，那么这个索引的选择性就接近于 1，这个索引的效率越高。】</p>
-</li>
-</ol>
+<blockquote>
+<p>  <strong>【小总结】</strong></p>
+</blockquote>
+<p>在实际生产中，3 层的 BTree 可以表示上百万的数据，如果上百万的数据查找只需要三次 IO，性能提高将是巨大的，如果没有索引，每个数据项都要发生一次 IO，那么总共需要百万次的 IO，显然成本非常非常高。</p>
 <hr>
-<h1 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h1><h2 id="MySQL-Query-Qptimizer（MySQL查询优化器）"><a href="#MySQL-Query-Qptimizer（MySQL查询优化器）" class="headerlink" title="MySQL Query Qptimizer（MySQL查询优化器）"></a>MySQL Query Qptimizer（MySQL查询优化器）</h2><ul>
-<li>MySQL 中有专门负责优化 SELECT 语句的优化器模块。主要功能是：通过计算分析系统收集到的统计信息，为客户端请求的 SQL 语句提供它认为最优的执行计划。（机器认为最优的数据检索方式，但 BDA 不一定认为是最优的）</li>
-</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><blockquote>
+<p>  <strong>哪些情况需要创建索引？</strong></p>
+</blockquote>
+<ol>
+<li> <strong>主键</strong>天生就是唯一索引；</li>
+<li> <strong>频繁作为查询条件的字段</strong>应该创建索引；</li>
+<li> 查询中与其它表关联的字段，<strong>外键</strong>字段应该建立索引；</li>
+<li> 查询中<strong>排序的字段</strong>。排序字段若通过索引去访问将大大提高排序速度；</li>
+<li> 单键/组合索引的选择问题，<strong>组合索引性价比更高</strong>；</li>
+<li> 查询中统计或者分组字段；</li>
+</ol>
+<blockquote>
+<p>  <strong>哪些情况不需要创建索引？</strong></p>
+</blockquote>
+<ol>
+<li> 表记录太少；【表记录过少的话遍历查找也能很快就找到所有数据，而为此再专门维护一张索引表是不合适的】</li>
+<li> 频繁更新的字段（经常增删改的表或者字段）不适合创建索引；【因为每次更新不单单要更新数据库表记录还会更新索引表记录】</li>
+<li> Where 条件里用不到的字段不创建索引（不用做查询条件的字段）</li>
+<li> <strong>过滤性不好的不适合建索引。</strong></li>
+</ol>
 <ul>
-<li>当客户端向 MySQL 服务器请求一条 SQL ，命令解析器模块完成请求分类，区别出是 SELECT 并转发给 MySQL_Query_Qptimizer 时， MySQL_Query_Qptimizer 首先会对整条 SQL 进行优化，处理掉一些常量表达式的预算，直接转换成常量值。并对 SQL 中的查询条件进行简化和转换，如去掉一些无用或显而易见的条件、结构调整等。……</li>
+<li>假如一个表中有 10w 条记录，有一个字段 gender 只有 0 和 1 两种值，且每个值的分布概率大约为 50%，那么对这种字段建立索引一般不会提高数据库的查询速度。<ul>
+<li>  索引的选择是指索引列中不同值的数量与表中记录数的比。如果一个表中有 2000 条记录，表索引列有 1980 个不同的值，那么这个索引的选择性就接近于 1，这个索引的效率越高。</li>
 </ul>
-<h2 id="MySQL-的常见瓶颈"><a href="#MySQL-的常见瓶颈" class="headerlink" title="MySQL 的常见瓶颈"></a>MySQL 的常见瓶颈</h2><ol>
-<li><strong>CPU</strong>：CPU 在饱和的时候一般发生在数据装入内存或从磁盘上读取数据的时候。</li>
-<li><strong>IO</strong>：磁盘 IO 瓶颈发生在装入数据远大于内存容量的时候。</li>
-<li><strong>服务器硬件的性能瓶颈</strong>：top，free，iostat 和 vmstat 来查看系统的性能状态。</li>
-</ol>
+</li>
+</ul>
 <hr>
-<h1 id="MySQL锁"><a href="#MySQL锁" class="headerlink" title="MySQL锁"></a>MySQL锁</h1><h2 id="是什么-1"><a href="#是什么-1" class="headerlink" title="是什么"></a>是什么</h2><blockquote>
+<h1 id="MySQL中的锁"><a href="#MySQL中的锁" class="headerlink" title="MySQL中的锁"></a>MySQL中的锁</h1><h2 id="是什么-1"><a href="#是什么-1" class="headerlink" title="是什么"></a>是什么</h2><blockquote>
 <p>  <strong>定义</strong></p>
 </blockquote>
-<p>锁是<strong>计算机协调多个进程或线程并发访问某一资源时的机制</strong>。</p>
-<p>在数据库中的数据是一种供许多用户共享的资源，所以就可能出现多个用户并发访问的情况。<strong>如何保证数据并发访问的一致性、有效性是所有数据库必须解决的一个问题</strong>。锁冲突也是影响数据库并发访问性能的一个重要因素。</p>
+<ul>
+<li>  锁是<strong>计算机协调多个进程或线程并发访问某一资源时的机制</strong>。</li>
+<li>  在数据库中的数据是一种供许多用户共享的资源，所以就可能出现多个用户并发访问的情况。<strong>如何保证数据并发访问的一致性、有效性是所有数据库必须解决的一个问题</strong>。锁冲突也是影响数据库并发访问性能的一个重要因素。</li>
+<li>  在上文 MySQL 架构的连接层中，存在一个 ConnectionPool，与 MySQL 服务器连接的每个客户端都会维护一个会话（Session），当同时有多个 Session 操作同一数据库中的同一数据时，就会产生冲突，这时就需要 MySQL 的锁机制来维护数据的一致性了。</li>
+</ul>
 <blockquote>
 <p>  <strong>生活案例</strong></p>
 </blockquote>
-<p>在淘宝上抢手机，库存只剩最后一件了，如果同时有多个用户同时点击了购买，到底谁买到？</p>
-<ul>
-<li>首先，这里肯定要使用到事务，我们先从库存表中取出商品数量，然后插入订单，付款后插入付款表信息，最后更新商品数量。在这个过程中，使用锁可以对有限的资源进行保护，解决隔离和并发的矛盾。</li>
-</ul>
+<p>淘宝秒杀抢手机，库存只剩最后一件了，如果同时有多个用户同时点击了购买，到底谁买到？</p>
+<p>首先，这里肯定要使用到事务，我们先从库存表中取出商品数量，然后插入订单，付款后插入付款表信息，最后更新商品数量。在这个过程中，使用锁可以对共享资源进行保护，解决隔离和并发的矛盾。</p>
 <blockquote>
-<p>  <strong>注意事项：</strong></p>
+<p>  <strong>注意：</strong></p>
 </blockquote>
 <ul>
-<li><strong>数据库锁都是悲观锁！！！</strong></li>
+<li>  <strong>数据库锁都是悲观锁！！！</strong></li>
 </ul>
 <hr>
-<h2 id="锁的分类"><a href="#锁的分类" class="headerlink" title="锁的分类"></a>锁的分类</h2><p>从<strong>对数据操作的类型</strong>来分可分为：</p>
-<blockquote>
-<ul>
-<li><strong>读锁（共享锁）</strong>：针对同一份数据，多个读操作可以同时读而不会互相影响。</li>
-<li><strong>写锁（排它锁）</strong>：当前写操作没有完成之前，它会阻断其它写锁和读锁。【注意：写和读都被阻断了】</li>
-</ul>
+<h2 id="锁分类"><a href="#锁分类" class="headerlink" title="锁分类"></a>锁分类</h2><blockquote>
+<p>  <strong>一些概念：</strong></p>
 </blockquote>
-<p>从<strong>对数据操作的粒度</strong>来分可分为：</p>
+<ul>
+<li>  开销：开销指实现锁需要浪费的性能</li>
+<li>  加锁速度：</li>
+<li>  死锁：</li>
+<li>  粒度：</li>
+<li>  并发性能：</li>
+</ul>
 <blockquote>
-<ul>
-<li><strong>行锁（Row_Level_Lock）：</strong>开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
-<li><strong>表锁（Table_Level_Lock）：</strong>开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
-<li><strong>页锁：</strong>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
-</ul>
+<p>  从<strong>对数据操作的类型</strong>来分可分为：</p>
 </blockquote>
-<p><strong>使用场景：</strong></p>
 <ul>
-<li>表锁更适合以查询为主的表使用。</li>
-<li></li>
+<li>  <strong>读锁（共享锁）</strong>：针对同一份数据，多个读操作可以同时读而不会互相影响。</li>
+<li>  <strong>写锁（排它锁）</strong>：当前写操作没有完成之前，它会阻断其它写锁和读锁。【注意：写和读都被阻断了】</li>
 </ul>
-<div class="table-container">
+<blockquote>
+<p>  从<strong>对数据操作的粒度</strong>来分可分为：</p>
+</blockquote>
+<ul>
+<li>  <strong>行锁（Row_Level_Lock）：</strong>开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
+<li>  <strong>表锁（Table_Level_Lock）：</strong>开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
+<li>  <strong>页锁：</strong>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
+</ul>
+<blockquote>
+<p>  <strong>使用场景：</strong></p>
+</blockquote>
+<ul>
+<li>  只能就具体应用的特点来说哪种锁更合适。</li>
+<li>  表锁更适合以查询为主的表使用。</li>
+<li>  行锁更适合以写为主的表使用。</li>
+</ul>
+<blockquote>
+<p>  <strong>小总结</strong></p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">读锁（共享锁）</th>
-<th style="text-align:center">写锁（独占锁）</th>
+<th align="center"></th>
+<th align="center">读锁（共享锁）</th>
+<th align="center">写锁（独占锁）</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center"><strong>表锁</strong></td>
-<td style="text-align:center">表共享读锁</td>
-<td style="text-align:center">表独占写锁</td>
+<tbody><tr>
+<td align="center"><strong>表锁</strong></td>
+<td align="center">表共享读锁</td>
+<td align="center">表独占写锁</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>行锁</strong></td>
-<td style="text-align:center">行共享读锁</td>
-<td style="text-align:center">行共享写锁</td>
+<td align="center"><strong>行锁</strong></td>
+<td align="center">行共享读锁</td>
+<td align="center">行独占写锁</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <hr>
-<h2 id="MySQL-锁机制"><a href="#MySQL-锁机制" class="headerlink" title="MySQL 锁机制"></a>MySQL 锁机制</h2><p><strong>MySQL 中的锁：</strong></p>
-<blockquote>
+<h2 id="MySQL-中的锁"><a href="#MySQL-中的锁" class="headerlink" title="MySQL 中的锁"></a>MySQL 中的锁</h2><blockquote>
+<p>  <strong>MySQL 中的锁：</strong></p>
+</blockquote>
 <ol>
-<li><p>MyISAM表锁</p>
+<li><p>MyISAM 表锁</p>
 <ul>
-<li>MyISAM 表共享读锁</li>
-<li>MyISAM 表独占写锁</li>
+<li>  MyISAM 表共享读锁</li>
+<li>  MyISAM 表独占写锁</li>
 </ul>
 </li>
 <li><p>InnoDB 行锁</p>
 <ul>
-<li>InnoDB 行共享读锁</li>
-<li>InnoDB 行独占写锁</li>
+<li>  InnoDB 行共享读锁</li>
+<li>  InnoDB 行独占写锁</li>
 </ul>
-<p>InnoDB 表锁</p>
+<p> InnoDB 表锁</p>
 <ul>
-<li>InnoDB 表共享读锁</li>
-<li>InnoDB 表独占写锁</li>
+<li>  InnoDB 表共享读锁</li>
+<li>  InnoDB 表独占写锁</li>
 </ul>
 </li>
-<li><p>Memory 表锁</p>
+<li><p> Memory 表锁</p>
 </li>
-<li><p>……</p>
+<li><p> ……</p>
 </li>
 </ol>
+<blockquote>
+<p>  <strong>MySQL 锁机制：</strong></p>
 </blockquote>
-<p><strong>MySQL 锁机制：</strong></p>
 <ul>
-<li>MySQL 的锁机制比较简单，就是不同的存储引擎支持不同的锁机制。</li>
-<li>比如：MyISAM 和 Memory 存储引擎采用的是表级锁。</li>
-<li>InnoDB 存储引擎既支持行锁（默认），也支持表锁。</li>
-<li>MyISAM 表在进行读操作的时候会自动对表加共享读锁，在进行写操作的时候会自动对表加共享写锁。</li>
-<li>InnoDB 表在进行读操作的时候会自动对行加共享读锁，在进行写操作的时候会自动对行加共享写锁。</li>
+<li>  <strong>MySQL 的锁机制比较简单，就是不同的存储引擎支持不同的锁机制。</strong></li>
+<li>  比如：MyISAM 和 Memory 存储引擎采用的是表级锁。</li>
+<li>  InnoDB 存储引擎既支持行锁（默认），也支持表锁。</li>
+<li>  <strong>MyISAM 表在进行读操作的时候会自动对表加共享读锁，在进行写操作的时候会自动对表加共享写锁。</strong></li>
+<li>  <strong>InnoDB 表在进行读操作的时候会自动对行加共享读锁，在进行写操作的时候会自动对行加共享写锁。</strong></li>
 </ul>
-<p><strong>一些概念：</strong></p>
-<ul>
-<li>开销：开销指实现锁需要浪费的性能</li>
-<li>加锁速度</li>
-<li>死锁</li>
-<li>粒度</li>
-<li>并发性能</li>
-</ul>
-<p>只能就具体应用的特点来说哪种锁更合适。</p>
 <hr>
 <h2 id="表锁（偏读）"><a href="#表锁（偏读）" class="headerlink" title="表锁（偏读）"></a>表锁（偏读）</h2><h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
-<li>开销小，加锁快【一张表只需加一个锁当然开销小，锁的粒度大，加锁自然快】</li>
-<li>无死锁</li>
-<li>锁粒度大</li>
-<li>发生锁冲突的概率最高</li>
-<li>并发度最低</li>
+<li>  开销小，加锁快【一张表只需加一个锁自然开销小，锁的粒度大，加锁自然快】</li>
+<li>  无死锁</li>
+<li>  锁粒度大</li>
+<li>  发生锁冲突的概率最高</li>
+<li>  并发度最低</li>
 </ul>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><blockquote>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
+<li>  查看数据库中所有表锁</li>
+<li>  加（表）锁</li>
+<li>  释放（表）锁</li>
+</ul>
+<blockquote>
 <ol>
-<li>查看数据库中所有表锁</li>
-<li>加（表）锁</li>
-<li>释放（表）锁</li>
+<li> **创建表 tb_emp 和 tb_dep **</li>
 </ol>
 </blockquote>
-<ol>
-<li><strong>创建表 tb_emp 和 tb_dep ，并插入数据</strong></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE IF NOT EXISTS tb_emp (</span><br><span class="line">    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">    NAME VARCHAR(20) DEFAULT &#39;&#39;</span><br><span class="line">)ENGINE&#x3D;MYISAM;	# 使用MYISAM引擎建的表 </span><br><span class="line"></span><br><span class="line">CREATE TABLE IF NOT EXISTS tb_dep (</span><br><span class="line">    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">    NAME VARCHAR(20) DEFAULT &#39;&#39;</span><br><span class="line">)ENGINE&#x3D;MYISAM;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="2">
+<li> <strong>手动加锁（读锁或写锁）</strong></li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE IF NOT EXISTS tb_emp (</span><br><span class="line">    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">    NAME VARCHAR(20) DEFAULT &#39;&#39;</span><br><span class="line">)ENGINE&#x3D;MYISAM;</span><br><span class="line"></span><br><span class="line">CREATE TABLE IF NOT EXISTS tb_dep (</span><br><span class="line">    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">    NAME VARCHAR(20) DEFAULT &#39;&#39;</span><br><span class="line">)ENGINE&#x3D;MYISAM;</span><br></pre></td></tr></table></figure>
-<ol>
-<li><strong>手动加锁（读锁或写锁）</strong></li>
-</ol>
+</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 语法</span><br><span class="line">lock table 表名1 read, 表名2 write;</span><br><span class="line"></span><br><span class="line">-- 给tb_emp表加读锁，给 tb_dep表加写锁</span><br><span class="line">lock table tb_emp read, tb_dep write;	</span><br></pre></td></tr></table></figure>
-<ol>
-<li><strong>查看数据库中所有表的锁</strong></li>
+
+<blockquote>
+<ol start="3">
+<li> <strong>查看数据库中所有表的锁</strong></li>
 </ol>
+</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- 查看数据库中所有表的锁</span><br><span class="line">SHOW OPEN TABLES;</span><br></pre></td></tr></table></figure>
+
 <p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210725182834745.png" alt="image-20210725182834745"></p>
-<ol>
-<li><strong>释放锁</strong></li>
+<blockquote>
+<ol start="4">
+<li> <strong>释放锁</strong></li>
 </ol>
+</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- 释放锁（Tip：释放锁使不能单个表释放，只能一次性释放所有表的锁）</span><br><span class="line">UNLOCK TABLE;</span><br></pre></td></tr></table></figure>
+
+
+
 <hr>
 <h3 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h3><h4 id="给表加读锁"><a href="#给表加读锁" class="headerlink" title="给表加读锁"></a>给表加读锁</h4><blockquote>
 <ol>
-<li><strong>向上面建好的 tb_emp 表中插入数据</strong></li>
+<li> <strong>向上面建好的 tb_emp 表中插入数据</strong></li>
 </ol>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO tb_emp(NAME) VALUES(&#39;张三&#39;);</span><br><span class="line">INSERT INTO tb_emp(NAME) VALUES(&#39;李四&#39;);</span><br><span class="line">INSERT INTO tb_emp(NAME) VALUES(&#39;王五&#39;);</span><br></pre></td></tr></table></figure>
+
+
+
 <blockquote>
-<ol>
-<li><strong>模拟两个线程同时操作 tb_emp 表</strong></li>
+<ol start="2">
+<li> <strong>模拟两个线程同时操作 tb_emp 表</strong></li>
 </ol>
 </blockquote>
 <p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/%E8%AF%BB%E9%94%81.png" alt="读锁"></p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">线程 T1</th>
-<th style="text-align:center">线程 T2</th>
+<th align="center">线程 T1</th>
+<th align="center">线程 T2</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>lock table tb_emp read;</code>【OK】</td>
-<td style="text-align:center"></td>
+<tbody><tr>
+<td align="center"><code>lock table tb_emp read; </code>【OK】</td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>select * from tb_emp;</code>  【OK】</td>
-<td style="text-align:center"></td>
+<td align="center"><code>select * from tb_emp; </code>  【OK】</td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"><code>select * from tb_emp;</code>  【OK】</td>
+<td align="center"></td>
+<td align="center"><code>select * from tb_emp; </code>  【OK】</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【Error】</td>
-<td style="text-align:center"></td>
+<td align="center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【Error】</td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【阻塞】</td>
+<td align="center"></td>
+<td align="center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【阻塞】</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>UNLOCK TABLES;</code></td>
-<td style="text-align:center"></td>
+<td align="center"><code>UNLOCK TABLES;</code></td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【OK】</td>
+<td align="center"></td>
+<td align="center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【OK】</td>
 </tr>
-</tbody>
-</table>
-</div>
-<p><strong>分析：</strong></p>
+</tbody></table>
+<blockquote>
+<p>  <strong>分析：</strong></p>
+</blockquote>
 <p>两个线程同时操作数据库中的同一张表，</p>
 <ol>
-<li>首先，线程 T1 先对 emp 表加表共享读锁；</li>
-<li>然后，T1 对加锁的表执行查询操作，OK；【因为 T1 本身就是持有锁的】</li>
-<li>再之，T2 对加锁的表进行查询操作，OK；【因为读锁是一种共享锁，共享锁可以有多个】</li>
-<li>T1 在未释放锁之前，想要读取其它表（非加锁的表），发现<strong>报错</strong>；</li>
-<li>T2 读取未加锁的表，OK；</li>
-<li>T1 在未释放锁之前，想要修改被加锁的表，<strong>报错</strong>；</li>
-<li>T2 想要修改未加锁的表，发现没有报错 ，但程序被<strong>阻塞</strong>【一直在转圈，但不能执行结束】</li>
-<li>T1 释放读锁；</li>
-<li>这时 T2 立即执行未执行完的更新的操作。</li>
+<li> 首先，线程 T1 先对 emp 表加表共享读锁；</li>
+<li> 然后，T1 对加锁的表执行查询操作，OK；【因为 T1 本身就是持有锁的】</li>
+<li> 再之，T2 对加锁的表进行查询操作，OK；【因为读锁是一种共享锁】</li>
+<li> T1 在未释放锁之前，想要读取其它表（非加锁的表），发现<strong>报错</strong>；【拿着锁不干事反而想去操作其它表是不被允许的】</li>
+<li> T2 读取未加锁的表，OK；</li>
+<li> T1 在未释放锁之前，想要修改被加锁的表，<strong>报错</strong>；【读锁只能读不能写】</li>
+<li> T2 想要修改未加锁的表，发现没有报错 ，但程序被<strong>阻塞</strong>【一直在转圈，但不能执行结束】</li>
+<li> T1 释放读锁；</li>
+<li> 这时 T2 立即执行未执行完的更新的操作。</li>
 </ol>
 <h4 id="给表加写锁"><a href="#给表加写锁" class="headerlink" title="给表加写锁"></a>给表加写锁</h4><ul>
-<li>当前线程对表的 查询+更新+插入 操作都可以执行；</li>
-<li>其它线程对表的查询被阻塞，需要等待锁被释放。</li>
+<li>  当前线程对表的 查询+更新+插入 操作都可以执行；</li>
+<li>  其它线程对表的查询被阻塞，需要等待锁被释放。</li>
 </ul>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
-<li><strong>MyISAM</strong> 在执行查询语句（SELECT）前，会<strong>自动给涉及的所有表加读锁</strong>，在执行增删改操作前，会<strong>自动给涉及的表加写锁</strong>。</li>
-<li>如果想要使用 InnoDB 给表加读/写锁，则需要显式地声明才可以。</li>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ul>
+<li>  <strong>MyISAM</strong> 在执行查询语句（SELECT）前，会<strong>自动给涉及的所有表加读锁</strong>，在执行增删改操作前，会<strong>自动给涉及的表加写锁</strong>。</li>
+<li>  如果想要使用 InnoDB 给表加读/写锁，则需要显式地声明才可以。</li>
 </ul>
-<blockquote>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><blockquote>
 <p>  <strong>结论：</strong></p>
 </blockquote>
 <p>对所有使用 MyISAM 引擎的表进行操作，会有以下情况：</p>
 <ul>
-<li>对 MyISAM 表的读操作，不会阻塞其它线程对同一表的读请求，但是会阻塞对同一表的写请求。只有当读锁释放后，才会执行其它线程的写操作。</li>
-<li>对 MyISAM 表的写操作，会阻塞其它线程对同一表的读和写操作，只有当写锁释放后，才会执行其它线程的读写操作。</li>
+<li>  对 MyISAM 表的读操作，不会阻塞其它线程对同一表的读请求，但是会阻塞对同一表的写请求。只有当读锁释放后，才会执行其它线程的写操作。</li>
+<li>  对 MyISAM 表的写操作，会阻塞其它线程对同一表的读和写操作，只有当写锁释放后，才会执行其它线程的读写操作。</li>
 </ul>
 <p>简而言之，就是<strong>读的时候可以读，读的时候不能写，写的时候不能读，写的时候不能写</strong>（读就是共享读，其它的可以读，不能写；写是独占写，其它的不能读也不能写）</p>
+<p><strong>MyISAM 不适合作为以写操作为主的表的引擎</strong>。因为对表中数据进行的写操作会造成表被自动加写锁，导致其它线程不能做任何操作，如果存在大量的更新会使得查询操作很难获取到锁，从而造成永远阻塞。</p>
 <hr>
 <h3 id="表锁分析"><a href="#表锁分析" class="headerlink" title="表锁分析"></a>表锁分析</h3><blockquote>
 <p>  <strong>查看哪些表被加锁了</strong></p>
 </blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW OPEN TABLES;</span><br></pre></td></tr></table></figure>
+
+
+
 <blockquote>
-<p>  <strong>如何分析表锁定</strong></p>
+<p>  <strong>表锁分析</strong></p>
 </blockquote>
-<p>可以通过检查 <strong>table_locks_waited</strong> 和 <strong>table_locks_immediate</strong> 状态变量来分析系统上的表锁定。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW STATUS LIKE &#39;table%&#39;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 检查锁的状态</span><br><span class="line">SHOW STATUS LIKE &#39;table%&#39;;</span><br></pre></td></tr></table></figure>
+
 <p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210727220206563.png" alt="image-20210727220206563"></p>
-<p>这里有两个变量记录 MySQL 内部表级锁定的情况，两个变量的说明如下：</p>
+<p>这里有一些属性记录了某个表锁的运行情况，两个重要的属性说明如下：</p>
 <ul>
-<li><strong>table_locks_immediate</strong>：产生表级锁定的次数，即表锁被获取过的次数，每次获取锁该值+1。</li>
-<li><strong>table_locks_waited</strong>：由于表锁争用而发生等待的次数（不能立即获取锁的次数，每等待一次该值+1）。此值较高则说明存在着较严重的表级锁争用的情况。</li>
+<li>  <strong>table_locks_immediate</strong>：表锁被获取过的次数，每次获取锁时该值+1。</li>
+<li>  <strong>table_locks_waited</strong>：由于表锁争用而发生等待的次数（不能立即获取锁的次数，每等待一次该值+1）。此值较高则说明存在着较严重的表级锁争用的情况。</li>
 </ul>
-<p><strong>MyISAM 不适合作为以写操作为主的表的引擎</strong>。因为对表中数据进行的写操作会造成表被自动加写锁，导致其它线程不能做任何操作，大量的更新会使得查询操作很难获取到锁，从而造成永远阻塞。</p>
 <hr>
-<h2 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h2><h3 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h3><ul>
-<li>InnoDB 引擎在执行 SQL 语句时默认加行锁（执行查询语句加默认读锁，执行写操作语句默认加写锁）；</li>
-<li>开销大，加锁慢。（需要给每行数据都加锁，自然开销比较大，加锁比较慢）</li>
-<li>会出现死锁；</li>
-<li>锁的粒度小，</li>
-<li>发生锁冲突的概率最低，</li>
-<li>并发度最高。</li>
+<h2 id="行锁（偏写）"><a href="#行锁（偏写）" class="headerlink" title="行锁（偏写）"></a>行锁（偏写）</h2><h3 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>  InnoDB 引擎在执行 SQL 语句时默认加行锁（执行查询语句加默认读锁，执行写操作语句默认加写锁）；</li>
+<li>  开销大，加锁慢。（需要给每行数据都加锁，自然开销比较大，加锁比较慢）</li>
+<li>  会出现死锁；</li>
+<li>  锁的粒度小，</li>
+<li>  发生锁冲突的概率最低，</li>
+<li>  并发度最高。</li>
 </ul>
-<h3 id="案例分析-1"><a href="#案例分析-1" class="headerlink" title="案例分析"></a>案例分析</h3><h4 id="建表"><a href="#建表" class="headerlink" title="建表"></a>建表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-- 建表</span><br><span class="line">CREATE TABLE tb_stu (</span><br><span class="line">    id INT(11),</span><br><span class="line">    age VARCHAR(16)</span><br><span class="line">)ENGINE&#x3D;INNODB;</span><br><span class="line"></span><br><span class="line">-- 插入数据</span><br><span class="line">INSERT INTO tb_stu VALUES(1,&#39;10&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(3,&#39;30&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(4,&#39;40&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(5,&#39;50&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(6,&#39;60&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(7,&#39;70&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(8,&#39;80&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(9,&#39;90&#39;);</span><br><span class="line"># 注意：这里没有插入 id&#x3D;2 的数据！！！</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-- 分别为 id 和 age 创建索引 </span><br><span class="line">CREATE INDEX a ON tb_stu(id);</span><br><span class="line">CREATE INDEX b ON tb_stu(age);</span><br><span class="line"></span><br><span class="line">-- 关闭 MySQL 的自动提交功能</span><br><span class="line">SET autocommit &#x3D; 0;</span><br></pre></td></tr></table></figure>
-<h4 id="行锁的基本演示"><a href="#行锁的基本演示" class="headerlink" title="行锁的基本演示"></a>行锁的基本演示</h4><ul>
-<li>模拟两个线程同时操作 stu 表数据。建立两个会话分别为 Session1 和  Session2。</li>
-</ul>
-<div class="table-container">
+<h3 id="语法（手动加行锁）"><a href="#语法（手动加行锁）" class="headerlink" title="语法（手动加行锁）"></a>语法（手动加行锁）</h3><blockquote>
+<p>  加<strong>行共享读锁</strong>：<code>lock in share mode</code></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 开始事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">-- 手动</span><br><span class="line">SELECT * FROM tb_stu WHERE id&#x3D;5 LOCK IN SHARE MODE;</span><br><span class="line"></span><br><span class="line">-- 事务提交后会自动释放锁</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  加<strong>行独占写锁</strong>：<code>FOR UPDATE</code></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 开始事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">-- 手动锁定某一行</span><br><span class="line">SELECT * FROM tb_stu WHERE id&#x3D;5 FOR UPDATE;</span><br><span class="line">-- 在 SELECT xxx... FOR UPDATE 执行后到事务提交之前，其它线程对该条记录的写操作都会被阻塞！！</span><br><span class="line"></span><br><span class="line">-- 事务提交后会自动释放锁</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="行锁基本操作演示"><a href="#行锁基本操作演示" class="headerlink" title="行锁基本操作演示"></a>行锁基本操作演示</h3><blockquote>
+<p>  <strong>建表</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-- 建表</span><br><span class="line">CREATE TABLE tb_stu (</span><br><span class="line">    id INT(11),</span><br><span class="line">    age VARCHAR(16)</span><br><span class="line">)ENGINE&#x3D;INNODB;</span><br><span class="line"></span><br><span class="line">-- 插入数据</span><br><span class="line">INSERT INTO tb_stu VALUES(1,&#39;10&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(3,&#39;30&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(4,&#39;40&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(5,&#39;50&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(6,&#39;60&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(7,&#39;70&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(8,&#39;80&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(9,&#39;90&#39;);</span><br><span class="line"># 注意：这里没有插入 id&#x3D;2 的数据！！！</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-- 分别为 id 和 age 创建索引 </span><br><span class="line">CREATE INDEX a ON tb_stu(id);</span><br><span class="line">CREATE INDEX b ON tb_stu(age);</span><br><span class="line"></span><br><span class="line">-- 关闭 MySQL 的自动提交功能</span><br><span class="line">SET autocommit &#x3D; 0;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>模拟两个线程同时操作 <code>tb_stu</code> 表数据。建立两个会话分别为 Session1 和  Session2。</strong></p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">Session1</th>
-<th style="text-align:center">Session2</th>
+<th align="center">Session1</th>
+<th align="center">Session2</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>SET autocommit = 0</code></td>
-<td style="text-align:center"><code>SET autocommit = 0</code></td>
+<tbody><tr>
+<td align="center"><code>SET autocommit = 0</code></td>
+<td align="center"><code>SET autocommit = 0</code></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>UPDATE tb_stu SET age=11 WHERE id=1;</code>【OK】</td>
-<td style="text-align:center"></td>
+<td align="center"><code>UPDATE tb_stu SET age=11 WHERE id=1;</code>【OK】</td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>SELECT * FROM tb_stu;</code>【查看后发现更新成功】</td>
-<td style="text-align:center"></td>
+<td align="center"><code>SELECT * FROM tb_stu;</code>【查看后发现更新成功】</td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"><code>SELECT * FROM tb_stu;</code>【未读到Session1未提交的事务】</td>
+<td align="center"></td>
+<td align="center"><code>SELECT * FROM tb_stu;</code>【未读到Session1未提交的事务】</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"><code>UPDATE tb_stu SET age=19 WHERE id=1;</code>【写操作被阻塞】</td>
+<td align="center"></td>
+<td align="center"><code>UPDATE tb_stu SET age=19 WHERE id=1;</code>【写操作被阻塞】</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>COMMIT;</code>【Session1 提交事务】</td>
-<td style="text-align:center"></td>
+<td align="center"><code>COMMIT;</code>【Session1 提交事务】</td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">【阻塞解除，更新操作继续执行成功。此时，id=1对应的age=19】</td>
+<td align="center"></td>
+<td align="center">【阻塞解除，更新操作继续执行成功。此时，id=1对应的age=19】</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ol>
-<li>分别关掉 Session1 和 Session2 事务的自动提交行为；</li>
-<li>更新 <code>id=1</code> 的这一条记录，在 Session1 中更新成功，但在 Session2 中并未读取到 Session1 的更新。这是由于 MySQL 默认的隔离级别（可重复读）导致的。</li>
-<li>此时，如果在 Session2 中想要更新同一行数据，发现 Session 的操作被阻塞，这是因为 InnoDB 默认给每行数据加了行锁。</li>
-<li>使用 COMMIT 提交事务后，行锁也会被释放，这时 Session2 的更新操作得以继续执行。</li>
+<li> 分别关掉 Session1 和 Session2 事务的自动提交行为；</li>
+<li> 更新 <code>id=1</code> 的这一条记录，在 Session1 中更新成功，但在 Session2 中并未读取到 Session1 的更新。这是由于 MySQL 默认的隔离级别（可重复读）导致的。</li>
+<li> 此时，如果在 Session2 中想要更新同一行数据，发现 Session 的操作被阻塞，这是因为 InnoDB 默认给每行数据加了行锁。</li>
+<li> 使用 COMMIT 提交事务后，行锁也会被释放，这时 Session2 的更新操作得以继续执行。</li>
 </ol>
 <hr>
-<h4 id="索引失效行锁升级为表锁"><a href="#索引失效行锁升级为表锁" class="headerlink" title="索引失效行锁升级为表锁"></a>索引失效行锁升级为表锁</h4><p><strong>行锁必须有索引才能实现，否则会自动锁全表，那么就不是行锁了。</strong>    </p>
-<p>所以在 InnoDB 表中有两种情况会导致行锁升级为表锁：</p>
+<h3 id="索引失效行锁升级为表锁"><a href="#索引失效行锁升级为表锁" class="headerlink" title="索引失效行锁升级为表锁"></a>索引失效行锁升级为表锁</h3><blockquote>
+<p>  <strong>原理</strong></p>
+</blockquote>
 <ul>
-<li>一是条件字段压根没有建立索引；</li>
-<li>二是条件字段的索引在使用中失效了。</li>
+<li>  <strong>行锁必须依赖于索引才能实现，否则会自动升级为表锁。</strong>    </li>
+<li>所以在 InnoDB 表中有两种情况会导致行锁升级为表锁：<ul>
+<li>  一是条件字段压根没有建立索引；</li>
+<li>  二是条件字段的索引在使用中失效了。</li>
+</ul>
+</li>
 </ul>
 <blockquote>
 <p>  <strong>举例</strong></p>
 </blockquote>
-<p>在 tb_stu 表中，id 为 int 类型，age 为 varchar 类型。并且为这两个字段分别创建了索引 a 和 b。如果我们在更新数据的过程中，故意把 varchar 类型的数据写成 int 类型的数据，由于 MySQL 存在自动转型，int 类型也能被识别，但是此时就破坏了索引 b 的结构，就会导致索引 b 失效。从而导致行锁会升级到表锁。</p>
+<p>在 <code>tb_stu</code> 表中，<code>id</code> 为 <code>int</code> 类型，<code>age</code> 为 <code>varchar</code> 类型。并且为这两个字段分别创建了索引 <code>a</code> 和 <code>b</code>。如果我们在更新数据的过程中，不小心把 <code>varchar</code> 类型的数据写成了 <code>int</code> 类型的数据，由于 MySQL 存在自动转型，<code>int</code> 类型也能被识别而不会报错，但是此时就破坏了索引 <code>b</code> 的结构，就会导致索引 <code>b</code> 失效。从而导致行锁会升级到表锁。</p>
 <ol>
-<li><p>破坏索引结构</p>
+<li> 破坏索引结构</li>
+</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># UPDATE tb_stu SET id&#x3D;1 WHERE age&#x3D;&#39;19&#39;; # 正确写法</span><br><span class="line">UPDATE tb_stu SET id&#x3D;1 WHERE age&#x3D;19;	# 这里故意写错，目的是为了破坏索引结构</span><br><span class="line"></span><br><span class="line">COMMIT</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>经过上面的操作后，age 对应的索引 b 的结构已经失效了，如果接下来还有以 age 为条件字段的操作，则行锁会升级为表锁</p>
-<p>|                    Session1                     |                     Session2                     |<br>| :——————————————————————-: | :———————————————————————: |<br>|                    <code>BEGIN;</code>                     |                                                  |<br>| <code>UPDATE tb_stu SET id=66 WHERE age=&#39;60&#39;;</code>【OK】 |                                                  |<br>|                                                 | <code>UPDATE tb_stu SET id=77 WHERE age=70</code>【被阻塞】 |<br>|                    <code>COMMIT;</code>                    |                                                  |<br>|                                                 |               【更新操作继续执行】               |</p>
-</li>
+
+<ol start="2">
+<li> 经过上面的操作后，<code>age</code> 对应的索引 <code>b</code> 的结构已经失效了，如果接下来还有以 age 为条件字段的操作，则行锁会升级为表锁。</li>
 </ol>
-<blockquote>
-<p>  Session1 设置为手动事务提交，Session2 设置为自动事务提交。</p>
-<ol>
-<li>Session1 开启事务，更新  <code>age=&#39;60&#39;</code> 的行记录，OK；</li>
-<li>Session2 更新 <code>age=&#39;70&#39;</code> 的行记录，却发现被阻塞。但是明明 tb_stu 表使用的是行锁呀？这就是索引失效后行锁自动升级为表锁了。</li>
-<li>Session1 提交后，释放表锁，Session2 得以继续进行，修改成功。</li>
-</ol>
-</blockquote>
-<h4 id="间隙锁危害"><a href="#间隙锁危害" class="headerlink" title="间隙锁危害"></a>间隙锁危害</h4><blockquote>
-<p>  <strong>间隙锁案例：</strong></p>
-</blockquote>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">Session1</th>
-<th style="text-align:center">Session2</th>
+<th align="center">Session1</th>
+<th align="center">Session2</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>SET autocommit = 0</code></td>
-<td style="text-align:center"><code>SET autocommit = 0</code></td>
+<tbody><tr>
+<td align="center"><code>BEGIN;</code></td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>UPDATE tb_stu SET age=99 WHERE id&gt;1 AND id&lt;6;</code><br>【更新 <code>1&lt;id&lt;6</code>的所有数据】</td>
-<td style="text-align:center"></td>
+<td align="center"><code>UPDATE tb_stu SET id=66 WHERE age=&#39;60&#39;;</code>【OK】</td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>SELECT * FROM tb_stu;</code>【查看后发现更新成功】</td>
-<td style="text-align:center"></td>
+<td align="center"></td>
+<td align="center"><code>UPDATE tb_stu SET id=77 WHERE age=70</code>【被阻塞】</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
-<td style="text-align:center"><code>INSERT INTO tb_stu VALUES(2,&quot;20&quot;);</code><br>【产生阻塞，插入操作无法执行完毕】</td>
+<td align="center"><code>COMMIT;</code></td>
+<td align="center"></td>
 </tr>
 <tr>
-<td style="text-align:center"><code>COMMIT;</code>【Session1 提交事务】</td>
-<td style="text-align:center"></td>
+<td align="center"></td>
+<td align="center">【更新操作继续执行】</td>
 </tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">【阻塞解除，插入操作继续执行成功。id=2的数据被成功插入】</td>
-</tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
+<p>Session1 设置为手动事务提交，Session2 设置为自动事务提交。</p>
 <ol>
-<li><p>分别关闭 Session1 和 Session2 的事务自动提交；</p>
+<li> Session1 开启事务，更新  <code>age=&#39;60&#39;</code> 的行记录，OK；</li>
+<li> Session2 更新 <code>age=&#39;70&#39;</code> 的行记录，却发现被阻塞。但是明明 tb_stu 表使用的是行锁呀？这就是索引失效后行锁自动升级为表锁了。</li>
+<li> Session1 提交后，释放表锁，Session2 得以继续进行，修改成功。</li>
+</ol>
+<hr>
+<h3 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h3><blockquote>
+<p>  <strong>间隙锁案例：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">Session1</th>
+<th align="center">Session2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>SET autocommit = 0</code></td>
+<td align="center"><code>SET autocommit = 0</code></td>
+</tr>
+<tr>
+<td align="center"><code>UPDATE tb_stu SET age=99 WHERE id&gt;1 AND id&lt;6;</code><br>【更新 <code>1&lt;id&lt;6</code>的所有数据】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><code>SELECT * FROM tb_stu;</code>【查看后发现更新成功】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>INSERT INTO tb_stu VALUES(2,&quot;20&quot;);</code><br>【产生阻塞，插入操作无法执行完毕】</td>
+</tr>
+<tr>
+<td align="center"><code>COMMIT;</code>【Session1 提交事务】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">【阻塞解除，插入操作继续执行成功。id=2的数据被成功插入】</td>
+</tr>
+</tbody></table>
+<ol>
+<li><p> 分别关闭 Session1 和 Session2 的事务自动提交；</p>
 </li>
-<li><p>更新 id 为（1，6）范围内的所有数据，由于当前表中没有 id 为 2 的数据，所以就是更新 id 为 3，4，5 的数据 age=99。</p>
+<li><p> 更新 id 为 <code>(1, 6)</code> 范围内的所有数据，由于当前表中没有 id 为 2 的数据，所以就是更新 id 为 3，4，5 的数据，设置 age=99。</p>
 </li>
-<li><p>但是我们此时使用 Session2 想要插入一条 id=2 的数据，却发现被阻塞了。这时为什么呢？</p>
-<p>按理来说，行锁只会作用于当前行，在本例中也就是第 3、4、5 行，而 Session2 操作的明明是第 2 行，为什么也会被阻塞呢？这时因为此时 id=2 的那一行也被加了行锁，这就是传说中的<strong>间隙锁</strong>。 </p>
+<li><p>  但是我们此时使用 Session2 想要插入一条 <code>id=2</code> 的数据，却发现被阻塞了。这时为什么呢？</p>
 </li>
-<li><p>只有当 Session1 的事务提交后，所有作用于行上的锁被释放了，Session2 的插入操作才能继续完成。</p>
-</li>
+</ol>
+<pre><code>-   按理来说，行锁只会作用于当前行，在本例中也就是第 3、4、5 行，而 Session2 操作的明明是第 2 行，为什么也会被阻塞呢？这时因为此时 id=2 的那一行也被加了行锁，这就是所谓的**间隙锁**。 
+</code></pre>
+<ol start="4">
+<li> 只有当 Session1 的事务提交后，所有作用于行上的锁被释放了，Session2 的插入操作才能继续完成。</li>
 </ol>
 <blockquote>
 <p>  <strong>什么是间隙锁？</strong></p>
 </blockquote>
-<p>当我们使用范围条件而不是相等条件检索数据，并请求共享或排它锁时，InnoDB 会给符合条件的已有数据记录的索引项加锁，这是显然的；</p>
-<p>对于索引的键值在条件范围内但并不存在的记录，叫做“<strong>间隙（GAP）</strong>”；</p>
-<p>InnoDB 也会对这个“间隙”加锁，这种锁机制就是所谓的<strong>间隙锁（Next-Key锁）</strong>。</p>
-<p><strong>总结：</strong>间隙锁 = 使用范围条件检索 + 请求锁 +检索的字段是一个索引</p>
+<ul>
+<li>  当我们使用范围条件而不是相等条件读/写数据，并请求共享/排它锁时，InnoDB 会给符合条件的已有数据记录的索引项加锁，这是显然的；</li>
+<li>  对于索引的键值在条件范围内但并不存在的记录，叫做“<strong>间隙（GAP）</strong>”。InnoDB 也会对这个“间隙”加锁，这种锁机制就是所谓的<strong>间隙锁（Next-Key锁）</strong>。</li>
+<li>  <strong>总结：</strong> <code>间隙锁 = 使用范围条件加锁 +检索的字段是一个索引</code></li>
+</ul>
 <blockquote>
 <p>  <strong>间隙锁的危害</strong></p>
 </blockquote>
-<p>因为 Query 执行过程中通过范围查找的话，它会锁定整个范围内所有的索引键值，即使这个键值在索引表中并不存在。</p>
-<p>间隙锁有一个致命的弱点就是当锁定一个范围的键值之后，即使某些不存在的键值也会被无辜的锁定，从而造成在锁定的时候无法插入锁定键值范围内的任何数据。在某些场景下这可能会对性能造成很大的危害。</p>
-<h4 id="手动加行锁"><a href="#手动加行锁" class="headerlink" title="手动加行锁"></a>手动加行锁</h4><blockquote>
-<p>  加<strong>行共享读锁</strong>：<code>lock in share mode</code></p>
+<ul>
+<li>  间隙锁有一个致命的弱点就是当锁定一个范围的键值之后，即使某些不存在的键值也会被无辜的锁定，从而造成在锁定的时候无法插入锁定键值范围内的任何数据。在某些场景下这可能会对性能造成很大的危害。</li>
+<li>  因为 Query 执行过程中通过范围查找的话，它会锁定整个范围内所有的索引键值，即使这个键值在索引表中并不存在。</li>
+</ul>
+<hr>
+<h3 id="InnoDB-优缺点"><a href="#InnoDB-优缺点" class="headerlink" title="InnoDB 优缺点"></a>InnoDB 优缺点</h3><blockquote>
+<p>  <strong>优点：</strong></p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 开始事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">-- 手动</span><br><span class="line">SELECT * FROM tb_stu WHERE id&#x3D;5 LOCK IN SHARE MODE;</span><br><span class="line"></span><br><span class="line">-- 事务提交后会自动释放锁</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>  InnoDB 存储引擎实现了行锁，虽然在实现锁时损耗的性能比表锁高一些，但其并发处理的能力是远优于 MyISAM 的表锁的。</li>
+<li>  当系统并发量较高时，InnoDB 的整体性能和 MyISAM 相比就会有比较明显的优势了。</li>
+</ul>
 <blockquote>
-<p>  加<strong>行独占写锁</strong></p>
+<p>  <strong>缺点：</strong></p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-- 开始事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">-- 手动锁定某一行</span><br><span class="line">SELECT * FROM tb_stu WHERE id&#x3D;5 FOR UPDATE;</span><br><span class="line"></span><br><span class="line">-- 在 SELECT xxx... FOR UPDATE 执行后到事务提交之前，其它线程对该条记录的写操作都会被阻塞！！</span><br><span class="line"></span><br><span class="line">-- 事务提交后会自动释放锁</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
-<h3 id="案例结论"><a href="#案例结论" class="headerlink" title="案例结论"></a>案例结论</h3><p><strong>优势：</strong></p>
-<p>InnoDB存储引擎由于实现了行锁，虽然在锁定机制的实现方面所带来的性能损耗肯能比表锁要高一些，但是在整体并发处理的能力是要远远优于 MyISAM 的表锁的。当系统并发量较高时，InnoDB 的整体性能和 MyISAM 相比就会有比较明显的优势了。</p>
-<p><strong>缺点：</strong></p>
-<p>但是，InnoDB 也有其脆弱的一面，当我们使用不当时（如索引失效导致行锁升级为表锁 ），可能会让 InnoDB 的整体性能表现不仅不能比 MyISAM 高，甚至可能会更差。</p>
+<ul>
+<li>  但是，InnoDB 也有其脆弱的一面，当我们使用不当时（如索引失效导致行锁升级为表锁 ），可能会让 InnoDB 的整体性能表现不仅不能比 MyISAM 高，甚至可能会更差。</li>
+</ul>
+<hr>
 <h3 id="行锁分析"><a href="#行锁分析" class="headerlink" title="行锁分析"></a>行锁分析</h3><blockquote>
 <p>  <strong>如何分析行锁？</strong></p>
 </blockquote>
-<ul>
-<li>通过检查 <code>InnoDB_row_lock</code> 状态变量来分析行锁的争夺情况：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW STATUS LIKE &#39;innodb_row_lock%&#39;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 展示行锁的各个状态量</span><br><span class="line">SHOW STATUS LIKE &#39;innodb_row_lock%&#39;;</span><br></pre></td></tr></table></figure>
+
 <p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210729091146048.png" alt="image-20210729091146048"></p>
 <p>对各个状态量的说明如下：</p>
 <ul>
-<li><strong>InnoDB_row_lock_current_waits</strong>：当前正在等待锁的数量；</li>
-<li><strong>InnoDB_row_lock_time</strong>：从系统启动到当前时间该行数据被锁定的总时间；【★】</li>
-<li><strong>InnoDB_row_lock_time_avg</strong>：每次等待所花的平均时间；【★】</li>
-<li><strong>InnoDB_row_lock_time_max</strong>：从系统启动到当前时间等待最长的一次所花的时间；</li>
-<li><strong>InnoDB_row_lock_waits</strong>：系统启动到当前时间总共等待的次数；【★】</li>
+<li>  <strong>InnoDB_row_lock_current_waits</strong>：当前正在等待锁的数量；</li>
+<li>  <strong>InnoDB_row_lock_time</strong>：从系统启动到当前时间该行数据被锁定的总时间；【★】</li>
+<li>  <strong>InnoDB_row_lock_time_avg</strong>：每次等待所花的平均时间；【★】</li>
+<li>  <strong>InnoDB_row_lock_time_max</strong>：从系统启动到当前时间等待最长的一次所花的时间；</li>
+<li>  <strong>InnoDB_row_lock_waits</strong>：系统启动到当前时间总共等待的次数；【★】</li>
 </ul>
 <p>对于这五个状态量，比较重要的有三个。尤其是当等待次数很高，而且等待平均时长也不小的时候，我们就需要分析系统中为什么会有 这么多等待，然后根据分析结果制定优化计划。</p>
 <hr>
 <h3 id="优化建议"><a href="#优化建议" class="headerlink" title="优化建议"></a>优化建议</h3><ul>
-<li>尽可能让所有数据检索都通过索引来完成，避免无索引行锁升级为表锁；</li>
-<li>合理设计索引，尽量缩小锁的范围；</li>
-<li>尽可能缩小检索条件，避免频繁出现间隙锁 ；</li>
-<li>尽量控制事务大小，减少锁定资源量和时间长度；</li>
-<li>尽可能低级别事务隔离。</li>
-</ul>
-<h2 id="页锁"><a href="#页锁" class="headerlink" title="页锁"></a>页锁</h2><ul>
-<li>页锁的开销和加锁时间介于表锁和行锁之间；</li>
-<li>会出现死锁；</li>
-<li>锁的粒度介于表锁和行锁之间；</li>
-<li>并发度一般。</li>
+<li>  尽可能让所有数据检索都通过索引来完成，避免无索引行锁升级为表锁；</li>
+<li>  合理设计索引，尽量缩小锁的范围；</li>
+<li>  尽可能缩小检索条件，避免频繁出现间隙锁 ；</li>
+<li>  尽量控制事务大小，减少锁定资源量和时间长度；</li>
+<li>  尽可能低级别事务隔离。</li>
 </ul>
 <hr>
-<h1 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h1>
+<h2 id="页锁"><a href="#页锁" class="headerlink" title="页锁"></a>页锁</h2><ul>
+<li>  页锁的开销和加锁时间介于表锁和行锁之间；</li>
+<li>  会出现死锁；</li>
+<li>  锁的粒度介于表锁和行锁之间；</li>
+<li>  并发度一般。</li>
+</ul>
+<hr>
+<h1 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h1><blockquote>
+<p>  <strong>SQL 性能下降的表现</strong>：</p>
+</blockquote>
+<ol>
+<li> 执行时间长</li>
+<li> 等待时间长</li>
+</ol>
+<blockquote>
+<p>  <strong>SQL 性能下降的原因：</strong></p>
+</blockquote>
+<ol>
+<li> SQL 语句写得烂</li>
+<li> 索引失效</li>
+<li> 关联查询太多join（设计缺陷或不得已的需求）【某些业务涉及的表太多，需要关联查询太多】</li>
+<li> 服务器调优及各个参数设置不合理（缓存、线程数等）</li>
+<li> ….</li>
+</ol>
+<blockquote>
+<p>  <strong>MySQL 的常见瓶颈</strong></p>
+</blockquote>
+<ol>
+<li> <strong>CPU</strong>：CPU 在饱和的时候一般发生在数据装入内存或从磁盘上读取数据的时候。</li>
+<li> <strong>IO</strong>：磁盘 IO 瓶颈发生在装入数据远大于内存容量的时候。</li>
+<li> <strong>服务器硬件的性能瓶颈</strong>：top，free，iostat 和 vmstat 来查看系统的性能状态。</li>
+</ol>
+<hr>
+<h1 id="主从复制（MySQL-集群）"><a href="#主从复制（MySQL-集群）" class="headerlink" title="主从复制（MySQL 集群）"></a>主从复制（MySQL 集群）</h1><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814164014357.png" alt="image-20210814164014357" style="zoom: 50%;">
+
+<blockquote>
+<p>  <strong>一主多从</strong></p>
+</blockquote>
+<ul>
+<li>  主节点用来执行写操作，从节点用于执行读操作</li>
+<li>  所有在主节点上执行的操作，都会被写入主节点的日志文件 <strong>Binary_log</strong> 中；</li>
+<li>  从节点通过 IO 读取到主节点的日志文件，复制到 <strong>Relay_log</strong> 中，然后由当前备机执行日志文件，即可完成从机数据的同步。</li>
+</ul>
+<blockquote>
+<p>  <strong>读写分离：</strong></p>
+</blockquote>
+<ul>
+<li>  因为 MySQL 只会将主节点的 <code>Binary_log</code> 文件同步到从节点，而不会反过来同步。因此也就引出了读写分离的问题。</li>
+<li>  如果要保证主从节点间的数据一致，<strong>写操作就只能发生在主节点</strong>，而读操作可以在集群中的任意节点上进行。</li>
+</ul>
+<hr>
+<h1 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h1><h2 id="为什么要进行分库分表？"><a href="#为什么要进行分库分表？" class="headerlink" title="为什么要进行分库分表？"></a>为什么要进行分库分表？</h2><p>当单张表中的数据量过大时，整体的查询效率就会降低得非常明显。这时为了提升查询效率，就要将一个表中的数据分散到多个数据库的多个表中。</p>
+<h2 id="多大数据量需要进行分库分表？"><a href="#多大数据量需要进行分库分表？" class="headerlink" title="多大数据量需要进行分库分表？"></a>多大数据量需要进行分库分表？</h2><p>阿里开发手册中建议：一个表的数据量超过 500W 条或者数据文件超过 2G，就要考虑进行分库分表了。</p>
+<h2 id="分库分表的方式"><a href="#分库分表的方式" class="headerlink" title="分库分表的方式"></a>分库分表的方式</h2><ul>
+<li>  分库分表包括<strong>分库</strong>和<strong>分表</strong>两个部分，而这两个部分统称为<strong>数据分片</strong>，其目的都是将数据拆分成不同的存储单元。</li>
+<li>  另外，从拆分的角度上，可以划分为<strong>垂直分片</strong>和<strong>水平分片</strong>。</li>
+</ul>
+<h3 id="垂直分片"><a href="#垂直分片" class="headerlink" title="垂直分片"></a>垂直分片</h3><ul>
+<li>  按照业务来对数据进行分片，又称为纵向分片。它的核心理念就是专库专用。</li>
+<li>  在拆分之前，一个数据库由多张数据表组成，每张表对应不同的业务，而拆分之后，则是按照业务将表归类，分布到不同的数据库或表中，从而将压力分散至不同的数据库或表。</li>
+<li>  例如：下图将用户表和订单表垂直分片到不同的数据库。</li>
+</ul>
+<img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814175705485.png" alt="image-20210814175705485" style="zoom:50%;">
+
+<p>垂直分片往往需要对架构和设计进行调整。通常来讲，是来不及应对业务需求快速变化的。而且，也无法真正地解决单点数据库的性能瓶颈。垂直分片可以缓解数据量和访问量带来的问题，但无法根治。如果垂直分片之后，表中的数据量依然超过单节点所能承受的阈值，则需要水平分片来进一步处理。</p>
+<h3 id="水平分片"><a href="#水平分片" class="headerlink" title="水平分片"></a>水平分片</h3><ul>
+<li>  水平分片又称为横向分片。</li>
+<li>  相对于垂直分片，它不再将数据根据业务逻辑分类，而是通过某几个字段，根据某种规则将数据分散到多个库或表中，每个分片仅包含数据的一部分。</li>
+<li>  水平分片从理论上突破了单击数据量处理的瓶颈，并且扩展相对自由，是分库分表的标准解决方案</li>
+<li>  如下图所示，根据取余的策略，将一张表中的数据分散到了两张表中保存。</li>
+</ul>
+<img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814180055407.png" alt="image-20210814180055407" style="zoom:50%;">
+
+
+
+
+
+<blockquote>
+<p>  <strong>常用的水平分片的策略：</strong></p>
+</blockquote>
+<p><strong>取模：</strong></p>
+<ul>
+<li>  优点：均匀存放数据。</li>
+<li>  缺点：扩容非常麻烦</li>
+</ul>
+<p><strong>按范围划分：</strong>比如，一个月分一个库。</p>
+<ul>
+<li>  优点：比较容易扩容，</li>
+<li>  缺点：数据分布不够均匀。对于大部分的行业来讲，存在淡季和旺季，淡季数据量较少，单独占一个库过于奢侈，旺季数据量大，可能会出现一个库存不在。</li>
+</ul>
+<h2 id="分库分表后，SQL语句的执行流程是怎样的？"><a href="#分库分表后，SQL语句的执行流程是怎样的？" class="headerlink" title="分库分表后，SQL语句的执行流程是怎样的？"></a>分库分表后，SQL语句的执行流程是怎样的？</h2><blockquote>
+<p>  <strong>分库分表后的执行流程</strong></p>
+</blockquote>
+<img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814172920328.png" alt="image-20210814172920328" style="zoom:50%;">
+
+<p>分布分表后，在执行查询语句时，由于查询语句中使用的是逻辑上的表，但是在分库分表后，逻辑上的表结构实际存储在多个库的多个表中。</p>
+<ol>
+<li> 在执行 SQL 语句时，首先依然需要解析器解析和查询优化；</li>
+<li> 但是在查询时，由于数据保存在多张表中，所以需要进行 SQL 路由，根据查询条件去不同库的表中查询；</li>
+<li> 这时候需要使用到真实的库名称和表名称，所以会有一步 SQL 改写的过程，将逻辑上的 SQL 语句改写成一条或多条真正要去执行查询的 SQL 语句，然后再执行查询；</li>
+<li> 得到查询结果后，可能查询结果来自多个库的多张表，所以还需要将这多个结果进行归并，最后才能得到一个唯一的结果返回给客户端。</li>
+</ol>
+
     </div>
 
     

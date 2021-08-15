@@ -166,7 +166,7 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -272,8 +272,7 @@
 </ul>
 <h2 id="2-采用类型转换-String-Object-方法"><a href="#2-采用类型转换-String-Object-方法" class="headerlink" title="2    采用类型转换 (String)Object 方法"></a>2    采用类型转换 (String)Object 方法</h2><ul>
 <li><p>使用这种方法时，需要注意的是类型必须能转成String类型。因为 Object 类型的对象在转成 String 对象时语法检查并不会报错，这将可能导致潜在的错误存在。所以再转换时最好用 <code>instanceof()</code> 方法做个类型检查，以判断是否可以转换。否则容易抛出 CalssCastException 异常。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void test01()&#123;</span><br><span class="line">    Object obj &#x3D; 100;</span><br><span class="line">    String objStr &#x3D; (String) obj;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String</span><br><span class="line">     *&#x2F;</span><br><span class="line">    log.info(objStr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void test01()&#123;</span><br><span class="line">    Object obj &#x3D; 100;</span><br><span class="line">    String objStr &#x3D; (String) obj;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String</span><br><span class="line">     *&#x2F;</span><br><span class="line">    log.info(objStr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li><p>此外，因 null 值可以强制转换为任何 Java 类类型，所以 (String)null 也是合法的。</p>
 <p><strong>null 值经过转换后还是 null。注意是 空值null  而不是  字符串null  ！！！</strong></p>
 </li>
@@ -284,266 +283,269 @@
 </blockquote>
 <p>JDK 中 <code>String.valueOf(Object)</code> 方法的源码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static String valueOf(Object obj) &#123;</span><br><span class="line">    return (obj &#x3D;&#x3D; null) ? &quot;null&quot; : obj.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>从上面的源码可以很清晰的看出 null 值不用担心的理由。</li>
 <li>但是，这也恰恰给了我们隐患。我们应当注意到，<strong>当 Object 为 null 时，String.valueOf(object) 的值是 字符串”null”，而不是 空值null ！！！在使用过程中切记要注意。</strong></li>
 </ul>
 <p>以上是对object对象转换为String的一些总结。</p>
-<h1 id="LocalDate"><a href="#LocalDate" class="headerlink" title="LocalDate"></a>LocalDate</h1><h3 id="LocalDate-中的常用方法："><a href="#LocalDate-中的常用方法：" class="headerlink" title="LocalDate 中的常用方法："></a>LocalDate 中的常用方法：</h3><div class="table-container">
-<table>
+<h1 id="LocalDate"><a href="#LocalDate" class="headerlink" title="LocalDate"></a>LocalDate</h1><h3 id="LocalDate-中的常用方法："><a href="#LocalDate-中的常用方法：" class="headerlink" title="LocalDate 中的常用方法："></a>LocalDate 中的常用方法：</h3><table>
 <thead>
 <tr>
-<th style="text-align:left">方法</th>
+<th align="left">方法</th>
 <th>返回值</th>
 <th>说明</th>
 <th>例子</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>LocalDate.now()</code></td>
+<tbody><tr>
+<td align="left"><code>LocalDate.now()</code></td>
 <td>LocalDate</td>
 <td>获取当前日期的年月日</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>LocalDate.of(2020, 02, 18);</code></td>
+<td align="left"><code>LocalDate.of(2020, 02, 18);</code></td>
 <td>LocalDate</td>
 <td>获取指定日期的年月日</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"></td>
+<td align="left"></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>查询</strong></td>
+<td align="left"><strong>查询</strong></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>getYear()</code></td>
+<td align="left"><code>getYear()</code></td>
 <td>int</td>
 <td>查看该日期的年份</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>getMonth()</code></td>
+<td align="left"><code>getMonth()</code></td>
 <td>Month</td>
 <td>查看该日期的月份</td>
 <td>MARCH</td>
 </tr>
 <tr>
-<td style="text-align:left"><code>getDayOfYear()</code></td>
+<td align="left"><code>getDayOfYear()</code></td>
 <td>int</td>
 <td>查看该日期在是一年中的第几天</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>getDayOfMonth()</code></td>
+<td align="left"><code>getDayOfMonth()</code></td>
 <td>int</td>
 <td>查看该日期是一个月中的第几天</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>getDayOfWeek()</code></td>
+<td align="left"><code>getDayOfWeek()</code></td>
 <td>DayOfWeek</td>
 <td>查看该日期是一周中的周几</td>
 <td>WEDNESDAY</td>
 </tr>
 <tr>
-<td style="text-align:left"><code>lengthOfMonth()</code></td>
+<td align="left"><code>lengthOfMonth()</code></td>
 <td>int</td>
 <td>查询该月有多少天</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>lengthOfYear()</code></td>
+<td align="left"><code>lengthOfYear()</code></td>
 <td>int</td>
 <td>查询该年有多少天</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"></td>
+<td align="left"></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>修改</strong></td>
+<td align="left"><strong>修改</strong></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>withYear(int year)</code></td>
+<td align="left"><code>withYear(int year)</code></td>
 <td>LocalDate</td>
 <td>修改该日期的年份</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>withMonth(int month)</code></td>
+<td align="left"><code>withMonth(int month)</code></td>
 <td>LocalDate</td>
 <td>修改该日期的月份</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>withDayOfMonth(int dayOfMonth)</code></td>
+<td align="left"><code>withDayOfMonth(int dayOfMonth)</code></td>
 <td>LocalDate</td>
 <td>修改该日期在当月的天数</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>withDayOfYear(int dayOfYear)</code></td>
+<td align="left"><code>withDayOfYear(int dayOfYear)</code></td>
 <td>LocalDate</td>
 <td>修改该日期在当年的天数</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><em>在原有的基础上增加年份/月份/周数/天数</em></td>
+<td align="left"><em>在原有的基础上增加年份/月份/周数/天数</em></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>plusYears(long yearsToAdd)</code></td>
+<td align="left"><code>plusYears(long yearsToAdd)</code></td>
 <td>LocalDate</td>
 <td>在原有的基础上增加年份</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>plusMonths(long monthsToAdd)</code></td>
+<td align="left"><code>plusMonths(long monthsToAdd)</code></td>
 <td>LocalDate</td>
 <td>在原有的基础上增加月份</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>ymd.plusWeeks(long weeksToAdd)</code></td>
+<td align="left"><code>ymd.plusWeeks(long weeksToAdd)</code></td>
 <td>LocalDate</td>
 <td>在原有的基础上增加周数</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>plusDays(long daysToAdd)</code></td>
+<td align="left"><code>plusDays(long daysToAdd)</code></td>
 <td>LocalDate</td>
 <td>在原有的基础上增加天数</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><em>在原有的基础上减少年份/月份/周数/天数</em></td>
+<td align="left"><em>在原有的基础上减少年份/月份/周数/天数</em></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>minusYears(long yearsToAdd)</code></td>
+<td align="left"><code>minusYears(long yearsToAdd)</code></td>
 <td>LocalDate</td>
 <td>在原有的基础上减少年份</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>minusMonths(long monthsToAdd)</code></td>
+<td align="left"><code>minusMonths(long monthsToAdd)</code></td>
 <td>LocalDate</td>
 <td>在原有的基础上减少月份</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>minusWeeks(long weeksToAdd)</code></td>
+<td align="left"><code>minusWeeks(long weeksToAdd)</code></td>
 <td>LocalDate</td>
 <td>在原有的基础上减少周数</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>minusDays(long daysToAdd)</code></td>
+<td align="left"><code>minusDays(long daysToAdd)</code></td>
 <td>LocalDate</td>
 <td>在原有的基础上减少天数</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"></td>
+<td align="left"></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>判断</strong></td>
+<td align="left"><strong>判断</strong></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>isLeapYear()</code></td>
+<td align="left"><code>isLeapYear()</code></td>
 <td>boolean</td>
 <td>判断该年是否为闰年</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>isBefore(ChronoLocalDate other)</code></td>
+<td align="left"><code>isBefore(ChronoLocalDate other)</code></td>
 <td>boolean</td>
 <td>判断该日期是否比参数日期早</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>isAfter(ChronoLocalDate other)</code></td>
+<td align="left"><code>isAfter(ChronoLocalDate other)</code></td>
 <td>boolean</td>
 <td>判断该日期是否比参数日期晚</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>isEqual(ChronoLocalDate other)</code></td>
+<td align="left"><code>isEqual(ChronoLocalDate other)</code></td>
 <td>boolean</td>
 <td>判断两个日期是否相等</td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"></td>
+<td align="left"></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>比较</strong></td>
+<td align="left"><strong>比较</strong></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td style="text-align:left"><code>compareTo(ChronoLocalDate other)</code></td>
+<td align="left"><code>compareTo(ChronoLocalDate other)</code></td>
 <td>int</td>
 <td>比较该日期与other日期的大小， 返回正数，则当前对象日期较晚。 ChronoLocalDate接口 是 LocalDate类 的父类接口</td>
+<td></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> org.junit.jupiter.api.Test;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.test.context.SpringBootTest;</span><br><span class="line"><span class="keyword">import</span> java.time.DayOfWeek;</span><br><span class="line"><span class="keyword">import</span> java.time.LocalDate;</span><br><span class="line"><span class="keyword">import</span> java.time.Month;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LocalDateTest</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLocalDate</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 基础方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 获取当前日期的年月日。如：2021-03-31</span></span><br><span class="line">        LocalDate ymd = LocalDate.now();</span><br><span class="line">        System.out.println(ymd.toString());</span><br><span class="line">        <span class="comment">// 获取指定日期的年月日</span></span><br><span class="line">        LocalDate ymd2 = LocalDate.of(<span class="number">2020</span>, <span class="number">2</span>, <span class="number">18</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 查询</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 查看该日期的年份</span></span><br><span class="line">        <span class="keyword">int</span> year = ymd.getYear();</span><br><span class="line">        <span class="comment">// 查看该日期的月份。如：MARCH</span></span><br><span class="line">        Month month = ymd.getMonth();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 查看该日期在是一年中的第几天。如：90 就表示当前时间是从年初开始的第90天</span></span><br><span class="line">        <span class="keyword">int</span> dayOfYear = ymd.getDayOfYear();</span><br><span class="line">        <span class="comment">// 查看该日期是一个月中的第几天</span></span><br><span class="line">        <span class="keyword">int</span> dayOfMonth = ymd.getDayOfMonth();</span><br><span class="line">        <span class="comment">// 查看该日期是一周中的周几。如：WEDNESDAY</span></span><br><span class="line">        DayOfWeek dayOfWeek = ymd.getDayOfWeek();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 查看该月有多少天</span></span><br><span class="line">        <span class="keyword">int</span> daysOfMonth = ymd.lengthOfMonth();</span><br><span class="line">        <span class="comment">// 查看该年有多少天，365或366</span></span><br><span class="line">        <span class="keyword">int</span> daysOfYear = ymd.lengthOfYear();</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 修改</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 修改该日期的年份</span></span><br><span class="line">        LocalDate withYear = ymd.withYear(<span class="number">2030</span>);</span><br><span class="line">        <span class="comment">// 修改该日期的月份</span></span><br><span class="line">        LocalDate withMonth = ymd.withMonth(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 修改该日期在当月的天数</span></span><br><span class="line">        LocalDate withDayOfMonth = ymd.withDayOfMonth(<span class="number">25</span>);</span><br><span class="line">        <span class="comment">// 修改该日期在当年的天数</span></span><br><span class="line">        LocalDate withDayOfYear = ymd.withDayOfYear(<span class="number">234</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 在原有的基础上增加年份/月份/周数/天数</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line">        <span class="comment">// 在原有的基础上增加年份</span></span><br><span class="line">        LocalDate plusYears = ymd.plusYears(<span class="number">2L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上增加月份</span></span><br><span class="line">        LocalDate plusMonths = ymd.plusMonths(<span class="number">30L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上增加周数</span></span><br><span class="line">        LocalDate plusWeeks = ymd.plusWeeks(<span class="number">13L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上增加天数</span></span><br><span class="line">        LocalDate plusDays = ymd.plusDays(<span class="number">35</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 在原有的基础上减少年份/月份/周数/天数</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line">        <span class="comment">// 在原有的基础上减少年份</span></span><br><span class="line">        LocalDate minusYears = ymd.minusYears(<span class="number">2L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上减少月份</span></span><br><span class="line">        LocalDate minusMonths = ymd.minusMonths(<span class="number">30L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上减少周数</span></span><br><span class="line">        LocalDate minusWeeks = ymd.minusWeeks(<span class="number">13L</span>);</span><br><span class="line">        <span class="comment">// 在原有的基础上减少天数</span></span><br><span class="line">        LocalDate minusDays = ymd.minusDays(<span class="number">35</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 判断</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 判断该年是否为闰年</span></span><br><span class="line">        <span class="keyword">boolean</span> b = ymd.isLeapYear();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 判断该日期是否比参数日期早</span></span><br><span class="line">        <span class="keyword">boolean</span> b1 = ymd.isBefore(ymd2);</span><br><span class="line">        <span class="comment">// 判断该日期是否比参数日期晚</span></span><br><span class="line">        <span class="keyword">boolean</span> b2 = ymd.isAfter(ymd2);</span><br><span class="line">        <span class="comment">// 判断两个日期是否相等</span></span><br><span class="line">        <span class="keyword">boolean</span> b3 = ymd.isEqual(ymd2);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 比较</span></span><br><span class="line"><span class="comment">         * ChronoLocalDate接口 是 LocalDate类 的父类接口</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 比较该日期（ymd）与参数日期（ymd2）的大小，返回正数，则 ymd日期 较晚</span></span><br><span class="line">        <span class="keyword">int</span> i = ymd.compareTo(ymd2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="LocalDate-与-String-之间的转换"><a href="#LocalDate-与-String-之间的转换" class="headerlink" title="LocalDate 与 String 之间的转换"></a>LocalDate 与 String 之间的转换</h3><div class="table-container">
-<table>
+
+
+
+<h3 id="LocalDate-与-String-之间的转换"><a href="#LocalDate-与-String-之间的转换" class="headerlink" title="LocalDate 与 String 之间的转换"></a>LocalDate 与 String 之间的转换</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">方法</th>
-<th style="text-align:center">说明</th>
+<th align="center">方法</th>
+<th align="center">说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>format(DateTimeFormatter formatter)</code></td>
-<td style="text-align:center">LocalDate &gt;&gt; String</td>
+<tbody><tr>
+<td align="center"><code>format(DateTimeFormatter formatter)</code></td>
+<td align="center">LocalDate &gt;&gt; String</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>parse(CharSequence text, DateTimeFormatter formatter)</code></td>
-<td style="text-align:center">String &gt;&gt; LocalDate</td>
+<td align="center"><code>parse(CharSequence text, DateTimeFormatter formatter)</code></td>
+<td align="center">String &gt;&gt; LocalDate</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * LocalDate 与 String 之间的互相转换</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">localDateSwitchString</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// LocalDate &gt;&gt; String</span></span><br><span class="line">    LocalDate ymd = LocalDate.now();</span><br><span class="line">    DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy年MM月dd日&quot;</span>);</span><br><span class="line">    String s = ymd.format(ofPattern);</span><br><span class="line">    log.info(s);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// String &gt;&gt; LocalDate</span></span><br><span class="line">    String s2 = <span class="string">&quot;2020:12:21&quot;</span>;</span><br><span class="line">    DateTimeFormatter ofPattern2 = DateTimeFormatter.ofPattern(<span class="string">&quot;yyyy:MM:dd&quot;</span>);</span><br><span class="line">    LocalDate date = LocalDate.parse(s2, ofPattern2);</span><br><span class="line">    System.out.println(date);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="LocalDate-与-LocalDateTime"><a href="#LocalDate-与-LocalDateTime" class="headerlink" title="LocalDate 与 LocalDateTime"></a>LocalDate 与 LocalDateTime</h3><blockquote>
 <p>简言之，<strong>LocalDate</strong> 就是不带时分秒的日期，而 <strong>LocalDateTime</strong> 就是带有时分秒日期。</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * LocalDate 和 LocalDateTime 的比较</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">compareWithLocalDateTime</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 获取当前时间</span></span><br><span class="line">    LocalDateTime time = LocalDateTime.now();</span><br><span class="line">    <span class="comment">// 获取指定日期的时间</span></span><br><span class="line">    LocalDateTime time2 = LocalDateTime.of(<span class="number">2021</span>, <span class="number">9</span>, <span class="number">23</span>, <span class="number">16</span>, <span class="number">32</span>, <span class="number">35</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="LocalDate-LocalDateTime-与-Date-之间的转换"><a href="#LocalDate-LocalDateTime-与-Date-之间的转换" class="headerlink" title="LocalDate/LocalDateTime 与 Date 之间的转换"></a>LocalDate/LocalDateTime 与 Date 之间的转换</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Date &lt;&lt;--&gt;&gt; LocalDate/LocalDateTime</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">switchDate</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// Date --&gt;&gt; LocalDate/LocalDateTime</span></span><br><span class="line">    Date date = <span class="keyword">new</span> Date();</span><br><span class="line">    LocalDate toLocalDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();</span><br><span class="line">    LocalDateTime toLocalDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// LocalDate/LocalDateTime --&gt;&gt; Date</span></span><br><span class="line">    LocalDate localDate = LocalDate.now(ZoneId.systemDefault());</span><br><span class="line">    Date toDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());</span><br><span class="line"></span><br><span class="line">    LocalDateTime localDateTime = LocalDateTime.now(ZoneId.systemDefault());</span><br><span class="line">    Date toDate2 = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 

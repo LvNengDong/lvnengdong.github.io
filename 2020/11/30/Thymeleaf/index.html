@@ -187,7 +187,7 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -305,11 +305,16 @@
 <p>所以如果我们返回视图：<code>users</code>，会指向到 <code>classpath:/templates/users.html</code></p>
 <p>Thymeleaf默认会开启页面缓存，提高页面并发能力。但会导致我们修改页面不会立即被展现，因此我们一般会关闭缓存：</p>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 关闭Thymeleaf的缓存</span></span><br><span class="line"><span class="meta">spring.thymeleaf.cache</span>=<span class="string">false</span></span><br></pre></td></tr></table></figure>
+
 <p>另外，修改完毕页面，需要使用快捷键：<code>Ctrl + Shift + F9</code>来刷新工程。</p>
 <h2 id="3-3-快速开始"><a href="#3-3-快速开始" class="headerlink" title="3.3.快速开始"></a>3.3.快速开始</h2><p>我们准备一个controller，控制视图跳转：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;show1&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">show1</span><span class="params">(Model model)</span></span>&#123;</span><br><span class="line">        model.addAttribute(<span class="string">&quot;msg&quot;</span>, <span class="string">&quot;Hello, Thymeleaf!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <p>新建一个html模板：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span> <span class="attr">xmlns:th</span>=<span class="string">&quot;http://www.thymeleaf.org&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>hello<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;msg&#125;&quot;</span>&gt;</span>大家好<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p><strong>注意</strong>，把html 的名称空间，改成：<code>xmlns:th=&quot;http://www.thymeleaf.org&quot;</code> 会有语法提示</p>
 <p>启动项目，访问页面：</p>
 <p> <img src="/2020/11/30/Thymeleaf/1526436248528.png" alt="1526436248528"></p>
@@ -330,8 +335,10 @@
 </ul>
 <h2 id="4-1-变量"><a href="#4-1-变量" class="headerlink" title="4.1.变量"></a>4.1.变量</h2><h3 id="变量案例"><a href="#变量案例" class="headerlink" title="变量案例"></a>变量案例</h3><p>我们先新建一个实体类：User</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    User friend;<span class="comment">// 对象类型属性</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>然后在模型中添加数据</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;show2&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">show2</span><span class="params">(Model model)</span></span>&#123;</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line">    user.setAge(<span class="number">21</span>);</span><br><span class="line">    user.setName(<span class="string">&quot;Jack Chen&quot;</span>);</span><br><span class="line">    user.setFriend(<span class="keyword">new</span> User(<span class="string">&quot;李小龙&quot;</span>, <span class="number">30</span>));</span><br><span class="line"></span><br><span class="line">    model.addAttribute(<span class="string">&quot;user&quot;</span>, user);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;show2&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>语法说明：</p>
 </blockquote>
@@ -341,6 +348,7 @@
 </blockquote>
 <p>我们在页面获取user数据：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span></span><br><span class="line">    欢迎您：<span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.name&#125;&quot;</span>&gt;</span>请登录<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>效果：</p>
 <p> <img src="/2020/11/30/Thymeleaf/1526438010948.png" alt="1526438010948"></p>
 <p>感觉跟el表达式几乎是一样的。不过区别在于，我们的表达式写在一个名为：<code>th:text</code>的标签属性中，这个叫做<code>指令</code></p>
@@ -375,6 +383,7 @@
 </blockquote>
 <p>看下面的案例：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Name: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.name&#125;&quot;</span>&gt;</span>Jack<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Age: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.age&#125;&quot;</span>&gt;</span>21<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>friend: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.friend.name&#125;&quot;</span>&gt;</span>Rose<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>我们获取用户的所有信息，分别展示。</p>
 <p>当数据量比较多的时候，频繁的写<code>user.</code>就会非常麻烦。</p>
 <p>因此，Thymeleaf提供了自定义变量来解决：</p>
@@ -382,6 +391,7 @@
 <p>示例：</p>
 </blockquote>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">th:object</span>=<span class="string">&quot;$&#123;user&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Name: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;*&#123;name&#125;&quot;</span>&gt;</span>Jack<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Age: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;*&#123;age&#125;&quot;</span>&gt;</span>21<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>friend: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;*&#123;friend.name&#125;&quot;</span>&gt;</span>Rose<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>首先在 <code>h2</code>上 用 <code>th:object=&quot;$&#123;user&#125;&quot;</code>获取user的值，并且保存</li>
 <li>然后，在<code>h2</code>内部的任意元素上，可以通过 <code>*&#123;属性名&#125;</code>的方式，来获取user中的属性，这样就省去了大量的<code>user.</code>前缀了</li>
@@ -391,6 +401,7 @@
 </blockquote>
 <p>ognl表达式本身就支持方法调用，例如：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span> <span class="attr">th:object</span>=<span class="string">&quot;$&#123;user&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>FirstName: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;*&#123;name.split(&#x27; &#x27;)[0]&#125;&quot;</span>&gt;</span>Jack<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>LastName: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;*&#123;name.split(&#x27; &#x27;)[1]&#125;&quot;</span>&gt;</span>Li<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>这里我们调用了name（是一个字符串）的split方法。</li>
 </ul>
@@ -401,107 +412,103 @@
 <ul>
 <li>一些环境相关对象</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">对象</th>
-<th style="text-align:left">作用</th>
+<th align="center">对象</th>
+<th align="left">作用</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>#ctx</code></td>
-<td style="text-align:left">获取Thymeleaf自己的Context对象</td>
+<tbody><tr>
+<td align="center"><code>#ctx</code></td>
+<td align="left">获取Thymeleaf自己的Context对象</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#requset</code></td>
-<td style="text-align:left">如果是web程序，可以获取HttpServletRequest对象</td>
+<td align="center"><code>#requset</code></td>
+<td align="left">如果是web程序，可以获取HttpServletRequest对象</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#response</code></td>
-<td style="text-align:left">如果是web程序，可以获取HttpServletReponse对象</td>
+<td align="center"><code>#response</code></td>
+<td align="left">如果是web程序，可以获取HttpServletReponse对象</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#session</code></td>
-<td style="text-align:left">如果是web程序，可以获取HttpSession对象</td>
+<td align="center"><code>#session</code></td>
+<td align="left">如果是web程序，可以获取HttpSession对象</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#servletContext</code></td>
-<td style="text-align:left">如果是web程序，可以获取HttpServletContext对象</td>
+<td align="center"><code>#servletContext</code></td>
+<td align="left">如果是web程序，可以获取HttpServletContext对象</td>
 </tr>
 <tr>
-<td style="text-align:center"></td>
+<td align="center"></td>
+<td align="left"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li>Thymeleaf提供的全局对象：</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">对象</th>
-<th style="text-align:left">作用</th>
+<th align="center">对象</th>
+<th align="left">作用</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>#dates</code></td>
-<td style="text-align:left">处理java.util.date的工具对象</td>
+<tbody><tr>
+<td align="center"><code>#dates</code></td>
+<td align="left">处理java.util.date的工具对象</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#calendars</code></td>
-<td style="text-align:left">处理java.util.calendar的工具对象</td>
+<td align="center"><code>#calendars</code></td>
+<td align="left">处理java.util.calendar的工具对象</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#numbers</code></td>
-<td style="text-align:left">用来对数字格式化的方法</td>
+<td align="center"><code>#numbers</code></td>
+<td align="left">用来对数字格式化的方法</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#strings</code></td>
-<td style="text-align:left">用来处理字符串的方法</td>
+<td align="center"><code>#strings</code></td>
+<td align="left">用来处理字符串的方法</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#bools</code></td>
-<td style="text-align:left">用来判断布尔值的方法</td>
+<td align="center"><code>#bools</code></td>
+<td align="left">用来判断布尔值的方法</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#arrays</code></td>
-<td style="text-align:left">用来护理数组的方法</td>
+<td align="center"><code>#arrays</code></td>
+<td align="left">用来护理数组的方法</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#lists</code></td>
-<td style="text-align:left">用来处理List集合的方法</td>
+<td align="center"><code>#lists</code></td>
+<td align="left">用来处理List集合的方法</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#sets</code></td>
-<td style="text-align:left">用来处理set集合的方法</td>
+<td align="center"><code>#sets</code></td>
+<td align="left">用来处理set集合的方法</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>#maps</code></td>
-<td style="text-align:left">用来处理map集合的方法</td>
+<td align="center"><code>#maps</code></td>
+<td align="left">用来处理map集合的方法</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li>举例</li>
 </ul>
 <p>我们在环境变量中添加日期类型对象</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;show3&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">show3</span><span class="params">(Model model)</span></span>&#123;</span><br><span class="line">    model.addAttribute(<span class="string">&quot;today&quot;</span>, <span class="keyword">new</span> Date());</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;show3&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在页面中处理</p>
 <ul>
 <li><p>直接获取Date对象并展示：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  今天是: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;today&#125;&quot;</span>&gt;</span>2020-04-25<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p><img src="/2020/11/30/Thymeleaf/image-20201130104040673.png" alt="image-20201130104040673"></p>
 </li>
 <li><p>利用全局对象<code>#dates</code>对日期进行格式化后展示</p>
 </li>
 </ul>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  今天是: <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;#dates.format(today,&#x27;yyyy-MM-dd&#x27;)&#125;&quot;</span>&gt;</span>2020-04-25<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p> 效果：</p>
 <p><img src="/2020/11/30/Thymeleaf/image-20201130104416364.png" alt="image-20201130104416364"></p>
 <h2 id="4-4-字面值"><a href="#4-4-字面值" class="headerlink" title="4.4 字面值"></a>4.4 字面值</h2><p>有的时候，我们需要在指令中填写基本类型如：字符串、数值、布尔等，并不希望被Thymeleaf解析为变量，这个时候称为字面值。</p>
@@ -510,26 +517,29 @@
 <p>使用一对单引号<code>&#39;</code>引用的内容就是字符串字面值了。</p>
 <p>Tip：双引号是<code>th:text</code>指令必须有的，单引号才表示使用字符串常量的字面值。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  你正在观看 <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;&#x27;thymeleaf&#x27;&quot;</span>&gt;</span>template<span class="tag">&lt;/<span class="name">span</span>&gt;</span> 的字符串常量值.</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p><code>th:text</code>中的thymeleaf并不会被认为是变量，而是一个字符串</p>
 <p> <img src="/2020/11/30/Thymeleaf/1526958538157.png" alt="1526958538157"></p>
 </li>
-</ul>
-<ul>
 <li><p>数字字面值</p>
 <p>数字不需要任何特殊语法， 写的什么就是什么，而且可以直接进行算术运算</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>今年是 <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;2020&quot;</span>&gt;</span>1900<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>两年后将会是 <span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;2020 + 2&quot;</span>&gt;</span>1902<span class="tag">&lt;/<span class="name">span</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p> <img src="/2020/11/30/Thymeleaf/1526958856078.png" alt="1526958856078"></p>
 </li>
 <li><p>布尔字面值</p>
 <p>布尔类型的字面值是true或false：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">th:if</span>=<span class="string">&quot;true&quot;</span>&gt;</span></span><br><span class="line">    展示</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">th:if</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">  隐藏</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>这里引用了一个<code>th:if</code>指令，跟vue中的<code>v-if</code>类似。如果<code>th:if=&quot;false&quot;</code>，则标签中的内容不会展示到页面上。</p>
 </li>
 </ul>
 <h2 id="4-5-拼接"><a href="#4-5-拼接" class="headerlink" title="4.5 拼接"></a>4.5 拼接</h2><p>我们经常会用到普通字符串与表达式拼接的情况：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;&#x27;欢迎您:&#x27; + $&#123;user.name&#125; + &#x27;!&#x27;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>字符串字面值需要用<code>&#39;&#39;</code>，拼接起来非常麻烦，Thymeleaf对此进行了简化，使用一对<code>|</code>即可：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;|欢迎您:$&#123;user.name&#125;|&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>与上面是完全等效的，这样就省去了字符串字面值的书写。</p>
 <p> <img src="/2020/11/30/Thymeleaf/1526959781368.png" alt="1526959781368"></p>
 <h2 id="4-6-运算"><a href="#4-6-运算" class="headerlink" title="4.6 运算"></a>4.6 运算</h2><p>需要注意：<code>$&#123;&#125;</code>内部的是通过OGNL表达式引擎解析的，外部的才是通过Thymeleaf的引擎解析，因此运算符尽量放在<code>$&#123;&#125;</code>外进行。</p>
@@ -537,6 +547,7 @@
 <li><p>算术运算</p>
 <p>支持的算术运算符：<code>+ - * / %</code></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.age&#125;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.age&#125;%2 == 0&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p> <img src="/2020/11/30/Thymeleaf/1526959990356.png" alt="1526959990356"></p>
 </li>
 <li><p>比较运算</p>
@@ -549,6 +560,7 @@
 <li>三元运算</li>
 </ul>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.sex&#125; ? &#x27;男&#x27;:&#x27;女&#x27;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>三元运算符的三个部分：conditon ? then : else</p>
 <p>​    condition：条件</p>
 <p>​    then：条件成立的结果</p>
@@ -561,6 +573,7 @@
 </li>
 </ul>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.name&#125; ?: &#x27;二狗&#x27;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>当前面的表达式值为null时，就会使用后面的默认值。</p>
 <p>注意：<code>?:</code>之间没有空格。</p>
 <p> <img src="/2020/11/30/Thymeleaf/1526960384564.png" alt="1526960384564"></p>
@@ -569,6 +582,7 @@
 <h2 id="4-7-循环"><a href="#4-7-循环" class="headerlink" title="4.7 循环"></a>4.7 循环</h2><p>循环也是非常频繁使用的需求，我们使用<code>th:each</code>指令来完成：</p>
 <p>假如有用户的集合：users在Context中。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tr</span> <span class="attr">th:each</span>=<span class="string">&quot;user : $&#123;users&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.name&#125;&quot;</span>&gt;</span>Onions<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.age&#125;&quot;</span>&gt;</span>2.41<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>${users} 是要遍历的集合，可以是以下类型：<ul>
 <li>Iterable，实现了Iterable接口的类</li>
@@ -581,6 +595,7 @@
 </ul>
 <p>在迭代的同时，我们也可以获取迭代的状态对象：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">tr</span> <span class="attr">th:each</span>=<span class="string">&quot;user,stat : $&#123;users&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.name&#125;&quot;</span>&gt;</span>Onions<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">&quot;$&#123;user.age&#125;&quot;</span>&gt;</span>2.41<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>stat对象包含以下属性：</p>
 <ul>
 <li>index，从0开始的角标</li>
@@ -593,6 +608,7 @@
 <h2 id="4-8-逻辑判断"><a href="#4-8-逻辑判断" class="headerlink" title="4.8 逻辑判断"></a>4.8 逻辑判断</h2><p>有了<code>if和else</code>，我们能实现一切功能。</p>
 <p>Thymeleaf中使用<code>th:if</code> 或者 <code>th:unless</code> ，两者的意思恰好相反。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">th:if</span>=<span class="string">&quot;$&#123;user.age&#125; &lt; 24&quot;</span>&gt;</span>小鲜肉<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>如果表达式的值为true，则标签会渲染到页面，否则不进行渲染。</p>
 <p>以下情况被认定为true：</p>
 <ul>
@@ -606,6 +622,7 @@
 <p> <img src="/2020/11/30/Thymeleaf/1526960499522.png" alt="1526960499522"></p>
 <h2 id="4-9-分支控制switch"><a href="#4-9-分支控制switch" class="headerlink" title="4.9 分支控制switch"></a>4.9 分支控制switch</h2><p>这里要使用两个指令：<code>th:switch</code> 和 <code>th:case</code></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:switch</span>=<span class="string">&quot;$&#123;user.role&#125;&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">th:case</span>=<span class="string">&quot;&#x27;admin&#x27;&quot;</span>&gt;</span>用户是管理员<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">th:case</span>=<span class="string">&quot;&#x27;manager&#x27;&quot;</span>&gt;</span>用户是经理<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">th:case</span>=<span class="string">&quot;*&quot;</span>&gt;</span>用户是别的玩意<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>需要注意的是，一旦有一个th:case成立，其它的则不再判断。与java中的switch是一样的。</p>
 <p>另外<code>th:case=&quot;*&quot;</code>表示默认，放最后。</p>
 <p> <img src="/2020/11/30/Thymeleaf/1526960621714.png" alt="1526960621714"></p>
@@ -613,11 +630,13 @@
 <p> <img src="/2020/11/30/Thymeleaf/1526961251878.png" alt="1526961251878"></p>
 <h2 id="4-10-JS模板"><a href="#4-10-JS模板" class="headerlink" title="4.10.JS模板"></a>4.10.JS模板</h2><p>模板引擎不仅可以渲染html，也可以对JS中的进行预处理。而且为了在纯静态环境下可以运行，其Thymeleaf代码可以被注释起来：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:inline</span>=<span class="string">&quot;javascript&quot;</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">const</span> user = <span class="comment">/*[[$&#123;user&#125;]]*/</span> &#123;&#125;;</span></span><br><span class="line"><span class="javascript">    <span class="keyword">const</span> age = <span class="comment">/*[[$&#123;user.age&#125;]]*/</span> <span class="number">20</span>;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(user);</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(age)</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>在script标签中通过<code>th:inline=&quot;javascript&quot;</code>来声明这是要特殊处理的js脚本</p>
 </li>
 <li><p>语法结构：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> user = <span class="comment">/*[[Thymeleaf表达式]]*/</span> <span class="string">&quot;静态环境下的默认值&quot;</span>;</span><br></pre></td></tr></table></figure>
+
 <p>因为Thymeleaf被注释起来，因此即便是静态环境下， js代码也不会报错，而是采用表达式后面跟着的默认值。</p>
 </li>
 </ul>
