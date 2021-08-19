@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,268 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/31/%E5%BC%82%E5%B8%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/31/%E5%BC%82%E5%B8%B8/" class="post-title-link" itemprop="url">异常</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-07-31 10:35:42 / Modified: 12:34:29" itemprop="dateCreated datePublished" datetime="2021-07-31T10:35:42+08:00">2021-07-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-是什么"><a href="#1-是什么" class="headerlink" title="1    是什么"></a>1    是什么</h2><p><strong>定义</strong>：异常是指程序在执行过程中出现的非正常情况，最终会导致程序的非正常停止。</p>
+<p>【异常并不是语法错误，语法错误的话编译时就会直接报错，不会产生字节码文件，根本不能运行。】</p>
+<ul>
+<li>在 Java 等面向对象的编程语言中，异常本身就是一个类，产生异常就是创建异常对象并抛出了一个异常对象。</li>
+<li>Java处理异常的方式是<strong>中断处理</strong>。</li>
+</ul>
+<h2 id="2-异常的体系结构"><a href="#2-异常的体系结构" class="headerlink" title="2    异常的体系结构"></a>2    异常的体系结构</h2><blockquote>
+<ul>
+<li>  Throwable 是<strong>类</strong>，不是接口</li>
+<li>  同样的，Error 和 Exception 继承了 Throwable ，所以它俩也是<strong>类</strong></li>
+<li>  RuntimeException 继承了 Exception，也是一个<strong>类</strong>；</li>
+<li>  但是 CheckedException 并没有真正地继承 Exception 类，并且它是一个<strong>接口</strong>。</li>
+</ul>
+</blockquote>
+<p><img src="/2021/07/31/%E5%BC%82%E5%B8%B8/Throwable.png"></p>
+<p>​        在 Java 中，所有的异常都有一个共同的祖先 <strong>java.lang.Throwable</strong> 类。Throwable 类有两个重要的子类 <strong>Exception</strong>（异常） 和 <strong>Error</strong>（错误） ，二者都是 Java 异常处理的重要子类，各自都包含大量子类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">* java.lang.Throwable</span><br><span class="line">* 		|-----java.lang.Error:一般不编写针对性的代码进行处理。</span><br><span class="line">* 		|-----java.lang.Exception:可以进行异常的处理</span><br><span class="line">* 			|------编译时异常(checked)</span><br><span class="line">* 					|-----IOException</span><br><span class="line">* 						|-----FileNotFoundException</span><br><span class="line">* 					|-----ClassNotFoundException</span><br><span class="line">* 			|------运行时异常(unchecked,RuntimeException)</span><br><span class="line">* 					|-----NullPointerException</span><br><span class="line">* 					|-----ArrayIndexOutOfBoundsException</span><br><span class="line">* 					|-----ClassCastException</span><br><span class="line">* 					|-----NumberFormatException</span><br><span class="line">* 					|-----InputMismatchException</span><br><span class="line">* 					|-----ArithmeticException</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h3><blockquote>
+<p>  <strong>java.lang.Error</strong></p>
+</blockquote>
+<p><strong>Error 错误是程序无法处理的错误</strong>。大多数是 JVM 层面的问题。即代码在逻辑上是正确的，但是由于 JVM 内存不足或者某些对象申请的内存空间过大导致等原因导致程序出现错误。 这些错误是在编译期是不可查的，因为它们在应用程序的控制和处理能力之外。</p>
+<p>​        例如，Java虚拟机运行错误（Virtual MachineError），当 JVM 不再有继续执行操作所需的内存资源时，将出现 <code>OutOfMemoryError</code>。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止。</p>
+<h3 id="Exception"><a href="#Exception" class="headerlink" title="Exception"></a>Exception</h3><blockquote>
+<p>  <strong>java.lang.Exception</strong></p>
+</blockquote>
+<p><strong>Exception 是程序本身可以处理的异常</strong>。Exception 又可分为 <strong>编译时异常</strong> 与 <strong>运行时异常</strong> 两大类。</p>
+<p><img src="/2021/07/31/%E5%BC%82%E5%B8%B8/image-20210730163920638.png" alt="image-20210730163920638"></p>
+<ul>
+<li>  编译时异常：执行 <code>javac.exe</code> 命名时，可能出现的异常；</li>
+<li>  运行时异常：执行 <code>java.exe</code> 命名时，出现的异常；</li>
+</ul>
+<h4 id="编译时异常"><a href="#编译时异常" class="headerlink" title="编译时异常"></a>编译时异常</h4><blockquote>
+<p>  <strong>执行 <code>javac.exe</code> 命名时，可能出现的异常；</strong></p>
+</blockquote>
+<p>以下是一个编译时异常的简单例子。由于我们使用的是 IDEA 集成开发工具，代码是即时编译的，所以可以编译时异常不会在控制台上输出，而是非常智能的提示出来了。但是如果我们使用基本的文本工具进行开发，编写的 <code>.java</code> 代码是不会自动提示错误的，只有在经过 javac 编译后才会提示，这就是所谓的<strong>编译时异常</strong>。</p>
+<img src="/2021/07/31/%E5%BC%82%E5%B8%B8/image-20210730163330302.png" alt="image-20210730163330302" style="zoom: 67%;">
+
+
+
+<h4 id="运行时异常"><a href="#运行时异常" class="headerlink" title="运行时异常"></a>运行时异常</h4><blockquote>
+<p>  <strong>执行 <code>java.exe</code> 命名时，出现的异常；</strong></p>
+</blockquote>
+<p>程序在执行 <code>java.exe</code> 运行后提示的异常。</p>
+<blockquote>
+<p>  常见的运行时异常</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NullPointerException	<span class="comment">// 要访问的变量没有引用任何对象时，抛出该异常）、</span></span><br><span class="line">ArithmeticException		<span class="comment">// 算术运算异常，一个整数除以0时，抛出该异常）和 </span></span><br><span class="line">ArrayIndexOutOfBoundsException	<span class="comment">// 下标越界异常</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><strong>异常和错误的区别</strong>：异常能被程序本身可以处理，错误是无法处理。</p>
+<p><strong>如何理解</strong></p>
+<p>我们可以看到，无论是编译期异常还是运行期异常，产生异常后程序员可以在代码层面纠正，使程序能继续正常运行。如上面的编译期异常，可以通过 <code>try...catch</code> 捕获处理；对于运行时期的各种异常，如空指针异常，可以通过加判断条件来避免。这些异常都是代码层面可以处理的。而对于一些虚拟机的异常，主要是涉及到了虚拟机的配置，可能出现在某写配置较好的虚拟机上可以正常运行，而在性能较差的虚拟机上就不能运行了的情况，所以说 Error 是无法避免的。</p>
+<h2 id="3-Throwable类常用方法"><a href="#3-Throwable类常用方法" class="headerlink" title="3    Throwable类常用方法"></a>3    Throwable类常用方法</h2><table>
+<thead>
+<tr>
+<th align="center">ID</th>
+<th align="center">方法</th>
+<th align="center">返回值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>printStackTrace()</code></td>
+<td align="center"><code>void</code></td>
+<td align="center">在控制台上打印异常的详细信息</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>getMessage()</code></td>
+<td align="center"><code>String</code></td>
+<td align="center">获取发生异常的原因</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>toString</code></td>
+<td align="center"><code>String</code></td>
+<td align="center">获取异常的类型和详细信息</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-异常处理方式"><a href="#4-异常处理方式" class="headerlink" title="4    异常处理方式"></a>4    异常处理方式</h2><p>异常的两种处理方式：1、<strong>“抛”</strong>  2、<strong>“抓”</strong></p>
+<blockquote>
+<ol>
+<li> <strong>“抛”</strong> </li>
+</ol>
+</blockquote>
+<ul>
+<li>  程序在正常执行的过程中，一旦出现异常，就会在异常代码处产生一个对应异常类的对象，并将此对象抛出。</li>
+<li>  一旦抛出异常对象以后，其后的代码就不再执行。</li>
+</ul>
+<p><strong>关于异常对象的产生：</strong></p>
+<ol>
+<li> 系统自动生成的异常对象；</li>
+<li> 手动的生成一个异常对象，并抛出（throw）。</li>
+</ol>
+<blockquote>
+<ol start="2">
+<li> <strong>“抓”</strong></li>
+</ol>
+</blockquote>
+<p>可以理解为异常的处理方式：①<code>try-catch-finally</code>  ②<code>throws</code></p>
+<h3 id="异常处理方式一：try-catch-finally"><a href="#异常处理方式一：try-catch-finally" class="headerlink" title="异常处理方式一：try-catch-finally"></a>异常处理方式一：try-catch-finally</h3><blockquote>
+<p>  <strong>使用说明：</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 可能出现异常的代码。</span></span><br><span class="line">    <span class="comment">// 代码中出现的异常可能不止一种，针对不同类型异常可以使用多个catch语句分别做不同的处理 </span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(异常类型<span class="number">1</span> 变量名<span class="number">1</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 处理异常的方式1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(异常类型<span class="number">2</span> 变量名<span class="number">2</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 处理异常的方式2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(异常类型<span class="number">3</span> 变量名<span class="number">3</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 处理异常的方式3</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">finally</span>&#123;</span><br><span class="line">    <span class="comment">// 一定会执行的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>说明：</strong></p>
+<ol>
+<li><code>finally</code> 是可选的。</li>
+<li>使用 <code>try</code> 将可能出现异常代码包起来，在执行过程中，一旦出现异常，就会生成一个对应异常类的对象，根据此异常对象的类型，去 <code>catch</code> 中进行匹配；</li>
+<li>一旦 <code>try</code> 中的异常对象匹配到某一个 <code>catch</code> 时，就进入 <code>catch</code> 中进行异常的处理。一旦处理完成，就跳出当前的 <code>try-catch</code> 结构，继续执行 <code>try</code> 中后续的代码，最后再执行 <code>finally</code> 中的代码。</li>
+<li><code>catch</code> 中的异常类型如果没子父类关系，则谁声明在上，谁声明在下无所谓。但是 <strong><code>catch</code> 中的异常类型如果满足子父类关系，则要求子类异常类型一定要声明在父类异常类型的上面</strong>，否则报错。【因为 <code>catch</code> 是从上向下匹配的，如果父类异常类型声明在先，则该父类异常的所有子类异常都会被父类异常拦截（多态），根本执行不到子类异常处 】</li>
+<li>常用的异常对象处理的方式： <code>① String  getMessage()    ② printStackTrace()</code></li>
+<li>在 <code>try</code> 结构中声明的变量，再出了 <code>try</code> 结构以后，就不能再被调用。</li>
+<li><code>try-catch-finally</code> 结构可以嵌套。</li>
+</ol>
+<blockquote>
+<p>  <strong>如何看待代码中的编译时异常和运行时异常？</strong></p>
+</blockquote>
+<ol>
+<li> 使用 <code>try-catch-finally</code> 处理编译时异常，使得程序在编译时就不再报错，但是运行时仍可能报错。相当于我们使用 <code>try-catch-finally</code> 将一个编译时可能出现的异常，延迟到运行时出现。</li>
+<li> 开发中，由于运行时异常比较常见，所以我们通常就不针对运行时异常编写 <code>try-catch-finally</code> 了。针对于编译时异常，我们则一定要考虑异常的处理。</li>
+</ol>
+<h3 id="异常处理方式二：throws"><a href="#异常处理方式二：throws" class="headerlink" title="异常处理方式二：throws"></a>异常处理方式二：throws</h3><ul>
+<li>  <strong>throws + 异常类型</strong> 写在方法的声明处。指明此方法执行时，可能会抛出的异常类型。</li>
+<li>  一旦当方法体执行时出现异常，仍会在异常代码处生成一个异常类的对象，此对象满足 <code>throws</code> 抛出的异常类型时，就会被抛出。异常代码后续的代码，就不再执行。</li>
+</ul>
+<h3 id="对比两种处理方式"><a href="#对比两种处理方式" class="headerlink" title="对比两种处理方式"></a>对比两种处理方式</h3><ul>
+<li>  <code>try-catch-finally</code>：真正的将异常给处理掉了。</li>
+<li>  <code>throws</code>：只是将异常抛给了方法的调用者，并没真正将异常处理掉。</li>
+</ul>
+<h3 id="体会开发中应该如何选择两种处理方式？"><a href="#体会开发中应该如何选择两种处理方式？" class="headerlink" title="体会开发中应该如何选择两种处理方式？"></a>体会开发中应该如何选择两种处理方式？</h3><ul>
+<li>  如果父类中被重写的方法没 <code>throws</code> 方式处理异常，则子类重写的方法也不能使用 <code>throws</code>。这意味着如果子类重写的方法中异常，必须使用 <code>try-catch-finally</code> 方式处理。</li>
+<li>  执行的方法 <code>methodA()</code> 中，先后又调用了另外的几个方法，这几个方法是递进关系执行的。我们建议这几个方法使用 <code>throws</code> 的方式进行处理，而执行的方法 <code>methodA()</code> 可以考虑使用 <code>try-catch-finally</code> 方式进行处理。</li>
+<li>  使用 <code>throws</code> 抛出的异常最外层还是要落实到使用 <code>try-catch-finally</code> 处理。</li>
+</ul>
+<blockquote>
+<p>  <strong>补充：</strong></p>
+</blockquote>
+<ul>
+<li>  方法重写的规则之一：子类重写的方法抛出的异常类型不大于父类被重写的方法抛出的异常类型。【因为父类是子类的顶级抽象，如果子类的异常类型范围大于父类类型的话，则父类就会无法处理超出范围的异常类型】</li>
+</ul>
+<hr>
+<h2 id="5-手动抛出异常对象"><a href="#5-手动抛出异常对象" class="headerlink" title="5    手动抛出异常对象"></a>5    手动抛出异常对象</h2><blockquote>
+<ol>
+<li> <strong>使用说明</strong></li>
+</ol>
+</blockquote>
+<p>在程序执行中，除了自动抛出异常对象的情况之外，我们还可以通过 <code>throw</code> 手动抛出一个异常类的对象。</p>
+<blockquote>
+<ol start="2">
+<li> <strong>throw 和  throws 的区别？</strong></li>
+</ol>
+</blockquote>
+<p><strong>throw</strong>：</p>
+<ul>
+<li>  动词，表示抛出一个异常类的对象。</li>
+<li>  生成异常对象的过程，声明在方法体内。</li>
+<li>  <code>throw</code> 抛出的对象会由 <code>throws</code> 接收并抛给上一层，并在最外层由 <code>try-catch-finally</code> 处理，或直接中断程序。</li>
+</ul>
+<p><strong>throws</strong>：</p>
+<ul>
+<li>  名词，属于异常处理的一种方式。声明在方法的声明处。</li>
+<li>  <code>throws</code> 用于接收程序运行时由系统抛出或者用户自定义抛出的异常，并交给 <code>try-catch-finally</code> 处理。  </li>
+</ul>
+<p><strong>例子：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">regist</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(id &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">this</span>.id = id;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 手动抛出异常对象</span></span><br><span class="line"><span class="comment">//			throw new RuntimeException(&quot;您输入的数据非法！&quot;);</span></span><br><span class="line"><span class="comment">//			throw new Exception(&quot;您输入的数据非法！&quot;);</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MyException(<span class="string">&quot;不能输入负数&quot;</span>);	<span class="comment">// 自定义异常对象</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="6-自定义异常类"><a href="#6-自定义异常类" class="headerlink" title="6    自定义异常类"></a>6    自定义异常类</h2><blockquote>
+<p>  <a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2020/11/26/%E9%80%9A%E7%94%A8%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%99%A8/">超链接：开发中的通用异常处理</a></p>
+</blockquote>
+<blockquote>
+<p>  <strong>如何自定义一个异常类？</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 如何自定义异常类？</span></span><br><span class="line"><span class="comment"> * 1. 继承于现的异常结构：RuntimeException 、Exception</span></span><br><span class="line"><span class="comment"> * 2. 提供全局常量：serialVersionUID</span></span><br><span class="line"><span class="comment"> * 3. 提供重载的构造器</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyException</span> <span class="keyword">extends</span> <span class="title">Exception</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">7034897193246939L</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">()</span></span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(msg);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2984,7 +3246,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-20 18:10:17" itemprop="dateModified" datetime="2021-07-20T18:10:17+08:00">2021-07-20</time>
+        <time title="Modified: 2021-08-15 12:15:37" itemprop="dateModified" datetime="2021-08-15T12:15:37+08:00">2021-08-15</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -3007,9 +3269,9 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><blockquote>
-<p>  代理模式；Proxy；</p>
+<p>  <strong>代理模式；Proxy；</strong></p>
 </blockquote>
-<p>代理模式是：通过为目标对象提供一个替身，以控制对这个对象的访问，即通过代理对象访问目标对象。通俗的来讲代理模式就是我们生活中常见的中介。</p>
+<p>代理模式是：为目标对象提供一个代理对象，通过代理对象操作对目标对象，即通过代理对象访问目标对象。通俗的来讲代理模式就是我们生活中常见的中介。</p>
 <p>这样做的好处是：可以在目标对象实现的基础上，增强额外的功能，即扩展目标对象的功能。</p>
 <p>被代理的对象可以是：远程对象、创建开销大的对象或需要安全控制的对象。</p>
 <p>代理模式有不同的形式，主要有两种：</p>
@@ -3021,19 +3283,54 @@
 </ul>
 </li>
 </ol>
-<h2 id="生活中的代理模式"><a href="#生活中的代理模式" class="headerlink" title="生活中的代理模式"></a>生活中的代理模式</h2><p>​        假如说我现在想买一辆二手车，虽然我可以自己去找车源，做质量检测等一系列的车辆过户流程，但是这确实太浪费我得时间和精力了。我只是想买一辆车而已为什么我还要额外做这么多事呢？于是我就通过中介公司来买车，他们来给我找车源，帮我办理车辆过户流程，我只是负责选择自己喜欢的车，然后付钱就可以了。</p>
+<hr>
+<h2 id="生活中的代理模式"><a href="#生活中的代理模式" class="headerlink" title="生活中的代理模式"></a>生活中的代理模式</h2><blockquote>
+<p>  <strong>需求</strong></p>
+</blockquote>
+<p> 小A大学毕业后要到一座新的城市工作，需要提前租一个房子，小A没办法亲自到那座城市去，只能委托给房屋中介公司来处理。</p>
+<blockquote>
+<p>  <strong>对于小A来说：</strong></p>
+</blockquote>
+<p>对于小A来说，他只需要等待房屋中介公司找好房子后，决定租或者不租即可。</p>
+<blockquote>
+<p>  <strong>对于中介公司来说：</strong></p>
+</blockquote>
+<p>对于中介公司来说，</p>
+<ol>
+<li> 首先需要先根据小A的租房要求，筛选房源；</li>
+<li> 然后需要对房源进行实地考察，与房东进行协调；</li>
+<li> 最后还需要将符合条件的房源信息转发给小A，让小A进行决定。</li>
+</ol>
+<blockquote>
+<p>  <strong>总结：</strong></p>
+</blockquote>
+<p>在上面的例子中，</p>
+<ul>
+<li><p>  小A可以看做是一个目标对象，该对象中包含了核心方法就是：<strong>租房</strong></p>
+</li>
+<li><p>中介公司就是代理对象，该对象包含的方法有：<strong>①调查房源  ②实地考察  ③租房</strong></p>
+<p>  但是要注意，真正租房的对象其实是小A，也就是说中介公司的租房这个方法最终是要通过小A来决定的，中介公司调用其实是小A的租房方法。</p>
+</li>
+</ul>
+<hr>
 <h2 id="为什么要使用代理模式"><a href="#为什么要使用代理模式" class="headerlink" title="为什么要使用代理模式"></a>为什么要使用代理模式</h2><ul>
-<li><p>  <strong>中介隔离作用：</strong>在某些情况下，一个客户类不想或者不能直接引用一个委托对象，而代理类对象可以在客户类和委托对象之间起到中介的作用，其特征是代理类和委托类实现相同的接口。</p>
+<li><p>  <strong>中介隔离作用：</strong>在某些情况下，如果客户类不方便直接引用一个委托对象，而代理类对象可以在客户类和委托对象之间起到中介的作用，其特征是代理类和委托类实现相同的接口。</p>
 </li>
 <li><p>  <strong>开闭原则，增加功能：</strong>代理类除了是客户类和委托类的中介之外，我们还可以通过给代理类增加额外的功能来扩展委托类的功能，这样做我们只需要修改代理类而不需要再修改委托类，符合代码设计的开闭原则。代理类主要负责为委托类预处理消息、过滤消息、把消息转发给委托类，以及事后对返回结果的处理等。代理类本身并不真正实现服务，而是同过调用委托类的相关方法，来提供特定的服务。真正的业务功能还是由委托类来实现，但是可以在业务功能执行的前后加入一些公共的服务。例如我们想给项目加入缓存、日志这些功能，我们就可以使用代理类来完成，而没必要打开已经封装好的委托类。</p>
 </li>
 </ul>
-<p><img src="/2021/07/19/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/image-20210719225805887.png" alt="image-20210719225805887"></p>
-<p>客户端对象（Client）</p>
-<p>目标对象/委托对象（TargetObject）</p>
-<p>代理对象（ProxyObject）</p>
+<img src="/2021/07/19/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E2%80%94%E2%80%94%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/image-20210719225805887.png" alt="image-20210719225805887" style="zoom:50%;">
+
+
+
+<ul>
+<li>  客户端对象（Client）</li>
+<li>  目标对象/委托对象（TargetObject）</li>
+<li>  代理对象（ProxyObject）</li>
+</ul>
 <p>Client 要使用 TargetObject 中的业务，在实际生产中，有时候并不希望 Client 直接依赖（调用）TargetObject 。【如安全性等问题】</p>
 <p>这时 Client 可以通过 ProxyObject 间接地调用 TargetObject。</p>
+<hr>
 <h1 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h1><p>静态代理在使用时，需要定义接口或者父类，被代理对象（目标对象）与代理对象一起实现相同的接口或者是继承相同的父类。</p>
 <p>​    </p>
 <h2 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h2><p>需求：</p>
@@ -3050,31 +3347,43 @@
 
 </li>
 <li><p><strong>实现服务类接口</strong></p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.proxy.staticproxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/20 10:27</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 委托对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TargetObject</span> <span class="keyword">implements</span> <span class="title">IBuyCar</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buyCar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;一手交钱，一手交车&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.proxy.staticproxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/20 10:27</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 委托对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TargetObject</span> <span class="keyword">implements</span> <span class="title">IBuyCar</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buyCar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;委托对象付钱买车&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </li>
 <li><p><strong>创建代理类</strong></p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.proxy.staticproxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/20 10:28</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 代理对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyObject</span> <span class="keyword">implements</span> <span class="title">IBuyCar</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> IBuyCar iBuyCar;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ProxyObject</span><span class="params">(IBuyCar buyCar)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.iBuyCar = buyCar;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buyCar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;中介挑选车源&quot;</span>);</span><br><span class="line">        iBuyCar.buyCar();    <span class="comment">// 买车</span></span><br><span class="line">        System.out.println(<span class="string">&quot;中介办理过户手续&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.proxy.staticproxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/20 10:28</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 代理对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyObject</span> <span class="keyword">implements</span> <span class="title">IBuyCar</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> IBuyCar iBuyCar;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ProxyObject</span><span class="params">(IBuyCar buyCar)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.iBuyCar = buyCar;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buyCar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;中介挑选车源&quot;</span>);</span><br><span class="line">        iBuyCar.buyCar();    <span class="comment">// 买车（真正买车的对象是委托对象）</span></span><br><span class="line">        System.out.println(<span class="string">&quot;中介办理过户手续&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </li>
 <li><p><strong>编写测试类</strong></p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.proxy.staticproxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/20 10:30</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 1、客户不直接访问委托类中的方法，而是通过代理类中的方法间接地访问委托类。</span></span><br><span class="line"><span class="comment"> * 2、可以在代理类中对委托类做一些增强</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TargetObject targetObject = <span class="keyword">new</span> TargetObject();</span><br><span class="line">        ProxyObject proxyObject = <span class="keyword">new</span> ProxyObject(targetObject);</span><br><span class="line"></span><br><span class="line">        proxyObject.buyCar();   <span class="comment">// 由代理对象控制委托对象中的方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 输出结果：</span></span><br><span class="line"><span class="comment"> *      中介挑选车源</span></span><br><span class="line"><span class="comment"> *      一手交钱，一手交车</span></span><br><span class="line"><span class="comment"> *      中介办理过户手续</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.proxy.staticproxy;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/20 10:30</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 1、客户不直接访问委托类中的方法，而是通过代理类中的方法间接地访问委托类。</span></span><br><span class="line"><span class="comment"> * 2、可以在代理类中对委托类做一些增强</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TargetObject targetObject = <span class="keyword">new</span> TargetObject();</span><br><span class="line">        ProxyObject proxyObject = <span class="keyword">new</span> ProxyObject(targetObject);</span><br><span class="line"></span><br><span class="line">        proxyObject.buyCar();   <span class="comment">// 表面上调用的是代理对象中的方法，但代理对象更底层还是调用了委托对象中的方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 输出结果：</span></span><br><span class="line"><span class="comment"> *      中介挑选车源</span></span><br><span class="line"><span class="comment"> *      委托对象付钱买车</span></span><br><span class="line"><span class="comment"> *      中介办理过户手续</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
 
 </li>
 </ol>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优点</strong>：</p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><blockquote>
+<p>  <strong>优点</strong>：</p>
+</blockquote>
 <ul>
 <li>  在不修改委托对象的功能前提下，能通过代理对象对委托对象的功能进行扩展。</li>
 </ul>
-<p><strong>缺点</strong>：</p>
+<blockquote>
+<p>  <strong>缺点</strong>：</p>
+</blockquote>
 <ul>
-<li>  因为代理对象需要与委托对象实现一样的接口，所以需要为每个委托对象建立一个对应的代理类，会产生很多代理类。</li>
-<li>  一旦代理类和委托类共同实现的接口中增加了方法，委托对象与代理对象都要维护。</li>
+<li>  因为<strong>代理对象需要与委托对象实现一样的接口，所以需要为每个委托类建立一个对应的代理类，会产生很多代理类</strong>。</li>
+<li>  <strong>一旦代理类和委托类共同实现的接口中增加了方法，委托对象与代理对象都要维护，即使这些方法不是两个类中都必须的。</strong></li>
 </ul>
 <hr>
-<h1 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h1><h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><p><strong>代理对象不需要实现接口</strong>，但是<strong>委托对象要实现接口</strong>，否则不能使用动态代理。</p>
-<p>代理对象的生成要利用 JDK 中反射包下的 API，动态的在内存中构建代理对象。也就是说动态代理的代理类是动态生成的，不是我们直接写好的。</p>
-<p>动态代理分为两大类：基于接口的动态代理；基于类的动态代理</p>
+<h1 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h1><h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><ul>
+<li>  <strong>代理对象不需要实现接口</strong>，但是<strong>委托对象要实现接口</strong>，否则不能使用动态代理。</li>
+<li>  代理对象的生成要利用 JDK 中反射包下的 API，动态的在内存中构建代理对象。也就是说动态代理的代理类是动态生成的，不是我们直接写好的。</li>
+</ul>
+<blockquote>
+<p>  动态代理分为两大类：</p>
+</blockquote>
+<ul>
+<li>  基于接口的动态代理；</li>
+<li>  基于类的动态代理</li>
+</ul>
 <h2 id="JDK-中生成代理对象的-API"><a href="#JDK-中生成代理对象的-API" class="headerlink" title="JDK 中生成代理对象的 API"></a>JDK 中生成代理对象的 API</h2><ul>
 <li>  代理类所在包 <code>java.lang.reflect.Proxy</code></li>
 </ul>
@@ -3083,7 +3392,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 参数说明：</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> loader    被代理对象使用的类加载器。（获取类加载器的方法是固定的）</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> interfaces    被代理对象的实现的接口类型。</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> h     事件处理，执行被代理对象中被代理的方法时，会触发事件处理器方法，会把当前执行的目标对象的方法作为参数传入</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span>  返回一个代理对象</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">newProxyInstance</span><span class="params">(ClassLoader loader,</span></span></span><br><span class="line"><span class="function"><span class="params">                                         Class&lt;?&gt;[] interfaces,</span></span></span><br><span class="line"><span class="function"><span class="params">                                         InvocationHandler h)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>InvocationHandler 接口</strong></p>
-<p>InvocationHandler 是一个接口，使用时需要实现其内部的抽象方法 **invoke()**，该方法的参数含义如下：</p>
+<p>InvocationHandler 是一个接口，使用时需要实现其内部的抽象方法 <strong>invoke()</strong> ，该方法的参数含义如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> proxy 调用该方法的代理实例（你要代理谁）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> method  （你要代理类中的哪个方法）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args  （要代理的方法中需要传递的参数）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span></span></span><br><span class="line"><span class="function">        <span class="keyword">throws</span> Throwable</span>;</span><br></pre></td></tr></table></figure>
 
 
@@ -3410,305 +3719,6 @@
 <p><strong>addWaiter(Node.EXCLUSIVE)</strong>  加强</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、将线程封装成 node 节点</span></span><br><span class="line"><span class="comment">// 2、Node 的</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">addWaiter</span><span class="params">(Node mode)</span> </span>&#123;</span><br><span class="line">    Node node = <span class="keyword">new</span> Node(Thread.currentThread(), mode);</span><br><span class="line">    <span class="comment">// Try the fast path of enq; backup to full enq on failure</span></span><br><span class="line">    Node pred = tail;</span><br><span class="line">    <span class="keyword">if</span> (pred != <span class="keyword">null</span>) &#123;</span><br><span class="line">        node.prev = pred;</span><br><span class="line">        <span class="keyword">if</span> (compareAndSetTail(pred, node)) &#123;</span><br><span class="line">            pred.next = node;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    enq(node);</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="post-title-link" itemprop="url">线程池</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-07-15 14:34:36" itemprop="dateCreated datePublished" datetime="2021-07-15T14:34:36+08:00">2021-07-15</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-10 18:02:07" itemprop="dateModified" datetime="2021-08-10T18:02:07+08:00">2021-08-10</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="0-前置知识"><a href="#0-前置知识" class="headerlink" title="0    前置知识"></a>0    前置知识</h1><ul>
-<li>  <a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2021/08/09/BlockingQueue/">超链接：阻塞队列</a></li>
-</ul>
-<hr>
-<h1 id="1-为什么使用线程池？（优势）"><a href="#1-为什么使用线程池？（优势）" class="headerlink" title="1    为什么使用线程池？（优势）"></a>1    为什么使用线程池？（优势）</h1><p>​    线程池的主要工作是控制运行线程的数量，处理过程中将任务放入队列。在线程创建后启动这些任务，如果任务数量超过了最大线程数量，超出数量的任务排队等候，等其它线程执行完毕，再从队列中取出任务来执行。</p>
-<blockquote>
-<p>  <strong>使用线程池的优势：</strong></p>
-</blockquote>
-<ol>
-<li>线程复用：创建/销毁线程需要消耗系统资源，线程池可以复⽤已创建的线程。</li>
-<li>控制最大并发数：控制并发的数量。并发数量过多，可能会导致资源消耗过多，从⽽造成服务器崩溃。（主要原因）</li>
-<li>管理线程：线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配、调优和监控</li>
-<li>提高响应速度。当任务到达时，任务可以不要等待线程创建就能立即执行。</li>
-</ol>
-<hr>
-<h1 id="2-怎么用"><a href="#2-怎么用" class="headerlink" title="2    怎么用"></a>2    怎么用</h1><ul>
-<li>  当我们使用线程池时，就不再需要把任务交给某个具体的线程了，我们只需要把任务交给线程池即可，线程池内部会分配一个空闲的线程去执行该任务。</li>
-</ul>
-<h2 id="2-1-架构说明"><a href="#2-1-架构说明" class="headerlink" title="2.1    架构说明"></a>2.1    架构说明</h2><ul>
-<li>  线程池是通过 Executor 框架实现的，该框架用到了 <strong>Executors、Executor、ExecutorService、ThreadPoolExecutor</strong> 这几个类。</li>
-</ul>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/Executor.png" alt="Executor"></p>
-<h2 id="2-2-代码实现（3-5种）"><a href="#2-2-代码实现（3-5种）" class="headerlink" title="2.2    代码实现（3/5种）"></a>2.2    代码实现（3/5种）</h2><blockquote>
-<ol>
-<li> <strong>Executors.newFixedThreadPool(int nThreads)</strong></li>
-<li> <strong>Executors.newSingleThreadExecutor()</strong></li>
-<li> <strong>Executors.newCachedThreadPool()</strong></li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.juc.pool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/15 15:12</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPoolDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ExecutorService threadPool1 = Executors.newFixedThreadPool(<span class="number">5</span>);   <span class="comment">// 创建固定线程数的线程池</span></span><br><span class="line">        ExecutorService threadPool2 = Executors.newSingleThreadExecutor();   <span class="comment">// 创建单线程数的线程池</span></span><br><span class="line">        ExecutorService threadPool3 = Executors.newCachedThreadPool();   <span class="comment">// 创建自适应线程数的线程池</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 模拟10个用户来办理业务，每个用户就是一个来自外部的请求线程</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">                threadPool3.execute(()-&gt;&#123;   <span class="comment">/*让线程池中的某个线程去执行任务*/</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot;****办理业务&quot;</span>);</span><br><span class="line">                &#125;);</span><br><span class="line">                <span class="comment">// main线程睡眠100ms</span></span><br><span class="line">                <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            threadPool3.shutdown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="2-3-源码分析"><a href="#2-3-源码分析" class="headerlink" title="2.3    源码分析"></a>2.3    源码分析</h2><p>查看底层源码发现，这三个创建线程池的方法底层都使用了 <strong>ThreadPoolExecutor</strong> 类。</p>
-<blockquote>
-<ol>
-<li> <strong>newFixedThreadPool</strong></li>
-</ol>
-</blockquote>
-<ul>
-<li>  创建一个定长的线程池，可控制线程的最大并发数，超出的线程数量的任务会在队列中等待。</li>
-<li>  newFixedThreadPool 创建的线程池 corePoolSize 和 maximumPoolSize 值是相等的，</li>
-<li>  底层使用的数据结构是 LinkedBlockingQueue。</li>
-<li>  执行长期的任务，性能较好</li>
-</ul>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154412236.png" alt="image-20210715154412236"></p>
-<blockquote>
-<ol start="2">
-<li> <strong>newSingleThreadExecutor</strong></li>
-</ol>
-</blockquote>
-<ul>
-<li>  创建一个只包含一个线程的线程池，只会用唯一的线程来执行任务，保证所有任务按照指定顺序执行。</li>
-<li>  newSingleThreadExecutor 将 corePoolSize 和 maximumPoolSize 都设置为 1，</li>
-<li>  底层使用的数据结构是 LinkedBlockingQueue。</li>
-<li>  适用于一个任务一个任务执行的场景</li>
-</ul>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154444221.png" alt="image-20210715154444221"></p>
-<blockquote>
-<ol start="3">
-<li> <strong>newCachedThreadPool</strong></li>
-</ol>
-</blockquote>
-<ul>
-<li>  创建一个自适应长度的线程池，即多退少补。</li>
-<li>  newCachedThreadPool 将 corePoolSize 设置为 0，将 maximumPoolSize 设置为 Integer.MAX_VALUE，也就是说来了任务就创建线程执行任务，当线程空闲超过 60s，就销毁线程。</li>
-<li>  底层使用的数据结构是 SynchronousQueue。</li>
-<li>  适用于执行很多短期异步的小程序或者负载较轻的服务器。</li>
-</ul>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210715154508186.png" alt="image-20210715154508186"></p>
-<hr>
-<h1 id="3-ThreadPoolExecutor-构造方法中的-7-大参数"><a href="#3-ThreadPoolExecutor-构造方法中的-7-大参数" class="headerlink" title="3    ThreadPoolExecutor 构造方法中的 7 大参数"></a>3    ThreadPoolExecutor 构造方法中的 7 大参数</h1><p>ThreadPoolExecutor 有多个重载的构造方法，方法中的参数为 5~7 个不等，我们直接看一下最多的 7 个参数。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// .....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li> <strong>corePoolSize</strong>：线程池中常驻核心线程数</li>
-</ol>
-<ul>
-<li>线程池中的常驻线程数，即使没有任务时也需要去维护的线程数量。<ul>
-<li>  当有请求任务进来后，首先会安排常驻线程去执行任务；</li>
-<li>  当线程池中正在使用的线程数量达到 corePoolSize 后，再有新的任务进来，就会把新进来的任务放到缓存队列中。</li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li> <strong>maximumPoolSize</strong>：线程池能够容纳的最大线程数，此值必须大于等于 1。</li>
-<li> <strong>keepAliveTime</strong>：多余的空闲线程的最大存活时间。[多余线程就是除了常驻线程之外的线程]</li>
-</ol>
-<ul>
-<li>如果线程池中的线程数量超过 <code>corePoolSize</code>，并且线程的空闲时间达到 <code>keepAliveTime</code> 值后，多余的空闲线程将会被销毁直到只剩下 <code>corePoolSize</code> 个线程。<ul>
-<li>  只有当前线程池中的线程数大于 <code>corePoolSize</code> 时 <code>keepAliveTime</code> 才会生效，直到线程池中的线程数不大于 <code>corePoolSize</code>。</li>
-</ul>
-</li>
-</ul>
-<ol start="4">
-<li> <strong>unit</strong>：keepAliveTime 的时间单位。</li>
-<li> <strong>workQueue</strong>：任务队列，被提交但尚未执行的任务。</li>
-<li> <strong>threadFactory</strong>：生成线程池中线程实例的工厂，一般使用默认的即可。不同的工厂都能生产线程实例，就类似于联想和戴尔工厂都能生产电脑，但具体的生产过程是不一样的。</li>
-<li> <strong>handler</strong>：拒绝策略。当阻塞队列满了并且工作线程大于等于线程池的最大线程数时如何拒绝请求任务的策略。</li>
-</ol>
-<ul>
-<li>  线程池的所有线程都已经在工作了，并且等待执行的任务队列也满了，这时候就需要拒绝新的任务加入，采用的策略就叫做拒绝策略。</li>
-</ul>
-<hr>
-<h1 id="4-底层工作原理"><a href="#4-底层工作原理" class="headerlink" title="4    底层工作原理"></a>4    底层工作原理</h1><h2 id="4-1-工作原理"><a href="#4-1-工作原理" class="headerlink" title="4.1    工作原理"></a>4.1    工作原理</h2><p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%9B%BE.png" alt="线程池工作原理图"></p>
-<h2 id="4-2-工作流程"><a href="#4-2-工作流程" class="headerlink" title="4.2    工作流程"></a>4.2    工作流程</h2><blockquote>
-<p>  <strong>工作流程图</strong></p>
-</blockquote>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="线程池工作流程图"></p>
-<p>在创建了线程池后，线程池会等待提交过来的任务请求。每次调用 <code>execute()</code> 方法添加新的任务请求时，线程池中会进行如下判断：</p>
-<ol>
-<li> 如果线程池中正在运行的线程数量小于 corePoolSize，那么马上分配一个空闲线程执行这个任务；</li>
-<li> 如果线程池中正在运行的线程数量大于等于 corePoolSize，会将这个任务放入阻塞队列；</li>
-<li> 如果这时候阻塞队列也满了且正在运行的线程数量小于 maximumPoolSize，就会创建非核心线程来执行这个任务；</li>
-<li> 如果队列满了且正在运行的线程数量大于等于 maximumPoolSize，那么线程池会执行<strong>饱和拒绝策略</strong>。</li>
-<li> 当一个线程执行完一个任务时，它会从阻塞队列中选取下一个任务进行执行。</li>
-<li>当一个线程无事可做超过一定的时间（keepAliveTime）时，线程池会判断：<ul>
-<li>  如果当前线程池中运行的线程数量大于 corePoolSize ，那么这个线程就会被销毁；</li>
-<li>  所以线程池的所有任务完成后它最终会收缩到 corePoolSize 的大小。</li>
-</ul>
-</li>
-</ol>
-<p><strong>小总结：</strong></p>
-<p>​    任务首先放到线程池的核心池中，放不下就放在阻塞队列，再放不下就对线程池扩容，直到扩容到最大。这时候如果继续有很多线程要进入，启动拒绝策略；如果这时候线程开始逐渐减少，就把线程池中超过空闲时间的线程销毁掉，直到线程池中线程数等于核心线程数。</p>
-<h2 id="4-3-源码分析"><a href="#4-3-源码分析" class="headerlink" title="4.3    源码分析"></a>4.3    源码分析</h2><blockquote>
-<p>  <strong>ThreadPoolExecutor 的构造函数</strong></p>
-</blockquote>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/%E6%BA%90%E7%A0%81.png" alt="源码"></p>
-<hr>
-<h1 id="5-线程池的4种拒绝策略"><a href="#5-线程池的4种拒绝策略" class="headerlink" title="5    线程池的4种拒绝策略"></a>5    线程池的4种拒绝策略</h1><ol>
-<li><p> <strong>AbortPolicy（默认）</strong>：直接抛出 RuntimeExecutionException 异常，阻止系统正常运行。</p>
-</li>
-<li><p> <strong>DiscardOldestPolicy</strong>：抛弃阻塞队列中等待最久的任务，然后把当前任务加入等待队列中尝试再次提交当前任务。</p>
-</li>
-<li><p> <strong>DiscardPolicy</strong>：直接丢弃任务，不予任何处理也不抛出异常。如果允许任务丢失，这是最好的一种方案。</p>
-</li>
-<li><p><strong>CallerRunsPolicy</strong>：“调用者“运行一种调节机制，该策略既不会抛弃任务，也不会抛出异常，而是将某些任务回退到调用者，让调用者线程去处理这个任务，从而降低新任务的流量。</p>
-<blockquote>
-<p>  <strong>注解：</strong>假设 main 线程是线程的调用者，main 线程将一个任务 A 分配给线程池处理，但此时线程池中的运行着的线程已经达到了 <code>maximumPoolSize</code>，即无法再给任务 A 分配一个新的线程了，需要拒绝这个任务。如果采用的拒绝策略是 <strong>CallerRunsPolicy</strong>，那么任务 A 不会被丢弃，也不会出现异常，而是会将任务 A 会退给 main 线程，让 main 线程去执行任务 A 。</p>
-</blockquote>
-</li>
-</ol>
-<p>以上 4 种内置的拒绝策略的实现类均实现了 RejectedExecutionHandler 接口。</p>
-<hr>
-<h1 id="6-线程在实际开发中的使用（阿里巴巴-Java-开发手册）"><a href="#6-线程在实际开发中的使用（阿里巴巴-Java-开发手册）" class="headerlink" title="6    线程在实际开发中的使用（阿里巴巴 Java 开发手册）"></a>6    线程在实际开发中的使用（阿里巴巴 Java 开发手册）</h1><ol>
-<li><p>在实际开发中，线程资源必须通过线程池提供，不允许开发人员在程序中自行显式地创建线程。</p>
-<blockquote>
-<p>  <strong>注解</strong>：使用线程池的好处是减少在创建和销毁线程上所消耗的时间以及系统资源的开销，解决资源不足的问题。如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者“过度切换上下文线程”的问题。</p>
-</blockquote>
-</li>
-<li><p>实际开发中，线程池不允许通过 Executors 工具类去创建，而是要通过 ThreadPoolExecutor 的方式去创建，这样的处理方式让开发人员更加明确线程池的规则，规避资源耗尽的风险。</p>
-<blockquote>
-<p>  <strong>注解：</strong>Executors 创建的线程池对象的弊端如下：</p>
-<ol>
-<li><p><code>FixedThreadPool</code> 和 <code>SingleThreadPool</code>：</p>
-<p> 这两种线程池维护的请求（阻塞）队列虽然是有界队列，但是允许的最大长度为 Integer.MAX_VALUE，这个值实际上非常大，可能会堆积大量的请求，从而导致 OOM。 </p>
-</li>
-<li><p><code>CachedThreadPool</code> 和 <code>ScheduledThreadPool</code></p>
-<p> 这两种线程池虽然使用的请求队列是同步阻塞队列，最大容量为1，但是允许创建的最大线程数量为 Integer.MAX_VALUE，也可能会创建大量的线程，从而导致 OOM。</p>
-</li>
-</ol>
-</blockquote>
-</li>
-</ol>
-<hr>
-<h1 id="7-自定义线程池"><a href="#7-自定义线程池" class="headerlink" title="7    自定义线程池"></a>7    自定义线程池</h1><h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/16 10:05</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 手写线程池</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThreadPoolDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         *  参数含义：</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         *      (</span></span><br><span class="line"><span class="comment">         *       int corePoolSize,      核心线程数</span></span><br><span class="line"><span class="comment">         *       int maximumPoolSize,   最大线程数</span></span><br><span class="line"><span class="comment">         *       long keepAliveTime,    多余线程空闲存活时间</span></span><br><span class="line"><span class="comment">         *       TimeUnit unit,      	时间单位</span></span><br><span class="line"><span class="comment">         *       BlockingQueue&lt;Runnable&gt; workQueue,    请求阻塞队列</span></span><br><span class="line"><span class="comment">         *       ThreadFactory threadFactory,        线程池工厂</span></span><br><span class="line"><span class="comment">         *       RejectedExecutionHandler handler    拒绝策略</span></span><br><span class="line"><span class="comment">         *      )</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        ThreadPoolExecutor threadPool = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">2</span>,</span><br><span class="line">                                                               <span class="number">5</span>,</span><br><span class="line">                                                               <span class="number">1L</span>,</span><br><span class="line">                                                               TimeUnit.SECONDS,</span><br><span class="line">                                                               <span class="keyword">new</span> LinkedBlockingQueue&lt;&gt;(<span class="number">5</span>),</span><br><span class="line">                                                               Executors.defaultThreadFactory(),</span><br><span class="line">                                                               <span class="keyword">new</span> ThreadPoolExecutor.AbortPolicy());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 模拟10个用户来办理业务，每个用户就是一个来自外部的请求线程。</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">                threadPool.execute(()-&gt;&#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot;办理业务&quot;</span>);</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            threadPool.shutdown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  上面自定义的线程池中，能容纳的最大线程数量为 5 个，阻塞队列的最大容量为 5 个，也就是说，该线程池顶峰时期最多只能同时容纳 10 个任务。如果任务数量超过 10 个，则会执行默认的拒绝策略，即抛出异常并终止程序。</li>
-</ul>
-<blockquote>
-<p>  <strong>不同拒绝策略测试</strong></p>
-</blockquote>
-<p>如果将用户请求的任务设置为 12 个，则一定会触发拒绝策略。</p>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102641510.png" alt="image-20210716102641510"></p>
-<blockquote>
-<ol>
-<li> <strong>默认拒绝策略 AbortPolicy 测试</strong></li>
-</ol>
-</blockquote>
-<p>程序会直接抛出 <strong>java.util.concurrent.RejectedExecutionException</strong>异常。</p>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102554869.png" alt="image-20210716102554869"></p>
-<blockquote>
-<ol start="2">
-<li> <strong>CallerRunsPolicy 测试</strong></li>
-</ol>
-</blockquote>
-<p>不会抛出异常，但是由于请求任务数大于线程池的最大线程容量与阻塞队列容量之和，所以会将容纳不下的任务交还给调用者线程执行，在这里就是交换 main 线程，让 main 线程去执行任务。</p>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716102733383.png" alt="image-20210716102733383"></p>
-<blockquote>
-<ol start="3">
-<li> <strong>DiscardOldestPolicy</strong></li>
-</ol>
-</blockquote>
-<p>不会抛出异常，而是将阻塞队列中等待时间最长的任务丢弃掉。可以看到请求任务有 12 个，而程序只执行的 10 个，阻塞队列中等待时间最长的两个被抛弃掉了。</p>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716103054629.png" alt="image-20210716103054629"></p>
-<blockquote>
-<ol start="4">
-<li> <strong>DiscardPolicy 策略</strong></li>
-</ol>
-</blockquote>
-<p>不会抛出异常，同样是把超出数量的任务抛弃掉，但是在这里抛弃的是容纳不下的最新的任务请求。</p>
-<p><img src="/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/image-20210716103405598.png" alt="image-20210716103405598"></p>
-<hr>
-<h2 id="如何合理配置线程池参数"><a href="#如何合理配置线程池参数" class="headerlink" title="如何合理配置线程池参数"></a>如何合理配置线程池参数</h2><h3 id="CPU密集型任务"><a href="#CPU密集型任务" class="headerlink" title="CPU密集型任务"></a>CPU密集型任务</h3><ul>
-<li>  CPU 密集的意思是该任务需要大量的运算，而没有阻塞，CPU 一直全速运行。</li>
-<li>  CPU 密集任务只有在真正的多核 CPU 上才能得到加速（通过多线程）</li>
-<li>  而在单核CPU上，无论你开几个模拟的多线程该任务都不可能得到加速，因为CPU总的运算能力有限。</li>
-<li>  CPU 密集型任务的配置尽可能少的线程数量。</li>
-<li>  一般公式：CPU 核数 + 1个线程的线程池</li>
-</ul>
-<hr>
-<h3 id="IO密集型"><a href="#IO密集型" class="headerlink" title="IO密集型"></a>IO密集型</h3><ul>
-<li>  IO 密集型，即该任务需要大量的 IO，即大量的阻塞。</li>
-<li>  在单线程上运行 IO 密集型的任务会导致大量的 CPU 运算能力浪费在等待。</li>
-<li>  所以在 IO 密集型任务中使用多线程可以大大的加速程序运行。即在单核 CPU 上，这种加速主要就是利用了被浪费掉的阻塞时间。</li>
-<li>  由于 IO 密集型任务并不是一直在执行任务，则应该配置尽可能多的线程，如 <strong>CPU核数×2</strong></li>
-</ul>
 
       
     </div>

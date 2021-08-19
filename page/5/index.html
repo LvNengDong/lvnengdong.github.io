@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,567 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/" class="post-title-link" itemprop="url">JVM——运行时数据区:03虚拟机栈</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-31 22:06:53" itemprop="dateCreated datePublished" datetime="2021-05-31T22:06:53+08:00">2021-05-31</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 16:48:06" itemprop="dateModified" datetime="2021-08-03T16:48:06+08:00">2021-08-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><strong>虚拟机栈内存结构简图</strong></p>
+</blockquote>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png" alt="虚拟机栈内存结构"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">|--栈</span><br><span class="line">	|--栈帧1</span><br><span class="line">		|--局部变量表</span><br><span class="line">			|--Slot1</span><br><span class="line">			|--Slot2</span><br><span class="line">			|--......</span><br><span class="line">		|--操作数栈</span><br><span class="line">		|--方法返回地址</span><br><span class="line">		|--动态链接</span><br><span class="line">		|--附加信息</span><br><span class="line">	|--栈帧2</span><br><span class="line">	|--栈帧3</span><br><span class="line">	|--....</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h1 id="虚拟机栈概述"><a href="#虚拟机栈概述" class="headerlink" title="虚拟机栈概述"></a>虚拟机栈概述</h1><h2 id="虚拟机栈出现的背景"><a href="#虚拟机栈出现的背景" class="headerlink" title="虚拟机栈出现的背景"></a>虚拟机栈出现的背景</h2><ul>
+<li>  由于 JVM 跨平台的设计，所以 JVM 的指令都是根据栈来设计的。</li>
+<li>  不同平台 CPU 架构不同，所以 JVM 指令不能设计为基于寄存器的。</li>
+</ul>
+<blockquote>
+<p>  <strong>栈式指令的优缺点：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>优点是跨平台，指令集小，编译器容易实现，</strong></li>
+<li>  <strong>缺点是性能下降（与寄存器相比），实现同样的功能需要更多的指令。</strong></li>
+</ul>
+<hr>
+<h2 id="内存中的栈与堆"><a href="#内存中的栈与堆" class="headerlink" title="内存中的栈与堆"></a>内存中的栈与堆</h2><p><strong>栈是运行时的单位，而堆是存储的单位。</strong></p>
+<ul>
+<li>即：栈解决程序运行问题，即程序如何执行，或者说如何处理数据；</li>
+<li>堆解决的是数据存储的问题，即数据怎么放，放在哪儿。</li>
+</ul>
+<hr>
+<h2 id="虚拟机栈的基本内容"><a href="#虚拟机栈的基本内容" class="headerlink" title="虚拟机栈的基本内容"></a>虚拟机栈的基本内容</h2><blockquote>
+<p>  <strong>是什么 ？</strong></p>
+</blockquote>
+<ul>
+<li><p>Java 虚拟机栈（Java Virtual Machine Stack），早期也叫 Java 栈。</p>
+</li>
+<li><p>每个线程在创建时都会创建一个虚拟机栈，其内部保存一个个的栈帧（Stack Frame），对应着一次次的方法调用。</p>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>生命周期</strong></p>
+</blockquote>
+<ul>
+<li>生命周期与线程一致。</li>
+</ul>
+<blockquote>
+<p>  <strong>作用</strong></p>
+</blockquote>
+<ul>
+<li><p>主要负责管理 Java 线程的运行。它保存方法的局部变量、部分结果，并参与方法的调用和返回。</p>
+<blockquote>
+<p>局部变量：如果局部变量是属于 8 种基本数据类型的，则保存的是数据值；如果局部变量是引用数据类型，则保存的是对象的引用地址。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>栈的优点</strong></p>
+</blockquote>
+<ul>
+<li><p>栈是一种快速有效的分配存储方式，其访问速度仅仅次于程序计数器。</p>
+</li>
+<li><p>JVM对<code>虚拟机栈</code>的操作只有两个：</p>
+<ol>
+<li>每个方法开始执行，伴随着入栈</li>
+<li>执行结束后出栈。</li>
+</ol>
+</li>
+<li><p><strong>对于栈来说不存在垃圾回收问题，出栈就等同于垃圾回收。</strong></p>
+<hr>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>栈中可能出现的异常</strong></p>
+</blockquote>
+<p>Java 虚拟机规范允许 <strong>Java栈的大小可以是动态的或者是固定不变的</strong>。</p>
+<ul>
+<li>如果采用固定大小的虚拟机栈，那每一个线程的对应的虚拟机栈的容量在线程创建之初就已经确定了，如果线程请求分配的栈容量超过虚拟机栈允许的最大容量，JVM将会抛出一个 <strong>StackOverflowError</strong> 异常。</li>
+<li>如果虚拟机栈设置为可动态扩展，并且在尝试扩展时无法申请到足够的内存，或者在创建新的线程时没有足够的内存去创建对应的虚拟机栈，那JVM将会抛出一个 <strong>OutOfMemoryError</strong> 异常。</li>
+</ul>
+<blockquote>
+<p>  <strong>设置栈内存的大小</strong></p>
+</blockquote>
+<ul>
+<li><p>我们可以使用参数 <code>-Xss</code> 来设置线程的最大栈空间，栈空间的大小直接决定了函数调用的最大可达深度。</p>
+</li>
+<li><p>在 IDEA 中，通过 <code>顶部导航栏 --&gt;&gt; Run --&gt;&gt; Edit Configurations...</code> 找到如下图配置信息，并设置线程的最大栈空间。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">设置 -Xss 参数常见的值：</span><br><span class="line">-Xss1m		<span class="comment">// 以 M 作为基本单位</span></span><br><span class="line">-Xss1024k	<span class="comment">// 以 kb 作为基本单位</span></span><br><span class="line">-Xss1048576		<span class="comment">// 默认基本单位，字节</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/image-20210517000602364.png" alt="image-20210517000602364"></p>
+<hr>
+<h1 id="栈的存储单位"><a href="#栈的存储单位" class="headerlink" title="栈的存储单位"></a>栈的存储单位</h1><h2 id="栈中存储什么？"><a href="#栈中存储什么？" class="headerlink" title="栈中存储什么？"></a>栈中存储什么？</h2><ul>
+<li>每个线程都有自己的栈，栈中的数据都是以 <strong>栈帧（Stack Frame）</strong> 为基本单位存储的。</li>
+<li>在这个线程上，每个正在执行的方法都有各自对应的一个栈帧（Stack Frame）。</li>
+<li>栈帧是一个内存区域，是一个数据集，保存了方法执行过程中的各种数据信息。</li>
+</ul>
+<hr>
+<h2 id="栈的运行原理"><a href="#栈的运行原理" class="headerlink" title="栈的运行原理"></a>栈的运行原理</h2><blockquote>
+<p>  <strong>当前栈帧</strong>、<strong>当前方法</strong> 和 <strong>当前类</strong> 的说明：</p>
+</blockquote>
+<ul>
+<li>在一个线程中，同一时刻，只能有一个栈帧正在执行操作，即只有当前正在执行方法的栈帧（栈顶栈帧）是有效的，这个栈帧被称为<strong>当前栈帧（Current Frame）</strong>，与当前栈帧对应的方法就是<strong>当前方法（Current Method）</strong>，这个方法所在的类就是<strong>当前类（Current Class）</strong>。</li>
+</ul>
+<blockquote>
+<p>  <strong>执行原理：</strong></p>
+</blockquote>
+<ul>
+<li>JVM对<code>虚拟机栈</code>的直接操作只有两个，就是对栈帧进行<strong>压栈</strong>和<strong>出栈</strong>。</li>
+<li>如果在当前方法中调用了其它方法，那么对应的新的栈帧会被创建出来，放在栈的顶端，变成了新的当前栈帧。</li>
+</ul>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E6%A0%88%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86.png" alt="栈运行原理"></p>
+<p>在某个线程中，</p>
+<blockquote>
+<ol>
+<li>首先执行方法1，方法1被压入栈中。</li>
+<li>在方法1中调用方法2，方法2被压入栈中；</li>
+<li>在方法2中调用方法3，方法3被压入栈中；</li>
+<li>在方法3中调用方法4，方法4被压入栈中。</li>
+</ol>
+</blockquote>
+<ul>
+<li>此时，方法4对应的栈帧4位于栈顶，所以栈帧4就被称为当前栈帧，对应的方法被称为当前方法，方法4所在的类被称为当前类。</li>
+<li>当方法4出栈后，方法3就位于了栈顶，栈帧3就变成了新的当前栈帧，方法3变成了新的当前方法，方法3所在的类就成了新的当前类。</li>
+<li>以此类推。</li>
+</ul>
+<blockquote>
+<p>  <strong>注意：</strong></p>
+</blockquote>
+<ul>
+<li>不同线程中的栈帧是不允许互相引用的，即不可以在一个线程的栈帧之中引用另一个线程的栈帧。</li>
+<li>如果<code>当前方法</code>调用了其它方法，那么这个“其它方法”就会成为<code>新的当前方法</code>，这个<code>新的当前方法</code>在执行完毕出栈时，当前栈帧会传回此方法的执行结果给上一个栈帧。接着，虚拟机会丢弃当前栈帧，使上一个栈帧重新成为当前栈帧。</li>
+<li>方法的结束方法时有两种：<strong>一种是正常的函数返回，使用 return 指令；另一种是抛出异常。不管使用哪种方式，都会导致当前栈帧出栈。</strong></li>
+</ul>
+<hr>
+<h1 id="局部变量表（Local-Variables）"><a href="#局部变量表（Local-Variables）" class="headerlink" title="局部变量表（Local Variables）"></a>局部变量表（Local Variables）</h1><blockquote>
+<p><strong>局部变量表；局部变量数组；本地变量表。</strong></p>
+</blockquote>
+<p><strong>局部变量表的逻辑结构是一个一维数字数组，主要用于存储栈帧对应方法的参数和方法内部的局部变量。</strong></p>
+<ul>
+<li>方法参数和方法内局部变量的数据类型可以是：<ol>
+<li> 各种基本类型数据</li>
+<li> 对象引用（reference）</li>
+<li> returnAddress 类型</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>问题：为什么说局部变量表存储的是一个数字数组呢？</strong></p>
+</blockquote>
+<p>答：</p>
+<ul>
+<li>  首先明确，局部变量表中主要保存了栈帧对应方法的<strong>方法参数、方法内的局部变量、和方法返回值</strong>。</li>
+<li>  这些数据的类型无外乎就是基本数据类型和引用数据类型。在基本数据类型中：<code>byte</code>、<code>short</code>、<code>int</code>、<code>long</code>、<code>double</code>、<code>float </code>本来就是数字类型，<code>boolean</code>、<code>char </code>可以通过 ASCII 码表转化成数字类型；同理，引用类型数据也可以转成为数字表示。</li>
+<li>  所以说，局部变量表存储的是一个数字数组。</li>
+</ul>
+<blockquote>
+<p>  <strong>问题：局部变量表存在线程安全问题吗？</strong></p>
+</blockquote>
+<p>答：由于局部变量表是建立在虚拟机栈的栈帧上，而虚拟机栈是线程私有的数据，因此不存在线程安全问题。</p>
+<blockquote>
+<p>  <strong>知识点：</strong></p>
+</blockquote>
+<ul>
+<li><strong>局部变量表所需的容量大小是在前端编译期就已经确定了的</strong>，并保存在方法的 Code 属性的 <code>maximum local variable</code> 数据项中。在方法运行期间是不会改变局部变量表的大小的。</li>
+<li><strong>方法可嵌套调用的次数由栈的大小（深度）决定</strong>。一般来说，<strong>栈越大，方法可嵌套调用的次数就越多</strong>。对于一个方法而言，它的参数和局部变量越多，就会使得局部变量表膨胀，它的栈帧也就越大，为满足方法调用所需传递的信息量增大的需求，函数调用就会占用更多的栈空间，导致其嵌套调用次数就会减少。</li>
+<li><strong>局部变量表中的变量只在当前方法调用中有效</strong>。在方法执行时，虚拟机通过使用局部变量表完成参数值到参数变量的传递过程。<strong>当方法调用结束后，随着方法栈帧的销毁，局部变量表也会随之销毁</strong>。</li>
+</ul>
+<hr>
+<h2 id="关于-Slot-的理解"><a href="#关于-Slot-的理解" class="headerlink" title="关于 Slot 的理解"></a>关于 Slot 的理解</h2><p><strong>Slot（变量槽）是局部变量表最基本的存储单元</strong>。</p>
+<ul>
+<li><p>参数值的保存范围从局部变量表的 <code>index[0]</code> 开始，到<code>index[-1]</code> 结束。</p>
+</li>
+<li><p>局部变量表中存放的是编译期可知的各种 <code>基本数据类型（8种）</code>、<code>引用类型（reference）</code> 和 <code>returnAddress 类型</code> 的变量。</p>
+</li>
+<li><p>在局部变量表里，<strong>32位以内的数据类型只占用一个 Slot（包括 reference 和 returnAddress 类型），64位的数据类型（long 和 double）占用两个 Slot</strong>。</p>
+<blockquote>
+<p>因为局部变量表是一维<strong>数字数组</strong>，所以所有数据类型在保存到局部变量表时都会转换成数字类型：</p>
+<ul>
+<li>byte、short、char 在存储前被转换为 int，boolean 也被转换为 int，0 表示 false，非0 表示 true。（转换成int是因为int刚好有32bit，而少于32bit的数据需要被填充到32bit）</li>
+<li>long 和 double 则占据两个 Slot。</li>
+<li>引用数据类型 reference 和 returnAddress 也占用一个Slot。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>JVM 会为局部变量表中的每一个 Slot 都分配一个<strong>访问索引</strong>，通过这个索引即可成功访问到局部变量表中每个 Slot 中保存的的值。</p>
+</li>
+<li><p>当一个<strong>实例方法</strong>被调用时，它的<code>方法参数</code>和<code>方法内部的局部变量</code>将会<strong>按照顺序被复制</strong>到局部变量表中的每一个Slot上。</p>
+<blockquote>
+<ul>
+<li>构造方法也是一种实例方法。</li>
+<li>如果当前栈帧是由构造方法或者实例方法创建的，那么<strong>该对象引用的 <code>this</code> 变量将会存放在局部变量表 index[0] 的 Slot 上</strong>，其余参数（方法参数和方法内部的局部变量）继续按照出现的顺序插入局部变量表的每一个Slot中。</li>
+<li><strong>因为静态方法的局部变量表中没有保存 this 这个对象引用，所以我们代码中的静态方法就不能使用 this 变量。</strong></li>
+</ul>
+</blockquote>
+</li>
+<li><p><strong>如果需要访问局部变量表中一个 64bit 的局部变量值时，只需要使用一个索引即可。</strong>（比如：访问 long 或 double 类型的变量）</p>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/Slot-1621265523329.png" alt="Slot"></p>
+</li>
+</ul>
+<hr>
+<h2 id="Slot-的重复利用"><a href="#Slot-的重复利用" class="headerlink" title="Slot 的重复利用"></a>Slot 的重复利用</h2><p><strong>栈帧中局部变量表的槽位是可以重复利用的</strong>。</p>
+<p>如果一个局部变量超出了其作用域，那么在其作用域之外新声明的局部变量就很有可能会复用过期的局部变量的槽位，从而<strong>达到节省资源的目的</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line">            b = a + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> c = a + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	分析：</span></span><br><span class="line"><span class="comment">		首先，这是一个非静态方法，所以在局部变量数组中 this 占一个槽位，下标为0；</span></span><br><span class="line"><span class="comment">		变量a 占一个槽位，下标为1；</span></span><br><span class="line"><span class="comment">		变量b 占一个槽位，下标为2；</span></span><br><span class="line"><span class="comment">		但是，b在超过了其作用域范围之后，所占的槽位会被回收，也就是说：</span></span><br><span class="line"><span class="comment">		变量c 在声明的时候 ，占用的仍然是 下标为2 的槽位。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="静态变量-和-局部变量-的对比"><a href="#静态变量-和-局部变量-的对比" class="headerlink" title="静态变量 和 局部变量 的对比"></a>静态变量 和 局部变量 的对比</h2><blockquote>
+<p>变量的分类：</p>
+<ul>
+<li>按照数据类型分类：1、基本类型变量  2、引用类型变量</li>
+<li>按照在类中的位置分类：<ol>
+<li>成员变量：按照有无 static 修饰又可分为：1️⃣类变量  2️⃣实例变量</li>
+<li>局部变量</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<ol>
+<li>成员变量，在使用前是有默认初始化值的。<ul>
+<li>类变量：类变量表有两次初始化的机会。第一次是在 <strong>linking 的 prepare 阶段</strong>，执行系统初始化，给类变量赋零值 <code>--&gt;&gt;</code> 另一次则是在 <strong>initialization 阶段</strong>，给类变量显式赋值（如果有的话）。</li>
+<li>实例变量：随着对象的创建，会在堆空间中分配实例变量空间，并进行默认赋值。</li>
+</ul>
+</li>
+<li>局部变量：在使用前，必须要进行显式赋值，否则在编译时就会直接报错。<ul>
+<li>和类变量初始化不同，局部变量表不存在系统初始化的过程，这就意味着一旦定义了局部变量必须人为进行初始化，否则就无法使用。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h2><ul>
+<li>在栈帧中，与性能调优关系最密切的部分就是<strong>局部变量表</strong>。<ol>
+<li>首先，局部变量表在一个栈帧中占据的内存往往是较多的，当涉及到栈内存溢出时，往往要考虑优化栈帧中局部变量表的内存。</li>
+<li>其次，局部变量表中保存了大量的对象指针，这些指针指向的对象存储在堆空间中，当局部变量表中的指针失效后，如何回收，什么时候回收 等等条件都影响着堆空间的利用，所以说：在栈帧中，与性能调优关系最密切的部分就是局部变量表。</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><strong>局部变量表中的变量也是重要的垃圾回收根节点，只要被局部变量表中直接或间接引用的对象都不会被回收。</strong></li>
+</ul>
+<hr>
+<h1 id="操作数栈（Operand-Stack）"><a href="#操作数栈（Operand-Stack）" class="headerlink" title="操作数栈（Operand Stack）"></a>操作数栈（Operand Stack）</h1><blockquote>
+<p><strong>操作数栈；表达式栈</strong></p>
+</blockquote>
+<ul>
+<li><p>操作数栈也是栈帧中的一个重要组成部分。</p>
+</li>
+<li><p>根据指令对局部变量表中的变量进行运算。</p>
+</li>
+<li><p><strong>操作数栈的作用就是：在方法执行过程中，根据字节码指令，往栈中写入数据或提取数据，即入栈（push）/ 出栈（pop）</strong></p>
+<blockquote>
+<ul>
+<li>某些字节码指令的作用是将值压入操作数栈；某些字节码指令的作用是将操作数取出栈，使用它们计算后再把结果压入栈。</li>
+<li>比如：执行复制、交换、求和等操作。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p><strong>操作数栈，主要用于保存计算程序的中间结果，同时作为计算过程中变量临时的存储空间。</strong></p>
+</li>
+<li><p>当一个方法刚开始执行时，一个新的栈帧也随之被创建出来，<strong>此时这个方法的操作数栈是空的</strong>。</p>
+</li>
+<li><p>每一个操作数栈都会拥有一个明确的栈深度，这个最大深度值在编译期就定义好了，保存在方法的 Code 对象的 <code>max_stack</code> 属性中。</p>
+</li>
+<li><p>栈中的任何一个元素都可以是任意的 Java 数据类型。</p>
+<blockquote>
+<p>32bit 的类型占用一个栈单位深度。</p>
+<p>64bit 的类型占用两个栈单位深度。</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>操作数栈不能采用访问索引的方式来进行数据访问，而只能通过标准的 入栈 / 出栈 操作完成一次数据访问。 </li>
+<li><strong>如果被调用的方法带有返回值的话，其返回值将会被压入当前栈帧的操作数栈中</strong>，并且更新 <code>程序计数器</code> 中下一条需要执行的字节码指令的地址。</li>
+<li>操作数栈中元素的数据类型必须与字节码指令的序列严格匹配，这由编译器在编译期间进行验证，同时在类加载过程中的类检验阶段的数据流分析阶段要再次验证。</li>
+<li>另外，我们说 JVM 的<strong>解释引擎是基于栈的执行引擎</strong>，其中的栈指的就是操作数栈。</li>
+</ul>
+<hr>
+<h1 id="栈顶缓存技术（Top-of-Stack-Cashing）"><a href="#栈顶缓存技术（Top-of-Stack-Cashing）" class="headerlink" title="栈顶缓存技术（Top-of-Stack Cashing）"></a>栈顶缓存技术（Top-of-Stack Cashing）</h1><p>基于栈式架构的虚拟机所使用的<strong>零地址指令</strong>更加紧凑，但完成一项操作的时候必然需要使用更多的入栈和出栈指令，这同时也就意味着将需要使用更多的指令分派（instruction dispatch）次数和内存读写次数。</p>
+<p>由于操作数是存储在内存中的，因此频繁的读/写操作必然会影响执行速度。为了解决这个问题，HotSpot JVM 的设计者提出了 栈顶缓存技术（Tos，Top-of-Stack Cashing）技术，<strong>将栈顶元素全部缓存在物理CPU的寄存器中，以此降低对内存的读/写次数，提升执行引擎的执行效率</strong>。</p>
+<hr>
+<h1 id="动态链接（Dynamic-Linking）"><a href="#动态链接（Dynamic-Linking）" class="headerlink" title="动态链接（Dynamic Linking）"></a>动态链接（Dynamic Linking）</h1><p><strong>动态链接：指向运行时常量池中方法的引用</strong>【符号引用转换为直接引用】</p>
+<ul>
+<li>大部分字节码指令在执行时都需要借助运行时常量池，所以 HotSpot 在设计之初，就在栈帧数据区保存了一个能够访问运行时常量池的指针，方便程序访问运行时常量池。</li>
+<li>每一个栈帧内部都包含一个指向<strong>运行时常量池</strong>中<strong>该栈帧所属方法的引用</strong>。包含这个引用的目的就是为了支持当前方法的代码能够实现<strong>动态链接（Dynamic Linking）</strong>。比如：<code>invokedynamic</code> 指令。</li>
+<li>在<code>.java</code>源文件被编译成<code>.class</code>字节码文件时，所有的变量和方法引用都会转化为符号引用（Symbolic Reference）保存在 <code>.class</code> 文件的常量池里。    比如：描述一个方法调用了其它方法时，就是通过常量池中指向方法的符号引用来表示的，而<strong>动态链接的作用就是为了将这些符号引用转换为调用方法的直接引用</strong>。</li>
+</ul>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-03%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5.png" alt="动态链接"></p>
+<h2 id="为什么需要常量池呢？"><a href="#为什么需要常量池呢？" class="headerlink" title="为什么需要常量池呢？"></a>为什么需要常量池呢？</h2><p>常量池的作用，就是为了提供一些符号和常量，便于指令的识别。</p>
+<ul>
+<li>一般来讲，我们的字节码文件所占的空间都比较小，但是每个字节码文件中保存的内容却不少，比如类的父类信息、各种数据类型的信息、等等等等。这些信息如果都保存在字节码文件中，显然字节码文件空间就非常臃肿了，那么这些信息保存在哪儿呢？常量池中！</li>
+<li>我们在字节码文件中只需要保存常量池中具体数据对象的引用，就可以在程序运行去具体的运行时常量池中找到程序运行所需要的数据信息。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>常量池/运行时常量池：保存指向方法和变量的符号引用；</li>
+<li>动态链接：将符号引用转换成直接引用。</li>
+</ul>
+<hr>
+<h1 id="方法的调用"><a href="#方法的调用" class="headerlink" title="方法的调用"></a>方法的调用</h1><blockquote>
+<p>  <strong>问题：Java 语言具有多态性，那么 JVM 在运行时如何知道应该调用父类的方法还是子类的方法呢 ？</strong></p>
+</blockquote>
+<p>在 JVM 中，将符号引用转换为调用方法时的直接引用与方法的绑定机制相关。</p>
+<ul>
+<li><p><strong>静态链接</strong>：</p>
+<p>当一个字节码文件被加载进 JVM 内存中时，如果<strong>被调用的目标方法在编译期可知</strong>，且运行期保持不变时，这种情况下将调用方法的符号引用转换为直接引用的过程称为静态链接。</p>
+</li>
+<li><p><strong>动态链接</strong>：</p>
+<p>如果<strong>被调用的方法在编译期无法被确定下来</strong>，也就是说，只能在程序运行期将调用方法的符号引用转换为直接引用，由于这种引用转换过程具备动态性，因此也就被称之为动态链接。</p>
+</li>
+</ul>
+<p>对应的方法的绑定机制为：<strong>早期绑定（Early Binding）</strong>和 <strong>晚期绑定（Late Binding）</strong>。</p>
+<p><strong>绑定是：一个字段、方法或者类从符号引用被转换为直接引用的过程，这仅仅发生一次</strong>。</p>
+<ul>
+<li><p><strong>早期绑定</strong>：</p>
+<p>早期绑定就是指 <strong>被调用的目标方法如果在编译期可知，且运行时保持不变</strong>时，即可将这个方法与所属的类进行绑定。这样一来，由于明确了被调用的目标方法究竟是哪一个，因此也就可以使用静态链接的方式将符号引用转换为直接引用。</p>
+</li>
+<li><p><strong>晚期绑定</strong>：</p>
+<p>如果<strong>被调用的方法在编译期无法被确定下来，只能够在程序运行期根据实际的类绑定相关的方法</strong>，这种绑定方式也就被称之为晚期绑定。</p>
+</li>
+</ul>
+<p>面向对象的语言的共性就是都支持 封装、继承和多态 等面向对象特性。既然这一类的编程语言具备多态特性，那么自然也就具备早期绑定和晚期绑定两种绑定方式。</p>
+<p>Java 中任何一个普通方法都具备虚函数的特征，它相当于C++语言中的虚函数（C++语言中需要使用关键字 virtual 来显示定义）。如果在 Java 程序中不希望某个方法拥有虚函数的特征时，则可以使用 final 关键字来标记这个方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">虚函数：运行期才能确定下来</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="虚方法-amp-非虚方法"><a href="#虚方法-amp-非虚方法" class="headerlink" title="虚方法 &amp; 非虚方法"></a>虚方法 &amp; 非虚方法</h2><ul>
+<li>如果方法在编译期就确定了具体的调用版本，且这个版本在运行时是不可变的。这样的方法就称为<strong>非虚方法</strong>。</li>
+<li>静态方法、私有方法、final方法、实例构造器、父类方法都是非虚方法。</li>
+<li>其它方法称为虚方法。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如果在编译阶段就能够明确确定将要调用哪个类中的方法，这种方法叫做非虚方法；</span><br><span class="line">如果在编译期不能确定，只有在运行时才能确定调用哪个类中的方法，这种方法叫做虚方法。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>虚拟机中提供了以下几条方法调用指令：</p>
+<ul>
+<li><p>普通调用指令：</p>
+<blockquote>
+<ol>
+<li><p><code>invokestatic</code>：调用静态方法，解析阶段确定唯一方法版本。</p>
+</li>
+<li><p><code>invokespecial</code>：调用<code>&lt;init&gt;</code>方法、私有方法及父类方法，解析阶段确定唯一方法版本。</p>
+<p>【父类方法就是<code>super.xxx()</code>】</p>
+</li>
+<li><p><code>invokevirtual</code>：调用所有虚方法。</p>
+</li>
+<li><p><code>invokeinterface</code>：调用接口方法。</p>
+</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>动态调用指令：</p>
+<blockquote>
+<ol start="5">
+<li><code>invokedynamic</code>：动态接续出需要调用的方法，然后执行。</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<p>前四条指令固化在虚拟机内部，方法的调用执行不可人为干预，而 <code>invokedynamic</code> 指令则支持由用户确定方法版本，其中 <strong>invokestatic指令 和 invokespecial指令 调用的方法称为非虚方法，其余的（final 修饰的除外）称为虚方法</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如果父类 Father 中定义了 final 关键字修饰的方法，在子类中直接调用该方法：</span><br><span class="line"></span><br><span class="line">我们会发现该方法是使用 invokevirtual 指令调用的，但本质上这还是一个非虚方法，</span><br><span class="line">因为被 final 修饰的方法在编译期就可以确定唯一的方法版本，不能被子类重写。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>JVM 字节码指令集一直比较稳定，一直到 Java7 中才增加了一个 <code>invokedynamic</code> 指令，这是 Java 为了实现动态类型语言支持而做的一种改进。</li>
+<li>但是在 Java7 中并没有提供直接生成 <code>invokedynamic</code> 指令的方法，需要借助 ASM 这种底层字节码工具来产生 <code>invokedynamic</code> 指令。<strong>直到 Java8 的 Lambda 表达式的出现，invokedynamic指令才在 Java 中有了直接的生成方式</strong>。</li>
+<li>Java7 中增加的动态语言类型支持的本质是对 Java 虚拟机规范的修改，而不是对Java语言规则的修改，这一块相对来讲比较复杂，增加了虚拟机中的方法调用，最直接的受益者就是运行在Java平台的动态语言的编译器。</li>
+</ul>
+<hr>
+<h2 id="动态类型语言和静态类型语言"><a href="#动态类型语言和静态类型语言" class="headerlink" title="动态类型语言和静态类型语言"></a>动态类型语言和静态类型语言</h2><ul>
+<li><strong>动态类型语言和静态类型语言两者的区别就在于对类型的检查是在编译期还是在运行期</strong>。满足前者就是静态类型语言，反之就是动态类型语言。 </li>
+<li>也就是说，静态类型语言是判断变量自身的类型信息；动态类型语言是判断变量值的类型信息。变量没有类型信息，变量值才有类型信息。这是动态语言的一个重要特性。</li>
+<li>Java 是一种静态类型语言，静态类型语言就是强类型语言，动态类型语言就是弱类型语言，如：Js、Python 等。</li>
+</ul>
+<hr>
+<h2 id="Java语言中方法重写的本质"><a href="#Java语言中方法重写的本质" class="headerlink" title="Java语言中方法重写的本质"></a>Java语言中方法重写的本质</h2><ol>
+<li> 当我们调用一个对象的方法的时候，首先会将这个对象的实际类型压入操作数栈记做 C 。</li>
+<li> 然后 JVM 就会去这个类型对应的 Class 中去查找是否含有 <code>返回值、名称和请求参数</code> 与调用方法都相同的方法；</li>
+<li> 如果找到了，继续进行访问权限校验，若校验通过，就返回该方法的直接引用；若校验失败，则返回 java.lang.IllegalAccessError 异常。</li>
+<li> 如果在 Class C 中找不到符合条件的方法，则按照继承关系从下往上依次对 C 的父类进行第2、3步的检索和验证过程。</li>
+<li> 如果始终没有找到对应的方法，则抛出 <code>java.lang.AbstractMethodError</code> 异常。</li>
+</ol>
+<blockquote>
+<p>  <strong>IllegalAccessError</strong></p>
+</blockquote>
+<ul>
+<li>  程序试图访问或修改一个属性或调用一个方法，如果这个属性或方法，你没有权限访问，一般会引起编译期异常。这个错误如果发生在运行时，就说明一个类发生了不兼容的改变。</li>
+</ul>
+<hr>
+<h2 id="虚方法表"><a href="#虚方法表" class="headerlink" title="虚方法表"></a>虚方法表</h2><ul>
+<li>在面向对象的编程中，会很频繁的使用到动态分派，如果在每次动态分派的过程中都要重新在类的方法元数据中搜索合适的目标的话可能影响到执行效率。因此，为了提高性能，JVM 采用<strong>在方法区为每个 Class 对象建立一个虚方法表</strong>（virtual method table）（非虚方法不会出现在表中）来实现，虚方法表中的每个虚方法通过索引来代替递归查找。</li>
+<li>每个类都对应有一个虚方法表，表中存放着各个方法的实际入口。</li>
+</ul>
+<blockquote>
+<p>  <strong>那么虚方法表什么时候创建呢？</strong></p>
+</blockquote>
+<p>虚方法表会在<strong>链接阶段</strong>被创建并开始初始化，类的变量<strong>初始</strong>值准备完成之后，JVM 会把该类的虚方法表也初始化完毕。</p>
+<hr>
+<h1 id="方法返回地址（Return-Address）"><a href="#方法返回地址（Return-Address）" class="headerlink" title="方法返回地址（Return Address）"></a>方法返回地址（Return Address）</h1><blockquote>
+<p>  <strong>定义</strong></p>
+</blockquote>
+<p><strong>方法返回地址</strong>保存的是程序计数器的值（指向下一条要执行指令的地址）。</p>
+<blockquote>
+<p>  <strong>举例</strong></p>
+</blockquote>
+<p>假设在某一栈中，先调用了A方法 ，A方法中又调用了B方法：</p>
+<ol>
+<li> A方法首先入栈，</li>
+<li> 在A方法的某一行代码中调用了B方法，B方法入栈，<strong>B方法在执行完毕后，要跳转回A方法中去，就需要用到这个方法返回地址</strong>。</li>
+<li> 方法返回地址的值就是程序计数器的值，即下一条JVM指令的地址，这样执行引擎就能根据这个地址跳转回A方法中去，继续执行A方法中的代码。</li>
+</ol>
+<blockquote>
+<p>  <strong>方法的两种结束方式：</strong></p>
+</blockquote>
+<p>一个方法的结束有两种方式：①正常执行完成    ②出现未处理的异常，非正常退出。  无论通过哪种方式退出，在方法退出后都返回到该方法被调用的位置。  </p>
+<ul>
+<li>方法正常退出时，<strong>会将调用者的程序计数器的值作为返回地址，即调用该方法的指令的下一条指令的地址</strong>。</li>
+<li>而通过异常退出的，返回地址要通过异常表来确定，栈帧中一般不会保存这部分信息。</li>
+</ul>
+<p>当一个方法开始执行后，只有两种方式可以退出这个方法：</p>
+<ol>
+<li>执行引擎收到任意一个方法返回的字节码指令（return），会有返回值传递给上层的方法调用者，简称<strong>正常完成出口</strong>。</li>
+<li>一个方法在正常调用完成之后究竟需要使用哪一个返回指令还需要根据方法返回值的实际数据类型而定。<ul>
+<li>在字节码指令中，返回指令包含 <code>ireturn</code> （当返回值是 boolean、byte、char、short 和 int 类型时使用）、 <code>lreturn</code> 、 <code>freturn</code> 、 <code>dreturn</code> 以及 <code>areturn</code> ，另外还有一个 <code>return</code> 指令供声明为 void 的方法、实例构造方法（ <code>&lt;init&gt;</code> ）、类和接口的构造方法（ <code>&lt;clinit&gt;</code> ）使用。</li>
+</ul>
+</li>
+<li>在方法执行的过程中遇到了异常，并且这个异常没有在方法内进行处理，也就是只要在本方法的异常表中没有搜索到匹配的异常处理器，就会导致方法退出。简称<strong>异常完成出口</strong>。</li>
+<li>方法执行过程中抛出异常时的异常处理方案，存储在一个异常处理表，方便在发生异常时找到处理异常的代码。<ul>
+<li>本质上，方法的退出就是当前栈帧出栈的过程。此时，需要恢复上一个栈帧中方法的局部变量表、操作数栈、将返回值压入调用者的操作数栈、设置PC寄存器值等，让调用者的方法能继续执行下去。</li>
+</ul>
+</li>
+</ol>
+<p>正常完成出口和异常完成出口的区别在于：<strong>通过异常完成出口退出的程序不会给它的上层调用者产生任何的返回值</strong>。</p>
+<hr>
+<h1 id="一些附加信息"><a href="#一些附加信息" class="headerlink" title="一些附加信息"></a>一些附加信息</h1><p>栈帧中还允许携带与Java虚拟机实现相关的一些附加信息。例如：对程序调试提供支持的信息。</p>
+<hr>
+<h1 id="栈的相关面试题"><a href="#栈的相关面试题" class="headerlink" title="栈的相关面试题"></a>栈的相关面试题</h1><blockquote>
+<ol>
+<li> <strong>举例栈溢出的情况？</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">栈溢出：StackOverflowError</span><br><span class="line">内存溢出：OutOfMemoryError</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li> 如果设置栈帧内存为自适应的话，假设某个方法入栈时需要占用的内存为2M，那么这时候JVM就会自动分配栈帧内存大于等于2M的空间给方法使用。这种情况下不会出现 StackOverflowError ，但是会当栈的内存不足以满足新的栈帧需要的内存时，会出现OutOfMemoryError。</li>
+<li> 如果设置栈帧内存为手动指定的话，假设某个方法入栈时需要占用的内存为2M，但是我们手动设置的栈帧的最大内存为1M，那么这时就会出现 StackOverflowError。</li>
+</ol>
+<blockquote>
+<ol start="2">
+<li> <strong>调整栈大小，就能保证不出现溢出吗？</strong></li>
+</ol>
+</blockquote>
+<p>答：不能。如果入栈的方法是一个死循环的递归方法，那么增加栈的内存只能保证栈溢出的时间出现的晚一些，最终还是会出现栈溢出。</p>
+<blockquote>
+<ol start="3">
+<li> <strong>分配的栈内存越大越好吗？</strong></li>
+</ol>
+</blockquote>
+<p>答：不是。会挤占其它内存空间。</p>
+<blockquote>
+<ol start="4">
+<li> <strong>垃圾回收是否会涉及到虚拟机栈？</strong></li>
+</ol>
+</blockquote>
+<p>答：不会。</p>
+<ul>
+<li>  程序计数器：不存在Error，不存在GC；</li>
+<li>  虚拟机栈：存在Error，不存在GC（通过出栈的方式来完成类似于垃圾回收的功能）；</li>
+<li>  本地方法栈：存在Error，不存在GC（类似于虚拟机栈）；</li>
+<li>  堆：存在Error，存在GC；</li>
+<li>  方法区：存在Error，存在GC；</li>
+</ul>
+<blockquote>
+<ol start="5">
+<li> <strong>方法中定义的局部变量是否线程安全？</strong></li>
+</ol>
+</blockquote>
+<p>答：不一定。具体问题具体分析。</p>
+<p>​    </p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1366,112 +1927,6 @@
 <h1 id="加密-解密工具类"><a href="#加密-解密工具类" class="headerlink" title="加密/解密工具类"></a>加密/解密工具类</h1><h2 id="MD5加密工具类"><a href="#MD5加密工具类" class="headerlink" title="MD5加密工具类"></a>MD5加密工具类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.atguigu.hospital.util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.security.MessageDigest;</span><br><span class="line"><span class="keyword">import</span> java.security.NoSuchAlgorithmException;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">MD5</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">encrypt</span><span class="params">(String strSrc)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">char</span> hexChars[] = &#123; <span class="string">&#x27;0&#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;4&#x27;</span>, <span class="string">&#x27;5&#x27;</span>, <span class="string">&#x27;6&#x27;</span>, <span class="string">&#x27;7&#x27;</span>, <span class="string">&#x27;8&#x27;</span>,</span><br><span class="line">                    <span class="string">&#x27;9&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span> &#125;;</span><br><span class="line">            <span class="keyword">byte</span>[] bytes = strSrc.getBytes();</span><br><span class="line">            MessageDigest md = MessageDigest.getInstance(<span class="string">&quot;MD5&quot;</span>);</span><br><span class="line">            md.update(bytes);</span><br><span class="line">            bytes = md.digest();</span><br><span class="line">            <span class="keyword">int</span> j = bytes.length;</span><br><span class="line">            <span class="keyword">char</span>[] chars = <span class="keyword">new</span> <span class="keyword">char</span>[j * <span class="number">2</span>];</span><br><span class="line">            <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; bytes.length; i++) &#123;</span><br><span class="line">                <span class="keyword">byte</span> b = bytes[i];</span><br><span class="line">                chars[k++] = hexChars[b &gt;&gt;&gt; <span class="number">4</span> &amp; <span class="number">0xf</span>];</span><br><span class="line">                chars[k++] = hexChars[b &amp; <span class="number">0xf</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> String(chars);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchAlgorithmException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;MD5加密出错！！+&quot;</span> + e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/15/SpringMVC%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%A4%84%E7%90%86HTTP%E8%AF%B7%E6%B1%82%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">SpringMVC中常见的处理HTTP请求的方法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-15 23:58:00" itemprop="dateCreated datePublished" datetime="2021-04-15T23:58:00+08:00">2021-04-15</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-16 00:18:59" itemprop="dateModified" datetime="2021-04-16T00:18:59+08:00">2021-04-16</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringMVC/" itemprop="url" rel="index"><span itemprop="name">SpringMVC</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="自动绑定"><a href="#自动绑定" class="headerlink" title="自动绑定"></a>自动绑定</h1><blockquote>
-<p><em>SpringMVC 绑定请求参数是自动实现的，但是想要使用，必须遵循使用要求。</em></p>
-</blockquote>
-<p>使用情况较少！！！</p>
-<hr>
-<h1 id="RequestParam"><a href="#RequestParam" class="headerlink" title="@RequestParam"></a>@RequestParam</h1><ul>
-<li>支持POST和GET请求。</li>
-<li>只支持Content-Type：为application/x-www-form-urlencoded编码的内容。Http协议中，如果不指定Content-Type，则默认传递的参数就是application/x-www-form-urlencoded类型</li>
-</ul>
-<p>@RequestParam案例<br>使用@RequestParm用于绑定controller上的参数，可以是多个参数，也可以是一个Map集合，GET，POST均可。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestParam&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Boolean <span class="title">requestParam</span><span class="params">(<span class="meta">@RequestParam(name = &quot;code&quot;,required = false)</span> String code)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;code:&quot;</span>+code);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>@RequestParm中name属性是指定参数名，required属性默认为ture，表示必传。若为false则为非必传。属性有defaultValue默认值选项，若该参数为null时，会将默认值填充到参数上。<br>在项目中还可以使用map来接收多个参数：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestParam</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>@RequestBody案例<br>@RequestBody绑定一个实体。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(value = &quot;requestBody&quot;)</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">requestBody</span><span class="params">(<span class="meta">@RequestBody</span>  User user)</span></span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;user:&quot;</span>+user.getName());</span><br><span class="line">    <span class="keyword">return</span> user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>@RequestBody也能采用map来接收多个参数。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;/menu.spring&quot;,method = RequestMethod.POST)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> NewFrameResponseResult <span class="title">queryTreeList</span><span class="params">(<span class="meta">@RequestBody</span> Map&lt;String, Object&gt; param)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NewFrameResponseResult.success(fyhsMenuTreeService.queryTreeList(param));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="RequestBody"><a href="#RequestBody" class="headerlink" title="@RequestBody"></a>@RequestBody</h1><ul>
-<li>不支持GET请求。</li>
-<li>必须要在请求头中申明 content-Type（如application/json）。springMvc通过HandlerAdapter配置的HttpMessageConverters解析httpEntity的数据，并绑定到相应的bean上。</li>
-</ul>
-<h1 id="PathVaribale"><a href="#PathVaribale" class="headerlink" title="@PathVaribale"></a>@PathVaribale</h1><h1 id="ModelAttribute"><a href="#ModelAttribute" class="headerlink" title="@ModelAttribute"></a>@ModelAttribute</h1>
       
     </div>
 
