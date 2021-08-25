@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">138</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,259 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/07/Hystrix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/11/07/Hystrix/" class="post-title-link" itemprop="url">Hystrix</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2020-11-07 18:35:19 / Modified: 21:09:30" itemprop="dateCreated datePublished" datetime="2020-11-07T18:35:19+08:00">2020-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/SpringCould/" itemprop="url" rel="index"><span itemprop="name">SpringCould</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Netflix/Hystrix/wiki">Hystrix官方文档</a></li>
+</ul>
+<h1 id="雪崩效应"><a href="#雪崩效应" class="headerlink" title="雪崩效应"></a>雪崩效应</h1><p>分布式系统环境下，<strong>服务间的依赖</strong>非常常见，一个业务调用通常以来多个基础服务。如下图，当库存服务不可用时，商品服务的请求线程被阻塞，当有大批量请求调用库存服务时，最终可能导致整个商品服务的资源耗尽（主要是线程池资源，虽然库存服务不可用，但是每个商品服务的请求还会占用一个线程，并且因为不会获取到响应，也就不会归还线程，这样当线程池资源耗尽时商品服务就会被阻塞），无法继续对外提供服务。并且这种不可用可能沿请求调用链向上传递，这种现象称为<strong>雪崩效应</strong>。</p>
+<p><img src="/2020/11/07/Hystrix/%E9%9B%AA%E5%B4%A9%E6%95%88%E5%BA%94.png"></p>
+<h2 id="雪崩效应的常见场景"><a href="#雪崩效应的常见场景" class="headerlink" title="雪崩效应的常见场景"></a>雪崩效应的常见场景</h2><blockquote>
+<ul>
+<li>硬件故障</li>
+<li>流量激增</li>
+<li>缓存穿透</li>
+<li>程序BUG</li>
+<li>同步等待</li>
+</ul>
+</blockquote>
+<h2 id="雪崩效应的应对策略"><a href="#雪崩效应的应对策略" class="headerlink" title="雪崩效应的应对策略"></a>雪崩效应的应对策略</h2><p>针对造成雪崩效应的不同场景，可以使用不同的应对策略，没有一种通用所有场景的策略。</p>
+<blockquote>
+<ul>
+<li>硬件故障</li>
+<li>流量激增</li>
+<li>缓存穿透</li>
+<li>程序BUG</li>
+<li>同步等待</li>
+</ul>
+</blockquote>
+<p>综上所述，如果一个应用不能对（服务间的）依赖故障进行隔离，那该应用本身就处在被拖垮的风险中。            因此，为了构件稳定、可靠的分布式系统，我们的服务应当具有自我保护能力，当依赖的服务不可用时，当前服务启动自我保护功能，从而避免发生雪崩效应。</p>
+<hr>
+<h1 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h1><p>Hystrix，中文含义是豪猪。因其背上长满棘刺，从而有了自我保护能力。            SpringCould中的Hystrix是Netflix一款开源的容错框架，同样具有自我保护能力。</p>
+<p>Hystrix的设计目标：</p>
+<blockquote>
+<ul>
+<li>对来自依赖的延迟和故障进行防护和控制（这些依赖通常是通过网络访问的）</li>
+<li>阻止故障的连锁反应</li>
+<li>快速失败并迅速恢复</li>
+<li>回退并优雅降级</li>
+<li>提供实时的监控与示警</li>
+</ul>
+</blockquote>
+<p>Hystrix遵循的设计原则：</p>
+<blockquote>
+<ul>
+<li>防止任何单独的依赖耗尽资源（主要是线程资源）</li>
+<li>过载立即切断并快速失败，防止排队</li>
+<li>尽可能提供回退以保护用户免受故障</li>
+<li>使用隔离技术来限制一个依赖的影响</li>
+<li>通过近实时的指标、监控和示警，确保故障被及时发现</li>
+<li>通过动态修改配置属性，确保故障及时恢复</li>
+<li>防止整个依赖客户端执行失败，而不仅仅是网络通信</li>
+</ul>
+</blockquote>
+<p>Hystrix如何实现这些设计目标？</p>
+<blockquote>
+<ul>
+<li>使用命令模式将所有对外部服务（或依赖关系）的调用包装在<code>HystrixCommand</code>或<code>HystrixObservableCommand</code>对象中，并将该对象放在单独的线程中执行；[没看懂…]</li>
+<li>每个依赖关系都维护着一个线程池，线程池被耗尽则拒绝请求（而不是让请求排队）</li>
+<li>记录请求成功、失败、超时和线程拒绝</li>
+<li>服务错误百分比超过了阈值，熔断器开关自动打开，一段时间内停止对该服务的所有请求</li>
+<li>请求失败、被拒绝、超时或熔断时执行降级逻辑</li>
+<li>近实时的监控指标和配置的修改</li>
+</ul>
+</blockquote>
+<h1 id="Hystrix处理流程"><a href="#Hystrix处理流程" class="headerlink" title="Hystrix处理流程"></a>Hystrix处理流程</h1><p><img src="/2020/11/07/Hystrix/hystrix%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png"></p>
+<p>Hystrix的整个工作流程如下：</p>
+<blockquote>
+<ol>
+<li>构造一个<code>HystrixCommand</code>或<code>HystrixObservableCommand</code>对象，用于封装请求，并在构造方法中配置请求被执行需要的参数；</li>
+<li>执行命令，Hystrix提供了4种执行命令的方法，后面详述；</li>
+<li>判断是否要使用缓存响应请求，若启动了缓存且缓存可用，则直接使用缓存响应请求。[Hystrix支持请求缓存，但需要用户自定义启动]</li>
+<li>判断熔断器是否打开，如果打开，则跳到第8步；</li>
+<li>判断线程池/队列/信号量是否已满，已满则跳到第8步；</li>
+<li>执行<code>HystrixCommand.run()</code>或<code>HystrixObservableCommand.construct()</code>，如果执行失败或超时，跳到第8步，否则跳到第9步；</li>
+<li>统计熔断器监控指标；</li>
+<li>执行FallBack备用逻辑；</li>
+<li>返回请求响应。</li>
+</ol>
+<p>从流程图上可知，第5步线程池/队列/信号量已满时，还会执行第7步逻辑，更新熔断器的统计信息，而第6步无论成功与否，都会执行第7步逻辑，更新熔断器统计信息。</p>
+</blockquote>
+<h1 id="Hystrix容错"><a href="#Hystrix容错" class="headerlink" title="Hystrix容错"></a>Hystrix容错</h1><p>Hystrix的容错主要是通过添加允许延迟和容错方法，帮助控制这些分布式服务之间的交互。            还通过隔离服务之间的访问点，阻止它们之间的级联故障以及回退选项来实现这一点，从而提高系统的整体弹性。            Hystrix主要提供了以下几种容错方法：</p>
+<ul>
+<li>资源隔离</li>
+<li>熔断</li>
+<li>降级</li>
+</ul>
+<p>下面我们详细了解一下这几种容错机制。</p>
+<hr>
+<h2 id="资源隔离"><a href="#资源隔离" class="headerlink" title="资源隔离"></a>资源隔离</h2><blockquote>
+<p>资源隔离主要指对线程的隔离。Hystrix提供了2种线程隔离方式：线程池和信号量</p>
+</blockquote>
+<h3 id="线程隔离——线程池"><a href="#线程隔离——线程池" class="headerlink" title="线程隔离——线程池"></a>线程隔离——线程池</h3><h3 id="线程隔离——信号量"><a href="#线程隔离——信号量" class="headerlink" title="线程隔离——信号量"></a>线程隔离——信号量</h3><hr>
+<h2 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h2><h3 id="熔断器简介"><a href="#熔断器简介" class="headerlink" title="熔断器简介"></a>熔断器简介</h3><p>在现实生活中，家用电路中都会安装一个保险盒，当负载过载时，保险盒中的保险丝就会自动熔断，保护下游部件不被烧毁。            Hystrix中的熔断器（Circuit Breaker）也是起类似作用。Hystrix在运行过程中回向每个CommandKey对应的熔断器报告成功、失败、超时和拒绝的状态，熔断器维护并统计这些数据，并根据这些信息来决策熔断器是否打开。如果打开，则熔断后续请求，快速返回。            隔一段时间后熔断器尝试半开，放一部分流量请求进来，相当于对依赖服务做一次健康检查，如果请求成功熔断器关闭。</p>
+<h3 id="熔断器配置"><a href="#熔断器配置" class="headerlink" title="熔断器配置"></a>熔断器配置</h3><p>熔断器主要包括以下6个参数：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">参数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center"><code>circuitBreaker.enabled</code></td>
+<td align="center">是否启用熔断器，默认true</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>circuitBreaker.forceOpen</code></td>
+<td align="center">强制打开熔断器，默认false</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>circuitBreaker.forceClosed</code></td>
+<td align="center">强制关闭熔断器，默认false</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><code>circuitBreaker.errorThresholdPercentage</code></td>
+<td align="center">错误率阈值，默认值是50%</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><code>circuitBreaker.requestVolumeThreshold</code></td>
+<td align="center">统计请求的最小数量，默认值是20</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"><code>circuitBreaker.sleepWindowMillseconds</code></td>
+<td align="center">半开状态试探睡眠时间，默认值5000ms</td>
+</tr>
+</tbody></table>
+<blockquote>
+<ul>
+<li><code>circuitBreaker.errorThresholdPercentage</code>是错误率的阈值，例如一段时间内有100个请求，其中有54个超时或异常，那么这段时间内的错误率就是54%，大于阈值50%，这种情况下就会触发熔断器打开。</li>
+<li><code>circuitBreaker.requestVolumeThreshold</code>的含义是：一段时间内至少有20个请求才能进行<code>errorThresholdPercentage</code>计算，如果一段时间内只有19个请求，并且这些请求全都失败了，错误率是100%，但是熔断器仍不会打开，因为总请求数不满20。</li>
+<li><code>circuitBreaker.sleepWindowMillseconds</code>的含义是：当熔断器开启5000s之后，会尝试放一部分流量过去进行试探，确定依赖服务是否恢复。</li>
+</ul>
+</blockquote>
+<h3 id="熔断器工作原理"><a href="#熔断器工作原理" class="headerlink" title="熔断器工作原理"></a>熔断器工作原理</h3><p><img src="/2020/11/07/Hystrix/%E7%86%94%E6%96%AD%E5%99%A8%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png"></p>
+<p>熔断器的工作流程如下：</p>
+<blockquote>
+<ol>
+<li>调用<code>allowRequest()</code>判断是否允许将请求提交到线程池：<ul>
+<li>如果熔断器强制打开，不允许放行，返回；</li>
+<li>如果熔断器强制关闭，允许放行。此外不需要再关注熔断器的实际状态，也就是说熔断器仍会维护统计数据和开关状态，但是不生效。</li>
+</ul>
+</li>
+<li>调用<code>isOpen()</code>判断熔断器开关是否打开：<ul>
+<li>1）如果熔断器打开，进入第3步，否则继续；</li>
+<li>2）如果一个周期内总的请求数小于<code>circuitBreaker.requestVolumeThreshold</code>的值，允许请求放行，否则进入3)；</li>
+<li>3）如果一个周期内错误率小于<code>circuitBreaker.errorThresholdPercentage</code>的值，允许请求放行。否则，打开熔断器开关，进入第3步。</li>
+</ul>
+</li>
+<li>调用<code>allowSingleTest()</code>判断是否允许单个请求通行，检查依赖服务是否恢复。<ul>
+<li>1）如果熔断器打开，且距离熔断器打开的时间或上一次试探请求放行的时间超过<code>circuitBreaker.sleepWindowMillseconds</code>，熔断器进入半开状态，允许放行一个试探请求；否则，不允许放行。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h2 id="回退降级"><a href="#回退降级" class="headerlink" title="回退降级"></a>回退降级</h2><p>降级，通常是指服务高峰期，为了保证核心服务的正常运行，需要停掉一些不太重要的业务，或者某些服务不可用时，执行备用逻辑从故障服务中快速失败或快速返回，以保障主体业务不受影响。            Hystrix提供的降级服务主要是为了容错，保证当前服务不受依赖服务故障的影响，从而提高服务的健壮性。            要支持回退或降级处理，可以重写<code>HystrixCommand</code>中的<code>getFallBack()</code>方法或<code>HystrixObservableCommand</code>中的<code>resumeWithFallBack()</code>方法。</p>
+<p>Hystrix会在以下几种情况下执行降级逻辑：</p>
+<blockquote>
+<ul>
+<li>执行<code>construct()</code>或<code>run()</code>抛出异常</li>
+<li>熔断器打开导致命令断路</li>
+<li>命令的线程池或信号量的容量超额，命令被拒绝</li>
+<li>命令执行超时</li>
+</ul>
+</blockquote>
+<ol>
+<li>正常工作的情况下，客户端请求调用服务API接口：</li>
+</ol>
+<p><img src="/2020/11/07/Hystrix/1525658906255.png" alt="1525658906255"></p>
+<ol start="2">
+<li>当有服务出现异常时，直接进行失败回滚，服务降级处理：</li>
+</ol>
+<p><img src="/2020/11/07/Hystrix/1525658983518.png" alt="1525658983518"></p>
+<blockquote>
+<p>当服务繁忙时，如果服务出现异常，不是粗暴的直接报错，而是返回一个友好的提示，虽然拒绝了用户的访问，但是会返回一个结果。</p>
+<p>这就好比去买鱼，平常超市买鱼会额外赠送杀鱼的服务。等到逢年过节，超时繁忙时，可能就不提供杀鱼服务了，这就是服务的降级。</p>
+<p>系统特别繁忙时，一些次要服务暂时中断，优先保证主要服务的畅通，一切资源优先让给主要服务来使用，在双十一、618时，京东天猫都会采用这样的策略。</p>
+</blockquote>
+<h3 id="降级回退方式"><a href="#降级回退方式" class="headerlink" title="降级回退方式"></a>降级回退方式</h3>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -589,7 +842,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-19 10:31:40" itemprop="dateModified" datetime="2021-08-19T10:31:40+08:00">2021-08-19</time>
+        <time title="Modified: 2021-08-21 11:03:06" itemprop="dateModified" datetime="2021-08-21T11:03:06+08:00">2021-08-21</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -913,6 +1166,10 @@
 <li>  <strong>开环控制</strong>：事先考虑好所有的情况，运行时不再更改。</li>
 <li>  <strong>闭环控制</strong>：运行时监控，哪里出现拥塞就进行分流。</li>
 </ul>
+<blockquote>
+<p>  分类IP地址</p>
+</blockquote>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820101552003.png" alt="image-20210820101552003"></p>
 <hr>
 <h2 id="网络层常见的协议"><a href="#网络层常见的协议" class="headerlink" title="网络层常见的协议"></a>网络层常见的协议</h2><blockquote>
 <ol>
@@ -987,49 +1244,234 @@
 </li>
 <li></li>
 </ol>
-<h2 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h2><h1 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h1><blockquote>
-<p>负责不同主机中两个进程之间的通信。</p>
-<p>使用传输层的服务，高层用户就可以直接进行端到端的数据传输，从而忽略通信子网的存在。</p>
-</blockquote>
-<h2 id="传输层的功能"><a href="#传输层的功能" class="headerlink" title="传输层的功能"></a>传输层的功能</h2><blockquote>
+<h2 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h2><hr>
+<h1 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h1><h2 id="传输层概述"><a href="#传输层概述" class="headerlink" title="传输层概述"></a>传输层概述</h2><blockquote>
 <ol>
-<li><p>传输层为运行在不同主机上的进程之间提供了<strong>逻辑通信</strong>（即端到端的通信）。</p>
-<p>[网络层提供的是<strong>主机</strong>之间的<strong>逻辑通信</strong>（即<code>点到点</code>的通信）。数据链路层提供的也是<code>点到点</code>的<strong>逻辑通信</strong>。] [<code>逻辑通信</code>是指2个对等层之间好像是沿水平方向传送数据，实际上并不是。真正的<strong>物理通信</strong>只有物理层上的比特流的传输]</p>
-</li>
-<li><p>流量控制</p>
-</li>
-<li><p>差错控制</p>
-</li>
-<li><p>服务治理</p>
-</li>
-<li><p>数据传输管理</p>
-</li>
+<li>传输层为运行在不同主机上的进程之间提供了<strong>逻辑通信</strong>（即端到端的通信）。</li>
+<li>流量控制</li>
+<li>差错控制</li>
+<li>服务治理</li>
+<li>数据传输管理</li>
 </ol>
 </blockquote>
-<h2 id="传输层常见协议"><a href="#传输层常见协议" class="headerlink" title="传输层常见协议"></a>传输层常见协议</h2><blockquote>
-<ol>
-<li>TCP</li>
-<li>UDP</li>
+<blockquote>
+<p>  <strong>核心功能</strong></p>
+</blockquote>
+<ul>
+<li>  传输层提供<strong>进程间的逻辑通信</strong>；网络层提供主机间的逻辑通信。</li>
+<li>  传输层实现进程间的逻辑通信依赖的是<strong>套接字</strong>，在网络通信中，主机 A 发送给主机 B 的报文段包含目的端口号和源端口号，目的端口号用于找到主机 B 的进程，源端口号则用于主机 B 返回响应消息。</li>
+</ul>
+<blockquote>
+<p>  <strong>传输协议（TCP / UDP）</strong></p>
+</blockquote>
+<ul>
+<li>  传输层提供两种不同的传输协议，即 ①面向连接的 TCP；  ②无连接的 UDP</li>
+<li>  <strong>网络层的 IP 协议是不可靠的。</strong></li>
+<li>  当传输层采用<strong>面向连接</strong>的 TCP 协议时，尽管下面的网络层是不可靠的，但是由于 TCP 具有可靠性，所以建立的逻辑信道就相当于是一条<strong>全双工</strong>的可靠信道；而当传输层采用无连接的 UDP 时，建立的逻辑信道仍然是一条不可靠信道。</li>
+</ul>
+<blockquote>
+<p>  <strong>面向连接 vs. 无连接</strong></p>
+</blockquote>
+<ul>
+<li><strong>面向连接</strong>就是，通信的双方在：<ol>
+<li> 正式通信前，要先建立连接，</li>
+<li> 通信过程中，要一直监控连接的情况；</li>
+<li> 通信结束后，要释放连接。</li>
 </ol>
-</blockquote>
-<h2 id="TCP协议的三次握手-amp-四次挥手"><a href="#TCP协议的三次握手-amp-四次挥手" class="headerlink" title="TCP协议的三次握手&amp;四次挥手"></a>TCP协议的三次握手&amp;四次挥手</h2><h3 id="TCP连接的建立"><a href="#TCP连接的建立" class="headerlink" title="TCP连接的建立"></a>TCP连接的建立</h3><p>TCP连接的建立要经过3个步骤，通常称为“三次握手”。</p>
-<blockquote>
-<ul>
-<li>step1：客户机的TCP首先向服务器的TCP发送一个连接请求报文段，这个特殊的报文段中不包含应用层数据。</li>
-<li>step2：服务器的TCP接收到连接请求报文段后，如果同意建立连接，就向客户机发回确认，并为该TCP连接分配TCP缓存和变量。</li>
-<li>step3：当客户机收到确认报文段后，还要想服务器给出确认，并且也要给连接分配缓存和变量。该报文段可以携带数据，如果不携带数据则不消耗序列号。</li>
+</li>
+<li>  <strong>无连接</strong>是：通信的双方无需提前建立连接，需通信的时候，直接将“数据”发送到网络上，尽可能地往目的地输送，但不保证一定成功。</li>
 </ul>
-</blockquote>
-<p>在成功进行了以上三步后，TCP连接就建立了，接下来就可以传递应用层数据了。</p>
-<h3 id="TCP连接的释放"><a href="#TCP连接的释放" class="headerlink" title="TCP连接的释放"></a>TCP连接的释放</h3><p>参与TCP连接的两个进程中的任何一个都能终止该连接，TCP连接的释放过程通常称为“四次挥手”。</p>
 <blockquote>
-<ul>
-<li>step1：客户机打算关闭连接，就向服务器TCP发送一个连接释放报文段，并停止再发送数据，主动关闭TCP连接。</li>
-<li>step2：服务器收到连接释放报文段后发出确认。</li>
-<li>step3：若服务器已经没有要向客户机发送的数据，就通知TCP释放连接，发出连接释放报文段。</li>
-<li>step4：客户机收到连接释放报文段后，向服务器发出确认报文段。</li>
-</ul>
+<p>  <strong>单工、全双工、半双工</strong></p>
 </blockquote>
+<ul>
+<li>  <strong>单工：</strong>一条信道，只有一个方向通信。即 A 可以给 B 发，但 B 不能给 A 发。如果 A 想发给 B，则需要新建一条 B 到 A 的信道。</li>
+<li>  <strong>半双工：</strong>两条信道，A 可以给 B 发，B 也可以给 A 发，但 A 给 B 发和 B 给 A 发不能同时进行。即 A 不能同时接收和发送，B 也一样。</li>
+<li>  <strong>全双工：</strong>两条信道，A 和 B 都可以同时接收和发送。</li>
+</ul>
+<blockquote>
+<p>  <strong>端口的作用：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>端口就是应用层和传输层之间进行数据传输的通道</strong>。</li>
+<li>  应用层的各种应用进程需要通过端口才能将其数据向下交付给传输层；以及传输层可以将其报文段中的数据通过端口向上交付给应用层的进程。</li>
+</ul>
+<blockquote>
+<p>  <strong>端口号</strong></p>
+</blockquote>
+<ul>
+<li>  端口号用于在一台计算机上唯一标识一个端口。</li>
+</ul>
+<blockquote>
+<p>  <strong>套接字（Socket）</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">套接字 &#x3D; （主机IP地址，端口号）</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  套接字唯一地标识了一个主机和其上的一个应用（进程）。</li>
+<li>  叫进程更为合适一点，因为客户机上一些应用使用的端口号是动态的，只有在运行时作为一个进程才能知道。</li>
+</ul>
+<hr>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><blockquote>
+<p>  <strong>UDP 优点</strong></p>
+</blockquote>
+<ol>
+<li> UDP 是无连接的，即不会引入建立连接的时延；</li>
+<li> 不需要维护连接状态，即不需要消耗资源去跟踪连接状态的相关参数，消耗的系统资源更少，即同样的软、硬件条件下能支持更多的服务。</li>
+<li> 分组首部开销小。TCP 首部需要 20Byte，而 UDP 仅需 8Byte。（TCP由于要建立、维护、释放连接，所以首部需要的信息多一点）</li>
+<li> UDP 没有拥塞控制，允许丢弃部分数据，对于要求控制发送时间的应用友好。即允许发送失败，但不允许发送超时的应用。</li>
+</ol>
+<blockquote>
+<p>  <strong>UDP 首部格式</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>目的端口号</strong></li>
+<li>  <strong>源端口号</strong>：在需要对方回信时使用，不需要时全选 0 即可。</li>
+<li>  <strong>长度</strong>：UDP 数据报的包括（首部长度+数据长度）。最短为 8Byte，即只有首部无数据。</li>
+<li><strong>校验和</strong>：<ul>
+<li>  接收方使用，用于检验 UDP 数据在传输中是否出错了，<strong>有错就丢弃</strong>。</li>
+<li>  该字段是可选的，如果源主机不想计算校验和，直接令该字段全为 0  即可。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/20171019224629112" alt="img"></p>
+<ul>
+<li>  如果接收方传输层的 UDP 发现报文中的端口号不存在，就丢弃该报文。</li>
+<li>  UDP 首部 8Byte 是四部分平均分配的，每一部分占 2Byte。</li>
+<li>  UDP 校验和可以校验数据报的首部部分和数据部分，发送方 UDP 将校验和保存在 UDP 首部中，接收方 UDP 通过破解校验和得到的结果，确定发送的消息是否正确，如果正确就接收，不正确就丢弃。</li>
+</ul>
+<hr>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="TCP-报文段"><a href="#TCP-报文段" class="headerlink" title="TCP 报文段"></a>TCP 报文段</h3><ul>
+<li>  TCP 传送的数据单元叫做<strong>TCP报文段</strong>。</li>
+<li>  <code>TCP报文段 = TCP 首部 + TCP 数据部分</code></li>
+<li>  <strong>TCP 首部长度是可变的，至少占 20Byte ，最多占 60Byte</strong>。允许扩充，每次扩充必须是 4Byte 的整数倍，即 <code>(4*N) Byte</code>。</li>
+<li>  整个 TCP 报文段作为 IP 数据报的的数据部分封装在 IP 数据报中。</li>
+</ul>
+<img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/20181130165347546.png" alt="img" style="zoom:150%;">
+
+
+
+<blockquote>
+<p>  <strong>TCP 首部各成员的含义：</strong></p>
+</blockquote>
+<ol>
+<li><p> <strong>源端口号</strong></p>
+</li>
+<li><p> <strong>目的端口号</strong></p>
+</li>
+<li><p><strong>序号</strong>：TCP 传输的是字节流（即一个一个字节的集合），即一个 TCP 报文段包含几百几千个 Byte，TCP 会为每个 Byte 都建立一个编号，而<strong>序号</strong>指的就是当前报文段所发送的字节流数据中第一个字节的序号。</p>
+<p> 例如：一个报文段的序号值为 301，携带的数据共有 100Byte，这就表明当前报文段数据的最后一个字节的序号是 400，故希望下一个报文段的数据序号应该从 401 开始。</p>
+</li>
+<li><p><strong>数据偏移</strong>：数据偏移指的就是首部长度。因为 TCP 首部是变长的，所以要使用数据偏移记录 TCP 报文段的首部长度。</p>
+<p> <code>数据偏移 = | TCP报文段的起始位置 - TCP报文段数据部分的起始位置 |</code></p>
+</li>
+<li><p> <strong>保留字段</strong>：保留为今后使用</p>
+</li>
+<li><p> <strong>URG（紧急位）</strong>：Urgency，当某一报文段中包含紧急数据时可以声明为紧急报文段，其对应的优先级会被提高。URG 需要和<strong>紧急指针</strong>配套使用，<code>URG=1</code> 表示紧急指针字段有效。</p>
+</li>
+<li><p> <strong>紧急指针</strong>：紧急指针指出在本报文段中紧急数据共有多个字节。紧急数据需放在数据部分的最前面，数据从第一个字节开始到紧急指针所指的字节就是紧急数据。</p>
+</li>
+<li><p> <strong>确认号</strong>：是接收方的 UDP 期望收到的下一个报文段的第一个字节的序号。若确认号为 N，则表明接收方前 N-1 个字节全部正确接收到了。确认号需要和<strong>确认位（ACK）</strong>配合使用【确认号是接收方在响应信息的确认报文段中使用的】</p>
+</li>
+<li><p><strong>ACK（确认位）</strong>：只有当 ACK=1 时确认号字段才有效；当 ACK=0 时，确认号无效。</p>
+<p> TCP 规定，在建立连接之后所有传送的报文段都必须把 ACK 置为 1。</p>
+</li>
+<li><p> <strong>PSH（推送位）</strong>：相当于强制刷新到上层协议的内存中。一般情况下，接收方接收到的数据会先保存在缓存中，等缓存填满之后再向上交付，但是收到 <strong>PSH=1</strong> 的报文段后，不管缓存是否填满，会立即执行一个数据的向上交付。</p>
+</li>
+<li><p> <strong>RST（复位位）</strong>：Reset，当 <strong>RST=1</strong> 时，表名 TCP 连接中出现了严重错误，必须释放连接，重新建立建立。</p>
+</li>
+<li><p><strong>SYN（同步位）</strong>：<strong>SYN=1</strong> 表示这是一个<strong>连接请求</strong>或<strong>连接接收</strong>报文。</p>
+<ul>
+<li>  当 <strong>SYN=1，ACK=0</strong> 时，表明这是一个连接请求报文；[TCP 规定连接建立后，确认位 ACK=1 恒成立，但是第一次请求建立连接时连接还尚未建立，所以 ACK=0 。]</li>
+<li>  若对方同意建立，则在响应报文中使用 <strong>SYN=1，ACK=1</strong> ，此时连接已经建立了。</li>
+</ul>
+</li>
+<li><p> <strong>FIN（终止位）</strong>：<strong>FIN=1</strong> 表示此报文段的发送方数据已经发送完毕，并要求释放连接。</p>
+</li>
+<li><p> <strong>窗口</strong>：指出了<strong>当前</strong>还允许对方发送的最大数据量。这个值在不断地变化，接收方的缓存空间是有限的，假设接收方缓存大小为 1000Byte，当已经使用了 300Byte 后，这时候窗口的大小就是 700Byte，即当前允许对方发送的最大数据量。</p>
+</li>
+<li><p> <strong>校验和</strong>：用于校验 TCP 报文段首部和数据两部分。</p>
+</li>
+<li><p> <strong>选项</strong>：长度可变，TCP 最初只规定了一种选项。即最大报文长度。</p>
+</li>
+<li><p> <strong>填充</strong>：为了使整个首部的长度是 4Byte 的整数倍。</p>
+</li>
+</ol>
+<hr>
+<h3 id="TCP连接的建立"><a href="#TCP连接的建立" class="headerlink" title="TCP连接的建立"></a>TCP连接的建立</h3><p>每一条 TCP 连接有两个端点，分别是两个套接字。</p>
+<p>TCP连接的建立要经过3个步骤，通常称为“三次握手”。</p>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/20180714120413411" alt="img"></p>
+<blockquote>
+<p>  <strong>step1：</strong></p>
+</blockquote>
+<ul>
+<li>  客户机的 TCP 首先向服务器的 TCP 发送一个连接请求报文段。</li>
+<li>  这个特殊的报文段中不包含应用层数据，但其首部的 SYN 标志位被置为 1，ACK 仍为 0（因为 ACK=1 标识着确认号有效，但是第一次请求建立连接时并没有确认号，所以确认位置为 0 即可）</li>
+<li>  另外，客户机会随机选择一个起始序号 seq=x (连接请求报文中不携带数据，但是会消耗掉一个序号)。</li>
+</ul>
+<blockquote>
+<p>  <strong>step2：</strong></p>
+</blockquote>
+<ul>
+<li>  服务器的 TCP 接收到连接请求报文段后，<strong>如果同意建立连接</strong>，就向客户机发回确认报文段，<strong>并为该 TCP 连接分配 TCP 缓存和变量</strong>。</li>
+<li>  如果服务器同意建立，此时对于服务器而言，连接就已经建立了，处于<strong>“半连接状态”</strong>。</li>
+<li>  在确认报文段中，<strong>SYN=1，ACK=1</strong>，确认号字段的值为 <code>x+1</code>，并且服务器会随机选择一个起始序号 <code>seq=y</code>。确认报文段同样不携带数据，但也要消耗掉一个序号。（因为服务器要发送确认号给客户端，所以确认位 SYN 必须为 1）</li>
+</ul>
+<blockquote>
+<p>  <strong>step3：</strong></p>
+</blockquote>
+<ul>
+<li>  当客户机收到确认报文段后，还要向服务器给出确认报文段，并且也要<strong>给该连接分配缓存和变量</strong>。</li>
+<li>  这个报文段的<strong>确认位 ACK=1，序号 seq=x+1，确认号 ack=y+1</strong>。</li>
+<li>  <strong>该报文段可以携带数据，如果不携带数据则不消耗序列号。</strong></li>
+</ul>
+<p>在成功进行了以上三步后，TCP 连接就建立了，接下来就可以传递应用层数据了。</p>
+<p>TCP 提供的是全双工通信，因此通信双方的应用层任何时候都能发送数据。</p>
+<p>由于服务器端的资源是在第二次握手时分配的，而客户端的资源是在第三次握手时才分配的。所以客户端可以利用这一特性在发送大量的请求去攻击服务器，这叫做 <strong>SYN洪泛攻击</strong>。</p>
+<blockquote>
+<p>  <strong>SYN 洪泛攻击</strong></p>
+</blockquote>
+<p>SYN 洪泛攻击发生在传输层的 TCP 协议建立连接的“三次握手”中。</p>
+<ol>
+<li> 攻击者发送 TCP SYN ，SYN 是TCP 三次握手中的第一个数据包。当服务器返回 ACK 后，该攻击者就不对其再进行确认，那么这个 TCP 就处于挂起状态，也就是所谓的半连接状态。</li>
+<li> 服务器收不到确认的话，还会重复发送 ACK 给攻击者，这样会更加浪费服务器的资源。</li>
+<li> 攻击者对服务器发送大量的这种 TCP 连接，，由于每一个都无法完成三次握手，所以在服务器上，这些 TCP 会因为挂起状态而消耗 CPU 内存，最终导致服务器宕机。</li>
+</ol>
+<hr>
+<h3 id="TCP连接的释放"><a href="#TCP连接的释放" class="headerlink" title="TCP连接的释放"></a>TCP连接的释放</h3><p>参与 TCP 连接的<strong>两个进程中的任何一个都能终止该连接</strong>，TCP连接的释放过程通常称为“四次挥手”。</p>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/20180714120426323" alt="img"></p>
+<blockquote>
+<p>  <strong>step1：</strong></p>
+</blockquote>
+<ul>
+<li>  客户机如果打算关闭连接，就向服务器 TCP 发送一个释放连接报文段，并停止再发送数据，主动关闭 TCP 连接。</li>
+<li>  该报文段的 <strong>FIN=1</strong>，序列号 <strong>seq=u</strong>（它等于前面已经传送过的数据的最后一个字节的序号+1）。FIN 报文段即使不携带数据，也要消耗掉一个序列号。</li>
+<li>  这个 FIN 报文段是客户机发送给服务器的倒数第二个报文段。</li>
+</ul>
+<blockquote>
+<p>  <strong>step2：</strong></p>
+</blockquote>
+<ul>
+<li>  服务器收到连接释放报文段后发出确认。确认号是 <strong>ack=u+1</strong>，而这个报文段自己的序列号 <strong>seq=v</strong>（即前面已经传送过的数据的最后一个字节的序列号+1）。</li>
+<li>  此时，从客户端向服务器端已经不能发送含有数据的报文段了，但是还有最后一个不含数据的确认消息报文段还是要发送的。</li>
+<li>  但是服务器如果还有数据的话，客户端仍要接收。但是此时服务器发送的含有数据部分的报文段，客户机不再对其响应，直到遇到 FIN 报文段。</li>
+</ul>
+<blockquote>
+<p>  <strong>step3：</strong></p>
+</blockquote>
+<ul>
+<li>  若服务器已经没有要向客户机发送的数据，就发送 FIN 报文段通知 TCP 释放连接，发出 <strong>FIN=1</strong> 的连接释放报文段。</li>
+</ul>
+<blockquote>
+<p>  <strong>step4：</strong></p>
+</blockquote>
+<ul>
+<li>  客户机收到连接释放报文段后，向服务器发出确认报文段。</li>
+<li>  这个确认报文段是客户机发送给服务器的最后一个报文段。</li>
+<li>  在确认报文段中，确认位 ACK=1，确认号 ack=w+1，序列号 seq=u+1。</li>
+<li>  此时 TCP 连接还尚未释放掉，必须经过时间等待计时器设置的时间 2MSL 后，才会真正地断开 TCP 连接。</li>
+</ul>
+<hr>
 <h1 id="会话层"><a href="#会话层" class="headerlink" title="会话层"></a>会话层</h1><blockquote>
 <p>会话层利用传输层提供的端到端的服务，并对该服务进行增强。</p>
 </blockquote>
@@ -1039,6 +1481,123 @@
 <h1 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h1><blockquote>
 <p>面向用户，是用户与计算机网络的界面</p>
 </blockquote>
+<h2 id="网络应用模型"><a href="#网络应用模型" class="headerlink" title="网络应用模型"></a>网络应用模型</h2><ul>
+<li>  <strong>C/S</strong>：一台服务器（集群），多台用户机</li>
+<li>  <strong>P2P</strong>：每台计算机，既可以是服务器，也可以是用户</li>
+</ul>
+<blockquote>
+<p>  <strong>P2P模型</strong></p>
+</blockquote>
+<img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820101819591.png" alt="image-20210820101819591" style="zoom:50%;">
+
+
+
+<blockquote>
+</blockquote>
+<h2 id="DNS-系统"><a href="#DNS-系统" class="headerlink" title="DNS 系统"></a>DNS 系统</h2><blockquote>
+<p>  DNS（Domain Name System）；域名系统</p>
+</blockquote>
+<ul>
+<li>  作用：将域名映射为 IP 地址</li>
+<li>  架构：C/S</li>
+<li>  底层协议：UDP</li>
+<li>  使用端口号：53</li>
+</ul>
+<h3 id="层次域名空间"><a href="#层次域名空间" class="headerlink" title="层次域名空间"></a>层次域名空间</h3><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820101741899.png" alt="image-20210820101741899" style="zoom:50%;">
+
+
+
+<h3 id="域名服务器"><a href="#域名服务器" class="headerlink" title="域名服务器"></a>域名服务器</h3><ul>
+<li>  域名服务器是一个联机的的分布式数据库系统。也就是说分布式数据库中保存了所有域名到 IP 地址的映射，如果能在这个分布式数据库找到域名对应的 IP 地址，在联网的情况下就可以进行访问，如果找不到，就会访问失败。</li>
+</ul>
+<blockquote>
+<p>  <strong>本地域名服务器</strong></p>
+</blockquote>
+<ul>
+<li>  本地域名服务器就是一台运行着的计算机，当一台主机发出 DNS 解析请求时，这个请求首先会发送给该主机的本地域名服务器，在本地域名服务器中找不到时才会继续发送给根域名服务器。</li>
+<li>  本地域名服务器中保存了根域名服务器的 IP 地址。</li>
+<li>  本地域名服务器可以在 Windows 的系统配置中手动填写，也可以由计算机根据当前连接自动获取。</li>
+</ul>
+<img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820104859100.png" alt="image-20210820104859100" style="zoom: 67%;">
+
+
+
+<blockquote>
+<p>  <strong>根域名服务器</strong></p>
+</blockquote>
+<ul>
+<li>  根域名服务器用来管辖顶级域名服务器，所有的根域名服务器都知道所有的顶级域名服务器的 IP 地址。</li>
+<li>  当在本地域名服务器中找不到客户计算机发送的域名解析请求时，首先会求助于根域名服务器。</li>
+<li>  因特网上有 13 个根域名服务器（每个都以集群的形式存在）。</li>
+</ul>
+<blockquote>
+<p>  <strong>顶级域名服务器</strong></p>
+</blockquote>
+<ul>
+<li>  顶级域名服务器用来管理在该顶级域名服务器下注册的所有二级域名。如 <code>.com</code> 下的所有二级域名。</li>
+<li>当收到 DNS 解析请求时，给出相应的回答：<ul>
+<li>  可能是最后的结果；如 <code>baidu.com</code></li>
+<li>  也可能是下一步要查找的服务器的 IP 地址。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>权限域名服务器</strong></p>
+</blockquote>
+<ul>
+<li>  即管理二级、三级、四级域名的服务器</li>
+</ul>
+<hr>
+<h3 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h3><blockquote>
+<p>  <strong>域名解析包括：</strong></p>
+</blockquote>
+<ul>
+<li>  反向解析：将 IP 地址映射成域名；</li>
+<li>  正向解析：将域名映射成 IP 地址。</li>
+</ul>
+<blockquote>
+<p>  <strong>域名解析有两种方式：</strong></p>
+</blockquote>
+<ul>
+<li>  递归查询</li>
+<li>  递归 + 迭代（结合）：常用</li>
+</ul>
+<blockquote>
+<p>  <strong>纯递归查询的缺点</strong>：</p>
+</blockquote>
+<p>对根域名服务器造成的负载过大。显然本地域名服务器的数量远大于根域名服务器的数量，当有大量的本地域名服务器向根域名服务器发送了大量域名解析请求后，由于全世界范围内根域名服务器只有 13 个集群，很有可能承担不了如此大的流量冲击。</p>
+<blockquote>
+<p>  <strong>递归+迭代的域名解析流程</strong></p>
+</blockquote>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820102550685.png" alt="image-20210820102550685"></p>
+<ol>
+<li> 主机向本地域名服务器的查询采用的是递归。即主机发出要解析的域名给本地域名服务器，本地域名解析完后后再交付给主机。中间的其它过程主机不管。</li>
+<li> 本地域名服务器向根域名服务器 / 顶级域名服务器 / 权限域名服务器 的查询采用的是迭代查询。即本地域名服务器先向根域名服务器查询域名的映射，若没找到的话，根域名服务器会返回一个顶级域名服务器的地址，本地域名服务器就会再向顶级域名服务器发送 DNS 解析请求。</li>
+<li> 以此类推。</li>
+</ol>
+<h3 id="DNS域名解析流程小结"><a href="#DNS域名解析流程小结" class="headerlink" title="DNS域名解析流程小结"></a>DNS域名解析流程小结</h3><p>假设某客户机通过浏览器请求访问 <code>map.baidu.com</code>，域名解析的过程如下： </p>
+<ol>
+<li> 首先，客户机会在本机的 <strong>host</strong> 文件中查找是否存在  <code>map.baidu.com</code> 映射的 IP 地址。（当然一般情况下是没有的，本机的 <code>host</code> 文件默认只保存了 <strong>localhost</strong> 的 IP 映射，当然也可以自己添加其它的）</li>
+<li> 如果本机找不到域名的映射，就会发送 DNS 请求报文到本地域名服务器。</li>
+<li> 本地域名服务器收到请求后，查询本地缓存中是否存在域名映射的 IP 地址，若没有，则以 DNS 客户的身份向根域名服务器发出解析请求；</li>
+<li> 根域名服务器收到请求后，判断该域名属于 <code>.com</code> 域，将对应的顶级域名服务器 <code>dns.com</code> 的 IP 地址返回给本地域名服务器；</li>
+<li> 本地域名服务器向顶级域名服务器 <code>dns.com</code> 发出域名解析请求；</li>
+<li> 顶级域名服务器 <code>dns.com</code> 收到请求后，判断该域名属于 <code>baidu.com</code> 域，故将对应的授权域名服务器 <code>dns.baidu.com</code> 的 IP 地址返回给本地域名服务器。</li>
+<li> 本地域名服务器向授权域名服务器 <code>dns.baidu.com</code> 发出域名解析请求；</li>
+<li> 授权域名服务器 <code>dns.baidu.com</code> 收到请求后，将查询结果 <code>map.baidu.com</code> 的 IP 地址返回给本地域名服务器；</li>
+<li> 本地域名服务器将查询结果保存到本地缓存，同时返回给客户机。</li>
+</ol>
+<p>为提高 DNS 的查询效率，在域名服务器中广泛地使用了告诉缓存。不仅仅是本地域名服务器、包括权限域名服务器、顶级域名服务器等都使用了高速缓存。减少了因特网上 DNS 查询报文的数量。</p>
+<hr>
+<blockquote>
+<p>  TCP连接释放</p>
+</blockquote>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820102127185.png" alt="image-20210820102127185"></p>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820102054682.png" alt="image-20210820102054682"></p>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820101950283.png" alt="image-20210820101950283"></p>
+<blockquote>
+</blockquote>
+<p><img src="/2020/10/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/image-20210820101643523.png" alt="image-20210820101643523"></p>
 
       
     </div>
@@ -8072,553 +8631,6 @@
 
 
 <h1 id="2、JavaWeb"><a href="#2、JavaWeb" class="headerlink" title="2、JavaWeb"></a>2、JavaWeb</h1>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/09/20/SpringBoot/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/09/20/SpringBoot/" class="post-title-link" itemprop="url">SpringBoot</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2020-09-20 10:11:15" itemprop="dateCreated datePublished" datetime="2020-09-20T10:11:15+08:00">2020-09-20</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-18 09:51:57" itemprop="dateModified" datetime="2021-08-18T09:51:57+08:00">2021-08-18</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/2020/09/20/SpringBoot/SpringBoot.png"></p>
-<h1 id="1、SpringBoot简介"><a href="#1、SpringBoot简介" class="headerlink" title="1、SpringBoot简介"></a>1、SpringBoot简介</h1><h2 id="1-1、为什么要学习SpringBoot"><a href="#1-1、为什么要学习SpringBoot" class="headerlink" title="1.1、为什么要学习SpringBoot"></a>1.1、为什么要学习SpringBoot</h2><blockquote>
-<p>因为Spring框架存在一些缺点，而SpringBoot框架在一定程度上很好的解决了这些缺点，所以我们需要学习SpringBoot。</p>
-</blockquote>
-<h3 id="1-1-1、Spring的缺点"><a href="#1-1-1、Spring的缺点" class="headerlink" title="1.1.1、Spring的缺点"></a>1.1.1、Spring的缺点</h3><ol>
-<li><p>虽然Spring的开发代码是轻量级的，但它的配置代码却是重量级的。可以分为3个阶段：</p>
-<blockquote>
-<ol>
-<li><p>XML配置。</p>
-</li>
-<li><p>注解配置</p>
-</li>
-<li><p>基于Java类的配置</p>
-</li>
-</ol>
-</blockquote>
-</li>
-<li><p>依赖管理复杂。在搭建Spring项目时，需要分析：</p>
-<blockquote>
-<p>1） 要导入哪些库的坐标，以及与直接导入的库有依赖关系的库的坐标</p>
-<p>2） 库与库之间的版本是否产生冲突</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="1-1-2、SpringBoot解决Spring的缺点"><a href="#1-1-2、SpringBoot解决Spring的缺点" class="headerlink" title="1.1.2、SpringBoot解决Spring的缺点"></a>1.1.2、SpringBoot解决Spring的缺点</h3><p>SpringBoot可以在很大程度上解决Spring的这2个缺点！Spring Boot 推崇<strong>约定大于配置</strong>的方式以便于我们能够尽可能快速的启动并运行程序。</p>
-<blockquote>
-<ol>
-<li>SpringBoot提供了约定成俗的配置文件信息，当然根据需求也可以自定义配置信息。</li>
-<li>SpringBoot框架实现了对绝大多数框架的依赖管理和依赖版本管理。</li>
-</ol>
-</blockquote>
-<h2 id="1-2、什么是SpringBoot"><a href="#1-2、什么是SpringBoot" class="headerlink" title="1.2、什么是SpringBoot"></a>1.2、什么是SpringBoot</h2><p>SpringBoot是Spring项目中的一个子工程，用一些固定的方式来构建生产级别的spring应用。Spring Boot 推崇<strong>约定大于配置</strong>的方式以便于你能够尽可能快速的启动并运行程序。其实人们把Spring Boot 称为搭建程序的<code>脚手架</code>。其最主要作用就是帮我们<strong>快速的构建庞大的Spring项目，并且尽可能的减少一切XML配置，做到开箱即用，迅速上手，让我们关注与业务而非配置</strong>。</p>
-<p>Spring Boot 简化了基于Spring的应用开发，只需要“run”就能创建一个独立的、生产级别的Spring应用。Spring Boot为Spring平台及第三方库提供开箱即用的设置（<strong>提供默认设置，存放默认配置的包就是启动器</strong>），这样我们就可以简单的开始。多数Spring Boot应用只需要很少的Spring配置。</p>
-<h2 id="1-3、SpringBoot的核心功能"><a href="#1-3、SpringBoot的核心功能" class="headerlink" title="1.3、SpringBoot的核心功能"></a>1.3、SpringBoot的核心功能</h2><h3 id="1-3-1、起步依赖"><a href="#1-3-1、起步依赖" class="headerlink" title="1.3.1、起步依赖"></a>1.3.1、起步依赖</h3><blockquote>
-<p>起步依赖就是将具备某种功能的坐标打包到一起，这些依赖加在一起支持某项功能。</p>
-<p>比如，在Web开发中，我们可能要使用到Servlet、jsp、SpringMVC等等依赖，而SpringBoot就会把我们可能用到的依赖的坐标整合起来，并管理依赖的版本问题，只对外提供一个新的依赖坐标<code>spring-boot-starter-web</code>。这样我们在使用时只需要导入<code>spring-boot-starter-web</code>依赖即可，而且无需管理版本问题。</p>
-</blockquote>
-<h3 id="1-3-2、自动配置"><a href="#1-3-2、自动配置" class="headerlink" title="1.3.2、自动配置"></a>1.3.2、自动配置</h3><hr>
-<h1 id="2、SpringBoot快速入门"><a href="#2、SpringBoot快速入门" class="headerlink" title="2、SpringBoot快速入门"></a>2、SpringBoot快速入门</h1><h2 id="2-1-使用Maven创建-SpringBoot-项目"><a href="#2-1-使用Maven创建-SpringBoot-项目" class="headerlink" title="2.1    使用Maven创建 SpringBoot 项目"></a>2.1    使用Maven创建 SpringBoot 项目</h2><blockquote>
-<ol>
-<li>创建一个普通的Maven工程</li>
-</ol>
-</blockquote>
-<p> <img src="/2020/09/20/SpringBoot/1525486435199.png" alt="1525486435199"></p>
-<blockquote>
-<ol start="2">
-<li>在<code>pom.xml</code>文件中添加依赖。</li>
-</ol>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.leyou.demo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springboot-demo<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">    <span class="comment">&lt;!--JDK版本管理--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">java.version</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">java.version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">    <span class="comment">&lt;!--SpringBoot中所有依赖的版本管理--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">	</span><br><span class="line">    <span class="comment">&lt;!--Web启动器--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol start="3">
-<li>编写一个启动类</li>
-</ol>
-</blockquote>
-<p>Spring Boot 项目通过main函数即可启动，我们需要创建一个<strong>启动类</strong>：</p>
-<p> <img src="/2020/09/20/SpringBoot/1525487293907.png" alt="1525487293907"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol start="4">
-<li>编写一个Controller</li>
-</ol>
-</blockquote>
-<p> <img src="/2020/09/20/SpringBoot/1525487465325.png" alt="1525487465325"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;hello&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello, spring boot!&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol start="5">
-<li>启动测试</li>
-</ol>
-</blockquote>
-<p>接下来，我们运行main函数，查看控制台，我们可以看到监听的端口信息：</p>
-<p><img src="file://E:/blog/source/_posts/SpringBoot/1525487705460.png?lastModify=1609939406" alt="1525487705460"></p>
-<ul>
-<li>服务器默认提供的访问端口号是8080；</li>
-<li>前端控制器提供的访问路径是：<code>/</code>；即<code>协议+IP地址+端口号</code>；</li>
-<li><code>/hello</code>访问路径映射到了<code>HelloController</code>中的<code>hello()</code>方法。</li>
-</ul>
-<blockquote>
-<ol start="6">
-<li>在浏览器中访问。</li>
-</ol>
-</blockquote>
-<p> <img src="file://E:/blog/source/_posts/SpringBoot/1525487820824.png?lastModify=1609939406" alt="1525487820824"></p>
-<blockquote>
-<ol start="7">
-<li>简化部署，创建一个可执行的jar包</li>
-</ol>
-</blockquote>
-<p>通常而言，Web项目都会被打成一个war包，运行这个war包需要TomCat服务器。而导入了下面的插件，则可以将应用打成一个jar包，这样无需安装在目标服务器中安装TomCat该Web项目也可以正常运行。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 这个插件，可以将应用打包成一个可执行的jar包；无需在目标服务器中安装TomCat等--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>将这个应用打成jar包，直接使用java -jar的命令进行执行；</p>
-<ol>
-<li><p>打包</p>
-<p><img src="/2020/09/20/SpringBoot/image-20210103112702556.png" alt="image-20210103112702556"></p>
-</li>
-<li><p>打包所在的目录</p>
-<p><img src="/2020/09/20/SpringBoot/image-20210103112807935.png" alt="image-20210103112807935"></p>
-<p><img src="/2020/09/20/SpringBoot/image-20210103112910903.png" alt="image-20210103112910903"></p>
-</li>
-<li><p>在当前jar包所在目录下，使用java-jar的命令去执行操作[使用Tab键可自动补全文件名称]</p>
-<p><img src="/2020/09/20/SpringBoot/image-20210103113115811.png" alt="image-20210103113115811"></p>
-</li>
-<li><p>通过浏览器访问</p>
-<p>相当于启动了一个SpringBoot项目。</p>
-</li>
-<li><p>SpringBoot在执行完打包命令后得到一个jar包，可以看到这个jar包也是一个压缩文件，在其<code>BOOT-INF/lib</code>目录下，我们可以看到已经导入了依赖和嵌入式的TomCat插件，所以我们的目标环境就可以无需自己安装TomCat服务器也可正常运行。</p>
-</li>
-</ol>
-<p><img src="/2020/09/20/SpringBoot/image-20210103113305223.png" alt="image-20210103113305223"></p>
-<hr>
-<h2 id="2-2-快速入门分析"><a href="#2-2-快速入门分析" class="headerlink" title="2.2    快速入门分析"></a>2.2    快速入门分析</h2><h3 id="POM文件"><a href="#POM文件" class="headerlink" title="POM文件"></a>POM文件</h3><h4 id="JDK版本管理"><a href="#JDK版本管理" class="headerlink" title="JDK版本管理"></a>JDK版本管理</h4><p>我使用的maven版本是<code>apache-maven-3.5.2</code>，该版本默认使用JDK1.5，而我们开发使用的是JDK1.8，因此这里我们需要修改jdk版本。</p>
-<blockquote>
-<p>全局管理：直接修改Maven的配置文件<code>setting.xml</code>，一次修改，永久生效。</p>
-</blockquote>
-<p>做法：在<code>setting.xml</code>配置文件中的<code>&lt;profiles&gt;</code>标签下添加：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">profile</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>jdk-1.8<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">activation</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">jdk</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">jdk</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">maven.compiler.compilerVersion</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.compilerVersion</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">profile</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>局部管理：针对具体的某个Maven项目的设置。每创建一个新项目都要重新设置。</p>
-</blockquote>
-<p>做法：在Maven工程的<code>pom.xml</code>文件中添加：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">java.version</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">java.version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<h4 id="SpringBoot的版本管理器（父项目）"><a href="#SpringBoot的版本管理器（父项目）" class="headerlink" title="SpringBoot的版本管理器（父项目）"></a>SpringBoot的版本管理器（父项目）</h4><blockquote>
-<p><code>spring-boot-starter-parent</code>：只管理版本信息，并没有导入真正的jar包。</p>
-</blockquote>
-<p>SpringBoot提供了一个名为<code>spring-boot-starter-parent</code>的工程，里面已经对常用的各种依赖（并非全部）的版本进行了管理，我们的项目只需以这个项目为父工程，就不用操心依赖的版本问题了，需要什么依赖，直接引入坐标即可。</p>
-<p>以后我们导入依赖默认不需要写版本（没有在<code>spring-boot-dependencies</code>项目中声明的依赖自然还需要手动声明版本号）。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--SpringBoot依赖一个父项目--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------</span><br><span class="line"><span class="comment">&lt;!--SpringBoot的父项目继续依赖一个父项目--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------</span><br><span class="line"><span class="comment">&lt;!--该项目（SpringBoot的爷爷项目）用来管理SpringBoot应用里面的所有依赖版本。只是用来管理版本，并没有导入具体的依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">activemq.version</span>&gt;</span>5.16.0<span class="tag">&lt;/<span class="name">activemq.version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">antlr2.version</span>&gt;</span>2.7.7<span class="tag">&lt;/<span class="name">antlr2.version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bitronix.version</span>&gt;</span>2.1.4<span class="tag">&lt;/<span class="name">bitronix.version</span>&gt;</span></span><br><span class="line">    ......</span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">dependency</span>&gt;</span>...<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>...<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        ......</span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h4 id="启动器"><a href="#启动器" class="headerlink" title="启动器"></a>启动器</h4><blockquote>
-<p><code>spring-boot-starter-xxx</code>：SpringBoot的场景启动器，真正导入jar包。</p>
-</blockquote>
-<p>SpringBoot将开发中常见的场景抽取出来，制作成一个个的<strong>starter（启动器）</strong>，只需要在项目里引入这些starter，相关场景的所有依赖就都会导入进来。我们需要使用什么功能就导入什么场景的启动器。</p>
-<p>比如要创建一个Web项目，我们就必须引入SpringBoot提供的Web启动器，该启动器会自动帮我们导入web模块正常运行所依赖的组件。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--需要注意的是，我们并没有在这里指定版本信息。因为SpringBoot的爷爷工程已经对版本进行了管理--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>这个时候，我们会发现项目中多出了大量的依赖：</p>
-<p> <img src="/2020/09/20/SpringBoot/1525486980765.png" alt="1525486980765"></p>
-<p>这些都是SpringBoot根据<code>spring-boot-starter-web</code>这个依赖自动引入的，而且所有的版本都已经管理好，不会出现冲突。</p>
-<p>SpringBoot集成了大部分主流的框架并且制作了启动器，部分没有收录的框架如MyBatis则是自己实现了SpringBoot的启动器。</p>
-<h3 id="启动类-自动配置原理分析"><a href="#启动类-自动配置原理分析" class="headerlink" title="启动类 (自动配置原理分析)"></a>启动类 (自动配置原理分析)</h3><p><img src="/2020/09/20/SpringBoot/SpringBoot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86.png"></p>
-<p>在SpringBoot的启动类中有2个特殊的地方：</p>
-<blockquote>
-<ol>
-<li><code>@SpringBootApplication</code>：<ul>
-<li>该注解标注在某个类上就说明这个类是SpringBoot的主配置类，SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；</li>
-</ul>
-</li>
-<li><code>SpringApplication.run(Xxx.class, args)</code></li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@SpringBootApplication</span> 标注在类上，用来声明该应用是一个 SpringBoot 应用</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span>	<span class="comment">// 1️⃣</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 启动SpringBoot应用</span></span><br><span class="line">        SpringApplication.run(Application.class, args);	<span class="comment">// 2️⃣</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="SpringBootApplication"><a href="#SpringBootApplication" class="headerlink" title="@SpringBootApplication"></a>@SpringBootApplication</h4><blockquote>
-<p>查看源码：</p>
-</blockquote>
-<p><img src="/2020/09/20/SpringBoot/1525488226710.png" alt="1525488226710"></p>
-<h5 id="SpringBootConfiguration"><a href="#SpringBootConfiguration" class="headerlink" title="@SpringBootConfiguration"></a>@SpringBootConfiguration</h5><blockquote>
-<p><code>@SpringBootConfiguration</code>等同于<code>@Configuration</code>，标注该类是SpringBoot的一个配置类。</p>
-</blockquote>
-<p>查看源码：</p>
-<p><img src="/2020/09/20/SpringBoot/1525488518514.png" alt="1525488518514"></p>
-<ul>
-<li><p>我们可以到，在这个注解上又有一个<code>@Configuration</code>注解。这个注解的作用就是声明当前类是一个配置类，Spring会自动扫描到添加了<code>@Configuration</code>的组件到容器中，并且读取其中的配置信息。所以说<code>@SpringBootConfiguration</code>等同于<code>@Configuration</code>，标注该类是SpringBoot的一个配置类。</p>
-</li>
-<li><p>配置类 <code>&lt;==&gt;</code> 配置文件，配置类也是容器中的一个组件，所以<code>@Configuration</code>注解的源码中也有<code>@Component</code>注解，即只使用<code>@Configuration</code>注解后也会被扫描添加到容器中。</p>
-</li>
-</ul>
-<h5 id="EnableAutoConfiguration"><a href="#EnableAutoConfiguration" class="headerlink" title="@EnableAutoConfiguration"></a>@EnableAutoConfiguration</h5><blockquote>
-<p><code>@EnableAutoConfiguration</code>的作用就是开启SpringBoot的自动配置功能，并且根据你引入的依赖来生成对应的默认配置。</p>
-</blockquote>
-<ul>
-<li><p>自动配置的原理就是：SpringBoot根据我们所添加的起步依赖，去“猜测”你想要如何配置该Spring项目。比如我们引入了<code>spring-boot-starter-web</code>起步依赖，这个起步依赖中又包含了<code>tomcat</code>、<code>SpringMVC</code>和<code>Servlet</code>等依赖，此时SpringBoot自动配置就会提供<code>tomcat</code>、<code>SpringMVC</code>和<code>Servlet</code>等组件的默认配置信息。</p>
-</li>
-<li><p>总结：SpringBoot内部对大量的第三方库或Spring内部库进行了默认配置，这些配置是否生效，取决于我们是否引入了对应库所需的依赖，如果有那么默认配置就会生效。</p>
-</li>
-<li><p>所以，我们使用SpringBoot构建一个项目，只需要引入所需框架的依赖，配置就可以交给SpringBoot处理了。除非你不希望使用SpringBoot的默认配置，它也提供了自定义配置的入口。</p>
-</li>
-</ul>
-<h5 id="ComponentScan"><a href="#ComponentScan" class="headerlink" title="@ComponentScan"></a>@ComponentScan</h5><blockquote>
-<p>查看源码：</p>
-</blockquote>
-<p> <img src="/2020/09/20/SpringBoot/1525498265579.png" alt="1525498265579"></p>
-<p>配置组件扫描的指令。提供了类似与<code>&lt;context:component-scan&gt;</code>标签相似的作用。</p>
-<p>通过<code>basePackageClasses</code>或者<code>basePackages</code>属性来指定要扫描的包。如果没有指定这些属性，默认从使用该注解的类所在的包开始，扫描当前包及其子包。</p>
-<p><code>@ComponentScan注解</code>是<code>@SpringBootApplication注解</code>的子注解，而<code>@SpringBootApplication注解</code>作用在启动类上，因此<strong>扫描的包是启动类所在包及其子包</strong>。因此，一般启动类会放在一个比较靠前的包目录中。</p>
-<hr>
-<h2 id="2-3-使用Spring-Initializer快速创建-SpringBoot-项目"><a href="#2-3-使用Spring-Initializer快速创建-SpringBoot-项目" class="headerlink" title="2.3    使用Spring Initializer快速创建 SpringBoot 项目"></a>2.3    使用Spring Initializer快速创建 SpringBoot 项目</h2><p>默认的 SpringBoot 项目：</p>
-<blockquote>
-<p>启动类（主程序）已经生成好了，我们只需要实现自己的业务逻辑</p>
-<p><code>resources</code>文件夹中的目录结构：</p>
-<blockquote>
-<p><code>static</code>：保存所有的静态资源；</p>
-<p><code>templates</code>：保存所有的模板页面；（SpringBoot 默认jar包使用嵌入式的TomCat，默认不支持JSP页面），可以使用的模板引擎（freemarker、thymeleaf）；</p>
-<p><code>application.properties</code>：应用配置文件。</p>
-</blockquote>
-</blockquote>
-<hr>
-<h1 id="3、SpringBoot原理分析"><a href="#3、SpringBoot原理分析" class="headerlink" title="3、SpringBoot原理分析"></a>3、SpringBoot原理分析</h1><h2 id="3-3、总结"><a href="#3-3、总结" class="headerlink" title="3.3、总结"></a>3.3、总结</h2><blockquote>
-<p>SpringBoot为我们提供了默认配置，而默认配置生效的条件一般有两个：</p>
-<ul>
-<li>你引入了相关依赖</li>
-<li>你自己没有配置</li>
-</ul>
-</blockquote>
-<ol>
-<li><p>启动依赖</p>
-<p>所以，我们如果不想配置，只需要引入依赖即可，而依赖版本我们也不用操心，因为只要引入了SpringBoot提供的stater（启动依赖），就会自动管理依赖及版本了。</p>
-<p>因此，使用SpringBoot的第一件事情，就是找启动器，SpringBoot提供了大量的默认启动器。</p>
-</li>
-<li><p>全局配置</p>
-<p>另外，SpringBoot的默认配置，都会读取默认属性，而这些属性可以通过自定义<code>application.properties</code>文件来进行覆盖。这样虽然使用的还是默认配置，但是配置中的值改成了我们自定义的。</p>
-<p>因此，使用SpringBoot的第二件事情，就是通过<code>application.properties</code>来覆盖默认属性值，形成自定义配置。我们需要知道SpringBoot的默认属性key。</p>
-<p>SpringBoot默认会从类路径下的加载<code>application.properties</code>或者<code>application.yml</code>文件。</p>
-</li>
-</ol>
-<hr>
-<h1 id="4、Java配置"><a href="#4、Java配置" class="headerlink" title="4、Java配置"></a>4、Java配置</h1><p>在SpringBoot中，我们可以不编写任何配置文件，就实现一个SpringMVC的项目了。</p>
-<p>但是如果没有任何的xml，那么我们如果要配置一个Bean该怎么办？</p>
-<p>比如我们要配置一个数据库连接池，在Spring中我们可以使用XML配置文件。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置连接池 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;dataSource&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.alibaba.druid.pool.DruidDataSource&quot;</span></span></span><br><span class="line"><span class="tag">      <span class="attr">init-method</span>=<span class="string">&quot;init&quot;</span> <span class="attr">destroy-method</span>=<span class="string">&quot;close&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;jdbc.url&#125;&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;jdbc.username&#125;&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;$&#123;jdbc.password&#125;&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>那么在SpringBoot中是如何管理Spring容器的呢？我们可以使用Java配置。</p>
-<h2 id="4-1、使用Java配置"><a href="#4-1、使用Java配置" class="headerlink" title="4.1、使用Java配置"></a>4.1、使用Java配置</h2><blockquote>
-<p>Java配置就是：通过使用java类和一些注解，代替配置文件保存配置信息。比较常用的注解有：</p>
-<ul>
-<li><code>@Configuration</code>：作用在类上，声明该类是一个配置类，用于代替xml配置文件；</li>
-<li><code>@Bean</code>：作用在方法上，将方法的返回值添加到Spring核心容器中，用于代替<code>&lt;bean&gt;</code>标签；</li>
-<li><code>@value</code>：作用在属性上，属性注入；</li>
-<li><code>@PropertySource</code>：作用在类上，用来指定外部属性文件中的路径。</li>
-</ul>
-</blockquote>
-<h3 id="例1、用Java配置实现数据库连接池的配置："><a href="#例1、用Java配置实现数据库连接池的配置：" class="headerlink" title="例1、用Java配置实现数据库连接池的配置："></a>例1、用Java配置实现数据库连接池的配置：</h3><ol>
-<li>首先引入Druid连接池依赖：</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>创建一个jdbc.properties文件，编写jdbc属性：</li>
-</ol>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">jdbc.driverClassName</span>=<span class="string">com.mysql.jdbc.Driver</span></span><br><span class="line"><span class="meta">jdbc.url</span>=<span class="string">jdbc:mysql://127.0.0.1:3306/leyou</span></span><br><span class="line"><span class="meta">jdbc.username</span>=<span class="string">root</span></span><br><span class="line"><span class="meta">jdbc.password</span>=<span class="string">root</span></span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>编写配置类代码：</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;classpath:jdbc.properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdbcConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;jdbc.url&#125;&quot;)</span></span><br><span class="line">    String url;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;jdbc.driverClassName&#125;&quot;)</span></span><br><span class="line">    String driverClassName;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;jdbc.username&#125;&quot;)</span></span><br><span class="line">    String username;</span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;jdbc.password&#125;&quot;)</span></span><br><span class="line">    String password;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DruidDataSource dataSource = <span class="keyword">new</span> DruidDataSource();</span><br><span class="line">        dataSource.setUrl(url);</span><br><span class="line">        dataSource.setDriverClassName(driverClassName);</span><br><span class="line">        dataSource.setUsername(username);</span><br><span class="line">        dataSource.setPassword(password);</span><br><span class="line">        <span class="keyword">return</span> dataSource;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>分析：</p>
-<ul>
-<li><code>@Configuration</code>：声明<code>JdbcConfig类</code>是一个配置类</li>
-<li><code>@PropertySource</code>：指定属性文件的路径是:<code>classpath:jdbc.properties</code></li>
-<li>通过<code>@Value</code>为属性注入值</li>
-<li>通过<code>@Bean</code>将 <code>dataSource()</code>方法声明为一个注册Bean的方法，Spring会自动调用该方法，将方法的返回值加入Spring容器中。</li>
-</ul>
-<p>然后我们就可以在任意位置通过<code>@Autowired</code>注入DataSource了。</p>
-</blockquote>
-<ol start="4">
-<li>编写测试类：</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> DataSource dataSource;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;hello&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello, spring boot!&quot;</span> + dataSource;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然后Debug运行并查看：</p>
-<p><img src="/2020/09/20/SpringBoot/1525492528558.png" alt="1525492528558"></p>
-<p>属性注入成功了！</p>
-<hr>
-<h2 id="4-2、SpringBoot的属性注入"><a href="#4-2、SpringBoot的属性注入" class="headerlink" title="4.2、SpringBoot的属性注入"></a>4.2、SpringBoot的属性注入</h2><blockquote>
-<p>在上面的案例中，我们实验了java配置方式。不过属性注入使用的是<code>@Value</code>注解。这种方式虽然可行，但是不够强大，因为它只能注入基本类型值。[<code>@Value</code>注解是Spring中通用的注解]</p>
-<p><strong><u>在SpringBoot中</u>，提供了一种新的属性注入方式，支持各种java基本数据类型及复杂类型的注入。</strong></p>
-<p><code>@ConfigurationProperties(prefix = &quot;xxx&quot;)--&gt;&gt; @EnableConfigurationProperties(xxx.class)</code></p>
-<ol>
-<li>将基本属性注入到一个类A中；</li>
-<li>将类A通过反射注入到类B中。</li>
-</ol>
-</blockquote>
-<ol>
-<li>我们定义一个<code>JdbcProperties类</code>，用来进行属性注入：</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;jdbc&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdbcProperties</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String url;</span><br><span class="line">    <span class="keyword">private</span> String driverClassName;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line">    <span class="comment">// ... 略</span></span><br><span class="line">    <span class="comment">// getters 和 setters</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ul>
-<li><p><code>@ConfigurationProperties注解</code>标明当前类要读取类路径下的<code>application.yml</code>配置文件，</p>
-<p><code>prefix=&quot;jdbc&quot;</code>，通过注解的属性<code>prefix</code>限定读取的数据，在这里是读取属性文件中，前缀为jdbc的值。</p>
-</li>
-<li><p>要求类中定义的各个属性名称必须与<code>application.yml</code>属性文件中的<code>jdbc.</code>后面部分一致</p>
-</li>
-<li><p>需要注意的是，这里我们并没有指定属性文件的地址，所以我们需要把<code>jdbc.properties</code>名称改为<code>application.properties</code>，这是SpringBoot默认读取的属性文件名：</p>
-</li>
-</ul>
-</blockquote>
-<p><img src="/2020/09/20/SpringBoot/1525496325572.png" alt="1525496325572"></p>
-<ol start="2">
-<li>在<code>JdbcConfig类</code>中使用<code>JdbcProperties对象</code>：</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(JdbcProperties.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdbcConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">(JdbcProperties jdbc)</span> </span>&#123;</span><br><span class="line">        DruidDataSource dataSource = <span class="keyword">new</span> DruidDataSource();</span><br><span class="line">        dataSource.setUrl(jdbc.getUrl());</span><br><span class="line">        dataSource.setDriverClassName(jdbc.getDriverClassName());</span><br><span class="line">        dataSource.setUsername(jdbc.getUsername());</span><br><span class="line">        dataSource.setPassword(jdbc.getPassword());</span><br><span class="line">        <span class="keyword">return</span> dataSource;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ol>
-<li><code>@EnableConfigurationProperties(JdbcProperties.class)</code>：标明该类要使用<code>JdbcProperties类的实例对象</code></li>
-<li>通过反射的方式动态的生成<code>JdbcProperties</code>对象，可以在该类的方法中直接使用：</li>
-</ol>
-</blockquote>
-<ol start="3">
-<li>测试结果：</li>
-</ol>
-<p><img src="/2020/09/20/SpringBoot/1525492528558.png" alt="1525492528558"></p>
-<hr>
-<h2 id="4-3、更简单的注入"><a href="#4-3、更简单的注入" class="headerlink" title="4.3、更简单的注入"></a>4.3、更简单的注入</h2><blockquote>
-<p>事实上，如果一段属性（配置信息）只被一个Bean需要，我们无需将先其注入到一个类（<code>JdbcProperties</code>）中。而是直接在需要的地方使用<code>@ConfigurationProperties注解</code>声明即可。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdbcConfig</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="comment">// 声明要注入的属性前缀，SpringBoot会自动把相关属性通过set方法注入到DataSource中</span></span><br><span class="line">    <span class="meta">@ConfigurationProperties(prefix = &quot;jdbc&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DruidDataSource dataSource = <span class="keyword">new</span> DruidDataSource();</span><br><span class="line">        <span class="keyword">return</span> dataSource;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们直接把<code>@ConfigurationProperties(prefix = &quot;jdbc&quot;)</code>声明在需要使用该段属性的<code>@Bean</code>的方法上，然后SpringBoot就会自动调用这个Bean（此处是DataSource）的set方法，然后完成注入。</p>
-<ul>
-<li>使用的前提是：<strong>该类必须有对应属性的set方法！</strong></li>
-</ul>
-<hr>
-<h1 id="5、SpringBoot整合SpringMVC"><a href="#5、SpringBoot整合SpringMVC" class="headerlink" title="5、SpringBoot整合SpringMVC"></a>5、SpringBoot整合SpringMVC</h1><blockquote>
-<p>直接引入<code>spring-boot-starter-web</code>启动依赖即可。</p>
-</blockquote>
-<h2 id="5-1、自定义配置信息"><a href="#5-1、自定义配置信息" class="headerlink" title="5.1、自定义配置信息"></a>5.1、自定义配置信息</h2><h3 id="5-1-1、修改端口号"><a href="#5-1-1、修改端口号" class="headerlink" title="5.1.1、修改端口号"></a>5.1.1、修改端口号</h3><p>查看SpringBoot的全局属性可知，端口通过以下方式配置：</p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 映射端口</span></span><br><span class="line"><span class="meta">server.port</span>=<span class="string">80</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="5-1-2、访问静态资源"><a href="#5-1-2、访问静态资源" class="headerlink" title="5.1.2、访问静态资源"></a>5.1.2、访问静态资源</h3><blockquote>
-<p>默认的静态资源路径为：</p>
-<ul>
-<li>classpath:/META-INF/resources/</li>
-<li>classpath:/resources/</li>
-<li>classpath:/static/</li>
-<li>classpath:/public</li>
-</ul>
-</blockquote>
-<p>只要静态资源放在这些目录中任何一个，SpringMVC都会帮我们处理。</p>
-<p>我们习惯会把静态资源放在<code>classpath:/static/</code>目录下。</p>
-<p> <img src="/2020/09/20/SpringBoot/1525512196866.png" alt="1525512196866"></p>
-<h3 id="5-1-3、添加拦截器"><a href="#5-1-3、添加拦截器" class="headerlink" title="5.1.3、添加拦截器"></a>5.1.3、添加拦截器</h3><blockquote>
-<ul>
-<li><p>如果你想要<em>保持Spring Boot 的一些默认MVC特征，同时又想自定义一些MVC配置</em>（包括：拦截器，格式化器、视图控制器、消息转换器 等等），你应该：</p>
-<ol>
-<li>让一个类实现<code>WebMvcConfigurer</code>，</li>
-<li>并且添加<code>@Configuration</code>注解，但是<strong>千万不要</strong>加<code>@EnableWebMvc</code>注解。</li>
-</ol>
-<p>如果你想要自定义<code>HandlerMapping</code>、<code>HandlerAdapter</code>、<code>ExceptionResolver</code>等组件，你可以创建一个<code>WebMvcRegistrationsAdapter</code>实例 来提供以上组件。</p>
-</li>
-<li><p>如果你想要<em>完全自定义SpringMVC，不保留SpringBoot提供的一切特征</em>，你可以自己定义类并且添加<code>@Configuration</code>注解和<code>@EnableWebMvc</code>注解</p>
-</li>
-</ul>
-</blockquote>
-<p>总结：通过实现<code>WebMvcConfigurer</code>类并添加<code>@Configuration</code>注解来实现自定义部分SpringMvc配置。</p>
-<p>首先我们定义一个拦截器：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginInterceptor</span> <span class="keyword">implements</span> <span class="title">HandlerInterceptor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> </span>&#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;preHandle method is now running!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)</span> </span>&#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;postHandle method is now running!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterCompletion</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)</span> </span>&#123;</span><br><span class="line">        logger.debug(<span class="string">&quot;afterCompletion method is now running!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>然后，我们定义配置类，注册拦截器：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MvcConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 通过<span class="doctag">@Bean</span>注解，将我们定义的拦截器注册到Spring容器</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> LoginInterceptor <span class="title">loginInterceptor</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LoginInterceptor();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 重写接口中的addInterceptors方法，添加自定义拦截器</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> registry</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 通过registry来注册拦截器，通过addPathPatterns来添加拦截路径</span></span><br><span class="line">        registry.addInterceptor(<span class="keyword">this</span>.loginInterceptor()).addPathPatterns(<span class="string">&quot;/**&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>结构如下：</p>
-<p> <img src="/2020/09/20/SpringBoot/1525513555179.png" alt="1525513555179"></p>
-<p>接下来运行并查看日志：</p>
-<p>你会发现日志中什么都没有，因为我们记录的log级别是debug，默认是显示info以上，我们需要进行配置。</p>
-<p>SpringBoot通过<code>logging.level.*=debug</code>来配置日志级别，*填写包名</p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置com.leyou包的日志级别为debug</span></span><br><span class="line"><span class="meta">logging.level.com.leyou</span>=<span class="string">debug</span></span><br></pre></td></tr></table></figure>
-
-<p>再次运行查看：</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">05</span> <span class="number">17</span>:<span class="number">50</span>:<span class="number">01</span><span class="variable">.811</span> DEBUG <span class="number">4548</span> --- [p-nio-<span class="number">80</span>-exec-<span class="number">1</span>] com<span class="variable">.leyou</span><span class="variable">.interceptor</span><span class="variable">.LoginInterceptor</span>   : preHandle method is now running!</span><br><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">05</span> <span class="number">17</span>:<span class="number">50</span>:<span class="number">01</span><span class="variable">.854</span> DEBUG <span class="number">4548</span> --- [p-nio-<span class="number">80</span>-exec-<span class="number">1</span>] com<span class="variable">.leyou</span><span class="variable">.interceptor</span><span class="variable">.LoginInterceptor</span>   : postHandle method is now running!</span><br><span class="line"><span class="number">2018</span>-<span class="number">05</span>-<span class="number">05</span> <span class="number">17</span>:<span class="number">50</span>:<span class="number">01</span><span class="variable">.854</span> DEBUG <span class="number">4548</span> --- [p-nio-<span class="number">80</span>-exec-<span class="number">1</span>] com<span class="variable">.leyou</span><span class="variable">.interceptor</span><span class="variable">.LoginInterceptor</span>   : afterCompletion method is now running!</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h1 id="6、SpringBoot整合JDBC和事务"><a href="#6、SpringBoot整合JDBC和事务" class="headerlink" title="6、SpringBoot整合JDBC和事务"></a>6、SpringBoot整合JDBC和事务</h1><p>Spring中的jdbc连接和事务是配置中的重要一环，在SpringBoot中该如何处理呢？</p>
-<p>答案是不需要处理，我们只要找到SpringBoot提供的启动器即可：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-jdbc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>当然，不要忘了数据库驱动，SpringBoot并不知道我们用的什么数据库，这里我们选择MySQL：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>至于事务，SpringBoot中通过注解来控制。就是我们熟知的<code>@Transactional</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">queryById</span><span class="params">(Long id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.userMapper.selectByPrimaryKey(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteById</span><span class="params">(Long id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.userMapper.deleteByPrimaryKey(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="7、SpringBoot整合连接池"><a href="#7、SpringBoot整合连接池" class="headerlink" title="7、SpringBoot整合连接池"></a>7、SpringBoot整合连接池</h1><h2 id="7-1、默认DataBase"><a href="#7-1、默认DataBase" class="headerlink" title="7.1、默认DataBase"></a>7.1、默认DataBase</h2><blockquote>
-<p>事实上，在引入JDBC启动器的时候，SpringBoot已经自动帮我们引入了一个数据库连接池。因此，我们只需要指定连接池参数即可：</p>
-</blockquote>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 连接四大参数</span></span><br><span class="line"><span class="meta">spring.datasource.url</span>=<span class="string">jdbc:mysql://localhost:3306/heima</span></span><br><span class="line"><span class="meta">spring.datasource.username</span>=<span class="string">root</span></span><br><span class="line"><span class="meta">spring.datasource.password</span>=<span class="string">root</span></span><br><span class="line"><span class="comment"># 可省略，SpringBoot自动推断</span></span><br><span class="line"><span class="meta">spring.datasource.driverClassName</span>=<span class="string">com.mysql.jdbc.Driver</span></span><br><span class="line"></span><br><span class="line"><span class="meta">spring.datasource.hikari.idle-timeout</span>=<span class="string">60000</span></span><br><span class="line"><span class="meta">spring.datasource.hikari.maximum-pool-size</span>=<span class="string">30</span></span><br><span class="line"><span class="meta">spring.datasource.hikari.minimum-idle</span>=<span class="string">10</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="7-2、手动引入DataBase"><a href="#7-2、手动引入DataBase" class="headerlink" title="7.2、手动引入DataBase"></a>7.2、手动引入DataBase</h2><blockquote>
-<p>当然，如果你更喜欢Druid连接池，也可以使用Druid官方提供的启动器：</p>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Druid连接池 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>druid-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>配置接信息。</li>
-</ul>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#初始化连接数</span></span><br><span class="line"><span class="meta">spring.datasource.druid.initial-size</span>=<span class="string">1</span></span><br><span class="line"><span class="comment">#最小空闲连接</span></span><br><span class="line"><span class="meta">spring.datasource.druid.min-idle</span>=<span class="string">1</span></span><br><span class="line"><span class="comment">#最大活动连接</span></span><br><span class="line"><span class="meta">spring.datasource.druid.max-active</span>=<span class="string">20</span></span><br><span class="line"><span class="comment">#获取连接时测试是否可用</span></span><br><span class="line"><span class="meta">spring.datasource.druid.test-on-borrow</span>=<span class="string">true</span></span><br><span class="line"><span class="comment">#监控页面启动</span></span><br><span class="line"><span class="meta">spring.datasource.druid.stat-view-servlet.allow</span>=<span class="string">true</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h1 id="8、SpringBoot整合mybatis"><a href="#8、SpringBoot整合mybatis" class="headerlink" title="8、SpringBoot整合mybatis"></a>8、SpringBoot整合mybatis</h1><h2 id="8-1、MyBatis"><a href="#8-1、MyBatis" class="headerlink" title="8.1、MyBatis"></a>8.1、MyBatis</h2><blockquote>
-<p>SpringBoot官方并没有提供Mybatis的启动器，不过Mybatis自己实现了：</p>
-</blockquote>
-<ol>
-<li>添加MyBatis起步依赖</li>
-<li>添加数据库驱动坐标</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--mybatis --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--mysql --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>添加数据库连接信息</li>
-</ol>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># mybatis 别名扫描</span></span><br><span class="line"><span class="meta">mybatis.type-aliases-package</span>=<span class="string">com.heima.pojo</span></span><br><span class="line"><span class="comment"># mapper.xml文件位置,如果没有映射文件，请注释掉</span></span><br><span class="line"><span class="meta">mybatis.mapper-locations</span>=<span class="string">classpath:mappers/*.xml</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>Tip：这里面没有配置mapper接口扫描包，因此我们需要给每一个Mapper接口添加<code>@Mapper</code>注解，才能被识别。</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="8-2、SpringBoot整合通用mapper"><a href="#8-2、SpringBoot整合通用mapper" class="headerlink" title="8.2、SpringBoot整合通用mapper"></a>8.2、SpringBoot整合通用mapper</h2><blockquote>
-<p>专门有一篇博客介绍通用Mapper。</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://lvnengdong.github.io/2020/09/07/%E9%80%9A%E7%94%A8Mapper%E7%9A%84%E8%AF%A6%E8%A7%A3/">通用Mapper详解</a></li>
-</ul>
-</blockquote>
-<hr>
-<h1 id="9、SpringBoot整合Junit"><a href="#9、SpringBoot整合Junit" class="headerlink" title="9、SpringBoot整合Junit"></a>9、SpringBoot整合Junit</h1><ol>
-<li><p>添加<code>Junit</code>起步依赖</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">   	<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>编写测试类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith(SpringRunner.class)</span></span><br><span class="line"><span class="meta">@SpringBootTest(classes = MySpringBootApplication.class)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">MyTest</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// 测试逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ul>
-<li><code>@RunWith()</code>的作用是替换单元测试模块为SpringBoot的单元测试模块</li>
-<li><code>@SpringBootTest()</code>的属性指定的启动类的字节码对象。</li>
-</ul>
-</blockquote>
-</li>
-</ol>
-
       
     </div>
 

@@ -49,14 +49,14 @@
 <meta property="og:image" content="http://example.com/2021/07/03/JUC/image-20210708210859384.png">
 <meta property="og:image" content="http://example.com/2021/07/03/JUC/image-20210708211522773.png">
 <meta property="og:image" content="http://example.com/2021/07/03/JUC/image-20210713124120349.png">
-<meta property="og:image" content="file://E:/blog/source/_posts/JUC/image-20210713130528886.png?lastModify=1628408761">
+<meta property="og:image" content="http://example.com/2021/07/03/JUC/image-20210713130528886.png">
 <meta property="og:image" content="http://example.com/2021/07/03/JUC/image-20210713131401299.png">
 <meta property="og:image" content="http://example.com/2021/07/03/JUC/image-20210713141702447.png">
 <meta property="og:image" content="http://example.com/2021/07/03/JUC/image-20210713144925160.png">
 <meta property="og:image" content="http://example.com/2021/07/03/JUC/%E6%AD%BB%E9%94%81.png">
 <meta property="og:image" content="http://example.com/2021/07/03/JUC/image-20210716115243510.png">
 <meta property="article:published_time" content="2021-07-03T02:00:06.000Z">
-<meta property="article:modified_time" content="2021-08-09T08:52:17.697Z">
+<meta property="article:modified_time" content="2021-08-21T14:44:53.288Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/07/03/JUC/image-20210714112703545.png">
@@ -186,7 +186,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">137</span>
+          <span class="site-state-item-count">138</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -266,7 +266,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-09 16:52:17" itemprop="dateModified" datetime="2021-08-09T16:52:17+08:00">2021-08-09</time>
+        <time title="Modified: 2021-08-21 22:44:53" itemprop="dateModified" datetime="2021-08-21T22:44:53+08:00">2021-08-21</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -830,15 +830,15 @@
 <p>  <strong>CountDownLatch；倒计时锁</strong></p>
 </blockquote>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
-<li>  <code>CountDownLatch</code> 是一种同步辅助工具，作用是<strong>让一个或多个线程阻塞，直到另一些线程完成了一系列操作后再被唤醒</strong>。</li>
+<li>  <code>CountDownLatch</code> 是一种同步辅助工具，作用是<strong>让一个或多个线程挂起，直到另一些线程完成了一系列操作后被挂起的线程再被唤醒</strong>。</li>
 <li>  <code>CountDownLatch</code> 对象是用给定的计数器初始化的。<strong>调用 await 方法会使当前线程阻塞</strong>，调用 <strong>countDown()</strong> 方法会减少计数值，直到当前计数减为零之后，所有等待的线程都会被释放， await 方法的后面的代码会继续执行。</li>
 </ul>
 <p><img src="/2021/07/03/JUC/image-20210713124120349.png" alt="image-20210713124120349"></p>
 <hr>
-<h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><p><img src="file://E:/blog/source/_posts/JUC/image-20210713130528886.png?lastModify=1628408761" alt="image-20210713130528886"></p>
+<h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><p><img src="/2021/07/03/JUC/image-20210713130528886.png" alt="image-20210713130528886"></p>
 <ul>
-<li>  **CountDownLatch#await()**：让当前线程进入等待，直到 latch 锁减到 0 再唤醒线程（每次减 1）。</li>
-<li>  **CountDownLatch#countDown()**：减少 latch 锁的计数，如果计数达到 0  则释放所有等待的线程。</li>
+<li>  <strong>CountDownLatch#await()</strong> ：让当前线程进入等待，直到 latch 锁减到 0 再唤醒线程（每次减 1）。</li>
+<li>  <strong>CountDownLatch#countDown()</strong> ：减少 latch 锁的计数，如果计数达到 0  则释放所有等待的线程。</li>
 </ul>
 <hr>
 <h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><blockquote>
@@ -852,7 +852,7 @@
 
 <ul>
 <li>  在上面代码中，6个线程并发执行，所以并不能保证火箭发射一定会在 5 个准备工作之后进行。</li>
-<li>  面对这种情况，我们之间的做法一般是让 <code>main</code> 线程先休眠足够长的时间，这段时间内让  5 个准备工作先执行完毕，最后再执行发射火箭的操作。这种操作虽然能解决问题，但是由于休眠时间是手动设定的，并不能保证一定精准。</li>
+<li>  面对这种情况，我们之前的做法一般是让 <code>main</code> 线程先休眠足够长的时间，这段时间内让  5 个准备工作先执行完毕，最后再执行发射火箭的操作。这种操作虽然能解决问题，但是由于休眠时间是手动设定的，并不能保证一定精准。</li>
 <li>  在这种情况下最好的方法就是使用 <strong>CountDownLatch</strong> 类。</li>
 </ul>
 <blockquote>
@@ -863,7 +863,7 @@
 <ul>
 <li>  假设先执行 for 循环，创建了第一个线程，之后线程被挂起，而去执行 mian 线程了；</li>
 <li>  main 线程执行到 <code>countDownLatch.await();</code> 时发现 CountDownLatch 对象的计数值不为 0，就会让当前线程（main）进入睡眠。</li>
-<li>  for 循环中每个线程执行完毕时都会将 <code>CountDownLatch</code> 对象中的计数器 <code>-1</code>，只有等到 for 循环中的五个线程全部执行完毕后，计数值变成 0 后，调用 <code>countDownLatch.await();</code> 方法才会唤醒所有等待的线程（这里只有一个等待的线程，就只唤醒一个）</li>
+<li>  for 循环中每个线程执行完毕时都会将 <code>CountDownLatch</code> 对象中的计数器 <code>-1</code>，当 for 循环中的五个线程全部执行完毕后，计数器值就会变成 0 ，这时由于 <code>countDownLatch.await();</code> 方法而挂起的线程会全部被唤醒（这里只有一个等待的线程，所以只唤醒了一个）</li>
 </ul>
 <blockquote>
 <p>  <strong>执行结果：</strong></p>
@@ -880,17 +880,21 @@
 </blockquote>
 <ul>
 <li>  <code>CyclicBarrier</code> 的字面意思是可循环（Cyclic）使用的屏障（Barrier）。</li>
-<li>  它的主要作用是：让一组线程到达一个屏障（也可以叫同步点）时被阻塞，直到最后一个线程达到屏障时，屏障才会开门，所有被屏障拦截的线程才会继续干活，线程进入屏障通过 <strong>Cyclic#await</strong> 方法。</li>
+<li>  它的主要作用是：让一组线程一起通过屏障点（也可以叫同步点）。每当有线程到达屏障点时，该线程就停止运行，直到所有的线程都到达了这个点，所有线程才重新运行。</li>
+<li>  它的构造方法可以指定一个目标值，只有当到达屏障点的线程数量等于目标值时，屏障才会开门，所有停住的线程会同时继续运行。</li>
+<li>  线程通过通过 <strong>Cyclic#await</strong> 方法停止运行，每调用一次 <code>await()</code> 方法，目标值+1。</li>
 <li>  集齐七颗龙珠，才能召唤神龙。</li>
-<li>  与 CountDownLatch 恰恰相反，初始值为 0，只有达到指定值，才能开始执行。</li>
+<li>  与 CountDownLatch 恰恰相反，CyclicBarrier 初始值为 0，只有达到指定值，才能开始执行。</li>
 </ul>
 <h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><p><img src="/2021/07/03/JUC/image-20210713141702447.png" alt="image-20210713141702447"></p>
-<p><strong>两个参数的构造方法</strong>：</p>
+<blockquote>
+<p>  <strong>两个参数的含义</strong>：</p>
+</blockquote>
 <ol>
 <li> <strong>int parties</strong>：目标值</li>
 <li> <strong>Runnable barrierAction</strong>：达到目标值后要执行的线程</li>
 </ol>
-<h2 id="代码演示-1"><a href="#代码演示-1" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CyclicBarrierDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CyclicBarrier cyclicBarrier = <span class="keyword">new</span> CyclicBarrier(<span class="number">7</span>, ()-&gt;&#123; System.out.println(<span class="string">&quot;=======召唤神龙&quot;</span>); &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">7</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> temp = i;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;收集到了&quot;</span>+ temp +<span class="string">&quot;星龙珠&quot;</span>);</span><br><span class="line">                    cyclicBarrier.await();  <span class="comment">// 七个线程每个线程收集一颗龙珠，收集到单颗龙珠后不能召唤神龙，就让当前线程休息</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (BrokenBarrierException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, Thread.currentThread().getName()).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 结果展示：</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 收集到了1星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了7星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了6星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了5星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了4星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了3星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了2星龙珠</span></span><br><span class="line"><span class="comment"> * =======召唤神龙</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<h2 id="代码演示-1"><a href="#代码演示-1" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CyclicBarrierDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        CyclicBarrier cyclicBarrier = <span class="keyword">new</span> CyclicBarrier(<span class="number">7</span>, ()-&gt;&#123; System.out.println(<span class="string">&quot;=======召唤神龙&quot;</span>); &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">7</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> temp = i;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;收集到了&quot;</span>+ temp +<span class="string">&quot;星龙珠&quot;</span>);</span><br><span class="line">                    cyclicBarrier.await();  <span class="comment">// 七个线程每个线程收集一颗龙珠，收集完成后，挂起</span></span><br><span class="line">                    System.out.println(<span class="string">&quot;测试是否执行后续代码&quot;</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (BrokenBarrierException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;, Thread.currentThread().getName()).start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当七个线程全部执行完毕后，目标值就达到了，可以破开屏障，先执行 CyclicBarrier 构造方法中指定的线程，</span></span><br><span class="line">        <span class="comment">// 再执行之前被挂起的七个线程</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 结果展示：</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 收集到了1星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了7星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了6星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了5星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了4星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了3星龙珠</span></span><br><span class="line"><span class="comment"> * 收集到了2星龙珠</span></span><br><span class="line"><span class="comment"> * =======召唤神龙</span></span><br><span class="line"><span class="comment"> * 测试是否执行后续代码</span></span><br><span class="line"><span class="comment"> * 测试是否执行后续代码</span></span><br><span class="line"><span class="comment"> * 测试是否执行后续代码</span></span><br><span class="line"><span class="comment"> * 测试是否执行后续代码</span></span><br><span class="line"><span class="comment"> * 测试是否执行后续代码</span></span><br><span class="line"><span class="comment"> * 测试是否执行后续代码</span></span><br><span class="line"><span class="comment"> * 测试是否执行后续代码</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -900,7 +904,15 @@
 </blockquote>
 <ul>
 <li>  多个线程抢多个资源</li>
-<li>  Semaphore 信号量主要用于两个目的，一个是用于多个共享资源的互斥使用，另一个用于并发线程数的控制。</li>
+<li>  Semaphore 信号量主要用于两个目的，一个是用于多个共享资源的互斥使用，另一个用于<strong>控制并发的线程数</strong>。</li>
+</ul>
+<blockquote>
+<p>  <strong>Semaphore 中的方法：</strong></p>
+</blockquote>
+<p><strong>Semaphore(int permits)</strong> 构造方法中指定了当前进程中最多只能允许几个线程同时运行。意思就是一个萝卜一个坑，线程就是萝卜，萝卜可以有多个，但是坑位是有限的，线程数可以远大于坑位数，但是同时（并发）运行的只能与坑位数量相同。</p>
+<ul>
+<li>  <code>Semaphore # acquire()</code>：占有坑位</li>
+<li>  <code>Semaphore # release()</code>：释放坑位</li>
 </ul>
 <blockquote>
 <p>  <strong>代码演示</strong></p>
