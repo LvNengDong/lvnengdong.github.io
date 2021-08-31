@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="AQS简介   AQS数据结构   资源共享模式   AQS 源码分析   释放资源   前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式指模板设计模式    概念为什么学JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。 是什么   AQS；AbstractQueuedSynchronizer；抽象队列同步器">
+<meta name="description" content="AQS简介   AQS数据结构   资源共享模式   AQS 源码分析   释放资源   前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式——模板设计模式    概念为什么学JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。 是什么   AQS；AbstractQueuedSynchronizer；抽象队列同步器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AQS">
 <meta property="og:url" content="http://example.com/2021/07/16/AQS/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="AQS简介   AQS数据结构   资源共享模式   AQS 源码分析   释放资源   前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式指模板设计模式    概念为什么学JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。 是什么   AQS；AbstractQueuedSynchronizer；抽象队列同步器">
+<meta property="og:description" content="AQS简介   AQS数据结构   资源共享模式   AQS 源码分析   释放资源   前置知识   公平锁和非公平锁  可重入锁  LockSupport  自旋锁  数据结构链表  设计模式——模板设计模式    概念为什么学JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。 是什么   AQS；AbstractQueuedSynchronizer；抽象队列同步器">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/image-20210716222211925.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/image-20210716222347766.png">
@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/ReentrantLock%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%8101.png">
 <meta property="og:image" content="http://example.com/2021/07/16/AQS/fair_nonfair$tryAcquire.png">
 <meta property="article:published_time" content="2021-07-16T09:27:18.000Z">
-<meta property="article:modified_time" content="2021-08-11T11:53:59.882Z">
+<meta property="article:modified_time" content="2021-08-30T01:41:55.545Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/07/16/AQS/image-20210716222211925.png">
@@ -176,7 +176,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">138</span>
+          <span class="site-state-item-count">142</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -256,7 +256,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-11 19:53:59" itemprop="dateModified" datetime="2021-08-11T19:53:59+08:00">2021-08-11</time>
+        <time title="Modified: 2021-08-30 09:41:55" itemprop="dateModified" datetime="2021-08-30T09:41:55+08:00">2021-08-30</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -294,7 +294,7 @@
 <li> LockSupport</li>
 <li> 自旋锁</li>
 <li> 数据结构链表</li>
-<li> 设计模式指模板设计模式</li>
+<li> 设计模式——模板设计模式</li>
 </ol>
 </blockquote>
 <hr>
@@ -303,14 +303,14 @@
 <p>  <strong>AQS；AbstractQueuedSynchronizer；抽象队列同步器</strong></p>
 </blockquote>
 <ul>
-<li>  <strong>抽象</strong>：抽象类，只实现⼀些主要逻辑，有些⽅法由⼦类实现；</li>
-<li>  <strong>队列</strong>：使⽤先进先出（FIFO）队列存储数据；</li>
+<li>  <strong>抽象</strong>：抽象类，只实现⼀些顶层的代码逻辑，具体细节由子类实现；</li>
+<li>  <strong>队列</strong>：使用先进先出（FIFO）队列存储数据；</li>
 <li>  <strong>同步</strong>：实现了同步的功能。</li>
 </ul>
 <p>AQS 是用来构建锁或者其它同步器组件的重量级基础框架及整个 JUC 体系的基石，通过内置的 FIFO <strong>队列</strong>来完成资源获取线程的排队工作，并通过一个 <strong>int 类型变量</strong>表示持有锁的状态。</p>
-<h2 id="有什么用"><a href="#有什么用" class="headerlink" title="有什么用"></a>有什么用</h2><p>AQS 是一个用来构建锁或者其它同步器的框架，使⽤AQS能简单⾼效地构造出应⽤⼴泛的同步器。</p>
+<h2 id="有什么用"><a href="#有什么用" class="headerlink" title="有什么用"></a>有什么用</h2><p>AQS 是一个用来构建锁或者其它同步器的框架，使用AQS能简单高效地构造出应用广泛的同步器。</p>
 <p>JUC 包下很多 API 都是基于 AQS 来实现加锁和释放锁等功能的。AQS 是 JUC 包的基础类。ReentrantLock、ReentrantReadWriteLock 等类底层都是基于 AQS 来实现的。</p>
-<p>当然，我们⾃⼰也能利⽤AQS⾮常轻松容易地构造出符合我们⾃⼰需求的同步器，只要子类实现它的⼏个 protected ⽅法就可以了，</p>
+<p>当然，我们自己也能利用 AQS 非常轻松容易地构造出符合我们自己需求的同步器，只要子类实现它的几个 protected 方法就可以了，</p>
 <blockquote>
 <p>  <strong>锁和同步器的关系：</strong></p>
 </blockquote>
@@ -318,7 +318,7 @@
 <li><p>锁：面向锁的<strong>使用者</strong></p>
 <p>  定义了程序员和锁交互的 API ，隐藏了实现细节。</p>
 </li>
-<li><p>同步器：面向锁的<strong>实现者</strong></p>
+<li><p>同步器：面向锁的<strong>实现者</strong>，即怎样实现一个锁</p>
 <p>  提出了统一规范并简化了锁的实现，屏蔽了同步状态管理、阻塞线程排队和通知、唤醒机制等。</p>
 </li>
 </ul>
@@ -352,7 +352,7 @@
 <p><img src="/2021/07/16/AQS/image-20210716222601965.png" alt="image-20210716222601965"></p>
 <hr>
 <h1 id="AQS-原理概述（乞丐版）（以-ReentrantLock-为例）"><a href="#AQS-原理概述（乞丐版）（以-ReentrantLock-为例）" class="headerlink" title="AQS 原理概述（乞丐版）（以 ReentrantLock 为例）"></a>AQS 原理概述（乞丐版）（以 ReentrantLock 为例）</h1><h2 id="ReentrantLock-和-AQS-的关系"><a href="#ReentrantLock-和-AQS-的关系" class="headerlink" title="ReentrantLock 和 AQS 的关系"></a>ReentrantLock 和 AQS 的关系</h2><p><img src="/2021/07/16/AQS/ReentrantLock_AQS_01.png" alt="ReentrantLock_AQS_01"></p>
-<p>​        ReentrantLock 类有一个内部类 Sync 继承了 AbstractQueuedSynchronizer 抽象类，说白了就是 ReentrantLock 中包含了一个 AQS 对象，AQS 对象是 ReentrantLock 实现加锁和释放锁的关键性核心组件。</p>
+<p>ReentrantLock 类有一个内部类 Sync 继承了 AbstractQueuedSynchronizer 抽象类，说白了就是 ReentrantLock 中包含了一个 AQS 对象，AQS 对象是 ReentrantLock 实现加锁和释放锁的关键性核心组件。</p>
 <h2 id="ReentrantLock-加锁和释放锁的底层原理"><a href="#ReentrantLock-加锁和释放锁的底层原理" class="headerlink" title="ReentrantLock 加锁和释放锁的底层原理"></a>ReentrantLock 加锁和释放锁的底层原理</h2><blockquote>
 <ol>
 <li> <strong>线程 T1 加锁</strong></li>

@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">138</span>
+          <span class="site-state-item-count">142</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,1657 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">JVM——类加载机制</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-10 17:26:39" itemprop="dateCreated datePublished" datetime="2021-06-10T17:26:39+08:00">2021-06-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 12:24:41" itemprop="dateModified" datetime="2021-08-03T12:24:41+08:00">2021-08-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="1-概述"><a href="#1-概述" class="headerlink" title="1    概述"></a>1    概述</h1><blockquote>
+<p>  <strong>什么是类加载机制？</strong></p>
+</blockquote>
+<p>在 <code>.class</code> 文件中保存的描述类型的信息，最终都需要被加载到虚拟机之后才能被运行和使用。而</p>
+<ol>
+<li> <strong>虚拟机如何将 <code>.class</code> 文件加载到内存中？</strong></li>
+<li> <strong><code>.class</code> 文件中的信息进入到虚拟机后会发生什么变化？</strong></li>
+</ol>
+<p>就是类加载机制关注的内容。简而言之，<strong>类加载机制就是将 <code>.class</code> 文件中的信息按照虚拟机的制定规范加载到内存中保存</strong>。</p>
+<h2 id="1-1-类的主动使用和被动使用"><a href="#1-1-类的主动使用和被动使用" class="headerlink" title="1.1    类的主动使用和被动使用"></a>1.1    类的主动使用和被动使用</h2><p>JVM 对 <code>.class</code> 文件采用的是<strong>懒加载</strong>的方式，也就是说只有需要使用某个类的时候才会将该类对应的 <code>.class</code> 文件加载到内存中生成 Class 对象。所以 Java 程序对类的使用方式又可分为：主动使用和被动使用。<strong>主动使用会导致类的初始化，而被动使用则不会导致类的初始化</strong>。</p>
+<p><strong>主动使用</strong>，又分7种情况：</p>
+<blockquote>
+<ol>
+<li>创建类的实例</li>
+<li>读取或设置某个类或接口中的静态字段时（常量除外，被 final static 修饰的字段也视为常量）。</li>
+<li>调用类的静态方法。</li>
+<li>使用 java.lang.reflect 包的方法被类型进行反射调用的时候，如果类型没有进行过初始化，则需要先触发其初始化（比如：Class.forName(“com.example.Test”)）</li>
+<li>当初始化类时，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</li>
+<li>当虚拟机启动时，用户需要指定一个要执行的主类（包含 <code>main()</code> 方法的那个类），虚拟机会先初始化这个类。</li>
+<li>JDK7 开始提供的动态语言支持：</li>
+</ol>
+</blockquote>
+<p>类的主动使用情况下，都会先判断类是否被加载，如果没有被加载，则会触发其进行加载。</p>
+<ul>
+<li>除了以上7种情况，其它使用 Java 类的方式都被看做是 <strong>类的被动使用</strong>，都<strong>不会导致类的初始化</strong>。</li>
+</ul>
+<hr>
+<h2 id="1-2-类加载器"><a href="#1-2-类加载器" class="headerlink" title="1.2    类加载器"></a>1.2    类加载器</h2><p>类加载器（ClassLoader）负责从文件系统或网络中加载二进制字节流（如<code>.class</code>二进制字节码文件）<strong>到方法区中</strong>，至于该二进制字节流是否可以运行，则由执行引擎（Execution Engine）决定。</p>
+<p>加载到 JVM 内存中的类信息存放在方法区。除了类本身的信息外，方法区中还会存放运行时常量池信息，可能还包括字符串字面量和数字常量（这部分常量信息是 Class 文件中常量池部分的内存映射）。</p>
+<blockquote>
+<p>运行时常量池对应 <code>.class</code> 文件中的常量池，通过对字节码文件的反编译我们发现字节码文件中存在常量池。常量池在程序运行时会被加载到方法区的运行时常量池中。</p>
+</blockquote>
+<p>类在被加载到内存中时依赖于运行时常量池（类中定义的常量、存在的符号字面量等都保存在常量池中，在加载类到内存中时就保存在运行时常量池中了）。</p>
+<h3 id="1-2-1-类加载器-ClassLoader-对象"><a href="#1-2-1-类加载器-ClassLoader-对象" class="headerlink" title="1.2.1    类加载器 ClassLoader 对象"></a>1.2.1    类加载器 ClassLoader 对象</h3><ol>
+<li><code>.class</code> 字节码文件一般保存在本地硬盘上，可以理解为实例对象的模板，这个模板首先要加载到虚拟机中，然后在创建实例对象的时候才能根据这个模板创建出 n 个实例对象。</li>
+<li><code>.class</code> 字节码文件被加载到虚拟机中时，会在方法区中划分一块内存保存这部分类数据，我们称之为<strong>DNA 元数据模板</strong>。</li>
+<li>从 <code>.class字节码文件 --&gt; 元数据模板</code> 的过程中，需要一个运输工具承担一个快递员的角色完成这一过程，这个工具就是<strong>类加载器 （Class Loader）</strong>。</li>
+</ol>
+<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/ClassLoader.png" alt="ClassLoader"></p>
+<hr>
+<h1 id="2-类的生命周期"><a href="#2-类的生命周期" class="headerlink" title="2    类的生命周期"></a>2    类的生命周期</h1><h2 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1    概述"></a>2.1    概述</h2><p>一个类型从被加载到虚拟机内存中开始，到卸载出内存为止。整个生命周期将会经历七个阶段。这七个阶段发生的顺序如下图所示。</p>
+<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png" alt="类的生命周期"></p>
+<p>这七个阶段按照生命周期可分为：<strong>类加载阶段 –&gt; 类使用阶段 –&gt; 类卸载阶段</strong>。类加载阶段中的验证、准备、解析三个阶段合称为连接（Linking）。</p>
+<p>其中，加载、验证、准备、初始化和卸载这五个阶段的顺序是可以确定的，类型的加载过程必须按部就班地按照这种顺序开始。而解析阶段则不一定（解析阶段主要负责将符号引用转换为直接引用），它在某些情况下可以在初始化阶段之后再开始，这是为了支持 Java 语言的运行时绑定特性。</p>
+<hr>
+<h2 id="2-2-类加载阶段"><a href="#2-2-类加载阶段" class="headerlink" title="2.2    类加载阶段"></a>2.2    类加载阶段</h2><h3 id="阶段1：Loading"><a href="#阶段1：Loading" class="headerlink" title="阶段1：Loading"></a>阶段1：Loading</h3><p>“加载（Loading）”是整个“类加载（Class_Loading）”过程中的一个阶段，这两个概念比较容易混淆。</p>
+<ol>
+<li>通过类的全限定类名获取定义此类的二进制字节流。<ul>
+<li>  说明：字节码文件以二进制格式保存，通过IO方式将<code>.class</code>字节码文件中的内容以字节流的形式传输到JVM内存中。</li>
+</ul>
+</li>
+<li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。<ul>
+<li>  说明：加载阶段结束之后，Java虚拟机外部的二进制字节码文件对应的内容就会按照虚拟机规定的格式存储在方法区中了。</li>
+</ul>
+</li>
+<li><strong>在方法区生成一个代表这个类的 java.lang.Class 对象</strong>，作为方法区中这个类的各种数据的访问入口。<ul>
+<li>  说明：类型数据妥善安置在方法区之后，就会在Java堆内存中实例化一个<code>java.lang.Class</code>类的对象，这个对象将作为程序访问方法区中的类型数据的外部接口。</li>
+</ul>
+</li>
+</ol>
+<h4 id="补充：加载-class-文件的方式"><a href="#补充：加载-class-文件的方式" class="headerlink" title="补充：加载 .class 文件的方式"></a>补充：加载 .class 文件的方式</h4><p>《Java虚拟机规范》对这三点要求并不是特别具体。例如“通过一个全限定类名来获取定义此类的二进制字节流”这条规则，并没有指明二进制字节流必须要从某个 <code>.class</code> 文件中获取。基于此发展出了各种各样的获取二进制字节流的方式，如：</p>
+<ul>
+<li>从本地系统中直接加载</li>
+<li>通过网络获取。典型场景：Web Applet</li>
+<li>从 zip 压缩包中读取。这很常见，是常见的 jar、war 格式的基础</li>
+<li>运行时计算生成，使用最多的是：动态代理技术</li>
+<li>由其他文件生成，典型的场景就是 JSP 应用，由 JSP 文件生成对应的 Class 文件。</li>
+<li>从专有数据库中提取。</li>
+<li>从加密文件中获取。典型的防止 Class 文件被反编译的保护措施。</li>
+</ul>
+<hr>
+<h3 id="阶段2：Verify"><a href="#阶段2：Verify" class="headerlink" title="阶段2：Verify"></a>阶段2：Verify</h3><p><strong>验证</strong>是连接阶段的第一步，这一阶段的目的是确保从<code>.class</code> 文件加载到方法区中的二进制字节流数据信息符合当前虚拟机的全部约束要求，确保这些信息被当做代码运行后不会危害虚拟机自身的安全。</p>
+<p>Java 语言是相对安全的编程语言，当代码发生语法层面的错误时（前端）编译器会拒绝编译，并抛出异常。但是 <code>.class</code> 文件并不是只能由 Java 语言编译而来，它可以使用包括靠键盘 0  和 1 直接在二进制编辑器中敲出 Class 文件在内的任何途径产生。Java 虚拟机如果不检查输出的字节流，对其完全信任的话，很可能会因为载入了有错误或者有恶意企图的字节码流而导致整个系统受攻击甚至崩溃，所以验证字节码是 Java 虚拟机保护自身的一项必要措施。</p>
+<p>验证阶段大致上会完成以下4个阶段的检验动作：</p>
+<ol>
+<li><p><strong>文件格式验证</strong>：验证二进制字节流是否符合 Class 文件格式规范，并且能被当前版本的虚拟机处理。主要包括：</p>
+<ul>
+<li>  是否以魔数 <code>0xCAFEBABE</code> 开头</li>
+<li>  主、次版本号是否在当前 Java 虚拟机接受的范围之内</li>
+<li>  常量池中的常量是否有不被支持的常量类型（检查常量 tag 标志）</li>
+<li>  指向常量的各种索引值中是否有指向不存在的常量或者不符合类型的常量</li>
+<li>  ……</li>
+</ul>
+</li>
+<li><p><strong>元数据验证</strong>：对字节码描述的信息进行语义分析，以保证其信息符合《Java虚拟机规范》的要求。包括：</p>
+<ul>
+<li>  这个类是否有父类</li>
+<li>  这个类的父类是否继承了不允许被继承的类（被 final 修饰的类）</li>
+<li>  如果这个类不是抽象类，是否实现了其父类或接口之中要求实现的所有方法</li>
+<li>  类中的字段、方法是否与父类产生矛盾（例如覆盖了父类中的 final 字段，或者出现了不符合规则的方法重载）</li>
+<li>  ……</li>
+</ul>
+</li>
+<li><p> <strong>字节码验证</strong>：通过对数据流分析和控制流分析，确定语义是合法的。</p>
+</li>
+<li><p><strong>符号引用验证</strong>：发生在虚拟机将符号引用转化为直接引用的时候。这个转化动作将在 Linking 的第三阶段——解析阶段中发生。符号引用验证可以看做是对类自身以外的各类信息进行匹配性校验。即检验该类是否缺少或者被禁止访问它依赖的某些外部类、方法、字段等资源。主要校验的内容有：</p>
+<ul>
+<li><p>  符号引用中通过字面量描述的全限定类名是否能找到对应的类。</p>
+</li>
+<li><p>找到对应的类后，在指定类中是否存在符合方法的字段描述及简单名称所描述的方法和字段。</p>
+<p>  就是 A 类依赖了 B 类，并调用了 B 类中的 test() 方法，首先要检查通过符号引用转化成的直接引用能不能找到 B，找到 B 之后还要检查 B 中有没有一个叫做 test() 的方法。</p>
+</li>
+<li><p>  符号引用中的类、字段、方法的可访问性，是否可被当前类访问。</p>
+</li>
+<li><p>  ……</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>如果无法通过符号引用的验证，Java 虚拟机将会抛出一个 <strong>java.lang.IncompatibleClassChangeError</strong> 的子类异常，典型的如：<strong>java.lang.IllegalAccessError</strong>、<strong>java.lang.NoSuchFieldError</strong>、<strong>java.lang.NoSuchMethodError</strong> 等。</p>
+<p>验证阶段对于 Java 虚拟机来说，是一个非常重要但又非必须的阶段。如果运行程序的全部代码都已经被反复验证和使用过，在生产阶段就可以考虑使用 <strong>-Xverify:none</strong> 参数来关闭大部分的验证措施，以缩短类加载的时间。  </p>
+<hr>
+<h3 id="阶段3：Prepare"><a href="#阶段3：Prepare" class="headerlink" title="阶段3：Prepare"></a>阶段3：Prepare</h3><ul>
+<li>Prepare 阶段的主要工作就是：为类变量（静态变量）分配内存并且设置该变量的默认初始零值[如果有类变量的话]，类变量会分配在方法区中。</li>
+<li><strong>Prepare 阶段不会为实例变量分配内存和初始化变量值</strong>，实例变量将会在对象实例化时随着对象一起分配在 Java 堆中。</li>
+<li>如果类变量使用 final 修饰，即 <strong>final static</strong> 修饰的变量，在 Prepare 阶段直接就会显式初始化。</li>
+</ul>
+<blockquote>
+<p>  <strong>例子</strong></p>
+</blockquote>
+<p>假设一个类变量的定义为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> value = <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+
+<p>那么 value 的值在 Prepare 阶段过后的初始值就是 0（默认零值），而把 value 赋值为 123 的动作要到类的初始化阶段（Initialization）才会被执行。</p>
+<p>在某些“特殊情况”下，即如果类字段的字段属性表中存在 ConstantValue 属性（即类字段是一个常量），那么在 Prepare 阶段变量值就会被初始化为 ConstantValue 属性所指定的初始值。假设上面的变量 value 的定义修改为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> value = <span class="number">123</span>;	<span class="comment">// 被 final static 修饰的变量就相当于一个常量 ConstantValue</span></span><br></pre></td></tr></table></figure>
+
+<p>（前端）编译时 javac 将会为 value 生成 ConstantValue 属性，在 Prepare 阶段虚拟机就会将 value 赋值为 123.</p>
+<blockquote>
+<p>  <strong>方法区只是一个逻辑上的区域</strong></p>
+</blockquote>
+<p>从概念上讲，这些类变量所使用的内存都应该在方法区中进行分配。但是必须要注意方法区只是一个逻辑概念，在 JDK8 之前，HotSpot 用永久代来实现方法区；从 JDK8 开始，类变量则是会随着 Class 对象一起存放在 Java 堆中，这时候“类变量在方法区”就完全是一种对逻辑概念的表述了。因为 JDK8 之后，方法区是用元空间实现的，但是类变量和Class对象也没有保存在元空间中。</p>
+<hr>
+<h3 id="阶段4：Resolve"><a href="#阶段4：Resolve" class="headerlink" title="阶段4：Resolve"></a>阶段4：Resolve</h3><p><strong>解析阶段是虚拟机将常量池内的符号引用转换为直接引用的过程</strong>。</p>
+<blockquote>
+<p>  <strong>JVM 中的符号引用和直接引用</strong>：</p>
+</blockquote>
+<ol>
+<li><p><strong>符号引用（Symbolic_Reference）</strong>：</p>
+<ul>
+<li><p>  符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到引用目标即可。</p>
+</li>
+<li><p>  符号引用与虚拟机实现的内存布局无关。各种虚拟机实现的内存布局可以各不相同，但是它们能接受的符号引用都必须一致。因为符号引用的字面量形式明确定义在《Java虚拟机规范》的 Class 文件格式中。</p>
+</li>
+<li><p>引用目标不一定是已经加载到虚拟机内存中的内容。</p>
+<p>  <em>符号引用的目标可能已被来加载器加载到内存中了，也可能没有。因为符号引用只是一种声明，只有在转换成直接引用时才会去真正的把要引用的目标加载到内存中</em></p>
+</li>
+<li><p>  符号引用在 <code>.class</code> 文件中以 CONSTANT_Class_info、CONSTANT_Fieldref_info、CONSTANT_Methodref_info 等类型的字面量出现。</p>
+</li>
+<li><p>  符号引用是一串字面量，所以被保存在常量池中。</p>
+</li>
+</ul>
+<p> ​        <em>在 Java 中，一个类会被编译成一个 <code>.class</code> 文件；在编译时，还不能确定类中引用到的对象的实际地址，因此只能用符号引用来代替。比如 com.example.People 引用了 com.example.Sleep 这个类，在编译时 People 类是不知道 Sleep 这个类或者这个类对应的实例在内存中的实际地址的，因此只能用符号引用 com.example.Sleep（假设是这个，当然实际上是由类似于 CONSTANT_Class_info 的常量来表示的）来表示 Sleep 的地址。</em></p>
+</li>
+<li><p><strong>直接引用（Direct Reference）</strong>：</p>
+<ul>
+<li>  直接引用可以是：1、直接指向目标的指针  2、相对偏移量  3、一个能间接定位到目标的句柄。</li>
+<li>  直接引用是和虚拟机实现的内存布局相关的，同一个符号引用在不同的虚拟机实现上翻译出来的直接引用一般不会相同。</li>
+<li>  <strong>如果有了直接引用，那引用的目标必然已经被加载到虚拟机内存中了</strong>。</li>
+</ul>
+</li>
+<li><p><strong>小结</strong>：</p>
+<p> ​        <strong>符号引用是一种声明，而直接引用则是具体的实现</strong>。假设有两个对象 A 和 B，A 依赖了 B（在 A 中使用到了 B）。在符号引用的角度看来是：A 对虚拟机说：我要使用 B 了，但是 B 在哪儿它自己也找不到，它仅仅只是知道 B 的存在。在直接引用的角度看来就是：它找到了 B ，并将 B 的地址给了 A ，这时候 A 才可以真正的使用 B 。</p>
+</li>
+</ol>
+<hr>
+<p>《Java虚拟机规范》之中并未规定解析阶段发生的具体时间，所以虚拟机实现可以根据需要来自行判断。到底是在被类加载器加载时就对常量池中的符号引用进行解析，还是等到一个符号引用将要被使用前才去解析它。</p>
+<p>解析动作主要针对类或接口、字段、类方法、接口方法、方法类型等。对应常量池中的 CONSTANT_Class_info、CONSTANT_Fieldref_info、CONSTANT_Methodref_info 等。</p>
+<hr>
+<h3 id="阶段5：Initialization"><a href="#阶段5：Initialization" class="headerlink" title="阶段5：Initialization"></a>阶段5：Initialization</h3><p>在 Prepare 阶段时，类变量已经被系统赋过一次零值了；而<strong>在 Initialization 阶段，则会根据开发人员通过程序编码制定的主观计划去初始化类变量和其它资源</strong>。</p>
+<p>从另一种角度来看，<strong>Initialization 阶段就是执行类构造器方法<code>&lt;clinit&gt;()</code> 的过程。</strong>[Class Init ]</p>
+<blockquote>
+<p>  <strong><code>&lt;clinit&gt;()</code> 方法与 <code>&lt;init&gt;()</code> 方法的区别</strong>：</p>
+</blockquote>
+<ul>
+<li><p>  <code>&lt;clinit&gt;()</code> 方法是 javac 编译器通过自动收集类中<strong>所有类变量的赋值动作</strong>和<strong>静态代码块中的语句</strong>合并产生的。（前端）编译器收集的顺序是由语句在源文件中出现的顺序决定的。</p>
+</li>
+<li><p>  <strong><code>&lt;clinit&gt;()</code> 方法与类的构造器方法不同。</strong>在 JVM 视角中，类的构造方法是 <code>&lt;init&gt;()</code> 方法。</p>
+</li>
+<li><p>与 <code>&lt;init&gt;()</code> 方法相比，<code>&lt;clinit&gt;()</code> 方法不需要显式地调用父类的<code>&lt;clinit&gt;()</code> 方法，Java <strong>虚拟机会保证在子类的 <code>&lt;clinit&gt;()</code> 方法执行之前，父类的<code>&lt;clinit&gt;()</code> 方法已经执行完毕</strong>。因此在 Java 虚拟机中第一个被执行的 <code>&lt;clinit&gt;()</code> 方法的类型肯定是 java.lang.Object。</p>
+<p>  ​    <em><code>&lt;init&gt;()</code> 方法都是需要显式地调用父类的 <code>&lt;init&gt;()</code> 方法的，我们通过构造方法中的 <code>super()</code> 方法区显式地调用父类的 <code>&lt;init&gt;()</code> 方法。当然 <code>spuer()</code> 方法在我们编写代码时可以省略不写，因为它是默认存在的，所以在被 javac 编译后，这个 <code>super()</code> 方法是一定存在的。</em></p>
+</li>
+<li><p>  由于父类的<code>&lt;clinit&gt;()</code> 方法先执行，这也就意味着<strong>父类中定义的静态语句要优先于子类中静态语句的执行</strong>。</p>
+</li>
+<li><p>  <code>&lt;clinit&gt;()</code> 方法对于类或接口来说并不是必须的，如果一个类中没有静态语句块，也没有对变量的赋值操作，那么（前端）编译器可以不为这个类生成<code>&lt;clinit&gt;()</code> 方法。</p>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>Java 虚拟机必须保证一个类的<code>&lt;clinit&gt;()</code> 方法在多线程环境中被正确地加锁同步。</strong> </p>
+</blockquote>
+<ul>
+<li>  原因：<strong>clinit()</strong> 方法本质上就是初始化静态变量，但是静态变量在理论上只能被初始化一次。在不加锁的情况下，如果有多个线程同时执行 <strong>clinit()</strong> 方法，就会创建出多个相同的静态变量，但是如果加了同步锁，那么无论有多少个线程，每个静态变量都只会被初始化一次。</li>
+<li>  如果多个线程同时去初始化一个类，那么只会有其中一个线程去执行这个类的<code>&lt;clinit&gt;()</code> 方法，其它线程都需要阻塞等待，直到活动线程执行完毕<code>&lt;clinit&gt;()</code> 方法。如果在一个类的<code>&lt;clinit&gt;()</code> 方法有耗时很长的操作，那么就有可能造成多个线程阻塞。</li>
+</ul>
+<blockquote>
+<p>  <strong>静态语句代码块中只能访问到定义在静态语句代码块之前的变量。定义在它之后的变量，在前面的静态语句块中可以赋值，但是不能访问。</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(num);  <span class="comment">// 静态代码块中可以访问到定义在静态代码块之前的变量</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        num = <span class="number">20</span>;  <span class="comment">// 给定义在静态代码块之后的变量赋值可以正常编译通过</span></span><br><span class="line">        System.out.println(num);    <span class="comment">// 但是引用定义在静态代码块之后的变量编译器会直接提示：“非法向前引用”</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> num = <span class="number">10</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*   num 在 Prepare 阶段就已经分配好内存空间并初始化为零值了，所以在 Initialization 阶段可以在任意位置给其显式地赋值，</span></span><br><span class="line"><span class="comment">* 因为 num 变量一定是存在的，只不过 num 的最终值由最后一次赋值操作决定。</span></span><br><span class="line"><span class="comment">*   而访问语句则应该放到 num 确定最终值之后再进行，如果直接将 num 赋值过程中的某个中间结果暴露给外部访问的话，</span></span><br><span class="line"><span class="comment">* 那得到的结果一定是错误的。</span></span><br><span class="line"><span class="comment">* */</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701093804902.png" alt="image-20210701093804902"></p>
+<hr>
+<h1 id="3-类加载器"><a href="#3-类加载器" class="headerlink" title="3    类加载器"></a>3    类加载器</h1><p>类加载器用于实现类的加载动作，将二进制文件中的类数据加载到内存中生成 Class 对象。<strong>不同的类需要使用不同的类加载器来加载</strong>。</p>
+<blockquote>
+<p>  <strong>JVM 中判断两个 Class 对象是否为同一个类的两个必要条件？</strong></p>
+</blockquote>
+<ol>
+<li> 类的全限定类名必须一致，包括包名</li>
+<li> 加载这个类的 ClassLoader（指ClassLoader 的实例对象）必须相同。</li>
+</ol>
+<p>换句话说，在 JVM 中，即使这两个类对象（Class 对象）来源于同一个 Class 文件，被同一个虚拟机所加载，但只要加载它们的 ClassLoader 实例对象不同，那么这两个类对象也是不相同的。</p>
+<blockquote>
+<p>  <strong>如果一个类是由用户类加载器加载的，那么 JVM 会将这个类加载器的引用作为 Class 信息的一部分保存在方法区中。</strong></p>
+</blockquote>
+<ul>
+<li>  AppClassLoader 负责将 .class 文件中的类信息加载到方法区中形成一个 Class 对象，除了 .class 文件中的类基本信息， Class 对象中还保存了加载这个类的类加载器的引用信息。</li>
+<li>  当解析一个类型到另一个类型的引用的时候，JVM 需要保证这两个类型的类加载器是相同的。</li>
+</ul>
+<h2 id="3-1-类加载器分类"><a href="#3-1-类加载器分类" class="headerlink" title="3.1    类加载器分类"></a>3.1    类加载器分类</h2><p>站在 Java 虚拟机的角度来看，只存在两种两种不同的类加载器：1、<strong>启动类加载器（BootStrap ClassLoader）</strong>   2、<strong>自定义类加载器（User-Defined ClassLoader）</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="center">BootStrap ClassLoader</th>
+<th align="center">其它</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">使用 C++ 语言实现（HotSpot）</td>
+<td align="center">使用 Java 语言实现</td>
+</tr>
+<tr>
+<td align="center">内嵌在虚拟机中</td>
+<td align="center">独立存在于虚拟机外部</td>
+</tr>
+<tr>
+<td align="center">无父类</td>
+<td align="center">全部继承自抽象类 java.lang.ClassLoader</td>
+</tr>
+</tbody></table>
+<p>站在开发人员的角度来看，类加载器的分类要更细致一些，如下图，可分为“<strong>三层类加载器</strong>”。</p>
+<img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/类加载器分类-1621267020284.png" alt="类加载器分类" style="zoom: 67%;">
+
+
+
+
+
+<h3 id="3-1-1-BootStrap-ClassLoader"><a href="#3-1-1-BootStrap-ClassLoader" class="headerlink" title="3.1.1    BootStrap ClassLoader"></a>3.1.1    BootStrap ClassLoader</h3><blockquote>
+<p>  启动类加载器；引导类加载器；BootStrap ClassLoader</p>
+</blockquote>
+<ul>
+<li>引导类加载器是用 C++ 语言实现的，内嵌在 JVM 内部。</li>
+<li>它负责加载 Java 的核心类库（即存放在 <code>&lt;JAVA_HOME&gt;/jre/lib/rt.jar、resource.jar 或 sun.boot.class.path</code> 路径下的内容）到内存中，用于提供运行 JVM 自身需要的类。</li>
+<li>并不继承自 <strong>java.lang.ClassLoader</strong> ，没有父类加载器。</li>
+<li>可以加载 Extension ClassLoader 和 Application ClassLoader，并指定为它们的父类加载器。</li>
+<li>出于安全考虑，BootStrap ClassLoader 只加载包名为 java、javax、sun 等开头的类。</li>
+<li>BootStrap ClassLoader 无法被 Java 程序直接引用，用户在编写自定义类加载器时，如果需要把加载请求委派给引导类加载器去处理，那么直接使用 null 代替即可。下图所示就是 <strong>java.lang.Class#getClassLoader()</strong> 方法的代码，其中的注释和代码实现都说明了以 null 值来代表引导类加载器的约定规则。</li>
+</ul>
+<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701102620816.png" alt="image-20210701102620816"></p>
+<hr>
+<h3 id="3-1-2-Extension-ClassLoader"><a href="#3-1-2-Extension-ClassLoader" class="headerlink" title="3.1.2    Extension ClassLoader"></a>3.1.2    Extension ClassLoader</h3><blockquote>
+<p>  扩展类加载器；Extension ClassLoader</p>
+</blockquote>
+<ul>
+<li><p>扩展类加载器是用 Java 语言编写的，由 <code>sun.misc.Launcher$ExtClassLoader</code> 实现。</p>
+</li>
+<li><p>派生于 ClassLoader</p>
+</li>
+<li><p>父类加载器为 BootStrap ClassLoader</p>
+</li>
+<li><p>负责加载<code>&lt;JAVA_HOME&gt;\lib\ext</code>目录下，或者被 <code>java.ext.dirs</code> 系统变量所指定的路径中的类库。</p>
+<p>  <em>JDK 的开发团队允许用户将具有通用性的类库放在 ext 目录下以扩展 JavaSE 的功能。即如果用户创建的 JAR 放在此目录下，也会自动由扩展类加载器加载。</em></p>
+</li>
+</ul>
+<p>​    </p>
+<h3 id="3-1-2-Application-ClassLoader"><a href="#3-1-2-Application-ClassLoader" class="headerlink" title="3.1.2    Application ClassLoader"></a>3.1.2    Application ClassLoader</h3><blockquote>
+<p>  应用程序类加载器；系统类加载器；Application ClassLoader</p>
+</blockquote>
+<ul>
+<li><p>Java 语言编写，由 <code>sun.misc.Launcher$AppClassLoader</code> 实现。</p>
+</li>
+<li><p>派生于 ClassLoader</p>
+</li>
+<li><p>父类加载器为扩展类加载器</p>
+</li>
+<li><p>由于 Application ClassLoader 可以通过 <code>java.lang.ClassLoader#getSystemClassLoader()</code> 方法得到，所以该类加载器又被称为“系统类加载器”。</p>
+</li>
+<li><p>它负责加载用户路径（ClassPath）或系统变量 <code>java.class.path</code> 指定路径下的所有类库。</p>
+<p>  <em>ClassPath 一般就是我们开发目录的 src 目录。</em></p>
+<p>  <img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/image-20210701103654441.png" alt="image-20210701103654441"></p>
+</li>
+<li><p><strong>Application ClassLoader 是应用程序默认的类加载器</strong>。如果应用程序中没有自定义过自己的类加载器，一般情况下 Java 应用中自定义的类都是由它来完成加载的。</p>
+</li>
+</ul>
+<hr>
+<h3 id="3-1-4-用户自定义类加载器"><a href="#3-1-4-用户自定义类加载器" class="headerlink" title="3.1.4    用户自定义类加载器"></a>3.1.4    用户自定义类加载器</h3><p>在 Java 的日常应用程序开发中，类的加载几乎是由上述 3 种类加载器相互配合执行的，在必要时，我们还可以自定义类加载器，来定制类的加载方式。</p>
+<h3 id="3-2-1-为什么要自定义类加载器？"><a href="#3-2-1-为什么要自定义类加载器？" class="headerlink" title="3.2.1    为什么要自定义类加载器？"></a>3.2.1    为什么要自定义类加载器？</h3><ul>
+<li>隔离加载类</li>
+<li>修改类加载的方式</li>
+<li>扩展加载源</li>
+<li>防止源码泄露</li>
+</ul>
+<h3 id="3-2-2-用户自定义类加载器实现步骤："><a href="#3-2-2-用户自定义类加载器实现步骤：" class="headerlink" title="3.2.2    用户自定义类加载器实现步骤："></a>3.2.2    用户自定义类加载器实现步骤：</h3><ol>
+<li>开发人员可以通过继承抽象类 <code>java.lang.ClassLoader</code> 类的方式，实现自己的类加载器，以满足一些特殊的需求。</li>
+<li>在 JDK1.2 之前，在自定义类加载器时，总会去继承 ClassLoader 类并重写 <code>loadClass()</code> 方法，从而实现自定义的类加载器，但是在 JDK1.2 之后已经不再建议用户去覆盖 <code>loadClass()</code> 方法，而是建议把自定义的类加载逻辑写在 <code>findClass()</code> 方法中。</li>
+<li>在编写自定义的类加载器时，如果没有太过于复杂的需求，可以直接继承 <strong>URLClassLoader</strong> 类，这样可以避免自己去编写 <code>findClass()</code> 方法及其获取字节流码的方式，使自定义类加载器编写更加简洁。</li>
+</ol>
+<hr>
+<h2 id="3-2-ClassLoader"><a href="#3-2-ClassLoader" class="headerlink" title="3.2    ClassLoader"></a>3.2    ClassLoader</h2><h3 id="3-2-1-关于-ClassLoader"><a href="#3-2-1-关于-ClassLoader" class="headerlink" title="3.2.1    关于 ClassLoader"></a>3.2.1    关于 ClassLoader</h3><ul>
+<li>  ClassLoader 类，它是一个抽象类，声明了类加载器对象中共有的方法。</li>
+<li>  除了启动类加载器外所有的类加载器都继承自 ClassLoader。</li>
+</ul>
+<blockquote>
+<p>  <strong>常用方法：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>方法名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>public final ClassLoader getParent()</code></td>
+<td>获取该类加载器的父类加载器</td>
+</tr>
+<tr>
+<td><code>public Class&lt;?&gt; loadClass(String name)</code></td>
+<td>加载指定名称的类，返回该类的 Class 对象实例</td>
+</tr>
+<tr>
+<td><code>protected Class&lt;?&gt; findClass(String name)</code></td>
+<td>查找指定名称的类，返回该类的 Class 对象实例</td>
+</tr>
+<tr>
+<td><code>protected final Class&lt;?&gt; findLoadedClass(String name)</code></td>
+<td>查找名称为 name 的已经被加载过的类，返回该类的 Class 对象实例</td>
+</tr>
+<tr>
+<td><code>protected final Class&lt;?&gt; defineClass(byte[] b, int off, int len)</code></td>
+<td>把字节数组b中的内容转换为一个Java类，返回该类的 Class 对象实例</td>
+</tr>
+<tr>
+<td><code>protected final void resolveClass(Class&lt;?&gt; c)</code></td>
+<td>连接指定的一个Java类</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-2-获取-ClassLoader-的途径"><a href="#3-2-2-获取-ClassLoader-的途径" class="headerlink" title="3.2.2    获取 ClassLoader 的途径"></a>3.2.2    获取 ClassLoader 的途径</h3><ul>
+<li><p>获取某个类的 ClassLoader</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxxClass.getClassLoader()</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader classLoader = Class.forName(<span class="string">&quot;java.lang.String&quot;</span>).getClassLoader;</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>获取当前线程上下文的 ClassLoader</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thread.currentThread().getContextClassLoader()</span><br></pre></td></tr></table></figure></li>
+<li><p>获取系统的 ClassLoader</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader.getSystemClassLoader()</span><br></pre></td></tr></table></figure></li>
+<li><p>获取调用者的 ClassLoader</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DriverManager.getCallerClassLoader()</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="3-3-双亲委派机制"><a href="#3-3-双亲委派机制" class="headerlink" title="3.3    双亲委派机制"></a>3.3    双亲委派机制</h2><p>在将某个类的 <code>.class</code> 文件加载到内存中时，JVM 采用的是 <strong>双亲委派模式</strong> 。即把请求交由父类处理，这是一种任务委派模式。</p>
+<blockquote>
+<p><strong>双亲委派模式的工作原理</strong>：</p>
+</blockquote>
+<ol>
+<li> 如果一个类加载器收到了加载某个类的请求，首先它并不会直接自己尝试去加载这个类，而是把这个请求委托给父类加载器去执行；</li>
+<li> 如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归。因此所有的加载请求最终都应该传递到最顶层的 BootStrap_ClassLoader 中；</li>
+<li> 如果最顶级父类加载器可以完成类加载任务，就加载并返回。如果父类加载器无法完成此加载任务，下一级的子类加载器才会尝试自己去加载，这就是双亲委派模式。</li>
+</ol>
+<p><img src="/2021/06/10/JVM%E2%80%94%E2%80%94%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6-1621267020284.png" alt="双亲委派机制"></p>
+<p>双亲委派模型的好处就是 Java 中的类随着它的加载器一起具备了一种优先级的层次关系。例如类 <code>java.lang.Object</code> ，它存放在 <code>rt.jar</code> 中。无论哪个类加载器要加载这个类，最终都是委派给处于模型最顶端的 <code>BootStrap ClassLoader </code>进行加载，因此 Object 类在程序的各种类加载环境中都能够保证是同一个类。反之，如果没有使用双亲委派模型，都由各个类加载器自行去加载的话，如果用户自己也编写了一个名为 <code>java.lang.Object</code> 的类，并放在程序的 ClassPath 中，那么系统中就会出现多个不同的 Object 类，Java 体系中最基础的行为也就无法保证了</p>
+<blockquote>
+<p><strong>举例</strong></p>
+</blockquote>
+<ol>
+<li> 程序运行时需要使用到 SPI 接口，SPI 接口属于核心API，需要使用双亲委派机制一直到 <code>BootStrapClassLoader</code> 中加载 <code>rt.jar</code>。</li>
+<li> SPI 核心类存在大量的接口，这些接口需要具体实现类实现后才能调用其中的方法。而这些方法一般都是第三方 jar 包，不属于核心API，所以就应该由 <code>AppClassLoader</code> 来加载。</li>
+<li> 接口是由 <code>BootStrapClassLoader</code> 加载的，而接口的具体实现类是由 <code>ApplicationClassLoader</code> 加载的。</li>
+</ol>
+<blockquote>
+<p><strong>优势</strong></p>
+</blockquote>
+<ul>
+<li><p>避免类重复加载</p>
+</li>
+<li><p>保护程序安全，防止核心 API 被随意篡改</p>
+<p>​    </p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">JVM——运行时数据区:07对象实例化过程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-07 11:34:22" itemprop="dateCreated datePublished" datetime="2021-06-07T11:34:22+08:00">2021-06-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-06-10 13:23:18" itemprop="dateModified" datetime="2021-06-10T13:23:18+08:00">2021-06-10</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+</blockquote>
+<p>对象的创建：</p>
+<ul>
+<li>  对象分配</li>
+<li>  对象内存布局</li>
+<li>  对象的访问</li>
+</ul>
+<h1 id="1-对象的实例化"><a href="#1-对象的实例化" class="headerlink" title="1    对象的实例化"></a>1    对象的实例化</h1><p><img src="/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/1623036700337-191886ae-39e7-4254-83c7-77fd7788e9da.jpeg" alt="img"></p>
+<h2 id="1-1-创建对象的方式"><a href="#1-1-创建对象的方式" class="headerlink" title="1.1    创建对象的方式"></a>1.1    创建对象的方式</h2><blockquote>
+<ol>
+<li> <strong>new</strong> </li>
+</ol>
+</blockquote>
+<p>​        使用 new 关键字创建对象本质上是调用对象的构造方法，但是在有些类中构造方法是私有的，这时我们就无法通过new关键字来创建对象了。</p>
+<p>​        一般这时候类会提供一个（或多个） <code>public static</code> 修饰的方法，我们可以通过 <code>类名.静态方法</code> 的方式来创建对象。</p>
+<p>常见的衍生方式有：</p>
+<ul>
+<li>  Xxx静态方法</li>
+<li>  XxxBuilder静态方法</li>
+<li>  XxxFactory静态方法</li>
+</ul>
+<p>这些静态方法本质上与 new 关键字一致，都是调用类的构造方法。</p>
+<blockquote>
+<ol start="2">
+<li> <strong>Class.newInstance()</strong> </li>
+</ol>
+</blockquote>
+<p>​        <code>Class.newInstance()</code> 方法是通过反射的方式来创建对象，但是这个方法从 JDK9 开始就已经被标记为过时了。其主要原因是：这个方法只能调用空参构造器，并且构造器方法的权限只能是 <code>public</code> 。</p>
+<blockquote>
+<ol start="3">
+<li> <strong>Constructor.newInstance()</strong></li>
+</ol>
+</blockquote>
+<p>​        <code>Constructor.newInstance()</code> 方法也是通过反射的方式来创建对象，这个方法从 JDK9 开始使用，它可以调用空参或带参的构造方法，并且可以调用任何权限的构造方法。</p>
+<blockquote>
+<ol start="4">
+<li> <strong>clone()</strong> </li>
+</ol>
+</blockquote>
+<p>​        通过 <code>clone()</code> 方法创建对象时不会调用任何构造器。但是要求当前类实现 Cloneable 接口，并重写接口中的 clone() 方法。</p>
+<blockquote>
+<ol start="5">
+<li> <strong>反序列化</strong> </li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="6">
+<li> <strong>第三方库</strong> </li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="1-2-创建对象的步骤"><a href="#1-2-创建对象的步骤" class="headerlink" title="1.2    创建对象的步骤"></a>1.2    创建对象的步骤</h2><p><img src="/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E6%AD%A5%E9%AA%A4.png" alt="对象创建步骤"></p>
+<h3 id="1、判断对象对应的类是否加载、链接、初始化"><a href="#1、判断对象对应的类是否加载、链接、初始化" class="headerlink" title="1、判断对象对应的类是否加载、链接、初始化"></a>1、判断对象对应的类是否加载、链接、初始化</h3><p>​        虚拟机在执行指令集时遇到了 new 指令后，首先会去检查这个指令的参数能否在方法区的运行时常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已经被加载、解析和初始化过（即判断类元信息是否存在）。如果没有，那么必须先执行相应的类加载过程。</p>
+<ul>
+<li>  类加载过程：在双亲委派模式下，使用类加载器以 <code>ClassLoader+包名+类名</code> 为Key查找对应的 <code>.class</code> 文件，如果找到文件，则进行类加载，并生成对应的Class对象；如果没有找到文件，则抛出 ClassNotFoundException 异常，。</li>
+</ul>
+<hr>
+<h3 id="2、为对象分配内存"><a href="#2、为对象分配内存" class="headerlink" title="2、为对象分配内存"></a>2、为对象分配内存</h3><p>在类加载检查通过后，接下来虚拟机将会为新生对象分配内存。</p>
+<ul>
+<li>  首先计算对象所需内存大小，在堆中划分一块内存给该对象。对象所需内存的大小在类加载完成之后便可以确定。</li>
+<li>   在新对象的内存空间中，如果对象的成员变量是基本类型数据，则根据数据类型的字节分配内存，如int占4个字节，double占8个字节；如果对象的成员变量是引用数据类型，仅分配引用变量所占的空间即可，即4个字节。</li>
+</ul>
+<h4 id="内存规整-vs-内存不规整"><a href="#内存规整-vs-内存不规整" class="headerlink" title="内存规整 .vs 内存不规整"></a>内存规整 .vs 内存不规整</h4><p>​        为对象分配内存就是把一块确定大小的内存块从Java堆中划分出来。</p>
+<blockquote>
+<p>  <strong>指针碰撞（Bump The Pointer）</strong></p>
+</blockquote>
+<p>假设Java堆中的内存是绝对规整的，即所有被使用过的内存放在一边，空闲的内存放在另一边，中间放着一个指针作为两块内存分界点的指示器，那么分配内存仅仅就是将指针向空闲的那边移动一段与新对象大小相等的距离罢了。这种分配方式称为<strong>指针碰撞法（Bump The Pointer）</strong></p>
+<blockquote>
+<p>  <strong>空闲列表（Free List）</strong></p>
+</blockquote>
+<p>如果Java堆中的内存并不是规整的，即已被使用的内存和空闲的内存互相交错，那么虚拟机就无法进行简单的指针碰撞了，虚拟机必须维护一个列表，记录内存中哪些内存块是可用的，在分配的时候从列表中找到一块足够大的空间划分给对象实例，并更新列表上的记录。这种分配方式称为<strong>空闲列表（FreeList）</strong>。</p>
+<p>​        </p>
+<p>​        选择哪种分配方式由Java堆是否规整决定，而Java堆是否规整又由虚拟机具体的落地产品所采用的垃圾收集器是否带有压缩整理（Compact）的功能决定。因此，如果虚拟机使用的是 Serial、ParNew 这种基于压缩算法的垃圾收集器时，虚拟机采用的对象分配方式就是指针碰撞。而如果虚拟机使用的是 CMS 这种基于清除（Sweep）算法的垃圾收集器时，理论上就只能使用空闲列表方式来为对象分配内存。</p>
+<hr>
+<h3 id="3、处理线程安全问题"><a href="#3、处理线程安全问题" class="headerlink" title="3、处理线程安全问题"></a>3、处理线程安全问题</h3><p>​        创建对象在虚拟机中是一个非常频繁的行为，创建后的对象保存在堆空间中，而堆空间又是多个线程共享的，所以说创建对象的行为在并发情况下并不是线程安全的。</p>
+<p>​        使用空闲列表或指针碰撞方法给对象分配内存时，每个对象的首地址值都会被记录。可能出现正在给对象A分配内存空间，指针还没来得及修改，对象B又同时使用了原来的指针来分配内存的情况。</p>
+<p>​        解决这个问题主要有2种方案：</p>
+<ol>
+<li>一种是对分配内存空间的动作进行同步处理。<ul>
+<li>  实际上，HotSpot 虚拟机通过采用 CAS 配上失败重试的方式保证对象分配内存的原子性。</li>
+</ul>
+</li>
+<li>另一种是把内存分配的动作按照线程划分在不同的空间中进行。<ul>
+<li>  即每个线程在Java堆中预先分配一小块内存，称为本地线程分配缓冲区（TLAB），哪个线程创建对象时要分配内存，就在哪个线程的TLAB中分配一块内存给实例对象，只有TLAB内存满了，给新的实例对象分配内存时才会需要进行同步锁定。</li>
+<li>  虚拟机是否开启使用TLAB，可以通过参数 <code>-XX:+/UserTLAB</code> 来设定。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="4、初始化对象的内存空间（默认初始化）"><a href="#4、初始化对象的内存空间（默认初始化）" class="headerlink" title="4、初始化对象的内存空间（默认初始化）"></a>4、初始化对象的内存空间（默认初始化）</h3><p>​        内存分配完毕之后，虚拟机必须先将分配到的内存空间（但不包括对象头）都初始化为零值。如果使用了 TLAB 的话，这一项工作也会提前到 TLAB 分配内存空间时顺便进行。这步操作保证了对象的实例字段在Java代码中不赋初值就可以直接使用，使程序能访问到这些字段的数据类型对应的零值。</p>
+<hr>
+<h3 id="5、设置对象的对象头"><a href="#5、设置对象的对象头" class="headerlink" title="5、设置对象的对象头"></a>5、设置对象的对象头</h3><p>​        接下来，Java虚拟机还会对对象进行必要的设置。例如这个对象是哪个类的实例、如何才能找到对象的元数据信息、对象的哈希码（实际上对象的 HashCode 会延后到真正调用 Object::hashCode() 方法时才计算）、对象的GC分代年龄等信息。根据虚拟机当前运行状态的不同，如是否启用偏向锁等。这些信息存放在对象的对象头（Object Header）中。</p>
+<hr>
+<h3 id="6、执行init方法进行初始化（显式初始化）"><a href="#6、执行init方法进行初始化（显式初始化）" class="headerlink" title="6、执行init方法进行初始化（显式初始化）"></a>6、执行init方法进行初始化（显式初始化）</h3><p>​        在上面的工作都完成之后，从虚拟机视角来看，一个新的对象就已经产生了。但是从开发者的视角来看，对象的创建才刚刚开始——构造函数，即 Class 文件中的 <code>&lt;init&gt;()</code> 方法还没有执行，所有的字段都还只有一个默认零值。一般来说，new 指令之后会接着执行 <code>&lt;init&gt;()</code> 方法，按照开发者的意愿对对象进行初始化，这样一个真正可用的对象才算被完全构造出来。</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">给对象属性赋值的操作：</span><br><span class="line">1、默认初始化</span><br><span class="line">--&gt;&gt;</span><br><span class="line">2、显示初始化&#x2F;静态代码块初始化        &#x2F;&#x2F; 显式初始化和静态代码块初始化处于同一级别，真正决定它俩谁先执行的因素是在代码中的顺序，谁在前面谁先执行。</span><br><span class="line">--&gt;&gt;</span><br><span class="line">3、构造器中初始化</span><br><span class="line">--&gt;&gt;</span><br><span class="line">4、根据对象的公共属性或set方法赋值</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h1 id="2-对象的内存布局"><a href="#2-对象的内存布局" class="headerlink" title="2    对象的内存布局"></a>2    对象的内存布局</h1><blockquote>
+<p>  对象在堆空间中的内存布局：</p>
+<p>  可分为3部分：1、对象头  2、实例数据  3、对齐填充</p>
+</blockquote>
+<p><img src="/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E8%84%91%E5%9B%BE.png"></p>
+<h2 id="2-1-对象头（Header）"><a href="#2-1-对象头（Header）" class="headerlink" title="2.1    对象头（Header）"></a>2.1    对象头（Header）</h2><blockquote>
+<ol>
+<li> <strong>运行时元数据（Mark Word）</strong></li>
+</ol>
+</blockquote>
+<p>​        用于存储对象自身的运行时数据。这部分数据的长度在32位和64位的虚拟机中分别为 32bit 和 64bit 。常见的保存的数据有：</p>
+<ul>
+<li>  <em>哈希值（HashCode）</em>：new出来的对象保存在堆中，有时候我们在栈中使用对象的时候需要得到这个对象在堆空间中的地址，这个地址值就是 <code>对象头.运行时元数据.哈希值</code>，也叫做对象的首地址值。</li>
+<li>  <em>GC分代年龄</em>：对象中保存了从年轻代晋升到老年代的年龄的阈值。</li>
+<li>  <em>锁状态标志</em>：标志了当前对象是否是一个锁对象。</li>
+<li>  <em>线程持有的锁</em></li>
+<li>  <em>偏向线程ID</em></li>
+<li>  <em>偏向时间戳</em></li>
+<li>  <em>……</em></li>
+</ul>
+<blockquote>
+<ol start="2">
+<li> <strong>类型指针</strong>：</li>
+</ol>
+</blockquote>
+<p>​        对象头的另一部分数据是类型指针，即对象指向它的类型元数据的指针。Java虚拟机通过这个指针来确定该对象是哪个类的实例。如 <code>obj.getClass()</code> 方法就是通过这个指针才可以根据对象定位到对象的类型信息。但是并不是所有的虚拟机实现都会在实例对象的对象头数据中保留类型指针。也就是说，查找对象的元数据信息并不一定要经过对象本身。</p>
+<blockquote>
+<ol start="3">
+<li> <strong>数组长度</strong></li>
+</ol>
+</blockquote>
+<p>​        如果对象是一个数组，那么在对象头中还必须有一块用于记录数组长度的数据。因为虚拟机可以通过普通Java对象的元数据信息确定Java对象的大小，进而可以确定分配给该对象的堆内存空间大小。但对于数组对象，如果数组的长度是不确定的，将无法通过元数据中的信息推断出数组对象的大小，所以在对象头中加上一个数组长度借此就可以推断出数组对象占用的堆内存大小了。</p>
+<hr>
+<h2 id="2-2-实例数据（Instance-Data）"><a href="#2-2-实例数据（Instance-Data）" class="headerlink" title="2.2    实例数据（Instance Data）"></a>2.2    实例数据（Instance Data）</h2><p>​        <strong>实例数据部分保存的是对象真正存储的有效信息</strong>。即开发人员在代码中定义的各种类型的字段内容，<em>无论是从父类继承下来的，还是在当前类中定义的字段都必须记录起来。</em></p>
+<p>​        这部分数据的存储顺序会受到虚拟机分配策略参数 <code>-XX:FieldAllocationStyle</code> 和字段在Java源码中定义顺序的影响。</p>
+<ul>
+<li>  HotSpot 虚拟机默认的分配顺序为：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span>/<span class="keyword">double</span> &gt; <span class="keyword">int</span> &gt; <span class="keyword">short</span> &gt; <span class="keyword">char</span> &gt; <span class="keyword">byte</span>/<span class="keyword">boolean</span> &gt; oops(Ordinary Object Points)</span><br></pre></td></tr></table></figure>
+
+<p>​        从以上默认的分配策略中可以看出，<em>相同宽度的字段总是被分配到一起存放。在满足这个前提条件的情况下，在父类中定义的变量会出现在子类之前。</em></p>
+<hr>
+<h2 id="2-3-对齐填充（Padding）"><a href="#2-3-对齐填充（Padding）" class="headerlink" title="2.3    对齐填充（Padding）"></a>2.3    对齐填充（Padding）</h2><p>​        对象的第三部分是对齐填充，对齐填充不是必须的，仅仅起到占位填充的作用。由于 HotSpot 的自动内存管理系统要求对象的起始地址必须是 8 字节的整数倍，即任何对象的大小都必须是 8 字节的整数倍。由于对象头部分已经被精心设计为正好是 8 字节的整数倍，因此，如果对象的实例数据部分没有达到 8 字节的整数倍的话，就需要通过对齐填充来进行补全。</p>
+<hr>
+<hr>
+<h1 id="3-对象的访问定位"><a href="#3-对象的访问定位" class="headerlink" title="3    对象的访问定位"></a>3    对象的访问定位</h1><p>​        创建对象自然是为了后续使用该对象，我们在Java程序中会通过栈上的 reference 数据来访问堆上的具体对象。在《Java虚拟机规范》中，并没有定义这个引用应该通过什么方式去定位、访问到堆中对象的具体位置，所以对象访问的方式是由具体的虚拟机实现来确定的。主流的访问方式主要有<strong>句柄访问</strong>和<strong>直接指针访问</strong>两种。</p>
+<h2 id="句柄访问-vs-直接指针访问"><a href="#句柄访问-vs-直接指针访问" class="headerlink" title="句柄访问 .vs 直接指针访问"></a>句柄访问 .vs 直接指针访问</h2><blockquote>
+<p>  <strong>句柄访问</strong></p>
+</blockquote>
+<p>​        句柄访问就是在Java堆区中划分出一块内存作为句柄池，<code>栈帧.局部变量表.reference</code> 中保存的就是对象的句柄地址，而句柄中包含了对象的实例数据地址信息和对象的类型数据的地址信息。 </p>
+<p><img src="/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/%E5%8F%A5%E6%9F%84%E8%AE%BF%E9%97%AE.png" alt="句柄访问"></p>
+<blockquote>
+<p>  <strong>直接指针访问</strong></p>
+</blockquote>
+<p>​        如果使用直接指针访问的话，Java堆中对象的内存布局就必须考虑如何保存到对象类型数据的指针，如通过在对象头中保留类型指针来访问类型信息。而 reference 中存储的直接就是实例对象的地址，当然这时如果只是访问实例对象本身的话，就不需要多一次间接访问句柄池的开销。</p>
+<p><img src="/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88%E8%AE%BF%E9%97%AE.png"></p>
+<blockquote>
+<p>  <strong>对比</strong></p>
+</blockquote>
+<p>​        这两种对象访问方式各有优势。</p>
+<ul>
+<li>  使用句柄访问最大的好处就是 reference 中存储的是稳定句柄地址，在对象被移动（GC时移动对象是很普遍的行为）时只需改变句柄池中实例数据指针即可，而 reference 本身不需修改。</li>
+<li>  使用直接指针访问最大的优点就是速度更快，它节省了一次指针定位的时间开销（即reference指针定位句柄池的时间开销），由于对象访问在程序运行时十分频繁，因此这类开销积少成多也是一项极为可观的执行成本。</li>
+</ul>
+<p>就 HotSpot 而言，它主要使用的是<strong>直接指针访问</strong>，但有极少部分对象也使用了句柄访问。</p>
+<hr>
+<h1 id="4-对象创建过程举例"><a href="#4-对象创建过程举例" class="headerlink" title="4    对象创建过程举例"></a>4    对象创建过程举例</h1><blockquote>
+<p>  <strong>代码</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Department dep = <span class="keyword">new</span> Department();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Department</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String depId;</span><br><span class="line">    <span class="keyword">private</span> String depName;</span><br><span class="line">    <span class="keyword">private</span> Employee employee;</span><br><span class="line">	<span class="comment">// get/set</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span> </span>&#123;</span><br><span class="line">	<span class="comment">// ....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>分析</strong></p>
+</blockquote>
+<ol>
+<li> 程序开始执行，<code>main()</code> 方法对应的栈帧入栈。</li>
+<li> 依次执行栈帧中的指令，直到遇到 new 指令，这时，首先根据指令后的符号引用定位到运行时常量池中的 <code>Department</code> 类，并检测到这个类已经被加载、解析和初始化过，然后根据元数据信息推断出该类对应的实例对象占用的内存大小。</li>
+<li> 在堆空间中为 <code>dep</code> 对象分配内存空间，执行默认初始化（赋零值），更新栈帧中局部变量表的值，新增<code>dep</code>对象在堆内存中的地址指针。（栈帧的局部变量表中的地址值即为堆内存中对象的对象头中的哈希值。）</li>
+<li> 执行显示初始化（即构造函数初始化），发现在 <code>dep</code>对象中还包含一个 <code>emp</code> 对象，这时需要以递归的方式执行创建对象的过程，即堆空间中再开辟一块空间用于保存 <code>emp</code> 对象。</li>
+<li> 完毕。</li>
+</ol>
+<ul>
+<li>  对象头中的类型指针保存的是方法区中对象对应的类型信息。</li>
+</ul>
+<p><img src="/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80.png" alt="对象的内存布局"></p>
+<h1 id="5-面试题"><a href="#5-面试题" class="headerlink" title="5    面试题"></a>5    面试题</h1><blockquote>
+<p>  面试题</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">美团：</span><br><span class="line">    对象在JVM中是怎么存储的？</span><br><span class="line">    对象头信息里面有哪些东西？</span><br><span class="line"></span><br><span class="line">蚂蚁金服：</span><br><span class="line">    Java对象头里有什么？</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  问题：如何通过栈帧中的对象引用访问到堆内存空间中真正的实例对象呢？</p>
+</blockquote>
+<p>答：栈帧中的局部变量表中保存了对象在堆空间中的真实地址，通过这个地址可以访问到真正的对象。</p>
+<ul>
+<li></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-06%E6%96%B9%E6%B3%95%E5%8C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-06%E6%96%B9%E6%B3%95%E5%8C%BA/" class="post-title-link" itemprop="url">JVM——运行时数据区:06方法区</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-02 10:18:07" itemprop="dateCreated datePublished" datetime="2021-06-02T10:18:07+08:00">2021-06-02</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 21:18:22" itemprop="dateModified" datetime="2021-08-03T21:18:22+08:00">2021-08-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><strong>方法区；Method Area</strong></p>
+</blockquote>
+<h1 id="1-栈、堆、方法区三者之间的交互关系"><a href="#1-栈、堆、方法区三者之间的交互关系" class="headerlink" title="1    栈、堆、方法区三者之间的交互关系"></a>1    栈、堆、方法区三者之间的交互关系</h1><p><img src="/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-06%E6%96%B9%E6%B3%95%E5%8C%BA/image-20210524212516071.png" alt="image-20210524212516071"></p>
+<p><img src="/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-06%E6%96%B9%E6%B3%95%E5%8C%BA/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E4%BA%A4%E4%BA%92.png" alt="运行时数据区交互"></p>
+<hr>
+<h1 id="2-方法区的理解"><a href="#2-方法区的理解" class="headerlink" title="2    方法区的理解"></a>2    方法区的理解</h1><p>《Java虚拟机规范》中明确规定：方法区在<strong>逻辑</strong>上是属于堆的一部分，但在一些 JVM 的落地产品中，方法区并不属于堆区的一部分。    对于 HotSpot 而言，方法区还有一个别名叫做 Non-Heap（非堆），目的就是要和堆分开。</p>
+<p>所以，<strong>方法区可以看做是一块独立于Java堆的内存空间</strong>。</p>
+<ul>
+<li>方法区（Method Area）与Java堆一样，是各个线程共享的内存区域。</li>
+<li>方法区在JVM启动时被创建，它的实际物理内存空间和堆区一样都是可以不连续的。</li>
+<li>方法区的大小，跟堆区一样，可以选择<strong>固定大小</strong>或<strong>自适应大小</strong>。</li>
+<li>方法区的大小决定了系统可以保存多少个类，如果系统定义了太多的类，导致方法区溢出，虚拟机同样会抛出内存溢出错误：<strong>java.lang.OutOfMemoryError: PermGen spaca</strong> 或者 <strong>java.lang.OutOfMemoryError: Metaspace</strong></li>
+<li>关闭JVM就会释放方法区的内存。</li>
+</ul>
+<hr>
+<h2 id="HotSpot中方法区的演变"><a href="#HotSpot中方法区的演变" class="headerlink" title="HotSpot中方法区的演变"></a>HotSpot中方法区的演变</h2><ul>
+<li>从 JDK8 开始，HotSpot 完全废弃了<strong>永久代</strong>的概念，改成了与 JRockit、J9 一样在本地内存中实现的<strong>元空间（Metaspace）</strong>。</li>
+<li>元空间的本质和永久代类似，都是对JVM规范中方法区的实现。不过元空间与永久代最大的区别在于：<strong>元空间占用的不是JVM虚拟机的内存空间，而是本地内存</strong>。</li>
+<li>永久代和元空间二者不只是名字变了，而且内存结构也调整了。</li>
+<li>《Java虚拟机规范》中规定，如果方法区无法满足新的内存分配需求时，将会抛出OOM异常。</li>
+</ul>
+<hr>
+<h1 id="3-设置方法区大小"><a href="#3-设置方法区大小" class="headerlink" title="3    设置方法区大小"></a>3    设置方法区大小</h1><p>方法区的大小不是固定的，JVM虚拟机可以根据实际需要动态调整。</p>
+<blockquote>
+<p><strong>在 JDK8 之前：</strong></p>
+</blockquote>
+<ul>
+<li>通过 <code>-XX:PermSize</code> 来设置永久代的初始分配的内存空间，默认值是 20.75M 。</li>
+<li>通过 <code>-XX:MaxPermSize</code> 来设置永久代的最大可用的内存空间，32位机器的默认值是 64M ，64位机器的默认值是 82M 。</li>
+<li>当 JVM 加载的类信息的容量超过了最大可用内存空间时，就会抛出OOM异常： <code>OutOfMemoryError:PermGen space</code> 。</li>
+</ul>
+<blockquote>
+<p><strong>从 JDK8 开始：</strong></p>
+</blockquote>
+<ul>
+<li>元数据区的初始内存大小和最大内存大小可以使用<code>-XX:MetaspaceSize</code> 和 <code>-XX:MaxMetaspaceSize</code> 来查看或指定。</li>
+<li>这两个参数的默认值依赖于平台。在 Win 下的缺省值分别为：<code>-XX:MetaspaceSize=21M</code> 和 <code>-XX:MaxMetaspaceSize=-1</code> ，-1表示没有限制。</li>
+<li>与永久代不同，如果不指定元空间的大小，默认情况下，元空间会耗尽所有可用的系统内存。如果元空间发生溢出，虚拟机一样会抛出 OOM 异常。</li>
+<li><code>-XX:MetaspaceSize</code>：该参数用于设置初始元空间的大小，对于一个64位服务器上的JVM来说，默认值为 <code>-XX:MetaspaceSize=21M</code>。这就是初始的<strong>高水位线</strong>，一旦元空间的内存达到这个水位线，就会触发 Full GC ，回收已失效的类（如果一个类对应的类加载器对象不再存活即为已失效的类），并重置高水位线的值，新的高水位线值取决于GC后释放了多少元空间。如果释放的空间不足，那么新的高水位线值在不超过 <code>MaxMetaspaceSize</code> 的情况下会适当提高；如果释放的空间过多，那么新的高水位线值在不超过 <code>MaxMetaspaceSize</code> 的情况下会适当降低。</li>
+<li>如果初始的高水位线设置过低，上述高水位线调整的情况就会发生很多次。通过垃圾回收器的日志可以观察到 Full GC 被多次调用，为了避免频繁的GC，建议将 <code>XX:MaxMetaspaceSize</code>设置为一个相对较高的值。</li>
+</ul>
+<hr>
+<h1 id="4-方法区的内部结构"><a href="#4-方法区的内部结构" class="headerlink" title="4    方法区的内部结构"></a>4    方法区的内部结构</h1><p><strong>问题：方法区中存储什么？</strong></p>
+<p>方法区用于存储已被虚拟机加载的<strong>类型信息、常量、静态变量、即时编译器编译后的代码缓存</strong>等。</p>
+<blockquote>
+<ul>
+<li>类型信息</li>
+<li>域信息</li>
+<li>方法信息</li>
+<li>静态变量</li>
+<li>运行时常量池</li>
+<li>JIT代码缓存</li>
+</ul>
+</blockquote>
+<h2 id="类型信息"><a href="#类型信息" class="headerlink" title="类型信息"></a>类型信息</h2><p>对每个加载的类型（类Class、接口Interface、枚举Enum、注解Annotation），JVM必须在方法区中存储以下类型信息：</p>
+<ol>
+<li><p>这个类型的全限定类名。</p>
+</li>
+<li><p>这个类型直接父类的全限定类名（对于 Interface 或 java.lang.Object ，都没有父类）。</p>
+</li>
+<li><p>这个类型的修饰符集合（public、abstract、final 的某个子集）。</p>
+</li>
+<li><p>这个类型直接实现的接口的一个有序列表。</p>
+<p> 说明：接口是可以多实现的。如现有 Class A ，它可以同时实现 Interface B 和 Interface C ，即 <code>class A implements B,C</code> ，所以说 Class A 所有实现的接口是一个列表，Interface B 保存在列表索引为0的位置上，Interface C 保存在列表索引为1的位置上。</p>
+</li>
+</ol>
+<hr>
+<h2 id="域信息（Field）"><a href="#域信息（Field）" class="headerlink" title="域信息（Field）"></a>域信息（Field）</h2><blockquote>
+<p>域信息；Field；成员变量；</p>
+</blockquote>
+<ul>
+<li>JVM 必须在方法区中保存类型中所有的域信息以及域的声明顺序。</li>
+<li>域的相关信息包括：<ol>
+<li>域名称</li>
+<li>域类型（数据类型）</li>
+<li>域修饰符（ [public、private、protected、static、final、volatile、transient] 中的某个子集）</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="方法信息（Method）"><a href="#方法信息（Method）" class="headerlink" title="方法信息（Method）"></a>方法信息（Method）</h2><p>JVM 必须在方法区中保存类型中所有方法的以下信息包括声明顺序：</p>
+<ul>
+<li><p>方法名称</p>
+</li>
+<li><p>方法的返回类型（包括 void）</p>
+</li>
+<li><p>方法参数的数量和类型（保存在数组中，按顺序存储）</p>
+</li>
+<li><p>方法的修饰符集合（[public、private、protected、static、final、synchronized、native、abstract] 的一个子集）</p>
+</li>
+<li><p>方法的字节码（bytecodes）、操作数栈、局部变量表及大小（abstract 和 native 方法除外）</p>
+</li>
+<li><p>异常表（abstract 和 native 方法除外）</p>
+</li>
+<li><ul>
+<li>每个异常处理的开始位置、结束位置、代码处理在程序计数器中的偏移地址、被捕获的异常的常量池索引   </li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Java 源代码中如果没有显式声明构造方法就会使用JVM默认提供的无参构造方法；</span><br><span class="line">JVM 提供的默认构造方法在源代码被编译成字节码文件后就已经存在了。</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="类变量"><a href="#类变量" class="headerlink" title="类变量"></a>类变量</h2><p>静态变量和类关联在一起，随着类的加载而加载，静态变量被称为类数据在逻辑上的一部分。</p>
+<p>类变量被类的所有实例共享，即使没有类实例时你也可以访问它。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodAreaTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        A a = <span class="keyword">null</span>;</span><br><span class="line">        a.hello();</span><br><span class="line">        System.out.println(a.count);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> ---------------------结果：</span></span><br><span class="line"><span class="comment">   不会报错，即使让实例对象指向 null 也不会报错，因为类变量是直接从线程共享的方法区取出来的数据。</span></span><br><span class="line"><span class="comment">     hello</span></span><br><span class="line"><span class="comment">     1</span></span><br><span class="line"><span class="comment"> ---------------------结果分析：</span></span><br><span class="line"><span class="comment">     即使没有类实例，也可以访问类变量</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="补充说明：全局常量-static-final"><a href="#补充说明：全局常量-static-final" class="headerlink" title="补充说明：全局常量[ static+final ]"></a>补充说明：全局常量[ static+final ]</h3><p>被声明为 final 的类变量的处理方法则不同，每个全局变量在编译的时候就会被分配了。即在字节码文件中就已经被确定下来了，可以认为是一个常量。</p>
+<hr>
+<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h2><h3 id="运行时常量池-vs-常量池"><a href="#运行时常量池-vs-常量池" class="headerlink" title="运行时常量池 vs. 常量池"></a>运行时常量池 vs. 常量池</h3><ul>
+<li>字节码文件，内部包含了常量池。</li>
+<li>方法区，内部包含了运行时常量池。</li>
+<li>字节码文件中包含了常量池，通过类加载器将这个常量池加载到方法区中就变成了运行时常量池。</li>
+<li>要弄清楚方法区的运行时常量池，需要理解清楚<code>.class</code>字节码文件中的常量池。</li>
+</ul>
+<h3 id="class-字节码文件"><a href="#class-字节码文件" class="headerlink" title=".class 字节码文件"></a>.class 字节码文件</h3><p>一个有效的字节码文件中除了包含类的版本信息、字段、方法以及接口等描述信息外，还包含一项信息那就是常量池表（Constant Pool Table），里面包括各种字面量，和对类型、域和方法的<strong>符号引用</strong>。</p>
+<p>常量池中呈现出来的都是符号引用，而真正执行程序时，字节码文件中的<strong>符号引用</strong>在被加载到方法区之后会被转化成<strong>直接引用</strong>。</p>
+<h3 id="为什么需要常量池"><a href="#为什么需要常量池" class="headerlink" title="为什么需要常量池 ?"></a>为什么需要常量池 ?</h3><ul>
+<li>  一个<code>.java</code>源程序编译后会产生一个（或多个） <code>.class</code>字节码文件，而字节码文件除了自身内部定义的信息外，还需要加载父类（或接口）中的数据，以及类内部对象及其父类的数据，所以说一个字节码文件通常需要加载很多类的数据。</li>
+<li>  如果直接把这些数据保存到一个字节码文件中，该文件就会很大且需要在每个使用到类的字节码文件都需要保存一遍，达不到复用的效果。</li>
+<li>  所以在 JVM 中我们会把关于引用数据的字符引用保存到常量池中，每个字节码文件在使用引用类时只需记录符号引用即可，在程序运行时通过动态链接会将符号引用转变成指向运行时常量池的直接引用即可。</li>
+<li>  关于这些符号引用保存在常量池中。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​        比如上面这段代码，在硬盘中占的内存只有几百字节，但是里面却还使用了 String、System、PrintStream、Object 等类型及其相关类型。如果把要使用的相关类型都编译到字节码文件中去，显然字节码文件将会非常大。为了避免这种情况，就需要使用到常量池了。常量池中保存的也不是对应的相关类型，而只是指向对应相关类型的地址值。</p>
+<blockquote>
+<p>  <strong>常量池的好处：</strong></p>
+</blockquote>
+<ol>
+<li> 可以复用。在常量池中只需定义一次，在其它地方需要使用时直接使用地址值访问即可。</li>
+</ol>
+<hr>
+<h3 id="常量池中有什么？"><a href="#常量池中有什么？" class="headerlink" title="常量池中有什么？"></a>常量池中有什么？</h3><blockquote>
+<p>  <strong>常量池中常见的数据类型信息：</strong></p>
+</blockquote>
+<ul>
+<li>数量值</li>
+<li>字符串值</li>
+<li>类型引用</li>
+<li>字段引用</li>
+<li>方法引用</li>
+</ul>
+<h3 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h3><p>常量池，可以看做是一张表，虚拟机指令根据这张常量表找到要执行的 类名、方法名、参数类型、  字面量 等信息</p>
+<hr>
+<h2 id="JIT-代码缓存"><a href="#JIT-代码缓存" class="headerlink" title="JIT 代码缓存"></a>JIT 代码缓存</h2><hr>
+<h1 id="5-方法区的演变"><a href="#5-方法区的演变" class="headerlink" title="5    方法区的演变"></a>5    方法区的演变</h1><p>​    首先明确一点，只有 HotSpot 才有”永久代”的概念。对于 JRockit、J9 等虚拟机来说，是不存在永久代的概念的。原则上如何实现方法区属于虚拟机的实现细节，不受《Java虚拟机规范》管束，并不要求统一。</p>
+<h2 id="HotSpot中方法区的演变过程"><a href="#HotSpot中方法区的演变过程" class="headerlink" title="HotSpot中方法区的演变过程"></a>HotSpot中方法区的演变过程</h2><ul>
+<li>在 JDK8 以前，把方法区称为<strong>永久代</strong>。从 JDK8 开始，使用<strong>元空间</strong>取代了永久代。</li>
+<li><strong>理论上，方法区和永久代并不等价</strong>。《Java虚拟机规范》对如何实现方法区并没有做统一的要求，例如：Jrockit，J9 中都不存在永久代的概念。<strong>但是在HotSpot虚拟机中，我们可以认为方法区就是永久代</strong> </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JDK之前</td>
+<td>有永久代（Permanent Generation），静态变量存放在永久代中</td>
+</tr>
+<tr>
+<td>JDK7</td>
+<td>有永久代，但已经逐步“去永久代”，将字符串常量池、静态变量保存在堆中</td>
+</tr>
+<tr>
+<td>JDK8开始</td>
+<td>无永久代，类型信息、字段、方法、常量保存在本地内存的元空间中，但字符串常量池、静态变量却保存在堆中</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="永久代为什么要被元空间替换-？"><a href="#永久代为什么要被元空间替换-？" class="headerlink" title="永久代为什么要被元空间替换 ？"></a>永久代为什么要被元空间替换 ？</h2><blockquote>
+<p>  官方解释：因为Oracle公司在2008年收购了JRockit。而在JRockit虚拟机中是没有永久代这一概念的，JRockit使用的是元空间。在融合JRockit和HotSpot这两个虚拟机的过程中，Oracle规定了统一使用元空间。</p>
+</blockquote>
+<p>在Java8中，HotSpot虚拟机中的永久代彻底被移除了，相应的，原来保存在永久代中的数据被移到了一个<strong>与虚拟机空间不相关的本地内存区域——元空间（MetaSpace）</strong>。</p>
+<p>由于类的元数据分配在本地内存中，元空间的最大可分配空间就是系统可用的内存空间。</p>
+<p>这项改动是很有必要的，原因是：</p>
+<ol>
+<li>永久代的空间大小是很难确定的。<ul>
+<li>  在某些场景下，如果动态加载的类过多，就很容易产生永久代空间的OOM。比如某个大型的Web工程，在运行过程中需要动态的加载很多类，就很有可能会出现OOM异常。</li>
+<li>  而永久代和元空间之间的最大区别自安于：元空间并不在虚拟机中，而是使用本地内存。因此，默认情况下，元空间的大小仅受本地内存限制。</li>
+</ul>
+</li>
+<li> 对永久代进行调优是非常困难的。</li>
+</ol>
+<hr>
+<h2 id="字符串常量池（String-Table）为什么要调整？"><a href="#字符串常量池（String-Table）为什么要调整？" class="headerlink" title="字符串常量池（String Table）为什么要调整？"></a>字符串常量池（String Table）为什么要调整？</h2><p>JDK7 将 StringTable 从永久代移动到了堆空间中。因为永久代的回收效率很低，只有触发 Full GC 的时候才会回收，而只有老年代或永久代空间不足时才会触发 Full GC 。</p>
+<p>这就导致了 StringTable 回收效率很低，而我们在开发过程中会有大量的字符串被创建，回收效率低就会导致永久代内存不足。放到堆里就能及时回收内存。</p>
+<hr>
+<h2 id="不同版本下静态引用在内存中位置"><a href="#不同版本下静态引用在内存中位置" class="headerlink" title="不同版本下静态引用在内存中位置"></a>不同版本下静态引用在内存中位置</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">    结论：</span></span><br><span class="line"><span class="comment">        1、静态引用对应的对象实体始终都保存在堆空间。</span></span><br><span class="line"><span class="comment">        2、而静态引用保存的位置则随着JDK版本的不同而不同。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticFieldTest</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] arr = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">100</span>];    <span class="comment">// 100MB</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h1 id="7-方法区的垃圾回收"><a href="#7-方法区的垃圾回收" class="headerlink" title="7    方法区的垃圾回收"></a>7    方法区的垃圾回收</h1><p>​        《Java虚拟机规范》对方法区的约束是非常宽松的，提到过可以不要求虚拟机在方法区中实现GC。事实上也确实有未实现或未能完整实现方法区类型卸载的虚拟机存在（例如 JDK11 时期的 ZGC 收集器就不支持类型卸载）。</p>
+<p>​        有些人认为方法区是没有垃圾收集行为的，其实不然。一般来说<strong>方法区的垃圾回收效果比较难以令人满意，尤其是类型的卸载，条件相当苛刻。但是这个区域的GC又确实是有必要的</strong>。以前Sun公司的Bug列表中，曾出现过若干个严重的Bug就是由于低版本的HotSpot虚拟机在对方法区进行GC时未完全回收到所有失效数据而导致内存泄露。</p>
+<blockquote>
+<p>  <strong>方法区的GC主要回收两部分内容：</strong></p>
+</blockquote>
+<ol>
+<li> <strong>常量池中废弃的常量</strong>。</li>
+<li> <strong>不再使用的类型</strong>。</li>
+</ol>
+<blockquote>
+<p>  <strong>废弃常量：</strong></p>
+</blockquote>
+<p>方法区的常量池之中主要存放两大类常量：字面量和符号引用</p>
+<ul>
+<li>  字面量是比较接近Java语言层次常量的概念，如：文本字符串、被声明为final的常量值等。</li>
+<li>而符号引用则属于编译原理方面的概念，包括以下三类常量：<ol>
+<li> 类和接口的全限定类名</li>
+<li> 字段的名称和描述符</li>
+<li> 方法的名称和描述符</li>
+</ol>
+</li>
+<li>  HotSpot虚拟机对常量池的回收策略是很明确的，<strong>只要常量池中的常量在任何地方都不再被引用，就可以被回收</strong>。</li>
+<li>  回收废弃常量与回收Java堆中的对象非常类似。</li>
+</ul>
+<blockquote>
+<p>  <strong>废弃类型：</strong></p>
+</blockquote>
+<p>判断一个常量是否“废弃”比较简单，而要判断一个类型是否属于“不再被使用的类”条件就非常苛刻了。需要同时满足以下三个条件：</p>
+<ol>
+<li> 该类所有实例都已经被回收。也就是Java堆中不存在该类及其任何派生子类的实例。</li>
+<li> 加载该类的类加载器已经被回收。这个条件除非是经过精心设计的可替换类加载器的场景。如 OSGI、JSP 的重加载等，否则通常是很难达成的。</li>
+<li> 该类对应的 java.lang.Class 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
+</ol>
+<p>​        JVM 虚拟机允许满足上述三个条件的类进行回收，但也仅仅是“允许”，而不是必然。关于是否要对类型进行回收，HotSpot虚拟机提供了 <code>-Xnoclassgc</code> 参数进行控制，还可以使用 <code>-verbose:class</code> 以及 <code>-XX:+TraceClassUnLoading</code> 查看类加载和卸载信息。</p>
+<p>​        在大量使用反射、动态代理、CGLib 等字节码的框架，动态生成JSP以及OSGi这类频繁自定义类加载器的场景中，通常都需要Java虚拟机具备类型卸载的能力，以保证不会对方法区造成过大的内存压力。</p>
+<hr>
+<h1 id="8-总结"><a href="#8-总结" class="headerlink" title="8    总结"></a>8    总结</h1><h2 id="运行时数据区：常见面试题"><a href="#运行时数据区：常见面试题" class="headerlink" title="运行时数据区：常见面试题"></a>运行时数据区：常见面试题</h2><ul>
+<li>  百度</li>
+</ul>
+<p>JVM内存模型，有哪些区？分别干什么的？</p>
+<ul>
+<li>  蚂蚁金服</li>
+</ul>
+<p>Java8 的内存分代改进？</p>
+<p>JVM内存分哪些区？每个区的作用是什么？</p>
+<p>JVM内存分布/内存机构？堆和栈的区别？堆的结构？为什么两个Survivor区？</p>
+<p>Eden和Survivor的比例分配？</p>
+<ul>
+<li>  小米</li>
+</ul>
+<p>JVM内存分区，为什么要有新生代和老年代？</p>
+<ul>
+<li>  字节跳动</li>
+</ul>
+<p>Java的内存分区？</p>
+<p>JVM运行时数据区？</p>
+<p>什么时候对象会进入老年代？</p>
+<ul>
+<li>  京东</li>
+</ul>
+<p>JVM内存结构，Eden和Survivor比例？</p>
+<p>JVM内存为什么要分成新生代、老年代、永久代。新生代中为什么要分成Eden和Survivor？</p>
+<ul>
+<li>  天猫</li>
+</ul>
+<p>JVM内存模型以及分区，需要详细到每个区放什么？</p>
+<p>JVM的内存模型，Java8 做了什么修改？</p>
+<ul>
+<li>  拼多多</li>
+</ul>
+<p>JVM内存分哪几个区？每个区的作用是什么？</p>
+<ul>
+<li>  美团</li>
+</ul>
+<p>Java内存分配？</p>
+<p>JVM的永久代中会发生垃圾回收吗？</p>
+<p>JVM内存分区，为什么要有新生代和老年代？</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-05%E5%A0%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-05%E5%A0%86/" class="post-title-link" itemprop="url">JVM——运行时数据区:05堆</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-02 10:17:58" itemprop="dateCreated datePublished" datetime="2021-06-02T10:17:58+08:00">2021-06-02</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 20:13:09" itemprop="dateModified" datetime="2021-08-03T20:13:09+08:00">2021-08-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="1-堆的核心概述（Heap）"><a href="#1-堆的核心概述（Heap）" class="headerlink" title="1    堆的核心概述（Heap）"></a>1    堆的核心概述（Heap）</h1><ul>
+<li>堆空间用于存储Java对象实例。</li>
+<li>一个 JVM 进程只存在一个堆空间，该进程下的所有线程共享该堆空空间。</li>
+<li>《Java虚拟机规范》规定，<strong>堆可以处于物理上不连续的内存空间中，但在逻辑上它应该被视为连续的</strong>。</li>
+<li>堆区空间在JVM启动时就被创建出来了，并且在创建时就已经确定好了其空间的大小。</li>
+<li>堆空间是JVM内存中最大的一块空间。</li>
+<li>堆空间的大小是可以调节的。</li>
+<li><strong>堆空间中还可以划分出线程私有的缓冲区（Thread Local Allocation Buffer，TLAB）</strong> </li>
+<li>“几乎”所有的对象实例以及数组都应当在运行时分配在堆上。</li>
+<li>数组和对象可能永远不会存储在栈中，因为栈帧中保存引用，这个引用指向对象或者数组在堆中的位置。</li>
+<li>在方法结束后，堆中的对象并不会马上被移除，仅仅在GC时才会被移除。</li>
+<li>堆是GC执行垃圾回收的重点区域。</li>
+</ul>
+<h2 id="堆空间的内存布局"><a href="#堆空间的内存布局" class="headerlink" title="堆空间的内存布局"></a>堆空间的内存布局</h2><p><img src="/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-05%E5%A0%86/%E5%A0%86%E7%A9%BA%E9%97%B4.png" alt="堆空间"></p>
+<p>现代垃圾回收器大部分都基于<strong>分代收集理论</strong>设计，堆空间细分为：</p>
+<blockquote>
+<p><strong>Java8 之前</strong>堆空间在逻辑上分为三部分：<strong>年轻代 + 老年代 + 永久代</strong></p>
+</blockquote>
+<ul>
+<li>Young Generation Space  年轻代   Young/New</li>
+<li>新生代又可划分为 Eden 区和 Survivor 区</li>
+<li>Tenure generation space  老年代    Old/Tenure</li>
+<li>Permanent Space        永久代    Perm</li>
+</ul>
+<blockquote>
+<p>从 <strong>Java8 开始</strong>堆空间逻辑在上分为三部分：<strong>新生代 + 老年代 + 元空间</strong> </p>
+</blockquote>
+<ul>
+<li><p>Young Generation Space  年轻代    Young/New</p>
+<ul>
+<li>  新生代又可划分为 Eden 区和 Survivor 区</li>
+</ul>
+</li>
+<li><p>Tenure generation space  老年代    Old/Tenure</p>
+</li>
+<li><p>Meta Space            元空间    Meta</p>
+</li>
+</ul>
+<blockquote>
+<p>  堆空间的演变仅仅是针对于方法区而言的，从Java8开始将 <code>永久代--&gt;&gt; 元空间</code></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">堆空间在逻辑上可分为三部分：1、年轻代 2、老年代 3、永久代&#x2F;元空间</span><br><span class="line">但是在物理上，堆空间只有：1、年轻代 2、老年代</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><strong>约定</strong>：</p>
+<ul>
+<li>新生区 &lt;=&gt; 新生代 &lt;=&gt; 年轻代</li>
+<li>养老区 &lt;=&gt; 养老区 &lt;=&gt; 老年代</li>
+<li>永久区 &lt;=&gt; 永久代</li>
+</ul>
+<hr>
+<h1 id="2-设置堆空间大小"><a href="#2-设置堆空间大小" class="headerlink" title="2    设置堆空间大小"></a>2    设置堆空间大小</h1><h2 id="堆空间大小的设置"><a href="#堆空间大小的设置" class="headerlink" title="堆空间大小的设置"></a>堆空间大小的设置</h2><p>堆空间的大小在JVM进程启动时就已经确定好了，但是开发人员仍可以通过参数 <code>-Xmx</code> 和 <code>Xms</code> 来显式的指定这个空间的大小。</p>
+<ul>
+<li><strong>-Xms</strong> 用于设置堆空间的初始内存，等价于 <code>-XX:InitialHeapSize</code> </li>
+<li><strong>-Xmx</strong> 用于设置堆空间的最大内存，等价于 <code>-XX:MaxHeapSize</code> </li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-X 是JVM的运行参数</span><br><span class="line">    ms 是 memory start</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 查看堆设置的参数</span></span><br><span class="line">    方式一：jps /   jstat -gc 进程id</span><br><span class="line">    方式二：-XX:+PrintGCDetails</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>一旦堆空间中的所有内存之和的大小超过 <code>-Xmx</code> 所指定的最大内存时，将会抛出 <strong>OutOfMemoryError</strong> 异常。</p>
+</li>
+<li><p>通常会将 <code>-Xms</code> 和 <code>-Xmx</code> 两个参数配置相同的值，其<strong>目的是为了能够在Java垃圾回收机制清理完堆区后不需要重新分隔计算堆区的大小，从而提高性能。</strong></p>
+</li>
+<li><p>默认情况下：</p>
+<p><code>初始内存大小 = 物理内存大小 / 64</code></p>
+<p><code>最大内存大小 = 物理电脑内存大小 / 4</code> </p>
+</li>
+</ul>
+<hr>
+<h2 id="OOM说明与举例"><a href="#OOM说明与举例" class="headerlink" title="OOM说明与举例"></a>OOM说明与举例</h2><ul>
+<li>堆空间内存溢出错误信息：<code>java.lang.OutOfMemoryError: Java heap space</code></li>
+</ul>
+<hr>
+<h1 id="3-年轻代与老年代"><a href="#3-年轻代与老年代" class="headerlink" title="3    年轻代与老年代"></a>3    年轻代与老年代</h1><p>存储在堆空间中的Java对象可以被划分为两类：</p>
+<ul>
+<li>一类是生命周期较短的瞬时对象，这类对象的创建和消亡都非常迅速。</li>
+<li>另外一类对象的生命周期非常长，在某些极端的情况下甚至与JVM线程的生命周期保持一致。</li>
+</ul>
+<p>按照上述标准，将Java堆空间进一步细分的话，又可划分为 <strong>年轻代（YoungGen）</strong> 和 <strong>老年代（OldGen）</strong>。</p>
+<blockquote>
+<p>其中 <strong>年轻代</strong> 又可以划分为 <strong>Eden区</strong> 和 <strong>Survivor区</strong>；</p>
+<ul>
+<li>  <strong>Survivor区</strong> 又可划分为 <strong>Survivor0区</strong> 和 <strong>Survivor1区</strong>（有时也叫做from区、to区）</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>年轻代保存的是生命周期较短的对象，这类对象由于生命周期较短，所以经常需要被GC回收；</span><br><span class="line">    <span class="number">1.1</span>	Eden区被翻译为伊甸园区，伊甸园在西方神话中就是最早出现的人类亚当和夏娃居住的地方，对应在JVM内存中Eden区就是Java对象</span><br><span class="line">    创建出来时最先在堆中的位置。</span><br><span class="line"><span class="number">2</span>、老年代保存的是生命周期较长的对象，这类对象生命周期较长，所以被GC回收回收的频率较低。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="参数设置"><a href="#参数设置" class="headerlink" title="参数设置"></a>参数设置</h2><p><img src="/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-05%E5%A0%86/%E5%A0%86%E7%A9%BA%E9%97%B4%E9%BB%98%E8%AE%A4%E5%88%86%E9%85%8D%E6%AF%94%E4%BE%8B.png" alt="堆空间默认分配比例"></p>
+<p><strong>配置新生代与老年代在堆结构的占比：</strong></p>
+<ul>
+<li><p>默认值是 <code>-XX:NewRatio=2</code>，表示新生代占1份，老年代占2份，新生代占整个堆的 1/3 。</p>
+</li>
+<li><p>可以修改 <code>-XX:NewRatio=4</code>，表示新生代占1份，老年代占4份，新生代占整个堆的 1/5。</p>
+</li>
+<li><p><strong>NewRatio = 老年代/新生代</strong> </p>
+</li>
+<li><p>在 HotSpot 中，Eden区和另外两个Survivor取所占堆空间的默认比例是：8：1：1</p>
+</li>
+<li><p>当然也可以通过参数<code>-XX:SurvivorRatio</code> 来调整这个空间比例。比如：SurvivorRatio = 8 。</p>
+</li>
+<li><p><strong>几乎所有的 Java 对象都是在 Eden 区被出生的。</strong></p>
+<blockquote>
+<p><strong>问题：什么时候Java对象不是在Eden区出生的？</strong></p>
+<p>答：如果我们New了一个对象，并且这个对象所占内存非常大，大到伊甸园区都放不下，可以直接把对象存储到老年代。</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>绝大多数的Java对象的销毁都是在新生代中进行的。据统计，绝大多数的对象生命周期都非常短，大部分在未晋升到老年代之前就已经被GC了。</p>
+</li>
+<li><p>可以使用参数 <code>-Xmn</code> 设置新生代最大内存的大小。（这个参数一般使用默认值即可） </p>
+</li>
+</ul>
+<hr>
+<h1 id="4-对象分配过程"><a href="#4-对象分配过程" class="headerlink" title="4    对象分配过程"></a>4    对象分配过程</h1><p>为新创建的对象分配内存空间是一件非常严谨和复杂的任务，JVM的设计者们不仅需要考虑内存如何分配，在哪里分配等问题，并且由于内存分配算法和内存回收算法密切相关，所以还需要考虑GC执行完垃圾回收后是否会在内存空间产生内存碎片等问题。</p>
+<h2 id="对象分配一般过程"><a href="#对象分配一般过程" class="headerlink" title="对象分配一般过程"></a>对象分配一般过程</h2><ol>
+<li><p><code>new</code> 出的新对象首先保存在 <code>Eden</code> 区。（此区有大小限制）</p>
+</li>
+<li><p>当伊甸园区的空间已被填满，并且程序又需要创建对象时，这时将会触发垃圾回收器对 <code>Eden</code>区中的对象进行一次 Minor GC：</p>
+<ul>
+<li>将 <code>Eden</code> 区中已失效的对象进行回收；</li>
+<li>将 <code>Eden</code>区中未失效的对象移动到 <code>Survivor0</code> 区，并且为每一个移动到幸存者区的对象分配一个年龄计数器。</li>
+<li>此时，<code>Eden</code> 区就已经被完全清空了，也就可以创建新的对象保存到 <code>Eden</code> 区。</li>
+</ul>
+</li>
+<li><p>继续往伊甸园区保存新创建的对象，如果伊甸园区满，将再次触发 Minor GC：</p>
+<ul>
+<li>将 <code>Eden</code> 区中已失效的对象进行销毁；</li>
+<li>将 <code>Eden</code> 区中未失效的对象，移动到 <code>Survivor1</code> 区，年龄计数器+1；</li>
+<li>并且将 <code>Survivor0</code> 区中经过 Minor GC 筛选后没有被回收的对象 ，也要移动到 <code>Survivor1</code> 区，并将年龄计数器+1。</li>
+<li>也就是说，对于 <code>Eden</code> 区和 <code>Survivor</code> 区中的对象，每次 Minor GC 后，都要将筛选后留下来的对象移动到空的 <code>Survivor </code>区中（即如果S0区为空，就将伊甸园区和S1区中的有效对象移动到S0区，如果S1区为空，就将伊甸园区和S0区中的有效对象移动到S1区中）。</li>
+<li>此时，<code>Eden</code> 区和 <code>Survivor0</code> 区就都被清空了。</li>
+</ul>
+</li>
+<li><p>继续往伊甸园区保存新创建的对象，如果伊甸园区满，再次触发 Minor GC，此时会将 GC 筛选后留下来的对象重新放回 <code>Survivor0</code>区，年龄计数器+1。以此类推，下次 GC 接着再放回 <code>Survivor1</code> 区，并累加年龄计数器。</p>
+</li>
+<li><p>啥时候能去养老区呢？可以设置 <strong>GC 次数的阈值，默认是 15 次</strong>。当年龄计数器大于等于 15 之后，即经历 15 次GC仍然存活在幸存者区的对象，就可以进入养老区了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可以通过参数 -XX:MaxTenuringThreshold&#x3D;&lt;N&gt; 来设置进入养老区的GC次数。</span><br></pre></td></tr></table></figure></li>
+<li><p>在老年代相对安全，不会频繁的触发 GC。<strong>即 Minor GC 不会对老年代空间进行垃圾回收</strong>，只有当养老区空间内存不足时，触发了 <strong>Major GC 后才会对老年代进行垃圾回收的操作</strong>。</p>
+</li>
+<li><p>若老年代在执行了 Major GC 后发现仍然没有足够空间保存新进入老年代的对象，就会产生 OOM 异常。</p>
+<p><code>java.lang.OutOfMemoryError: Java heap space</code></p>
+</li>
+</ol>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><blockquote>
+<ol>
+<li> <strong><code>from区</code> 和 <code>to区</code> 是相对的：</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li><code>to区</code> 永远是内存为空的幸存者区，<code>from区</code> 永远是内存不为空的幸存者区。</li>
+<li>即：如果幸存者1区为空，则该区就是 to区；如果幸存者1区不为空，则该区就是 from区。</li>
+</ul>
+<blockquote>
+<ol start="2">
+<li> <strong>GC</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>伊甸园区满的时候会触发 YGC/Minor GC；</li>
+<li>幸存者区满的时候不会触发 YGC/Minor GC</li>
+<li>但是当 YGC/Minor GC 被触发的时候，会将伊甸园区和幸存者区一起进行GC。 </li>
+</ul>
+<blockquote>
+<ol start="3">
+<li> <strong>关于垃圾回收：</strong></li>
+</ol>
+</blockquote>
+<p>频繁在新生区，很少在养老区，几乎不在永久代（/元空间 ）。</p>
+<hr>
+<h2 id="对象分配的特殊情况"><a href="#对象分配的特殊情况" class="headerlink" title="对象分配的特殊情况"></a>对象分配的特殊情况</h2><p><img src="/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-05%E5%A0%86/%E5%A0%86%E4%B8%AD%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E8%BF%87%E7%A8%8B.png" alt="堆中对象分配过程"></p>
+<ol>
+<li><p>使用 <code>new</code> 关键字在堆中创建出一个对象；</p>
+</li>
+<li><p>如果 Eden 放得下，就在 Eden 分配一块内存保存对象；</p>
+</li>
+<li><p>如果 Eden 放不下，就会触发 YGC 进行垃圾回收，GC 结束后会清空 Eden 空间，</p>
+<ul>
+<li>如果此时 Eden 放得下，就在 Eden 分配一块内存保存对象。</li>
+<li>如果要创建的对象是一个超大的对象，所需要分配的内存大于 Eden 本身的内存空间。则跳过 Eden 和 Survivor ，直接去判断 Old 区能否放得下该对象；<ul>
+<li>如果 Old 区能放得下该对象，就直接在 Old 区分配一块内存保存对象。</li>
+<li>如果 Old 区放不下该对象，就会触发 FGC 对 Old 区的空间进行垃圾回收，GC 结束后会清理 Old 区已失效的对象。<ul>
+<li>如果经过 FGC 后，Old 区剩余的内存空间大于创建新对象需要的内存空间，即可以放得下了，就在 Old 区分配一块内存保存对象。</li>
+<li>如果经过 FGC 后，Old 区剩余的内存空间仍不足以支持新对象的创建，则抛出 OOM 异常。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>  <strong>YGC 的详细过程：</strong></p>
+</blockquote>
+<p>当 Eden 满时触发 YGC，</p>
+<ol>
+<li>首先会回收 Eden 中失效的对象的内存空间；</li>
+<li>如果 Survivor 放得下：<ol>
+<li>将 Eden 中未失效的对象移动至 Survivor ；</li>
+<li>将 Survivor 中 from 区的对象移动至 to 区。</li>
+<li>如果 Survivor 中对象的存活时间超过阈值，就晋升为老年代，移动至 Old 区；</li>
+<li>如果对象的存活时间未超过阈值，则继续从 from 区移动到 to 区；</li>
+</ol>
+</li>
+<li>如果 Survivor 放不下：<ul>
+<li>直接晋升到老年代，移动至 Old 区。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="5-Minor-GC、Major-GC、Full-GC"><a href="#5-Minor-GC、Major-GC、Full-GC" class="headerlink" title="5    Minor GC、Major GC、Full GC"></a>5    Minor GC、Major GC、Full GC</h1><blockquote>
+<p>  Minor，未成年人</p>
+<p>  Major：成年人</p>
+</blockquote>
+<p>JVM在进行GC时，并非每次GC都会对堆空间的三个内存区域（新生代、老年代、方法区）全部进行回收。</p>
+<p>在 HotSpot 中，GC 按照回收区域又可分为两大种类型：①部分回收（Partial GC）    ②整堆回收（Full GC）</p>
+<ul>
+<li>部分回收：不是完整回收整个Java堆的垃圾回收。其中又可分为：<ol>
+<li>新生代回收（Minor GC / Young GC）：只针对新生代区（Eden 和 Survivor）的GC。</li>
+<li>老年代回收（Major GC / Old GC）：只针对老年代区的GC。</li>
+<li>混合回收（Mixed GC）：针对整个新生代和部分老年代的GC。</li>
+</ol>
+</li>
+<li>整堆回收（Full GC）：针对整个Java堆和方法区的垃圾回收</li>
+</ul>
+<ul>
+<li><input checked disabled type="checkbox"> <strong>注意：很多时候 Major GC 和 Full GC 会混淆使用，需要具体分辨是老年代回收还是整堆回收。</strong></li>
+</ul>
+<hr>
+<h2 id="分代式GC的触发条件"><a href="#分代式GC的触发条件" class="headerlink" title="分代式GC的触发条件"></a>分代式GC的触发条件</h2><blockquote>
+<p>  <strong>Minor GC 的触发条件</strong></p>
+</blockquote>
+<ul>
+<li>当年轻代空间不足时，就会触发 Minor GC，这里的年轻代满指的是 Eden 区满，Survivor 区满不会触发GC。（每次触发 Minor GC 会清理整个年轻代的内存空间）</li>
+<li>因为 Java 对象<strong>大多都具备朝生夕灭</strong>的特性，所以 Minor GC 触发非常频繁，一般回收速度也比较快。</li>
+<li>触发 Minor GC 后会引发 STW（Stop The Work），暂停其它用户的线程，等到垃圾回收结束，用户线程才会恢复运行。 </li>
+</ul>
+<blockquote>
+<p>  <strong>Major GC / Full GC的触发条件</strong></p>
+</blockquote>
+<ul>
+<li>指发生在老年代的GC，对象从老年代消失时，我们说“Major GC” 或 “Full GC” 就发生了。</li>
+<li>发生了 Major GC，经常会伴随至少一次的 Minor GC（但非绝对的，在 Parallel Scavenge 收集器的收集策略里就有直接进行 Major GC 的策略选择过程）。</li>
+<li>Major GC 的速度一般会比 Minor GC 慢10倍以上，STW 的时间更长。</li>
+<li>如果 Major GC 后，内存还不足，就会报 OOM 了。</li>
+</ul>
+<blockquote>
+<p>  <strong>Full GC 的触发机制</strong></p>
+</blockquote>
+<p>触发 Full GC 执行的情况有以下5种：</p>
+<ol>
+<li>手动调用 <code>System.gc()</code> 方法，</li>
+<li>老年代空间不足时；</li>
+<li>方法区空间不足时；</li>
+<li>某次 Minor GC 后进入老年代的对象的平均内存的大小大于老年代的可用内存；</li>
+<li>由 Eden、from 区向 to 区复制时，如果待复制内容的大小大于 to 区的可用内存，就会把超出部分的对象转存到老年代，若此时老年代的可用内存小于待加入内存的大小，则会触发 Full GC 。</li>
+</ol>
+<p><strong>说明：Full GC 是开发或调优中尽量要避免的，这样暂停时间会短一些。</strong></p>
+<hr>
+<h1 id="6-堆空间分代思想"><a href="#6-堆空间分代思想" class="headerlink" title="6    堆空间分代思想"></a>6    堆空间分代思想</h1><p>研究表明，不同的对象生命周期不同，其中 70%~99% 的对象都是临时对象。</p>
+<blockquote>
+<p>  <strong>问题：Java堆空间为什么需要分代保存对象？不分代就不能正常工作了吗？</strong></p>
+</blockquote>
+<p>答：其实不分代完全可以，分代的唯一理由就是<strong>优化GC性能</strong>。</p>
+<ul>
+<li>  如果没有分代，那么所有的对象都会保存在一整块堆内存中，就如同把一个学校所有的人都关在一个教室。此时，每次GC的时候都需要把堆的所有的对象扫描一遍，才能够判断哪些对象已失效，哪些对象未失效。</li>
+<li>  而在堆空间中，大部分的对象都是一些临时对象，生命周期很短。如果分代保存的话，把新创建的对象集中保存在某一块内存区域，当 GC 的时候只需扫描这块保存新对象的区域即可，而对于那些已经晋升到老年代的对象，只需要隔很久去GC一次即可。这样可以极大的节省CPU资源。</li>
+</ul>
+<hr>
+<h1 id="7-内存分配策略"><a href="#7-内存分配策略" class="headerlink" title="7    内存分配策略"></a>7    内存分配策略</h1><h2 id="对象晋升规则"><a href="#对象晋升规则" class="headerlink" title="对象晋升规则"></a>对象晋升规则</h2><ul>
+<li><p>如果对象出生在 Eden 并经过第一次 Minor GC 后仍然存活，并且能被 Survivor 容纳的话，将被移动到 Survivor 空间中，并将对象年龄设为1。</p>
+</li>
+<li><p>对象在 Survivor 中每熬过一次 Minor GC，年龄就增加1岁，当它的年龄增加到一定程度（HotSpot VM 默认为15岁，但是每个JVM、每个GC都有所不同）时，就会被晋升到养老区。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对于晋升到养老区的年龄阈值，可以通过参数： -XX:MaxTenuringThreshold 来设置。</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="内存分配策略"><a href="#内存分配策略" class="headerlink" title="内存分配策略"></a>内存分配策略</h2><p>针对不同年龄段的对象分配原则如下所示：</p>
+<ul>
+<li>优先分配到 Eden</li>
+<li>大对象直接分配到老年代（尽量避免程序中出现过多的大对象）</li>
+<li>长期存活的对象分配到老年代</li>
+<li><strong>动态对象年龄判断</strong><ul>
+<li>如果 Survivor 中相同年龄的所有对象大小的总和大于 Survivor 空间的一半，年龄大于或等于该年龄的对象可以直接进入养老区，无需等到 MaxTenuringThreshold 中要求的年龄。</li>
+</ul>
+</li>
+<li>空间分配担保<ul>
+<li><code>-XX:HandlePromotionFailure</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="8-为对象分配内存：TLAB"><a href="#8-为对象分配内存：TLAB" class="headerlink" title="8    为对象分配内存：TLAB"></a>8    为对象分配内存：TLAB</h1><blockquote>
+<p><strong>TLAB；Thread Local Allocation Buffer；本地线程缓存区</strong></p>
+</blockquote>
+<h2 id="为什么会有TLAB（Thread-Local-Allocation-Buffer）？"><a href="#为什么会有TLAB（Thread-Local-Allocation-Buffer）？" class="headerlink" title="为什么会有TLAB（Thread Local Allocation Buffer）？"></a>为什么会有TLAB（Thread Local Allocation Buffer）？</h2><ul>
+<li><p>堆空间是所有线程共享的区域，任何线程都可以访问到堆空间中的共享数据。</p>
+</li>
+<li><p><strong>由于对象是在堆空间中创建的，所以在高并发条件下为新创建对象分配内存空间是线程不安全的。</strong></p>
+<blockquote>
+<p>假设有3个线程同时创建对象，这三个线程同时进入分配内存空间的环节，</p>
+<ol>
+<li> 首先，线程A申请到了一块内存地址为<code>0x1101</code>的内存空间，但是还没来得及创建对象，就被切换到线程B执行了；</li>
+<li> 线程B经检查后，发现地址为<code>0x1101</code>的内存空间是空闲的 ，所以线程B也得到了这块内存空间用于保存创建的对象；</li>
+<li> 同理，线程C也得到了地址为<code>0x1101</code>的内存空间。</li>
+</ol>
+<p>这三个线程在申请堆空间时都被JVM分配到了编号为<code>0x1101</code>的内存空间，但是在创建对象时这三个对象使用同一块内存就会产生冲突了。</p>
+</blockquote>
+</li>
+<li><p>为了避免多个线程操作同一地址，在创建对象时还需要使用加锁等机制。显然，加锁是非常影响分配速度的。</p>
+</li>
+</ul>
+<hr>
+<h2 id="什么是TLAB-？"><a href="#什么是TLAB-？" class="headerlink" title="什么是TLAB ？"></a>什么是TLAB ？</h2><ul>
+<li>从内存模型的角度来讲，对 <strong>Eden</strong> 继续进行划分，JVM <strong>在 Eden 区中划分出一块区域作为 TLAB 区</strong>，这块区域为每个线程都分配了一个私有缓存区域。</li>
+<li>多线程同时创建对象时，使用 TLAB 可以避免一系列的线程不安全问题，同时还能够提升内存分配的吞吐量，因此我们可以将这种内存分配方式称之为<strong>快速分配策略</strong>。</li>
+</ul>
+<hr>
+<h2 id="TLAB-说明"><a href="#TLAB-说明" class="headerlink" title="TLAB 说明"></a>TLAB 说明</h2><ul>
+<li><strong>尽管不是所有的对象实例都能在 TLAB 中成功创建，但JVM确实是将TLAB作为内存分配的首选。</strong></li>
+<li>默认情况下，TLAB 空间的内存非常小，仅占整个 Eden 的 1%，所以当这个空间容纳不下我们要创建的对象实例时，就无法在 TLAB中成功创建对象。当然我们可以通过参数 <code>-XX:TLABWasteTargetPercent</code> 设置 TLAB 空间占用 Eden 的百分比大小。</li>
+<li><strong>一旦对象在 TLAB 空间中创建失败时，JVM 就会尝试着通过使用加锁机制确保创建对象时的原子性，直接在 Eden 空间中创建对象。</strong></li>
+<li>在程序中，开发人员可以通过参数 <code>-XX:UseTLAB</code> 来设置是否开启 TLAB 空间。</li>
+</ul>
+<h3 id="对象分配过程（含TLAB）"><a href="#对象分配过程（含TLAB）" class="headerlink" title="对象分配过程（含TLAB）"></a>对象分配过程（含TLAB）</h3><p><img src="/2021/06/02/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-05%E5%A0%86/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E8%BF%87%E7%A8%8B.png" alt="对象分配过程"></p>
+<hr>
+<h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><blockquote>
+<p>  <strong>问题：堆空间一定都是共享的吗？</strong></p>
+</blockquote>
+<p>答：不是。堆空间中 Eden 区中的 TLAB 区是每个线程私有的。</p>
+<hr>
+<h1 id="9-小结堆空间参数设置"><a href="#9-小结堆空间参数设置" class="headerlink" title="9    小结堆空间参数设置"></a>9    小结堆空间参数设置</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-XX:+PrintFlagsInitial		<span class="comment">// 查看所有参数使用的默认值</span></span><br><span class="line">-XX:+PrintFlagsFinal		<span class="comment">// 查看所有参数的最终值（可能存在修改，不再是初始值）</span></span><br><span class="line"></span><br><span class="line">-XX:NewRatio		<span class="comment">// 配置新生代与老年代在堆结构中的占比</span></span><br><span class="line"></span><br><span class="line">-Xms		<span class="comment">// 设置初始堆空间的内存（默认为物理内存的1/64）</span></span><br><span class="line">-Xmx		<span class="comment">// 设置最大堆空间的内存（默认为物理内存的1/64）</span></span><br><span class="line">-Xmn		<span class="comment">// 设置新生代内存的大小（初始值和最大值）</span></span><br><span class="line"></span><br><span class="line">-XX:SurvivorRatio=[size]		<span class="comment">// 设置新生代中 Eden 和 S0/S1 空间的比例</span></span><br><span class="line"></span><br><span class="line">-XX:MaxTenuringThreshold	<span class="comment">// 设置新生代垃圾的最大年龄，超过阈值进入养老区</span></span><br><span class="line"></span><br><span class="line">-XX:+PrintGCDetails		<span class="comment">// 输出详细的GC处理日志</span></span><br><span class="line">-XX:+PrintGC	<span class="comment">// 打印GC简要信息</span></span><br><span class="line"></span><br><span class="line">-XX:HandlePromotionFailure	<span class="comment">// 是否设置空间分配担保</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<hr>
+<h1 id="10-空间分配担保"><a href="#10-空间分配担保" class="headerlink" title="10    空间分配担保"></a>10    空间分配担保</h1><p>在发生 Minor GC 之前，虚拟机会<strong>检查老年代最大可用的连续空间是否大于新生代所有对象的总空间</strong>。</p>
+<ul>
+<li>如果大于，则此次 Minor GC 是安全的。（最极端的情况就是新生代所有的对象都在这一次GC后进入到养老区）</li>
+<li>如果小于，则虚拟机会查看参数 <code>-XX:HandlePromotionFailure</code> 的值是否允许担保失败。<ul>
+<li>如果 <code>-XX:HandlePromotionFailure=true</code>，表示允许担保失败，那么会继续<strong>检查老年代最大可用连续空间是否大于历次晋升到老年代的对象的平均大小</strong>。<ul>
+<li><input checked disabled type="checkbox"> 如果大于，则尝试进行一次 Minor GC ，但这个 Minor GC  依然是有风险的。因为平均数据并不能决定本次数据。</li>
+<li><input checked disabled type="checkbox"> 如果小于，则改为进行一次 Full GC。</li>
+</ul>
+</li>
+<li>如果 <code>-XX:HandlePromotionFailure=false</code>，表示不允许担保失败，直接进行一次 Full GC。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>小总结：</strong></p>
+</blockquote>
+<p>执行 Minor GC 前需要进行担保：</p>
+<ul>
+<li>  若担保成功，则继续执行 Minor GC；</li>
+<li>  若担保失败，则直接进行 Full GC。</li>
+</ul>
+<blockquote>
+<p>  <strong>担保机制在不同 JDK 版本中的变化：</strong></p>
+</blockquote>
+<ul>
+<li>  JDK7 之前，担保机制需要手动开启或关闭；</li>
+<li>  从 JDK7 开始，担保机制变更为自动开启的了。</li>
+</ul>
+<p>从 JDK7 开始，<strong>HandlePromotionFailure</strong>参数不再会影响到虚拟机的空间分配担保策略，即默认<code>-XX:HandlePromotionFailure=true</code>。虽然在源码中还定义了HandlePromotionFailure参数，但是在代码中已经不会再使用它。规则变为：<strong>只要老年代的连续空间大于新生代对象总大小或者历次晋升老年代对象的平均大小就会进行 Minor GC，否则将进行 Full GC</strong>。</p>
+<hr>
+<h1 id="11-堆是分配对象存储的唯一选择吗？"><a href="#11-堆是分配对象存储的唯一选择吗？" class="headerlink" title="11    堆是分配对象存储的唯一选择吗？"></a>11    堆是分配对象存储的唯一选择吗？</h1><ul>
+<li>随着 JIT 编译器的发展与<strong>逃逸分析技术</strong>逐渐成熟，<strong>栈上分配、标量替换优化技术</strong>将会导致一些微妙的变化，所有的对象都分配到堆上也渐渐变得不那么“绝对”了。 </li>
+<li>在 Java 虚拟机中，对象是在 Java 堆中分配的。但是有一种特殊情况，那就是<strong>如果经过逃逸分析（Escape Analysis）后发现，一个对象并没有逃逸出方法的话，那么就可能被优化成栈上分配</strong>。这就就无需在堆上分配内存，也无需进行垃圾回收了，这就是最常见的<strong>堆外存储技术</strong>。</li>
+<li>此外，前面提到的基于 OpenJDK 深度定制的 TaoBaoVM，其中创新的 GCIH（GC invisible heap）技术实现了 off-heap，将生命周期较长的 Java 对象从 heap 中移至 heap 外，并且 GC 不能管理 GCIH 内部的 Java 对象，以此达到降低 GC 的回收频率和提升 GC的回收效率的目的。  </li>
+</ul>
+<h2 id="逃逸分析概述"><a href="#逃逸分析概述" class="headerlink" title="逃逸分析概述"></a>逃逸分析概述</h2><ul>
+<li><p>如何将堆上的对象分配到栈，需要使用逃逸分析手段。</p>
+</li>
+<li><p>这是一种可以有效减少Java程序中同步负载和内存堆分配压力的跨函数全局数据流分析算法。</p>
+</li>
+<li><p>通过逃逸分析，HotSpot 编译器能够分析出一个新的对象引用的使用范围从而决定是否要将这个对象分配到堆上。</p>
+</li>
+<li><p><strong>逃逸分析的基本行为就是分析对象动态作用域</strong>：</p>
+</li>
+<li><p>当一个对象在方法中被定义后，对象只在方法内部使用，则认为没有发生逃逸。</p>
+</li>
+<li><p>当一个对象在方法中被定义后，它被外部方法所引用，则认为发生了逃逸。例如作为调用参数传递到其它方法中。</p>
+</li>
+<li><p><strong>没有发生逃逸的对象，可以分配到栈上，随着方法执行的结束，栈空间就被移出</strong>。</p>
+</li>
+</ul>
+<h3 id="参数设置："><a href="#参数设置：" class="headerlink" title="参数设置："></a>参数设置：</h3><ul>
+<li><p>从 JDK7 开始，HotSpot 就默认开启了逃逸分析。</p>
+</li>
+<li><p>如果是更早的版本，开发人员可以通过：</p>
+</li>
+<li><ul>
+<li><code>-XX: +DoEscapeAnalysis</code> 参数显式的开启逃逸分析。</li>
+<li><code>-XX: +PrintEscapeAnalysis</code> 查看逃逸分析的筛选结果。</li>
+</ul>
+</li>
+</ul>
+<h3 id="结论："><a href="#结论：" class="headerlink" title="结论："></a>结论：</h3><ul>
+<li>开发中能使用局部变量的，就不要在方法外定义。</li>
+</ul>
+<hr>
+<h2 id="逃逸分析代码优化"><a href="#逃逸分析代码优化" class="headerlink" title="逃逸分析代码优化"></a>逃逸分析代码优化</h2><p>使用逃逸分析，编译器可以对代码作如下优化：</p>
+<blockquote>
+<ol>
+<li>栈上分配</li>
+<li>同步省略 </li>
+<li>分离对象或标量替换</li>
+</ol>
+</blockquote>
+<h3 id="一、栈上分配"><a href="#一、栈上分配" class="headerlink" title="一、栈上分配"></a>一、栈上分配</h3><ul>
+<li>将堆分配转换为栈分配，分配在栈上的对象不需要进行垃圾回收，方法出栈后对象自动被销毁，可以提高程序的性能。</li>
+<li>JIT 编译器在编译期间会根据逃逸分析的结果，如果发现一个对象并没有逃逸出当前方法的话，就可能被优化成栈上分配。分配完成后，调用在栈内执行，最后线程结束，栈空间被回收，局部变量对象也被回收。这样就无需进行垃圾回收了。</li>
+</ul>
+<h3 id="二、同步省略"><a href="#二、同步省略" class="headerlink" title="二、同步省略"></a>二、同步省略</h3><p>如果发现一个对象只能被一个线程被访问到，那么对于这个对象的操作可以不考虑同步。</p>
+<ul>
+<li>  线程同步的代价是非常高的，同步的后果是降低并发性和性能。</li>
+<li>  在动态编译同步代码块的时候，JIT 编译器可以借助逃逸分析来判断同步代码块所使用的锁对象是否只能被一个线程访问而没有被发布到其它线程。</li>
+<li>  如果没有，那么JIT编译器在编译这个同步代码块的时候就会取消对这部分代码的同步。这样就能大大提高并发性和性能。这个取消同步的过程就叫做同步省略，也叫锁消除。</li>
+</ul>
+<h3 id="三、分离对象或标量替换"><a href="#三、分离对象或标量替换" class="headerlink" title="三、分离对象或标量替换"></a>三、分离对象或标量替换</h3><p>有的对象可能不需要作为一个连续的内存结构存在也能被访问到，那么对象的部分（或全部）可以不存储在内存，而是存储在CPU寄存器中。</p>
+<ul>
+<li>  标量（Scalar）是指一个无法再分解成更小数据的数据。</li>
+<li>  Java 中的基本数据类型就是标量。</li>
+<li>  相对的，那些还可以分解的数据叫做聚合量（Aggregate），Java中的对象就是聚合量，因为它可以分解成其它聚合量和标量。</li>
+<li>  在 JIT 阶段，如果经过逃逸分析，发现一个对象不会被外界访问的话，那么经过JIT优化，就会把这个对象拆解成若干个成员变量来代替。这个过程就是标量替换。</li>
+</ul>
+<blockquote>
+<p>  <strong>代码演示</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    alloc();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">alloc</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Point point = <span class="keyword">new</span> Point();</span><br><span class="line">    System.out.println(<span class="string">&quot;point.x=&quot;</span>+point.x + <span class="string">&quot;;point.y=&quot;</span>+point.y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以上代码经过标量替换后，就会变成：</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">alloc</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> y = <span class="number">2</span>;</span><br><span class="line">    System.out.println(<span class="string">&quot;point.x=&quot;</span>+point.x + <span class="string">&quot;;point.y=&quot;</span>+point.y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    可以看到，Point这个聚合量经过逃逸分析后，发现它并没有逃逸，就会替换成两个非聚合量了。</span></span><br><span class="line"><span class="comment">    那么标量替换有什么好处呢？就是可以大大减少堆内存的占用。</span></span><br><span class="line"><span class="comment">    因为一旦不需要创建对象了，那么就不再需要分配堆内存了。</span></span><br><span class="line"><span class="comment">    这些临时变量不需要创建对象来保存，直接保存在栈中的临时变量表中即可。</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">    标量替换为栈上分配提供了很好的基础。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>标量替换参数设置</strong></p>
+</blockquote>
+<p>使用参数 <code>-XX:+EliminateAllocations</code> 开启标量替换（默认就是打开的），允许将对象打散成标量对象分配在栈上。</p>
+<hr>
+<h2 id="逃逸分析小结：逃逸分析并不成熟"><a href="#逃逸分析小结：逃逸分析并不成熟" class="headerlink" title="逃逸分析小结：逃逸分析并不成熟"></a>逃逸分析小结：逃逸分析并不成熟</h2><ul>
+<li>关于逃逸分析的论文在1999年就已经发表了，但直到 JDK1.6 才有实现，而且这项技术到如今也并不是十分成熟的。</li>
+<li>其根本原因就是<strong>无法保证逃逸分析节省的性能消耗一定能高于它的消耗</strong>。虽然经过逃逸分析可以做标量替换、栈上分配和锁消除。但是逃逸分析自身也是需要进行一系列复杂的分析的，这其实也是一个相当耗时的过程。</li>
+<li>一个极端的例子，就是经过逃逸分析之后，发现没有一个对象是不逃逸的，那这个逃逸分析的过程就白白浪费了。</li>
+<li>虽然这项技术并不十分成熟，但是它也是<strong>即时编译器优化技术中一个十分重要的手段</strong>。</li>
+<li>有一些观点认为：通过逃逸分析，JVM 会在栈上分配那些不会逃逸的对象，这在理论上是可行的，但是取决于 JVM 设计者的选择。Oracle HotSpot JVM 中就并未这么做，这一点在逃逸分析相关的文档里已经说明，所以可以明确所有的对象实例都是创建在堆上。</li>
+<li>目前很多书籍还是基于 JDK7 之前的版本，JDK 已经发生了很大的变化，intern 字符串的缓存和静态变量曾经都被分配在永久代中，而永久代已经被元数据区取代，但是，intern 字符串缓存和静态变量并不是被转移到元数据区，而是直接在堆上分配，所以这一点同样符合前面一点的结论：对象实例都是分配在堆上。</li>
+</ul>
+<hr>
+<h1 id="12-小结"><a href="#12-小结" class="headerlink" title="12    小结"></a>12    小结</h1><ul>
+<li>年轻代是大部分对象诞生、成长、消亡的区域，大部分对象在这里产生、应用、最后被垃圾回收器回收，结束生命。</li>
+<li>老年代放置长生命周期的对象，通常都是从 Survivor 区筛选拷贝过来的 Java对象。当然，也会有特殊情况，我们知道普通的对象会被分配在TLAB上，但是如果对象太大，JVM会试图直接分配在Eden 其它位置上；如果对象太大，完全无法在新生代找到足够长的连续空闲空间，JVM就会直接分配到老年代。</li>
+<li>当GC只发生在年轻代中，回收年轻代对象的行为被称为 Minor GC。当GC发生在老年代时则被称为 Major GC 或者 Full GC 。一般的，Minor GC 的发生频率要比 Major GC 高很多，即老年代中垃圾回收发生的频率将大大低于年轻代。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1419,561 +3070,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">SpringBoot接口返回数据</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-05-06 23:45:17 / Modified: 23:57:25" itemprop="dateCreated datePublished" datetime="2021-05-06T23:45:17+08:00">2021-05-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="1、格式化接口返回的-Date-类型数据"><a href="#1、格式化接口返回的-Date-类型数据" class="headerlink" title="1、格式化接口返回的 Date 类型数据"></a>1、格式化接口返回的 Date 类型数据</h1><h2 id="存在的问题："><a href="#存在的问题：" class="headerlink" title="存在的问题："></a>存在的问题：</h2><p>在 SpringBoot 的返回值中，如果返回值是 Date 类型数据或返回值对象中包含 Date 类型数据。接口会将 Date 类型数据转换成 Json 字符串并返回，Date 类型数据默认转换成的 Json 字符串格式如下：</p>
-<p><img src="/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/image-20210407150210541.png" alt="image-20210407150210541"></p>
-<ol>
-<li>而实际需求想要的时间数据格式往往类似于<code>yyyy-MM-dd HH:mm:ss</code>这样的；</li>
-<li>而且特别强调一点是我在测试时调用接口的时间是北京时间<code>14：47</code>，而接口返回值中的时间是<code>06：47</code>，显然这是按照国际标准时区计时返回的。</li>
-</ol>
-<hr>
-<h2 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h2><p>SpringBoot 内部集成了Jackson 依赖，所以我们可以直接使用 Jackson 工具来制定 Date 类型数据转换成 Json 字符串数据的规则，只要开发人员指定了 Date 类型数据序列化的规则，则默认的转换规则就会被覆盖掉。</p>
-<blockquote>
-<p>制定 Date 数据序列化规则的方法主要有2种：</p>
-</blockquote>
-<h3 id="1、使用-JsonFormat-注解"><a href="#1、使用-JsonFormat-注解" class="headerlink" title="1、使用 @JsonFormat 注解"></a>1、使用 @JsonFormat 注解</h3><p>我们可以在返回数据对象的字段上添加 <strong>@JsonFormat</strong> 注解来规定想要的返回格式和设置想要的时区。（北京时区是：GMT+8）</p>
-<p><img src="/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/image-20210407151151336.png" alt="image-20210407151151336"></p>
-<p>修改之后的响应结果如下：</p>
-<p><img src="/2021/05/06/SpringBoot%E6%8E%A5%E5%8F%A3%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE/image-20210407150840406.png" alt="image-20210407150840406"></p>
-<hr>
-<h3 id="2、使用-Jackson-的全局配置"><a href="#2、使用-Jackson-的全局配置" class="headerlink" title="2、使用 Jackson 的全局配置"></a>2、使用 Jackson 的全局配置</h3><p>我们可以在<code>application.properties</code>配置文件中设置全局属性：</p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.jackson.date-format</span>=<span class="string">yyyy-MM-dd HH:mm:ss</span></span><br><span class="line"><span class="meta">spring.jackson.time-zone</span>=<span class="string">GMT+8</span></span><br><span class="line"><span class="meta">spring.jackson.serialization.write-dates-as-timestamps</span>=<span class="string">false</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意事项：</strong></p>
-</blockquote>
-<p><strong>@JsonFormat 注解 的优先级高于 全局配置文件 ！</strong>  当这两个同时存在时，以 @JsonFormat 注解为主！</p>
-<hr>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">MongoDB下载与安装</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-05-05 11:46:13 / Modified: 11:49:53" itemprop="dateCreated datePublished" datetime="2021-05-05T11:46:13+08:00">2021-05-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MongoDB/" itemprop="url" rel="index"><span itemprop="name">MongoDB</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="下载-amp-安装"><a href="#下载-amp-安装" class="headerlink" title="下载 &amp; 安装"></a>下载 &amp; 安装</h1><ul>
-<li>使用宝塔的一键安装！</li>
-</ul>
-<hr>
-<h2 id="远端访问"><a href="#远端访问" class="headerlink" title="远端访问"></a>远端访问</h2><p>在 Linux 上安装好 MongoDB 后，如果发现通过远程仍然不能访问到 MongoDB 数据库，这时主要需要检查两点：</p>
-<blockquote>
-<ol>
-<li> 是否放开了服务器的防火墙。</li>
-</ol>
-</blockquote>
-<p>MongoDB 对外开放的端口号是 <strong>27017</strong>，必须放开此端口的防火墙。</p>
-<blockquote>
-<ol start="2">
-<li> 设置允许所有地址访问。</li>
-</ol>
-</blockquote>
-<p>MongoDB 默认只允许本机IP访问，如果需要其它IP能够访问，则需要修改配置文件。（下图是默认配置文件的配置信息）</p>
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505103207460.png" alt="image-20210505103207460"></p>
-<ul>
-<li><p>可直接设置配置文件为 <code>bindIpAll: true</code>，即允许所有的IPv4和IPv6地址访问</p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIpAll</span>: <span class="string">true</span></span><br></pre></td></tr></table></figure></li>
-<li><p>也可以将 bindIp 修改为 <code>0.0.0.0</code></p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># network interfaces</span></span><br><span class="line"><span class="attr">net</span>:<span class="string"></span></span><br><span class="line">    <span class="attr">port</span>: <span class="string">27017</span></span><br><span class="line">    <span class="attr">bindIp</span>: <span class="string">0.0.0.0</span></span><br></pre></td></tr></table></figure></li>
-<li><p>注意事项：<br><strong>net.bindIp</strong> 和 <strong>net.bindIpAll</strong> 是互斥的。也就是说，你可以指定其中一个，但不能同时指定两者。</p>
-</li>
-</ul>
-<hr>
-<h1 id="MongoDB-数据库加密"><a href="#MongoDB-数据库加密" class="headerlink" title="MongoDB 数据库加密"></a>MongoDB 数据库加密</h1><blockquote>
-<p>  MongoDB 的用户名和密码是基于特定数据库的，而不是基于整个系统的，所以所有的数据库都需要设置密码。</p>
-</blockquote>
-<p>如果需要给 MongoDB 数据库使用安全验证，则需要用 <code>--auth</code> 开启安全性检查，只有认证通过的用户才能对数据库执行读写操作。</p>
-<h2 id="1、在服务器端进入-MongoDB-环境"><a href="#1、在服务器端进入-MongoDB-环境" class="headerlink" title="1、在服务器端进入 MongoDB 环境"></a>1、在服务器端进入 MongoDB 环境</h2><h3 id="1-1-MongoDB-安装在-Docker-中"><a href="#1-1-MongoDB-安装在-Docker-中" class="headerlink" title="1.1    MongoDB 安装在 Docker 中"></a>1.1    MongoDB 安装在 Docker 中</h3><blockquote>
-<p>  如果 MongoDB 安装在 Docker 中，首先进入 Docker 的 MongoDB 环境中！</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it [容器id&#x2F;容器名] mongo</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504220804360.png" alt="image-20210504220804360"></p>
-<h3 id="1-2-通过宝塔安装的-MongoDB"><a href="#1-2-通过宝塔安装的-MongoDB" class="headerlink" title="1.2    通过宝塔安装的 MongoDB"></a>1.2    通过宝塔安装的 MongoDB</h3><blockquote>
-<p>  如果是通过宝塔安装的 MongoDB ，其默认的安装位置为：<code>/www/server/mongodb</code> （通过宝塔安装的所有应用都保存在 <strong>/www/server</strong> 目录下）</p>
-</blockquote>
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505105819882.png" alt="image-20210505105819882"></p>
-<ol>
-<li> 进入 MongoDB 的安装目录：</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /www/server/mongodb/bin</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li> 输入命令 <code>mongo</code> ，进入 MongoDB 环境</li>
-</ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="2、切换到-‘admin’-数据库"><a href="#2、切换到-‘admin’-数据库" class="headerlink" title="2、切换到 ‘admin’ 数据库"></a>2、切换到 ‘admin’ 数据库</h2><blockquote>
-<p>  <strong>admin</strong> 数据库是 MongoDB 初始化时创建的，用于管理用户角色。</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221215610.png" alt="image-20210504221215610"></p>
-<h2 id="3、设置超级管理员用户"><a href="#3、设置超级管理员用户" class="headerlink" title="3、设置超级管理员用户"></a>3、设置超级管理员用户</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user: <span class="string">&#x27;superPanda&#x27;</span>, <span class="built_in">pwd</span>: <span class="string">&#x27;pandaMaster&#x27;</span>, roles:[<span class="string">&#x27;root&#x27;</span>]&#125;)</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<ul>
-<li>  user：超级管理员的用户名</li>
-<li>  pwd：超级管理员的用户密码</li>
-<li>  roles：用于设置用户的权限，如：读、写等等。<strong>root</strong> 代表所有权限</li>
-</ul>
-</blockquote>
-<p>验证是否添加成功：如果返回 “1” 表示添加成功，返回 “0” 表示添加失败。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.auth(<span class="string">&#x27;用户名&#x27;</span>, <span class="string">&#x27;用户密码&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504221640941.png" alt="image-20210504221640941"></p>
-<h2 id="4、给特定的数据库设置权限"><a href="#4、给特定的数据库设置权限" class="headerlink" title="4、给特定的数据库设置权限"></a>4、给特定的数据库设置权限</h2><blockquote>
-<p>  第3步是给超级管理员设置账号和密码，现在要给特定的库设置权限。我这里以 <strong>beauty_dev</strong> 库为例。</p>
-</blockquote>
-<h3 id="4-1-切换到-beauty-dev-数据库"><a href="#4-1-切换到-beauty-dev-数据库" class="headerlink" title="4.1    切换到 beauty_dev 数据库"></a>4.1    切换到 beauty_dev 数据库</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use beauty_dev</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-2-添加用户"><a href="#4-2-添加用户" class="headerlink" title="4.2    添加用户"></a>4.2    添加用户</h3><blockquote>
-<p>  为 beauty_dev 库添加一个用户，并赋予权限。</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createUser(&#123;user:<span class="string">&#x27;用户名&#x27;</span>, <span class="built_in">pwd</span>:<span class="string">&#x27;密码&#x27;</span>, roles: [&#123;role: <span class="string">&#x27;readWrite&#x27;</span>, db: <span class="string">&#x27;beauty_dev&#x27;</span>&#125;]&#125;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  这段命令的意思是：创建一个普通用户，并给予读写权限，<code>db</code> 表示用户可操作的数据库名。</li>
-</ul>
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210504222318840.png" alt="image-20210504222318840"></p>
-<blockquote>
-<p>  <strong>常见的权限类型：</strong></p>
-<p>  Read：允许用户读取指定数据库</p>
-<p>  readWrite：允许用户读写指定数据库</p>
-<p>  dbAdmin：允许用户在指定数据库中执行管理函数，如索引创建、删除，查看统计或访问system.profile</p>
-<p>  userAdmin：允许用户向system.users集合写入，可以找指定数据库里创建、删除和管理用户</p>
-<p>  clusterAdmin：只在admin数据库中可用，赋予用户所有分片和复制集相关函数的管理权限。</p>
-<p>  readAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读权限</p>
-<p>  readWriteAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的读写权限</p>
-<p>  userAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的userAdmin权限</p>
-<p>  dbAdminAnyDatabase：只在admin数据库中可用，赋予用户所有数据库的dbAdmin权限。</p>
-<p>  root：只在admin数据库中可用。超级账号，超级权限</p>
-</blockquote>
-<h2 id="5、重启"><a href="#5、重启" class="headerlink" title="5、重启"></a>5、重启</h2><blockquote>
-<p>  配置完成后，重启 MongoDB。</p>
-<p>  MongoDB 默认不开启访问控制，我们要通过 <code>--auth</code> 参数开启安全登录。<code>--auth</code> 一旦开启了，用户连接 MongoDB 的数据库时必须制定用户名和密码。</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo --dbpath 存放数据库文件夹路径 --auth</span><br><span class="line"></span><br><span class="line">mongod --dbpath /www/server/mongodb/data --auth		<span class="comment"># 宝塔中存放数据库数据的文件路径</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="5-1-宝塔可视化界面修改"><a href="#5-1-宝塔可视化界面修改" class="headerlink" title="5.1    宝塔可视化界面修改"></a>5.1    宝塔可视化界面修改</h3><ul>
-<li>  修改前</li>
-</ul>
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111109060.png" alt="image-20210505111109060"></p>
-<ul>
-<li>  修改后</li>
-</ul>
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111159182.png" alt="image-20210505111159182"></p>
-<ul>
-<li>  重启即可完成加密登录</li>
-</ul>
-<h2 id="6、效果展示"><a href="#6、效果展示" class="headerlink" title="6、效果展示"></a>6、效果展示</h2><p>此时通过无密登录已经无法正常访问数据库了。</p>
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111544758.png" alt="image-20210505111544758"></p>
-<p>只有通过用户认证（账号密码登录）后才能正常访问数据库。</p>
-<p><img src="/2021/05/05/MongoDB%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85/image-20210505111829513.png" alt="image-20210505111829513"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/" class="post-title-link" itemprop="url">SpringBoot处理json格式的请求数据</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-05-01 16:36:36 / Modified: 17:47:42" itemprop="dateCreated datePublished" datetime="2021-05-01T16:36:36+08:00">2021-05-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>使用 Spring 的拦截器获取请求参数时，发现一个问题就是：</p>
-<p>GET 请求使用 <strong>request.getParameterMap()</strong> 获取请求参数是可行的，</p>
-<p>但是 POST 请求使用 <strong>request.getParameterMap()</strong> 获取请求参数是获取不到的。</p>
-<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>如果是 POST请求 contentType 设置为 <code>application/x-www-form-urlencoded</code> 是可以通过 <strong>request.getParameterMap()</strong> 来获取请求参数的；</p>
-<blockquote>
-<p><code>application/x-www-form-urlencoded</code> 即POST请求的请求参数是键值对类型。</p>
-</blockquote>
-<p><img src="/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/image-20210501164732194.png" alt="image-20210501164732194"></p>
-<p>如果上述条件没有满足，则相关的表单数据不会被设置进 request 的 parameter 集合中，相关的数据就需要通过 <strong>request.getInputStream()</strong> 来拦截获取。</p>
-<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><p>如果我们使用了POST 请求请求数据，并且发送的是 json 类型的数据，如下图：</p>
-<p><img src="/2021/05/01/SpringBoot%E5%A4%84%E7%90%86json%E6%A0%BC%E5%BC%8F%E7%9A%84%E8%AF%B7%E6%B1%82%E6%95%B0%E6%8D%AE/image-20210501164852880.png" alt="image-20210501164852880"></p>
-<p>这时我们想要在 Controller 层拦截请求数据就不能使用 HttpServletRequest 对象了。</p>
-<p>我们可以使用 <strong>@RequestBody</strong> 注解：</p>
-<h2 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h2><blockquote>
-<p>如果请求参数的形式和 JavaBean 相同，可以直接用对应的 JavaBean 来接收。  </p>
-</blockquote>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> Hosp hosp)</span></span>&#123;	<span class="comment">// 这里的 Hosp 是一个自定义的 JavaBean</span></span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="方法二："><a href="#方法二：" class="headerlink" title="方法二："></a>方法二：</h2><blockquote>
-<p>可以使用一个 Map 集合接收 json 字符串，然后再一个一个的从Map 中拿值。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> Map&lt;String,Object&gt; json)</span></span>&#123;	</span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="方法三："><a href="#方法三：" class="headerlink" title="方法三："></a>方法三：</h2><blockquote>
-<p>可以使用 String 类型的变量接收 json 字符串，然后在将其转换为 JSONObject 对象，再一个一个的从 JSONObject 对象中拿值。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">testController</span><span class="params">(<span class="meta">@RequestBody</span> String json)</span></span>&#123;	</span><br><span class="line">    Hosp hosp = JSONObject.parseObject(parameter, Hosp.class);</span><br><span class="line"> 	<span class="comment">// TODO   </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/" class="post-title-link" itemprop="url">阿里云短信服务</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-20 21:03:34" itemprop="dateCreated datePublished" datetime="2021-04-20T21:03:34+08:00">2021-04-20</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-02 20:53:35" itemprop="dateModified" datetime="2021-08-02T20:53:35+08:00">2021-08-02</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="开通阿里云短信服务"><a href="#开通阿里云短信服务" class="headerlink" title="开通阿里云短信服务"></a>开通阿里云短信服务</h1><h2 id="1、开通阿里云短信服务"><a href="#1、开通阿里云短信服务" class="headerlink" title="1、开通阿里云短信服务"></a>1、开通阿里云短信服务</h2><blockquote>
-<ol>
-<li>进入官网并登录/注册。</li>
-</ol>
-</blockquote>
-<p>官网地址：<a target="_blank" rel="noopener" href="http://www.aliyun.com/">www.aliyun.com</a></p>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420210414796.png" alt="image-20210420210414796"></p>
-<blockquote>
-<ol start="2">
-<li>首次进入选择免费开通短信服务。</li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420210558936.png" alt="image-20210420210558936"></p>
-<blockquote>
-<ol start="3">
-<li>进入<em>短信服务管理控制台</em>。</li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420213851804.png" alt="image-20210420213851804"></p>
-<h2 id="2、添加签名"><a href="#2、添加签名" class="headerlink" title="2、添加签名"></a>2、添加签名</h2><blockquote>
-<ol>
-<li>进入<code>国内消息 --&gt;&gt; 签名管理 --&gt;&gt; 添加签名</code></li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420211108672.png" alt="image-20210420211108672"></p>
-<blockquote>
-<ol start="2">
-<li>填写签名需要的资料，并发起申请。</li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420211920700.png" alt="image-20210420211920700"></p>
-<h2 id="3、添加模板"><a href="#3、添加模板" class="headerlink" title="3、添加模板"></a>3、添加模板</h2><blockquote>
-<ol>
-<li>进入 <code>国内消息 --&gt;&gt; 模板管理 --&gt;&gt; 添加模板</code></li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420212430982.png" alt="image-20210420212430982"></p>
-<blockquote>
-<ol start="2">
-<li>添加自定义的模板信息。其中：<ul>
-<li><strong>${xxx}</strong> 格式的属性是由从自己的服务器端上传到阿里云上的。</li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420213423198.png" alt="image-20210420213423198"></p>
-<ul>
-<li>Tip：验证码并不是由阿里云生成的，而是通过自己的服务器程序生成上传给阿里云服务器，再由阿里云服务器转发给用户使用的。</li>
-</ul>
-<hr>
-<h2 id="4、获取-AccessKey"><a href="#4、获取-AccessKey" class="headerlink" title="4、获取 AccessKey"></a>4、获取 AccessKey</h2><blockquote>
-<ol>
-<li>进入：<code>用户头像 --&gt;&gt; AccessKey管理 --&gt;&gt; 创建AccessKey</code></li>
-</ol>
-</blockquote>
-<p><img src="/2021/04/20/%E9%98%BF%E9%87%8C%E4%BA%91%E7%9F%AD%E4%BF%A1%E6%9C%8D%E5%8A%A1/image-20210420213613810.png" alt="image-20210420213613810"></p>
-<h1 id="SpringBoot-整合阿里云服务"><a href="#SpringBoot-整合阿里云服务" class="headerlink" title="SpringBoot 整合阿里云服务"></a>SpringBoot 整合阿里云服务</h1><h2 id="初始化-SpringBoot-项目"><a href="#初始化-SpringBoot-项目" class="headerlink" title="初始化 SpringBoot 项目"></a>初始化 SpringBoot 项目</h2><blockquote>
-<ol>
-<li>创建一个 SpringBoot 项目</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol start="2">
-<li>添加依赖</li>
-</ol>
-</blockquote>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.aliyun<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>aliyun-java-sdk-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<ol start="3">
-<li>添加配置文件 application.properties</li>
-</ol>
-</blockquote>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 

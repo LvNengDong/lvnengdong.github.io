@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="参考地址：力扣大佬   链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;number-of-provinces&#x2F;solution&#x2F;python-duo-tu-xiang-jie-bing-cha-ji-by-m-vjdr&#x2F;  基本概念   并查集是一种数据结构   并查集这三个字，一个字代表一个意思。   并（Union），代表合并   查（Find），代表查找">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并查集">
+<meta property="og:url" content="http://example.com/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="参考地址：力扣大佬   链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;number-of-provinces&#x2F;solution&#x2F;python-duo-tu-xiang-jie-bing-cha-ji-by-m-vjdr&#x2F;  基本概念   并查集是一种数据结构   并查集这三个字，一个字代表一个意思。   并（Union），代表合并   查（Find），代表查找">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/1609980000-ofFjdW-%E5%B9%BB%E7%81%AF%E7%89%871.JPG">
+<meta property="article:published_time" content="2021-08-30T01:55:15.000Z">
+<meta property="article:modified_time" content="2021-08-30T08:19:23.474Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/1609980000-ofFjdW-%E5%B9%BB%E7%81%AF%E7%89%871.JPG">
+
+
+<link rel="canonical" href="http://example.com/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>并查集 | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E6%9F%A5%E9%9B%86%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">并查集实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E6%9F%A5%E9%9B%86%E5%9F%BA%E6%9C%AC%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81-Java"><span class="nav-number">3.</span> <span class="nav-text">并查集基本模板代码(Java)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E7%BB%83%E4%B9%A0"><span class="nav-number">4.</span> <span class="nav-text">题目练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LeetCode547%EF%BC%9A%E7%9C%81%E4%BB%BD%E6%95%B0%E9%87%8F"><span class="nav-number">4.1.</span> <span class="nav-text">LeetCode547：省份数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LeetCode200%EF%BC%9A%E5%B2%9B%E5%B1%BF%E6%95%B0%E9%87%8F"><span class="nav-number">4.2.</span> <span class="nav-text">LeetCode200：岛屿数量</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          并查集
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-30 09:55:15 / Modified: 16:19:23" itemprop="dateCreated datePublished" datetime="2021-08-30T09:55:15+08:00">2021-08-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <blockquote>
+<p>  参考地址：力扣大佬</p>
+<p>  链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-provinces/solution/python-duo-tu-xiang-jie-bing-cha-ji-by-m-vjdr/">https://leetcode-cn.com/problems/number-of-provinces/solution/python-duo-tu-xiang-jie-bing-cha-ji-by-m-vjdr/</a></p>
+</blockquote>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
+<li>  并查集是一种数据结构</li>
+<li>  并查集这三个字，一个字代表一个意思。</li>
+<li>  <strong>并（Union）</strong>，代表合并</li>
+<li>  <strong>查（Find）</strong>，代表查找</li>
+<li>  <strong>集（Set）</strong>，代表这是一个以字典为基础的数据结构，它的基本功能是合并集合中的元素，查找集合中的元素</li>
+<li>  并查集的典型应用是有关<strong>连通分量</strong>的问题</li>
+</ul>
+<hr>
+<h2 id="并查集实现"><a href="#并查集实现" class="headerlink" title="并查集实现"></a>并查集实现</h2><blockquote>
+<ol>
+<li> <strong>数据结构</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  并查集跟树有些类似，只不过它跟树是相反的。在树这个数据结构里面，每个节点会记录它的子节点。在并查集里，每个节点会记录它的父节点。</li>
+<li>  通常用 Map 来实现这个结构，Map 的 K 表示当前节点，V 表示当前节点的父节点</li>
+</ul>
+<p><img src="/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/1609980000-ofFjdW-%E5%B9%BB%E7%81%AF%E7%89%871.JPG" alt="幻灯片1.JPG"></p>
+<p>可以看到，如果节点是相互连通的（从一个节点可以到达另一个节点），那么他们在同一棵树里，或者说在同一个集合里，或者说他们的<strong>祖先是相同的</strong>。</p>
+<blockquote>
+<ol start="2">
+<li> <strong>初始化节点</strong></li>
+</ol>
+</blockquote>
+<p>初始化时每个节点的父节点都为空，也就是说每个节点最初都是一个独立的子集</p>
+<blockquote>
+<ol start="3">
+<li> <strong>合并两个节点</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  如果发现两个节点是连通的（一般通过题目中给定的条件来判断两个节点是否连通），就把它们合并。</li>
+<li>  合并就是设置两个节点的祖宗相同，可以把 A 节点的祖宗设置为 A、B 共同的祖宗或者把 B 节点的祖宗设置为 A、B 共同的祖宗。</li>
+</ul>
+<blockquote>
+<ol start="4">
+<li> <strong>判断两节点是否连通</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  就是判断两个节点的祖先是否相同，相同处于同一连通分量中</li>
+</ul>
+<blockquote>
+<ol start="5">
+<li> <strong>查找祖宗（通用方法）</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  如果该节点的父节点不为空，就一直迭代向上查找，直到找到某个节点的父节点为空</li>
+</ul>
+<h2 id="并查集基本模板代码-Java"><a href="#并查集基本模板代码-Java" class="headerlink" title="并查集基本模板代码(Java)"></a>并查集基本模板代码(Java)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.unionFind;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/30 9:57</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 并查集模板类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// K 表示当前节点，V表示当前节点的父节点</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, Integer&gt; map;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1、【初始化节点】当新加入一个节点时节点的父节点为空，即每个节点初始都是一个独立的子集</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> newNode)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!map.containsKey(newNode))</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(newNode, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2、【合并两个节点】如果两个节点是连通的，就把它们合并到一个子集中。</span></span><br><span class="line">    <span class="comment">// ==&gt; 就是设置祖先相同，可以把 A 子树的祖先作为两个节点共同的祖先，也可以把B子树作为两个节点共同的祖先</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (rootA != rootB)	<span class="comment">// 只有当不在同一个连通分量中时才需要设置到一块去，如果已经在了就无需重复设置</span></span><br><span class="line">        &#123;</span><br><span class="line">            map.put(rootB, rootA);  <span class="comment">// 将 rootA 作为合并后的新的祖先</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3、【判断两个节点是否连通】就是判断两个节点是否有同一个祖先，如果有，则证明连通；否则不连通</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isConnected</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line">        <span class="keyword">return</span> rootA==rootB;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4、【查找祖先】通用功能，如果父节点不为空，就一直迭代向上查找，直到找到父节点为空的节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> node)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> root = node;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (map.get(root) != <span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = map.get(root);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当 map.get(node) == null 时，返回 node 即可</span></span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="题目练习"><a href="#题目练习" class="headerlink" title="题目练习"></a>题目练习</h2><h3 id="LeetCode547：省份数量"><a href="#LeetCode547：省份数量" class="headerlink" title="LeetCode547：省份数量"></a>LeetCode547：省份数量</h3><blockquote>
+<p>  <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-provinces/">547. 省份数量</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findCircleNum</span><span class="params">(<span class="keyword">int</span>[][] isConnected)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 共有 n 个城市，依次初始化，每次初始化新的城市就判断是否与已添加的城市相连，如果相连就将它们连接起来，最后统计一共有多少个连通分量</span></span><br><span class="line">        UnionFind uf = <span class="keyword">new</span> UnionFind();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;isConnected.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 将 i 添加到 uf 中</span></span><br><span class="line">            uf.add(i);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;i; j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 如果两个城市相连，就将它们并入一个连通分量</span></span><br><span class="line">                <span class="keyword">if</span>(isConnected[i][j] == <span class="number">1</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    uf.merge(i, j);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在 UnionFind 中增加一个方法用于统计连通分量</span></span><br><span class="line">        <span class="keyword">return</span> uf.num;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// K 表示当前节点，V表示当前节点的父节点</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, Integer&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 连通分量个数。每新增一个节点连通分量个数就加一，每合并一次节点连通分量个数就减一</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">        <span class="keyword">this</span>.num = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1、【初始化节点】当新加入一个节点时节点的父节点为空，即每个节点初始都是一个独立的子集</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> newNode)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!map.containsKey(newNode))</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(newNode, <span class="keyword">null</span>);</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2、【合并两个节点】如果两个节点是连通的，就把它们合并到一个子集中。</span></span><br><span class="line">    <span class="comment">// ==&gt; 就是设置祖先相同，可以把 A 子树的祖先作为两个节点共同的祖先，也可以把B子树作为两个节点共同的祖先</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line">		</span><br><span class="line">        <span class="comment">// 当两个节点连通，且这两个节点不在同一个连通分量中时，才进行合并</span></span><br><span class="line">        <span class="keyword">if</span> (rootA != rootB)</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(rootB, rootA);  <span class="comment">// 将 rootA 作为合并后的新的祖先</span></span><br><span class="line">            num--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3、【判断两个节点是否连通】就是判断两个节点是否有同一个祖先，如果有，则证明连通；否则不连通</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isConnected</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line">        <span class="keyword">return</span> rootA==rootB;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4、【查找祖先】通用功能，如果父节点不为空，就一直迭代向上查找，直到找到父节点为空的节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> node)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> root = node;</span><br><span class="line">        <span class="keyword">while</span> (map.get(root) != <span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = map.get(root);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当 map.get(node) == null 时，返回 node 即可</span></span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h3 id="LeetCode200：岛屿数量"><a href="#LeetCode200：岛屿数量" class="headerlink" title="LeetCode200：岛屿数量"></a>LeetCode200：岛屿数量</h3><blockquote>
+<p>  <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/">200. 岛屿数量</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.two;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/30 12:10</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 求岛屿的数量，可以转换为求连通分量的数量。可以考虑用并查集来求解</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution200_02</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[][] grid = <span class="keyword">new</span> <span class="keyword">char</span>[][]&#123;</span><br><span class="line">                &#123;<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;1&#x27;</span>&#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        Solution200_02 solution200 = <span class="keyword">new</span> Solution200_02();</span><br><span class="line">        <span class="keyword">int</span> count = solution200.numIslands(grid);</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*【特殊情况】*/</span></span><br><span class="line">        <span class="keyword">if</span> (grid == <span class="keyword">null</span> || grid[<span class="number">0</span>].length == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*【一般情况】</span></span><br><span class="line"><span class="comment">        *   1、从头到尾遍历：遇到“0”跳过，遇到 &quot;1&quot; 就并入集合。</span></span><br><span class="line"><span class="comment">        *   2、最终看有几个连通分量</span></span><br><span class="line"><span class="comment">        *   */</span></span><br><span class="line">        <span class="keyword">int</span> rows = grid.length;</span><br><span class="line">        <span class="keyword">int</span> cols = grid[<span class="number">0</span>].length;</span><br><span class="line"></span><br><span class="line">        UnionFind uf = <span class="keyword">new</span> UnionFind();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 【首先把矩阵中所有陆地的数量统计出来，加入到集合中】</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; cols; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[i][j] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    uf.add(i*cols+j);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; cols; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[i][j] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                &#123;</span><br><span class="line"><span class="comment">//                    uf.add(i*cols+j);</span></span><br><span class="line">                    <span class="comment">// 查看上下左右是否可以并入并查集</span></span><br><span class="line">                    <span class="keyword">if</span> (i-<span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[i-<span class="number">1</span>][j] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        uf.merage((i-<span class="number">1</span>)*cols+j, i*cols+j);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (i+<span class="number">1</span> &lt; rows &amp;&amp; grid[i+<span class="number">1</span>][j]==<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        uf.merage((i+<span class="number">1</span>)*cols+j, i*cols+j);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (j-<span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[i][j-<span class="number">1</span>] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        uf.merage(i*cols+j-<span class="number">1</span>, i*cols+j);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (j+<span class="number">1</span> &lt; cols &amp;&amp; grid[i][j+<span class="number">1</span>] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        uf.merage(i*cols+j+<span class="number">1</span>, i*cols+j);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uf.num;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;Integer, Integer&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num;   <span class="comment">// 连通分量的数量</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Integer node)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 新加入的节点设置其父节点为 null</span></span><br><span class="line">        <span class="keyword">if</span>(!map.containsKey(node))</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(node, <span class="keyword">null</span>);</span><br><span class="line">            num++;  <span class="comment">// 连通分量+1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点合并</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merage</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 如果两个节点之间是连通的，就将其合并，合并后连通分量的数目-1</span></span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当两个节点连通，且这两个节点不在同一个连通分量中时，才进行合并</span></span><br><span class="line">        <span class="keyword">if</span>(rootA != rootB)</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(rootA, rootB);</span><br><span class="line">            num--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查找节点的祖宗</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> node)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> root = node;</span><br><span class="line">        <span class="keyword">while</span>(map.get(root) != <span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = map.get(root);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/08/28/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="prev" title="回溯法">
+                  <i class="fa fa-chevron-left"></i> 回溯法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+</body>
+</html>

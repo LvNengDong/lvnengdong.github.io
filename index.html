@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">138</span>
+          <span class="site-state-item-count">142</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,325 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/" class="post-title-link" itemprop="url">并查集</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-30 09:55:15 / Modified: 16:19:23" itemprop="dateCreated datePublished" datetime="2021-08-30T09:55:15+08:00">2021-08-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>  参考地址：力扣大佬</p>
+<p>  链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-provinces/solution/python-duo-tu-xiang-jie-bing-cha-ji-by-m-vjdr/">https://leetcode-cn.com/problems/number-of-provinces/solution/python-duo-tu-xiang-jie-bing-cha-ji-by-m-vjdr/</a></p>
+</blockquote>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
+<li>  并查集是一种数据结构</li>
+<li>  并查集这三个字，一个字代表一个意思。</li>
+<li>  <strong>并（Union）</strong>，代表合并</li>
+<li>  <strong>查（Find）</strong>，代表查找</li>
+<li>  <strong>集（Set）</strong>，代表这是一个以字典为基础的数据结构，它的基本功能是合并集合中的元素，查找集合中的元素</li>
+<li>  并查集的典型应用是有关<strong>连通分量</strong>的问题</li>
+</ul>
+<hr>
+<h2 id="并查集实现"><a href="#并查集实现" class="headerlink" title="并查集实现"></a>并查集实现</h2><blockquote>
+<ol>
+<li> <strong>数据结构</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  并查集跟树有些类似，只不过它跟树是相反的。在树这个数据结构里面，每个节点会记录它的子节点。在并查集里，每个节点会记录它的父节点。</li>
+<li>  通常用 Map 来实现这个结构，Map 的 K 表示当前节点，V 表示当前节点的父节点</li>
+</ul>
+<p><img src="/2021/08/30/%E5%B9%B6%E6%9F%A5%E9%9B%86/1609980000-ofFjdW-%E5%B9%BB%E7%81%AF%E7%89%871.JPG" alt="幻灯片1.JPG"></p>
+<p>可以看到，如果节点是相互连通的（从一个节点可以到达另一个节点），那么他们在同一棵树里，或者说在同一个集合里，或者说他们的<strong>祖先是相同的</strong>。</p>
+<blockquote>
+<ol start="2">
+<li> <strong>初始化节点</strong></li>
+</ol>
+</blockquote>
+<p>初始化时每个节点的父节点都为空，也就是说每个节点最初都是一个独立的子集</p>
+<blockquote>
+<ol start="3">
+<li> <strong>合并两个节点</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  如果发现两个节点是连通的（一般通过题目中给定的条件来判断两个节点是否连通），就把它们合并。</li>
+<li>  合并就是设置两个节点的祖宗相同，可以把 A 节点的祖宗设置为 A、B 共同的祖宗或者把 B 节点的祖宗设置为 A、B 共同的祖宗。</li>
+</ul>
+<blockquote>
+<ol start="4">
+<li> <strong>判断两节点是否连通</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  就是判断两个节点的祖先是否相同，相同处于同一连通分量中</li>
+</ul>
+<blockquote>
+<ol start="5">
+<li> <strong>查找祖宗（通用方法）</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  如果该节点的父节点不为空，就一直迭代向上查找，直到找到某个节点的父节点为空</li>
+</ul>
+<h2 id="并查集基本模板代码-Java"><a href="#并查集基本模板代码-Java" class="headerlink" title="并查集基本模板代码(Java)"></a>并查集基本模板代码(Java)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.unionFind;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/30 9:57</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 并查集模板类</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// K 表示当前节点，V表示当前节点的父节点</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, Integer&gt; map;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1、【初始化节点】当新加入一个节点时节点的父节点为空，即每个节点初始都是一个独立的子集</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> newNode)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!map.containsKey(newNode))</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(newNode, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2、【合并两个节点】如果两个节点是连通的，就把它们合并到一个子集中。</span></span><br><span class="line">    <span class="comment">// ==&gt; 就是设置祖先相同，可以把 A 子树的祖先作为两个节点共同的祖先，也可以把B子树作为两个节点共同的祖先</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (rootA != rootB)	<span class="comment">// 只有当不在同一个连通分量中时才需要设置到一块去，如果已经在了就无需重复设置</span></span><br><span class="line">        &#123;</span><br><span class="line">            map.put(rootB, rootA);  <span class="comment">// 将 rootA 作为合并后的新的祖先</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3、【判断两个节点是否连通】就是判断两个节点是否有同一个祖先，如果有，则证明连通；否则不连通</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isConnected</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line">        <span class="keyword">return</span> rootA==rootB;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4、【查找祖先】通用功能，如果父节点不为空，就一直迭代向上查找，直到找到父节点为空的节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> node)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> root = node;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (map.get(root) != <span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = map.get(root);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当 map.get(node) == null 时，返回 node 即可</span></span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="题目练习"><a href="#题目练习" class="headerlink" title="题目练习"></a>题目练习</h2><h3 id="LeetCode547：省份数量"><a href="#LeetCode547：省份数量" class="headerlink" title="LeetCode547：省份数量"></a>LeetCode547：省份数量</h3><blockquote>
+<p>  <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-provinces/">547. 省份数量</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findCircleNum</span><span class="params">(<span class="keyword">int</span>[][] isConnected)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 共有 n 个城市，依次初始化，每次初始化新的城市就判断是否与已添加的城市相连，如果相连就将它们连接起来，最后统计一共有多少个连通分量</span></span><br><span class="line">        UnionFind uf = <span class="keyword">new</span> UnionFind();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;isConnected.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 将 i 添加到 uf 中</span></span><br><span class="line">            uf.add(i);</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;i; j++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 如果两个城市相连，就将它们并入一个连通分量</span></span><br><span class="line">                <span class="keyword">if</span>(isConnected[i][j] == <span class="number">1</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    uf.merge(i, j);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在 UnionFind 中增加一个方法用于统计连通分量</span></span><br><span class="line">        <span class="keyword">return</span> uf.num;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// K 表示当前节点，V表示当前节点的父节点</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, Integer&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 连通分量个数。每新增一个节点连通分量个数就加一，每合并一次节点连通分量个数就减一</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">        <span class="keyword">this</span>.num = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1、【初始化节点】当新加入一个节点时节点的父节点为空，即每个节点初始都是一个独立的子集</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> newNode)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!map.containsKey(newNode))</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(newNode, <span class="keyword">null</span>);</span><br><span class="line">            num++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2、【合并两个节点】如果两个节点是连通的，就把它们合并到一个子集中。</span></span><br><span class="line">    <span class="comment">// ==&gt; 就是设置祖先相同，可以把 A 子树的祖先作为两个节点共同的祖先，也可以把B子树作为两个节点共同的祖先</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line">		</span><br><span class="line">        <span class="comment">// 当两个节点连通，且这两个节点不在同一个连通分量中时，才进行合并</span></span><br><span class="line">        <span class="keyword">if</span> (rootA != rootB)</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(rootB, rootA);  <span class="comment">// 将 rootA 作为合并后的新的祖先</span></span><br><span class="line">            num--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3、【判断两个节点是否连通】就是判断两个节点是否有同一个祖先，如果有，则证明连通；否则不连通</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isConnected</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line">        <span class="keyword">return</span> rootA==rootB;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4、【查找祖先】通用功能，如果父节点不为空，就一直迭代向上查找，直到找到父节点为空的节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> node)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> root = node;</span><br><span class="line">        <span class="keyword">while</span> (map.get(root) != <span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = map.get(root);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 当 map.get(node) == null 时，返回 node 即可</span></span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h3 id="LeetCode200：岛屿数量"><a href="#LeetCode200：岛屿数量" class="headerlink" title="LeetCode200：岛屿数量"></a>LeetCode200：岛屿数量</h3><blockquote>
+<p>  <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-islands/">200. 岛屿数量</a></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.two;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/30 12:10</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 求岛屿的数量，可以转换为求连通分量的数量。可以考虑用并查集来求解</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution200_02</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[][] grid = <span class="keyword">new</span> <span class="keyword">char</span>[][]&#123;</span><br><span class="line">                &#123;<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;0&#x27;</span>,<span class="string">&#x27;1&#x27;</span>,<span class="string">&#x27;1&#x27;</span>&#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        Solution200_02 solution200 = <span class="keyword">new</span> Solution200_02();</span><br><span class="line">        <span class="keyword">int</span> count = solution200.numIslands(grid);</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*【特殊情况】*/</span></span><br><span class="line">        <span class="keyword">if</span> (grid == <span class="keyword">null</span> || grid[<span class="number">0</span>].length == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*【一般情况】</span></span><br><span class="line"><span class="comment">        *   1、从头到尾遍历：遇到“0”跳过，遇到 &quot;1&quot; 就并入集合。</span></span><br><span class="line"><span class="comment">        *   2、最终看有几个连通分量</span></span><br><span class="line"><span class="comment">        *   */</span></span><br><span class="line">        <span class="keyword">int</span> rows = grid.length;</span><br><span class="line">        <span class="keyword">int</span> cols = grid[<span class="number">0</span>].length;</span><br><span class="line"></span><br><span class="line">        UnionFind uf = <span class="keyword">new</span> UnionFind();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 【首先把矩阵中所有陆地的数量统计出来，加入到集合中】</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; cols; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[i][j] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    uf.add(i*cols+j);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; rows; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; cols; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[i][j] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                &#123;</span><br><span class="line"><span class="comment">//                    uf.add(i*cols+j);</span></span><br><span class="line">                    <span class="comment">// 查看上下左右是否可以并入并查集</span></span><br><span class="line">                    <span class="keyword">if</span> (i-<span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[i-<span class="number">1</span>][j] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        uf.merage((i-<span class="number">1</span>)*cols+j, i*cols+j);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (i+<span class="number">1</span> &lt; rows &amp;&amp; grid[i+<span class="number">1</span>][j]==<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        uf.merage((i+<span class="number">1</span>)*cols+j, i*cols+j);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (j-<span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[i][j-<span class="number">1</span>] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        uf.merage(i*cols+j-<span class="number">1</span>, i*cols+j);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (j+<span class="number">1</span> &lt; cols &amp;&amp; grid[i][j+<span class="number">1</span>] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">                    &#123;</span><br><span class="line">                        uf.merage(i*cols+j+<span class="number">1</span>, i*cols+j);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uf.num;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;Integer, Integer&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num;   <span class="comment">// 连通分量的数量</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Integer node)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 新加入的节点设置其父节点为 null</span></span><br><span class="line">        <span class="keyword">if</span>(!map.containsKey(node))</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(node, <span class="keyword">null</span>);</span><br><span class="line">            num++;  <span class="comment">// 连通分量+1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 节点合并</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merage</span><span class="params">(<span class="keyword">int</span> nodeA, <span class="keyword">int</span> nodeB)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 如果两个节点之间是连通的，就将其合并，合并后连通分量的数目-1</span></span><br><span class="line">        <span class="keyword">int</span> rootA = find(nodeA);</span><br><span class="line">        <span class="keyword">int</span> rootB = find(nodeB);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当两个节点连通，且这两个节点不在同一个连通分量中时，才进行合并</span></span><br><span class="line">        <span class="keyword">if</span>(rootA != rootB)</span><br><span class="line">        &#123;</span><br><span class="line">            map.put(rootA, rootB);</span><br><span class="line">            num--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 查找节点的祖宗</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> node)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> root = node;</span><br><span class="line">        <span class="keyword">while</span>(map.get(root) != <span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            root = map.get(root);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/28/%E5%9B%9E%E6%BA%AF%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/28/%E5%9B%9E%E6%BA%AF%E6%B3%95/" class="post-title-link" itemprop="url">回溯法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-08-28 16:13:17" itemprop="dateCreated datePublished" datetime="2021-08-28T16:13:17+08:00">2021-08-28</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-29 10:01:08" itemprop="dateModified" datetime="2021-08-29T10:01:08+08:00">2021-08-29</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>  力扣大佬解释链接：</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-python-dai-ma-java-dai-ma-by-liweiw/">https://leetcode-cn.com/problems/permutations/solution/hui-su-suan-fa-python-dai-ma-java-dai-ma-by-liweiw/</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/26/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/08/26/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">约瑟夫环问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-08-26 17:13:36 / Modified: 17:19:45" itemprop="dateCreated datePublished" datetime="2021-08-26T17:13:36+08:00">2021-08-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>  约瑟夫环问题</p>
+</blockquote>
+<blockquote>
+<p>  <strong>LeetCode地址</strong></p>
+</blockquote>
+<ul>
+<li>  <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/">https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/</a></li>
+</ul>
+<h2 id="数组实现"><a href="#数组实现" class="headerlink" title="数组实现"></a>数组实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">数组长度都设置为0，表示对应编号的人没有出局</span><br><span class="line">int n， int m	&#x2F;&#x2F; 表示总共有n 人，数到m时出局</span><br><span class="line">int count	计数器</span><br><span class="line">int i &#x3D; 0; 表示当前报数开始的编号（初始为0）</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 只有当出局的人数小于 n 时循环才有必要继续</span><br><span class="line">while(count &lt; n)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="循环链表实现"><a href="#循环链表实现" class="headerlink" title="循环链表实现"></a>循环链表实现</h2><h2 id="递归实现"><a href="#递归实现" class="headerlink" title="递归实现"></a>递归实现</h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2005,371 +2324,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/08/02/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">排序算法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-08-02 22:19:15" itemprop="dateCreated datePublished" datetime="2021-08-02T22:19:15+08:00">2021-08-02</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-03 09:22:58" itemprop="dateModified" datetime="2021-08-03T09:22:58+08:00">2021-08-03</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>  <strong>排序算法稳定性小结：</strong></p>
-</blockquote>
-<p><strong>快些选一堆</strong>是不稳定的排序算法，其它都是稳定的！</p>
-<ul>
-<li>  快排</li>
-<li>  希尔</li>
-<li>  选择</li>
-<li>  堆排</li>
-</ul>
-<h1 id="快排"><a href="#快排" class="headerlink" title="快排"></a>快排</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ol>
-<li> 选择一个关键值作为基准值。比基准值小的都在左边序列（一般是无序的），比基准值大的都在右边（一般是无序的）。一般选择序列的第一个元素。</li>
-<li> 从后往前比较，用基准值和最后一个值比较，如果比基准值小的交换位置，如果没有继续比较下一个，直到找到第一个比基准值小的值才交换。</li>
-<li>找到这个值之后，又从前往后开始比较，如果有比基准值大的，交换位置，如果没有继续比较下一个，直到找到第一个比基准值大的<br> 值才交换。</li>
-<li> 直到 <strong>从前往后的比较索引&gt;从后往前比较的索引</strong>，结束第一次循环。</li>
-<li> 此时，对于基准值来说，左边都比基准值小，右边都比基准值大，这个基准值就到达排序的最终位置了。</li>
-</ol>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/02/%E6%B3%A8%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/08/02/%E6%B3%A8%E8%A7%A3/" class="post-title-link" itemprop="url">注解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-08-02 19:18:11 / Modified: 20:37:52" itemprop="dateCreated datePublished" datetime="2021-08-02T19:18:11+08:00">2021-08-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Java<code>注解(Annotation)</code>又称为<code>元数据</code>。</p>
-<h1 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h1><blockquote>
-<p><code>元注解</code>就是用来标志注解的注解。</p>
-</blockquote>
-<ol>
-<li><p><code>@Retention</code></p>
-<p> 标识如何存储，是只在代码中，还是编入class文件中，或者在运行阶段可以通过反射访问。</p>
-<ul>
-<li><code>RetentionPolicy.SOURCE</code>：注解只保留在源文件，当Java被编译成<code>.class</code>文件后，注解被遗弃。</li>
-<li><code>RetentionPolicy.CLASS</code>：注解被保留到<code>.class</code>文件，但当JVM将<code>.class</code>文件加载到内存中时，注解被遗弃。<strong>这是缺省值</strong>。</li>
-<li><code>RetentionPolicy.RUNTIME</code>：注解不仅被保存到<code>.class</code>文件，而且JVM加载<code>.class</code>文件后依然存在。</li>
-</ul>
-</li>
-<li><p><code>@Documented</code>：</p>
-<p> 标记这些注解是否保存在JavaDoc中。</p>
-</li>
-<li><p><code>@Target</code>：</p>
-<p> 标记这个注解可以修饰的范围。<code>Annotation</code>的修饰范围：</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">ElementType</span></span>&#123;</span><br><span class="line">    TYPE,</span><br><span class="line">    FIELD,</span><br><span class="line">    METHOD,</span><br><span class="line">    PARAMETER,</span><br><span class="line">    LOCAL_VARIABLE,</span><br><span class="line">    ANNOTATION_TYPE,</span><br><span class="line">    PACKAGE,</span><br><span class="line">    TYPE_PARAMETER,</span><br><span class="line">    TYPE_USE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p><code>Inherited</code>：</p>
-<p> 标记这个注解是继承于哪个<strong>注解类</strong>的。</p>
-<blockquote>
-<p>注解是不支持继承的。</p>
-</blockquote>
-</li>
-<li><p><code>@SafeVarargs</code>：</p>
-<p> 在声明可变参数的构造函数或方法时，Java编译器会包<code>unchecked</code>警告，使用该注解可忽略这些警告。</p>
-</li>
-<li><p><code>@FunctionalInterface</code>：</p>
-<p> 标识这个方法是一个函数式接口</p>
-</li>
-<li><p><code>@Repeatable</code>：</p>
-<p> 标识某注解可以在同一个声明上使用多次。</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/02/%E6%9E%9A%E4%B8%BE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/08/02/%E6%9E%9A%E4%B8%BE/" class="post-title-link" itemprop="url">枚举</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2021-08-02 18:42:10 / Modified: 19:17:41" itemprop="dateCreated datePublished" datetime="2021-08-02T18:42:10+08:00">2021-08-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><ul>
-<li>  Java中，被 <strong>enum</strong> 关键字修饰的类型就是枚举类型。</li>
-<li>  枚举类型是一种特殊的数据类型。它是一种与 Class、Interface、Annotation 平级的数据类型。</li>
-<li>  <strong>枚举是指具有固定实例个数的类</strong>。普通的类可以根据需求创建任意多个实例，但是在枚举中实例的个数是有限制的。</li>
-<li>  枚举虽然<strong>有构造函数</strong>，但其构造函数默认都是私有的，所以只能在当前类中使用<code>new</code>关键字创建对象。</li>
-<li>  <strong>当需要定义一组常量时，强烈建议使用枚举类。</strong></li>
-<li>  <strong>如果枚举类中只一个对象，则可以作为一种单例模式的实现方式。</strong></li>
-<li>  <code>枚举类型(enum)</code>、<code>类(Class)</code>、<code>接口(Interface)</code>、<code>注解类(Annotation)</code>处于同一级。</li>
-<li>  注解类不是注解，注解类的作用是定义注解的业务逻辑</li>
-</ul>
-<p><img src="/2021/08/02/%E6%9E%9A%E4%B8%BE/image-20201026191110428.png" alt="image-20201026191110428"></p>
-<hr>
-<h1 id="如何定义枚举类"><a href="#如何定义枚举类" class="headerlink" title="如何定义枚举类"></a>如何定义枚举类</h1><blockquote>
-<p>  <strong>Before：没有枚举类之前，定义一组常量的方式：</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeekDemo</span></span>&#123;</span><br><span class="line">	<span class="comment">// 一组常量，表示周一到周日</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MONDAY=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TUESDAY=<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> WEDNESDAY=<span class="number">3</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> THURSDAY=<span class="number">4</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> FRIDAY=<span class="number">5</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SATURDAY=<span class="number">6</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SUNDAY=<span class="number">7</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>  <strong>After：利用枚举重新定义：</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">EnumWeekDemo</span> </span>&#123;</span><br><span class="line">    MONDAY,</span><br><span class="line">    Tuesday,</span><br><span class="line">    WEDNESDAY,</span><br><span class="line">    THURSDAY,</span><br><span class="line">    FRIDAY,</span><br><span class="line">    SATURDAY,</span><br><span class="line">    SUNDAY;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h1 id="枚举的实现原理"><a href="#枚举的实现原理" class="headerlink" title="枚举的实现原理"></a>枚举的实现原理</h1><ol>
-<li> 我们使用关键字 <code>enum</code> 定义枚举类，这个类在编译后，编译器会为我们生成一个相关的 class 类，也就是说枚举类型在编译后也是一个 class 类型，而且类继承自 <strong>java.lang.Enum</strong>。</li>
-<li> 上文中的代码在加载到内存中后，会生成<strong>一个 Class 对象</strong>：<strong>EnumWeekDemo</strong>；</li>
-<li> 除此之外，还会生成 <strong>7 个 EnumWeekDemo 类的实例对象</strong>，分别对应枚举类中定义的7个日期；</li>
-</ol>
-<blockquote>
-<p>  <strong>小总结：</strong></p>
-</blockquote>
-<ul>
-<li>  枚举类表示有固定实例个数的类，这些实例就是根据自身枚举类创建的实例对象，具体有多个个实例根据你在枚举类中写了多少个就有多少个。</li>
-<li>  枚举类中的每个实例对象是 <strong>public static final</strong> 的，即可以通过类名直接访问，且不可变，可用于存储常量对象。</li>
-</ul>
-<hr>
-<h1 id="枚举类中常用的静态方法"><a href="#枚举类中常用的静态方法" class="headerlink" title="枚举类中常用的静态方法"></a>枚举类中常用的静态方法</h1><table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">方法</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center"><code>values()</code></td>
-<td align="center">获取枚举中的所有变量，并作为数组返回</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center"><code>valueOf(String name)</code></td>
-<td align="center">根据名称获取枚举变量</td>
-</tr>
-</tbody></table>
-<h1 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h1><h2 id="自定义枚举类"><a href="#自定义枚举类" class="headerlink" title="自定义枚举类"></a>自定义枚举类</h2><p>模拟枚举类的内部实现，即不适用 enum 关键字实现与枚举类型相同的逻辑。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义枚举类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Season</span></span>&#123;</span><br><span class="line">    <span class="comment">// 1.声明Season对象的属性: private final修饰</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.私化类的构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Season</span><span class="params">(String seasonName,String seasonDesc)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.seasonName = seasonName;</span><br><span class="line">        <span class="keyword">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.提供当前枚举类的多个对象：public static final的</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Season SPRING = <span class="keyword">new</span> Season(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春暖花开&quot;</span>);</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Season SUMMER = <span class="keyword">new</span> Season(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;夏日炎炎&quot;</span>);</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Season AUTUMN = <span class="keyword">new</span> Season(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋高气爽&quot;</span>);</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Season WINTER = <span class="keyword">new</span> Season(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;冰天雪地&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4.其他诉求1：获取枚举类对象的属性</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSeasonName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> seasonName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSeasonDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> seasonDesc;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4.其他诉求2：提供toString()</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Season&#123;&quot;</span> +</span><br><span class="line">            <span class="string">&quot;seasonName=&#x27;&quot;</span> + seasonName + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">            <span class="string">&quot;, seasonDesc=&#x27;&quot;</span> + seasonDesc + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="使用-enum"><a href="#使用-enum" class="headerlink" title="使用 enum"></a>使用 enum</h2><p>JDK 5 中新增了 enum 用于定义枚举类。</p>
-<blockquote>
-<p>  <strong>使用 enum 关键字的枚举类</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Season1</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1.提供当前枚举类的实例对象，多个对象之间用&quot;,&quot;隔开，末尾对象&quot;;&quot;结束</span></span><br><span class="line">    SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春暖花开&quot;</span>),</span><br><span class="line">    SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;夏日炎炎&quot;</span>),</span><br><span class="line">    AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋高气爽&quot;</span>),</span><br><span class="line">    WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;冰天雪地&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.声明Season对象的属性:private final修饰</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String seasonName;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String seasonDesc;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.私化类的构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Season1</span><span class="params">(String seasonName,String seasonDesc)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.seasonName = seasonName;</span><br><span class="line">        <span class="keyword">this</span>.seasonDesc = seasonDesc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4.其他诉求1：获取枚举类对象的属性</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSeasonName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> seasonName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSeasonDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> seasonDesc;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h2 id="枚举类常用方法（继承于java-lang-Enum类）"><a href="#枚举类常用方法（继承于java-lang-Enum类）" class="headerlink" title="枚举类常用方法（继承于java.lang.Enum类）"></a>枚举类常用方法（继承于java.lang.Enum类）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Season1 summer = Season1.SUMMER;</span><br><span class="line">    <span class="comment">// toString():返回枚举类对象的名称（枚举类默认继承的Enum类中重写了toString方法，这里可以直接调用）</span></span><br><span class="line">    System.out.println(summer.toString());</span><br><span class="line"></span><br><span class="line">    System.out.println(Season1.class.getSuperclass());</span><br><span class="line">    System.out.println(<span class="string">&quot;****************&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// values():返回所的枚举类对象构成的数组</span></span><br><span class="line">    Season1[] values = Season1.values();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; values.length; i++) &#123;</span><br><span class="line">        System.out.println(values[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">&quot;****************&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// valueOf(String objName):返回枚举类中对象名是objName的对象。</span></span><br><span class="line">    Season1 winter = Season1.valueOf(<span class="string">&quot;WINTER&quot;</span>);</span><br><span class="line">    <span class="comment">// 如果没objName的枚举类对象，则抛异常：IllegalArgumentException</span></span><br><span class="line">    System.out.println(winter);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h2 id="如何让枚举类对象实现接口"><a href="#如何让枚举类对象实现接口" class="headerlink" title="如何让枚举类对象实现接口"></a>如何让枚举类对象实现接口</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Info</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 枚举类</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">Season1</span> <span class="keyword">implements</span> <span class="title">Info</span></span>&#123;</span><br><span class="line">    <span class="comment">// 1.提供当前枚举类的对象，多个对象之间用&quot;,&quot;隔开，末尾对象&quot;;&quot;结束</span></span><br><span class="line">    SPRING(<span class="string">&quot;春天&quot;</span>,<span class="string">&quot;春暖花开&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;春天在哪里？&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    SUMMER(<span class="string">&quot;夏天&quot;</span>,<span class="string">&quot;夏日炎炎&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;宁夏&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    AUTUMN(<span class="string">&quot;秋天&quot;</span>,<span class="string">&quot;秋高气爽&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;秋天不回来&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    WINTER(<span class="string">&quot;冬天&quot;</span>,<span class="string">&quot;冰天雪地&quot;</span>)&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;大约在冬季&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
