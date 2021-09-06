@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://example.com/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88%E8%AE%BF%E9%97%AE.png">
 <meta property="og:image" content="http://example.com/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80.png">
 <meta property="article:published_time" content="2021-06-07T03:34:22.000Z">
-<meta property="article:modified_time" content="2021-06-10T05:23:18.870Z">
+<meta property="article:modified_time" content="2021-09-01T09:44:49.342Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/06/07/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-07%E5%AF%B9%E8%B1%A1%E5%AE%9E%E4%BE%8B%E5%8C%96%E8%BF%87%E7%A8%8B/1623036700337-191886ae-39e7-4254-83c7-77fd7788e9da.jpeg">
@@ -167,7 +167,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">141</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -247,7 +247,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-06-10 13:23:18" itemprop="dateModified" datetime="2021-06-10T13:23:18+08:00">2021-06-10</time>
+        <time title="Modified: 2021-09-01 17:44:49" itemprop="dateModified" datetime="2021-09-01T17:44:49+08:00">2021-09-01</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -452,7 +452,7 @@
 <li> 程序开始执行，<code>main()</code> 方法对应的栈帧入栈。</li>
 <li> 依次执行栈帧中的指令，直到遇到 new 指令，这时，首先根据指令后的符号引用定位到运行时常量池中的 <code>Department</code> 类，并检测到这个类已经被加载、解析和初始化过，然后根据元数据信息推断出该类对应的实例对象占用的内存大小。</li>
 <li> 在堆空间中为 <code>dep</code> 对象分配内存空间，执行默认初始化（赋零值），更新栈帧中局部变量表的值，新增<code>dep</code>对象在堆内存中的地址指针。（栈帧的局部变量表中的地址值即为堆内存中对象的对象头中的哈希值。）</li>
-<li> 执行显示初始化（即构造函数初始化），发现在 <code>dep</code>对象中还包含一个 <code>emp</code> 对象，这时需要以递归的方式执行创建对象的过程，即堆空间中再开辟一块空间用于保存 <code>emp</code> 对象。</li>
+<li> 执行显式初始化（即构造函数初始化），发现在 <code>dep</code>对象中还包含一个 <code>emp</code> 对象，这时需要以递归的方式执行创建对象的过程，即堆空间中再开辟一块空间用于保存 <code>emp</code> 对象。</li>
 <li> 完毕。</li>
 </ol>
 <ul>
@@ -470,9 +470,6 @@
 <p>  问题：如何通过栈帧中的对象引用访问到堆内存空间中真正的实例对象呢？</p>
 </blockquote>
 <p>答：栈帧中的局部变量表中保存了对象在堆空间中的真实地址，通过这个地址可以访问到真正的对象。</p>
-<ul>
-<li></li>
-</ul>
 
     </div>
 

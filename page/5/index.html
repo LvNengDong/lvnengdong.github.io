@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">141</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -234,7 +234,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-09-01 09:28:20" itemprop="dateModified" datetime="2021-09-01T09:28:20+08:00">2021-09-01</time>
+        <time title="Modified: 2021-09-01 17:41:49" itemprop="dateModified" datetime="2021-09-01T17:41:49+08:00">2021-09-01</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -436,7 +436,7 @@
 <li><p>  <strong><code>&lt;clinit&gt;()</code> 方法与类的构造器方法不同。</strong>在 JVM 视角中，类的构造方法是 <code>&lt;init&gt;()</code> 方法。</p>
 </li>
 <li><p>与 <code>&lt;init&gt;()</code> 方法相比，<code>&lt;clinit&gt;()</code> 方法不需要显式地调用父类的<code>&lt;clinit&gt;()</code> 方法，Java <strong>虚拟机会保证在子类的 <code>&lt;clinit&gt;()</code> 方法执行之前，父类的<code>&lt;clinit&gt;()</code> 方法已经执行完毕</strong>。因此在 Java 虚拟机中第一个被执行的 <code>&lt;clinit&gt;()</code> 方法的类型肯定是 java.lang.Object。</p>
-<p>  ​    <em><code>&lt;init&gt;()</code> 方法都是需要显式地调用父类的 <code>&lt;init&gt;()</code> 方法的，我们通过构造方法中的 <code>super()</code> 方法区显式地调用父类的 <code>&lt;init&gt;()</code> 方法。当然 <code>spuer()</code> 方法在我们编写代码时可以省略不写，因为它是默认存在的，所以在被 javac 编译后，这个 <code>super()</code> 方法是一定存在的。</em></p>
+<p>  ​    <em><code>&lt;init&gt;()</code> 方法都是需要显式地调用父类的 <code>&lt;init&gt;()</code> 方法的，我们通过构造方法中的 <code>super()</code> 方法去显式地调用父类的 <code>&lt;init&gt;()</code> 方法。当然 <code>spuer()</code> 方法在我们编写代码时可以省略不写，因为它是默认存在的，所以在被 javac 编译后，这个 <code>super()</code> 方法是一定存在的。</em></p>
 </li>
 <li><p>  由于父类的<code>&lt;clinit&gt;()</code> 方法先执行，这也就意味着<strong>父类中定义的静态语句要优先于子类中静态语句的执行</strong>。</p>
 </li>
@@ -447,7 +447,7 @@
 <p>  <strong>Java 虚拟机必须保证一个类的<code>&lt;clinit&gt;()</code> 方法在多线程环境中被正确地加锁同步。</strong> </p>
 </blockquote>
 <ul>
-<li>  原因：<strong>clinit()</strong> 方法本质上就是初始化静态变量，但是静态变量在理论上只能被初始化一次。在不加锁的情况下，如果有多个线程同时执行 <strong>clinit()</strong> 方法，就会创建出多个相同的静态变量，但是如果加了同步锁，那么无论有多少个线程，每个静态变量都只会被初始化一次。</li>
+<li>  原因：<strong>clinit</strong> 方法本质上就是初始化静态变量，但是静态变量在理论上只能被初始化一次。在不加锁的情况下，如果有多个线程同时执行 <strong>clinit</strong> 方法，就会创建出多个相同的静态变量，但是如果加了同步锁，那么无论有多少个线程，每个静态变量都只会被初始化一次。</li>
 <li>  如果多个线程同时去初始化一个类，那么只会有其中一个线程去执行这个类的<code>&lt;clinit&gt;()</code> 方法，其它线程都需要阻塞等待，直到活动线程执行完毕<code>&lt;clinit&gt;()</code> 方法。如果在一个类的<code>&lt;clinit&gt;()</code> 方法有耗时很长的操作，那么就有可能造成多个线程阻塞。</li>
 </ul>
 <blockquote>
@@ -512,7 +512,7 @@
 </blockquote>
 <ul>
 <li>引导类加载器是用 C++ 语言实现的，内嵌在 JVM 内部。</li>
-<li>它负责加载 Java 的核心类库（即存放在 <code>&lt;JAVA_HOME&gt;/jre/lib/rt.jar、resource.jar 或 sun.boot.class.path</code> 路径下的内容）到内存中，用于提供运行 JVM 自身需要的类。</li>
+<li>它负责加载 Java 的核心类库（即存放在 <code>&lt;JAVA_HOME&gt;/jre/lib/rt.jar、resource.jar 或 sun.boot.class.path</code> 路径下的内容）到内存中，用于提供 JRE 运行时需要的类。</li>
 <li>并不继承自 <strong>java.lang.ClassLoader</strong> ，没有父类加载器。</li>
 <li>可以加载 Extension ClassLoader 和 Application ClassLoader，并指定为它们的父类加载器。</li>
 <li>出于安全考虑，BootStrap ClassLoader 只加载包名为 java、javax、sun 等开头的类。</li>
@@ -708,7 +708,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-06-10 13:23:18" itemprop="dateModified" datetime="2021-06-10T13:23:18+08:00">2021-06-10</time>
+        <time title="Modified: 2021-09-01 17:44:49" itemprop="dateModified" datetime="2021-09-01T17:44:49+08:00">2021-09-01</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -913,7 +913,7 @@
 <li> 程序开始执行，<code>main()</code> 方法对应的栈帧入栈。</li>
 <li> 依次执行栈帧中的指令，直到遇到 new 指令，这时，首先根据指令后的符号引用定位到运行时常量池中的 <code>Department</code> 类，并检测到这个类已经被加载、解析和初始化过，然后根据元数据信息推断出该类对应的实例对象占用的内存大小。</li>
 <li> 在堆空间中为 <code>dep</code> 对象分配内存空间，执行默认初始化（赋零值），更新栈帧中局部变量表的值，新增<code>dep</code>对象在堆内存中的地址指针。（栈帧的局部变量表中的地址值即为堆内存中对象的对象头中的哈希值。）</li>
-<li> 执行显示初始化（即构造函数初始化），发现在 <code>dep</code>对象中还包含一个 <code>emp</code> 对象，这时需要以递归的方式执行创建对象的过程，即堆空间中再开辟一块空间用于保存 <code>emp</code> 对象。</li>
+<li> 执行显式初始化（即构造函数初始化），发现在 <code>dep</code>对象中还包含一个 <code>emp</code> 对象，这时需要以递归的方式执行创建对象的过程，即堆空间中再开辟一块空间用于保存 <code>emp</code> 对象。</li>
 <li> 完毕。</li>
 </ol>
 <ul>
@@ -931,9 +931,6 @@
 <p>  问题：如何通过栈帧中的对象引用访问到堆内存空间中真正的实例对象呢？</p>
 </blockquote>
 <p>答：栈帧中的局部变量表中保存了对象在堆空间中的真实地址，通过这个地址可以访问到真正的对象。</p>
-<ul>
-<li></li>
-</ul>
 
       
     </div>

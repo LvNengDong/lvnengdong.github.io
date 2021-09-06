@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="Hystrix官方文档  雪崩效应分布式系统环境下，服务间的依赖非常常见，一个业务调用通常以来多个基础服务。如下图，当库存服务不可用时，商品服务的请求线程被阻塞，当有大批量请求调用库存服务时，最终可能导致整个商品服务的资源耗尽（主要是线程池资源，虽然库存服务不可用，但是每个商品服务的请求还会占用一个线程，并且因为不会获取到响应，也就不会归还线程，这样当线程池资源耗尽时商品服务就会被阻塞），无法继">
+<meta name="description" content="Hystrix官方文档  雪崩效应分布式系统环境下，服务间的依赖非常常见，一个服务调用通常依赖多个基础服务。 如下图，当库存服务不可用时，商品服务的请求库存服务的线程就会被阻塞，当有大批量请求调用库存服务时，这些所有的请求就都会被阻塞，最终可能导致整个商品服务的资源被耗尽（主要是线程池资源，虽然库存服务不可用，但是每个商品服务的请求还会占用一个线程，并且因为不会获取到响应，也就不会归还线程，这样">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hystrix">
 <meta property="og:url" content="http://example.com/2020/11/07/Hystrix/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Hystrix官方文档  雪崩效应分布式系统环境下，服务间的依赖非常常见，一个业务调用通常以来多个基础服务。如下图，当库存服务不可用时，商品服务的请求线程被阻塞，当有大批量请求调用库存服务时，最终可能导致整个商品服务的资源耗尽（主要是线程池资源，虽然库存服务不可用，但是每个商品服务的请求还会占用一个线程，并且因为不会获取到响应，也就不会归还线程，这样当线程池资源耗尽时商品服务就会被阻塞），无法继">
+<meta property="og:description" content="Hystrix官方文档  雪崩效应分布式系统环境下，服务间的依赖非常常见，一个服务调用通常依赖多个基础服务。 如下图，当库存服务不可用时，商品服务的请求库存服务的线程就会被阻塞，当有大批量请求调用库存服务时，这些所有的请求就都会被阻塞，最终可能导致整个商品服务的资源被耗尽（主要是线程池资源，虽然库存服务不可用，但是每个商品服务的请求还会占用一个线程，并且因为不会获取到响应，也就不会归还线程，这样">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2020/11/07/Hystrix/%E9%9B%AA%E5%B4%A9%E6%95%88%E5%BA%94.png">
 <meta property="og:image" content="http://example.com/2020/11/07/Hystrix/hystrix%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://example.com/2020/11/07/Hystrix/1525658906255.png">
 <meta property="og:image" content="http://example.com/2020/11/07/Hystrix/1525658983518.png">
 <meta property="article:published_time" content="2020-11-07T10:35:19.000Z">
-<meta property="article:modified_time" content="2020-11-07T13:09:30.000Z">
+<meta property="article:modified_time" content="2021-09-03T07:29:32.248Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2020/11/07/Hystrix/%E9%9B%AA%E5%B4%A9%E6%95%88%E5%BA%94.png">
@@ -166,7 +166,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">141</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -238,10 +238,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-11-07 18:35:19 / Modified: 21:09:30" itemprop="dateCreated datePublished" datetime="2020-11-07T18:35:19+08:00">2020-11-07</time>
+      <time title="Created: 2020-11-07 18:35:19" itemprop="dateCreated datePublished" datetime="2020-11-07T18:35:19+08:00">2020-11-07</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-03 15:29:32" itemprop="dateModified" datetime="2021-09-03T15:29:32+08:00">2021-09-03</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -265,7 +271,8 @@
         <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/Netflix/Hystrix/wiki">Hystrix官方文档</a></li>
 </ul>
-<h1 id="雪崩效应"><a href="#雪崩效应" class="headerlink" title="雪崩效应"></a>雪崩效应</h1><p>分布式系统环境下，<strong>服务间的依赖</strong>非常常见，一个业务调用通常以来多个基础服务。如下图，当库存服务不可用时，商品服务的请求线程被阻塞，当有大批量请求调用库存服务时，最终可能导致整个商品服务的资源耗尽（主要是线程池资源，虽然库存服务不可用，但是每个商品服务的请求还会占用一个线程，并且因为不会获取到响应，也就不会归还线程，这样当线程池资源耗尽时商品服务就会被阻塞），无法继续对外提供服务。并且这种不可用可能沿请求调用链向上传递，这种现象称为<strong>雪崩效应</strong>。</p>
+<h1 id="雪崩效应"><a href="#雪崩效应" class="headerlink" title="雪崩效应"></a>雪崩效应</h1><p>分布式系统环境下，<strong>服务间的依赖</strong>非常常见，一个服务调用通常依赖多个基础服务。</p>
+<p>如下图，当库存服务不可用时，商品服务的请求库存服务的线程就会被阻塞，当有大批量请求调用库存服务时，这些所有的请求就都会被阻塞，最终可能导致整个商品服务的资源被耗尽（主要是线程池资源，虽然库存服务不可用，但是每个商品服务的请求还会占用一个线程，并且因为不会获取到响应，也就不会归还线程，这样当线程池资源耗尽时商品服务就会被阻塞），无法继续对外提供服务。并且这种不可用可能沿请求调用链向上传递，这种现象称为<strong>雪崩效应</strong>。</p>
 <p><img src="/2020/11/07/Hystrix/%E9%9B%AA%E5%B4%A9%E6%95%88%E5%BA%94.png"></p>
 <h2 id="雪崩效应的常见场景"><a href="#雪崩效应的常见场景" class="headerlink" title="雪崩效应的常见场景"></a>雪崩效应的常见场景</h2><blockquote>
 <ul>
@@ -278,15 +285,12 @@
 </blockquote>
 <h2 id="雪崩效应的应对策略"><a href="#雪崩效应的应对策略" class="headerlink" title="雪崩效应的应对策略"></a>雪崩效应的应对策略</h2><p>针对造成雪崩效应的不同场景，可以使用不同的应对策略，没有一种通用所有场景的策略。</p>
 <blockquote>
-<ul>
-<li>硬件故障</li>
-<li>流量激增</li>
-<li>缓存穿透</li>
-<li>程序BUG</li>
-<li>同步等待</li>
-</ul>
+<p>  <strong>小总结</strong></p>
 </blockquote>
-<p>综上所述，如果一个应用不能对（服务间的）依赖故障进行隔离，那该应用本身就处在被拖垮的风险中。            因此，为了构件稳定、可靠的分布式系统，我们的服务应当具有自我保护能力，当依赖的服务不可用时，当前服务启动自我保护功能，从而避免发生雪崩效应。</p>
+<ul>
+<li>  <strong>如果一个应用不能对（服务间的）依赖故障进行隔离，那该应用本身就处在被拖垮的风险中。</strong>            </li>
+<li>  因此，为了构建稳定、可靠的分布式系统，我们的服务应当具有自我保护能力，当依赖的服务不可用时，当前服务启动自我保护功能，从而避免发生雪崩效应。</li>
+</ul>
 <hr>
 <h1 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h1><p>Hystrix，中文含义是豪猪。因其背上长满棘刺，从而有了自我保护能力。            SpringCould中的Hystrix是Netflix一款开源的容错框架，同样具有自我保护能力。</p>
 <p>Hystrix的设计目标：</p>
@@ -460,8 +464,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/11/07/Feign/" rel="next" title="Feign">
-                  Feign <i class="fa fa-chevron-right"></i>
+                <a href="/2020/11/07/Eureka/" rel="next" title="Eureka">
+                  Eureka <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

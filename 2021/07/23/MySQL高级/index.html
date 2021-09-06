@@ -46,7 +46,7 @@
 <meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814180055407.png">
 <meta property="og:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814172920328.png">
 <meta property="article:published_time" content="2021-07-23T07:24:27.000Z">
-<meta property="article:modified_time" content="2021-08-14T10:11:23.216Z">
+<meta property="article:modified_time" content="2021-09-05T12:34:16.289Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/1411859-20180617124155105-273948974.png">
@@ -176,7 +176,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">141</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -256,7 +256,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-14 18:11:23" itemprop="dateModified" datetime="2021-08-14T18:11:23+08:00">2021-08-14</time>
+        <time title="Modified: 2021-09-05 20:34:16" itemprop="dateModified" datetime="2021-09-05T20:34:16+08:00">2021-09-05</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -767,7 +767,7 @@
 <p>  <strong>一些概念：</strong></p>
 </blockquote>
 <ul>
-<li>  开销：开销指实现锁需要浪费的性能</li>
+<li>  开销：开销指实现锁需要消耗的资源</li>
 <li>  加锁速度：</li>
 <li>  死锁：</li>
 <li>  粒度：</li>
@@ -852,8 +852,8 @@
 <li>  <strong>MySQL 的锁机制比较简单，就是不同的存储引擎支持不同的锁机制。</strong></li>
 <li>  比如：MyISAM 和 Memory 存储引擎采用的是表级锁。</li>
 <li>  InnoDB 存储引擎既支持行锁（默认），也支持表锁。</li>
-<li>  <strong>MyISAM 表在进行读操作的时候会自动对表加共享读锁，在进行写操作的时候会自动对表加共享写锁。</strong></li>
-<li>  <strong>InnoDB 表在进行读操作的时候会自动对行加共享读锁，在进行写操作的时候会自动对行加共享写锁。</strong></li>
+<li>  <strong>MyISAM 只能加表级锁，比如表级读锁或表级写锁。</strong></li>
+<li>  <strong>InnoDB 默认加的锁是行级锁，但是也支持加表级锁。</strong></li>
 </ul>
 <hr>
 <h2 id="表锁（偏读）"><a href="#表锁（偏读）" class="headerlink" title="表锁（偏读）"></a>表锁（偏读）</h2><h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
@@ -971,8 +971,11 @@
 <li>  其它线程对表的查询被阻塞，需要等待锁被释放。</li>
 </ul>
 <h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ul>
-<li>  <strong>MyISAM</strong> 在执行查询语句（SELECT）前，会<strong>自动给涉及的所有表加读锁</strong>，在执行增删改操作前，会<strong>自动给涉及的表加写锁</strong>。</li>
-<li>  如果想要使用 InnoDB 给表加读/写锁，则需要显式地声明才可以。</li>
+<li><p><strong>MyISAM 在执行查询语句（SELECT）前，会自动给涉及的所有表加读锁，在执行增删改操作前，会自动给涉及的表加写锁。</strong></p>
+<p>  【特别声明：在创建表之后并不会马上加锁，而是延后到在查询的时候才会加上去。】</p>
+</li>
+<li><p>  如果想要使用 InnoDB 给表加读/写锁，则需要显式地声明才可以。</p>
+</li>
 </ul>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><blockquote>
 <p>  <strong>结论：</strong></p>
@@ -1182,7 +1185,7 @@
 <li><p>  但是我们此时使用 Session2 想要插入一条 <code>id=2</code> 的数据，却发现被阻塞了。这时为什么呢？</p>
 </li>
 </ol>
-<pre><code>-   按理来说，行锁只会作用于当前行，在本例中也就是第 3、4、5 行，而 Session2 操作的明明是第 2 行，为什么也会被阻塞呢？这时因为此时 id=2 的那一行也被加了行锁，这就是所谓的**间隙锁**。 
+<pre><code>按理来说，行锁只会作用于当前行，在本例中也就是第 3、4、5 行，而 Session2 操作的明明是第 2 行，为什么也会被阻塞呢？这时因为此时 id=2 的那一行也被加了行锁，这就是所谓的**间隙锁**。 
 </code></pre>
 <ol start="4">
 <li> 只有当 Session1 的事务提交后，所有作用于行上的锁被释放了，Session2 的插入操作才能继续完成。</li>
@@ -1281,7 +1284,7 @@
 </blockquote>
 <ul>
 <li>  主节点用来执行写操作，从节点用于执行读操作</li>
-<li>  所有在主节点上执行的操作，都会被写入主节点的日志文件 <strong>Binary_log</strong> 中；</li>
+<li>  所有在主节点上执行的写操作，都会被写入主节点的日志文件 <strong>Binary_log</strong> 中；</li>
 <li>  从节点通过 IO 读取到主节点的日志文件，复制到 <strong>Relay_log</strong> 中，然后由当前备机执行日志文件，即可完成从机数据的同步。</li>
 </ul>
 <blockquote>
