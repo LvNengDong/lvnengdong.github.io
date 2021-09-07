@@ -155,13 +155,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -194,6 +194,591 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/14/%E9%93%BE%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/14/%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">链表</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-14 12:34:55" itemprop="dateCreated datePublished" datetime="2021-06-14T12:34:55+08:00">2021-06-14</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-06-16 22:47:16" itemprop="dateModified" datetime="2021-06-16T22:47:16+08:00">2021-06-16</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/2021/06/14/%E9%93%BE%E8%A1%A8/%E9%93%BE%E8%A1%A8.png" alt="链表"></p>
+<h1 id="单向链表"><a href="#单向链表" class="headerlink" title="单向链表"></a>单向链表</h1><h2 id="单链表节点定义"><a href="#单链表节点定义" class="headerlink" title="单链表节点定义"></a>单链表节点定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LNode</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Object data;	<span class="comment">//  节点#data域</span></span><br><span class="line">    <span class="keyword">public</span> LNode next;	<span class="comment">//  节点#next域</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h1><h2 id="为什么要有双链表（单链表的缺点）"><a href="#为什么要有双链表（单链表的缺点）" class="headerlink" title="为什么要有双链表（单链表的缺点）"></a>为什么要有双链表（单链表的缺点）</h2><ul>
+<li><p>  单链表，查找的方向只能是一个方向（从头到尾），而双向链表可以向前或向后查找</p>
+</li>
+<li><p>单向链表，不能自我删除，需要靠辅助节点；而双向链表则可以自我删除。</p>
+<p>  单链表删除时，总会找到 temp（temp 是待删除节点的前一个节点）节点来帮助删除。</p>
+</li>
+</ul>
+<h2 id="双链表节点的定义"><a href="#双链表节点的定义" class="headerlink" title="双链表节点的定义"></a>双链表节点的定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DLNode</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Object data;		<span class="comment">//  节点#data域</span></span><br><span class="line">    <span class="keyword">public</span> DLNode prior;	<span class="comment">//  指向前驱节点的指针</span></span><br><span class="line">    <span class="keyword">public</span> DLNode next;		<span class="comment">//  指向后继节点的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="双链表的基础操作"><a href="#双链表的基础操作" class="headerlink" title="双链表的基础操作"></a>双链表的基础操作</h2><h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><p>​    双向链表的遍历方式和单链表一样，只是在遍历的过程中可以向前查找，也可以向后查找。单向链表只能向后查找，例如我们当前遍历到链表的第5个节点，在单向链表中我们只能够继续向后查找5之后的节点，但是在双向链表中，我们既可以查找5之后的节点，也可以返回去查找5之前的节点。</p>
+<h3 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h3><h4 id="尾插"><a href="#尾插" class="headerlink" title="尾插"></a>尾插</h4><ol>
+<li> 首先，找到当前链表的尾节点 temp；</li>
+<li> 让尾节点的 next 指针指向要添加的新节点，即 <code>temp.next = newDLNode</code>；</li>
+<li> 让新节点的 prior 指针指向尾节点，即 <code>newDLNode.prior = temp</code></li>
+</ol>
+<h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><p>​    修改思路也和单向链表一致</p>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>​    因为是双向链表，因此，我们可以实现自我删除某个节点。</p>
+<ol>
+<li> 找到待删除的节点 temp；</li>
+<li> 让待删除节点前一个节点的 next 指针指向待删除节点后一个节点，即 <code>temp.prior.next = temp.next</code>；</li>
+<li>让待删除节点后一个节点的 prior 指针指向待删除节点的前一个节点，即 <code>temp.next.prior = temp.prior</code> 。<ul>
+<li>  如果待删除的节点是链表的尾节点，就不需要执行第 3 步了，否则会出现空指针异常。</li>
+</ul>
+</li>
+</ol>
+<h1 id="环形链表"><a href="#环形链表" class="headerlink" title="环形链表"></a>环形链表</h1><h2 id="单向环形链表"><a href="#单向环形链表" class="headerlink" title="单向环形链表"></a>单向环形链表</h2><blockquote>
+<p>  <strong>应用场景：约瑟夫（Josephu）问题</strong></p>
+</blockquote>
+<p>​        Josephu 问题：设编号为 1，2，3，…….，n 的 n 个人围坐一圈，约定编号为 k（1&lt;=k&lt;=n）的人从 1 开始报数，数到 m 的那个人出列，他的下一位又从 1 开始报数，数到 m 的那个人又出列。以此类推，直到所有人都出列为止。据此产生一个出队编号的序列。</p>
+<blockquote>
+<p>  <strong>思路</strong></p>
+</blockquote>
+<p>​        用一个不带头结点的循环链表来处理 Josephu 问题，先构成一个有 n 个节点的单循环链表，然后由 k 节点起从 1 开始计数，记到 m 时，对应节点从链表中删除，然后再从被删除节点的下一个节点又从 1 开始计数，直到最后一个节点从链表中删除算法结束。</p>
+<blockquote>
+<p>  <strong>代码</strong></p>
+</blockquote>
+<p>​        根据用户的输入，要形成一个小朋友出队的顺序。假设 </p>
+<ul>
+<li>  <code>n=5</code>，即共有 5 人</li>
+<li>  <code>k=1</code>，编号为 1 的人从 1 开始报数</li>
+<li>  <code>m=2</code>，报数为 2 的人出列，他的下一位又从 1 开始报数</li>
+</ul>
+<ol>
+<li><p> 因为存在出队行为，所以需要执行单链表的删除操作，也就是说需要一个辅助指针 <code>helper</code> 指向待删除节点的前一个节点。 <code>first</code> 指针从头开始遍历，所以 <code>helper</code> 指针需要事先指向 <code>first</code> 指向节点的前一个节点（即单向链表的最后一个节点），并且 <code>helper</code> 指针紧跟 <code>first</code> 指针同步遍历。</p>
+</li>
+<li><p> 报数前，先让 <code>first</code> 和 <code>helper</code> 移动 <code>k-1</code> 次。</p>
+</li>
+<li><p> 当小朋友报数时，让 <code>first</code> 和 <code>helper</code> 指针同时移动 <code>m-1</code> 次，因为小朋友报数时，自己需要占一次。</p>
+</li>
+<li><p>这时就可以将 <code>first</code> 指向的节点出队。两种方式：</p>
+<ol>
+<li> <code>first = first.next;  helper.next = first</code></li>
+<li><code>helper.next = first.next;  first = first.next</code></li>
+</ol>
+</li>
+</ol>
+<h2 id="单向环形链表的操作"><a href="#单向环形链表的操作" class="headerlink" title="单向环形链表的操作"></a>单向环形链表的操作</h2><h3 id="构建一个单向环形链表"><a href="#构建一个单向环形链表" class="headerlink" title="构建一个单向环形链表"></a>构建一个单向环形链表</h3><ol>
+<li> 先创建链表的第一个节点，让 <code>first</code> 指针指向该节点，让第一个节点的 <code>next</code> 指针指向自己，自我连接形成环状。</li>
+<li> 每增加一个新的节点，就把新节点加入到已有的环形链表中即可。</li>
+</ol>
+<h3 id="遍历-1"><a href="#遍历-1" class="headerlink" title="遍历"></a>遍历</h3><ol>
+<li> 创建一个辅助指针 <code>current</code> 与 <code>first</code> 指针指向同一个节点。</li>
+<li> 通过 while 循环遍历环形链表，但 <code>current</code> 指针再次与 <code>first</code> 指向同一个节点时循环结束。</li>
+</ol>
+<h3 id="添加-1"><a href="#添加-1" class="headerlink" title="添加"></a>添加</h3><h2 id="双向环形链表"><a href="#双向环形链表" class="headerlink" title="双向环形链表"></a>双向环形链表</h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/13/String/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/13/String/" class="post-title-link" itemprop="url">String</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-13 11:42:39" itemprop="dateCreated datePublished" datetime="2021-06-13T11:42:39+08:00">2021-06-13</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-07-31 17:57:19" itemprop="dateModified" datetime="2021-07-31T17:57:19+08:00">2021-07-31</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>  本文默认使用 HotSpot 虚拟机 + JDK8 ，如有其它情况会具体指出。</p>
+</blockquote>
+<h1 id="1-String-的基本特性"><a href="#1-String-的基本特性" class="headerlink" title="1  String 的基本特性"></a>1  String 的基本特性</h1><blockquote>
+<p>  <strong>String；字符串；</strong></p>
+</blockquote>
+<p>顾名思义，就是把一个个的字符串在一起，所以说<strong>字符串的底层实现就是一个字符数组</strong>。</p>
+<img src="/2021/06/13/String/1623398509911-a4c2e130-bfc9-4aa7-9a9d-531df6e1cdee.png" alt="image.png">
+
+<ul>
+<li>  String 被声明为 <strong>final</strong> 的表示类不可被继承。</li>
+<li>  String 实现了 <strong>Serializable</strong> 接口，表示字符串是支持序列化的。</li>
+<li>  String 实现了 <strong>Comparable</strong> 接口，表示 String 可以比较大小。</li>
+<li>  在 JDK8 中，String 使用字符数组 <strong>final char[] value</strong> 数组来存储字符串数据。</li>
+</ul>
+<h2 id="1-1-String-存储结构的演变"><a href="#1-1-String-存储结构的演变" class="headerlink" title="1.1    String 存储结构的演变"></a>1.1    String 存储结构的演变</h2><ul>
+<li>  在 JDK9 之前，String 底层是通过<strong>字符数组 <code>char[]</code></strong> 来保存字符串的。</li>
+<li>  从 <strong>JDK9</strong> 开始，String 底层变成了通过<strong>字节数组 <code>byte[]</code></strong> 来保存字符串数据。【字符型 char 编码后都可以用数字（byte型）表示】</li>
+</ul>
+<blockquote>
+<p>  <strong>为什么要变化？</strong></p>
+</blockquote>
+<p>String 底层将 <code>char[]</code> 变成 <code>byte[]</code> 来存储字符串数据，可以节约一些空间。</p>
+<p>同时，String 的一些衍生对象，如 StringBuffer、StringBuilder 等也作出了同样的改变，将存储结构变更为了 byte[] 。</p>
+<hr>
+<h2 id="1-2-String-的不可变性"><a href="#1-2-String-的不可变性" class="headerlink" title="1.2    String 的不可变性"></a>1.2    String 的不可变性</h2><blockquote>
+<p>  String：<strong>不可变的字符序列</strong></p>
+</blockquote>
+<ul>
+<li>  当对字符串<strong>重新赋值</strong>时，会重新分配内存区域，重新赋值，而不是在原先 <code>value[]</code> 的基础上进行更新。</li>
+<li>  当对现有的字符串进行<strong>拼接</strong>操作时，也是重新分配内存区域，重新赋值，而不是在原先 <code>value[]</code> 的基础上进行拼接、赋值。</li>
+<li>  当<strong>调用 <code>String replace(char oldChar, char newChar)</code> 方法</strong>使用新字符串替换当前字符串指定的子串时，也是重新分配内存区域并重新赋值，而不能在原先字符串数组 <code>value[]</code> 的基础上进行操作。</li>
+</ul>
+<blockquote>
+<p>  <strong>String 字符串为什么不能直接拼接字符串？【==String为什么设计成不可变的？】</strong></p>
+</blockquote>
+<p>String 的底层数据结构是 <code>char[]</code> 或 <code>byte[]</code>，由于<strong>数组的定长性</strong>，即一旦被创建出来，它的长度就就确定了，不能再被更改。在进行字符串拼接操作时，原数组的容量显然是不足以容纳拼接后的新数组的，所以只能新开辟一块更大的空间保存新的字符串，而不是去改变原有的字符串。【如果新数组的长度小于原数组，又会导致数组存在多个空白区域，造成内存的浪费，也是不合理的】</p>
+<hr>
+<h1 id="2-String-的内存分配"><a href="#2-String-的内存分配" class="headerlink" title="2  String 的内存分配"></a>2  String 的内存分配</h1><h2 id="String-对象可以保存在内存中的哪些位置"><a href="#String-对象可以保存在内存中的哪些位置" class="headerlink" title="String 对象可以保存在内存中的哪些位置"></a>String 对象可以保存在内存中的哪些位置</h2><blockquote>
+<p>  <strong>String 对象可以保存在内存中的哪些位置?</strong></p>
+</blockquote>
+<ol>
+<li> 字符串常量池中；</li>
+<li> 堆中(的非字符串常量池空间)；</li>
+<li> 二者都保存</li>
+</ol>
+<hr>
+<h2 id="不同版本-JDK-中-StringPool-在内存中的调整"><a href="#不同版本-JDK-中-StringPool-在内存中的调整" class="headerlink" title="不同版本 JDK 中 StringPool 在内存中的调整"></a>不同版本 JDK 中 StringPool 在内存中的调整</h2><ul>
+<li>  在 JDK7 之前，字符串常量池存放在<strong>方法区</strong>中（在 HotSpot 中就是永久代）。</li>
+<li>  JDK7，HotSpot 将字符串常量池的位置调整到了<strong>堆</strong>中。</li>
+<li>  JDK8：字符串常量池存储在方法区（元空间）</li>
+</ul>
+<blockquote>
+<p>  <strong>问题：String Pool 为什么要从方法区调整到堆空间中？</strong></p>
+</blockquote>
+<p><strong>保存在方法区的缺点</strong>：</p>
+<ol>
+<li> 方法区（永久代/元空间）默认占用的内存空间较小，如果在方法区中保存大量的 String 对象，极易导致方法区空间出现 OOM  异常。</li>
+<li> 即使将方法区初始的内存空间设置为一个较高的值，但是由于方法区进行 GC 的频率极低，这也就意味着在方法区中，String 对象在使用完后，无法做到及时的 GC，也会导致方法区频繁出现 OOM 异常。</li>
+</ol>
+<p><strong>保存在堆空间的优点</strong>：</p>
+<ol>
+<li> 首先堆空间解决了保存在方法区时的两个问题：①内存空间小。  ②GC不及时。</li>
+<li> 所有的 String 字面量对象都保存在堆（Heap）中，它就和其它普通对象一样，这样的好处就是在进行 JVM 调优时只需调整堆的大小就可以了。【原来保存在元空间中时还要特意为了 String 常量池去进行元空间的性能调优】</li>
+</ol>
+<hr>
+<h2 id="2-1-字符串常量池的数据结构"><a href="#2-1-字符串常量池的数据结构" class="headerlink" title="2.1    字符串常量池的数据结构"></a>2.1    字符串常量池的数据结构</h2><blockquote>
+<p>  <strong>字符串常量池数据结构</strong></p>
+</blockquote>
+<ul>
+<li>  通过字面量的方式<strong>（区别于 new）</strong>给一个字符串赋值，此时字符串的值保存在堆空间的字符串常量池中。</li>
+<li>  <strong>字符串常量池的底层数据结构是一个 HashTable，所以说字符串常量池中不会存储相同内容的字符串</strong> 。</li>
+<li>  String 的 StringPool 是一个固定大小的 HashTable，数组的默认长度在不同的 JDK 版本中均有所不同。</li>
+<li>  如果放进 StringPool 的 String 非常多，就会造成 Hash 冲突严重，从而导致链表会很长，而链表长了后就会导致调用 <code>String.intern()</code> 时性能大幅下降。</li>
+</ul>
+<p><strong>参数信息：</strong></p>
+<ul>
+<li>  使用 <code>-XX:StringTableSize</code> 可以设置 StringPool 的长度。</li>
+<li>  JDK6中，StringPool 的默认长度为 1009，可以任意设置大小；</li>
+<li>  从 JDK7 开始，StringPool 的默认长度增加到了 60013 ；</li>
+<li>  从 JDK8 开始，可设置的最小长度为 1009 。</li>
+</ul>
+<blockquote>
+<p>  <strong>具体代码分析</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">&quot;abc&quot;</span>;  <span class="comment">// 字面量定义的方式，“abc”存储在字符串常量池中</span></span><br><span class="line">String s2 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">System.out.println(s1 == s2);	<span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">s1 = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">System.out.println(s1 == s2);	<span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li> 由于字符串常量池在堆空间中，所以一个程序中所有的线程用的是同一个字符串常量池；</li>
+<li> 由于字符串常量池底层是 HashTable 结构，所以池中不会出现重复的字符串，所以上述代码中的变量 <code>s1</code> 和 <code>s2</code> 指向的是同一个地址。</li>
+<li> 由于字符串的不可变性，第 5 行代码中等号右边的语句会在字符串常量池中新开辟一块内存空间用于保存字符串“hello”，并将其赋值给等号左边的变量 s1。</li>
+<li> 所以此时 s1 指向的是 “hello”  的地址，而 s2 指向的 “abc” 的地址，两者不相等。</li>
+</ol>
+<hr>
+<h2 id="2-2-如何将字符串对象保存到字符串常量池中"><a href="#2-2-如何将字符串对象保存到字符串常量池中" class="headerlink" title="2.2    如何将字符串对象保存到字符串常量池中"></a>2.2    如何将字符串对象保存到字符串常量池中</h2><p>​        对于 Java 中的 8 种基本数据类型和引用类型 String，这些类型在程序中的使用是非常频繁的（二八原则），为了使这些类型的数据在内存中速度更快、更节省内存，都提供了一种常量池的概念。    </p>
+<p>​        常量池就类似于一个 Java 系统级别提供的缓存。8 种基本类型数据的常量池都是系统协调的，String类型的常量池比较特殊，想要<strong>将字符串对象保存在字符串常量中主要方法有两种</strong> ：</p>
+<ol>
+<li>直接使用双引号声明出来的 String 对象（字符串字面量对象）会直接存储在常量池中。<ul>
+<li>  比如： <code>String info = &quot;HelloWorld&quot;;</code> </li>
+</ul>
+</li>
+<li> 如果不是通过双引号声明的 String 对象，也可以使用 String 提供的 <strong>intern()</strong> 方法将某个字符串对象加入到字符串常量池中。</li>
+</ol>
+<hr>
+<h1 id="4-字符串拼接操作"><a href="#4-字符串拼接操作" class="headerlink" title="4  字符串拼接操作"></a>4  字符串拼接操作</h1><blockquote>
+<ul>
+<li>  字符串常量 + 字符串常量</li>
+<li>  字符串常量 + 字符串变量</li>
+<li>  字符串变量 + 字符串变量</li>
+</ul>
+</blockquote>
+<h2 id="常量-常量"><a href="#常量-常量" class="headerlink" title="常量 + 常量"></a>常量 + 常量</h2><ul>
+<li>  常量与常量的拼接结果还保存在字符串常量池中，原理是编译期优化。</li>
+<li>  编译期优化：</li>
+</ul>
+<blockquote>
+<p>  <strong>问题：如何理解“编译期优化”？</strong></p>
+</blockquote>
+<p>答：两个字符串常量相加，在被编译成 <code>.class</code> 字节码文件时就已经将这两个常量拼接为一个常量字面量了，所以加载到内存中的只有一个字符串字面量来，所以会将这个字符串字面量保存到字符串常量池中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span> + <span class="string">&quot;c&quot;</span>;    <span class="comment">// 在编译后，就等同于 &quot;abc&quot;</span></span><br><span class="line">    String s2 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  .java 文件需要先被编译成 .class 字节码文件，再被加载到JVM中执行。</span></span><br><span class="line"><span class="comment">     *      在 .class 文件中，s1 已经是一个拼接过的常量了。即</span></span><br><span class="line"><span class="comment">     *          String s1 = &quot;abc&quot;;</span></span><br><span class="line"><span class="comment">     *          String s2 = &quot;abc&quot;;</span></span><br><span class="line"><span class="comment">     *      所以在将字节码文件加载到 JVM 中运行时这两个常量都会保存在堆空间的常量池中，</span></span><br><span class="line"><span class="comment">     *	 并且常量池中不允许出现重复的元素，所以说 s1 和 s2 指向同一个对象。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    System.out.println(s1 == s2);   <span class="comment">// true</span></span><br><span class="line">    System.out.println(s1.equals(s2));      <span class="comment">// true</span></span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="常量-变量-变量"><a href="#常量-变量-变量" class="headerlink" title="常量/变量 +变量"></a>常量/变量 +变量</h2><ul>
+<li>  常量池中不会保存相同内容的字面量对象。</li>
+</ul>
+<blockquote>
+<p>  <strong>结论：</strong></p>
+</blockquote>
+<ul>
+<li>  在多个字符串拼接操作中，只要存在变量，结果就<strong>只会</strong>保存在堆中的非常量池区域。</li>
+<li>  <strong>Tip：此时拼接后的 String 对象只会保存在堆中的非常量池区域，而不会同步保存到字符串常量池中！！！</strong></li>
+</ul>
+<blockquote>
+<p>  <strong>原理：</strong>字符串拼接操作底层是通过 <code>StringBuilder#append()</code> 方法实现的。</p>
+</blockquote>
+<p>在多个字符串拼接操作中，只要存在变量，那么 JVM 在进行字符串拼接的时候，</p>
+<ol>
+<li> 首先会 <code>new StringBuilder()</code> 对象，</li>
+<li> 然后调用该对象中的 <code>append()</code> 方法拼接字符串，</li>
+<li> 最后再调用  <code>StringBuilder#toString()</code> 方法，将拼接后的字符串对象转换成 String 对象，并将这个 String 对象保存在堆中(的非常量池区域)。</li>
+</ol>
+<blockquote>
+<p>  <strong>代码：</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line">    String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s4 = s1 + s2;</span><br><span class="line">    String s5 = <span class="string">&quot;a&quot;</span> + s2;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        s1 + s2 的执行细节：</span></span><br><span class="line"><span class="comment">            1、StringBuilder sb = new StringBuilder();</span></span><br><span class="line"><span class="comment">            2、sb.append(s1);</span></span><br><span class="line"><span class="comment">            3、sb.append(s2);</span></span><br><span class="line"><span class="comment">            4、sb.toString();  --&gt;&gt; 类似于 new String(&quot;ab&quot;)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  最终 s4 指向的地址是在第 4 步的 <code>sb.toString()</code> 中确定的，这个方法类似于 <code>new String()</code>，但是并不相同。</li>
+<li>  <strong>使用 <code>new String()</code> 创建出来的 String 对象会同时保存在堆和字符串常量池中</strong>，而 <code>StringBuilder#toString()</code> 方法生成的 String 对象只保存在堆中(的非常量池区域)。</li>
+</ul>
+<blockquote>
+<p>  <strong>Tip</strong>：</p>
+</blockquote>
+<ul>
+<li>  在 JDK5 之前，含有变量的字符串拼接操作，底层使用的类是 StringBuffer，<em>因为 JDK5 之前并没有 StringBuilder 这个类</em>；</li>
+<li>  从 JDK5 开始，才使用 StringBuilder 代替 StringBuffer 来完成含有变量的字符串拼接操作。</li>
+</ul>
+<blockquote>
+<p>  <strong>字节码文件</strong></p>
+</blockquote>
+<p><img src="/2021/06/13/String/1623478701279-d327aa0f-fdc0-47a9-a63e-e310317f7271.png" alt="test.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> 0 ldc #2 &lt;a&gt;   // 在字符串常量池中创建一个字面量对象&lt;a&gt;，并得到该字面量对象的内存地址</span><br><span class="line"> <span class="number">2</span> astore_1     <span class="comment">// 将字面量&lt;a&gt;的内存地址保存到栈中栈帧的局部变量表中下标为 1 的位置上</span></span><br><span class="line"> 3 ldc #3 &lt;b&gt;  </span><br><span class="line"> <span class="number">5</span> astore_2     </span><br><span class="line"> 6 ldc #4 &lt;ab&gt;  </span><br><span class="line"> <span class="number">8</span> astore_3    </span><br><span class="line">  </span><br><span class="line"> <span class="comment">/* 创建 StringBuilder 对象开始 */</span></span><br><span class="line"> 9 new #5 &lt;java/lang/StringBuilder&gt; </span><br><span class="line"><span class="number">12</span> dup</span><br><span class="line">13 invokespecial #6 &lt;java/lang/StringBuilder.&lt;init&gt;&gt;</span><br><span class="line"><span class="comment">/*  创建 StringBuilder 对象结束 */</span></span><br><span class="line"></span><br><span class="line"><span class="number">16</span> aload_1  <span class="comment">// 取出局部变量表中下标为1的位置上的值，即常量池中字面量对象&lt;a&gt;的地址值</span></span><br><span class="line">17 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    // 调用 StringBuilder#append() 将该值追加到 StringBuilder 对象中</span><br><span class="line"><span class="number">20</span> aload_2  </span><br><span class="line">21 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;</span><br><span class="line">     </span><br><span class="line">24 invokevirtual #8 &lt;java/lang/StringBuilder.toString&gt;  // 调用 StringBuilder#toString() 将StringBuilder对象转化为String对象</span><br><span class="line"><span class="number">27</span> astore <span class="number">4</span> <span class="comment">// 将上一条指令得到的String对象的内存地址值保存到局部变量表下标为4的位置上</span></span><br><span class="line"></span><br><span class="line">29 new #5 &lt;java/lang/StringBuilder&gt;</span><br><span class="line"><span class="number">32</span> dup</span><br><span class="line">33 invokespecial #6 &lt;java/lang/StringBuilder.&lt;init&gt;&gt;</span><br><span class="line"></span><br><span class="line">36 ldc #2 &lt;a&gt;   // 从常量池中得到字符串常量&lt;a&gt;</span><br><span class="line">38 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    </span><br><span class="line"><span class="number">41</span> aload_2      </span><br><span class="line">42 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    </span><br><span class="line">45 invokevirtual #8 &lt;java/lang/StringBuilder.toString&gt;  </span><br><span class="line"><span class="number">48</span> astore <span class="number">5</span>     </span><br><span class="line">     </span><br><span class="line"><span class="number">50</span> <span class="keyword">return</span>   <span class="comment">// 返回</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="特殊情况：final-修饰的变量"><a href="#特殊情况：final-修饰的变量" class="headerlink" title="特殊情况：final 修饰的变量"></a>特殊情况：final 修饰的变量</h2><p>使用 <code>final</code> 修饰的变量等价于常量，因为在 <code>.java</code> 源文件在编译成 <code>.class</code> 字节码文件的时候就已经把 <code>final</code> 修饰的变量转换成常量值了（编译期优化）。也就是说加载到内存中的就是字符串字面量常量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">final</span> String s1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line">    <span class="keyword">final</span> String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s4 = s1 + s2;</span><br><span class="line">    System.out.println(s3 == s4);  <span class="comment">// true</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        使用 final 修饰的变量，在编译成字节码文件的时候就已经把这些变量转换成常量了（编译期优化），</span></span><br><span class="line"><span class="comment">        也就是说加载到内存中的是常量字符串，常量与常量的拼接自然保存在常量池中。</span></span><br><span class="line"><span class="comment">        所以可以得到 s3==s4 为 true</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>如果拼接的结果调用 <code>intern()</code> 方法，则主动将常量池中还没有的字符串对象放入池中，并返回此对象在常量池中的地址。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;javaEE&quot;</span>;   <span class="comment">// String Pool；poolAddress[0]</span></span><br><span class="line">    String s2 = <span class="string">&quot;hadoop&quot;</span>;   <span class="comment">// String Pool；poolAddress[1]</span></span><br><span class="line"></span><br><span class="line">    String s3 = <span class="string">&quot;javaEEhadoop&quot;</span>;     <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line">    String s4 = <span class="string">&quot;javaEE&quot;</span> + <span class="string">&quot;hadoop&quot;</span>;    <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line">    String s5 = s1 + <span class="string">&quot;hadoop&quot;</span>;  <span class="comment">// Not String Pool； heapAddress[0]</span></span><br><span class="line">    String s6 = <span class="string">&quot;javaEE&quot;</span> + s2;  <span class="comment">// Not String Pool; heapAddress[1]</span></span><br><span class="line">    String s7 = s1 + s2;    <span class="comment">// Not String Pool; heapAddress[2]</span></span><br><span class="line">    String s8 = s6.intern();    <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分析：</span></span><br><span class="line"><span class="comment">     *      s1 保存在字符串常量池中，地址为 poolAddress[0]；</span></span><br><span class="line"><span class="comment">     *      s2 保存在字符串常量池中，地址为 poolAddress[1]；</span></span><br><span class="line"><span class="comment">     *      s3 保存在字符串常量池中，地址为 poolAddress[2]；</span></span><br><span class="line"><span class="comment">     *      s4 是两个常量的拼接，由于编译期优化，结果仍保存在常量池中，并且地址为 poolAddress[2]；</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     *      s5 是 变量+常量 的拼接，结果只会保存在堆中的非常量池区域，所以 s5 的地址为 heapAddress[0]；</span></span><br><span class="line"><span class="comment">     *      s6 也是 变量+常量 的拼接，结果会保存在堆中的非常量池区域，并且在非常量池区域并没有要求相同的值只能保存一份数据，所以 s6 会占用一块新的内存空间，地址为 heapAddress[1]；</span></span><br><span class="line"><span class="comment">     *      s7 也是 变量+变量 的拼接，结果会保存在堆中的非常量池区域，原理同 s6 一样，s7 的地址为 heapAddress[2]；</span></span><br><span class="line"><span class="comment">     *      s8 是 s6 调用 intern() 方法得到的返回值，由于s6对应的字符串字面量在常量池中已经存在了，所以 s8 的地址值为 poolAddress[2];</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span> </span><br><span class="line"></span><br><span class="line">    System.out.println(s3 == s4);   <span class="comment">// true</span></span><br><span class="line">    System.out.println(s3 == s5);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s3 == s6);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s3 == s7);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s5 == s6);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s5 == s7);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s6 == s7);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s3 == s8);   <span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<hr>
+<h1 id="5-intern-方法"><a href="#5-intern-方法" class="headerlink" title="5  intern() 方法"></a>5  intern() 方法</h1><h2 id="有什么用？"><a href="#有什么用？" class="headerlink" title="有什么用？"></a>有什么用？</h2><blockquote>
+<p>  <strong>源码分析</strong></p>
+</blockquote>
+<p><img src="/2021/06/13/String/1623488782339-dd95c67e-52d3-4dfd-887b-52ed4e499a47.png" alt="image.png"></p>
+<p>​        <strong>intern()</strong> 方法是 String 类中的一个方法，查看源码可知，<code>String#intern()</code> 方法是一个 <code>native</code> 修饰的本地方法。也就是说，其具体实现是由 C/C++ 编写的。</p>
+<blockquote>
+<p>  <strong>主要作用：</strong></p>
+</blockquote>
+<p>现有一个字符串对象 <code>String s1</code> ，当调用 <code>s1.intern()</code> 方法时，</p>
+<ol>
+<li> 首先要去判断字符串常量池中是否已经存在一个 String 对象其字面量与 s1 的字面量相同；</li>
+<li> 如果存在，那么就返回字符串常量池中该 String 对象的地址；</li>
+<li> 如果不存在，就将 s1 对象的字面量值拷贝一份到字符串常量池中，并返回该 String 对象在字符串常量池中的地址。</li>
+</ol>
+<blockquote>
+<p>  <strong>Tip：</strong></p>
+</blockquote>
+<p>调用 <code>String#intern()</code> 方法可以确保字符串在内存中只有一份数据，这样可以节约内存空间，加快字符串操作任务的执行速度。</p>
+<p><strong>分析：</strong></p>
+<ul>
+<li>  调用 <code>String#intern()</code> 方法后，如果 String 对象原本就保存在字符串常量池中，那不会有任何改变；</li>
+<li>  如果 String 对象原本保存在堆(的非字符串常量池区域)中，那么调用此方法后，就会返回一个字符串常量池中对象的地址。</li>
+<li>  这时就可以把原来堆(的非字符串常量池区域)中的 String 对象回收掉，让内存中只保留一份字符串字面量数据。【这一步不是必须的】</li>
+</ul>
+<hr>
+<h2 id="intern-的使用场景"><a href="#intern-的使用场景" class="headerlink" title="intern() 的使用场景"></a>intern() 的使用场景</h2><p>如果不是通过字符串字面量（即双引号）创建的 String 对象，如果想要将其保存到字符串常量池中，可以使用 String 提供的 intern() 方法。</p>
+<blockquote>
+<p>  <strong>问题：如何保证字符串变量 s 指向的字符串是字符串常量池中的数据而不是堆中非常量池区域的数据呢？</strong></p>
+</blockquote>
+<p>答：有2种方式</p>
+<ol>
+<li> 直接通过双引号而不是 new 关键字来创建 String 对象。如：<code>String s = &quot;HelloWorld&quot;;</code></li>
+<li> 对堆中的字符串对象，调用 <code>intern()</code> 方法，得到的返回值就是指向字符串常量池中对应字符串字面量的地址。</li>
+</ol>
+<blockquote>
+<p>  <strong>问题：<code>new String(&quot;HelloWorld&quot;)</code> 会创建几个对象？</strong> </p>
+</blockquote>
+<p>答：如果在此之前，字符串常量池中已有字面量对象 <code>“HelloWorld”</code>，则只会在堆中新建 1 个对象；否则会新建 2 个对象，一个保存在堆中非字符串常量池区域（和普通对象一样），另一个保存在字符串常量池中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String s = <span class="keyword">new</span> String(<span class="string">&quot;HelloWorld&quot;</span>);</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    	创建动作分解：</span></span><br><span class="line"><span class="comment">    	1、new String()  堆中；</span></span><br><span class="line"><span class="comment">    	2、&quot;HelloWorld&quot;  字符串常量池中；</span></span><br><span class="line"><span class="comment">    	3、执行堆中的 String 对象的初始化方法；</span></span><br><span class="line"><span class="comment">    	4、将等式左边的地址赋值给等式右边的变量。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li> 首先，在堆中非常量池区域中创建一个 String 对象。</li>
+<li> 其次，在字符串常量池中创建字面量为 <code>&quot;HelloWorld&quot;</code> 的字面量对象。</li>
+<li> 再次，调用 String 类的构造方法，对字符串对象 s 进行显式初始化；</li>
+<li> 最后，将结果地址保存到局部变量表下标为 1 的位置上。</li>
+<li> <strong>注意：虽然现在字符串常量池和堆中都有“HelloWorld”这个字符串对象，但是此时 s 得到的地址是堆中的！！！</strong></li>
+</ol>
+<p><img src="/2021/06/13/String/1623491535138-3562077b-906b-41ae-aaee-49806b528949.png" alt="image.png"></p>
+<blockquote>
+<p>  <strong>扩展：<code>String str = new String(&quot;a&quot;) + new String(&quot;b&quot;);</code> 会创建多少个对象？</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String str = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/06/13/String/1623492457552-7821a5f9-93b5-44b1-aabf-11514fb0ba93.png" alt="image.png"></p>
+<p>分析：</p>
+<ul>
+<li>  对象1：<code>new StringBuilder()</code>， 首先，两个字符串变量拼接时，需要一个辅助对象 StringBuilder 。</li>
+<li>  对象2：<code>new String(&quot;a&quot;)</code>，</li>
+<li>  对象3：常量池中的字面量对象 “a”</li>
+<li>  对象4：<code>new String(&quot;b&quot;)</code>，</li>
+<li>  对象5：常量池中的字面量对象 “b”</li>
+<li>  对象6：在调用 <code>StringBuilder.toString()</code> 方法时，根据 <code>toString()</code> 方法的源码，还要创建一个 String 对象。</li>
+</ul>
+<blockquote>
+<p>  <strong>toString() 方法</strong></p>
+</blockquote>
+<p><strong>虽然 toString() 方法底层调用了 new String() 方法，但是却不会在字符串常量池中创建对应的字符串对象，只会在堆中创建字符串对象。</strong></p>
+<p><img src="/2021/06/13/String/1623492807620-7f60184d-4382-4830-b450-95b9019c6051.png" alt="image.png"></p>
+<blockquote>
+<p>  <code>StringBuilder#toString()</code> 的字节码文件</p>
+</blockquote>
+<ul>
+<li>  我们可以看到并没有在字符串常量池中创建 String 对象。</li>
+</ul>
+<p><img src="/2021/06/13/String/image-20210613173632473.png" alt="image-20210613173632473"></p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h3 id="Demo1"><a href="#Demo1" class="headerlink" title="Demo1"></a>Demo1</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);    <span class="comment">// s1 --&gt;&gt; Not String Pool ；heapAddr[0]</span></span><br><span class="line">    s1.intern();    <span class="comment">// s1 --&gt;&gt; Not String Pool ；heapAddr[0]</span></span><br><span class="line">    			   <span class="comment">// s1.intern() 的返回值 --&gt;&gt; String Pool ； poolAddr[0]</span></span><br><span class="line">    String s2 = <span class="string">&quot;1&quot;</span>;    <span class="comment">// s2 --&gt;&gt; String Pool ； poolAddr[0]</span></span><br><span class="line">    System.out.println(s1 == s2);   <span class="comment">// False</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>分析：</strong></p>
+<ol>
+<li><p>使用 <code>new</code> 关键字创建对象，</p>
+<ul>
+<li>  首先会在堆中非常量池区域分配内存保存字符串对象 “1” ；</li>
+<li>  并且之后还会在常量池中分配内存保存字面量对象 “1” ;</li>
+<li>  但是此时栈中局部变量表中的 s1 保存的是堆中非常量池区域的字符串对象的内存地址；</li>
+</ul>
+</li>
+<li><p>调用 <code>s1.intern()</code> 方法，JVM 尝试在字符串常量池中创建值为 “1” 的字面量对象，发现已存在，得到该字面量对象的地址，作为方法的返回值。<code>intern()</code> 方法是有返回值的，返回值就是字面量对象 “1” 在字符串常量池中的内存地址，但是在本例中并没有接收这个地址，也就是说目前为止，s1 指向的仍然是堆中非常量池区域中那个字符串对象的内存地址。</p>
+</li>
+<li><p>直接使用双引号创建 String 对象，JVM 会尝试在字符串常量池中创建值为 “1” 的字面量对象，发现已存在，得到该字面量对象的地址，并将此字面量对象的内存地址保存在栈的局部变量表中，即此时 s2 指向字符串常量池中对应字面量对象的地址。</p>
+</li>
+<li><p>所以，<code>s1==s2</code> 结果为 False</p>
+</li>
+</ol>
+<h3 id="Demo2"><a href="#Demo2" class="headerlink" title="Demo2"></a>Demo2</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">       String s3 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);  <span class="comment">// s3 --&gt;&gt; Not String Pool ；heapAddr[1]</span></span><br><span class="line">       s3.intern();    <span class="comment">// // s3 --&gt;&gt; Not String Pool ；heapAddr[1]</span></span><br><span class="line">       String s4 = <span class="string">&quot;11&quot;</span>;    <span class="comment">// JDK6：String Pool ； poolAddr[1]  JDK7：Not String Pool ；heapAddr[1]</span></span><br><span class="line">       System.out.println(s3 == s4);   <span class="comment">// JDK6：False  JDK7：True</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>s3</code> 指向的对象是由两个字符串对象拼接而成的，在进行字符串拼接时，底层要借助 <code>StingBuilder</code> 实现。其中有一步需要使用 <code>StringBuilder#toString()</code> 方法将 <code>Stringbuilder</code> 对象转换成 <code>String</code> 对象，在使用 <code>toString()</code> 方法时，<strong>只</strong>会在堆中的非常量池区域创建一个 <code>String</code> 对象，并不会在常量池中创建这个对象对应的字面量对象（类似于 new，但不会同步到常量池中）。所以第 2 行代码在执行完毕后 <code>s3</code> 指向一个堆中的字符串对象。</li>
+<li>由于此时字符串常量池中没有字面量对象 <code>“11”</code>，所以调用 <code>intern()</code> 方法会在常量池中创建一个字符串对象<code>“11&quot;</code>并返回其地址值。<ul>
+<li>  在 JDK7 之前，由于字符串常量池不在堆空间中，所以会真正意义上的在字符串常量池创建一个字符串对象<code>“11”</code>并返回其地址值。</li>
+<li>  从 JDK7 开始，由于字符串常量池也保存在堆空间中，所以这时不会在常量池中创建真正的字符串对象<code>“11”</code>了，而是直接拿来了 s3 对象的地址值。</li>
+</ul>
+</li>
+<li>此处没有使用 <code>intern()</code> 方法的返回值，所以 s3 仍然指向堆中非常量池空间中的那个字符串对象的地址。</li>
+<li>直接使用字面量创建String对象。由于此时字符串常量池中已有该字面量对象，所以不再新建对象，只是返回字面量对象的地址，而显然该字面量对象的地址是一个地址值，最后真正指向的对象还是堆中非常量池区域的那个String对象，而返回地址按照对象的就近原则也是堆中非常量池区域的String对象的地址值。</li>
+<li>所以说， 在JDK7之前，<code>s3 == s4</code> 为 False；而从JDK7开始，<code>s3 == s4</code> 为 True</li>
+</ol>
+<img src="/2021/06/13/String/1623508433062-ce767a2e-fba1-4f8d-bd53-374635e01625.png" alt="intern的使用 (1).png" style="zoom: 67%;">
+
+
+
+
+
+<h2 id="不同版本JDK中不同方式创建字符串对象的先后顺序的影响"><a href="#不同版本JDK中不同方式创建字符串对象的先后顺序的影响" class="headerlink" title="不同版本JDK中不同方式创建字符串对象的先后顺序的影响"></a>不同版本JDK中不同方式创建字符串对象的先后顺序的影响</h2><ol>
+<li> 如果只想在堆的非字符串常量池区域创建对象： <code>String s1 = new String(&quot;a&quot;) + new String(&quot;b&quot;);</code> 此时字符串常量池中没有“ab”对应的字面量对象。</li>
+<li>如果这时继续在常量池中也保存一份 “ab” 字符串对应的字面量对象。可以调用 <code>s1.intern();</code> 方法。<ul>
+<li>  从 JDK7 开始，为了节省内存，在常量池中创建字符串对象这一步，如果在堆的非常量池区域存在相同字面量值的对象，就不再创建一个“真正”的字面量对象了，而是在常量池的字面量对象的地址中保存堆中非常量池区域那个对象的地址值。</li>
+<li>  而在 JDK7 之前，在常量池中创建的对象时真正意义上的字面量对象，保存的是真正的数据值，而不是对象的引用。</li>
+</ul>
+</li>
+<li> 如果使用 <code>String s1 = new String(&quot;1&quot;);</code> 创建对象，这时会创建两个对象，即字符串常量池中的字面量对象和 Java 堆的非字符串常量池区域的对象，这两个对象都是真正意义上的对象。上述1，2的规则就不再使用了。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JDK8 中测试</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">       String s3 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);  <span class="comment">// Not String Pool ；heapAddr[1]</span></span><br><span class="line">       s3.intern();    <span class="comment">// String Pool ； poolAddr[1]</span></span><br><span class="line">       String s4 = <span class="string">&quot;11&quot;</span>;    <span class="comment">// Not String Pool ；heapAddr[1]</span></span><br><span class="line">       System.out.println(s3 == s4);   <span class="comment">// True</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="comment">/*</span></span><br><span class="line"><span class="comment">       调换了2、3行代码的执行顺序</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">       String s3 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);  <span class="comment">// Heap&#x27;s Not String Pool ；heapAddr[0]</span></span><br><span class="line">       String s4 = <span class="string">&quot;11&quot;</span>;    <span class="comment">// String Pool ; poolAddr[0]</span></span><br><span class="line">       s3.intern();    <span class="comment">// String Pool ； poolAddr[0]</span></span><br><span class="line">       System.out.println(s3 == s4);   <span class="comment">// False</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>总结：String中intern()的使用：</strong></p>
+</blockquote>
+<ul>
+<li><p>  在 JDK7 之前，将字符串对象尝试放入字符串常量池中时：</p>
+</li>
+<li><ul>
+<li>  如果字符串常量池中已经含有，则并不会放入，并返回已有对象的内存地址；</li>
+<li>  如果字符串常量池中没有，则会将当前对象的值复制一份，放入字符串常量池，并返回字符串常量池中该对象的内存地址；</li>
+</ul>
+</li>
+<li><p>  从 JDK7 开始，将字符串对象尝试放入字符串常量池中时：</p>
+</li>
+<li><ul>
+<li>  如果字符串常量池中已经含有该字面量对象，则直接返回该字面量对象的内存地址即可；</li>
+<li>  如果没有，则会把<strong>对象的引用地址复制一份</strong>，放入字符串常量池，并返回字符串常量池中的引用地址。</li>
+</ul>
+</li>
+</ul>
+<h2 id="intern-的练习"><a href="#intern-的练习" class="headerlink" title="intern 的练习"></a>intern 的练习</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//      String x = &quot;ab&quot;;</span></span><br><span class="line">        String s1 = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">        <span class="comment">// 在上一行代码执行完毕之后，字符串常量池中并没有字面量对象 &quot;ab&quot;</span></span><br><span class="line"></span><br><span class="line">        String s2 = s1.intern();</span><br><span class="line">        <span class="comment">// JDK6中，在字符串常量池中创建字面量对象 &quot;ab&quot; ，并将地址值赋给 s2</span></span><br><span class="line">        <span class="comment">// JDK8中，在字符串常量池中没有创建字面量对象 &quot;ab&quot;，而是创建了一个引用对象，指向堆中非字符串常量池中的地址并将地址返回</span></span><br><span class="line">        System.out.println(s1 == <span class="string">&quot;ab&quot;</span>); <span class="comment">// false（JDK6）；true（JDK8）</span></span><br><span class="line">        System.out.println(s2 == <span class="string">&quot;ab&quot;</span>); <span class="comment">// true</span></span><br><span class="line">        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    String s1 = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);  <span class="comment">// &quot;ab&quot; --&gt;&gt; Heap   执行完以后，在字符串常量池中不会生成 &quot;ab&quot;</span></span><br><span class="line">    s1.intern();</span><br><span class="line">    String s2 = <span class="string">&quot;ab&quot;</span>;   <span class="comment">// s2 --&gt;&gt; String Pool --&gt;&gt; Heap</span></span><br><span class="line">    System.out.println(s1 == s2); <span class="comment">// true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="keyword">new</span> String(<span class="string">&quot;ab&quot;</span>);   <span class="comment">// &quot;ab&quot; --&gt;&gt; Heap, SringPool    执行完以后，在字符串常量池中会生成 &quot;ab&quot;，但是s1指向的是Heap中的那个</span></span><br><span class="line">    s1.intern();</span><br><span class="line">    String s2 = <span class="string">&quot;ab&quot;</span>;   <span class="comment">// s2 --&gt;&gt; String Pool</span></span><br><span class="line">    System.out.println(s1 == s2); <span class="comment">// false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<hr>
+<h1 id="7-G1-中的-String-去重操作"><a href="#7-G1-中的-String-去重操作" class="headerlink" title="7  G1 中的 String 去重操作"></a>7  G1 中的 String 去重操作</h1><p>字符串常量池中本就不允许存储重复元素，所以 String 的去重操作针对的是堆中非字符串常量池的区域。</p>
+<p>String s1 = new String(“hello”);</p>
+<p>String s1 = new String(“hello”);</p>
+<p>什么是去重操作？（图）</p>
+<h2 id="背景说明"><a href="#背景说明" class="headerlink" title="背景说明"></a>背景说明</h2><blockquote>
+<p>  背景</p>
+</blockquote>
+<p>通过对大量 Java 应用的研究测试表明：</p>
+<ul>
+<li>  堆中存活的数据集合中 String 对象占据了约 25%；</li>
+<li>  其中 String 对象中重复的对象又占了约 13.5%；重复的意思就是： <code>string1.equals(string2) == true</code> </li>
+<li>  堆上存在重复的String对象必然是一种内存资源的浪费。</li>
+<li>  String 对象的平均长度是 45</li>
+</ul>
+<p>许多大规模Java应用的瓶颈在于内存，而这些项目将在G1垃圾收集器中实现自动持续对重复的String对象进行去重，这样能避免浪费内存。</p>
+<hr>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2786,269 +3371,6 @@
 </blockquote>
 </li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/20/JVM%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/20/JVM%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/" class="post-title-link" itemprop="url">JVM——本地方法库</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-20 21:19:19" itemprop="dateCreated datePublished" datetime="2021-05-20T21:19:19+08:00">2021-05-20</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-03 12:33:15" itemprop="dateModified" datetime="2021-08-03T12:33:15+08:00">2021-08-03</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="本地方法接口"><a href="#本地方法接口" class="headerlink" title="本地方法接口"></a>本地方法接口</h1><h2 id="什么是本地方法？"><a href="#什么是本地方法？" class="headerlink" title="什么是本地方法？"></a>什么是本地方法？</h2><ul>
-<li>  使用 <strong>native</strong> 关键字修饰的方法。</li>
-<li>  该方法由非 Java 语言实现的，比如 C 或 C++。</li>
-<li>  在定义一个 <code>Native Method</code> 时，并不提供实现体（有点像定义接口中的抽象方法），因为其具体实现是由非 Java 语言在外面实现的。</li>
-<li>  <strong>标识符 native 可以与所有其它的 java 标识符连用，但 abstract 除外</strong>。</li>
-<li>  <strong>一个 <code>Native Method</code> 就是一个Java调用非Java代码的接口</strong>。</li>
-<li>  这个特征并非 Java 特有的，很多其它的编程语言都有这一机制，比如在 C++ 中，就可以用 <code>extern &quot;C&quot;</code> 告知 C++ 编译器去调用一个 C 的函数。</li>
-<li>  本地接口的作用是融合不同的编程语言为 Java 所用，它的初衷是融合 C/C++ 程序。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">native 关键字表明了当前方法是一个本地方法，是有实现体的，但实现体是采用非Java语言实现的；</span><br><span class="line">而 abstract 关键字表明无无方法实现体。</span><br><span class="line">这两个关键字是相互矛盾的。</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h2 id="为什么要使用-Native-Method-？"><a href="#为什么要使用-Native-Method-？" class="headerlink" title="为什么要使用 Native Method ？"></a>为什么要使用 Native Method ？</h2><p>Java 语言使用起来非常方便，然而有些层次的任务用 Java 实现起来不容易，或者我们对程序的效率很在意时，问题就来了。</p>
-<blockquote>
-<ol>
-<li><strong>与Java环境外交互</strong></li>
-</ol>
-</blockquote>
-<p><strong>有时Java应用需要与Java外面的环境交互，这是本地方法存在的主要原因</strong>。有时Java需要与一些底层系统，如操作系统或某些硬件交换信息，本地方法正是这样的一种交流机制，它为我们提供了一个非常简洁的接口，类似于一个黑盒，我们无需去了解Java应用之外的繁琐的细节。</p>
-<blockquote>
-<ol start="2">
-<li><strong>与操作系统交互</strong></li>
-</ol>
-</blockquote>
-<ul>
-<li>  JVM 虚拟机是一个虚拟机系统，支持 Java 语言本身和运行时库，它是Java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。</li>
-<li>  然而不管怎样，它毕竟不是一个完整的系统，它经常需要依赖一些底层系统的支持。这些底层系统常常是强大的操作系统。</li>
-<li>  <strong>通过使用本地方法，我们得以用 Java 与底层的操作系统交互，甚至JVM的一些部分就是用C写的</strong>。</li>
-<li>  还有，如果我们要使用一些 Java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</li>
-</ul>
-<blockquote>
-<ol start="3">
-<li><strong>Sun’s Java</strong></li>
-</ol>
-</blockquote>
-<p><strong>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互</strong>。JRE 大部分是用 Java 实现的，它也通过一些本地方法与外界交互。例如：java.lamg.Thread 的 <code>setPriority()</code> 方法是用Java实现的，但是它的具体实现调用的是该类里的本地方法<code>setPriority0()</code>。这个本地方法是用C实现的，并被植入JVM内部。</p>
-<h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><p><strong>目前本地方法的使用越来越少了，除非是与硬件有关的应用</strong>，比如通过 Java 程序驱动打印机或者 Java 系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/09/JWT/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/05/09/JWT/" class="post-title-link" itemprop="url">JWT</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-05-09 16:05:40" itemprop="dateCreated datePublished" datetime="2021-05-09T16:05:40+08:00">2021-05-09</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-02 20:53:00" itemprop="dateModified" datetime="2021-08-02T20:53:00+08:00">2021-08-02</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h1><p>完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。</p>
-<p>Token 就是将这些信息包装成一个编码后的字符串，如</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Jack#14692866513#192.0.0.1#...</span><br></pre></td></tr></table></figure>
-
-<p>并且将这个字符串放入请求头 header 中。</p>
-<p>在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。</p>
-<p>在请求头中，查看是否包含 token 字符串，</p>
-<p>如果包含，对 token 字符串进行校验，比较该 token 与我们生成的 token 是否相同，相同则校验通过，表示目前就处于登录状态。否则不通过。</p>
-<p>token 可以设置有效时间！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">token 的作用：</span><br><span class="line">	1、存储用户信息</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Token-的生成"><a href="#Token-的生成" class="headerlink" title="Token  的生成"></a>Token  的生成</h2><p>Token 需要按照一定的规则来生成。这个规则可以由开发者自己决定，也可以借助一些 token 生成工具来生成。</p>
-<p>JWT 就是一个生产 token 的工具包。</p>
-<h1 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h1><ul>
-<li>JWT（Json Web Token）：是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准。（就是按照一定的规则生成 Json 字符串）</li>
-<li>JWT 的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源。比如用在用户登录上。</li>
-<li>JWT最重要的作用就是对 token信息的<strong>防伪</strong>作用。</li>
-</ul>
-<h2 id="JWT-原理"><a href="#JWT-原理" class="headerlink" title="JWT 原理"></a>JWT 原理</h2><p>一个JWT由三个部分组成：公共部分、私有部分、签名部分。最后由这三者组合进行 base64 编码得到 JWT。</p>
-<p><img src="/2021/05/09/JWT/image-20210509161913888.png" alt="image-20210509161913888"></p>
-<blockquote>
-<ol>
-<li>公共部分</li>
-</ol>
-</blockquote>
-<ul>
-<li>主要是该 JWT 的相关配置参数，比如签名的加密算法、格式类型、过期时间等等。</li>
-<li>Key=ATGUIGU</li>
-</ul>
-<blockquote>
-<ol start="2">
-<li>私有部分</li>
-</ol>
-</blockquote>
-<ul>
-<li>用户自定义的内容，真正要封装的信息。</li>
-<li>如：user { “userId”：”192321”，”name”：”张三”}</li>
-</ul>
-<blockquote>
-<ol start="3">
-<li>签名部分</li>
-</ol>
-</blockquote>
-<ul>
-<li>SaltiP：当前服务器的 IP 地址！{linux 中配置代理服务器的ip}</li>
-<li>主要用户对 JWT 生成字符串的时候，进行加密{盐值}</li>
-</ul>
-<p>最终组成：key+salt+userInfo –&gt;&gt;token</p>
-<p>base64 编码，并不是加密，只是把明文信息变成了不可见的字符串。但是其实只要用一些工具就可以把 base64 编码解成明文，所以不要在JWT中放入涉及私密的信息。</p>
-<h2 id="SpringBoot-整合-JWT"><a href="#SpringBoot-整合-JWT" class="headerlink" title="SpringBoot 整合 JWT"></a>SpringBoot 整合 JWT</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.jsonwebtoken.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang3.StringUtils;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JwtHelper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// token 的过期时间</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> tokenExpiration = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;</span><br><span class="line">    <span class="comment">// token 的签名秘钥（根据秘钥进行编码、加密等操作）</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String tokenSignKey = <span class="string">&quot;123456&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据参数生成 token 字符串（加密）</span></span><br><span class="line"><span class="comment">     * 这里的参数是：1、用户id（userId）  2、用户姓名（userName）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userId</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userName</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">createToken</span><span class="params">(Long userId, String userName)</span> </span>&#123;</span><br><span class="line">        String token = Jwts.builder()</span><br><span class="line">            .setSubject(<span class="string">&quot;YYGH-USER&quot;</span>)    <span class="comment">// 设置分类</span></span><br><span class="line">            .setExpiration(<span class="keyword">new</span> Date(System.currentTimeMillis() + tokenExpiration))  <span class="comment">// 设置过期时间</span></span><br><span class="line">            .claim(<span class="string">&quot;userId&quot;</span>, userId)</span><br><span class="line">            .claim(<span class="string">&quot;userName&quot;</span>, userName)</span><br><span class="line">            .signWith(SignatureAlgorithm.HS512, tokenSignKey)</span><br><span class="line">            .compressWith(CompressionCodecs.GZIP)</span><br><span class="line">            .compact();</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户id：userid（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title">getUserId</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        Integer userId = (Integer) claims.get(<span class="string">&quot;userId&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> userId.longValue();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户名称：userName（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getUserName</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws</span><br><span class="line">            = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        <span class="keyword">return</span> (String) claims.get(<span class="string">&quot;userName&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String token = JwtHelper.createToken(<span class="number">1L</span>, <span class="string">&quot;Jack&quot;</span>);</span><br><span class="line">        System.out.println(token);</span><br><span class="line">        System.out.println(JwtHelper.getUserId(token));</span><br><span class="line">        System.out.println(JwtHelper.getUserName(token));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>测试结果：</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ</span><br><span class="line">.H4sIAAAAAAAAAKtWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDMyMDM2NbUw11EqLU4t8kwBikGYfom5qUAtXonJ2Uq1AA6KXZ1BAAAA</span><br><span class="line">.ajuC6Hj7TCbklRN238jTyQSL-gQEGG55UkUxnP64IuL41C5OVvVZnKH3VQiZSrVtOQhHh5XnEKV3nr5xKWWzvw</span><br><span class="line"><span class="comment">// 可以看到，token 由3部分组成，中间用 . 隔开 ！</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br><span class="line">Jack</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
 
       
     </div>

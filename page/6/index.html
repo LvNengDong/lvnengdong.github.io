@@ -155,13 +155,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -194,6 +194,269 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/20/JVM%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/20/JVM%E2%80%94%E2%80%94%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/" class="post-title-link" itemprop="url">JVM——本地方法库</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-20 21:19:19" itemprop="dateCreated datePublished" datetime="2021-05-20T21:19:19+08:00">2021-05-20</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 12:33:15" itemprop="dateModified" datetime="2021-08-03T12:33:15+08:00">2021-08-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="本地方法接口"><a href="#本地方法接口" class="headerlink" title="本地方法接口"></a>本地方法接口</h1><h2 id="什么是本地方法？"><a href="#什么是本地方法？" class="headerlink" title="什么是本地方法？"></a>什么是本地方法？</h2><ul>
+<li>  使用 <strong>native</strong> 关键字修饰的方法。</li>
+<li>  该方法由非 Java 语言实现的，比如 C 或 C++。</li>
+<li>  在定义一个 <code>Native Method</code> 时，并不提供实现体（有点像定义接口中的抽象方法），因为其具体实现是由非 Java 语言在外面实现的。</li>
+<li>  <strong>标识符 native 可以与所有其它的 java 标识符连用，但 abstract 除外</strong>。</li>
+<li>  <strong>一个 <code>Native Method</code> 就是一个Java调用非Java代码的接口</strong>。</li>
+<li>  这个特征并非 Java 特有的，很多其它的编程语言都有这一机制，比如在 C++ 中，就可以用 <code>extern &quot;C&quot;</code> 告知 C++ 编译器去调用一个 C 的函数。</li>
+<li>  本地接口的作用是融合不同的编程语言为 Java 所用，它的初衷是融合 C/C++ 程序。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">native 关键字表明了当前方法是一个本地方法，是有实现体的，但实现体是采用非Java语言实现的；</span><br><span class="line">而 abstract 关键字表明无无方法实现体。</span><br><span class="line">这两个关键字是相互矛盾的。</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="为什么要使用-Native-Method-？"><a href="#为什么要使用-Native-Method-？" class="headerlink" title="为什么要使用 Native Method ？"></a>为什么要使用 Native Method ？</h2><p>Java 语言使用起来非常方便，然而有些层次的任务用 Java 实现起来不容易，或者我们对程序的效率很在意时，问题就来了。</p>
+<blockquote>
+<ol>
+<li><strong>与Java环境外交互</strong></li>
+</ol>
+</blockquote>
+<p><strong>有时Java应用需要与Java外面的环境交互，这是本地方法存在的主要原因</strong>。有时Java需要与一些底层系统，如操作系统或某些硬件交换信息，本地方法正是这样的一种交流机制，它为我们提供了一个非常简洁的接口，类似于一个黑盒，我们无需去了解Java应用之外的繁琐的细节。</p>
+<blockquote>
+<ol start="2">
+<li><strong>与操作系统交互</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  JVM 虚拟机是一个虚拟机系统，支持 Java 语言本身和运行时库，它是Java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。</li>
+<li>  然而不管怎样，它毕竟不是一个完整的系统，它经常需要依赖一些底层系统的支持。这些底层系统常常是强大的操作系统。</li>
+<li>  <strong>通过使用本地方法，我们得以用 Java 与底层的操作系统交互，甚至JVM的一些部分就是用C写的</strong>。</li>
+<li>  还有，如果我们要使用一些 Java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</li>
+</ul>
+<blockquote>
+<ol start="3">
+<li><strong>Sun’s Java</strong></li>
+</ol>
+</blockquote>
+<p><strong>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互</strong>。JRE 大部分是用 Java 实现的，它也通过一些本地方法与外界交互。例如：java.lamg.Thread 的 <code>setPriority()</code> 方法是用Java实现的，但是它的具体实现调用的是该类里的本地方法<code>setPriority0()</code>。这个本地方法是用C实现的，并被植入JVM内部。</p>
+<h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><p><strong>目前本地方法的使用越来越少了，除非是与硬件有关的应用</strong>，比如通过 Java 程序驱动打印机或者 Java 系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/09/JWT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/09/JWT/" class="post-title-link" itemprop="url">JWT</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-09 16:05:40" itemprop="dateCreated datePublished" datetime="2021-05-09T16:05:40+08:00">2021-05-09</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-02 20:53:00" itemprop="dateModified" datetime="2021-08-02T20:53:00+08:00">2021-08-02</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h1><p>完成登录后，会将一些基本用户信息，如 用户名、手机号、IP地址等 返回给前端去展示。</p>
+<p>Token 就是将这些信息包装成一个编码后的字符串，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Jack#14692866513#192.0.0.1#...</span><br></pre></td></tr></table></figure>
+
+<p>并且将这个字符串放入请求头 header 中。</p>
+<p>在一些需要用户登录才能完成操作的页面，当发起请求时，每次都需要进行登录判断。</p>
+<p>在请求头中，查看是否包含 token 字符串，</p>
+<p>如果包含，对 token 字符串进行校验，比较该 token 与我们生成的 token 是否相同，相同则校验通过，表示目前就处于登录状态。否则不通过。</p>
+<p>token 可以设置有效时间！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">token 的作用：</span><br><span class="line">	1、存储用户信息</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Token-的生成"><a href="#Token-的生成" class="headerlink" title="Token  的生成"></a>Token  的生成</h2><p>Token 需要按照一定的规则来生成。这个规则可以由开发者自己决定，也可以借助一些 token 生成工具来生成。</p>
+<p>JWT 就是一个生产 token 的工具包。</p>
+<h1 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h1><ul>
+<li>JWT（Json Web Token）：是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准。（就是按照一定的规则生成 Json 字符串）</li>
+<li>JWT 的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源。比如用在用户登录上。</li>
+<li>JWT最重要的作用就是对 token信息的<strong>防伪</strong>作用。</li>
+</ul>
+<h2 id="JWT-原理"><a href="#JWT-原理" class="headerlink" title="JWT 原理"></a>JWT 原理</h2><p>一个JWT由三个部分组成：公共部分、私有部分、签名部分。最后由这三者组合进行 base64 编码得到 JWT。</p>
+<p><img src="/2021/05/09/JWT/image-20210509161913888.png" alt="image-20210509161913888"></p>
+<blockquote>
+<ol>
+<li>公共部分</li>
+</ol>
+</blockquote>
+<ul>
+<li>主要是该 JWT 的相关配置参数，比如签名的加密算法、格式类型、过期时间等等。</li>
+<li>Key=ATGUIGU</li>
+</ul>
+<blockquote>
+<ol start="2">
+<li>私有部分</li>
+</ol>
+</blockquote>
+<ul>
+<li>用户自定义的内容，真正要封装的信息。</li>
+<li>如：user { “userId”：”192321”，”name”：”张三”}</li>
+</ul>
+<blockquote>
+<ol start="3">
+<li>签名部分</li>
+</ol>
+</blockquote>
+<ul>
+<li>SaltiP：当前服务器的 IP 地址！{linux 中配置代理服务器的ip}</li>
+<li>主要用户对 JWT 生成字符串的时候，进行加密{盐值}</li>
+</ul>
+<p>最终组成：key+salt+userInfo –&gt;&gt;token</p>
+<p>base64 编码，并不是加密，只是把明文信息变成了不可见的字符串。但是其实只要用一些工具就可以把 base64 编码解成明文，所以不要在JWT中放入涉及私密的信息。</p>
+<h2 id="SpringBoot-整合-JWT"><a href="#SpringBoot-整合-JWT" class="headerlink" title="SpringBoot 整合 JWT"></a>SpringBoot 整合 JWT</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io.jsonwebtoken.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang3.StringUtils;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JwtHelper</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// token 的过期时间</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> tokenExpiration = <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;</span><br><span class="line">    <span class="comment">// token 的签名秘钥（根据秘钥进行编码、加密等操作）</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String tokenSignKey = <span class="string">&quot;123456&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据参数生成 token 字符串（加密）</span></span><br><span class="line"><span class="comment">     * 这里的参数是：1、用户id（userId）  2、用户姓名（userName）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userId</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> userName</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">createToken</span><span class="params">(Long userId, String userName)</span> </span>&#123;</span><br><span class="line">        String token = Jwts.builder()</span><br><span class="line">            .setSubject(<span class="string">&quot;YYGH-USER&quot;</span>)    <span class="comment">// 设置分类</span></span><br><span class="line">            .setExpiration(<span class="keyword">new</span> Date(System.currentTimeMillis() + tokenExpiration))  <span class="comment">// 设置过期时间</span></span><br><span class="line">            .claim(<span class="string">&quot;userId&quot;</span>, userId)</span><br><span class="line">            .claim(<span class="string">&quot;userName&quot;</span>, userName)</span><br><span class="line">            .signWith(SignatureAlgorithm.HS512, tokenSignKey)</span><br><span class="line">            .compressWith(CompressionCodecs.GZIP)</span><br><span class="line">            .compact();</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户id：userid（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Long <span class="title">getUserId</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        Integer userId = (Integer) claims.get(<span class="string">&quot;userId&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> userId.longValue();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 token 字符串得到用户名称：userName（解密）</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getUserName</span><span class="params">(String token)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isEmpty(token)) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        Jws&lt;Claims&gt; claimsJws</span><br><span class="line">            = Jwts.parser().setSigningKey(tokenSignKey).parseClaimsJws(token);</span><br><span class="line">        Claims claims = claimsJws.getBody();</span><br><span class="line">        <span class="keyword">return</span> (String) claims.get(<span class="string">&quot;userName&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String token = JwtHelper.createToken(<span class="number">1L</span>, <span class="string">&quot;Jack&quot;</span>);</span><br><span class="line">        System.out.println(token);</span><br><span class="line">        System.out.println(JwtHelper.getUserId(token));</span><br><span class="line">        System.out.println(JwtHelper.getUserName(token));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>测试结果：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ</span><br><span class="line">.H4sIAAAAAAAAAKtWKi5NUrJSiox099ANDXYNUtJRSq0oULIyNDMyMDM2NbUw11EqLU4t8kwBikGYfom5qUAtXonJ2Uq1AA6KXZ1BAAAA</span><br><span class="line">.ajuC6Hj7TCbklRN238jTyQSL-gQEGG55UkUxnP64IuL41C5OVvVZnKH3VQiZSrVtOQhHh5XnEKV3nr5xKWWzvw</span><br><span class="line"><span class="comment">// 可以看到，token 由3部分组成，中间用 . 隔开 ！</span></span><br><span class="line"></span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br><span class="line">Jack</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1367,7 +1630,7 @@
 <tr>
 <td>From</td>
 <td>发出请求的用户的Email</td>
-<td>From: <a href="mailto:&#x75;&#x73;&#x65;&#x72;&#x40;&#101;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#x75;&#x73;&#x65;&#x72;&#x40;&#101;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></td>
+<td>From: <a href="mailto:&#x75;&#x73;&#101;&#x72;&#64;&#x65;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#x75;&#x73;&#101;&#x72;&#64;&#x65;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;</a></td>
 </tr>
 <tr>
 <td>Host</td>
@@ -1813,485 +2076,6 @@
 
 
 
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/" class="post-title-link" itemprop="url">Vue组件化编码</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-09 23:10:34" itemprop="dateCreated datePublished" datetime="2021-04-09T23:10:34+08:00">2021-04-09</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-05 14:46:36" itemprop="dateModified" datetime="2021-05-05T14:46:36+08:00">2021-05-05</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Vue-cli"><a href="#Vue-cli" class="headerlink" title="Vue-cli"></a>Vue-cli</h1><h2 id="1、是什么？"><a href="#1、是什么？" class="headerlink" title="1、是什么？"></a>1、是什么？</h2><p>通过对 WebPack 的了解，如果我们手动去设置打包相关的配置信息是非常麻烦的。因为在开发中，需要打包的东西不止是 Js、Css、HTML、image 等，还有更多的东西要处理，如果我如果我一一去添加这些插件和加载器非常耗费时间。</p>
-<p>而作为一个开发人员，我们需要关注的往往只有项目源代码文件<code>（即src文件）</code>和少数几个配置文件。为了提高开发效率，Vue 官方提供了一个快速搭建 Vue Web项目的脚手架：<strong>vue-cli</strong>，使用它能快速的构建一个web工程模板。类似于 Java 中的 SpringBoot 等框架，我们只需在这个脚手架上进行二次开发即可！</p>
-<h2 id="2、如何使用？"><a href="#2、如何使用？" class="headerlink" title="2、如何使用？"></a>2、如何使用？</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><blockquote>
-<p>GitHub 地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-cli">https://github.com/vuejs/vue-cli</a></p>
-</blockquote>
-<blockquote>
-<p>安装命令（全局安装）：</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>测试是否安装成功：在控制台输出以下命令看是否有响应。</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vue</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><blockquote>
-<ol>
-<li>创建一个空文件夹，在当前文件夹下进入控制台窗口。</li>
-</ol>
-</blockquote>
-<blockquote>
-<ol start="2">
-<li>初始化模板项目。</li>
-</ol>
-</blockquote>
-<ul>
-<li>vue-cli 给我们提供了多个项目模板，我们最常使用的就是 webpack 模板（即初始化一个使用 webpack 打包的 vue web 项目）。</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 语法： vue init 模板名 [项目名称]</span></span><br><span class="line">vue init webpack</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目名称可以先不指定，在稍后的提示选项中指定！</span></span><br></pre></td></tr></table></figure>
-
-<p>初始化项目的选项根据需要自行选择：</p>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409232341832.png" alt="image-20210409232341832"></p>
-<blockquote>
-<ol start="3">
-<li>使用<code>npm install</code>安装依赖。（如果在第二步中使用 NPM 自动安装的话，就无需进行手动安装这一步了！）</li>
-</ol>
-</blockquote>
-<p>安装成功！提示我们可以使用<code>npm run dev</code>命令启动。</p>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209062090.png" alt="1530209062090"></p>
-<h2 id="3、模板项目的结构？"><a href="#3、模板项目的结构？" class="headerlink" title="3、模板项目的结构？"></a>3、模板项目的结构？</h2><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233127399.png" alt="image-20210409233127399"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">|—— build 				&#x2F;&#x2F; webpack 相关的配置文件夹(基本不需要修改)</span><br><span class="line">	|—— dev-server.js 	 &#x2F;&#x2F; 通过express 启动后台服务器</span><br><span class="line">|—— config				&#x2F;&#x2F; webpack 相关的配置文件夹(基本不需要修改)</span><br><span class="line">	|—— index.js		&#x2F;&#x2F; 指定的后台服务的端口号和静态资源文件夹</span><br><span class="line">|—— node_modules		&#x2F;&#x2F; 依赖包文件夹</span><br><span class="line">|—— src 				&#x2F;&#x2F; 源码文件夹</span><br><span class="line">	|—— components		&#x2F;&#x2F; vue 组件及其相关资源文件夹</span><br><span class="line">	|—— App.vue			&#x2F;&#x2F; 应用根组件</span><br><span class="line">	|—— main.js			&#x2F;&#x2F; 应用入口js</span><br><span class="line">|—— static				&#x2F;&#x2F; 静态资源文件夹</span><br><span class="line">|—— .babelrc			&#x2F;&#x2F; babel 的配置文件（babel runtime control）</span><br><span class="line">|—— .eslintignore		&#x2F;&#x2F; eslint 检查忽略的配置</span><br><span class="line">|—— .eslintrc.js		&#x2F;&#x2F; eslint 的配置文件（eslint runtime control）</span><br><span class="line">|—— .editorcconfig</span><br><span class="line">|—— .gitignore			&#x2F;&#x2F; Git 版本控制忽略文件配置</span><br><span class="line">|—— .postcssrc.js</span><br><span class="line">|—— index.html			&#x2F;&#x2F; 主页面文件</span><br><span class="line">|—— package.json		&#x2F;&#x2F; 应用包配置文件</span><br><span class="line">|—— package-lock.json</span><br><span class="line">|—— README.md			&#x2F;&#x2F; 应用描述说明的readme 文件</span><br></pre></td></tr></table></figure>
-
-<h3 id="src"><a href="#src" class="headerlink" title="src"></a>src</h3><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210404124345145.png" alt="image-20210404124345145"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">├── assets 			&#x2F;&#x2F; 图片等资源 </span><br><span class="line">├── components 		&#x2F;&#x2F; 各种公共组件，非公共组件在各自view下维护 </span><br><span class="line">├── router 			&#x2F;&#x2F; 路由表 </span><br><span class="line">├── App.vue 		&#x2F;&#x2F; 项目根组件</span><br><span class="line">├── main.js 		&#x2F;&#x2F; 项目入口文件</span><br></pre></td></tr></table></figure>
-
-<h4 id="入口文件：main-js"><a href="#入口文件：main-js" class="headerlink" title="入口文件：main.js"></a>入口文件：<code>main.js</code></h4><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209503007.png" alt="1525913687860"></p>
-<h4 id="单文件组件：-vue"><a href="#单文件组件：-vue" class="headerlink" title="单文件组件：*.vue*"></a>单文件组件：<code>*.vue*</code></h4><p>我们称后缀名为<code>.vue</code>的文件为单文件组件。每一个<code>.vue</code>文件，就是一个独立的vue组件。而 <strong>App.vue</strong> 是整个项目的根组件。</p>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530209769323.png" alt="1530209769323"></p>
-<p>单文件组件中包含三部分内容：</p>
-<ul>
-<li><code>&lt;template/&gt;</code>：<strong>Html 模板</strong></li>
-<li><code>&lt;script/&gt;</code>：<strong>Js 脚本</strong>，这里编写的就是vue的组件对象，还可以有data(){}等</li>
-<li><code>&lt;style/&gt;</code>：<strong>Css 样式</strong>，支持CSS语法高亮和提示</li>
-</ul>
-<p>每个组件都有自己独立的html、JS、CSS，互不干扰，真正做到可独立复用。</p>
-<h4 id="多文件组件"><a href="#多文件组件" class="headerlink" title="多文件组件"></a>多文件组件</h4><p>既然有单文件组件，那么就一定有多文件组件。多文件组件一般是一个文件夹，这个文件夹中除了包含一些单文件组件之外，还可以包含一些 image 等静态资源。所有这些资源形成一个大的组件对外暴露，我们把这个大的组件就叫做多文件组件！！！</p>
-<h3 id="gitkeep"><a href="#gitkeep" class="headerlink" title=".gitkeep"></a>.gitkeep</h3><p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409233500688.png" alt="image-20210409233500688"></p>
-<p><code>.gitkeep</code> 是作用于 Git 进行版本管理的文件。</p>
-<p>Git 进行版本控制时有一个特点就是如果某个文件夹为空就会自动忽略（即不对该文件夹进行版本控制），但是如果我们不想该文件夹被忽略的话，就可以在该文件夹下创建一个<code>.gitkeep</code>的文件（文件内容为空），这样Git在进行版本管理时就不会忽略该文件夹了！！！</p>
-<h2 id="4、运行"><a href="#4、运行" class="headerlink" title="4、运行"></a>4、运行</h2><blockquote>
-<p>查看项目文件的配置信息：<code>package.json</code></p>
-</blockquote>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210016103.png" alt="1530210016103"></p>
-<ul>
-<li>可以看到这里引入了非常多的依赖，绝大多数都是开发期依赖，比如大量的加载器。</li>
-<li>运行时依赖只有 vue 和 vue-router</li>
-<li>脚本有三个：<ul>
-<li>dev：使用了webpack-dev-server命令，开发时热部署使用</li>
-<li>start：使用了npm run dev命令，与上面的dev效果完全一样，当脚本名为“start”时，可以省略“run”。 </li>
-<li>build：等同于webpack的打包功能，会打包到dist目录下。</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>启动项目</p>
-</blockquote>
-<p>我们执行<code>npm run dev</code> 或者 <code>npm start</code> 都可以启动项目：</p>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/1530210411076.png" alt="1530210411076"></p>
-<blockquote>
-<p>检查页面元素</p>
-</blockquote>
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/image-20210409234531234.png" alt="image-20210409234531234"></p>
-<h2 id="5、项目打包"><a href="#5、项目打包" class="headerlink" title="5、项目打包"></a>5、项目打包</h2><blockquote>
-<p>打包命令</p>
-</blockquote>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="6、项目发布"><a href="#6、项目发布" class="headerlink" title="6、项目发布"></a>6、项目发布</h2><h3 id="使用静态服务器发布"><a href="#使用静态服务器发布" class="headerlink" title="使用静态服务器发布"></a>使用静态服务器发布</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install -g serve</span><br><span class="line">serve dist</span><br><span class="line">访问: http:&#x2F;&#x2F;localhost:5000</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用动态web服务器发布-tomcat"><a href="#使用动态web服务器发布-tomcat" class="headerlink" title="使用动态web服务器发布(tomcat)"></a>使用动态web服务器发布(tomcat)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">修改配置: webpack.prod.conf.js</span><br><span class="line">output: &#123;</span><br><span class="line">publicPath: &#39;&#x2F;xxx&#x2F;&#39; &#x2F;&#x2F;打包文件夹的名称</span><br><span class="line">&#125;</span><br><span class="line">重新打包:</span><br><span class="line">npm run build</span><br><span class="line">修改dist 文件夹为项目名称: xxx</span><br><span class="line">将xxx 拷贝到运行的tomcat 的webapps 目录下</span><br><span class="line">访问: http:&#x2F;&#x2F;localhost:8080&#x2F;xxx</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h1 id="组件定义与使用"><a href="#组件定义与使用" class="headerlink" title="组件定义与使用"></a>组件定义与使用</h1><h2 id="什么是组件？"><a href="#什么是组件？" class="headerlink" title="什么是组件？"></a>什么是组件？</h2><ul>
-<li><strong>组件就是一个局部功能界面。包含要实现这个功能界面所有的相关资源，包括 html、css、js、image 等。</strong></li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The Vue build version to load with the `import` command</span></span><br><span class="line"><span class="comment">// (runtime-only or standalone) has been set in webpack.base.conf with an alias.</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&#x27;./App&#x27;</span>   <span class="comment">// 引入一个组件</span></span><br><span class="line"></span><br><span class="line">Vue.config.productionTip = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* eslint-disable no-new */</span></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&#x27;#app&#x27;</span>,</span><br><span class="line">  components: &#123; App &#125;,    <span class="comment">// 将组件映射成指定名称的标签（这里利用ES6语法省略&lt;K,V&gt;为K）</span></span><br><span class="line">  template: <span class="string">&#x27;&lt;App/&gt;&#x27;</span>    <span class="comment">// 模板。模板最终会嵌入到 el 匹配到的页面中去。所以我们最终在 index.html 中渲染的内容就是 &lt;App/&gt; 组件中的内容</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="vue-文件的组成-3-个部分"><a href="#vue-文件的组成-3-个部分" class="headerlink" title="vue 文件的组成(3 个部分)"></a>vue 文件的组成(3 个部分)</h2><p><strong>一个 Vue 文件就是一个单文件组件！！！</strong></p>
-<blockquote>
-<ol>
-<li>模板页面</li>
-<li>JS 模块对象</li>
-<li>样式</li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">	页面模板</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">        data() &#123;return &#123;&#125;&#125;,</span><br><span class="line">        methods: &#123;&#125;,</span><br><span class="line">        computed: &#123;&#125;,</span><br><span class="line">        components: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">    样式定义</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><blockquote>
-<ol>
-<li>引入组件</li>
-<li>映射成标签</li>
-<li>使用组件标签</li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;HelloWorld&gt;&lt;&#x2F;HelloWorld&gt;</span><br><span class="line">    &lt;hello-world&gt;&lt;&#x2F;hello-world&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">    import HelloWorld from &#39;.&#x2F;components&#x2F;HelloWorld&#39;</span><br><span class="line">    export default &#123;</span><br><span class="line">        components: &#123;</span><br><span class="line">            HelloWorld</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="关于标签名与标签属性名书写问题"><a href="#关于标签名与标签属性名书写问题" class="headerlink" title="关于标签名与标签属性名书写问题"></a>关于标签名与标签属性名书写问题</h2><ol>
-<li>写法一: 一模一样</li>
-<li>写法二: 大写变小写, 并用-连接</li>
-</ol>
-<h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><h3 id="1、创建根组件"><a href="#1、创建根组件" class="headerlink" title="1、创建根组件"></a>1、创建根组件</h3><blockquote>
-<p>因为Vue项目是一个单页面应用，我们一般在这个单页面中会引入一个根组件（所有组件的祖宗），一般命名为<strong>App.vue</strong>。所以第二步我们要创建一个 App.vue 组件</p>
-</blockquote>
-<ol>
-<li>先创建组件基本结构（固定写法）。包括写 html  的 <code>&lt;template/&gt;</code> ， 写 js 的 <code>&lt;script/&gt;</code> ，写 css 的 <code>&lt;style/&gt;</code></li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;  &#x2F;&#x2F; 配置对象（能配置的属性&#x2F;方法与Vue一致）</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="2、创建其它组件"><a href="#2、创建其它组件" class="headerlink" title="2、创建其它组件"></a>2、创建其它组件</h3><blockquote>
-<p>其它组件都是根组件的子孙组件。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;p class&#x3D;&quot;myClass&quot;&gt;&#123;&#123;msg&#125;&#125;&lt;&#x2F;p&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;  &#x2F;&#x2F; 配置对象（能配置的属性&#x2F;方法与Vue一致）</span><br><span class="line">  name: &quot;HelloWorld&quot;,</span><br><span class="line">  data()&#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      msg: &quot;Hello Vue&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">  .myClass&#123;</span><br><span class="line">    color: red;</span><br><span class="line">    font-size: 30px;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>可以看到在一个组件内部，html 部分可以直接调用 script 中的数据model以及 style中的css样式</li>
-</ul>
-<h3 id="3、在根组件中引用其它组件"><a href="#3、在根组件中引用其它组件" class="headerlink" title="3、在根组件中引用其它组件"></a>3、在根组件中引用其它组件</h3><blockquote>
-<ol>
-<li>引入子组件：<code>import HelloWorld from &quot;./components/HelloWorld&quot;;</code></li>
-<li>将引入的子组件映射成一个标签：<code>component</code></li>
-<li>使用（组件）标签</li>
-</ol>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;img class&#x3D;&quot;logo&quot; src&#x3D;&quot;src&#x2F;assets&#x2F;logo.png&quot;&#x2F;&gt;</span><br><span class="line">&lt;!--    3、使用（组件）标签  --&gt;</span><br><span class="line">    &lt;HelloWorld&#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">  &#x2F;&#x2F; 1、引入组件</span><br><span class="line">  import HelloWorld from &quot;.&#x2F;components&#x2F;HelloWorld&quot;;</span><br><span class="line">  export default &#123;</span><br><span class="line">    components: &#123;HelloWorld&#125;,</span><br><span class="line">    data()&#123;</span><br><span class="line">      return&#123;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#x2F;&#x2F; 2、将引入的组件映射成标签</span><br><span class="line">    comments:&#123;</span><br><span class="line">      HelloWorld,   &#x2F;&#x2F; 采用ES6语法，简化&lt;K,V&gt;的书写</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">  .logo&#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    height: 200px;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;&#x2F;style&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="4、创建-main-js"><a href="#4、创建-main-js" class="headerlink" title="4、创建 main.js"></a>4、创建 main.js</h3><blockquote>
-<p>在<code>main.js</code>中创建一个Vue对象，用于将根组件<code>&lt;App/&gt;</code>渲染到<code>index.html</code>中去！！</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 入口js：创建Vue实例</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入 vue 依赖</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// （1）引入 App 组件（根组件）</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&quot;./App&quot;</span>;</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  components:&#123;</span><br><span class="line">    App,  <span class="comment">// （2）将 App 组件映射成标签</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//（3）将组件标签渲染到指定的页面中去</span></span><br><span class="line">  template:<span class="string">&#x27;&lt;App/&gt;&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<p><img src="/2021/04/09/Vue%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BC%96%E7%A0%81/lifecycle.png" alt="Vue 实例生命周期"></p>
-<h1 id="组件化编码的流程"><a href="#组件化编码的流程" class="headerlink" title="组件化编码的流程"></a>组件化编码的流程</h1><p>拆分组件–&gt;&gt;静态组件–&gt;&gt;动态组件</p>
-<h2 id="做交互"><a href="#做交互" class="headerlink" title="做交互"></a>做交互</h2><p>绑定事件监听</p>
-<p>–&gt;&gt;</p>
-<p>自动收集数据</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">跨域问题常见的解决方案</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-06 00:02:02" itemprop="dateCreated datePublished" datetime="2021-04-06T00:02:02+08:00">2021-04-06</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-04-11 23:30:16" itemprop="dateModified" datetime="2021-04-11T23:30:16+08:00">2021-04-11</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="什么是跨域问题"><a href="#什么是跨域问题" class="headerlink" title="什么是跨域问题"></a>什么是跨域问题</h1><p>跨域问题是浏览器对于 Ajax 请求的一种安全限制：一个页面发起的ajax请求，只能是与当前页域名相同的路径，这能有效的阻止跨站攻击。</p>
-<p>以下情况都属于跨域：</p>
-<table>
-<thead>
-<tr>
-<th>跨域原因说明</th>
-<th>示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>域名不同</td>
-<td><code>www.jd.com</code> 与 <code>www.taobao.com</code></td>
-</tr>
-<tr>
-<td>域名相同，端口不同</td>
-<td><code>www.jd.com:8080</code> 与 <code>www.jd.com:8081</code></td>
-</tr>
-<tr>
-<td>二级域名不同</td>
-<td><code>item.jd.com</code> 与 <code>miaosha.jd.com</code></td>
-</tr>
-</tbody></table>
-<p>如果<strong>域名和端口都相同，但是请求路径不同</strong>，不属于跨域，如：</p>
-<p><code>www.jd.com/item</code> </p>
-<p><code>www.jd.com/goods</code></p>
-<p>而我们刚才是从<code>manage.leyou.com</code>去访问<code>api.leyou.com</code>，这属于二级域名不同，跨域了。</p>
-<h1 id="跨域问题常见的解决方案"><a href="#跨域问题常见的解决方案" class="headerlink" title="跨域问题常见的解决方案"></a>跨域问题常见的解决方案</h1><blockquote>
-<ol>
-<li><strong>nginx 反向代理</strong></li>
-</ol>
-</blockquote>
-<p>利用 nginx 把跨域反向代理为不跨域，支持各种请求方式</p>
-<p>缺点：需要在nginx进行额外配置，语义不清晰</p>
-<blockquote>
-<ol start="2">
-<li><strong>CORS</strong></li>
-</ol>
-</blockquote>
-<p>规范化的跨域请求解决方案，安全可靠。</p>
-<p>优势：</p>
-<ul>
-<li>在服务端进行控制是否允许跨域，可自定义规则</li>
-<li>支持各种请求方式</li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li>会产生额外的请求</li>
-</ul>
-<h1 id="CORS-解决跨域"><a href="#CORS-解决跨域" class="headerlink" title="CORS 解决跨域"></a>CORS 解决跨域</h1><h2 id="什么是-CORS"><a href="#什么是-CORS" class="headerlink" title="什么是 CORS"></a>什么是 CORS</h2><p>CORS 是一个 W3C 标准，全称是”跨域资源共享”（Cross-origin resource sharing）。</p>
-<p>它允许浏览器向跨源服务器，发出 <code>XMLHttpRequest</code> 请求，从而克服了AJAX只能同源使用的限制。</p>
-<p>CORS需要浏览器和服务器同时支持。</p>
-<ul>
-<li><p>浏览器端：</p>
-<p>目前，所有浏览器都支持该功能（IE10以下不行）。整个CORS通信过程，都是浏览器自动完成，不需要用户参与。</p>
-</li>
-<li><p>服务端：</p>
-<p>CORS通信与AJAX没有任何差别，因此你不需要改变以前的业务逻辑。只不过，浏览器会在请求中携带一些头信息，我们需要以此判断是否允许其跨域，然后在响应头中加入一些信息即可。这一般通过过滤器完成即可。</p>
-</li>
-</ul>
-<h2 id="CORS-原理"><a href="#CORS-原理" class="headerlink" title="CORS 原理"></a>CORS 原理</h2><p>浏览器会将 Ajax 请求分为两类，其处理方案略有差异：简单请求、特殊请求。</p>
-<h3 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h3><p>只要同时满足以下两大条件，就属于简单请求。：</p>
-<p>（1) 请求方法是以下三种方法之一：</p>
-<ul>
-<li>HEAD</li>
-<li>GET</li>
-<li>POST</li>
-</ul>
-<p>（2）HTTP的头信息不超出以下几种字段：</p>
-<ul>
-<li>Accept</li>
-<li>Accept-Language</li>
-<li>Content-Language</li>
-<li>Last-Event-ID</li>
-<li>Content-Type：只限于三个值<code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code></li>
-</ul>
-<p>当浏览器发现发起的ajax请求是简单请求时，会在请求头中携带一个字段：<code>Origin</code>.【发起请求的域名】</p>
-<p><img src="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/1530460311064.png" alt="1530460311064"></p>
-<p>Origin中会指出当前请求属于哪个域（协议+域名+端口）。服务会根据这个值决定是否允许其跨域。</p>
-<p>如果服务器允许跨域，需要在返回的响应头中携带下面信息：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Access-Control-Allow-Origin: http://manage.leyou.com</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Content-Type: text/html; charset=utf-8</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Access-Control-Allow-Origin：可接受的域，是一个具体域名或者*（代表任意域名）</li>
-<li>Access-Control-Allow-Credentials：是否允许携带cookie，默认情况下，cors不会携带cookie，除非这个值是true</li>
-</ul>
-<blockquote>
-<p>有关cookie：</p>
-</blockquote>
-<p>要想操作cookie，需要满足3个条件：</p>
-<ul>
-<li>服务的响应头中需要携带Access-Control-Allow-Credentials并且为true。</li>
-<li>浏览器发起ajax需要指定withCredentials 为true</li>
-<li>响应头中的Access-Control-Allow-Origin一定不能为*，必须是指定的域名</li>
-</ul>
-<h3 id="特殊请求"><a href="#特殊请求" class="headerlink" title="特殊请求"></a>特殊请求</h3><p>不符合简单请求的条件，会被浏览器判定为特殊请求,，例如请求方式为PUT。</p>
-<blockquote>
-<p>预检请求</p>
-</blockquote>
-<p>特殊请求会在正式通信之前，增加一次HTTP查询请求，称为”预检”请求（preflight）。</p>
-<p>浏览器先询问服务器，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些HTTP动词和头信息字段。只有得到肯定答复，浏览器才会发出正式的<code>XMLHttpRequest</code>请求，否则就报错。</p>
-<p>一个“预检”请求的样板：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">OPTIONS</span> <span class="string">/cors</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Origin</span><span class="punctuation">: </span>http://manage.leyou.com</span><br><span class="line"><span class="attribute">Access-Control-Request-Method</span><span class="punctuation">: </span>PUT</span><br><span class="line"><span class="attribute">Access-Control-Request-Headers</span><span class="punctuation">: </span>X-Custom-Header</span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.leyou.com</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>en-US</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0...</span><br></pre></td></tr></table></figure>
-
-<p>与简单请求相比，除了Origin以外，多了两个头：</p>
-<ul>
-<li>Access-Control-Request-Method：接下来会用到的请求方式，比如PUT</li>
-<li>Access-Control-Request-Headers：会额外用到的头信息</li>
-</ul>
-<blockquote>
-<p>预检请求的响应</p>
-</blockquote>
-<p>服务的收到预检请求，如果许可跨域，会发出响应：</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Date</span><span class="punctuation">: </span>Mon, 01 Dec 2008 01:15:39 GMT</span><br><span class="line"><span class="attribute">Server</span><span class="punctuation">: </span>Apache/2.0.61 (Unix)</span><br><span class="line"><span class="attribute">Access-Control-Allow-Origin</span><span class="punctuation">: </span>http://manage.leyou.com</span><br><span class="line"><span class="attribute">Access-Control-Allow-Credentials</span><span class="punctuation">: </span>true</span><br><span class="line"><span class="attribute">Access-Control-Allow-Methods</span><span class="punctuation">: </span>GET, POST, PUT</span><br><span class="line"><span class="attribute">Access-Control-Allow-Headers</span><span class="punctuation">: </span>X-Custom-Header</span><br><span class="line"><span class="attribute">Access-Control-Max-Age</span><span class="punctuation">: </span>1728000</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/html; charset=utf-8</span><br><span class="line"><span class="attribute">Content-Encoding</span><span class="punctuation">: </span>gzip</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>0</span><br><span class="line"><span class="attribute">Keep-Alive</span><span class="punctuation">: </span>timeout=2, max=100</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>Keep-Alive</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/plain</span><br></pre></td></tr></table></figure>
-
-<p>除了<code>Access-Control-Allow-Origin</code>和<code>Access-Control-Allow-Credentials</code>以外，这里又额外多出3个头：</p>
-<ul>
-<li>Access-Control-Allow-Methods：允许访问的方式</li>
-<li>Access-Control-Allow-Headers：允许携带的头</li>
-<li>Access-Control-Max-Age：本次许可的有效时长，单位是秒，<strong>过期之前的ajax请求就无需再次进行预检了</strong></li>
-</ul>
-<p>如果浏览器得到上述响应，则认定为可以跨域，后续就跟简单请求的处理是一样的了。</p>
-<h2 id="跨域实现"><a href="#跨域实现" class="headerlink" title="跨域实现"></a>跨域实现</h2><p>虽然原理比较复杂，但是前面说过：</p>
-<ul>
-<li>浏览器端都有浏览器自动完成，我们无需操心</li>
-<li>服务端可以通过拦截器统一实现，不必每次都去进行跨域判定的编写。</li>
-</ul>
-<p>事实上，SpringMVC已经帮我们写好了CORS的跨域过滤器：CorsFilter ,内部已经实现了刚才所讲的判定逻辑，我们直接用就好了。</p>
-<h3 id="通过-CrossOrigin-注解实现"><a href="#通过-CrossOrigin-注解实现" class="headerlink" title="通过 @CrossOrigin 注解实现"></a>通过 @CrossOrigin 注解实现</h3><p>通过 @CrossOrigin 注解实现跨域请求非常简单，只需要在要访问的 Controller 上加上 @CrossOrigin 注解即可！</p>
-<p>缺点是不能全局生效，每个要跨域的 Controller 都需要添加 @CrossOrigin 注解！</p>
-<p><img src="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/image-20210406002533903.png" alt="image-20210406002533903"></p>
-<h3 id="通过全局配置文件实现"><a href="#通过全局配置文件实现" class="headerlink" title="通过全局配置文件实现"></a>通过全局配置文件实现</h3><blockquote>
-<ol>
-<li>编写一个配置类，并且注册 CorsFilter</li>
-</ol>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.cors.CorsConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.cors.UrlBasedCorsConfigurationSource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.filter.CorsFilter;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GlobalCorsConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> CorsFilter <span class="title">corsFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 1.添加CORS配置信息</span></span><br><span class="line">        CorsConfiguration config = <span class="keyword">new</span> CorsConfiguration();</span><br><span class="line">        <span class="comment">//1) 允许哪些IP可以跨域访问，可以添加多个。最好不要写 *，否则cookie就无法使用了</span></span><br><span class="line">        config.addAllowedOrigin(<span class="string">&quot;http://localhost:90&quot;</span>);</span><br><span class="line">        <span class="comment">//2) 是否发送Cookie信息</span></span><br><span class="line">        config.setAllowCredentials(<span class="keyword">true</span>);</span><br><span class="line">        <span class="comment">//3) 允许的请求方式</span></span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;OPTIONS&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;HEAD&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;GET&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;PUT&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;POST&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;DELETE&quot;</span>);</span><br><span class="line">        config.addAllowedMethod(<span class="string">&quot;PATCH&quot;</span>);</span><br><span class="line">        <span class="comment">// 4）允许的头信息</span></span><br><span class="line">        config.addAllowedHeader(<span class="string">&quot;*&quot;</span>);</span><br><span class="line">        <span class="comment">// 5）有效时长</span></span><br><span class="line">        config.setMaxAge(<span class="number">36000L</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2.添加映射路径，我们拦截一切请求</span></span><br><span class="line">        UrlBasedCorsConfigurationSource configSource = <span class="keyword">new</span> UrlBasedCorsConfigurationSource();</span><br><span class="line">        configSource.registerCorsConfiguration(<span class="string">&quot;/**&quot;</span>, config);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.返回新的CorsFilter.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CorsFilter(configSource);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="常见的错误"><a href="#常见的错误" class="headerlink" title="常见的错误"></a>常见的错误</h1><h2 id="常见错误1："><a href="#常见错误1：" class="headerlink" title="常见错误1："></a>常见错误1：</h2><p><strong>@CrossOrigin注解</strong> 和 <strong>全局配置文件</strong> 不能同时存在，因为这两种方式都能起到允许跨域的效果，如果同时使用就会发生冲突！</p>
-<h2 id="常见错误2"><a href="#常见错误2" class="headerlink" title="常见错误2"></a>常见错误2</h2><p><img src="/2021/04/06/%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%E5%B8%B8%E8%A7%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/image-20210406000556206.png" alt="image-20210406000556206"></p>
-<blockquote>
-<p>错误信息：</p>
-<p><strong>Cross origin requests are only supported for protocol schemes: http, data, chrome, chrome-extension, chrome-untrusted, https</strong></p>
-<p>解释说明：跨域请求只支持以下协议：http, data, chrome, chrome-extension, chrome-untrusted, https。</p>
-</blockquote>
-<p>分析：</p>
-<p>每当你看到`Cross origin requests are only supported…消息时，几乎可以肯定地说这意味着你只是忘记了在代码中的请求URL上添加<strong>https</strong> 或 <strong>http</strong>。</p>
 
       
     </div>

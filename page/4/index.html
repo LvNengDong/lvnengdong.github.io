@@ -155,13 +155,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">143</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -194,6 +194,760 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/08/JMM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/08/JMM/" class="post-title-link" itemprop="url">JMM</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-08 22:00:54" itemprop="dateCreated datePublished" datetime="2021-07-08T22:00:54+08:00">2021-07-08</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-09 12:17:09" itemprop="dateModified" datetime="2021-08-09T12:17:09+08:00">2021-08-09</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="现代计算机内存模型"><a href="#现代计算机内存模型" class="headerlink" title="现代计算机内存模型"></a>现代计算机内存模型</h1><ul>
+<li>  早期计算机中 CPU 和内存的速度是差不多的，CPU 执行指令的速度与内存读写数据的速度基本可以达到一种平衡。</li>
+<li>  但是在现代计算机中，CPU 执行指令的速度要远高于内存的存取速度，当 CPU 运算结束后，只能空闲等待，直到再次读取到内存中的数据，这是非常浪费新能的。</li>
+<li>  所以现代计算机系统一般都会加入一层读写速度尽可能接近 CPU 运算速度的高速缓存（Cache）来作为内存和处理器之间的缓冲。将运算需要使用到的数据复制到缓存中，让运算能快速进行，当运算结束后再从缓存同步回内存之中，这样处理器就无需等待缓慢的内存读写了。</li>
+</ul>
+<blockquote>
+<p>  <strong>为什么不把数据直接存在 CPU 中呢？这样读写速度岂不是更快了？</strong></p>
+</blockquote>
+<ul>
+<li>  现代计算机中，硬件性能的速度从高到低为：<code>CPU &gt; Cache &gt; 内存 &gt; 硬盘</code>。而在同等价值下，内存大小则是刚好反过来的，也就是说，运算速度越快，可存储的数据量就越小。所以说使用 CPU 来存储程序运行时需要使用到的所有数据是不现实的，在计算机系统中，<strong>CPU 主要用于数据计算，其它硬件则用于数据存取</strong>。</li>
+<li>  <strong>为了防止 CPU 被阻塞</strong>。如果直接将数据放在 CPU 中，当运算阻塞时整个 CPU 就废了，而放在高速缓存中，如果某个运算发生阻塞超过一定时间后，CPU 可以放弃该运算转去执行其它缓存中的运算。</li>
+</ul>
+<blockquote>
+<p>  <strong>磁盘中的数据什么时候加载到高速缓存（Cache）中呢？</strong></p>
+</blockquote>
+<ol>
+<li> 程序开始运行的时候，需要把运行时需要使用到的数据加载到内存中。在这个阶段就可以把一些高频的、可能会经常用到的数据（如加减乘除等运算符）直接加载到高速缓存中。</li>
+<li> 程序在运行过程中，如果发现有一部分数据是被反复使用的（如通过阈值来筛选高频出现的数据），就可以把这一部分数据在运行期再加载到高速缓存中。</li>
+<li> 高速缓存中放的只是主内存中的一部分高频使用的数据，并不能把全部数据都复制到高速缓存中，但即使这样，也大大增加了 CPU的利用率。</li>
+</ol>
+<h2 id="缓存一致性问题"><a href="#缓存一致性问题" class="headerlink" title="缓存一致性问题"></a>缓存一致性问题</h2><p>​    绝大多数的运算任务都不可能只靠处理器“计算”就能完成，处理器至少要与内存交互，如读取内存数据、存储运算结果等，这个 I/O 是很难消除的。即程序运行时 CPU 需要经历 <code>从内存取数据 --&gt; CPU 运算 --&gt; 将运算结果写回内存</code>，由于 CPU 的运算速度远快于内存的读写速度，就会出现这样一种情况，内存花了 10s 才将要运算的数据传递到 CPU 中，但是 CPU 只用了 1s 就计算完了，那么中间的 9s CPU 就一直没有活干。写出到内存中也存在类似的情况。<strong>基于高速缓存的存储很好地解决了处理器与内存的速度矛盾，但是引入了一个新的问题：缓存一致性</strong>。</p>
+<p>​    在多处理器系统中，每个处理器都有自己的高速缓存，而它们又共享同一主内存（物理意义上的内存，可以看做是内存条）（比如 3 个 CPU，一根内存条）。当多个处理器的运算任务都涉及同一块主内存区域时，将可能导致各自的缓存数据不一致。举例说明就是某个变量在多个 CPU 之间共享，并且这些 CPU 都对这个变量进行了运算，那么当缓存数据同步回主内存时以谁的缓存数据为主呢？</p>
+<p>​    <strong>为了解决缓存一致性的问题，需要各个处理器访问缓存时都要遵循一些协议，在读写的时候要根据协议来进行操作</strong>。</p>
+<p><img src="/2021/07/08/JMM/JMM.png" alt="JMM"></p>
+<hr>
+<h1 id="JMM-概述"><a href="#JMM-概述" class="headerlink" title="JMM 概述"></a>JMM 概述</h1><blockquote>
+<p>  <strong>JMM；Java Memory Model；Java内存模型</strong></p>
+</blockquote>
+<p><strong>什么是 Java 内存模型？</strong></p>
+<p>​        Java 内存模型就是按照功能将内存划分为几个不同的区域，这些区域在内存中不是真实存在的，而是为了方便理解将某个（或某些）真实的内存区域抽象成了概念上不同的区域。</p>
+<p>​        其实 JVM 也是一种内存模型，因为真实的物理内存空间并未划分什么栈空间、堆空间、方法区等，只不过 JVM 在实现时利用一部分物理空间存储具有相似性的数据，所以才把内存抽象成一块一块不同的区域。</p>
+<p>​        从抽象的角度看，<strong>JMM 定义了线程和主内存之间的抽象关系</strong>：线程之间共享的变量存储在<strong>主内存（Main Memory）</strong>中，每个线程都有一个私有的<strong>本地内存（Local Memory）</strong>，本地内存中存储了该线程读/写共享变量的副本。</p>
+<p>​        <strong>本地内存是 JMM 的一个抽象概念</strong>，并不真实存在，它由缓存、写缓冲区、寄存器以及其它的编译期优化共同实现的。它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（包括实例字段、静态字段和构成数组对象的元素）的访问方式。</p>
+<h2 id="运行时内存的划分"><a href="#运行时内存的划分" class="headerlink" title="运行时内存的划分"></a>运行时内存的划分</h2><img src="/2021/07/08/JMM/image-20210807154853861.png" alt="image-20210807154853861" style="zoom: 33%;">
+
+
+
+<ul>
+<li>  对于每一个线程来说，栈都是私有的，而堆是共有的。</li>
+<li>  也就是说在栈中的变量（局部变量、⽅法定义参数、异常处理器参数）不会在线程之间共享，也就不会有内存可见性的问题，也不受内存模型的影响。</li>
+<li>  而在堆中的变量是共享的，称为共享变量。所以，<strong>内存可见性是针对的共享变量</strong>。</li>
+</ul>
+<h2 id="既然堆是共享的，为什么在堆中会有内存不可见问题？"><a href="#既然堆是共享的，为什么在堆中会有内存不可见问题？" class="headerlink" title="既然堆是共享的，为什么在堆中会有内存不可见问题？"></a>既然堆是共享的，为什么在堆中会有内存不可见问题？</h2><ul>
+<li>  这是因为现代计算机为了高效，往往会在高速缓存区中缓存共享变量，因为 CPU 访问缓存区比访问内存要快得多。</li>
+<li>  线程之间的共享变量存在主内存中，每个线程都有一个私有的本地内存，存储了该线程读、写共享变量的副本。</li>
+<li>  本地内存是 Java 内存模型的一个抽象概念，并不真实存在。它涵盖了缓存、写缓冲区、寄存器等。</li>
+<li>  Java 线程之间的通信由 Java 内存模型（简称JMM）控制，从抽象的角度来说，<strong>JMM 定义了线程和主内存之间的抽象关系</strong>。</li>
+</ul>
+<h2 id="JMM与Java内存区域划分的区别与联系"><a href="#JMM与Java内存区域划分的区别与联系" class="headerlink" title="JMM与Java内存区域划分的区别与联系"></a>JMM与Java内存区域划分的区别与联系</h2><p>上面两小节分别提到了JMM 和 Java 运行时内存区域的划分，这两者既有差别又有联系：</p>
+<blockquote>
+<p>  <strong>区别</strong></p>
+</blockquote>
+<p>两者是不同的概念层次。JMM是抽象的，他是⽤来描述一组规则，通过这个规则来控制各个变量的访问方式，围绕原子性、有序性、可见性等展开的。而 Java 运行时内存的划分是具体的，是 JVM 运行 Java 程序时，必要的内存划分。</p>
+<blockquote>
+<p>  <strong>联系</strong></p>
+</blockquote>
+<ul>
+<li>  都存在私有数据区域和共享数据区域。⼀般来说，<strong>JMM中的主内存属于共享数据区域，他是包含了堆和方法区</strong>；</li>
+<li>  同样，<strong>JMM 中的本地内存属于私有数据区域，包含了程序计数器、本地方法栈、虚拟机栈</strong>。</li>
+<li>  实际上，他们表达的是同⼀种含义，这⾥不做区分。</li>
+</ul>
+<hr>
+<h1 id="JMM-工作原理"><a href="#JMM-工作原理" class="headerlink" title="JMM 工作原理"></a>JMM 工作原理</h1><p>​    上面我们讲了：JMM 定义了线程与主内存之间的抽象关系。</p>
+<p>​    在一个运行的 Java 程序中，JVM 是一个进程，运行时包含多个线程，而每个线程创建时 JVM 都会为其创建一个<strong>工作内存</strong>，工作内存是每个线程私有的数据区域，而 JMM 中规定所有变量都要存储在<strong>主内存</strong>，主内存是共享内存区域，所有线程都可以访问，但 <strong>线程对变量的操作（读取、赋值等）必须要在工作内存中进行，首先要将变量从主内存拷贝到自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存</strong>，而不能直接操作主内存中的变量，各个线程中的工作内存中存储着主内存中的变量副本拷贝，因此不同的线程间无法访问对方的工作内存。<strong>若多个线程间想要通信，必须通过主内存来完成</strong>。其简要访问过程如下图：</p>
+<p><img src="/2021/07/08/JMM/JMM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png" alt="JMM内存结构"></p>
+<p>从图中可以看出：</p>
+<ol>
+<li>所有的共享变量都存在主内存中。</li>
+<li>每个线程都保存了⼀份该线程使用到的共享变量的副本。</li>
+<li>如果线程A与线程B之间要通信的话，必须经历下面2个步骤：</li>
+</ol>
+<ul>
+<li>  线程A将本地内存A中更新过的共享变量刷新到主内存中去。</li>
+<li>  线程B到主内存中去读取线程A之前已经更新过的共享变量。</li>
+</ul>
+<p>所以，<strong>线程A无法直接访问线程B的工作内存，线程间通信必须经过主内存</strong>。<br>注意，根据JMM的规定，<strong>线程对共享变量的所有操作都必须在自己的本地内存中进行，不能直接从主内存中读取</strong>。</p>
+<p>所以线程B并不是直接去主内存中读取共享变量的值，⽽是先在本地内存B中找到这个共享变量，发现这个共享变量已经被更新了，然后本地内存B去主内存中读取这个共享变量的新值，并拷贝到本地内存B中，最后线程B再读取本地内存B中的新值。</p>
+<p>那么怎么知道这个共享变量的被其他线程更新了呢？这就是JMM的功劳了，也是 JMM 存在的必要性之一。JMM通过控制主内存与每个线程的本地内存之间的交互，来提供内存可见性保证。</p>
+<ul>
+<li>  Java中的 volatile 关键字可以保证多线程操作共享变量的可见性以及禁止指令重排，</li>
+<li>  synchronized 关键字不仅保证可见性，同时也保证了原子性（互斥性）。</li>
+<li>  在更底层，JMM通过内存屏障来实现内存的可见性以及禁止指令重排。</li>
+</ul>
+<hr>
+<h1 id="JMM-三大特性"><a href="#JMM-三大特性" class="headerlink" title="JMM 三大特性"></a>JMM 三大特性</h1><blockquote>
+<ol>
+<li> <strong>可见性</strong></li>
+<li> <strong>原子性</strong></li>
+<li> <strong>有序性</strong></li>
+</ol>
+</blockquote>
+<p>​    JMM 三大特性是大多数多线程开发需要遵守的规定。但是 volatile 只支持可见性、有序性（禁止指令重排），而不支持原子性。</p>
+<h2 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h2><ul>
+<li>  每个线程对主内存中共享变量的读写操作都是先将主内存中的共享变量拷贝到自己的工作内存进行运算，然后再写回到主内存中的。</li>
+<li>  这就可能会造成：线程 A 修改了共享变量 X 的值但还未写回主内存时，另一个线程 B 又对主内存中同一个共享变量 X 进行操作，但此时 A 线程工作内存中的共享变量 X 对线程 B 来说并不可见。这种工作内存与主内存同步延迟现象造成了可见性问题。</li>
+</ul>
+<h2 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h2><blockquote>
+<p>  <strong>什么是原子性？</strong></p>
+</blockquote>
+<ul>
+<li><pre><code>     不可分割性，完整性，即某个线程正在做某个具体业务时，中间不可以被加塞或者被分隔，需要整体完整。
+</code></pre>
+</li>
+<li><pre><code>     要么同时成功，要么同时失败。有点类似于关系型数据库中的事务。
+</code></pre>
+</li>
+</ul>
+<h2 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h2><h1 id="JMM-关于同步的规定"><a href="#JMM-关于同步的规定" class="headerlink" title="JMM 关于同步的规定"></a>JMM 关于同步的规定</h1><ol>
+<li> 线程加锁前，必须把共享变量的值刷新回<strong>主内存</strong>；</li>
+<li> 线程加锁前，必须读取主内存的最新值到<strong>自己的工作内存</strong>；</li>
+<li> 加锁解锁是同一把锁。</li>
+</ol>
+<hr>
+<h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><h2 id="1-知识点"><a href="#1-知识点" class="headerlink" title="1    知识点"></a>1    知识点</h2><blockquote>
+<p>  <strong>使用 ThreadLocal 进行线程本地存储</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>ThreadLocal</strong> 是 Java 中提供的<strong>线程本地存储机制</strong>，可以利用该机制将数据缓存在某个线程内部，该线程可以在任意时刻、任意方法中获取缓存中的数据。</li>
+<li>  ThreadLocal 底层是通过 <strong>ThreadLocalMap</strong> 来实现的（ThreadLocalMap是ThreadLocal的一个静态内部类），每个 Thread 对象（注意不是 ThreadLocal 对象）中都存在一个 ThreadLocalMap ，map 的 key 为 ThreadLocal 对象，map 的 value 为需要缓存的值。</li>
+<li>  ThreadLocalMap 的 key 始终为 ThreadLocal 的引用，但其值是一个 Object 类型，可以将其声明为一个 Map 类型，这样就可以存储多对元素了。</li>
+</ul>
+<p><img src="/2021/07/08/JMM/ThreadLocal.png" alt="ThreadLocal"></p>
+<blockquote>
+<p>  <strong>线程池中的 ThreadLocal 存在的内存泄露问题</strong></p>
+</blockquote>
+<ul>
+<li>  如果在线程池中使用 ThreadLocal 会造成内存泄露，因为正常情况下，线程死亡后，需要把线程对象使用过的资源全部释放。即  ThreadLocal 使用完之后，应该要把使用过的 <code>Entry&lt;K, V&gt;</code> 对象进行回收。</li>
+<li>  但是由于线程池中的部分线程是不会被回收的，而线程池中的线程对象通过强引用指向了 ThreadLocalMap，ThreadLocalMap 又通过强引用指向 Entry 对象。所以如果线程对象不被回收的话，Entry 对象也就不会被回收。</li>
+<li>  如果反复使用线程池中线程对象的 ThreadLocalMap 缓存数据，就会导致内存泄露。</li>
+<li>  <strong>解决方法是：在使用完 ThreadLocal 对象后，手动调用 ThreadLocal 中的 remove() 方法，手动清除 Entry 对象。</strong></li>
+<li>  ThreadLocal 经典的应用场景就是连接管理（一个线程持有一个连接，该连接对象可以在不同的方法之间进行传递，线程之间共享一个连接）。</li>
+</ul>
+<h2 id="2-代码验证"><a href="#2-代码验证" class="headerlink" title="2    代码验证"></a>2    代码验证</h2><h3 id="Before：未使用-ThreadLocal-前"><a href="#Before：未使用-ThreadLocal-前" class="headerlink" title="Before：未使用 ThreadLocal 前"></a>Before：未使用 ThreadLocal 前</h3><blockquote>
+<ol>
+<li> <strong>定义一个 Person 类</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="2">
+<li> <strong>测试</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.tmp;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/9 11:31</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Person person = <span class="keyword">new</span> Person();  <span class="comment">// 堆中</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            person.setName(<span class="string">&quot;张学友&quot;</span>);  </span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">2000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1==========&quot;</span>+ person.getName());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            person.setName(<span class="string">&quot;乌蝇哥&quot;</span>);  </span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2==========&quot;</span>+ person.getName());</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>代码分析：</strong></p>
+</blockquote>
+<ul>
+<li>  测试程序中的两个线程 T1 和 T2，T1 和 T2 都有可能先被执行。</li>
+<li>如果 T1 先执行，<ol>
+<li> 则会先执行 <code>person.name = &quot;张学友&quot;</code>，再切换到线程 T2 执行 <code>person.name = &quot;乌蝇哥&quot;</code>；</li>
+<li> 最终两个线程输出的结果都是： <code>person.name = &quot;乌蝇哥&quot;</code>。</li>
+</ol>
+</li>
+<li>如果 T2 先执行，<ol>
+<li> 则会先执行 <code>person.name = &quot;乌蝇哥&quot;</code>，再切换到线程 T1 执行 <code>person.name = &quot;张学友&quot;</code>；</li>
+<li> 最终两个线程输出的结果都是： <code>person.name = &quot;张学友&quot;</code>。</li>
+</ol>
+</li>
+</ul>
+<p>对于这种不确定的结果，在生产中是不可以接受的。如果要求，线程 T1 的输出结果始终是 “张学友”，而线程 T2 的输出结果始终是 “乌蝇哥”，就可以使用 ThreadLocal ，将 <code>Person.name</code> 属性保存在线程的本地内存中。</p>
+<h3 id="After：使用-ThreadLocal-后"><a href="#After：使用-ThreadLocal-后" class="headerlink" title="After：使用 ThreadLocal 后"></a>After：使用 ThreadLocal 后</h3><blockquote>
+<ol>
+<li> <strong>修改 Person 类</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    ThreadLocal&lt;String&gt; threadLocalName = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line"><span class="comment">//    private String name;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.threadLocalName.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.threadLocalName.set(name);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">     <span class="function"><span class="keyword">public</span> ThreadLocal&lt;String&gt; <span class="title">getThreadLocalName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> threadLocalName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="2">
+<li> <strong>测试</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/8/9 11:31</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Person person = <span class="keyword">new</span> Person();  <span class="comment">// 堆中</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            person.setName(<span class="string">&quot;张学友&quot;</span>);  <span class="comment">// T1线程的栈中</span></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">2000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1==========&quot;</span>+ person.getName());</span><br><span class="line">            </span><br><span class="line">            person.getThreadLocalName().remove();</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            person.setName(<span class="string">&quot;乌蝇哥&quot;</span>);  <span class="comment">// T2线程的栈中</span></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2==========&quot;</span>+ person.getName());</span><br><span class="line">            </span><br><span class="line">            person.getThreadLocalName().remove();</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/" class="post-title-link" itemprop="url">集合类线程不安全——List/Set/Map</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-05 09:39:29" itemprop="dateCreated datePublished" datetime="2021-07-05T09:39:29+08:00">2021-07-05</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-02 09:40:17" itemprop="dateModified" datetime="2021-08-02T09:40:17+08:00">2021-08-02</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="ArrayList-线程不安全"><a href="#ArrayList-线程不安全" class="headerlink" title="ArrayList 线程不安全"></a>ArrayList 线程不安全</h1><blockquote>
+<p>  <strong>带着问题学习：</strong></p>
+</blockquote>
+<p>在 Java8 中，</p>
+<ol>
+<li> <code>new ArrayList&lt;&gt;()</code> 的底层数据结构是什么？</li>
+<li> <code>new ArrayList&lt;&gt;()</code> 的初始长度是多少？</li>
+<li> 数组长度一旦初始化就不能再修改了，Java 底层对数组进行扩容使用的方法是什么？</li>
+<li> 数组扩容的标准是什么？每次扩容多大？</li>
+<li> ArrayList 是线程安全的吗？</li>
+<li> 写一个 ArrayList 不安全的例子？</li>
+<li> 如何解决 ArrayList 线程不安全？有几种方法？</li>
+</ol>
+<blockquote>
+<p>  <strong>答案：</strong></p>
+</blockquote>
+<ol>
+<li><p> ArrayList 底层的数据结构是 Object 数组： <code>Object[] elementData</code>。</p>
+</li>
+<li><p>如果使用无参构造方法，初始的数组长度为 10，即执行 <code>new ArrayList&lt;&gt;()</code> 语句会在内存中创建一个 Object[10] 的数组对象。</p>
+<p> 但这句并不正完全确，应该说：<strong>无参构造器默认不会在内存中创建新数组，而是指向一个在类加载阶段就已经创建好了的容量为 0  的空数组，只有在调用了 add() 方法时，才会在堆空间中创建一个数组对象，并设置数组的初始容量为 10</strong>。</p>
+</li>
+<li><p>Java 底层对数组进行扩容使用的是 <strong>Arrays.copyOf()</strong> 方法，更深一层是 <strong>System.arraycopy()</strong> 方法（System.arraycopy 是一个本地方法）。</p>
+<ul>
+<li>  ArrayList 底层就是用数组实现的，对于数组而言，其容量在只能被指定一次，而数组扩容就是创建一个容量更大的新的数组，将原先数组中的数据全部拷贝到新数组中去。</li>
+</ul>
+</li>
+<li><ul>
+<li><p>  正常情况下，数组扩容的标准是每次扩张一半，即每次扩张到原来的 1.5 倍。比如，新建一个 ArrayList 数组，数组容量最初为 10，第一次扩容后从 10 扩展到 15，第二次则是从 15 扩展到 22。</p>
+</li>
+<li><p>  但是，如果数组扩容 1.5 倍后仍不够用的话，那么有多少个元素，就把容量到多少，即数组的容量刚好能盛下所有元素；</p>
+</li>
+<li><p>  还有一种情况，数组的容量是有上限的，这个上限值被规定为 <strong>Integer.MAX_VALUE</strong>（因为数组下标是 int 类型的所以最大值不能超出 Integer 的取值范围），达到最大值后再怎么扩容数组容量都不会再变了。</p>
+</li>
+<li><p>  扩展：HashMap 的初始长度是 16，每次扩容容量增加一倍。</p>
+</li>
+</ul>
+</li>
+<li><p> ArrayList 是线程不安全的。</p>
+</li>
+<li><p> 例子见下文</p>
+</li>
+<li><p>解决 ArrayList 的线程不安全有多种方法，根据实际需要自行选择。本文罗列出来了 3 种。</p>
+<ul>
+<li>  <code>new Vector()</code></li>
+<li>  <code>Collections.synchronizedList(new ArrayList&lt;&gt;())</code></li>
+<li>  <code>new CopyOnWriteArrayList&lt;&gt;()</code></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="1-ArrayList-概述"><a href="#1-ArrayList-概述" class="headerlink" title="1    ArrayList 概述"></a>1    ArrayList 概述</h2><p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705132107889.png" alt="image-20210705132107889"></p>
+<ul>
+<li>  <code>ArrayList</code> 实现了<code> List</code> 接口，继承了 <code>AbstractList</code> 类；</li>
+<li>  底层数据结构是一个 Object 数组， <code>Object[] elementData</code>。并通过一系列机制实现了数组的自动扩容。</li>
+<li>  它是线程不安全的，一般多用于单线程环境下（与 Vector 最大的区别就是，Vector 是线程安全的，但是 ArrayList 性能更好）；</li>
+<li>  它实现了 Serializable 接口，支持序列化，能够通过序列化传输；</li>
+<li>  它实现了 RandomAccess 接口，支持快速随机访问，这里表现为可以通过下标直接访问（底层是数组实现的，所以可以直接用数组下标来索引）；</li>
+<li>  实现了 Cloneable 接口，能被克隆。</li>
+<li>  <strong>数组是不可以自动扩容的！</strong></li>
+</ul>
+<hr>
+<h2 id="2-ArrayList-构造方法"><a href="#2-ArrayList-构造方法" class="headerlink" title="2    ArrayList 构造方法"></a>2    ArrayList 构造方法</h2><p><code>ArrayList</code> 一共提供了 3 个构造方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span>；</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>  源码分析（部分）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">8683452581122892189L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数组默认的容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 类加载阶段就已经创建好了的一个不可变的、共享的、空的 Object[] 数组对象</span></span><br><span class="line"><span class="comment">     *   如果用户创建的数组对象是空的，那么无需在堆中新建一个对象，直接引用这个实例即可。</span></span><br><span class="line"><span class="comment">     *	 好处就是如果程序中存在多个空数组对象，不会浪费更多的内存为每个空数组分配空间，只使用这一个即可</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">	*	主要用于与 EMPTY_ELEMENTDATA 区分开来。二者实现方式相同</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 保存了到达非空数组对象的地址</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">transient</span> Object[] elementData;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 	size 表示 elementData 的长度。</span></span><br><span class="line"><span class="comment">     *  注意 size 是 ArrayList 的一个私有变量，用于记录该 list 集合中有效元素的数量，而不是容量。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  ArrayList 的单参构造函数，构造具有指定初始容量的空列表。创建时需要传递数组长度 initialCapacity</span></span><br><span class="line"><span class="comment">     *      1、数组长度大于0，新建一个 Object[initialCapacity] 数组，并返回地址</span></span><br><span class="line"><span class="comment">     *      2、数组长度等于0，不在堆中新建数组对象，直接让 elementData 指向类加载阶段就创建好的空数组</span></span><br><span class="line"><span class="comment">     *      3、数组长度小于0，抛出异常</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal Capacity: &quot;</span>+</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 空参构造函数。如果是空参构造函数的话，不会在内存中新建对象，而是直接让 elementData 指向</span></span><br><span class="line"><span class="comment">     * DEFAULTCAPACITY_EMPTY_ELEMENTDATA，这是一个空数组。</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 在 ArrayList 实例对象调用 add() 方法的时候，才会真正创建 Object[10] 数组。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="空参构造器"><a href="#空参构造器" class="headerlink" title="空参构造器"></a>空参构造器</h3><blockquote>
+<p>  首先查看源码中 <strong>无参构造器</strong> 的实现：</p>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705110738072.png" alt="image-20210705110738072"></p>
+<ul>
+<li>  上面的注释表明：无参构造器将会提供一个初始容量为 10 的空数组，即 Object[10]。</li>
+<li>  但是实际上并不是在这一步实现的。我们继续查看 <strong>DEFAULTCAPACITY_EMPTY_ELEMENTDATA</strong> 和 <strong>elementData</strong> 的源码。</li>
+<li>  发现 <code>DEFAULTCAPACITY_EMPTY_ELEMENTDATA</code> 只是一个空数组，这一步只是让 <strong>elementData</strong> 指向了一个容量为 0  的空数组罢了。</li>
+</ul>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705111012804.png" alt="image-20210705111012804"></p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705111123760.png" alt="image-20210705111123760"></p>
+<hr>
+<h3 id="带参构造器"><a href="#带参构造器" class="headerlink" title="带参构造器"></a>带参构造器</h3><p>ArrayList 有<strong>两个带参构造器</strong> ，其实现分别如下：</p>
+<blockquote>
+<ol>
+<li> <strong>public ArrayList(Collection&lt;? extends E&gt; c)</strong> ：</li>
+</ol>
+</blockquote>
+<ul>
+<li><p>  这个构造器用于将一个 Collection 的子类实例对象中的所有元素拷贝到新集合的 elementData 中。</p>
+</li>
+<li><p>Collection 的子类实例对象有两种情况：</p>
+<p>  ① 实例对象为空，则直接复用方法区的空数组即可；</p>
+<p>  ② 实例对象不为空，将原实例对象中的所有元素复制一份到新数组中。</p>
+</li>
+</ul>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705133755514.png" alt="image-20210705133755514"></p>
+<p><code>Collection#toArray()</code> 方法是一个抽象方法，具体的实现过程由实现类决定，该方法的作用是：返回一个包含此集合中所有元素的数组，返回值是 <code>Object[]</code> 数组，并且 <code>Object[]</code> 数组长度与集合中有效元素的个数是一样的。</p>
+<ol>
+<li> 首先将 <strong>Collection c</strong> 转换成一个 <strong>Object[] 数组</strong> ，并让 <strong>elementData</strong> 指向转换后的数组；【此时 elementData 的 length 与有效元素的个数相等，即 Object[] 数组被填满了】</li>
+<li> 获取 elementData 数组的的长度并将其赋值给 size，这里的 size 是一个实例变量，用于记录集合中有效元素个数。</li>
+<li>判断：<ul>
+<li>  如果 size 不为 0 ，说明 Collection c 不为空，继续调用 <code>Arrays.copyOf()</code> 方法拷贝 elementData 中的元素到新的内存空间中；</li>
+<li>  否则（Collection c 为空）让 elementData 指向一个类初始化时就已经创建好的空数组对象。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<ol start="2">
+<li> <strong>public ArrayList(int initialCapacity)</strong></li>
+</ol>
+</blockquote>
+<p>这是一个带初始容量的 ArrayList 构造方法，构造具有指定初始容量的空列表。创建时需要传递数组长度 <strong>initialCapacity</strong>。</p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705140516278.png" alt="image-20210705140516278"></p>
+<ol>
+<li> 若数组长度大于0，新建一个 <code>Object[initialCapacity]</code> 数组；</li>
+<li> 若数组长度等于0，直接复用类加载阶段创建好的 Object 空数组；</li>
+<li> 若数组长度小于0，抛出异常。</li>
+</ol>
+<hr>
+<h2 id="3-ArrayList-的动态扩容"><a href="#3-ArrayList-的动态扩容" class="headerlink" title="3    ArrayList 的动态扩容"></a>3    ArrayList 的动态扩容</h2><blockquote>
+<p>  <strong>带着问题学习：</strong></p>
+</blockquote>
+<ol>
+<li> 通过上面的学习，我们还是不知道为什么无参构造器默认指向了一个容量为 0 的数组，而在注释中却说是一个初始容量为 10 的数组呢？</li>
+<li> 通过上面的学习我们并没有看到 <code>ArrayList</code> 的动态扩容，那么为什么说 <code>ArrayList</code> 是一个动态扩容的数组呢？</li>
+</ol>
+<p>这些问题在 <strong>add()</strong> 方法中都能找到答案。</p>
+<blockquote>
+<ol>
+<li> <strong>add() 方法是 List 接口声明的通用的方法，在 ArrayList 中的实现如下：</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112039567.png" alt="image-20210705112039567"></p>
+<p>源码分析：</p>
+<ol>
+<li> <strong>size</strong> 是当前数组中有效元素的个数（未新增 e 元素之前）。</li>
+<li> 通过 <strong>ensureCapacityInternal</strong> 方法可以保证数组容量不会被撑爆，该方法接收的参数是 <code>size+1</code> ；</li>
+<li> 如果数组容量得到保证后，新增的元素将保存在 <code>size+1</code> 的位置上，并返回结果为真，表示新增成功。</li>
+</ol>
+<p>接下来进入 <strong>ensureCapacityInternal</strong> 方法查看其具体实现：</p>
+<blockquote>
+<ol start="2">
+<li>  <strong>ensureCapacityInternal 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112635200.png" alt="image-20210705112635200"></p>
+<p><strong>ensureCapacityInternal</strong> 继续调用 <strong>ensureExplicitCapacity</strong> 和 <strong>calculateCapacity</strong> 方法保证数组容量问题。</p>
+<blockquote>
+<ol start="3">
+<li> <strong>calculateCapacity 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112857905.png" alt="image-20210705112857905"></p>
+<p><strong>参数：</strong></p>
+<ul>
+<li>  <strong>minCapacity</strong> 是新增元素后需要的最小数组容量<code>[minCapacity = size+1]</code>。</li>
+<li>  <strong>DEFAULT_CAPACITY</strong> 是一个常量 10，表示默认数组的容量。</li>
+</ul>
+<p><strong>原理：</strong></p>
+<ol>
+<li>在这个方法中，首先会判断 <code>elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA</code> 是否成立。<ul>
+<li>  成立的条件是 ArrayList 实例必须是使用无参构造器创建的，并且是第一次调用 <code>add()</code> 方法，<code>DEFAULTCAPACITY_EMPTY_ELEMENTDATA</code> 是一个类初始化阶段就已经创建好了的空数组对象，只有调用了 ArrayList 类的无参构造器才会让 elementData 指向这个对象。</li>
+</ul>
+</li>
+<li> 如果结果为真，则说明 elementData 是使用无参构造器创建的，并且是第一次调用 <code>add()</code> 方法。显然，对于 <code>DEFAULTCAPACITY_EMPTY_ELEMENTDATA</code> 而言， size 为 0，<code>size+1</code> 即 <code>minCapacity</code> 将会是 1，使用 <code>Math.max(DEFAULT_CAPACITY, minCapacity)</code> 取较大值后返回的是 10。直到这里无参构造器才创建了一个容量为 10 的数组。</li>
+<li> 所以说“无参构造器默认创建一个容量为 10 的数组”并不严格，应该说：<strong>无参构造器默认不会在内存中创建新数组，而是指向一个在类加载阶段就已经创建好了的容量为 0  的空数组，只有在调用了 add() 方法时，才会在堆空间中创建一个新的容量为 10 的数组</strong>。【注意：add() 方法只能一个一个地添加元素，不能一次性添加多个。】</li>
+<li> 得到了 <code>minCapacity</code> 数组容量这个值后，当前方法出栈继续调用上一个方法 <strong>ensureExplicitCapacity</strong>。</li>
+</ol>
+<blockquote>
+<ol start="4">
+<li>  <strong>ensureExplicitCapacity 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705114523086.png" alt="image-20210705114523086"></p>
+<ol>
+<li> <code>modCount++</code> 是用于在快速失败机制中判断使用的，与本文相关性不大，暂时略过。</li>
+<li> 接下来判断，新增元素后需要的最小容量是否超过了当前数组的容量，如果超过了，则证明需要扩容了。</li>
+<li> 如果是使用无参构造器创建的 <code>ArrayList</code> 对象，在这一步 <code>minCapacity == 10</code>；而 <code>elementData.length</code> 则是 0，必然满足扩容的条件。</li>
+<li> 调用 <strong>grow</strong> 方法进行扩容。</li>
+</ol>
+<blockquote>
+<ol start="5">
+<li> <strong>grow 方法</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705114959424.png" alt="image-20210705114959424"></p>
+<ol>
+<li> <strong>minCapacity</strong> 是新增元素后需要的最小容量</li>
+<li> <strong>oldCapacity</strong> 是原来（未新增元素前）数组的容量</li>
+<li> 由于在上一个方法中已经知道原来的数组已经放不下新增的元素了，所以这里首先要进行扩容。<strong>oldCapacity &gt;&gt; 1</strong> 是位运算的右移操作，右移一位相当于除以 2，所以这句代码就等于 <code>int newCapacity = oldCapacity + oldCapacity/2</code>，即容量扩大为原来的 1.5 倍。</li>
+<li>比较扩容后新数组的容量 <code>newCapacity</code> 与 新增元素后需要的最小容量 <code>minCapacity</code> ，如果扩容后仍然不够，则直接让 <code>newCapacity == minCapacity</code>，而不再是计算 1.5 倍的扩容。（即如果扩容 1.5 倍后仍然容量不够，那就直接让数组的容量等于元素的个数）<ul>
+<li>  例如：使用无参构造函数的 <code>ArrayList</code> 对象第一次调用 <code>add()</code> 方法扩容，由于扩容前数组的容量为 0，即使扩容 1.5 倍也仍然是 0，所以这时候直接让新的数组长度等于 10 就行了，这种特殊情况可以无视扩容 1.5 倍的规则。</li>
+<li>  如果使用有参构造函数创建了一个长度为 1 的 ArrayList 对象，即底层数组长度为 1，第一次扩容时扩大到 1.5 显然也是不合适的，所以可以直接扩容到 2。</li>
+</ul>
+</li>
+<li>如果扩容后（第3或4步）发现新数组的容量超过了规定的最大容量 <strong>MAX_ARRAY_SIZE</strong>，则还需调用 <strong>hugeCapacity</strong>方法进行处理。（在数组长度已经很大的基础上，直接增加 0.5 倍是很大的，所以这时候我们需要额外加一些保护机制）<ul>
+<li>  <strong>MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8</strong>，因为数组下标是整型的数据，所以其取值范围不能超过这个范围。</li>
+</ul>
+</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705144202128.png" alt="image-20210705144202128"></p>
+<p>所有的处理结束后，调用 <strong>Arrays.copyOf</strong> 方法将原数组中的所有元素拷贝到新数组中。</p>
+<blockquote>
+<ol start="6">
+<li> <strong>hugeCapacity 方法</strong>（非必须执行的方法）</li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705144627777.png" alt="image-20210705144627777"></p>
+<p>在数组长度已经很大的基础上，直接扩容 1.5 倍增长是很大的，所以这时候我们需要额外加一些保护机制。不再是在原数组长度的基础上增加 0.5 倍了，而是根据新增元素后需要的最小容量来改变新数组的容量（只有 2 种情况）。凡是能进入到该方法的都是大容量的数组（即扩大 1.5 就会超出上限）。</p>
+<ol>
+<li>如果新增元素后需要的最小容量大于 MAX_ARRAY_SIZE ，则将新数组的容量设置为 <strong>Integer.MAX_VALUE</strong>；</li>
+<li>否则，将新数组的容量设置为 <strong>MAX_ARRAY_SIZE</strong>；</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145256894.png" alt="image-20210705145256894"></p>
+<p>方法执行完后，当前栈帧出栈，执行上一个方法。</p>
+<blockquote>
+<ol start="7">
+<li> <strong>Arrays.copyOf</strong></li>
+</ol>
+</blockquote>
+<ol>
+<li> 计算完扩容的容量后，继续执行真正地执行 grow 方法。调用 <strong>Arrays.copyof</strong> 方法，进行复制操作。</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145658774.png" alt="image-20210705145658774"></p>
+<ol start="2">
+<li> <strong>Arrays.copyof</strong> 底层真正执行的是 <strong>System.arraycopy</strong> 方法。</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705145828821.png" alt="image-20210705145828821"></p>
+<ol start="3">
+<li> 而 <strong>System.arraycopy</strong> 方法则是一个本地方法。</li>
+</ol>
+<hr>
+<h2 id="4-ArrayList-线程不安全"><a href="#4-ArrayList-线程不安全" class="headerlink" title="4    ArrayList 线程不安全"></a>4    ArrayList 线程不安全</h2><h3 id="ArrayList-线程不安全案例"><a href="#ArrayList-线程不安全案例" class="headerlink" title="ArrayList 线程不安全案例"></a>ArrayList 线程不安全案例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">       ArrayList&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++) &#123;</span><br><span class="line">           <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">               list.add(UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">8</span>));</span><br><span class="line">               System.out.println(list);</span><br><span class="line">           &#125;, String.valueOf(i)).start();</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据上面几部分的学习，我们已经知道了 <code>ArrayList#add</code> 方法在写入数据之前，会先确定要写入位置的下标。如果多个线程同时向同一个 <code>list</code> 集合中写入数据，就可能存在<strong>多个线程同时取得了同一个下标的写入权</strong>，如果不加以限制，就可能会造成如下情况。即一个线程写的值覆盖了另一个线程写的值。</p>
+<img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705205807031.png" alt="image-20210705205807031" style="zoom: 67%;">
+
+<p>甚至可能会出现并发修改异常：<strong>java.util.ConcurrentModificationException</strong></p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705211114239.png" alt="image-20210705211114239"></p>
+<p>既然 <code>ArrayList#add()</code> 是线程不安全的，为了解决线程安全问题，我们应该怎么做呢？——加锁！！！</p>
+<blockquote>
+<p>  <strong>ArrayList 线程不安全总结：</strong></p>
+</blockquote>
+<p>ArrayList 在添加元素时会调用 <code>add()</code> 方法，add() 方法底层源码的逻辑是：每添加一个元素，会先确定要添加元素的下标位置，并判断是否超出当前数组的容量来决定是否需要扩容。这些过程都没有加锁，即如果多个线程并发执行时，会出现多个线程获取到同一个待插入位置的情况，这时先插入该位置的元素就会被后插入该位置的元素所覆盖。</p>
+<hr>
+<h3 id="解决方法1：Vector"><a href="#解决方法1：Vector" class="headerlink" title="解决方法1：Vector"></a>解决方法1：Vector</h3><p>加锁是最简单的方法，Java 的开发者们已经为我们提供好了 <strong>Vector#add()</strong> 方法用于执行线程安全的 add 方法。</p>
+<blockquote>
+<p>  <strong>Vector 类</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Vector</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  Vector 同样也实现了 <code>List&lt;E&gt;</code> 接口，继承了 <code>AbstractList&lt;E&gt;</code> 类。和 ArrayList 是同一层级的类。</li>
+</ul>
+<blockquote>
+<p>  <strong>线程安全的代码</strong></p>
+</blockquote>
+<img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705211801881.png" alt="image-20210705211801881">
+
+<ul>
+<li>  只需将 <strong>new ArrayList</strong> 改为 <strong>new Vector</strong> 即可。</li>
+</ul>
+<blockquote>
+<p>  <strong>Vector 的缺点</strong></p>
+</blockquote>
+<img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705212216863.png" alt="image-20210705212216863">
+
+<ul>
+<li>  查看 <strong>Vector#add</strong> 的源码，可以看到该方法被 synchronized 修饰，是线程安全的，但是这样一来就会严重影响高并环境下的程序执行速度了。</li>
+<li>  我们可以看到该方法在 <code>JDK1.2</code> 之后就被声明弃用了。在早期的 JDK 时期，由于硬件设备的落后，单线程或少线程的程序是主流，加锁的 <code>add()</code> 方法能在不太影响程序执行速度的情况下加强程序的安全性，性价比还是很高的。但是在当前的硬件环境下，服务器端特别是电商项目大多都需要高并发的支持，这时再使用 <code>Vector#add</code> 方法对性能的影响就很大了。</li>
+</ul>
+<hr>
+<h3 id="解决方法2：使用-Collections-工具类创建线程安全的-ArrayList"><a href="#解决方法2：使用-Collections-工具类创建线程安全的-ArrayList" class="headerlink" title="解决方法2：使用 Collections 工具类创建线程安全的 ArrayList"></a>解决方法2：使用 Collections 工具类创建线程安全的 ArrayList</h3><ul>
+<li>  使用 <strong>Collections.synchronizedList</strong> 方法创建线程安全的 ArrayList。</li>
+</ul>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705213152762.png" alt="image-20210705213152762"></p>
+<ul>
+<li>  下图可以看到，Collections 工具类提供了用于保证线程安全的 List 、Set 、Map 方法，那么也就说明 List、Set、Map 中一定有一些实现类是线程不安全的。具体就是：<strong>ArrayList、HashSet、HashMap</strong></li>
+</ul>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705213534400.png" alt="image-20210705213534400"></p>
+<h3 id="解决方法3：CopyOnWriteArrayList"><a href="#解决方法3：CopyOnWriteArrayList" class="headerlink" title="解决方法3：CopyOnWriteArrayList"></a>解决方法3：CopyOnWriteArrayList</h3><blockquote>
+<p>  <strong>CopyOnWriteArrayList 类</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> java.util.concurrent;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CopyOnWriteArrayList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  <strong>CopyOnWriteArrayList</strong> 是 JUC 包下的一个线程安全的 <code>ArrayList</code> 的变体。</li>
+<li>  它实现了 <code>List&lt;E&gt;</code> 接口，在某种意义上，它和 ArrayList 、Vector 是平级的。</li>
+<li>  它能保证线程安全是因为采用了<strong>写时复制技术</strong></li>
+</ul>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705215106596.png" alt="image-20210705215106596"></p>
+<blockquote>
+<p>  <strong>线程安全的代码</strong></p>
+</blockquote>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705214658694.png" alt="image-20210705214658694"></p>
+<blockquote>
+<p>  <strong>写时复制技术</strong></p>
+</blockquote>
+<ul>
+<li>  顾名思义，“写时复制”就是写的时候才复制，也就是说“读的时候不复制”。</li>
+<li>  我们都知道，多个线程读同一份资源不会有线程安全的问题，只有多个线程对同一份资源进行写操作的时候才可能出现线程安全问题。</li>
+<li>  一般的加锁机制（重锁）不会区分读还是写，只要是某一资源被上锁了，不管是读还是写都需要进行资源的争夺。</li>
+<li>  而如果某份资源在大多数情况下都是多线程读，只有少数情况下才会进行多线程写的话，使用不区分读写的锁显然对性能的浪费很大。而如果将读和写的操作分开，在某些情况下反而能得到更好的性能。写时复制技术就是这样一种技术。</li>
+<li>  写时复制技术用到了<strong>读写分离的思想</strong>。</li>
+<li>  读的时候共享，写的时候复制一份数据的副本对副本进行操作，写好以后，用副本覆盖原件。</li>
+</ul>
+<p>放在本例中就是，线程 A、B、C 同时执行 <code>list.add()</code> 操作，向集合中添加元素。</p>
+<ol>
+<li> 如果线程 A、B、C 同时要读 <code>list</code> 中的数据，可以任意读，无锁。</li>
+<li> 如果线程 B 要修改 <code>list</code> 中的数据，如调用 <code>add()</code> 方法添加元素。不好意思，不能直接在原 <code>list</code> 集合中添加，线程 B 需要将原来的 <code>list</code> 集合的内容复制一份，将要添加的数据加入到 <code>list</code> 副本中。如果添加成功了，再将指向原 <code>list</code> 的指针指向新的 <code>list</code>，这就完成了一次集合中元素的添加。</li>
+</ol>
+<blockquote>
+<p>  <strong>源码解读（部分）</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CopyOnWriteArrayList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">8673264195747942595L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 锁对象</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">transient</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数组的底层结构：Object[] </span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Object[] array;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> Object[] getArray() &#123;</span><br><span class="line">        <span class="keyword">return</span> array;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setArray</span><span class="params">(Object[] a)</span> </span>&#123;</span><br><span class="line">        array = a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法1</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CopyOnWriteArrayList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        setArray(<span class="keyword">new</span> Object[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法2</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CopyOnWriteArrayList</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</span><br><span class="line">        Object[] elements;</span><br><span class="line">        <span class="keyword">if</span> (c.getClass() == CopyOnWriteArrayList.class)</span><br><span class="line">            elements = ((CopyOnWriteArrayList&lt;?&gt;)c).getArray();</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            elements = c.toArray();</span><br><span class="line">            <span class="comment">// c.toArray might (incorrectly) not return Object[] (see 6260652)</span></span><br><span class="line">            <span class="keyword">if</span> (elements.getClass() != Object[].class)</span><br><span class="line">                elements = Arrays.copyOf(elements, elements.length, Object[].class);</span><br><span class="line">        &#125;</span><br><span class="line">        setArray(elements);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法3</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CopyOnWriteArrayList</span><span class="params">(E[] toCopyIn)</span> </span>&#123;</span><br><span class="line">        setArray(Arrays.copyOf(toCopyIn, toCopyIn.length, Object[].class));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>add() 方法源码</strong></p>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705221837637.png" alt="image-20210705221837637"></p>
+<ol>
+<li> 首先加锁</li>
+<li> 调用自身类中的 <code>getArray()</code> 方法获得当前集合对象的底层数组对象；</li>
+<li> 将原数组复制一份并将长度增加 1，</li>
+<li> 在新的索引位置上保存新增的元素；</li>
+<li> 让对象的 <code>array</code> 属性指向新的数组对象（即原数组对象被废弃）；</li>
+<li> 释放锁。</li>
+</ol>
+<hr>
+<h1 id="HashSet-线程不安全"><a href="#HashSet-线程不安全" class="headerlink" title="HashSet 线程不安全"></a>HashSet 线程不安全</h1><p><strong>带着问题学习</strong></p>
+<ol>
+<li> HashSet 底层的数据结构是什么？</li>
+<li> HashMap 是键值对的结构，而 <code>HashSet#add</code> 方法只用传递一个参数进去，为什么？</li>
+</ol>
+<p><strong>答案：</strong></p>
+<ol>
+<li> HashSet 底层的数据结构是 HashMap。</li>
+<li> HashSet 底层确实调用了 <code>HashMap#put(K, V)</code> 方法，但是我们在调用 <code>HashSet#add</code> 方法时只需添加一个参数即可。这时因为 Java 开发人员在源码级别帮我们做了自动填充。HashSet 只是利用了 HashMap 键（Key）的不可重复性，至于值（Value）则是用一个常量填充。也就是说，我们每次调用  <code>HashSet#add(xxx)</code> 时，实际上调用的是 <code>HashMap#put(xxx, 常量)</code> 。至于这个常量是什么，在下文的源码分析中可以看到，其实只是一个类加载阶段就创建好的对象的地址。</li>
+</ol>
+<h2 id="1-HashSet-底层数据结构"><a href="#1-HashSet-底层数据结构" class="headerlink" title="1    HashSet 底层数据结构"></a>1    HashSet 底层数据结构</h2><blockquote>
+<p>  <strong>源码分析</strong></p>
+</blockquote>
+<ol>
+<li> 通过源码可以看到，HashSet 的底层数据结构其实是一个 HashMap。而 HashMap 的数据结构是键值对的，那么 HashSet 是如何处理这一情况的呢？</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705225253807.png" alt="image-20210705225253807"></p>
+<ol start="2">
+<li> 在 <strong>HashSet#add</strong> 方法中可以看到，add 方法底层确实调用的是 <strong>HashMap#put</strong> 方法，其 Key 为要添加的元素，而 V 则是一个 <strong>PRESENT</strong> 值</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705225457854.png" alt="image-20210705225457854"></p>
+<ol start="3">
+<li> 继续查看 PRESENT 的源码，我们可以看到， <strong>PRESENT</strong> 是一个常量值，也就是说 Value 是固定不变的。</li>
+</ol>
+<p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705225617057.png" alt="image-20210705225617057"></p>
+<ol start="4">
+<li> 总结：HashSet 底层是 HashMap，但是只是利用了 HashMap 中键（key）的不可重复性，而在值（value）的部分则是使用一个常量值来填充。</li>
+</ol>
+<hr>
+<h2 id="2-代码验证-HashSet-线程不安全"><a href="#2-代码验证-HashSet-线程不安全" class="headerlink" title="2    代码验证 HashSet 线程不安全"></a>2    代码验证 HashSet 线程不安全</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Set&lt;String&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">30</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            set.add(UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">8</span>));</span><br><span class="line">            System.out.println(set);</span><br><span class="line">        &#125;, String.valueOf(i)).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  这段代码也会出现 <strong>java.util.ConcurrentModificationException</strong> 异常，这就证明了 HashSet 也是线程不安全的。</li>
+</ul>
+<hr>
+<h2 id="3-如何解决-HashSet-线程不安全（2种方法）"><a href="#3-如何解决-HashSet-线程不安全（2种方法）" class="headerlink" title="3    如何解决 HashSet 线程不安全（2种方法）"></a>3    如何解决 HashSet 线程不安全（2种方法）</h2><ol>
+<li> <strong>Collections 工具类：Collections.synchronizedSet(new HashSet&lt;&gt;())</strong></li>
+<li> <strong>写时复制技术：new CopyOnWriteArraySet&lt;&gt;()</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"><span class="comment">//        Set&lt;String&gt; set = new HashSet&lt;&gt;();    // 线程不安全</span></span><br><span class="line"><span class="comment">//        Set&lt;String&gt; set = Collections.synchronizedSet(new HashSet&lt;&gt;());     // 线程安全①</span></span><br><span class="line">        Set&lt;String&gt; set = <span class="keyword">new</span> CopyOnWriteArraySet&lt;&gt;();     <span class="comment">// 线程安全②</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">30</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                set.add(UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">8</span>));</span><br><span class="line">                System.out.println(set);</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h1 id="HashMap-线程不安全"><a href="#HashMap-线程不安全" class="headerlink" title="HashMap 线程不安全"></a>HashMap 线程不安全</h1><h2 id="1-代码验证-HashMap-不安全"><a href="#1-代码验证-HashMap-不安全" class="headerlink" title="1    代码验证 HashMap 不安全"></a>1    代码验证 HashMap 不安全</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();    <span class="comment">// 线程不安全</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">30</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">8</span>));</span><br><span class="line">            System.out.println(map);</span><br><span class="line">        &#125;, String.valueOf(i)).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  错误信息：<strong>java.util.ConcurrentModificationException</strong></li>
+</ul>
+<h2 id="2-如何解决-HashMap-线程不安全"><a href="#2-如何解决-HashMap-线程不安全" class="headerlink" title="2    如何解决 HashMap 线程不安全"></a>2    如何解决 HashMap 线程不安全</h2><ol>
+<li> <strong>Collections 工具类：Collections.synchronizedMap(new HashMap&lt;&gt;())</strong></li>
+<li> <strong>JUC包下的HashMap：new ConcurrentHashMap&lt;&gt;()</strong></li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"><span class="comment">//        Map&lt;String, String&gt; map = new HashMap&lt;&gt;();    // 线程不安全</span></span><br><span class="line"><span class="comment">//        Map&lt;String, String&gt; map = Collections.synchronizedMap(new HashMap&lt;&gt;());     // 线程安全①</span></span><br><span class="line">        Map&lt;String, String&gt; map = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();     <span class="comment">// 线程安全②</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">30</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(<span class="number">0</span>, <span class="number">8</span>));</span><br><span class="line">                System.out.println(map);</span><br><span class="line">            &#125;, String.valueOf(i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="3-ConcurrentHashMap源码分析"><a href="#3-ConcurrentHashMap源码分析" class="headerlink" title="3    ConcurrentHashMap源码分析"></a>3    ConcurrentHashMap源码分析</h2><blockquote>
+<p>  <strong>ConcurrentHashMap 类</strong></p>
+</blockquote>
+<ul>
+<li>  ConcurrentHashMap 是 JUC 包下的一个 HashMap 的变式，与 HashMap 的功能基本一致，但是它是线程安全的。 </li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> java.util.concurrent;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcurrentHashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">ConcurrentMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Serializable</span> </span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>ConcurrentHashMap#put 方法源码</strong></p>
+</blockquote>
+<ol>
+<li> <code>ConcurrentHashMap#put</code> 会调用 <code>ConcurrentHashMap#putVal</code> 方法</li>
+<li> 在 <code>ConcurrentHashMap#putVal</code> 方法中的一部分代码块被加了锁。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> putVal(key, value, <span class="keyword">false</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Implementation for put and putIfAbsent */</span></span><br><span class="line">   <span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(K key, V value, <span class="keyword">boolean</span> onlyIfAbsent)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (key == <span class="keyword">null</span> || value == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">       <span class="keyword">int</span> hash = spread(key.hashCode());</span><br><span class="line">       <span class="keyword">int</span> binCount = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">for</span> (Node&lt;K,V&gt;[] tab = table;;) &#123;</span><br><span class="line">           Node&lt;K,V&gt; f; <span class="keyword">int</span> n, i, fh;</span><br><span class="line">           <span class="keyword">if</span> (tab == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">               tab = initTable();</span><br><span class="line">           <span class="keyword">else</span> <span class="keyword">if</span> ((f = tabAt(tab, i = (n - <span class="number">1</span>) &amp; hash)) == <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">if</span> (casTabAt(tab, i, <span class="keyword">null</span>,</span><br><span class="line">                            <span class="keyword">new</span> Node&lt;K,V&gt;(hash, key, value, <span class="keyword">null</span>)))</span><br><span class="line">                   <span class="keyword">break</span>;                   <span class="comment">// no lock when adding to empty bin</span></span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">else</span> <span class="keyword">if</span> ((fh = f.hash) == MOVED)</span><br><span class="line">               tab = helpTransfer(tab, f);</span><br><span class="line">           <span class="keyword">else</span> &#123;</span><br><span class="line">               V oldVal = <span class="keyword">null</span>;</span><br><span class="line">               <span class="keyword">synchronized</span> (f) &#123;</span><br><span class="line">                   <span class="keyword">if</span> (tabAt(tab, i) == f) &#123;</span><br><span class="line">                       <span class="keyword">if</span> (fh &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                           binCount = <span class="number">1</span>;</span><br><span class="line">                           <span class="keyword">for</span> (Node&lt;K,V&gt; e = f;; ++binCount) &#123;</span><br><span class="line">                               K ek;</span><br><span class="line">                               <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                                   ((ek = e.key) == key ||</span><br><span class="line">                                    (ek != <span class="keyword">null</span> &amp;&amp; key.equals(ek)))) &#123;</span><br><span class="line">                                   oldVal = e.val;</span><br><span class="line">                                   <span class="keyword">if</span> (!onlyIfAbsent)</span><br><span class="line">                                       e.val = value;</span><br><span class="line">                                   <span class="keyword">break</span>;</span><br><span class="line">                               &#125;</span><br><span class="line">                               Node&lt;K,V&gt; pred = e;</span><br><span class="line">                               <span class="keyword">if</span> ((e = e.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                                   pred.next = <span class="keyword">new</span> Node&lt;K,V&gt;(hash, key,</span><br><span class="line">                                                             value, <span class="keyword">null</span>);</span><br><span class="line">                                   <span class="keyword">break</span>;</span><br><span class="line">                               &#125;</span><br><span class="line">                           &#125;</span><br><span class="line">                       &#125;</span><br><span class="line">                       <span class="keyword">else</span> <span class="keyword">if</span> (f <span class="keyword">instanceof</span> TreeBin) &#123;</span><br><span class="line">                           Node&lt;K,V&gt; p;</span><br><span class="line">                           binCount = <span class="number">2</span>;</span><br><span class="line">                           <span class="keyword">if</span> ((p = ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,</span><br><span class="line">                                                          value)) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                               oldVal = p.val;</span><br><span class="line">                               <span class="keyword">if</span> (!onlyIfAbsent)</span><br><span class="line">                                   p.val = value;</span><br><span class="line">                           &#125;</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">if</span> (binCount != <span class="number">0</span>) &#123;</span><br><span class="line">                   <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD)</span><br><span class="line">                       treeifyBin(tab, i);</span><br><span class="line">                   <span class="keyword">if</span> (oldVal != <span class="keyword">null</span>)</span><br><span class="line">                       <span class="keyword">return</span> oldVal;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       addCount(<span class="number">1L</span>, binCount);</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -4421,591 +5175,6 @@
 <hr>
 <p>​        以 CMS（Concurrent-Mark-Sweep）回收器为例，CMS 是基于 Mark-Sweep 实现的，对于对象的回收效率很高（相较于 Mark-Sweep-Compact 算法）。而对于碎片问题，CMS 采用基于 Mark-Compact 算法的 Serial Old 回收器作为补偿措施：当内存回收不佳（碎片导致的 Concurrent Mode Failure）时，将采用 Serial Old 执行 Full GC 以达到对老年代内存的整理。</p>
 <p>分代思想被现有的虚拟机广泛使用。几乎所有的垃圾回收器都区分老年代和新生代。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/14/%E9%93%BE%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/06/14/%E9%93%BE%E8%A1%A8/" class="post-title-link" itemprop="url">链表</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-06-14 12:34:55" itemprop="dateCreated datePublished" datetime="2021-06-14T12:34:55+08:00">2021-06-14</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-06-16 22:47:16" itemprop="dateModified" datetime="2021-06-16T22:47:16+08:00">2021-06-16</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/2021/06/14/%E9%93%BE%E8%A1%A8/%E9%93%BE%E8%A1%A8.png" alt="链表"></p>
-<h1 id="单向链表"><a href="#单向链表" class="headerlink" title="单向链表"></a>单向链表</h1><h2 id="单链表节点定义"><a href="#单链表节点定义" class="headerlink" title="单链表节点定义"></a>单链表节点定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LNode</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Object data;	<span class="comment">//  节点#data域</span></span><br><span class="line">    <span class="keyword">public</span> LNode next;	<span class="comment">//  节点#next域</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h1><h2 id="为什么要有双链表（单链表的缺点）"><a href="#为什么要有双链表（单链表的缺点）" class="headerlink" title="为什么要有双链表（单链表的缺点）"></a>为什么要有双链表（单链表的缺点）</h2><ul>
-<li><p>  单链表，查找的方向只能是一个方向（从头到尾），而双向链表可以向前或向后查找</p>
-</li>
-<li><p>单向链表，不能自我删除，需要靠辅助节点；而双向链表则可以自我删除。</p>
-<p>  单链表删除时，总会找到 temp（temp 是待删除节点的前一个节点）节点来帮助删除。</p>
-</li>
-</ul>
-<h2 id="双链表节点的定义"><a href="#双链表节点的定义" class="headerlink" title="双链表节点的定义"></a>双链表节点的定义</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DLNode</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Object data;		<span class="comment">//  节点#data域</span></span><br><span class="line">    <span class="keyword">public</span> DLNode prior;	<span class="comment">//  指向前驱节点的指针</span></span><br><span class="line">    <span class="keyword">public</span> DLNode next;		<span class="comment">//  指向后继节点的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="双链表的基础操作"><a href="#双链表的基础操作" class="headerlink" title="双链表的基础操作"></a>双链表的基础操作</h2><h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><p>​    双向链表的遍历方式和单链表一样，只是在遍历的过程中可以向前查找，也可以向后查找。单向链表只能向后查找，例如我们当前遍历到链表的第5个节点，在单向链表中我们只能够继续向后查找5之后的节点，但是在双向链表中，我们既可以查找5之后的节点，也可以返回去查找5之前的节点。</p>
-<h3 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h3><h4 id="尾插"><a href="#尾插" class="headerlink" title="尾插"></a>尾插</h4><ol>
-<li> 首先，找到当前链表的尾节点 temp；</li>
-<li> 让尾节点的 next 指针指向要添加的新节点，即 <code>temp.next = newDLNode</code>；</li>
-<li> 让新节点的 prior 指针指向尾节点，即 <code>newDLNode.prior = temp</code></li>
-</ol>
-<h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><p>​    修改思路也和单向链表一致</p>
-<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p>​    因为是双向链表，因此，我们可以实现自我删除某个节点。</p>
-<ol>
-<li> 找到待删除的节点 temp；</li>
-<li> 让待删除节点前一个节点的 next 指针指向待删除节点后一个节点，即 <code>temp.prior.next = temp.next</code>；</li>
-<li>让待删除节点后一个节点的 prior 指针指向待删除节点的前一个节点，即 <code>temp.next.prior = temp.prior</code> 。<ul>
-<li>  如果待删除的节点是链表的尾节点，就不需要执行第 3 步了，否则会出现空指针异常。</li>
-</ul>
-</li>
-</ol>
-<h1 id="环形链表"><a href="#环形链表" class="headerlink" title="环形链表"></a>环形链表</h1><h2 id="单向环形链表"><a href="#单向环形链表" class="headerlink" title="单向环形链表"></a>单向环形链表</h2><blockquote>
-<p>  <strong>应用场景：约瑟夫（Josephu）问题</strong></p>
-</blockquote>
-<p>​        Josephu 问题：设编号为 1，2，3，…….，n 的 n 个人围坐一圈，约定编号为 k（1&lt;=k&lt;=n）的人从 1 开始报数，数到 m 的那个人出列，他的下一位又从 1 开始报数，数到 m 的那个人又出列。以此类推，直到所有人都出列为止。据此产生一个出队编号的序列。</p>
-<blockquote>
-<p>  <strong>思路</strong></p>
-</blockquote>
-<p>​        用一个不带头结点的循环链表来处理 Josephu 问题，先构成一个有 n 个节点的单循环链表，然后由 k 节点起从 1 开始计数，记到 m 时，对应节点从链表中删除，然后再从被删除节点的下一个节点又从 1 开始计数，直到最后一个节点从链表中删除算法结束。</p>
-<blockquote>
-<p>  <strong>代码</strong></p>
-</blockquote>
-<p>​        根据用户的输入，要形成一个小朋友出队的顺序。假设 </p>
-<ul>
-<li>  <code>n=5</code>，即共有 5 人</li>
-<li>  <code>k=1</code>，编号为 1 的人从 1 开始报数</li>
-<li>  <code>m=2</code>，报数为 2 的人出列，他的下一位又从 1 开始报数</li>
-</ul>
-<ol>
-<li><p> 因为存在出队行为，所以需要执行单链表的删除操作，也就是说需要一个辅助指针 <code>helper</code> 指向待删除节点的前一个节点。 <code>first</code> 指针从头开始遍历，所以 <code>helper</code> 指针需要事先指向 <code>first</code> 指向节点的前一个节点（即单向链表的最后一个节点），并且 <code>helper</code> 指针紧跟 <code>first</code> 指针同步遍历。</p>
-</li>
-<li><p> 报数前，先让 <code>first</code> 和 <code>helper</code> 移动 <code>k-1</code> 次。</p>
-</li>
-<li><p> 当小朋友报数时，让 <code>first</code> 和 <code>helper</code> 指针同时移动 <code>m-1</code> 次，因为小朋友报数时，自己需要占一次。</p>
-</li>
-<li><p>这时就可以将 <code>first</code> 指向的节点出队。两种方式：</p>
-<ol>
-<li> <code>first = first.next;  helper.next = first</code></li>
-<li><code>helper.next = first.next;  first = first.next</code></li>
-</ol>
-</li>
-</ol>
-<h2 id="单向环形链表的操作"><a href="#单向环形链表的操作" class="headerlink" title="单向环形链表的操作"></a>单向环形链表的操作</h2><h3 id="构建一个单向环形链表"><a href="#构建一个单向环形链表" class="headerlink" title="构建一个单向环形链表"></a>构建一个单向环形链表</h3><ol>
-<li> 先创建链表的第一个节点，让 <code>first</code> 指针指向该节点，让第一个节点的 <code>next</code> 指针指向自己，自我连接形成环状。</li>
-<li> 每增加一个新的节点，就把新节点加入到已有的环形链表中即可。</li>
-</ol>
-<h3 id="遍历-1"><a href="#遍历-1" class="headerlink" title="遍历"></a>遍历</h3><ol>
-<li> 创建一个辅助指针 <code>current</code> 与 <code>first</code> 指针指向同一个节点。</li>
-<li> 通过 while 循环遍历环形链表，但 <code>current</code> 指针再次与 <code>first</code> 指向同一个节点时循环结束。</li>
-</ol>
-<h3 id="添加-1"><a href="#添加-1" class="headerlink" title="添加"></a>添加</h3><h2 id="双向环形链表"><a href="#双向环形链表" class="headerlink" title="双向环形链表"></a>双向环形链表</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/13/String/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/06/13/String/" class="post-title-link" itemprop="url">String</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-06-13 11:42:39" itemprop="dateCreated datePublished" datetime="2021-06-13T11:42:39+08:00">2021-06-13</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-07-31 17:57:19" itemprop="dateModified" datetime="2021-07-31T17:57:19+08:00">2021-07-31</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JavaSE/" itemprop="url" rel="index"><span itemprop="name">JavaSE</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>  本文默认使用 HotSpot 虚拟机 + JDK8 ，如有其它情况会具体指出。</p>
-</blockquote>
-<h1 id="1-String-的基本特性"><a href="#1-String-的基本特性" class="headerlink" title="1  String 的基本特性"></a>1  String 的基本特性</h1><blockquote>
-<p>  <strong>String；字符串；</strong></p>
-</blockquote>
-<p>顾名思义，就是把一个个的字符串在一起，所以说<strong>字符串的底层实现就是一个字符数组</strong>。</p>
-<img src="/2021/06/13/String/1623398509911-a4c2e130-bfc9-4aa7-9a9d-531df6e1cdee.png" alt="image.png">
-
-<ul>
-<li>  String 被声明为 <strong>final</strong> 的表示类不可被继承。</li>
-<li>  String 实现了 <strong>Serializable</strong> 接口，表示字符串是支持序列化的。</li>
-<li>  String 实现了 <strong>Comparable</strong> 接口，表示 String 可以比较大小。</li>
-<li>  在 JDK8 中，String 使用字符数组 <strong>final char[] value</strong> 数组来存储字符串数据。</li>
-</ul>
-<h2 id="1-1-String-存储结构的演变"><a href="#1-1-String-存储结构的演变" class="headerlink" title="1.1    String 存储结构的演变"></a>1.1    String 存储结构的演变</h2><ul>
-<li>  在 JDK9 之前，String 底层是通过<strong>字符数组 <code>char[]</code></strong> 来保存字符串的。</li>
-<li>  从 <strong>JDK9</strong> 开始，String 底层变成了通过<strong>字节数组 <code>byte[]</code></strong> 来保存字符串数据。【字符型 char 编码后都可以用数字（byte型）表示】</li>
-</ul>
-<blockquote>
-<p>  <strong>为什么要变化？</strong></p>
-</blockquote>
-<p>String 底层将 <code>char[]</code> 变成 <code>byte[]</code> 来存储字符串数据，可以节约一些空间。</p>
-<p>同时，String 的一些衍生对象，如 StringBuffer、StringBuilder 等也作出了同样的改变，将存储结构变更为了 byte[] 。</p>
-<hr>
-<h2 id="1-2-String-的不可变性"><a href="#1-2-String-的不可变性" class="headerlink" title="1.2    String 的不可变性"></a>1.2    String 的不可变性</h2><blockquote>
-<p>  String：<strong>不可变的字符序列</strong></p>
-</blockquote>
-<ul>
-<li>  当对字符串<strong>重新赋值</strong>时，会重新分配内存区域，重新赋值，而不是在原先 <code>value[]</code> 的基础上进行更新。</li>
-<li>  当对现有的字符串进行<strong>拼接</strong>操作时，也是重新分配内存区域，重新赋值，而不是在原先 <code>value[]</code> 的基础上进行拼接、赋值。</li>
-<li>  当<strong>调用 <code>String replace(char oldChar, char newChar)</code> 方法</strong>使用新字符串替换当前字符串指定的子串时，也是重新分配内存区域并重新赋值，而不能在原先字符串数组 <code>value[]</code> 的基础上进行操作。</li>
-</ul>
-<blockquote>
-<p>  <strong>String 字符串为什么不能直接拼接字符串？【==String为什么设计成不可变的？】</strong></p>
-</blockquote>
-<p>String 的底层数据结构是 <code>char[]</code> 或 <code>byte[]</code>，由于<strong>数组的定长性</strong>，即一旦被创建出来，它的长度就就确定了，不能再被更改。在进行字符串拼接操作时，原数组的容量显然是不足以容纳拼接后的新数组的，所以只能新开辟一块更大的空间保存新的字符串，而不是去改变原有的字符串。【如果新数组的长度小于原数组，又会导致数组存在多个空白区域，造成内存的浪费，也是不合理的】</p>
-<hr>
-<h1 id="2-String-的内存分配"><a href="#2-String-的内存分配" class="headerlink" title="2  String 的内存分配"></a>2  String 的内存分配</h1><h2 id="String-对象可以保存在内存中的哪些位置"><a href="#String-对象可以保存在内存中的哪些位置" class="headerlink" title="String 对象可以保存在内存中的哪些位置"></a>String 对象可以保存在内存中的哪些位置</h2><blockquote>
-<p>  <strong>String 对象可以保存在内存中的哪些位置?</strong></p>
-</blockquote>
-<ol>
-<li> 字符串常量池中；</li>
-<li> 堆中(的非字符串常量池空间)；</li>
-<li> 二者都保存</li>
-</ol>
-<hr>
-<h2 id="不同版本-JDK-中-StringPool-在内存中的调整"><a href="#不同版本-JDK-中-StringPool-在内存中的调整" class="headerlink" title="不同版本 JDK 中 StringPool 在内存中的调整"></a>不同版本 JDK 中 StringPool 在内存中的调整</h2><ul>
-<li>  在 JDK7 之前，字符串常量池存放在<strong>方法区</strong>中（在 HotSpot 中就是永久代）。</li>
-<li>  JDK7，HotSpot 将字符串常量池的位置调整到了<strong>堆</strong>中。</li>
-<li>  JDK8：字符串常量池存储在方法区（元空间）</li>
-</ul>
-<blockquote>
-<p>  <strong>问题：String Pool 为什么要从方法区调整到堆空间中？</strong></p>
-</blockquote>
-<p><strong>保存在方法区的缺点</strong>：</p>
-<ol>
-<li> 方法区（永久代/元空间）默认占用的内存空间较小，如果在方法区中保存大量的 String 对象，极易导致方法区空间出现 OOM  异常。</li>
-<li> 即使将方法区初始的内存空间设置为一个较高的值，但是由于方法区进行 GC 的频率极低，这也就意味着在方法区中，String 对象在使用完后，无法做到及时的 GC，也会导致方法区频繁出现 OOM 异常。</li>
-</ol>
-<p><strong>保存在堆空间的优点</strong>：</p>
-<ol>
-<li> 首先堆空间解决了保存在方法区时的两个问题：①内存空间小。  ②GC不及时。</li>
-<li> 所有的 String 字面量对象都保存在堆（Heap）中，它就和其它普通对象一样，这样的好处就是在进行 JVM 调优时只需调整堆的大小就可以了。【原来保存在元空间中时还要特意为了 String 常量池去进行元空间的性能调优】</li>
-</ol>
-<hr>
-<h2 id="2-1-字符串常量池的数据结构"><a href="#2-1-字符串常量池的数据结构" class="headerlink" title="2.1    字符串常量池的数据结构"></a>2.1    字符串常量池的数据结构</h2><blockquote>
-<p>  <strong>字符串常量池数据结构</strong></p>
-</blockquote>
-<ul>
-<li>  通过字面量的方式<strong>（区别于 new）</strong>给一个字符串赋值，此时字符串的值保存在堆空间的字符串常量池中。</li>
-<li>  <strong>字符串常量池的底层数据结构是一个 HashTable，所以说字符串常量池中不会存储相同内容的字符串</strong> 。</li>
-<li>  String 的 StringPool 是一个固定大小的 HashTable，数组的默认长度在不同的 JDK 版本中均有所不同。</li>
-<li>  如果放进 StringPool 的 String 非常多，就会造成 Hash 冲突严重，从而导致链表会很长，而链表长了后就会导致调用 <code>String.intern()</code> 时性能大幅下降。</li>
-</ul>
-<p><strong>参数信息：</strong></p>
-<ul>
-<li>  使用 <code>-XX:StringTableSize</code> 可以设置 StringPool 的长度。</li>
-<li>  JDK6中，StringPool 的默认长度为 1009，可以任意设置大小；</li>
-<li>  从 JDK7 开始，StringPool 的默认长度增加到了 60013 ；</li>
-<li>  从 JDK8 开始，可设置的最小长度为 1009 。</li>
-</ul>
-<blockquote>
-<p>  <strong>具体代码分析</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">&quot;abc&quot;</span>;  <span class="comment">// 字面量定义的方式，“abc”存储在字符串常量池中</span></span><br><span class="line">String s2 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line">System.out.println(s1 == s2);	<span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">s1 = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">System.out.println(s1 == s2);	<span class="comment">// false</span></span><br></pre></td></tr></table></figure>
-
-<ol>
-<li> 由于字符串常量池在堆空间中，所以一个程序中所有的线程用的是同一个字符串常量池；</li>
-<li> 由于字符串常量池底层是 HashTable 结构，所以池中不会出现重复的字符串，所以上述代码中的变量 <code>s1</code> 和 <code>s2</code> 指向的是同一个地址。</li>
-<li> 由于字符串的不可变性，第 5 行代码中等号右边的语句会在字符串常量池中新开辟一块内存空间用于保存字符串“hello”，并将其赋值给等号左边的变量 s1。</li>
-<li> 所以此时 s1 指向的是 “hello”  的地址，而 s2 指向的 “abc” 的地址，两者不相等。</li>
-</ol>
-<hr>
-<h2 id="2-2-如何将字符串对象保存到字符串常量池中"><a href="#2-2-如何将字符串对象保存到字符串常量池中" class="headerlink" title="2.2    如何将字符串对象保存到字符串常量池中"></a>2.2    如何将字符串对象保存到字符串常量池中</h2><p>​        对于 Java 中的 8 种基本数据类型和引用类型 String，这些类型在程序中的使用是非常频繁的（二八原则），为了使这些类型的数据在内存中速度更快、更节省内存，都提供了一种常量池的概念。    </p>
-<p>​        常量池就类似于一个 Java 系统级别提供的缓存。8 种基本类型数据的常量池都是系统协调的，String类型的常量池比较特殊，想要<strong>将字符串对象保存在字符串常量中主要方法有两种</strong> ：</p>
-<ol>
-<li>直接使用双引号声明出来的 String 对象（字符串字面量对象）会直接存储在常量池中。<ul>
-<li>  比如： <code>String info = &quot;HelloWorld&quot;;</code> </li>
-</ul>
-</li>
-<li> 如果不是通过双引号声明的 String 对象，也可以使用 String 提供的 <strong>intern()</strong> 方法将某个字符串对象加入到字符串常量池中。</li>
-</ol>
-<hr>
-<h1 id="4-字符串拼接操作"><a href="#4-字符串拼接操作" class="headerlink" title="4  字符串拼接操作"></a>4  字符串拼接操作</h1><blockquote>
-<ul>
-<li>  字符串常量 + 字符串常量</li>
-<li>  字符串常量 + 字符串变量</li>
-<li>  字符串变量 + 字符串变量</li>
-</ul>
-</blockquote>
-<h2 id="常量-常量"><a href="#常量-常量" class="headerlink" title="常量 + 常量"></a>常量 + 常量</h2><ul>
-<li>  常量与常量的拼接结果还保存在字符串常量池中，原理是编译期优化。</li>
-<li>  编译期优化：</li>
-</ul>
-<blockquote>
-<p>  <strong>问题：如何理解“编译期优化”？</strong></p>
-</blockquote>
-<p>答：两个字符串常量相加，在被编译成 <code>.class</code> 字节码文件时就已经将这两个常量拼接为一个常量字面量了，所以加载到内存中的只有一个字符串字面量来，所以会将这个字符串字面量保存到字符串常量池中。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span> + <span class="string">&quot;c&quot;</span>;    <span class="comment">// 在编译后，就等同于 &quot;abc&quot;</span></span><br><span class="line">    String s2 = <span class="string">&quot;abc&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  .java 文件需要先被编译成 .class 字节码文件，再被加载到JVM中执行。</span></span><br><span class="line"><span class="comment">     *      在 .class 文件中，s1 已经是一个拼接过的常量了。即</span></span><br><span class="line"><span class="comment">     *          String s1 = &quot;abc&quot;;</span></span><br><span class="line"><span class="comment">     *          String s2 = &quot;abc&quot;;</span></span><br><span class="line"><span class="comment">     *      所以在将字节码文件加载到 JVM 中运行时这两个常量都会保存在堆空间的常量池中，</span></span><br><span class="line"><span class="comment">     *	 并且常量池中不允许出现重复的元素，所以说 s1 和 s2 指向同一个对象。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    System.out.println(s1 == s2);   <span class="comment">// true</span></span><br><span class="line">    System.out.println(s1.equals(s2));      <span class="comment">// true</span></span><br><span class="line">&#125;   </span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h2 id="常量-变量-变量"><a href="#常量-变量-变量" class="headerlink" title="常量/变量 +变量"></a>常量/变量 +变量</h2><ul>
-<li>  常量池中不会保存相同内容的字面量对象。</li>
-</ul>
-<blockquote>
-<p>  <strong>结论：</strong></p>
-</blockquote>
-<ul>
-<li>  在多个字符串拼接操作中，只要存在变量，结果就<strong>只会</strong>保存在堆中的非常量池区域。</li>
-<li>  <strong>Tip：此时拼接后的 String 对象只会保存在堆中的非常量池区域，而不会同步保存到字符串常量池中！！！</strong></li>
-</ul>
-<blockquote>
-<p>  <strong>原理：</strong>字符串拼接操作底层是通过 <code>StringBuilder#append()</code> 方法实现的。</p>
-</blockquote>
-<p>在多个字符串拼接操作中，只要存在变量，那么 JVM 在进行字符串拼接的时候，</p>
-<ol>
-<li> 首先会 <code>new StringBuilder()</code> 对象，</li>
-<li> 然后调用该对象中的 <code>append()</code> 方法拼接字符串，</li>
-<li> 最后再调用  <code>StringBuilder#toString()</code> 方法，将拼接后的字符串对象转换成 String 对象，并将这个 String 对象保存在堆中(的非常量池区域)。</li>
-</ol>
-<blockquote>
-<p>  <strong>代码：</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line">    String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s4 = s1 + s2;</span><br><span class="line">    String s5 = <span class="string">&quot;a&quot;</span> + s2;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        s1 + s2 的执行细节：</span></span><br><span class="line"><span class="comment">            1、StringBuilder sb = new StringBuilder();</span></span><br><span class="line"><span class="comment">            2、sb.append(s1);</span></span><br><span class="line"><span class="comment">            3、sb.append(s2);</span></span><br><span class="line"><span class="comment">            4、sb.toString();  --&gt;&gt; 类似于 new String(&quot;ab&quot;)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  最终 s4 指向的地址是在第 4 步的 <code>sb.toString()</code> 中确定的，这个方法类似于 <code>new String()</code>，但是并不相同。</li>
-<li>  <strong>使用 <code>new String()</code> 创建出来的 String 对象会同时保存在堆和字符串常量池中</strong>，而 <code>StringBuilder#toString()</code> 方法生成的 String 对象只保存在堆中(的非常量池区域)。</li>
-</ul>
-<blockquote>
-<p>  <strong>Tip</strong>：</p>
-</blockquote>
-<ul>
-<li>  在 JDK5 之前，含有变量的字符串拼接操作，底层使用的类是 StringBuffer，<em>因为 JDK5 之前并没有 StringBuilder 这个类</em>；</li>
-<li>  从 JDK5 开始，才使用 StringBuilder 代替 StringBuffer 来完成含有变量的字符串拼接操作。</li>
-</ul>
-<blockquote>
-<p>  <strong>字节码文件</strong></p>
-</blockquote>
-<p><img src="/2021/06/13/String/1623478701279-d327aa0f-fdc0-47a9-a63e-e310317f7271.png" alt="test.png"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> 0 ldc #2 &lt;a&gt;   // 在字符串常量池中创建一个字面量对象&lt;a&gt;，并得到该字面量对象的内存地址</span><br><span class="line"> <span class="number">2</span> astore_1     <span class="comment">// 将字面量&lt;a&gt;的内存地址保存到栈中栈帧的局部变量表中下标为 1 的位置上</span></span><br><span class="line"> 3 ldc #3 &lt;b&gt;  </span><br><span class="line"> <span class="number">5</span> astore_2     </span><br><span class="line"> 6 ldc #4 &lt;ab&gt;  </span><br><span class="line"> <span class="number">8</span> astore_3    </span><br><span class="line">  </span><br><span class="line"> <span class="comment">/* 创建 StringBuilder 对象开始 */</span></span><br><span class="line"> 9 new #5 &lt;java/lang/StringBuilder&gt; </span><br><span class="line"><span class="number">12</span> dup</span><br><span class="line">13 invokespecial #6 &lt;java/lang/StringBuilder.&lt;init&gt;&gt;</span><br><span class="line"><span class="comment">/*  创建 StringBuilder 对象结束 */</span></span><br><span class="line"></span><br><span class="line"><span class="number">16</span> aload_1  <span class="comment">// 取出局部变量表中下标为1的位置上的值，即常量池中字面量对象&lt;a&gt;的地址值</span></span><br><span class="line">17 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    // 调用 StringBuilder#append() 将该值追加到 StringBuilder 对象中</span><br><span class="line"><span class="number">20</span> aload_2  </span><br><span class="line">21 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;</span><br><span class="line">     </span><br><span class="line">24 invokevirtual #8 &lt;java/lang/StringBuilder.toString&gt;  // 调用 StringBuilder#toString() 将StringBuilder对象转化为String对象</span><br><span class="line"><span class="number">27</span> astore <span class="number">4</span> <span class="comment">// 将上一条指令得到的String对象的内存地址值保存到局部变量表下标为4的位置上</span></span><br><span class="line"></span><br><span class="line">29 new #5 &lt;java/lang/StringBuilder&gt;</span><br><span class="line"><span class="number">32</span> dup</span><br><span class="line">33 invokespecial #6 &lt;java/lang/StringBuilder.&lt;init&gt;&gt;</span><br><span class="line"></span><br><span class="line">36 ldc #2 &lt;a&gt;   // 从常量池中得到字符串常量&lt;a&gt;</span><br><span class="line">38 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    </span><br><span class="line"><span class="number">41</span> aload_2      </span><br><span class="line">42 invokevirtual #7 &lt;java/lang/StringBuilder.append&gt;    </span><br><span class="line">45 invokevirtual #8 &lt;java/lang/StringBuilder.toString&gt;  </span><br><span class="line"><span class="number">48</span> astore <span class="number">5</span>     </span><br><span class="line">     </span><br><span class="line"><span class="number">50</span> <span class="keyword">return</span>   <span class="comment">// 返回</span></span><br></pre></td></tr></table></figure>
-
-
-
-<hr>
-<h2 id="特殊情况：final-修饰的变量"><a href="#特殊情况：final-修饰的变量" class="headerlink" title="特殊情况：final 修饰的变量"></a>特殊情况：final 修饰的变量</h2><p>使用 <code>final</code> 修饰的变量等价于常量，因为在 <code>.java</code> 源文件在编译成 <code>.class</code> 字节码文件的时候就已经把 <code>final</code> 修饰的变量转换成常量值了（编译期优化）。也就是说加载到内存中的就是字符串字面量常量。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">final</span> String s1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line">    <span class="keyword">final</span> String s2 = <span class="string">&quot;b&quot;</span>;</span><br><span class="line">    String s3 = <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">    String s4 = s1 + s2;</span><br><span class="line">    System.out.println(s3 == s4);  <span class="comment">// true</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        使用 final 修饰的变量，在编译成字节码文件的时候就已经把这些变量转换成常量了（编译期优化），</span></span><br><span class="line"><span class="comment">        也就是说加载到内存中的是常量字符串，常量与常量的拼接自然保存在常量池中。</span></span><br><span class="line"><span class="comment">        所以可以得到 s3==s4 为 true</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>如果拼接的结果调用 <code>intern()</code> 方法，则主动将常量池中还没有的字符串对象放入池中，并返回此对象在常量池中的地址。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="string">&quot;javaEE&quot;</span>;   <span class="comment">// String Pool；poolAddress[0]</span></span><br><span class="line">    String s2 = <span class="string">&quot;hadoop&quot;</span>;   <span class="comment">// String Pool；poolAddress[1]</span></span><br><span class="line"></span><br><span class="line">    String s3 = <span class="string">&quot;javaEEhadoop&quot;</span>;     <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line">    String s4 = <span class="string">&quot;javaEE&quot;</span> + <span class="string">&quot;hadoop&quot;</span>;    <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line">    String s5 = s1 + <span class="string">&quot;hadoop&quot;</span>;  <span class="comment">// Not String Pool； heapAddress[0]</span></span><br><span class="line">    String s6 = <span class="string">&quot;javaEE&quot;</span> + s2;  <span class="comment">// Not String Pool; heapAddress[1]</span></span><br><span class="line">    String s7 = s1 + s2;    <span class="comment">// Not String Pool; heapAddress[2]</span></span><br><span class="line">    String s8 = s6.intern();    <span class="comment">// String Pool；poolAddress[2]</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分析：</span></span><br><span class="line"><span class="comment">     *      s1 保存在字符串常量池中，地址为 poolAddress[0]；</span></span><br><span class="line"><span class="comment">     *      s2 保存在字符串常量池中，地址为 poolAddress[1]；</span></span><br><span class="line"><span class="comment">     *      s3 保存在字符串常量池中，地址为 poolAddress[2]；</span></span><br><span class="line"><span class="comment">     *      s4 是两个常量的拼接，由于编译期优化，结果仍保存在常量池中，并且地址为 poolAddress[2]；</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     *      s5 是 变量+常量 的拼接，结果只会保存在堆中的非常量池区域，所以 s5 的地址为 heapAddress[0]；</span></span><br><span class="line"><span class="comment">     *      s6 也是 变量+常量 的拼接，结果会保存在堆中的非常量池区域，并且在非常量池区域并没有要求相同的值只能保存一份数据，所以 s6 会占用一块新的内存空间，地址为 heapAddress[1]；</span></span><br><span class="line"><span class="comment">     *      s7 也是 变量+变量 的拼接，结果会保存在堆中的非常量池区域，原理同 s6 一样，s7 的地址为 heapAddress[2]；</span></span><br><span class="line"><span class="comment">     *      s8 是 s6 调用 intern() 方法得到的返回值，由于s6对应的字符串字面量在常量池中已经存在了，所以 s8 的地址值为 poolAddress[2];</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span> </span><br><span class="line"></span><br><span class="line">    System.out.println(s3 == s4);   <span class="comment">// true</span></span><br><span class="line">    System.out.println(s3 == s5);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s3 == s6);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s3 == s7);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s5 == s6);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s5 == s7);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s6 == s7);   <span class="comment">// false</span></span><br><span class="line">    System.out.println(s3 == s8);   <span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<hr>
-<h1 id="5-intern-方法"><a href="#5-intern-方法" class="headerlink" title="5  intern() 方法"></a>5  intern() 方法</h1><h2 id="有什么用？"><a href="#有什么用？" class="headerlink" title="有什么用？"></a>有什么用？</h2><blockquote>
-<p>  <strong>源码分析</strong></p>
-</blockquote>
-<p><img src="/2021/06/13/String/1623488782339-dd95c67e-52d3-4dfd-887b-52ed4e499a47.png" alt="image.png"></p>
-<p>​        <strong>intern()</strong> 方法是 String 类中的一个方法，查看源码可知，<code>String#intern()</code> 方法是一个 <code>native</code> 修饰的本地方法。也就是说，其具体实现是由 C/C++ 编写的。</p>
-<blockquote>
-<p>  <strong>主要作用：</strong></p>
-</blockquote>
-<p>现有一个字符串对象 <code>String s1</code> ，当调用 <code>s1.intern()</code> 方法时，</p>
-<ol>
-<li> 首先要去判断字符串常量池中是否已经存在一个 String 对象其字面量与 s1 的字面量相同；</li>
-<li> 如果存在，那么就返回字符串常量池中该 String 对象的地址；</li>
-<li> 如果不存在，就将 s1 对象的字面量值拷贝一份到字符串常量池中，并返回该 String 对象在字符串常量池中的地址。</li>
-</ol>
-<blockquote>
-<p>  <strong>Tip：</strong></p>
-</blockquote>
-<p>调用 <code>String#intern()</code> 方法可以确保字符串在内存中只有一份数据，这样可以节约内存空间，加快字符串操作任务的执行速度。</p>
-<p><strong>分析：</strong></p>
-<ul>
-<li>  调用 <code>String#intern()</code> 方法后，如果 String 对象原本就保存在字符串常量池中，那不会有任何改变；</li>
-<li>  如果 String 对象原本保存在堆(的非字符串常量池区域)中，那么调用此方法后，就会返回一个字符串常量池中对象的地址。</li>
-<li>  这时就可以把原来堆(的非字符串常量池区域)中的 String 对象回收掉，让内存中只保留一份字符串字面量数据。【这一步不是必须的】</li>
-</ul>
-<hr>
-<h2 id="intern-的使用场景"><a href="#intern-的使用场景" class="headerlink" title="intern() 的使用场景"></a>intern() 的使用场景</h2><p>如果不是通过字符串字面量（即双引号）创建的 String 对象，如果想要将其保存到字符串常量池中，可以使用 String 提供的 intern() 方法。</p>
-<blockquote>
-<p>  <strong>问题：如何保证字符串变量 s 指向的字符串是字符串常量池中的数据而不是堆中非常量池区域的数据呢？</strong></p>
-</blockquote>
-<p>答：有2种方式</p>
-<ol>
-<li> 直接通过双引号而不是 new 关键字来创建 String 对象。如：<code>String s = &quot;HelloWorld&quot;;</code></li>
-<li> 对堆中的字符串对象，调用 <code>intern()</code> 方法，得到的返回值就是指向字符串常量池中对应字符串字面量的地址。</li>
-</ol>
-<blockquote>
-<p>  <strong>问题：<code>new String(&quot;HelloWorld&quot;)</code> 会创建几个对象？</strong> </p>
-</blockquote>
-<p>答：如果在此之前，字符串常量池中已有字面量对象 <code>“HelloWorld”</code>，则只会在堆中新建 1 个对象；否则会新建 2 个对象，一个保存在堆中非字符串常量池区域（和普通对象一样），另一个保存在字符串常量池中。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String s = <span class="keyword">new</span> String(<span class="string">&quot;HelloWorld&quot;</span>);</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    	创建动作分解：</span></span><br><span class="line"><span class="comment">    	1、new String()  堆中；</span></span><br><span class="line"><span class="comment">    	2、&quot;HelloWorld&quot;  字符串常量池中；</span></span><br><span class="line"><span class="comment">    	3、执行堆中的 String 对象的初始化方法；</span></span><br><span class="line"><span class="comment">    	4、将等式左边的地址赋值给等式右边的变量。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li> 首先，在堆中非常量池区域中创建一个 String 对象。</li>
-<li> 其次，在字符串常量池中创建字面量为 <code>&quot;HelloWorld&quot;</code> 的字面量对象。</li>
-<li> 再次，调用 String 类的构造方法，对字符串对象 s 进行显式初始化；</li>
-<li> 最后，将结果地址保存到局部变量表下标为 1 的位置上。</li>
-<li> <strong>注意：虽然现在字符串常量池和堆中都有“HelloWorld”这个字符串对象，但是此时 s 得到的地址是堆中的！！！</strong></li>
-</ol>
-<p><img src="/2021/06/13/String/1623491535138-3562077b-906b-41ae-aaee-49806b528949.png" alt="image.png"></p>
-<blockquote>
-<p>  <strong>扩展：<code>String str = new String(&quot;a&quot;) + new String(&quot;b&quot;);</code> 会创建多少个对象？</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    String str = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/06/13/String/1623492457552-7821a5f9-93b5-44b1-aabf-11514fb0ba93.png" alt="image.png"></p>
-<p>分析：</p>
-<ul>
-<li>  对象1：<code>new StringBuilder()</code>， 首先，两个字符串变量拼接时，需要一个辅助对象 StringBuilder 。</li>
-<li>  对象2：<code>new String(&quot;a&quot;)</code>，</li>
-<li>  对象3：常量池中的字面量对象 “a”</li>
-<li>  对象4：<code>new String(&quot;b&quot;)</code>，</li>
-<li>  对象5：常量池中的字面量对象 “b”</li>
-<li>  对象6：在调用 <code>StringBuilder.toString()</code> 方法时，根据 <code>toString()</code> 方法的源码，还要创建一个 String 对象。</li>
-</ul>
-<blockquote>
-<p>  <strong>toString() 方法</strong></p>
-</blockquote>
-<p><strong>虽然 toString() 方法底层调用了 new String() 方法，但是却不会在字符串常量池中创建对应的字符串对象，只会在堆中创建字符串对象。</strong></p>
-<p><img src="/2021/06/13/String/1623492807620-7f60184d-4382-4830-b450-95b9019c6051.png" alt="image.png"></p>
-<blockquote>
-<p>  <code>StringBuilder#toString()</code> 的字节码文件</p>
-</blockquote>
-<ul>
-<li>  我们可以看到并没有在字符串常量池中创建 String 对象。</li>
-</ul>
-<p><img src="/2021/06/13/String/image-20210613173632473.png" alt="image-20210613173632473"></p>
-<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><h3 id="Demo1"><a href="#Demo1" class="headerlink" title="Demo1"></a>Demo1</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);    <span class="comment">// s1 --&gt;&gt; Not String Pool ；heapAddr[0]</span></span><br><span class="line">    s1.intern();    <span class="comment">// s1 --&gt;&gt; Not String Pool ；heapAddr[0]</span></span><br><span class="line">    			   <span class="comment">// s1.intern() 的返回值 --&gt;&gt; String Pool ； poolAddr[0]</span></span><br><span class="line">    String s2 = <span class="string">&quot;1&quot;</span>;    <span class="comment">// s2 --&gt;&gt; String Pool ； poolAddr[0]</span></span><br><span class="line">    System.out.println(s1 == s2);   <span class="comment">// False</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>分析：</strong></p>
-<ol>
-<li><p>使用 <code>new</code> 关键字创建对象，</p>
-<ul>
-<li>  首先会在堆中非常量池区域分配内存保存字符串对象 “1” ；</li>
-<li>  并且之后还会在常量池中分配内存保存字面量对象 “1” ;</li>
-<li>  但是此时栈中局部变量表中的 s1 保存的是堆中非常量池区域的字符串对象的内存地址；</li>
-</ul>
-</li>
-<li><p>调用 <code>s1.intern()</code> 方法，JVM 尝试在字符串常量池中创建值为 “1” 的字面量对象，发现已存在，得到该字面量对象的地址，作为方法的返回值。<code>intern()</code> 方法是有返回值的，返回值就是字面量对象 “1” 在字符串常量池中的内存地址，但是在本例中并没有接收这个地址，也就是说目前为止，s1 指向的仍然是堆中非常量池区域中那个字符串对象的内存地址。</p>
-</li>
-<li><p>直接使用双引号创建 String 对象，JVM 会尝试在字符串常量池中创建值为 “1” 的字面量对象，发现已存在，得到该字面量对象的地址，并将此字面量对象的内存地址保存在栈的局部变量表中，即此时 s2 指向字符串常量池中对应字面量对象的地址。</p>
-</li>
-<li><p>所以，<code>s1==s2</code> 结果为 False</p>
-</li>
-</ol>
-<h3 id="Demo2"><a href="#Demo2" class="headerlink" title="Demo2"></a>Demo2</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">       String s3 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);  <span class="comment">// s3 --&gt;&gt; Not String Pool ；heapAddr[1]</span></span><br><span class="line">       s3.intern();    <span class="comment">// // s3 --&gt;&gt; Not String Pool ；heapAddr[1]</span></span><br><span class="line">       String s4 = <span class="string">&quot;11&quot;</span>;    <span class="comment">// JDK6：String Pool ； poolAddr[1]  JDK7：Not String Pool ；heapAddr[1]</span></span><br><span class="line">       System.out.println(s3 == s4);   <span class="comment">// JDK6：False  JDK7：True</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><code>s3</code> 指向的对象是由两个字符串对象拼接而成的，在进行字符串拼接时，底层要借助 <code>StingBuilder</code> 实现。其中有一步需要使用 <code>StringBuilder#toString()</code> 方法将 <code>Stringbuilder</code> 对象转换成 <code>String</code> 对象，在使用 <code>toString()</code> 方法时，<strong>只</strong>会在堆中的非常量池区域创建一个 <code>String</code> 对象，并不会在常量池中创建这个对象对应的字面量对象（类似于 new，但不会同步到常量池中）。所以第 2 行代码在执行完毕后 <code>s3</code> 指向一个堆中的字符串对象。</li>
-<li>由于此时字符串常量池中没有字面量对象 <code>“11”</code>，所以调用 <code>intern()</code> 方法会在常量池中创建一个字符串对象<code>“11&quot;</code>并返回其地址值。<ul>
-<li>  在 JDK7 之前，由于字符串常量池不在堆空间中，所以会真正意义上的在字符串常量池创建一个字符串对象<code>“11”</code>并返回其地址值。</li>
-<li>  从 JDK7 开始，由于字符串常量池也保存在堆空间中，所以这时不会在常量池中创建真正的字符串对象<code>“11”</code>了，而是直接拿来了 s3 对象的地址值。</li>
-</ul>
-</li>
-<li>此处没有使用 <code>intern()</code> 方法的返回值，所以 s3 仍然指向堆中非常量池空间中的那个字符串对象的地址。</li>
-<li>直接使用字面量创建String对象。由于此时字符串常量池中已有该字面量对象，所以不再新建对象，只是返回字面量对象的地址，而显然该字面量对象的地址是一个地址值，最后真正指向的对象还是堆中非常量池区域的那个String对象，而返回地址按照对象的就近原则也是堆中非常量池区域的String对象的地址值。</li>
-<li>所以说， 在JDK7之前，<code>s3 == s4</code> 为 False；而从JDK7开始，<code>s3 == s4</code> 为 True</li>
-</ol>
-<img src="/2021/06/13/String/1623508433062-ce767a2e-fba1-4f8d-bd53-374635e01625.png" alt="intern的使用 (1).png" style="zoom: 67%;">
-
-
-
-
-
-<h2 id="不同版本JDK中不同方式创建字符串对象的先后顺序的影响"><a href="#不同版本JDK中不同方式创建字符串对象的先后顺序的影响" class="headerlink" title="不同版本JDK中不同方式创建字符串对象的先后顺序的影响"></a>不同版本JDK中不同方式创建字符串对象的先后顺序的影响</h2><ol>
-<li> 如果只想在堆的非字符串常量池区域创建对象： <code>String s1 = new String(&quot;a&quot;) + new String(&quot;b&quot;);</code> 此时字符串常量池中没有“ab”对应的字面量对象。</li>
-<li>如果这时继续在常量池中也保存一份 “ab” 字符串对应的字面量对象。可以调用 <code>s1.intern();</code> 方法。<ul>
-<li>  从 JDK7 开始，为了节省内存，在常量池中创建字符串对象这一步，如果在堆的非常量池区域存在相同字面量值的对象，就不再创建一个“真正”的字面量对象了，而是在常量池的字面量对象的地址中保存堆中非常量池区域那个对象的地址值。</li>
-<li>  而在 JDK7 之前，在常量池中创建的对象时真正意义上的字面量对象，保存的是真正的数据值，而不是对象的引用。</li>
-</ul>
-</li>
-<li> 如果使用 <code>String s1 = new String(&quot;1&quot;);</code> 创建对象，这时会创建两个对象，即字符串常量池中的字面量对象和 Java 堆的非字符串常量池区域的对象，这两个对象都是真正意义上的对象。上述1，2的规则就不再使用了。</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JDK8 中测试</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">       String s3 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);  <span class="comment">// Not String Pool ；heapAddr[1]</span></span><br><span class="line">       s3.intern();    <span class="comment">// String Pool ； poolAddr[1]</span></span><br><span class="line">       String s4 = <span class="string">&quot;11&quot;</span>;    <span class="comment">// Not String Pool ；heapAddr[1]</span></span><br><span class="line">       System.out.println(s3 == s4);   <span class="comment">// True</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="comment">/*</span></span><br><span class="line"><span class="comment">       调换了2、3行代码的执行顺序</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">       String s3 = <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;1&quot;</span>);  <span class="comment">// Heap&#x27;s Not String Pool ；heapAddr[0]</span></span><br><span class="line">       String s4 = <span class="string">&quot;11&quot;</span>;    <span class="comment">// String Pool ; poolAddr[0]</span></span><br><span class="line">       s3.intern();    <span class="comment">// String Pool ； poolAddr[0]</span></span><br><span class="line">       System.out.println(s3 == s4);   <span class="comment">// False</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>  <strong>总结：String中intern()的使用：</strong></p>
-</blockquote>
-<ul>
-<li><p>  在 JDK7 之前，将字符串对象尝试放入字符串常量池中时：</p>
-</li>
-<li><ul>
-<li>  如果字符串常量池中已经含有，则并不会放入，并返回已有对象的内存地址；</li>
-<li>  如果字符串常量池中没有，则会将当前对象的值复制一份，放入字符串常量池，并返回字符串常量池中该对象的内存地址；</li>
-</ul>
-</li>
-<li><p>  从 JDK7 开始，将字符串对象尝试放入字符串常量池中时：</p>
-</li>
-<li><ul>
-<li>  如果字符串常量池中已经含有该字面量对象，则直接返回该字面量对象的内存地址即可；</li>
-<li>  如果没有，则会把<strong>对象的引用地址复制一份</strong>，放入字符串常量池，并返回字符串常量池中的引用地址。</li>
-</ul>
-</li>
-</ul>
-<h2 id="intern-的练习"><a href="#intern-的练习" class="headerlink" title="intern 的练习"></a>intern 的练习</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//      String x = &quot;ab&quot;;</span></span><br><span class="line">        String s1 = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">        <span class="comment">// 在上一行代码执行完毕之后，字符串常量池中并没有字面量对象 &quot;ab&quot;</span></span><br><span class="line"></span><br><span class="line">        String s2 = s1.intern();</span><br><span class="line">        <span class="comment">// JDK6中，在字符串常量池中创建字面量对象 &quot;ab&quot; ，并将地址值赋给 s2</span></span><br><span class="line">        <span class="comment">// JDK8中，在字符串常量池中没有创建字面量对象 &quot;ab&quot;，而是创建了一个引用对象，指向堆中非字符串常量池中的地址并将地址返回</span></span><br><span class="line">        System.out.println(s1 == <span class="string">&quot;ab&quot;</span>); <span class="comment">// false（JDK6）；true（JDK8）</span></span><br><span class="line">        System.out.println(s2 == <span class="string">&quot;ab&quot;</span>); <span class="comment">// true</span></span><br><span class="line">        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    String s1 = <span class="keyword">new</span> String(<span class="string">&quot;a&quot;</span>) + <span class="keyword">new</span> String(<span class="string">&quot;b&quot;</span>);  <span class="comment">// &quot;ab&quot; --&gt;&gt; Heap   执行完以后，在字符串常量池中不会生成 &quot;ab&quot;</span></span><br><span class="line">    s1.intern();</span><br><span class="line">    String s2 = <span class="string">&quot;ab&quot;</span>;   <span class="comment">// s2 --&gt;&gt; String Pool --&gt;&gt; Heap</span></span><br><span class="line">    System.out.println(s1 == s2); <span class="comment">// true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    String s1 = <span class="keyword">new</span> String(<span class="string">&quot;ab&quot;</span>);   <span class="comment">// &quot;ab&quot; --&gt;&gt; Heap, SringPool    执行完以后，在字符串常量池中会生成 &quot;ab&quot;，但是s1指向的是Heap中的那个</span></span><br><span class="line">    s1.intern();</span><br><span class="line">    String s2 = <span class="string">&quot;ab&quot;</span>;   <span class="comment">// s2 --&gt;&gt; String Pool</span></span><br><span class="line">    System.out.println(s1 == s2); <span class="comment">// false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-<hr>
-<h1 id="7-G1-中的-String-去重操作"><a href="#7-G1-中的-String-去重操作" class="headerlink" title="7  G1 中的 String 去重操作"></a>7  G1 中的 String 去重操作</h1><p>字符串常量池中本就不允许存储重复元素，所以 String 的去重操作针对的是堆中非字符串常量池的区域。</p>
-<p>String s1 = new String(“hello”);</p>
-<p>String s1 = new String(“hello”);</p>
-<p>什么是去重操作？（图）</p>
-<h2 id="背景说明"><a href="#背景说明" class="headerlink" title="背景说明"></a>背景说明</h2><blockquote>
-<p>  背景</p>
-</blockquote>
-<p>通过对大量 Java 应用的研究测试表明：</p>
-<ul>
-<li>  堆中存活的数据集合中 String 对象占据了约 25%；</li>
-<li>  其中 String 对象中重复的对象又占了约 13.5%；重复的意思就是： <code>string1.equals(string2) == true</code> </li>
-<li>  堆上存在重复的String对象必然是一种内存资源的浪费。</li>
-<li>  String 对象的平均长度是 45</li>
-</ul>
-<p>许多大规模Java应用的瓶颈在于内存，而这些项目将在G1垃圾收集器中实现自动持续对重复的String对象进行去重，这样能避免浪费内存。</p>
-<hr>
 
       
     </div>
