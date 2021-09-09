@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="1、日志框架 日志的作用：  记录程序运行中产生的关键数据。  日志的发展：   System.out.println(&quot;&quot;)；，将程序运行时的关键数据打印在控制台上。 日志框架，既可以将程序运行时的关键数据打印在控制台上，也可以将日志信息持久化到指定的文件夹中去。 高级日志框架：在日志框架的基础上，增加了一些人性化的功能，如： 异步模式 自动归档：将每天的日志单独放在一个文件">
+<meta name="description" content="1、日志框架 日志的作用：  记录程序运行中产生的关键数据。  日志的发展：   System.out.println(&quot;&quot;)；，将程序运行时产生的关键数据打印在控制台上。 日志框架，既可以将程序运行时的关键数据打印在控制台上，也可以将日志信息持久化到指定的文件夹中去。 高级日志框架：在日志框架的基础上，增加了一些人性化的功能，如： 异步模式 自动归档：将每天的日志单独放在一个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot整合日志">
 <meta property="og:url" content="http://example.com/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1、日志框架 日志的作用：  记录程序运行中产生的关键数据。  日志的发展：   System.out.println(&quot;&quot;)；，将程序运行时的关键数据打印在控制台上。 日志框架，既可以将程序运行时的关键数据打印在控制台上，也可以将日志信息持久化到指定的文件夹中去。 高级日志框架：在日志框架的基础上，增加了一些人性化的功能，如： 异步模式 自动归档：将每天的日志单独放在一个文件">
+<meta property="og:description" content="1、日志框架 日志的作用：  记录程序运行中产生的关键数据。  日志的发展：   System.out.println(&quot;&quot;)；，将程序运行时产生的关键数据打印在控制台上。 日志框架，既可以将程序运行时的关键数据打印在控制台上，也可以将日志信息持久化到指定的文件夹中去。 高级日志框架：在日志框架的基础上，增加了一些人性化的功能，如： 异步模式 自动归档：将每天的日志单独放在一个">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/concrete-bindings.png">
 <meta property="og:image" content="http://example.com/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/legacy.png">
@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://example.com/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/image-20201227203732038.png">
 <meta property="og:image" content="http://example.com/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/image-20201227204458159.png">
 <meta property="article:published_time" content="2020-12-27T13:54:37.000Z">
-<meta property="article:modified_time" content="2020-12-27T14:17:00.000Z">
+<meta property="article:modified_time" content="2021-09-09T03:55:51.408Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/concrete-bindings.png">
@@ -155,7 +155,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6"><span class="nav-number">1.</span> <span class="nav-text">1、日志框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6"><span class="nav-number">1.1.</span> <span class="nav-text">常见的日志框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81SLF4j%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">2、SLF4j使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%A6%82%E4%BD%95%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%AD%E4%BD%BF%E7%94%A8SLF4j"><span class="nav-number">2.1.</span> <span class="nav-text">1、如何在系统中使用SLF4j</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%A6%82%E4%BD%95%E8%AE%A9%E7%B3%BB%E7%BB%9F%E4%B8%AD%E6%89%80%E6%9C%89%E7%9A%84%E6%97%A5%E5%BF%97%E9%83%BD%E7%BB%9F%E4%B8%80%E5%88%B0slf4j"><span class="nav-number">2.2.</span> <span class="nav-text">2、如何让系统中所有的日志都统一到slf4j</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81SpringBoot%E6%97%A5%E5%BF%97%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text">3、SpringBoot日志关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8%EF%BC%9B"><span class="nav-number">4.</span> <span class="nav-text">4、日志使用；</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE"><span class="nav-number">4.1.</span> <span class="nav-text">1、默认配置</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6"><span class="nav-number">1.</span> <span class="nav-text">1、日志框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81SLF4j%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">2、SLF4j使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-SLF4j-%E6%80%8E%E4%B9%88%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">2.1    SLF4j 怎么用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2%E3%80%81%E5%A6%82%E4%BD%95%E8%AE%A9%E7%B3%BB%E7%BB%9F%E4%B8%AD%E6%89%80%E6%9C%89%E7%9A%84%E6%97%A5%E5%BF%97%E9%83%BD%E7%BB%9F%E4%B8%80%E5%88%B0-slf4j"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、如何让系统中所有的日志都统一到 slf4j</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81SpringBoot%E6%97%A5%E5%BF%97%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text">3、SpringBoot日志关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8%EF%BC%9B"><span class="nav-number">4.</span> <span class="nav-text">4、日志使用；</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE"><span class="nav-number">4.1.</span> <span class="nav-text">1、默认配置</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -173,9 +173,8 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
         <span class="site-state-item-count">31</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
         <span class="site-state-item-count">1</span>
@@ -240,10 +239,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2020-12-27 21:54:37 / Modified: 22:17:00" itemprop="dateCreated datePublished" datetime="2020-12-27T21:54:37+08:00">2020-12-27</time>
+      <time title="Created: 2020-12-27 21:54:37" itemprop="dateCreated datePublished" datetime="2020-12-27T21:54:37+08:00">2020-12-27</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-09 11:55:51" itemprop="dateModified" datetime="2021-09-09T11:55:51+08:00">2021-09-09</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -265,14 +270,14 @@
     
     <div class="post-body" itemprop="articleBody">
         <h2 id="1、日志框架"><a href="#1、日志框架" class="headerlink" title="1、日志框架"></a>1、日志框架</h2><blockquote>
-<p>日志的作用：</p>
+<p><strong>日志的作用：</strong></p>
 </blockquote>
 <p>记录程序运行中产生的关键数据。</p>
 <blockquote>
-<p>日志的发展：</p>
+<p><strong>日志的发展：</strong></p>
 </blockquote>
 <ol>
-<li><code>System.out.println(&quot;&quot;)；</code>，将程序运行时的关键数据打印在控制台上。</li>
+<li><code>System.out.println(&quot;&quot;)；</code>，将程序运行时产生的关键数据打印在控制台上。</li>
 <li>日志框架，既可以将程序运行时的关键数据打印在控制台上，也可以将日志信息持久化到指定的文件夹中去。</li>
 <li>高级日志框架：在日志框架的基础上，增加了一些人性化的功能，如：<ul>
 <li>异步模式</li>
@@ -282,18 +287,21 @@
 </li>
 </ol>
 <blockquote>
-<p>存在的问题：</p>
+<p><strong>存在的问题：</strong></p>
 </blockquote>
 <p>显而易见，日志框架是需要不断迭代的，如果我们想要使用更高级的日志框架代替原本项目中低级的日志框架，该如何实现呢？</p>
 <ol>
-<li>将以前的框架卸载下俩，换上新的框架，重新修改项目中日志相关的API。显然这是不合适的，使用这种方式的话每次更换日志框架都需要修改项目中的API。</li>
-<li>仿照JDBC数据库驱动的实现，规定一个统一的接口层，要求所有的日志框架都必须实现该接口类，在程序中调用时直接使用接口API即可，这样即使更换日志框架也不用修改源代码。</li>
+<li>将以前的框架卸载了，换成新的框架，重新修改项目中日志相关的API。显然这是不合适的，使用这种方式的话每次更换日志框架都需要修改项目中的API。</li>
+<li>仿照 JDBC 数据库驱动的实现，规定一个统一的接口层，要求所有的日志框架都必须实现该接口类，在程序中调用时直接使用接口API 即可，这样即使更换日志框架也不用修改源代码。</li>
 </ol>
-<h3 id="常见的日志框架"><a href="#常见的日志框架" class="headerlink" title="常见的日志框架"></a>常见的日志框架</h3><p>JUL、JCL、Jboss-logging、logback、log4j、log4j2、slf4j….</p>
+<blockquote>
+<p>  <strong>常见的日志框架</strong></p>
+</blockquote>
+<p>JUL、JCL、Jboss-logging、logback、log4j、log4j2、slf4j….</p>
 <table>
 <thead>
 <tr>
-<th align="center">日志门面  （日志的抽象层）</th>
+<th align="center">日志框架接口（日志的抽象层）</th>
 <th align="center">日志实现</th>
 </tr>
 </thead>
@@ -302,55 +310,85 @@
 <td align="center">Log4j<br>JUL（java.util.logging）<br>  Log4j2<br><strong>Logback</strong></td>
 </tr>
 </tbody></table>
-<p>左边选一个门面（抽象层）、右边来选一个实现；</p>
-<p>日志门面：SLF4J；</p>
-<p>日志实现：Logback；</p>
-<p>SpringBoot：底层是Spring框架，Spring框架默认是用JCL；</p>
-<p><strong>==SpringBoot选用 SLF4j和logback；==</strong></p>
+<p>左边选一个日志框架接口（抽象层），右边来选一个实现。如：</p>
+<ul>
+<li>  日志门面：SLF4J；</li>
+<li>  日志实现：Logback；</li>
+</ul>
+<p>Spring 框架默认的日志接口框架是 JCL；<strong>而 SpringBoot 默认的日志框架接口是 SLF4j，默认的实现是 logback</strong>。</p>
 <hr>
 <h2 id="2、SLF4j使用"><a href="#2、SLF4j使用" class="headerlink" title="2、SLF4j使用"></a>2、SLF4j使用</h2><ul>
 <li>Slf4j官网：<a target="_blank" rel="noopener" href="https://www.slf4j.org/">https://www.slf4j.org</a></li>
 </ul>
-<h3 id="1、如何在系统中使用SLF4j"><a href="#1、如何在系统中使用SLF4j" class="headerlink" title="1、如何在系统中使用SLF4j"></a>1、如何在系统中使用SLF4j</h3><p>我们在开发的时候调用日志框架的记录方法，不是直接调用日志框架的实现类，而是调用日志抽象层里面的方法，抽象层再去调用实现层方法。</p>
+<h3 id="2-1-SLF4j-怎么用"><a href="#2-1-SLF4j-怎么用" class="headerlink" title="2.1    SLF4j 怎么用"></a>2.1    SLF4j 怎么用</h3><p>我们在开发的时候调用日志框架的记录方法，不是直接调用日志框架的实现类中的方法，而是通过 SpringBoot 中的接口中的方法间接地调用日志框架实现类中的方法。【就是多态】</p>
 <blockquote>
-<p>官方Demo</p>
+<p><strong>官方Demo</strong></p>
 </blockquote>
-<p>给系统里面导入：</p>
 <ol>
-<li><strong>slf4j的jar</strong>   </li>
-<li><strong>logback的实现jar</strong></li>
+<li>导入：<ul>
+<li>  <strong>slf4j的jar</strong>   </li>
+<li>  <strong>logback的实现jar</strong></li>
+</ul>
+</li>
+<li> 编写测试类</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Logger logger = LoggerFactory.getLogger(HelloWorld.class);		<span class="comment">// 指定记录哪一个类的日志信息</span></span><br><span class="line">    logger.info(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">      <span class="comment">// getLogger 是 slf4j 包中的方法</span></span><br><span class="line">    Logger logger = LoggerFactory.getLogger(HelloWorld.class);		<span class="comment">// 指定记录哪一个类的日志信息</span></span><br><span class="line">    logger.info(<span class="string">&quot;Hello World&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 
 <blockquote>
-<p>slf4j的四层结构：</p>
+<p>  <strong>slf4j的四层结构：</strong></p>
+</blockquote>
 <ol>
 <li>应用程序层</li>
 <li>抽象层</li>
-<li>适配层：如果使用了slf4j的抽象层，又要使用没有实现slf4j规定接口的实现类，这时候就需要使用适配层来完成一个转换的功能。适配层向上实现了slf4j的接口，向下规定了实现类，只需要在适配器中完成对同一类功能之间的相互赋值，即可实现既定的功能。</li>
+<li>适配层：如果使用了 slf4j 的抽象层，又要使用没有实现 slf4j 规定接口的实现类，这时候就需要使用适配层来完成一个转换的功能。适配层向上实现了 slf4j 的接口，向下规定了实现类，只需要在适配器中完成对同一类功能之间的相互赋值，即可实现既定的功能。</li>
 <li>实现层</li>
 </ol>
-</blockquote>
 <p><strong>case1：</strong></p>
-<p>通过应用程序层直接调用Slf4j的抽象层，如果没有导入抽象层的实现类，显然只能得到null。</p>
+<ul>
+<li>  通过应用程序层直接调用Slf4j的抽象层，如果没有导入抽象层的实现类，显然只能得到null。</li>
+</ul>
 <p><strong>case2：</strong></p>
-<p>通过应用程序层直接调用Slf4j的抽象层，并且导入抽象层的实现类，则可以正确输出日志信息。</p>
+<ul>
+<li>  通过应用程序层直接调用Slf4j的抽象层，并且导入抽象层的实现类，则可以正确输出日志信息。</li>
+</ul>
 <p><strong>case3：</strong></p>
-<p>通过应用程序层直接调用Slf4j的抽象层，并且导入抽象层的实现类，但是实现类与抽象层并不适配，这时候就需要多加一层适配层，启到承上启下的作用，加上适配器后也以正确输出日志信息。</p>
-<p>如下图所示，<code>log4j</code>的是一种日志框架的实现类，<code>slf4j</code>是日志框架的一种抽象类，但是二者之间并不兼容，这时候我们引入了<code>slf4j-log412</code>这一适配器，就可将这二者关联起来。</p>
+<ul>
+<li>  通过应用程序层直接调用Slf4j的抽象层，并且导入抽象层的实现类，但是实现类与抽象层并不适配，这时候就需要多加一层适配层，启到承上启下的作用，加上适配器后也以正确输出日志信息。</li>
+<li>  如下图所示，<code>log4j</code>的是一种日志框架的实现类，<code>slf4j</code>是日志框架的一种抽象类，但是二者之间并不兼容，这时候我们引入了<code>slf4j-log412</code>这一适配器，就可将这二者关联起来。</li>
+</ul>
 <p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/concrete-bindings.png"></p>
-<p>每一个日志的实现框架都有自己   的配置文件。无论使用哪一种日志门面，<strong>配置文件还是得与具体的日志实现框架的匹配</strong>。</p>
-<h3 id="2、如何让系统中所有的日志都统一到slf4j"><a href="#2、如何让系统中所有的日志都统一到slf4j" class="headerlink" title="2、如何让系统中所有的日志都统一到slf4j"></a>2、如何让系统中所有的日志都统一到slf4j</h3><p>对于一个应用程序来说，往往要使用多种框架才能实现。比如有一个A程序，实现该程序使用了Spring、Hibernate、MyBatis等技术，对于Spring框架来说，其底层默认采用了<code>commons-logging</code>日志门面，而Hibernate则采用了<code>jboss-logging</code>作为日志门面。针对同一个项目使用不同的日志输出API显然非常不方便，那么如何才能让一个项目中所有框架都能使用slf4j作为日志框架的底层实现类就能完成日志的输出呢？</p>
+<ul>
+<li>  每一个日志的实现框架都有自己的配置文件。无论使用哪一种日志门面，<strong>配置文件还是得与具体的日志实现框架的匹配</strong>。</li>
+</ul>
+<hr>
+<h3 id="2-2、如何让系统中所有的日志都统一到-slf4j"><a href="#2-2、如何让系统中所有的日志都统一到-slf4j" class="headerlink" title="2.2、如何让系统中所有的日志都统一到 slf4j"></a>2.2、如何让系统中所有的日志都统一到 slf4j</h3><p>对于一个应用程序来说，往往需要使用多种框架。比如有一个A程序，实现该程序使用了Spring、Hibernate、MyBatis等技术，对于Spring 框架来说，其底层默认采用了<code>commons-logging</code>日志门面，而Hibernate则采用了<code>jboss-logging</code>作为日志门面。针对同一个项目使用不同的日志输出 API 显然非常不方便，那么如何才能让一个项目中所有框架都能使用 slf4j 作为日志框架的底层实现类就能完成日志的输出呢？</p>
 <p><strong>case1</strong></p>
-<p>如下图所示，假设应用程序application采用了4个框架，而这4个框架的采用的日志框架又各不相同，分别是：<code>SLF4J</code>、<code>Commons logging</code>、<code>log4j</code>、<code>java.util.logging</code>。</p>
-<p>我们想要达到的效果：只保留<code>SLF4J</code>框架的实现类，对于非<code>SLF4J</code>的框架则替换其默认日志框架为<code>SLF4J</code>。做到可以调用多个是指框架的抽象层API，但是只配置<code>SLF4J</code>的配置文件，就能完成对日志的相关操作。</p>
-<p>做法：</p>
+<blockquote>
+<p>  <strong>存在的问题：</strong></p>
+</blockquote>
+<ul>
+<li>  如下图所示，假设某应用程序 application 采用了 4 个框架，而这4个框架的采用的日志框架又各不相同，分别是：<code>SLF4J</code>、<code>Commons logging</code>、<code>log4j</code>、<code>java.util.logging</code>。</li>
+</ul>
+<blockquote>
+<p>  <strong>预期结果：</strong></p>
+</blockquote>
+<ul>
+<li>  我们想要达到的效果：只保留<code>SLF4J</code>框架的实现类，对于非<code>SLF4J</code>的框架则替换其默认日志框架为<code>SLF4J</code>。做到可以调用多个是指框架的抽象层API，但是只配置<code>SLF4J</code>的配置文件，就能完成对日志的相关操作。</li>
+</ul>
+<blockquote>
+<p>  <strong>做法：</strong></p>
+</blockquote>
 <p>将不需要使用的日志框架排除出去，但是排除过后会出现一个问题就是原来框架的运行需要的jar包不存在了程序直接无法启动，这时候我们可以引入<strong>中间包</strong>来替换掉被排除的jar包，中间包中的所有类与原jar包中的所有类名字完全一样，这就保证了程序在运行过程中可以加载到需要的全限定类名，但是中间包中的类的方法的实现又去调用SLF4J的抽象类，SLF4J的抽象类则继续调用SLF4J的实现类。</p>
 <p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/legacy.png"></p>
+<blockquote>
+<p>  <strong>小总结：</strong></p>
+</blockquote>
 <ol>
-<li>==将系统中其他日志框架先排除出去；==</li>
-<li>==用中间包来替换原有的日志框架；==</li>
-<li>==我们导入slf4j的实现类==</li>
+<li>将系统中其他日志框架先排除出去；</li>
+<li>用中间包来替换原有的日志框架；</li>
+<li>我们导入slf4j的实现类</li>
 </ol>
 <hr>
 <h2 id="3、SpringBoot日志关系"><a href="#3、SpringBoot日志关系" class="headerlink" title="3、SpringBoot日志关系"></a>3、SpringBoot日志关系</h2><p><img src="/2020/12/27/SpringBoot%E6%95%B4%E5%90%88%E6%97%A5%E5%BF%97/image-20201227200842184.png" alt="image-20201227200842184"></p>
@@ -428,18 +466,18 @@
 </tr>
 </tbody></table>
 <ol start="2">
-<li><p>日志输出的格式</p>
-<p>日志输出格式：</p>
-<pre><code>%d表示日期时间，
-%thread表示线程名，
-%-5level：级别从左显示5个字符宽度
-%logger&#123;50&#125; 表示logger名字最长50个字符，否则按照句点分割。 
-%msg：日志消息，
-%n是换行符
-</code></pre>
-<p>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</p>
-</li>
+<li>日志输出的格式</li>
 </ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">日志输出格式：</span><br><span class="line">	%d表示日期时间，</span><br><span class="line">	%thread表示线程名，</span><br><span class="line">	%-5level：级别从左显示5个字符宽度</span><br><span class="line">	%logger&#123;50&#125; 表示logger名字最长50个字符，否则按照句点分割。 </span><br><span class="line">	%msg：日志消息，</span><br><span class="line">	%n是换行符</span><br><span class="line"></span><br><span class="line">%d&#123;yyyy-MM-dd HH:mm:ss.SSS&#125; [%thread] %-5level %logger&#123;50&#125; - %msg%n</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
 
     </div>
 
