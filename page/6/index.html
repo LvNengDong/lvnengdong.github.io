@@ -155,13 +155,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">143</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -194,6 +194,152 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">JVM——运行时数据区:01概述</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-05-31 20:33:06" itemprop="dateCreated datePublished" datetime="2021-05-31T20:33:06+08:00">2021-05-31</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-03 14:49:08" itemprop="dateModified" datetime="2021-08-03T14:49:08+08:00">2021-08-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E5%BC%95%E5%85%A5%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.jpg"></p>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><hr>
+<p><strong>问题：什么是内存？</strong></p>
+<ul>
+<li>内存是非常重要的系统资源，是硬盘和CPU的中间仓库及桥梁，承载着操作系统和应用程序的实时运行。  </li>
+</ul>
+<hr>
+<p><strong>问题：什么是JVM内存布局？</strong></p>
+<ul>
+<li>JVM 内存布局规定了 Java 程序在运行过程中内存申请、分配、管理的策略，保证了 JVM 高效稳定的运行。</li>
+<li><strong>不同的 JVM 对于内存布局的划分方式和管理机制存在着差异。</strong></li>
+</ul>
+<hr>
+<p><strong>JVM内存布局（经典）</strong></p>
+<p>下图是一种经典的 JVM 内存布局：</p>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-1622464561115.png"></p>
+<p><strong>Part1：</strong></p>
+<p>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域有各自的用途，创建和销毁时间。</p>
+<ul>
+<li>有的区域会随着虚拟机进程的启动而创建，随着虚拟机进程的退出而销毁。</li>
+<li>有的区域则是与线程一一对应的，随着用户线程的开始和结束而创建和销毁。</li>
+</ul>
+<blockquote>
+<p>一个虚拟机对应一个进程。虚拟机启动就创建一个进程，虚拟机退出就杀死一个进程。</p>
+</blockquote>
+<p><strong>Part2：</strong></p>
+<p>在上图中，灰色的内存区域是单个线程所私有的，红色的内存区域是多个线程共享的。即：</p>
+<ul>
+<li>JVM中每个线程私有的内存区域包括： 1、程序计数器    2、虚拟机栈    3、本地方法栈</li>
+<li>JVM中所有线程共享内存区域包括：1、堆    2、方法区（永久代或元空间、代码缓存）</li>
+</ul>
+<p><img src="/2021/05/31/JVM%E2%80%94%E2%80%94%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-01%E6%A6%82%E8%BF%B0/%E7%AC%AC03%E7%AB%A0_%E7%BA%BF%E7%A8%8B%E5%85%B1%E4%BA%AB%E5%92%8C%E7%A7%81%E6%9C%89%E7%9A%84%E7%BB%93%E6%9E%84-1622464561115.jpg"></p>
+<blockquote>
+<p>PC：PC寄存器（程序计数器）</p>
+<p>VMS：虚拟机栈</p>
+<p>NMS：本地方法栈</p>
+</blockquote>
+<hr>
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><ul>
+<li><p>线程是一个程序里的运行单元。JVM 允许一个应用有多个线程并行执行。</p>
+</li>
+<li><p>每个Java程序启动后是一个进程，这个进程中可以包含多个线程。</p>
+</li>
+<li><p>在 HotSpot VM 中，每个线程都与操作系统的本地线程一一映射。</p>
+<blockquote>
+<p>当一个 Java 线程开始执行时，本地操作系统同时也会创建一个本地线程；当 Java 线程执行结束后，本地线程也会回收。</p>
+</blockquote>
+</li>
+<li><p>操作系统负责线程的安排调度，将所有的线程安排到任一可用的CPU上（如果本地机器有多个CPU的话）。一旦本地线程初始化成功，它就会调用 Java 线程中的 run() 方法。</p>
+</li>
+</ul>
+<hr>
+<h2 id="JVM-系统线程"><a href="#JVM-系统线程" class="headerlink" title="JVM 系统线程"></a>JVM 系统线程</h2><ul>
+<li><p>如果你使用 jconsole 或者是任何一个调试工具，都能看到在后台有许多线程在运行。但是这些线程不包括调用 <code>public static void main(String[])</code> 的 main 线程以及所有这个 main 线程自己创建的线程。</p>
+</li>
+<li><p>这些主要的后台系统线程在 HotSpot JVM 里主要是以下几个：</p>
+<blockquote>
+<ul>
+<li>虚拟机线程</li>
+<li>周期任务线程</li>
+<li>GC 线程</li>
+<li>编译线程</li>
+<li>信号调度线程</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1630,7 +1776,7 @@
 <tr>
 <td>From</td>
 <td>发出请求的用户的Email</td>
-<td>From: <a href="mailto:&#x75;&#x73;&#101;&#x72;&#64;&#101;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x75;&#x73;&#101;&#x72;&#64;&#101;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a></td>
+<td>From: <a href="mailto:&#x75;&#x73;&#101;&#114;&#64;&#x65;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;">&#x75;&#x73;&#101;&#114;&#64;&#x65;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;</a></td>
 </tr>
 <tr>
 <td>Host</td>
@@ -1902,180 +2048,6 @@
 
 
 <h1 id="文件上传时发送的HTTP协议的内容"><a href="#文件上传时发送的HTTP协议的内容" class="headerlink" title="文件上传时发送的HTTP协议的内容"></a>文件上传时发送的HTTP协议的内容</h1><p><img src="/2021/04/13/%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/image-20210414233855135.png" alt="image-20210414233855135"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/11/Vue%E8%B7%AF%E7%94%B1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/04/11/Vue%E8%B7%AF%E7%94%B1/" class="post-title-link" itemprop="url">Vue路由</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-04-11 11:12:35" itemprop="dateCreated datePublished" datetime="2021-04-11T11:12:35+08:00">2021-04-11</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-05-09 15:51:20" itemprop="dateModified" datetime="2021-05-09T15:51:20+08:00">2021-05-09</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="什么是路由"><a href="#什么是路由" class="headerlink" title="什么是路由"></a>什么是路由</h1><p>路由就是一组映射关系，即<code>&lt;K, V&gt;</code>键值对。</p>
-<p>K 是 Path，</p>
-<p>V 是 通过这个 Path 要访问的路径！</p>
-<ul>
-<li>在后端中，V 一般是处理请求的回调函数。</li>
-<li>在前端（Vue）中：V 就是一个组件。</li>
-</ul>
-<hr>
-<h1 id="Vue-Router-概述"><a href="#Vue-Router-概述" class="headerlink" title="Vue-Router 概述"></a>Vue-Router 概述</h1><ul>
-<li>Vue-Router 是官方提供的用来实现 SPA 的 vue 插件</li>
-<li>GitHub地址：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-router">https://github.com/vuejs/vue-router</a></li>
-<li>官方文档（中文）：<a target="_blank" rel="noopener" href="http://router.vuejs.org/zh-cn/">http://router.vuejs.org/zh-cn/</a></li>
-<li>下载：<code>npm install vue-router --save</code></li>
-</ul>
-<hr>
-<h1 id="Vue-Router-相关-API"><a href="#Vue-Router-相关-API" class="headerlink" title="Vue-Router 相关 API"></a>Vue-Router 相关 API</h1><h2 id="1、创建路由器"><a href="#1、创建路由器" class="headerlink" title="1、创建路由器"></a>1、创建路由器</h2><blockquote>
-<p>**VueRouter()**：用于创建路由器的构造函数</p>
-</blockquote>
-<p>路由器 &amp; 路由：路由器是路由信息的集合，路由器是一个构造函数，在路由器的构造函数中可以配置多个路有信息！</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">	<span class="comment">// 多个配置项</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="2、在路由器中配置路由信息"><a href="#2、在路由器中配置路由信息" class="headerlink" title="2、在路由器中配置路由信息"></a>2、在路由器中配置路由信息</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">routes: [</span><br><span class="line">    &#123; </span><br><span class="line">        <span class="comment">// 一般路由</span></span><br><span class="line">        path: <span class="string">&#x27;/about&#x27;</span>,</span><br><span class="line">        component: About</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123; </span><br><span class="line">        <span class="comment">// 自动跳转路由</span></span><br><span class="line">        path: <span class="string">&#x27;/&#x27;</span>,</span><br><span class="line">        redirect: <span class="string">&#x27;/about&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3、注册路由器"><a href="#3、注册路由器" class="headerlink" title="3、注册路由器"></a>3、注册路由器</h2><blockquote>
-<ul>
-<li><p><em>注册路由器就是声明使用路由器，我们创建好了 Vue-Router 实例后如果不告诉 Vue 的话 Vue 在启动项目时也不会去加载Vue-Router这个路由器实例。声明使用类似于 SpringBoot 中的 @Component 注解，只有声明使用后项目才会去加载该类中的信息。</em></p>
-</li>
-<li><p><em>Vue 一般是一个单页面应用，只会绑定一个 Vue 对象（当然这个 Vue 对象可以有任意多个子级配置对象），我们需要在这个 Vue 实例中声明使用路由器，项目在加载时才会去加载路由器中配置的路由信息。</em></p>
-</li>
-</ul>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// import router from &#x27;./router/index.js&#x27;	// 引入路由器模块，（这个模块的配置下文会将到），由于 router 中的Js文件名为 index.js，所以我们可以将引入路径简写为下面的配置！！！</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router&#x27;</span>	</span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">    router		<span class="comment">// 1、router 就是 Vue-Router 实例对象。	 2、配置对象的属性名都是一些固定的名称，不能随便修改</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="4、使用路由组件标签"><a href="#4、使用路由组件标签" class="headerlink" title="4、使用路由组件标签"></a>4、使用路由组件标签</h2><ol>
-<li><code>&lt;router-link&gt;</code>：用来生成路由链接</li>
-<li><code>&lt;router-view&gt;</code>：用来显示当前路由组件界面</li>
-</ol>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--  1、用来生成路由链接  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">to</span>=<span class="string">&quot;/xxx&quot;</span>&gt;</span>Go to XXX<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--  2、用来显示当前路由组件界面  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<hr>
-<h1 id="快速入门（基本路由）"><a href="#快速入门（基本路由）" class="headerlink" title="快速入门（基本路由）"></a>快速入门（基本路由）</h1><p>在实际开发中，组件可分为两大类：</p>
-<ol>
-<li>路由组件：路由组件一般放在 <strong>views/pages</strong> 目录下</li>
-<li>非路由组件：非路由组件一般放在 <strong>components</strong> 目录下</li>
-</ol>
-<p>在实际开发中，一般会专门创建一个 <strong>src/router/index.js</strong> 文件用于定义路由器模块！</p>
-<p><img src="/2021/04/11/Vue%E8%B7%AF%E7%94%B1/image-20210411113552483.png" alt="image-20210411113552483"></p>
-<blockquote>
-<p><strong>src/router/index.js</strong></p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 路由器模块</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="comment">// 2、引入 vue 插件</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="comment">// 1、引入 vue-router 插件</span></span><br><span class="line"><span class="keyword">import</span> VueRouter <span class="keyword">from</span> <span class="string">&quot;vue-router&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3、声明使用 VueRouter 实例</span></span><br><span class="line">Vue.use(VueRouter)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 6、在路由信息中需要映射到Vue组件，所以在这里引入Vue组件</span></span><br><span class="line"><span class="keyword">import</span> About <span class="keyword">from</span> <span class="string">&quot;../views/About&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> Home <span class="keyword">from</span> <span class="string">&quot;../views/Home&quot;</span>;</span><br><span class="line"><span class="comment">// 4、路由器模块应该向外暴露一个路由器对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  <span class="comment">// 5、配置路由信息（多个）: 用数组 `[]` 保存；   数组中的每个路由配置信息都是一个对象：用 `&#123;&#125;` 保存对象</span></span><br><span class="line">  routes: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">&#x27;/about&#x27;</span>,</span><br><span class="line">      component: <span class="string">&#x27;About&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: <span class="string">&#x27;/home&#x27;</span>,</span><br><span class="line">      component: <span class="string">&#x27;Home&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>src/main.js</strong></p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 入口js：创建Vue实例</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> router <span class="keyword">from</span> <span class="string">&#x27;./router/index.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// （1）引入 App 组件（根组件）</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">&quot;./App&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  el: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  components:&#123;</span><br><span class="line">    App,  <span class="comment">// （2）将 App 组件映射成标签</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//（3）使用组件标签</span></span><br><span class="line">  template:<span class="string">&#x27;&lt;App/&gt;&#x27;</span>,</span><br><span class="line"></span><br><span class="line">  router,   <span class="comment">// 配置对象的属性名都是一些固定的名称，不能随便修改</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h1 id="嵌套路由"><a href="#嵌套路由" class="headerlink" title="嵌套路由"></a>嵌套路由</h1><h1 id="缓存路由组件"><a href="#缓存路由组件" class="headerlink" title="缓存路由组件"></a>缓存路由组件</h1><h1 id="向路由组件传递数据"><a href="#向路由组件传递数据" class="headerlink" title="向路由组件传递数据"></a>向路由组件传递数据</h1><h2 id="方式1：路由路径携带参数-param-query"><a href="#方式1：路由路径携带参数-param-query" class="headerlink" title="方式1：路由路径携带参数(param/query)"></a>方式1：路由路径携带参数(param/query)</h2><ol>
-<li><p>配置路由</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">routes: [</span><br><span class="line">    &#123;</span><br><span class="line">        path: <span class="string">&#x27;/aaa/bbb/:id&#x27;</span>,		<span class="comment">// :id 就是传递过去的参数，id 可变</span></span><br><span class="line">        component: MessageDetail</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></li>
-<li><p>路由路径</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">router-link</span> <span class="attr">:to</span>=<span class="string">&quot;`/aaa/bbb/$&#123;m.id&#125;`&quot;</span>&gt;</span>&#123;&#123;m.title&#125;&#125;<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>在路由组件中读取请求参数</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">this</span>.$route.params.id</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="方式2-lt-router-view-gt-属性携带数据"><a href="#方式2-lt-router-view-gt-属性携带数据" class="headerlink" title="方式2: &lt;router-view&gt;属性携带数据"></a>方式2: <code>&lt;router-view&gt;</code>属性携带数据</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">router-view</span> <span class="attr">:msg</span>=<span class="string">&quot;msg&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="编程式路由导航"><a href="#编程式路由导航" class="headerlink" title="编程式路由导航"></a>编程式路由导航</h1><ul>
-<li>JS 中实现页面跳转</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.location.href = <span class="string">&#x27;要跳转的url地址&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Vue 编程式路由导航</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">this.$router.push(&quot;要跳转的url地址&quot;)</span><br></pre></td></tr></table></figure>
-
-
-
 
       
     </div>

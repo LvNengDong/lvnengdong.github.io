@@ -155,13 +155,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">143</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -194,6 +194,1477 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/25/%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/25/%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">算法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-25 12:48:34" itemprop="dateCreated datePublished" datetime="2021-07-25T12:48:34+08:00">2021-07-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-08-13 11:38:21" itemprop="dateModified" datetime="2021-08-13T11:38:21+08:00">2021-08-13</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<ul>
+<li>  分治算法</li>
+<li>  动态规划算法</li>
+</ul>
+</blockquote>
+<h1 id="分治算法"><a href="#分治算法" class="headerlink" title="分治算法"></a>分治算法</h1><h2 id="分治算法介绍"><a href="#分治算法介绍" class="headerlink" title="分治算法介绍"></a>分治算法介绍</h2><p>​        分治法是一种很重要的算法，顾名思义就是“分而治之”，即把一个复杂的问题分解成两个或更多相同或相似的子问题，再继续把子问题分成更小的子问题，直到最后子问题可以简单的直接求解，原问题的解即子问题的解的合并。</p>
+<p>​        分治思想是很多高效算法的基础，如排序算法（快速排序、归并排序），傅立叶变换（快速傅立叶变换）等。</p>
+<h2 id="分治算法的基本步骤"><a href="#分治算法的基本步骤" class="headerlink" title="分治算法的基本步骤"></a>分治算法的基本步骤</h2><p>分治法在每一层递归上都有三个步骤：</p>
+<ol>
+<li> <strong>分解</strong>：将原问题分解为若干个规模较小，相互独立，与原问题形式相同的子问题；</li>
+<li> <strong>解决</strong>：若子问题规模较小而容易被解决则直接解，否则递归地解各个子问题；</li>
+<li> <strong>合并</strong>：将各个子问题的解合并为原问题的解。</li>
+</ol>
+<p>分治（Divide-and-Conquer）算法的设计模式如下<strong>：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> |P| ≤ n0</span><br><span class="line">    <span class="function">then <span class="title">return</span><span class="params">(ADHOC(P))</span></span></span><br><span class="line"><span class="function">    <span class="comment">//将P分解为较小的子问题 P1 ,P2 ,…,Pk</span></span></span><br><span class="line">    for i←1 to k</span><br><span class="line">        <span class="keyword">do</span> yi ← Divide-<span class="keyword">and</span>-Conquer(Pi)   递归解决Pi</span><br><span class="line">            T ← MERGE(y1,y2,…,yk)   合并子问题</span><br><span class="line">            <span class="keyword">return</span>(T)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  其中 <code>|P|</code> 表示问题 P 的规模；<code>n0</code> 是一个阈值，表示当问题 <code>P</code> 的规模不超过 <code>n0</code> 时，问题已容易直接解出，不必再继续分解；</li>
+<li>  <code>ADHOC(P)</code> 是该分治法中的基本子算法，用于直接解决小规模的问题 <code>P</code>。因此，当 <code>P</code> 的规模不超过 <code>n0</code> 时直接用算法 <code>ADHOC(P)</code> 求解。</li>
+<li>  算法 <code>MERGE(y1,y2,…,yk)</code> 是该分治法中的合并子算法，用于将 <code>P</code> 的子问题 <code>P1 ,P2 ,…,Pk</code> 的相应的解 <code>y1,y2,…,yk</code> 合并为 <code>P</code> 的解。</li>
+</ul>
+<h2 id="分治算法可以求解的一些经典问题"><a href="#分治算法可以求解的一些经典问题" class="headerlink" title="分治算法可以求解的一些经典问题"></a>分治算法可以求解的一些经典问题</h2><ul>
+<li>  二分查找</li>
+<li>  大整数乘法</li>
+<li>  棋盘覆盖</li>
+<li>  合并排序</li>
+<li>  快速排序</li>
+<li>  线性时间选择</li>
+<li>  最接近点对问题</li>
+<li>  循环赛日程表</li>
+<li>  汉诺塔</li>
+</ul>
+<hr>
+<h2 id="汉诺塔"><a href="#汉诺塔" class="headerlink" title="汉诺塔"></a>汉诺塔</h2><p><img src="/2021/07/25/%E7%AE%97%E6%B3%95/image-20210725192445350.png" alt="image-20210725192445350"></p>
+<p><strong>要求：</strong></p>
+<ul>
+<li>  将A塔的所有圆盘移动到C塔；</li>
+<li>  规定小圆盘上不能放大圆盘；</li>
+<li>  在三根柱子之间一次只能移动一个圆盘。</li>
+</ul>
+<p><strong>分析</strong></p>
+<ol>
+<li> 如果只有一个盘，<code>A-&gt;C</code></li>
+<li>如果有 2 个盘：<ul>
+<li>  <code>A上-&gt;B</code></li>
+<li>  <code>A下-&gt;C</code></li>
+<li>  <code>B-&gt;C</code></li>
+</ul>
+</li>
+<li>如果有 n（n&gt;=2）个盘，可以把整座塔视为两部分，即下层的一个盘和上层的 (n-1) 个盘。思路也非常简单，就是:<ul>
+<li>  <code>A上 -&gt; B</code></li>
+<li>  <code>A下 -&gt; C</code></li>
+<li>  <code>B -&gt; C</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.dac;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> lnd</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/7/25 19:34</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Version</span> 1.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 汉诺塔游戏 --&gt;&gt; 分治算法</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      * 1.  如果只有一个盘，A-&gt;C</span></span><br><span class="line"><span class="comment"> *      * 2.  如果有 2 个盘：</span></span><br><span class="line"><span class="comment"> *      *     -   A上-&gt;B</span></span><br><span class="line"><span class="comment"> *      *     -   A下-&gt;C</span></span><br><span class="line"><span class="comment"> *      *     -   B-&gt;C</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HanoiTower</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        hanoiTower(<span class="number">5</span>,<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  该方法用于将 A塔上的所有圆盘转移到 C塔上</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> num   总共有多少个盘</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> A A塔</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> B B塔</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> C C塔</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hanoiTower</span><span class="params">(<span class="keyword">int</span> num, <span class="keyword">char</span> A, <span class="keyword">char</span> B, <span class="keyword">char</span> C)</span></span>&#123;</span><br><span class="line">        <span class="comment">/* 如果只有一个圆盘， A-&gt;C */</span></span><br><span class="line">        <span class="keyword">if</span> (num == <span class="number">1</span>)&#123;</span><br><span class="line">            System.out.println(A + <span class="string">&quot;-&gt;&quot;</span> + C);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 如果有2个以上的盘，A上-&gt;B A下-&gt;C B-&gt;C*/</span></span><br><span class="line">        <span class="keyword">if</span> (num &gt;= <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="comment">// A上(num-1)-&gt;B</span></span><br><span class="line">            hanoiTower(num-<span class="number">1</span>, A, C, B);</span><br><span class="line">            <span class="comment">// A下(1)—&gt;C</span></span><br><span class="line">            System.out.println(A + <span class="string">&quot;-&gt;&quot;</span> + C);</span><br><span class="line">            <span class="comment">// B(全部)-&gt;C</span></span><br><span class="line">            hanoiTower(num-<span class="number">1</span>, B, A, C); <span class="comment">// 只看第2个和第4个参数就能确定源头塔和目标塔</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><p><strong>动态规划的基础就是穷举</strong></p>
+<p>用于计算最大/小值，最优解等</p>
+<p>动态规划是一个自底向上的类递归算法。</p>
+<p><strong>动态规划就是 【选/不选】 的问题！！！</strong></p>
+<h2 id="最优解问题"><a href="#最优解问题" class="headerlink" title="最优解问题"></a>最优解问题</h2><p>我们通过一个实际问题来学习动态规划。</p>
+<blockquote>
+<p>  <strong>题目：</strong></p>
+</blockquote>
+<p>下图共有 7 项任务，横轴表示每项任务的工作时间，红字表示完成每项任务可以得到的报酬。比如任务一需要在 <code>1~4</code> 时间段进行，任务二需要在 <code>3~5</code> 时间段进行。也就是说想要完成任务一就必须放弃任务二、三、五，因为这几个任务的时间段冲突了。现在的问题是想知道从 0~11 时间段内最高报酬的任务组合是什么。</p>
+<img src="/2021/07/25/%E7%AE%97%E6%B3%95/image-20210727171453446.png" alt="image-20210727171453446" style="zoom:50%;">
+
+
+
+<blockquote>
+<p>  <strong>分析：</strong></p>
+</blockquote>
+<p><strong>动态规划就是【选/不选】的问题！！！</strong></p>
+<p>我们用 <strong>OPT(i)</strong> 函数表示包含第 i 个任务的情况下报酬最高的任务组合。【OPT：最优解】</p>
+<p>比如选了任务 ⑧，肯定就不能再选任务 ⑥ 和 ⑦ 了。这时就会存在两种情况，到底是选择任务 ⑧ 后得到的总薪资最高还是不选任务⑧得到的总薪资最高呢？这就是 【选/不选】的问题。<br>$$<br>OPT(8) = max<br>    \begin{cases}<br>        V_8+OPT(5)    &amp;\text{// 选⑧就要放弃⑥和⑦}<br>    \\<br>        OPT(7)    &amp;\text{//不选⑧就相当于放弃⑧}<br>    \end{cases}<br>$$</p>
+<blockquote>
+<p>  <strong>公式：</strong></p>
+</blockquote>
+<p>以此类推，可以得到一个公式，<br>$$<br>OPT(i) = max<br>    \begin{cases}<br>        V_i+OPT(prev(i))    &amp;\text{// prev(i)表示在选择了第i个任务后剩余任务中的最优解下标}<br>    \\<br>        OPT(i-1)    &amp;\text{//不选}<br>    \end{cases}<br>$$</p>
+<ol>
+<li><p>建立 <strong>V<del>i</del> 表</strong>与 <strong>prev(i) 表</strong>如下：</p>
+<ul>
+<li><p>  <strong>V<del>i</del></strong> 表示第 i 个任务的薪资；</p>
+</li>
+<li><p><strong>prev(i)</strong> 表示选择第 i 个任务后，剩下任务中的最优解下标。</p>
+<table>
+<thead>
+<tr>
+<th align="center">i</th>
+<th align="center">V<del>i</del></th>
+<th align="center">prev(i)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>1</code></td>
+<td align="center">5</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center"><code>2</code></td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center"><code>3</code></td>
+<td align="center">8</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center"><code>4</code></td>
+<td align="center">4</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center"><code>5</code></td>
+<td align="center">6</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center"><code>6</code></td>
+<td align="center">3</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center"><code>7</code></td>
+<td align="center">2</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center"><code>8</code></td>
+<td align="center">4</td>
+<td align="center">5</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>建立 OPT(i) 最优解的树形结构【递归思路】。</p>
+<p> <img src="/2021/07/25/%E7%AE%97%E6%B3%95/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92.png" alt="动态规划"></p>
+<ul>
+<li>  我们可以看到，在递归【自顶向下】的过程中，我们会多次用到已经计算过的 OPT(i) 的值，如果能够将已计算过的值保存起来，在需要使用的时候直接调用，就可以节省很大的计算性能。</li>
+<li>  所以可以采用动态规划的算法，【自底向上】建立一个动态规划的数组，保存从 <code>OPT(0)~OPT(n)</code> 的所有值。</li>
+</ul>
+</li>
+<li><p>建立动态规划数组。</p>
+<table>
+<thead>
+<tr>
+<th align="center">OPT(0)</th>
+<th align="center">OPT(1)</th>
+<th align="center">OPT(2)</th>
+<th align="center">OPT(3)</th>
+<th align="center">OPT(4)</th>
+<th align="center">OPT(5)</th>
+<th align="center">OPT(6)</th>
+<th align="center">OPT(7)</th>
+<th align="center">OPT(8)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">5</td>
+<td align="center">5</td>
+<td align="center">8</td>
+<td align="center">9</td>
+<td align="center">9</td>
+<td align="center">9</td>
+<td align="center">10</td>
+<td align="center">13</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<p><img src="/2021/07/25/%E7%AE%97%E6%B3%95/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92_%E6%9C%80%E9%AB%98%E8%96%AA%E8%B5%84%E7%BB%84%E5%90%88.png" alt="动态规划_最高薪资组合"></p>
+<hr>
+<h2 id="动态规划算法介绍"><a href="#动态规划算法介绍" class="headerlink" title="动态规划算法介绍"></a>动态规划算法介绍</h2><ol>
+<li> <strong>动态规划（Dynamic Programming）</strong>算法的核心思想是：将大问题划分为小问题进行解决，从而一步步获取最优解的处理算法。</li>
+<li> 动态规划算法与分治算法类似，其基本思想也是将待求解问题分解成若干个子问题，先求解子问题，然后从这些子问题的解得到原问题的解。</li>
+<li> 与分治法不同的是，<strong>适合于用动态规划求解的问题，经分解得到的子问题往往不是互相独立的。</strong>即下一个子问题的求解是建立在上一个子问题解的基础上得到的。</li>
+<li> 动态规划可以通过<strong>填表的方式</strong>来逐步推进，得到最优解.</li>
+</ol>
+<h2 id="背包问题"><a href="#背包问题" class="headerlink" title="背包问题"></a>背包问题</h2><p>给定一个固定容量的背包，若干具有一定价值和重量的物品，如何选择物品放入背包使物品的价值最大。</p>
+<p><strong>需求：</strong></p>
+<p>有一个背包，容量为 4 磅，现有如下物品：</p>
+<ul>
+<li>  要求装入的背包的<u>总价值最大</u>，并且<u>重量不超出</u>。</li>
+<li>  要求<u>装入的物品不能重复</u>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>物品</strong></th>
+<th align="center"><strong>重量</strong></th>
+<th align="center"><strong>价格</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">吉他(G)</td>
+<td align="center">1</td>
+<td align="center">1500</td>
+</tr>
+<tr>
+<td align="center">音响(S)</td>
+<td align="center">4</td>
+<td align="center">3000</td>
+</tr>
+<tr>
+<td align="center">电脑(L)</td>
+<td align="center">3</td>
+<td align="center">2000</td>
+</tr>
+</tbody></table>
+<p><strong>背包问题分类：</strong></p>
+<p>背包可分为 <strong>01背包</strong> 和 <strong>完全背包</strong>：</p>
+<ul>
+<li>  01 背包：同类物品只能放入一件，背包的物品种类不能重复。</li>
+<li>  完全背包：每类物品可以放入多件到背包中。</li>
+</ul>
+<p><strong>思路分析：</strong></p>
+<p>这里的问题属于 <strong>01背包</strong>，即每种物品最多放一件。【无限背包可以转化为01背包解决】</p>
+<ul>
+<li>  给定的 n 个物品，每次遍历到的第 i 个物品，根据 <code>w[i]</code> 和 <code>v[i]</code> 来确定是否需要将该物品放入背包中。</li>
+<li>  设 <code>v[i]</code>、<code>w[i]</code> 分别为第 <code>i</code> 个物品的价值和重量，<code>C</code> 为背包的容量。</li>
+<li>再令 <code>v[i][j]</code> 表示在前 <code>i</code> 个物品中能够装入容量为 <code>j</code> 的背包中的最大价值。则我们有下面的结果：<ol>
+<li> <code>vi=v0=0</code>，表示填入表第一行和第一列是 0</li>
+<li> 当 <code>w[i]&gt; j</code> 时 <code>vi=vi-1</code>，当准备加入新增的商品的容量大于当前背包的容量时，就直接使用上一个单元格的装入策略</li>
+<li> 当 <code>j&gt;=w[i]</code> 时，<code>vi=max&#123;vi-1, v[i]+vi-1]&#125;</code> </li>
+</ol>
+</li>
+</ul>
+<p>// 当 准备加入的新增的商品的容量小于等于当前背包的容量,</p>
+<p>// 装入的方式:</p>
+<p>v[i-1][j]： 就是上一个单元格的装入的最大值</p>
+<p>v[i] : 表示当前商品的价值 </p>
+<p>v[i-1][j-w[i]] ： 装入i-1商品，到剩余空间j-w[i]的最大值</p>
+<p>当j&gt;=w[i]时： v[i][j]=max{v[i-1][j], v[i]+v[i-1][j-w[i]]} :</p>
+<p>w[i]：第 i 个物品的重量</p>
+<p>v[i]：第  i 件物品的价值</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/" class="post-title-link" itemprop="url">MySQL高级</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-07-23 15:24:27" itemprop="dateCreated datePublished" datetime="2021-07-23T15:24:27+08:00">2021-07-23</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-09-05 20:34:16" itemprop="dateModified" datetime="2021-09-05T20:34:16+08:00">2021-09-05</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySql/" itemprop="url" rel="index"><span itemprop="name">MySql</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="MySQL-架构"><a href="#MySQL-架构" class="headerlink" title="MySQL 架构"></a>MySQL 架构</h1><h2 id="1-1-MySQL逻辑架构"><a href="#1-1-MySQL逻辑架构" class="headerlink" title="1.1    MySQL逻辑架构"></a>1.1    MySQL逻辑架构</h2><p>MySQL 可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，<strong>插件式的存储引擎架构</strong>将查询处理和其它的系统任务以及数据的存储提取相分离。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。其主要逻辑架构可分为四层，从上到下分别是：</p>
+<blockquote>
+<ol>
+<li>  <strong>连接层</strong></li>
+<li>  <strong>服务层</strong></li>
+<li>  <strong>引擎层</strong></li>
+<li>  <strong>存储层</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/1411859-20180617124155105-273948974.png" alt="img"></p>
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/1411859-20180617123859211-1860022440.png" alt="img"></p>
+<h3 id="1-1-1-连接层"><a href="#1-1-1-连接层" class="headerlink" title="1.1.1    连接层"></a>1.1.1    连接层</h3><ul>
+<li>  <strong>连接层主要处理客户端与 MySQL 服务端的连接、授权认证、连接安全等问题</strong>。包含本地 socket 通信和大多数基于客户端/服务端工具实现的网络通信。</li>
+<li>  主要完成一些类似于连接处理、授权认证、及相关的安全方案。同样在该层上可以实现基于 SSL 的安全链接。服务器也会为安全接入的每个客户端验证它所具有的操作权限。</li>
+<li>  在该层上<strong>引入了线程池的概念</strong>，为通过认证安全接入的客户端提供线程。</li>
+</ul>
+<hr>
+<h3 id="1-1-2-服务层"><a href="#1-1-2-服务层" class="headerlink" title="1.1.2    服务层"></a>1.1.2    服务层</h3><table>
+<thead>
+<tr>
+<th>名字</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Management Serveices &amp; Utilities</strong></td>
+<td>系统管理和控制工具</td>
+</tr>
+<tr>
+<td><strong>SQL Interface</strong></td>
+<td>SQL 接口。接受用户的SQL 命令，并且返回用户需要查询的结果。</td>
+</tr>
+<tr>
+<td><strong>Parser</strong></td>
+<td>解析器。SQL 命令传递到解析器的时候会被解析器验证和解析</td>
+</tr>
+<tr>
+<td><strong>Optimizer</strong></td>
+<td>查询优化器。SQL 语句在查询之前会使用查询优化器对查询进行优化。</td>
+</tr>
+<tr>
+<td><strong>Cache 和Buffer</strong></td>
+<td>查询缓存。</td>
+</tr>
+</tbody></table>
+<h4 id="1、Management-Serveices-amp-Utilities：系统管理控制工具"><a href="#1、Management-Serveices-amp-Utilities：系统管理控制工具" class="headerlink" title="1、Management Serveices &amp; Utilities：系统管理控制工具"></a>1、Management Serveices &amp; Utilities：系统管理控制工具</h4><p>可以看做是类似于 Hadoop 中的 Zookeeper，或者是 SpringCloud 中的配置中心，主要作用是协调整管理个系统的各个模块。</p>
+<hr>
+<h4 id="2、SQL-Interface：SQL-接口"><a href="#2、SQL-Interface：SQL-接口" class="headerlink" title="2、SQL Interface：SQL 接口"></a>2、SQL Interface：SQL 接口</h4><p>类似于 MVC 三层架构中的 Controller 层，只是负责接收请求和返回最终的结果，具体的业务逻辑交给更底层的服务去做。比如 <code>select ... from ...</code> 就会调用 SQL Interface。</p>
+<hr>
+<h4 id="3、Parser：解析器"><a href="#3、Parser：解析器" class="headerlink" title="3、Parser：解析器"></a>3、Parser：解析器</h4><p>SQL Interface 中的 SQL 命令传递到解析器的时候会被解析器验证和解析。主要功能有：</p>
+<ul>
+<li>  <strong>验证</strong>：对接收的 SQL 语句进行语义和语法的分析，如果在分解构成中遇到错误，那么就说明这个 SQL 语句是不合理的，验证失败，不继续网下执行，直接抛出错误。</li>
+<li>  <strong>解析</strong>：如果验证成功，则根据语义和语法，将 SQL 语句划分为不同的操作类型，然后进行针对性的转发到后续步骤。比如查询语句就转发到查询对应的服务，更新操作就转发到更新对应的服务。</li>
+</ul>
+<hr>
+<h4 id="4、Optimizer：查询优化器"><a href="#4、Optimizer：查询优化器" class="headerlink" title="4、Optimizer：查询优化器"></a>4、Optimizer：查询优化器</h4><ul>
+<li>  SQL 语句在查询之前会使用查询优化器对查询进行优化。就是优化客户端请求的 SQL 语句，根据客户端请求的 SQL 语句，和数据库中的一些统计信息，在一系列算法的基础上进行分析，得出一个最优的策略，告诉后面的程序如何执行这个 SQL 语句。（机器认为最优的数据检索方式，但 BDA 不一定认为是最优的）</li>
+<li>  查询优化器就类似于指令重排，对于开发人员来说，写一条 SQL 可能自我感觉良好，性能天下第一，但是对于底层机器来说，它有自己的优化标准，经过查询优化器优化后的 SQL 语句的执行顺序并不一定与开发人员设计的 SQL 执行顺序相同。</li>
+<li>  当客户端向 MySQL 服务器请求一条 SQL ，命令解析器模块完成请求分类，区别出是 SELECT 并转发给 MySQL_Query_Qptimizer 时， MySQL_Query_Qptimizer 首先会对整条 SQL 进行优化，处理掉一些常量表达式的预算，直接转换成常量值。并对 SQL 中的查询条件进行简化和转换，如去掉一些无用或显而易见的条件、结构调整等。</li>
+</ul>
+<hr>
+<h4 id="5、Cache和Buffer：查询缓存"><a href="#5、Cache和Buffer：查询缓存" class="headerlink" title="5、Cache和Buffer：查询缓存"></a>5、Cache和Buffer：查询缓存</h4><p>如果查询缓存有命中的查询结果，查询语句就可以直接去查询缓存中取数据。这个缓存机制是由一系列小缓存组成的。比如表缓存，记录缓存，key 缓存，权限缓存等。</p>
+<hr>
+<h3 id="1-1-3-引擎层"><a href="#1-1-3-引擎层" class="headerlink" title="1.1.3    引擎层"></a>1.1.3    引擎层</h3><ul>
+<li>  存储引擎主要负责数据存储和提取，存储引擎不会去解析 sql，不同存储引擎之间不会通讯，只会简单地响应上层服务器的请求。</li>
+<li>  存储引擎真正的负责了 MySQL 中数据的存储和提取，服务器通过 API 与存储引擎进行通信。</li>
+<li>  存储引擎接口模块可以说是 MySQL 数据库中最有特色的一点了。目前各种数据库产品中，基本上只有 MySQL 可以实现其底层<strong>数据存储引擎的插件式管理</strong>。这个模块实际上只是 一个抽象类，但正是因为它成功地将各种数据处理高度抽象化，才成就了今天 MySQL <strong>可插拔存储引擎的特色</strong>。</li>
+<li>  可插拔的存储引擎的实现，让 MySQL 在处理不同的业务逻辑时，可以根据实际应用场景选择效率尽可能高的存储引擎。这就是 MySQL 相较于其它同类数据库产品的最大优势。</li>
+<li>  注意：<strong>存储引擎是基于表的，而不是数据库</strong>。</li>
+</ul>
+<hr>
+<h3 id="1-1-4-存储层"><a href="#1-1-4-存储层" class="headerlink" title="1.1.4    存储层"></a>1.1.4    存储层</h3><p>数据存储层，主要是将数据存储在硬件层面的文件系统上，并与存储引擎交互。</p>
+<hr>
+<h2 id="1-2-存储引擎"><a href="#1-2-存储引擎" class="headerlink" title="1.2    存储引擎"></a>1.2    存储引擎</h2><blockquote>
+<p>  <strong>如何查看 MySQL 支持的存储引擎</strong></p>
+</blockquote>
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210723163415302.png" alt="image-20210723163415302"></p>
+<blockquote>
+<p>  <strong>MyISAM vs. InnoDB</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">对比项</th>
+<th align="center">MyISAM</th>
+<th align="center">InnoDB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">主/外键</td>
+<td align="center">不支持</td>
+<td align="center">支持</td>
+</tr>
+<tr>
+<td align="center">事务</td>
+<td align="center">不支持</td>
+<td align="center">支持</td>
+</tr>
+<tr>
+<td align="center">行/表锁</td>
+<td align="center">表锁</td>
+<td align="center">行锁</td>
+</tr>
+<tr>
+<td align="center">索引</td>
+<td align="center">非聚簇索引</td>
+<td align="center">聚簇索引</td>
+</tr>
+<tr>
+<td align="center">表空间</td>
+<td align="center">小</td>
+<td align="center">大</td>
+</tr>
+<tr>
+<td align="center">关注点</td>
+<td align="center">性能</td>
+<td align="center">事务</td>
+</tr>
+</tbody></table>
+<ul>
+<li>  <strong>行锁</strong>：操作时只锁某一行，不会对其它行产生影响。<strong>适合高并发的操作</strong>。</li>
+<li>  <strong>表锁</strong>：即使只操作一条记录也会锁住整张表，不适合高并发的操作。【这是 MyISAM 被逐渐淘汰的主要原因之一】</li>
+<li>  既缓存索引又缓存真实数据对内存要求高，而内存大小对性能有着决定性的影响，已使用的内存越大，性能就越差。</li>
+</ul>
+<blockquote>
+<p>  <strong>聚簇索引 和 非聚簇索引</strong></p>
+</blockquote>
+<ul>
+<li>  MySQL 的 MyISAM 引擎在建立索引时，会专门维护一张索引表，索引表中除了索引值外，还有一列用于存储真实数据的内存地址，这就叫做非聚簇索引。</li>
+<li>  <strong>非聚簇索引</strong>就是真实数据和索引物理上不保存在一起，要获取表中的真实时还需要通过索引对应的地址空间到另一张专门保存数据的表中去找。</li>
+<li>  而<strong>聚簇索引</strong>就是索引和真实数据在物理上是保存在一起的。即会将数据表中的建立了索引的列的数据复制一份保存在索引表中，当通过索引检索到数据后，无需再回到数据表中读取数据，直接在索引表中就可以读取到数据。</li>
+<li>  MyISAM 使用的就是非聚簇索引，树的叶子节点上的 Data 不是数据本身，而是数据存放的地址。</li>
+<li>  InnoDB 采用的是聚簇索引，树的叶子节点上的 Data 就是数据本身。</li>
+<li>  因为聚簇索引中要求真实数据的存放顺序和索引顺序要一致，所以<strong>一个表当中只能有一个聚簇索引</strong>，而非聚簇索引可以有多个。</li>
+<li>  InnoDB 中，如果表定义了 PrimaryKey，那么 PrimaryKey 就是聚簇索引。如果没有 PrimaryKey ，就会找第一个非空的 unique 列作用聚簇索引。否则，InnoDB 会创建一个隐藏的 row_id 作为聚簇索引。</li>
+</ul>
+<hr>
+<h2 id="1-3-大致查询流程"><a href="#1-3-大致查询流程" class="headerlink" title="1.3    大致查询流程"></a>1.3    大致查询流程</h2><p>MySQL 查询的流程大致是：</p>
+<ol>
+<li> MySQL 客户端通过协议与 MySQL 服务器建连接；</li>
+<li> 发送查询语句，先查询缓存，如果命中，直接返回结果；</li>
+<li>否则进行语句解析，也就是说，在解析查询之前，服务器会先访问查询缓存（Query Cache）——它存储了 SQL 语句以及<br> 相应的查询结果集。</li>
+<li> 如果某个查询结果已经位于缓存中，服务器就不会再对 SQL 语句进行解析、优化、以及执行。它仅仅将缓存中的结果返回给用户即可，这将大大提高系统的性能。</li>
+</ol>
+<hr>
+<h1 id="SQL-的执行顺序"><a href="#SQL-的执行顺序" class="headerlink" title="SQL 的执行顺序"></a>SQL 的执行顺序</h1><p>随着 MySQL 版本的更新换代，其优化器也在不断的升级，优化器会根据同一条 SQL 语句的不同执行顺序产生的性能消耗不同而动<br>态调整执行顺序。下面是比较常见的一种的查询顺序：</p>
+<blockquote>
+<p>  <strong>SQL语句</strong></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">  <span class="operator">&lt;</span> select_list <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">  <span class="operator">&lt;</span> left_table <span class="operator">&gt;</span> </span><br><span class="line"><span class="operator">&lt;</span> join_type <span class="operator">&gt;</span> <span class="keyword">JOIN</span> </span><br><span class="line">  <span class="operator">&lt;</span> right_table <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">ON</span> </span><br><span class="line">  <span class="operator">&lt;</span> join_condition <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">  <span class="operator">&lt;</span> where_condition <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> </span><br><span class="line">  <span class="operator">&lt;</span> group_by_list <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">HAVING</span></span><br><span class="line">  <span class="operator">&lt;</span> having_condition <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> </span><br><span class="line">  <span class="operator">&lt;</span> order_by_condition <span class="operator">&gt;</span> </span><br><span class="line">LIMIT </span><br><span class="line">  <span class="operator">&lt;</span> limit_number <span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>底层执行顺序</strong></p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span>  <span class="operator">&lt;</span> left_table <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">ON</span>  <span class="operator">&lt;</span> join_condition <span class="operator">&gt;</span> </span><br><span class="line"><span class="operator">&lt;</span> join_type <span class="operator">&gt;</span> <span class="keyword">JOIN</span> <span class="operator">&lt;</span> right_table <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">WHERE</span> <span class="operator">&lt;</span> where_condition <span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="operator">&lt;</span> group_by_list <span class="operator">&gt;</span> </span><br><span class="line"><span class="keyword">HAVING</span> <span class="operator">&lt;</span> having_condition <span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">&lt;</span> select_list <span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="operator">&lt;</span> order_by_condition <span class="operator">&gt;</span></span><br><span class="line">LIMIT <span class="operator">&lt;</span> limit_number <span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210724120203199.png" alt="image-20210724120203199"></p>
+<h1 id="Join图"><a href="#Join图" class="headerlink" title="Join图"></a>Join图</h1><p>基础的 Join 关系有 4 种：</p>
+<blockquote>
+<ol>
+<li> 内连接</li>
+<li> 左外连接</li>
+<li> 右外连接</li>
+<li> 全外连接</li>
+</ol>
+</blockquote>
+<p>由此演化出来的常见的 Join 关系有 7 种，如图所示：</p>
+<img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210724120245430.png" alt="image-20210724120245430" style="zoom:100%;">
+
+
+
+
+
+<h2 id="3-1-内连接"><a href="#3-1-内连接" class="headerlink" title="3.1    内连接"></a>3.1    内连接</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="3-2-左外连接"><a href="#3-2-左外连接" class="headerlink" title="3.2    左外连接"></a>3.2    左外连接</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br></pre></td></tr></table></figure>
+
+<p>左外连接保存 LEFT_TABLE（这里是 tb_A） 中的全部记录，对于 tb_A 中存在而 tb_B 中不存在的记录，则用 null 填充。所以查询结果中可能会存在这样一类记录。</p>
+<table>
+<thead>
+<tr>
+<th align="center">A.id</th>
+<th align="center">A.name</th>
+<th align="center">B.id</th>
+<th align="center">B.dep</th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">10</td>
+<td align="center">余则成</td>
+<td align="center">NULL</td>
+<td align="center">NULL</td>
+<td align="center">（A独有）</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center">王大治</td>
+<td align="center">5</td>
+<td align="center">体育部</td>
+<td align="center">（A、B共有）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-3-左外连接扩展"><a href="#3-3-左外连接扩展" class="headerlink" title="3.3    左外连接扩展"></a>3.3    左外连接扩展</h2><p>在左外连接的基础上，只选择左表独有的数据。（即对于两表的公共数据不要）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key</span><br><span class="line"><span class="keyword">WHERE</span> B.KEY <span class="keyword">IS</span> <span class="keyword">NULL</span> ;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="3-4-右外连接"><a href="#3-4-右外连接" class="headerlink" title="3.4    右外连接"></a>3.4    右外连接</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br></pre></td></tr></table></figure>
+
+<p>右外连接保存 RIGHT_TABLE（这里是 tb_B） 中的全部记录，对于 tb_B 中存在而 tb_A 中不存在的记录，则用 NULL 填充。所以查询结果中可能会存在这样一类记录。</p>
+<table>
+<thead>
+<tr>
+<th align="center">A.id</th>
+<th align="center">A.name</th>
+<th align="center">B.id</th>
+<th align="center">B.dep</th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">NULL</td>
+<td align="center">NULL</td>
+<td align="center">7</td>
+<td align="center">“市场部”</td>
+<td align="center">B独有</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center">王大治</td>
+<td align="center">5</td>
+<td align="center">体育部</td>
+<td align="center">（A、B共有）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-5-右外连接扩展"><a href="#3-5-右外连接扩展" class="headerlink" title="3.5    右外连接扩展"></a>3.5    右外连接扩展</h2><p>在右外连接的基础上，只选择右表独有的数据。（即对于两表的公共数据不要）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key</span><br><span class="line"><span class="keyword">WHERE</span> A.KEY <span class="keyword">IS</span> <span class="keyword">NULL</span> ;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="3-6-全外连接"><a href="#3-6-全外连接" class="headerlink" title="3.6    全外连接"></a>3.6    全外连接</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">FULL</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br></pre></td></tr></table></figure>
+
+<p>全外连接会保存 LEFT_TABLE 和 RIGHT_TABLE 中共有的数据和独有的数据。查询结果的类型如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">A.id</th>
+<th align="center">A.name</th>
+<th align="center">B.id</th>
+<th align="center">B.dep</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">NULL</td>
+<td align="center">NULL</td>
+<td align="center">7</td>
+<td align="center">“市场部”</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center">“余则成”</td>
+<td align="center">NULL</td>
+<td align="center">NULL</td>
+</tr>
+<tr>
+<td align="center">18</td>
+<td align="center">“派大星”</td>
+<td align="center">4</td>
+<td align="center">“营销部”</td>
+</tr>
+</tbody></table>
+<h2 id="3-7-全外连接扩展"><a href="#3-7-全外连接扩展" class="headerlink" title="3.7    全外连接扩展"></a>3.7    全外连接扩展</h2><p>在全外连接的基础上，只选择左表和右表独有的部分记录。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> tb_A A </span><br><span class="line"><span class="keyword">FULL</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> tb_B B</span><br><span class="line"><span class="keyword">ON</span> A.key <span class="operator">=</span> B.key;</span><br><span class="line"><span class="keyword">WHERE</span> A.key <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">OR</span> B.key <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h2><p><strong>MySQL 不支持 FULL OUTER JOIN 查询</strong>（Oracle 支持），但是 ，所以 MySQL 中要想实现同样的效果，需要使用 <strong>union</strong> 关键字。</p>
+<ul>
+<li>  UNION 操作符用于合并两个或多个 SELECT 语句的结果。</li>
+<li>  UNION 内部的每个 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每个 SELECT 语句中的列的顺序必须相同。</li>
+<li>  默认地，UNION 操作符选取不同的值（默认去重）。如果允许重复的值，请使用 UNION ALL。</li>
+</ul>
+<hr>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><blockquote>
+<p>  <strong>定义：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>索引（Index）是一种数据结构</strong>，用于提高数据查询速率。</li>
+<li>  <strong>这个数据结构的具体实现可以有多种</strong>，常见的有 B-树、B+树、AVL树、Hash 等等。</li>
+<li>  索引可以理解为“<strong>排好序的可以实现快速查找的数据结构</strong>”！</li>
+</ul>
+<blockquote>
+<p>  <strong>解释说明：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>Before：</strong></li>
+</ul>
+<p>如果没有索引，想要查询 <code>tb_user</code> 表中 <code>name=&quot;张三&quot;</code> 的这条数据，我们需要挨个查询 <code>tb_user</code> 表中的所有数据，直到找到 <code>name=&quot;张三&quot;</code> 的数据。当然这种查询存在随机性，可能第一个就直接查到了，也有可能直到最后一个才查到，平均时间复杂度为 O<del>n</del> 。</p>
+<ul>
+<li>  <strong>After：</strong></li>
+</ul>
+<p>假设我们为 name 这一列建立了一个索引（假设索引的数据结构为 BTree），这时 name 列中的所有数据就会按照某种规则映射到 BTree 上，想要查询 <code>name=&quot;张三&quot;</code> 的这条数据时，用 <code>“张三”</code> 对应的值与 BTree 第一层的多个范围空间进行对比，找到满足条件的范围进入下一层对比，这样只需要很少的几次比较，就能够定位到 “张三” 在 BTree 中的位置，再从索引直接关联到数据库中真实数据的内存地址，即完成了一次查询。</p>
+<blockquote>
+<p>  <strong>一种索引实现</strong></p>
+</blockquote>
+<p>在数据之外，数据库系统还维护着满足特定查找算法的数据结构，这些数据结构以某种方式指向数据（记录了真实真实数据的地址），在这些数据结构上我们可以实现高效的查找算法。这种数据结构，就是<strong>索引</strong>。</p>
+<p>下图就是一种可能的索引方式示例：</p>
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210724170912841.png" alt="image-20210724170912841"></p>
+<ul>
+<li>  左边是索引表，一共有两列七条记录，最左边记录的是真实数据的物理地址，Col1 是主键字段，Col2 是索引字段。</li>
+<li>  为了加快 Col2 的查找，可以维护一个右边所示的二叉查找树，每个节点分别包含索引键值和一个指向对应数据记录物理地址的指针，这样就可以运用二叉查找在一定的复杂度内获取到相应数据，从而快速的检索出符合条件的记录。</li>
+<li>  一般来说索引本身也很大，不可能全部存储在内存中，因此索引往往以索引文件的形式存储的磁盘上。</li>
+</ul>
+<blockquote>
+<p>  <strong>索引会影响到两大功能的执行效率：</strong></p>
+</blockquote>
+<ol>
+<li> 排序：<code>ORDER BY</code> </li>
+<li> 查找：<code>WHERE；HAVING</code></li>
+</ol>
+<p><strong>解释：</strong></p>
+<ul>
+<li>  查找时，如果对应的字段建立了索引，就不会出现在某张表中挨个查找的情况，而是跳着查找，效率更高。</li>
+<li>  排序时，因为索引结构本身就是有序的，所以对应的字段直接按照索引顺序正序或倒序排列即可。</li>
+</ul>
+<hr>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><blockquote>
+<p>  <strong>优点</strong>：</p>
+</blockquote>
+<ul>
+<li>  索引能提高数据检索速率，对于一些常用于查询的字段，如果将其设置为索引，能大大地提高查询的速率。</li>
+<li>  将频繁使用的字段就将其设置为索引，比不设索引时查询速度要快。</li>
+<li>  通过索引列对数据进行排序，降低数据排序的成本。</li>
+</ul>
+<blockquote>
+<p>  <strong>缺点</strong>：</p>
+</blockquote>
+<ul>
+<li>  实际上索引也是一张表，该表保存了索引字段（主键天生就是索引字段），并指向实体表的记录。所以索引也是要占用空间的。</li>
+<li>虽然索引大大提高了查询速度，但同时却会降低更新表的速度。比如在对表进行 CRUD 操作时，不仅需要更新表中的数据，还要更新对应的索引表。<ul>
+<li>  对于 UPDATE 操作，记录变更后索引字段在索引表中的位置就可能发生变化，需要更新。</li>
+<li>  对于 INSERT 操作，添加记录后需要将新记录的索引字段加到索引表中。</li>
+<li>  同理 DELETE 需要删除索引表中的记录。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h2><ul>
+<li>  <strong>单值索引</strong>：一个索引只包含单个列，一个表可以有多个单列索引。</li>
+<li>  <strong>复合索引</strong>：即一个索引包含多个列。</li>
+<li>  唯一索引：索引列的值必须唯一（即用于建立索引的列必须符合 UNIQUE），但允许有空值。</li>
+</ul>
+<hr>
+<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><blockquote>
+<p>  <strong>语法</strong></p>
+</blockquote>
+<ol>
+<li> 创建：</li>
+<li> 删除</li>
+<li> 查看表的所有索引</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">-- 创建：</span><br><span class="line">CREATE [UNIQUE] INDEX [indexName] ON table_name(column1, column2);	# 方式一</span><br><span class="line"></span><br><span class="line">-- 删除</span><br><span class="line">DROP INDEX [indexName] ON table_name;</span><br><span class="line"></span><br><span class="line">-- 查看</span><br><span class="line">SHOW INDEX FROM table_name;</span><br><span class="line"></span><br><span class="line">-- 使用 Alter 命令</span><br><span class="line">ALTER TABLE tb_name ADD PRIMARY KEY(column_list);	# 该语句添加一个主键，这意味着索引值必须是唯一的，且不能为NULL。</span><br><span class="line">ALTER TABLE tb_name ADD INDEX index_name(column_list) # 添加普通索引，索引值可出现多次。</span><br><span class="line">ALTER TABLE tb_name ADD UNIQUE INDEX index_name(column_list) # 添加唯一索引，要求被添加的列必须是唯一的</span><br><span class="line">ALTER TABLE tb_name ADD FULLTEXT index_name (column_list) # 该语句指定了索引为FULLTEXT ，用于全文索引。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <strong>注意</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>主键天生就是一种唯一索引</strong></li>
+</ul>
+<blockquote>
+<p>  <strong>案例</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 假设 name 和 openid 这两个字段在查询时频繁被使用，就可以将其设置为索引来增加查询速度</span><br><span class="line">SELECT * FROM USER WHERE NAME&#x3D;&quot;&quot; AND openid&#x3D;&quot;&quot;;</span><br><span class="line"></span><br><span class="line">-- 单值索引</span><br><span class="line">CREATE INDEX idx_user_name ON USER(NAME)</span><br><span class="line"></span><br><span class="line">-- 复合索引</span><br><span class="line">CREATE INDEX idx_user_nameOpenid ON USER(NAME, openid) </span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<hr>
+<h2 id="常见的索引数据结构"><a href="#常见的索引数据结构" class="headerlink" title="常见的索引数据结构"></a>常见的索引数据结构</h2><blockquote>
+<ul>
+<li>  二叉排序树（BST）</li>
+<li>  平衡二叉树（AVL）</li>
+<li>  B-树（B树）</li>
+<li>  <strong>B+树</strong></li>
+<li>  Hash 索引</li>
+<li>  Full-Text 全文索引</li>
+<li>  R-Tree 索引</li>
+</ul>
+</blockquote>
+<ul>
+<li>  <strong>MySQL 的 InnoDB 引擎使用的是 BTree 索引。</strong></li>
+</ul>
+<h3 id="二叉排序树"><a href="#二叉排序树" class="headerlink" title="二叉排序树"></a>二叉排序树</h3><ul>
+<li>  若它的左子树不为空，则左子树上所有关键字的值均小于根关键字的值；</li>
+<li>  若它的右子树不为空，则右子树上所有关键字的值均大于根关键字的值；</li>
+<li>  左右子树又是一棵二叉排序树。</li>
+</ul>
+<h3 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h3><ul>
+<li>  平衡二叉树首先是一棵二叉排序树，但是其要满足左右子树高度之差的绝对值不超过 1。</li>
+<li>  平衡二叉树的左右子树也是平衡二叉树。</li>
+</ul>
+<h3 id="B-树"><a href="#B-树" class="headerlink" title="B-树"></a>B-树</h3><h3 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h3><p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/BTree.png" alt="BTree"></p>
+<blockquote>
+<p>  <strong>【初始化介绍】</strong></p>
+</blockquote>
+<p>一颗 B 树，浅蓝色的块我们称之为一个磁盘块，可以看到每个磁盘块包含了<strong>数据项</strong>（深蓝色所示）和<strong>指针</strong>（黄色所示）。如磁盘块1 包含数据项 17 和 35，包含指针 P1、P2、P3。</p>
+<ul>
+<li>  P1 指向数据项小于 17 的磁盘块，P2 指向数据项在17~35 之间的磁盘块，P3 指向数据项大于 35 的磁盘块。</li>
+<li>  真实的数据存储在于叶子节点中，即 3、5、9、10、13、15、28、29、36、60、75、79、90、99。</li>
+<li>  <strong>非叶子节点只不存储真实的数据，只存储指引搜索方向的数据项</strong>。如 17、35 并不真实存在于数据表中。</li>
+</ul>
+<blockquote>
+<p>  <strong>【查找过程】</strong></p>
+</blockquote>
+<ol>
+<li> 如果要查找数据项 29，那么首先会把磁盘块 1 中的数据加载到内存中，发生第一次 IO，在内存中用二分查找确定 29 在17~35 之间，锁定磁盘块 1 的 P2 指针；</li>
+<li> 通过磁盘块 1 的 P2 指针的磁盘地址把磁盘块 3 中的数据加载到内存中，发生第二次 IO，在内存中用二分查找确定 29 在 26~30 之间，锁定磁盘块 3 的 P2 指针；</li>
+<li> 加载磁盘块 8 中的数据到内存中，发生第三次 IO，同时内存中做二分查找找到 29，结束查询，总计三次 IO。</li>
+</ol>
+<blockquote>
+<p>  <strong>【小总结】</strong></p>
+</blockquote>
+<p>在实际生产中，3 层的 BTree 可以表示上百万的数据，如果上百万的数据查找只需要三次 IO，性能提高将是巨大的，如果没有索引，每个数据项都要发生一次 IO，那么总共需要百万次的 IO，显然成本非常非常高。</p>
+<hr>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><blockquote>
+<p>  <strong>哪些情况需要创建索引？</strong></p>
+</blockquote>
+<ol>
+<li> <strong>主键</strong>天生就是唯一索引；</li>
+<li> <strong>频繁作为查询条件的字段</strong>应该创建索引；</li>
+<li> 查询中与其它表关联的字段，<strong>外键</strong>字段应该建立索引；</li>
+<li> 查询中<strong>排序的字段</strong>。排序字段若通过索引去访问将大大提高排序速度；</li>
+<li> 单键/组合索引的选择问题，<strong>组合索引性价比更高</strong>；</li>
+<li> 查询中统计或者分组字段；</li>
+</ol>
+<blockquote>
+<p>  <strong>哪些情况不需要创建索引？</strong></p>
+</blockquote>
+<ol>
+<li> 表记录太少；【表记录过少的话遍历查找也能很快就找到所有数据，而为此再专门维护一张索引表是不合适的】</li>
+<li> 频繁更新的字段（经常增删改的表或者字段）不适合创建索引；【因为每次更新不单单要更新数据库表记录还会更新索引表记录】</li>
+<li> Where 条件里用不到的字段不创建索引（不用做查询条件的字段）</li>
+<li> <strong>过滤性不好的不适合建索引。</strong></li>
+</ol>
+<ul>
+<li>假如一个表中有 10w 条记录，有一个字段 gender 只有 0 和 1 两种值，且每个值的分布概率大约为 50%，那么对这种字段建立索引一般不会提高数据库的查询速度。<ul>
+<li>  索引的选择是指索引列中不同值的数量与表中记录数的比。如果一个表中有 2000 条记录，表索引列有 1980 个不同的值，那么这个索引的选择性就接近于 1，这个索引的效率越高。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="MySQL中的锁"><a href="#MySQL中的锁" class="headerlink" title="MySQL中的锁"></a>MySQL中的锁</h1><h2 id="是什么-1"><a href="#是什么-1" class="headerlink" title="是什么"></a>是什么</h2><blockquote>
+<p>  <strong>定义</strong></p>
+</blockquote>
+<ul>
+<li>  锁是<strong>计算机协调多个进程或线程并发访问某一资源时的机制</strong>。</li>
+<li>  在数据库中的数据是一种供许多用户共享的资源，所以就可能出现多个用户并发访问的情况。<strong>如何保证数据并发访问的一致性、有效性是所有数据库必须解决的一个问题</strong>。锁冲突也是影响数据库并发访问性能的一个重要因素。</li>
+<li>  在上文 MySQL 架构的连接层中，存在一个 ConnectionPool，与 MySQL 服务器连接的每个客户端都会维护一个会话（Session），当同时有多个 Session 操作同一数据库中的同一数据时，就会产生冲突，这时就需要 MySQL 的锁机制来维护数据的一致性了。</li>
+</ul>
+<blockquote>
+<p>  <strong>生活案例</strong></p>
+</blockquote>
+<p>淘宝秒杀抢手机，库存只剩最后一件了，如果同时有多个用户同时点击了购买，到底谁买到？</p>
+<p>首先，这里肯定要使用到事务，我们先从库存表中取出商品数量，然后插入订单，付款后插入付款表信息，最后更新商品数量。在这个过程中，使用锁可以对共享资源进行保护，解决隔离和并发的矛盾。</p>
+<blockquote>
+<p>  <strong>注意：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>数据库锁都是悲观锁！！！</strong></li>
+</ul>
+<hr>
+<h2 id="锁分类"><a href="#锁分类" class="headerlink" title="锁分类"></a>锁分类</h2><blockquote>
+<p>  <strong>一些概念：</strong></p>
+</blockquote>
+<ul>
+<li>  开销：开销指实现锁需要消耗的资源</li>
+<li>  加锁速度：</li>
+<li>  死锁：</li>
+<li>  粒度：</li>
+<li>  并发性能：</li>
+</ul>
+<blockquote>
+<p>  从<strong>对数据操作的类型</strong>来分可分为：</p>
+</blockquote>
+<ul>
+<li>  <strong>读锁（共享锁）</strong>：针对同一份数据，多个读操作可以同时读而不会互相影响。</li>
+<li>  <strong>写锁（排它锁）</strong>：当前写操作没有完成之前，它会阻断其它写锁和读锁。【注意：写和读都被阻断了】</li>
+</ul>
+<blockquote>
+<p>  从<strong>对数据操作的粒度</strong>来分可分为：</p>
+</blockquote>
+<ul>
+<li>  <strong>行锁（Row_Level_Lock）：</strong>开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</li>
+<li>  <strong>表锁（Table_Level_Lock）：</strong>开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</li>
+<li>  <strong>页锁：</strong>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</li>
+</ul>
+<blockquote>
+<p>  <strong>使用场景：</strong></p>
+</blockquote>
+<ul>
+<li>  只能就具体应用的特点来说哪种锁更合适。</li>
+<li>  表锁更适合以查询为主的表使用。</li>
+<li>  行锁更适合以写为主的表使用。</li>
+</ul>
+<blockquote>
+<p>  <strong>小总结</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">读锁（共享锁）</th>
+<th align="center">写锁（独占锁）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>表锁</strong></td>
+<td align="center">表共享读锁</td>
+<td align="center">表独占写锁</td>
+</tr>
+<tr>
+<td align="center"><strong>行锁</strong></td>
+<td align="center">行共享读锁</td>
+<td align="center">行独占写锁</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="MySQL-中的锁"><a href="#MySQL-中的锁" class="headerlink" title="MySQL 中的锁"></a>MySQL 中的锁</h2><blockquote>
+<p>  <strong>MySQL 中的锁：</strong></p>
+</blockquote>
+<ol>
+<li><p>MyISAM 表锁</p>
+<ul>
+<li>  MyISAM 表共享读锁</li>
+<li>  MyISAM 表独占写锁</li>
+</ul>
+</li>
+<li><p>InnoDB 行锁</p>
+<ul>
+<li>  InnoDB 行共享读锁</li>
+<li>  InnoDB 行独占写锁</li>
+</ul>
+<p> InnoDB 表锁</p>
+<ul>
+<li>  InnoDB 表共享读锁</li>
+<li>  InnoDB 表独占写锁</li>
+</ul>
+</li>
+<li><p> Memory 表锁</p>
+</li>
+<li><p> ……</p>
+</li>
+</ol>
+<blockquote>
+<p>  <strong>MySQL 锁机制：</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>MySQL 的锁机制比较简单，就是不同的存储引擎支持不同的锁机制。</strong></li>
+<li>  比如：MyISAM 和 Memory 存储引擎采用的是表级锁。</li>
+<li>  InnoDB 存储引擎既支持行锁（默认），也支持表锁。</li>
+<li>  <strong>MyISAM 只能加表级锁，比如表级读锁或表级写锁。</strong></li>
+<li>  <strong>InnoDB 默认加的锁是行级锁，但是也支持加表级锁。</strong></li>
+</ul>
+<hr>
+<h2 id="表锁（偏读）"><a href="#表锁（偏读）" class="headerlink" title="表锁（偏读）"></a>表锁（偏读）</h2><h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>  开销小，加锁快【一张表只需加一个锁自然开销小，锁的粒度大，加锁自然快】</li>
+<li>  无死锁</li>
+<li>  锁粒度大</li>
+<li>  发生锁冲突的概率最高</li>
+<li>  并发度最低</li>
+</ul>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
+<li>  查看数据库中所有表锁</li>
+<li>  加（表）锁</li>
+<li>  释放（表）锁</li>
+</ul>
+<blockquote>
+<ol>
+<li> **创建表 tb_emp 和 tb_dep **</li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE IF NOT EXISTS tb_emp (</span><br><span class="line">    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">    NAME VARCHAR(20) DEFAULT &#39;&#39;</span><br><span class="line">)ENGINE&#x3D;MYISAM;	# 使用MYISAM引擎建的表 </span><br><span class="line"></span><br><span class="line">CREATE TABLE IF NOT EXISTS tb_dep (</span><br><span class="line">    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,</span><br><span class="line">    NAME VARCHAR(20) DEFAULT &#39;&#39;</span><br><span class="line">)ENGINE&#x3D;MYISAM;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="2">
+<li> <strong>手动加锁（读锁或写锁）</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-- 语法</span><br><span class="line">lock table 表名1 read, 表名2 write;</span><br><span class="line"></span><br><span class="line">-- 给tb_emp表加读锁，给 tb_dep表加写锁</span><br><span class="line">lock table tb_emp read, tb_dep write;	</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="3">
+<li> <strong>查看数据库中所有表的锁</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- 查看数据库中所有表的锁</span><br><span class="line">SHOW OPEN TABLES;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210725182834745.png" alt="image-20210725182834745"></p>
+<blockquote>
+<ol start="4">
+<li> <strong>释放锁</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- 释放锁（Tip：释放锁使不能单个表释放，只能一次性释放所有表的锁）</span><br><span class="line">UNLOCK TABLE;</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h3 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h3><h4 id="给表加读锁"><a href="#给表加读锁" class="headerlink" title="给表加读锁"></a>给表加读锁</h4><blockquote>
+<ol>
+<li> <strong>向上面建好的 tb_emp 表中插入数据</strong></li>
+</ol>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO tb_emp(NAME) VALUES(&#39;张三&#39;);</span><br><span class="line">INSERT INTO tb_emp(NAME) VALUES(&#39;李四&#39;);</span><br><span class="line">INSERT INTO tb_emp(NAME) VALUES(&#39;王五&#39;);</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<ol start="2">
+<li> <strong>模拟两个线程同时操作 tb_emp 表</strong></li>
+</ol>
+</blockquote>
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/%E8%AF%BB%E9%94%81.png" alt="读锁"></p>
+<table>
+<thead>
+<tr>
+<th align="center">线程 T1</th>
+<th align="center">线程 T2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>lock table tb_emp read; </code>【OK】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><code>select * from tb_emp; </code>  【OK】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>select * from tb_emp; </code>  【OK】</td>
+</tr>
+<tr>
+<td align="center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【Error】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【阻塞】</td>
+</tr>
+<tr>
+<td align="center"><code>UNLOCK TABLES;</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>UPDATE tb_emp SET NAME=&quot;张飞&quot; WHERE id=1;</code>  【OK】</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>  <strong>分析：</strong></p>
+</blockquote>
+<p>两个线程同时操作数据库中的同一张表，</p>
+<ol>
+<li> 首先，线程 T1 先对 emp 表加表共享读锁；</li>
+<li> 然后，T1 对加锁的表执行查询操作，OK；【因为 T1 本身就是持有锁的】</li>
+<li> 再之，T2 对加锁的表进行查询操作，OK；【因为读锁是一种共享锁】</li>
+<li> T1 在未释放锁之前，想要读取其它表（非加锁的表），发现<strong>报错</strong>；【拿着锁不干事反而想去操作其它表是不被允许的】</li>
+<li> T2 读取未加锁的表，OK；</li>
+<li> T1 在未释放锁之前，想要修改被加锁的表，<strong>报错</strong>；【读锁只能读不能写】</li>
+<li> T2 想要修改未加锁的表，发现没有报错 ，但程序被<strong>阻塞</strong>【一直在转圈，但不能执行结束】</li>
+<li> T1 释放读锁；</li>
+<li> 这时 T2 立即执行未执行完的更新的操作。</li>
+</ol>
+<h4 id="给表加写锁"><a href="#给表加写锁" class="headerlink" title="给表加写锁"></a>给表加写锁</h4><ul>
+<li>  当前线程对表的 查询+更新+插入 操作都可以执行；</li>
+<li>  其它线程对表的查询被阻塞，需要等待锁被释放。</li>
+</ul>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ul>
+<li><p><strong>MyISAM 在执行查询语句（SELECT）前，会自动给涉及的所有表加读锁，在执行增删改操作前，会自动给涉及的表加写锁。</strong></p>
+<p>  【特别声明：在创建表之后并不会马上加锁，而是延后到在查询的时候才会加上去。】</p>
+</li>
+<li><p>  如果想要使用 InnoDB 给表加读/写锁，则需要显式地声明才可以。</p>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><blockquote>
+<p>  <strong>结论：</strong></p>
+</blockquote>
+<p>对所有使用 MyISAM 引擎的表进行操作，会有以下情况：</p>
+<ul>
+<li>  对 MyISAM 表的读操作，不会阻塞其它线程对同一表的读请求，但是会阻塞对同一表的写请求。只有当读锁释放后，才会执行其它线程的写操作。</li>
+<li>  对 MyISAM 表的写操作，会阻塞其它线程对同一表的读和写操作，只有当写锁释放后，才会执行其它线程的读写操作。</li>
+</ul>
+<p>简而言之，就是<strong>读的时候可以读，读的时候不能写，写的时候不能读，写的时候不能写</strong>（读就是共享读，其它的可以读，不能写；写是独占写，其它的不能读也不能写）</p>
+<p><strong>MyISAM 不适合作为以写操作为主的表的引擎</strong>。因为对表中数据进行的写操作会造成表被自动加写锁，导致其它线程不能做任何操作，如果存在大量的更新会使得查询操作很难获取到锁，从而造成永远阻塞。</p>
+<hr>
+<h3 id="表锁分析"><a href="#表锁分析" class="headerlink" title="表锁分析"></a>表锁分析</h3><blockquote>
+<p>  <strong>查看哪些表被加锁了</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW OPEN TABLES;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>表锁分析</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 检查锁的状态</span><br><span class="line">SHOW STATUS LIKE &#39;table%&#39;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210727220206563.png" alt="image-20210727220206563"></p>
+<p>这里有一些属性记录了某个表锁的运行情况，两个重要的属性说明如下：</p>
+<ul>
+<li>  <strong>table_locks_immediate</strong>：表锁被获取过的次数，每次获取锁时该值+1。</li>
+<li>  <strong>table_locks_waited</strong>：由于表锁争用而发生等待的次数（不能立即获取锁的次数，每等待一次该值+1）。此值较高则说明存在着较严重的表级锁争用的情况。</li>
+</ul>
+<hr>
+<h2 id="行锁（偏写）"><a href="#行锁（偏写）" class="headerlink" title="行锁（偏写）"></a>行锁（偏写）</h2><h3 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>  InnoDB 引擎在执行 SQL 语句时默认加行锁（执行查询语句加默认读锁，执行写操作语句默认加写锁）；</li>
+<li>  开销大，加锁慢。（需要给每行数据都加锁，自然开销比较大，加锁比较慢）</li>
+<li>  会出现死锁；</li>
+<li>  锁的粒度小，</li>
+<li>  发生锁冲突的概率最低，</li>
+<li>  并发度最高。</li>
+</ul>
+<h3 id="语法（手动加行锁）"><a href="#语法（手动加行锁）" class="headerlink" title="语法（手动加行锁）"></a>语法（手动加行锁）</h3><blockquote>
+<p>  加<strong>行共享读锁</strong>：<code>lock in share mode</code></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-- 开始事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">-- 手动</span><br><span class="line">SELECT * FROM tb_stu WHERE id&#x3D;5 LOCK IN SHARE MODE;</span><br><span class="line"></span><br><span class="line">-- 事务提交后会自动释放锁</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  加<strong>行独占写锁</strong>：<code>FOR UPDATE</code></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 开始事务</span><br><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line">-- 手动锁定某一行</span><br><span class="line">SELECT * FROM tb_stu WHERE id&#x3D;5 FOR UPDATE;</span><br><span class="line">-- 在 SELECT xxx... FOR UPDATE 执行后到事务提交之前，其它线程对该条记录的写操作都会被阻塞！！</span><br><span class="line"></span><br><span class="line">-- 事务提交后会自动释放锁</span><br><span class="line">COMMIT;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="行锁基本操作演示"><a href="#行锁基本操作演示" class="headerlink" title="行锁基本操作演示"></a>行锁基本操作演示</h3><blockquote>
+<p>  <strong>建表</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-- 建表</span><br><span class="line">CREATE TABLE tb_stu (</span><br><span class="line">    id INT(11),</span><br><span class="line">    age VARCHAR(16)</span><br><span class="line">)ENGINE&#x3D;INNODB;</span><br><span class="line"></span><br><span class="line">-- 插入数据</span><br><span class="line">INSERT INTO tb_stu VALUES(1,&#39;10&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(3,&#39;30&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(4,&#39;40&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(5,&#39;50&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(6,&#39;60&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(7,&#39;70&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(8,&#39;80&#39;);</span><br><span class="line">INSERT INTO tb_stu VALUES(9,&#39;90&#39;);</span><br><span class="line"># 注意：这里没有插入 id&#x3D;2 的数据！！！</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-- 分别为 id 和 age 创建索引 </span><br><span class="line">CREATE INDEX a ON tb_stu(id);</span><br><span class="line">CREATE INDEX b ON tb_stu(age);</span><br><span class="line"></span><br><span class="line">-- 关闭 MySQL 的自动提交功能</span><br><span class="line">SET autocommit &#x3D; 0;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>模拟两个线程同时操作 <code>tb_stu</code> 表数据。建立两个会话分别为 Session1 和  Session2。</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">Session1</th>
+<th align="center">Session2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>SET autocommit = 0</code></td>
+<td align="center"><code>SET autocommit = 0</code></td>
+</tr>
+<tr>
+<td align="center"><code>UPDATE tb_stu SET age=11 WHERE id=1;</code>【OK】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><code>SELECT * FROM tb_stu;</code>【查看后发现更新成功】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>SELECT * FROM tb_stu;</code>【未读到Session1未提交的事务】</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>UPDATE tb_stu SET age=19 WHERE id=1;</code>【写操作被阻塞】</td>
+</tr>
+<tr>
+<td align="center"><code>COMMIT;</code>【Session1 提交事务】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">【阻塞解除，更新操作继续执行成功。此时，id=1对应的age=19】</td>
+</tr>
+</tbody></table>
+<ol>
+<li> 分别关掉 Session1 和 Session2 事务的自动提交行为；</li>
+<li> 更新 <code>id=1</code> 的这一条记录，在 Session1 中更新成功，但在 Session2 中并未读取到 Session1 的更新。这是由于 MySQL 默认的隔离级别（可重复读）导致的。</li>
+<li> 此时，如果在 Session2 中想要更新同一行数据，发现 Session 的操作被阻塞，这是因为 InnoDB 默认给每行数据加了行锁。</li>
+<li> 使用 COMMIT 提交事务后，行锁也会被释放，这时 Session2 的更新操作得以继续执行。</li>
+</ol>
+<hr>
+<h3 id="索引失效行锁升级为表锁"><a href="#索引失效行锁升级为表锁" class="headerlink" title="索引失效行锁升级为表锁"></a>索引失效行锁升级为表锁</h3><blockquote>
+<p>  <strong>原理</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>行锁必须依赖于索引才能实现，否则会自动升级为表锁。</strong>    </li>
+<li>所以在 InnoDB 表中有两种情况会导致行锁升级为表锁：<ul>
+<li>  一是条件字段压根没有建立索引；</li>
+<li>  二是条件字段的索引在使用中失效了。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>举例</strong></p>
+</blockquote>
+<p>在 <code>tb_stu</code> 表中，<code>id</code> 为 <code>int</code> 类型，<code>age</code> 为 <code>varchar</code> 类型。并且为这两个字段分别创建了索引 <code>a</code> 和 <code>b</code>。如果我们在更新数据的过程中，不小心把 <code>varchar</code> 类型的数据写成了 <code>int</code> 类型的数据，由于 MySQL 存在自动转型，<code>int</code> 类型也能被识别而不会报错，但是此时就破坏了索引 <code>b</code> 的结构，就会导致索引 <code>b</code> 失效。从而导致行锁会升级到表锁。</p>
+<ol>
+<li> 破坏索引结构</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">BEGIN;</span><br><span class="line"></span><br><span class="line"># UPDATE tb_stu SET id&#x3D;1 WHERE age&#x3D;&#39;19&#39;; # 正确写法</span><br><span class="line">UPDATE tb_stu SET id&#x3D;1 WHERE age&#x3D;19;	# 这里故意写错，目的是为了破坏索引结构</span><br><span class="line"></span><br><span class="line">COMMIT</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li> 经过上面的操作后，<code>age</code> 对应的索引 <code>b</code> 的结构已经失效了，如果接下来还有以 age 为条件字段的操作，则行锁会升级为表锁。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="center">Session1</th>
+<th align="center">Session2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>BEGIN;</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><code>UPDATE tb_stu SET id=66 WHERE age=&#39;60&#39;;</code>【OK】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>UPDATE tb_stu SET id=77 WHERE age=70</code>【被阻塞】</td>
+</tr>
+<tr>
+<td align="center"><code>COMMIT;</code></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">【更新操作继续执行】</td>
+</tr>
+</tbody></table>
+<p>Session1 设置为手动事务提交，Session2 设置为自动事务提交。</p>
+<ol>
+<li> Session1 开启事务，更新  <code>age=&#39;60&#39;</code> 的行记录，OK；</li>
+<li> Session2 更新 <code>age=&#39;70&#39;</code> 的行记录，却发现被阻塞。但是明明 tb_stu 表使用的是行锁呀？这就是索引失效后行锁自动升级为表锁了。</li>
+<li> Session1 提交后，释放表锁，Session2 得以继续进行，修改成功。</li>
+</ol>
+<hr>
+<h3 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h3><blockquote>
+<p>  <strong>间隙锁案例：</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">Session1</th>
+<th align="center">Session2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>SET autocommit = 0</code></td>
+<td align="center"><code>SET autocommit = 0</code></td>
+</tr>
+<tr>
+<td align="center"><code>UPDATE tb_stu SET age=99 WHERE id&gt;1 AND id&lt;6;</code><br>【更新 <code>1&lt;id&lt;6</code>的所有数据】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><code>SELECT * FROM tb_stu;</code>【查看后发现更新成功】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"><code>INSERT INTO tb_stu VALUES(2,&quot;20&quot;);</code><br>【产生阻塞，插入操作无法执行完毕】</td>
+</tr>
+<tr>
+<td align="center"><code>COMMIT;</code>【Session1 提交事务】</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">【阻塞解除，插入操作继续执行成功。id=2的数据被成功插入】</td>
+</tr>
+</tbody></table>
+<ol>
+<li><p> 分别关闭 Session1 和 Session2 的事务自动提交；</p>
+</li>
+<li><p> 更新 id 为 <code>(1, 6)</code> 范围内的所有数据，由于当前表中没有 id 为 2 的数据，所以就是更新 id 为 3，4，5 的数据，设置 age=99。</p>
+</li>
+<li><p>  但是我们此时使用 Session2 想要插入一条 <code>id=2</code> 的数据，却发现被阻塞了。这时为什么呢？</p>
+</li>
+</ol>
+<pre><code>按理来说，行锁只会作用于当前行，在本例中也就是第 3、4、5 行，而 Session2 操作的明明是第 2 行，为什么也会被阻塞呢？这时因为此时 id=2 的那一行也被加了行锁，这就是所谓的**间隙锁**。 
+</code></pre>
+<ol start="4">
+<li> 只有当 Session1 的事务提交后，所有作用于行上的锁被释放了，Session2 的插入操作才能继续完成。</li>
+</ol>
+<blockquote>
+<p>  <strong>什么是间隙锁？</strong></p>
+</blockquote>
+<ul>
+<li>  当我们使用范围条件而不是相等条件读/写数据，并请求共享/排它锁时，InnoDB 会给符合条件的已有数据记录的索引项加锁，这是显然的；</li>
+<li>  对于索引的键值在条件范围内但并不存在的记录，叫做“<strong>间隙（GAP）</strong>”。InnoDB 也会对这个“间隙”加锁，这种锁机制就是所谓的<strong>间隙锁（Next-Key锁）</strong>。</li>
+<li>  <strong>总结：</strong> <code>间隙锁 = 使用范围条件加锁 +检索的字段是一个索引</code></li>
+</ul>
+<blockquote>
+<p>  <strong>间隙锁的危害</strong></p>
+</blockquote>
+<ul>
+<li>  间隙锁有一个致命的弱点就是当锁定一个范围的键值之后，即使某些不存在的键值也会被无辜的锁定，从而造成在锁定的时候无法插入锁定键值范围内的任何数据。在某些场景下这可能会对性能造成很大的危害。</li>
+<li>  因为 Query 执行过程中通过范围查找的话，它会锁定整个范围内所有的索引键值，即使这个键值在索引表中并不存在。</li>
+</ul>
+<hr>
+<h3 id="InnoDB-优缺点"><a href="#InnoDB-优缺点" class="headerlink" title="InnoDB 优缺点"></a>InnoDB 优缺点</h3><blockquote>
+<p>  <strong>优点：</strong></p>
+</blockquote>
+<ul>
+<li>  InnoDB 存储引擎实现了行锁，虽然在实现锁时损耗的性能比表锁高一些，但其并发处理的能力是远优于 MyISAM 的表锁的。</li>
+<li>  当系统并发量较高时，InnoDB 的整体性能和 MyISAM 相比就会有比较明显的优势了。</li>
+</ul>
+<blockquote>
+<p>  <strong>缺点：</strong></p>
+</blockquote>
+<ul>
+<li>  但是，InnoDB 也有其脆弱的一面，当我们使用不当时（如索引失效导致行锁升级为表锁 ），可能会让 InnoDB 的整体性能表现不仅不能比 MyISAM 高，甚至可能会更差。</li>
+</ul>
+<hr>
+<h3 id="行锁分析"><a href="#行锁分析" class="headerlink" title="行锁分析"></a>行锁分析</h3><blockquote>
+<p>  <strong>如何分析行锁？</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 展示行锁的各个状态量</span><br><span class="line">SHOW STATUS LIKE &#39;innodb_row_lock%&#39;;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210729091146048.png" alt="image-20210729091146048"></p>
+<p>对各个状态量的说明如下：</p>
+<ul>
+<li>  <strong>InnoDB_row_lock_current_waits</strong>：当前正在等待锁的数量；</li>
+<li>  <strong>InnoDB_row_lock_time</strong>：从系统启动到当前时间该行数据被锁定的总时间；【★】</li>
+<li>  <strong>InnoDB_row_lock_time_avg</strong>：每次等待所花的平均时间；【★】</li>
+<li>  <strong>InnoDB_row_lock_time_max</strong>：从系统启动到当前时间等待最长的一次所花的时间；</li>
+<li>  <strong>InnoDB_row_lock_waits</strong>：系统启动到当前时间总共等待的次数；【★】</li>
+</ul>
+<p>对于这五个状态量，比较重要的有三个。尤其是当等待次数很高，而且等待平均时长也不小的时候，我们就需要分析系统中为什么会有 这么多等待，然后根据分析结果制定优化计划。</p>
+<hr>
+<h3 id="优化建议"><a href="#优化建议" class="headerlink" title="优化建议"></a>优化建议</h3><ul>
+<li>  尽可能让所有数据检索都通过索引来完成，避免无索引行锁升级为表锁；</li>
+<li>  合理设计索引，尽量缩小锁的范围；</li>
+<li>  尽可能缩小检索条件，避免频繁出现间隙锁 ；</li>
+<li>  尽量控制事务大小，减少锁定资源量和时间长度；</li>
+<li>  尽可能低级别事务隔离。</li>
+</ul>
+<hr>
+<h2 id="页锁"><a href="#页锁" class="headerlink" title="页锁"></a>页锁</h2><ul>
+<li>  页锁的开销和加锁时间介于表锁和行锁之间；</li>
+<li>  会出现死锁；</li>
+<li>  锁的粒度介于表锁和行锁之间；</li>
+<li>  并发度一般。</li>
+</ul>
+<hr>
+<h1 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h1><blockquote>
+<p>  <strong>SQL 性能下降的表现</strong>：</p>
+</blockquote>
+<ol>
+<li> 执行时间长</li>
+<li> 等待时间长</li>
+</ol>
+<blockquote>
+<p>  <strong>SQL 性能下降的原因：</strong></p>
+</blockquote>
+<ol>
+<li> SQL 语句写得烂</li>
+<li> 索引失效</li>
+<li> 关联查询太多join（设计缺陷或不得已的需求）【某些业务涉及的表太多，需要关联查询太多】</li>
+<li> 服务器调优及各个参数设置不合理（缓存、线程数等）</li>
+<li> ….</li>
+</ol>
+<blockquote>
+<p>  <strong>MySQL 的常见瓶颈</strong></p>
+</blockquote>
+<ol>
+<li> <strong>CPU</strong>：CPU 在饱和的时候一般发生在数据装入内存或从磁盘上读取数据的时候。</li>
+<li> <strong>IO</strong>：磁盘 IO 瓶颈发生在装入数据远大于内存容量的时候。</li>
+<li> <strong>服务器硬件的性能瓶颈</strong>：top，free，iostat 和 vmstat 来查看系统的性能状态。</li>
+</ol>
+<hr>
+<h1 id="主从复制（MySQL-集群）"><a href="#主从复制（MySQL-集群）" class="headerlink" title="主从复制（MySQL 集群）"></a>主从复制（MySQL 集群）</h1><img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814164014357.png" alt="image-20210814164014357" style="zoom: 50%;">
+
+<blockquote>
+<p>  <strong>一主多从</strong></p>
+</blockquote>
+<ul>
+<li>  主节点用来执行写操作，从节点用于执行读操作</li>
+<li>  所有在主节点上执行的写操作，都会被写入主节点的日志文件 <strong>Binary_log</strong> 中；</li>
+<li>  从节点通过 IO 读取到主节点的日志文件，复制到 <strong>Relay_log</strong> 中，然后由当前备机执行日志文件，即可完成从机数据的同步。</li>
+</ul>
+<blockquote>
+<p>  <strong>读写分离：</strong></p>
+</blockquote>
+<ul>
+<li>  因为 MySQL 只会将主节点的 <code>Binary_log</code> 文件同步到从节点，而不会反过来同步。因此也就引出了读写分离的问题。</li>
+<li>  如果要保证主从节点间的数据一致，<strong>写操作就只能发生在主节点</strong>，而读操作可以在集群中的任意节点上进行。</li>
+</ul>
+<hr>
+<h1 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h1><h2 id="为什么要进行分库分表？"><a href="#为什么要进行分库分表？" class="headerlink" title="为什么要进行分库分表？"></a>为什么要进行分库分表？</h2><p>当单张表中的数据量过大时，整体的查询效率就会降低得非常明显。这时为了提升查询效率，就要将一个表中的数据分散到多个数据库的多个表中。</p>
+<h2 id="多大数据量需要进行分库分表？"><a href="#多大数据量需要进行分库分表？" class="headerlink" title="多大数据量需要进行分库分表？"></a>多大数据量需要进行分库分表？</h2><p>阿里开发手册中建议：一个表的数据量超过 500W 条或者数据文件超过 2G，就要考虑进行分库分表了。</p>
+<h2 id="分库分表的方式"><a href="#分库分表的方式" class="headerlink" title="分库分表的方式"></a>分库分表的方式</h2><ul>
+<li>  分库分表包括<strong>分库</strong>和<strong>分表</strong>两个部分，而这两个部分统称为<strong>数据分片</strong>，其目的都是将数据拆分成不同的存储单元。</li>
+<li>  另外，从拆分的角度上，可以划分为<strong>垂直分片</strong>和<strong>水平分片</strong>。</li>
+</ul>
+<h3 id="垂直分片"><a href="#垂直分片" class="headerlink" title="垂直分片"></a>垂直分片</h3><ul>
+<li>  按照业务来对数据进行分片，又称为纵向分片。它的核心理念就是专库专用。</li>
+<li>  在拆分之前，一个数据库由多张数据表组成，每张表对应不同的业务，而拆分之后，则是按照业务将表归类，分布到不同的数据库或表中，从而将压力分散至不同的数据库或表。</li>
+<li>  例如：下图将用户表和订单表垂直分片到不同的数据库。</li>
+</ul>
+<img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814175705485.png" alt="image-20210814175705485" style="zoom:50%;">
+
+<p>垂直分片往往需要对架构和设计进行调整。通常来讲，是来不及应对业务需求快速变化的。而且，也无法真正地解决单点数据库的性能瓶颈。垂直分片可以缓解数据量和访问量带来的问题，但无法根治。如果垂直分片之后，表中的数据量依然超过单节点所能承受的阈值，则需要水平分片来进一步处理。</p>
+<h3 id="水平分片"><a href="#水平分片" class="headerlink" title="水平分片"></a>水平分片</h3><ul>
+<li>  水平分片又称为横向分片。</li>
+<li>  相对于垂直分片，它不再将数据根据业务逻辑分类，而是通过某几个字段，根据某种规则将数据分散到多个库或表中，每个分片仅包含数据的一部分。</li>
+<li>  水平分片从理论上突破了单击数据量处理的瓶颈，并且扩展相对自由，是分库分表的标准解决方案</li>
+<li>  如下图所示，根据取余的策略，将一张表中的数据分散到了两张表中保存。</li>
+</ul>
+<img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814180055407.png" alt="image-20210814180055407" style="zoom:50%;">
+
+
+
+
+
+<blockquote>
+<p>  <strong>常用的水平分片的策略：</strong></p>
+</blockquote>
+<p><strong>取模：</strong></p>
+<ul>
+<li>  优点：均匀存放数据。</li>
+<li>  缺点：扩容非常麻烦</li>
+</ul>
+<p><strong>按范围划分：</strong>比如，一个月分一个库。</p>
+<ul>
+<li>  优点：比较容易扩容，</li>
+<li>  缺点：数据分布不够均匀。对于大部分的行业来讲，存在淡季和旺季，淡季数据量较少，单独占一个库过于奢侈，旺季数据量大，可能会出现一个库存不在。</li>
+</ul>
+<h2 id="分库分表后，SQL语句的执行流程是怎样的？"><a href="#分库分表后，SQL语句的执行流程是怎样的？" class="headerlink" title="分库分表后，SQL语句的执行流程是怎样的？"></a>分库分表后，SQL语句的执行流程是怎样的？</h2><blockquote>
+<p>  <strong>分库分表后的执行流程</strong></p>
+</blockquote>
+<img src="/2021/07/23/MySQL%E9%AB%98%E7%BA%A7/image-20210814172920328.png" alt="image-20210814172920328" style="zoom:50%;">
+
+<p>分布分表后，在执行查询语句时，由于查询语句中使用的是逻辑上的表，但是在分库分表后，逻辑上的表结构实际存储在多个库的多个表中。</p>
+<ol>
+<li> 在执行 SQL 语句时，首先依然需要解析器解析和查询优化；</li>
+<li> 但是在查询时，由于数据保存在多张表中，所以需要进行 SQL 路由，根据查询条件去不同库的表中查询；</li>
+<li> 这时候需要使用到真实的库名称和表名称，所以会有一步 SQL 改写的过程，将逻辑上的 SQL 语句改写成一条或多条真正要去执行查询的 SQL 语句，然后再执行查询；</li>
+<li> 得到查询结果后，可能查询结果来自多个库的多张表，所以还需要将这多个结果进行归并，最后才能得到一个唯一的结果返回给客户端。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2042,310 +3513,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/16/AQS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/07/16/AQS/" class="post-title-link" itemprop="url">AQS</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-07-16 17:27:18" itemprop="dateCreated datePublished" datetime="2021-07-16T17:27:18+08:00">2021-07-16</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-30 09:41:55" itemprop="dateModified" datetime="2021-08-30T09:41:55+08:00">2021-08-30</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<ul>
-<li>  AQS简介</li>
-<li>  AQS数据结构</li>
-<li>  资源共享模式</li>
-<li>  AQS 源码分析</li>
-<li>  释放资源</li>
-</ul>
-</blockquote>
-<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><blockquote>
-<ol>
-<li> 公平锁和非公平锁</li>
-<li> 可重入锁</li>
-<li> LockSupport</li>
-<li> 自旋锁</li>
-<li> 数据结构链表</li>
-<li> 设计模式——模板设计模式</li>
-</ol>
-</blockquote>
-<hr>
-<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="为什么学"><a href="#为什么学" class="headerlink" title="为什么学"></a>为什么学</h2><p>JUC 底层原理就是 AQS，就相当于 JVM 之于 Java。</p>
-<h2 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h2><blockquote>
-<p>  <strong>AQS；AbstractQueuedSynchronizer；抽象队列同步器</strong></p>
-</blockquote>
-<ul>
-<li>  <strong>抽象</strong>：抽象类，只实现⼀些顶层的代码逻辑，具体细节由子类实现；</li>
-<li>  <strong>队列</strong>：使用先进先出（FIFO）队列存储数据；</li>
-<li>  <strong>同步</strong>：实现了同步的功能。</li>
-</ul>
-<p>AQS 是用来构建锁或者其它同步器组件的重量级基础框架及整个 JUC 体系的基石，通过内置的 FIFO <strong>队列</strong>来完成资源获取线程的排队工作，并通过一个 <strong>int 类型变量</strong>表示持有锁的状态。</p>
-<h2 id="有什么用"><a href="#有什么用" class="headerlink" title="有什么用"></a>有什么用</h2><p>AQS 是一个用来构建锁或者其它同步器的框架，使用AQS能简单高效地构造出应用广泛的同步器。</p>
-<p>JUC 包下很多 API 都是基于 AQS 来实现加锁和释放锁等功能的。AQS 是 JUC 包的基础类。ReentrantLock、ReentrantReadWriteLock 等类底层都是基于 AQS 来实现的。</p>
-<p>当然，我们自己也能利用 AQS 非常轻松容易地构造出符合我们自己需求的同步器，只要子类实现它的几个 protected 方法就可以了，</p>
-<blockquote>
-<p>  <strong>锁和同步器的关系：</strong></p>
-</blockquote>
-<ul>
-<li><p>锁：面向锁的<strong>使用者</strong></p>
-<p>  定义了程序员和锁交互的 API ，隐藏了实现细节。</p>
-</li>
-<li><p>同步器：面向锁的<strong>实现者</strong>，即怎样实现一个锁</p>
-<p>  提出了统一规范并简化了锁的实现，屏蔽了同步状态管理、阻塞线程排队和通知、唤醒机制等。</p>
-</li>
-</ul>
-<p>​    </p>
-<hr>
-<h2 id="AQS为什么是JUC内容中最重要的基石"><a href="#AQS为什么是JUC内容中最重要的基石" class="headerlink" title="AQS为什么是JUC内容中最重要的基石"></a>AQS为什么是JUC内容中最重要的基石</h2><p>JUC 中和 AQS 有关的类：</p>
-<blockquote>
-<ul>
-<li>  ReentrantLock</li>
-<li>  CountDownLatch</li>
-<li>  ReentrantReadWriteLock</li>
-<li>  Semaphore</li>
-<li>  ……</li>
-</ul>
-</blockquote>
-<ol>
-<li> <strong>ReentrantLock</strong></li>
-</ol>
-<p><img src="/2021/07/16/AQS/image-20210716222211925.png" alt="image-20210716222211925"></p>
-<ol start="2">
-<li> <strong>CountDownLatch</strong></li>
-</ol>
-<p><img src="/2021/07/16/AQS/image-20210716222347766.png" alt="image-20210716222347766"></p>
-<ol start="3">
-<li> <strong>ReentrantReadWriteLock</strong></li>
-</ol>
-<p><img src="/2021/07/16/AQS/image-20210716222507442.png" alt="image-20210716222507442"></p>
-<ol start="4">
-<li> <strong>Semaphore</strong></li>
-</ol>
-<p><img src="/2021/07/16/AQS/image-20210716222601965.png" alt="image-20210716222601965"></p>
-<hr>
-<h1 id="AQS-原理概述（乞丐版）（以-ReentrantLock-为例）"><a href="#AQS-原理概述（乞丐版）（以-ReentrantLock-为例）" class="headerlink" title="AQS 原理概述（乞丐版）（以 ReentrantLock 为例）"></a>AQS 原理概述（乞丐版）（以 ReentrantLock 为例）</h1><h2 id="ReentrantLock-和-AQS-的关系"><a href="#ReentrantLock-和-AQS-的关系" class="headerlink" title="ReentrantLock 和 AQS 的关系"></a>ReentrantLock 和 AQS 的关系</h2><p><img src="/2021/07/16/AQS/ReentrantLock_AQS_01.png" alt="ReentrantLock_AQS_01"></p>
-<p>ReentrantLock 类有一个内部类 Sync 继承了 AbstractQueuedSynchronizer 抽象类，说白了就是 ReentrantLock 中包含了一个 AQS 对象，AQS 对象是 ReentrantLock 实现加锁和释放锁的关键性核心组件。</p>
-<h2 id="ReentrantLock-加锁和释放锁的底层原理"><a href="#ReentrantLock-加锁和释放锁的底层原理" class="headerlink" title="ReentrantLock 加锁和释放锁的底层原理"></a>ReentrantLock 加锁和释放锁的底层原理</h2><blockquote>
-<ol>
-<li> <strong>线程 T1 加锁</strong></li>
-</ol>
-</blockquote>
-<p>如果现在有一个线程尝试调用 <code>ReentrantLock</code> 的 <code>lock()</code> 方法进行加锁，会发生什么事情呢？</p>
-<p>很简单。这个 AQS 对象内部有一个核心变量 <code>private volatile int state</code>，代表了加锁的状态。初始状态下，<code>state == 0</code>，另外，这个 AQS 内部还有一个关键变量，用来记录当前加锁的是哪个线程，初始化状态下，这个变量是 null。</p>
-<p><img src="/2021/07/16/AQS/ReentrantLock_AQS_01_1.png" alt="ReentrantLock_AQS_01_1"></p>
-<p>接着线程 T1 调用 ReentrantLock#lock() 方法尝试进行加锁，这个加锁的过程，就是用 CAS 操作将 state 值从 0 变成 1。</p>
-<p>如果 T1 之前没有其它线程加锁锁，那么 <code>state==0</code> 恒成立。此时线程 T1 就可以加锁成功。</p>
-<p>一旦线程 T1 加锁成功后，就可以设置当前加锁线程是自己。如下图所示，就是线程 T1 加锁的过程。</p>
-<p><img src="/2021/07/16/AQS/ReentrantLock_AQS_02.png" alt="ReentrantLock_AQS_02"></p>
-<p>说白了，AQS 其实就是 JUC 包中的一个核心组件，里面有 <strong>state 变量</strong>、<strong>加锁线程变量</strong>等核心的东西，维护了加锁的状态。</p>
-<p>而<strong>ReentrantLock 只是一个外层的 API，内核中的锁机制实现都是依赖于 AQS 组件的。</strong></p>
-<p>ReentrantLock 顾名思义是一个可重入锁，即可以使用一个 ReentrantLock 对象执行多次 <code>lock()</code> 和 <code>unlock()</code> 方法。</p>
-<p>那么 AQS 是如何实现可重入加锁的呢？线程 T1 每调用一次 <code>lock()</code> 方法，如果 CAS 比较发现 state != 0，接着会再判断当前加锁线程是不是自己，如果是就把 state 的值累加 1，其余不变。同理，调用 <code>unlock()</code> 释放锁的时候就是把 state 值累减 1。</p>
-<blockquote>
-<ol start="2">
-<li> <strong>线程 T2 加锁</strong></li>
-</ol>
-</blockquote>
-<p>如果线程 T1 加锁之后，线程 T2 想要争夺锁会怎么样？（<strong>互斥锁</strong>）</p>
-<ol>
-<li> 线程 T2 尝试获取锁，调用 <code>lock()</code> 方法，首先会去检查 <code>ReentrantLock.AQS.state</code> 变量是否为 0，发现不为 0，说明有线程正在使用锁，CAS 校验失败；</li>
-<li> 接着线程 T2 会继续查看当前加锁的线程是不是自己，“<strong>加锁线程</strong>”这个变量明确记录了是线程 T1 占用了这个锁，所以此时线程 T2 会加锁失败。</li>
-</ol>
-<p><img src="/2021/07/16/AQS/ReentrantLock_AQS_03.png" alt="ReentrantLock_AQS_03"></p>
-<blockquote>
-<ol start="3">
-<li> <strong>加锁失败</strong></li>
-</ol>
-</blockquote>
-<p>接着，线程 T2 会将自己放入 AQS 的同步等待队列中，因为自己尝试加锁失败了，此时就要将自己放入等待队列中，直到线程 T1 释放锁之后，自己就可以重新尝试加锁了。</p>
-<p>所以 AQS 内部还有一个同步等待队列，专门存放那些加锁失败的线程。</p>
-<p><img src="/2021/07/16/AQS/ReentrantLock_AQS_03_02.png" alt="ReentrantLock_AQS_03_02"></p>
-<blockquote>
-<ol start="4">
-<li> <strong>释放锁</strong></li>
-</ol>
-</blockquote>
-<p>接着，线程 T1 在执行完自己的业务逻辑代码之后，就会释放锁。释放锁的过程非常简单，就是将 AQS 内的 state 变量的值递减 1，如果 state 为 0，则彻底释放锁，会将“加锁线程”变量的值也设置为 null。</p>
-<blockquote>
-<ol start="5">
-<li> <strong>释放锁之后</strong></li>
-</ol>
-</blockquote>
-<p>接下来，会从等待队列的队头唤醒线程 T2 重新尝试加锁。</p>
-<p>线程 T2 重新尝试加锁，还是使用 CAS 操作将 state 从 0 变成 1，此时就会加锁成功，并将 state 设置为 1，同时把 “<strong>加锁线程”</strong> 设置为线程 T2 自己，同时线程 T2 从同步等待队列中出队。 </p>
-<hr>
-<h1 id="AQS-初步"><a href="#AQS-初步" class="headerlink" title="AQS 初步"></a>AQS 初步</h1><p>​        多线程环境下，为保证线程安全经常需要加锁，加锁就会导致线程阻塞，有阻塞就需要排队，实现排队必然需要队列（抢不到锁的线程被阻塞后就得去排队）。</p>
-<p>​        抢到资源（锁）的线程直接使用资源处理业务逻辑，抢不到资源的线程必然涉及一种排队等候机制。抢占资源失败的线程继续等待，但等候的线程仍然保留获取锁的可能性。</p>
-<p>​        如果共享资源被占用，就需要一定的阻塞等待和唤醒机制来保证锁分配。这个机制主要是通过 CLH（CLH 是三个科学家的首字母缩写）队列的变体实现的，将暂时获取不到锁（被阻塞）的线程加入到队列中，这个队列就是 AQS 的抽象表现。它将请求共享资源（锁）的线程封装成队列的节点（Node），通过 CAS、自旋以及 <code>LockSupport#part()</code> 等方式，维护 state 变量的状态，使并发达到同步的控制效果。</p>
-<p>​        <strong>AQS 管理的是没有抢到锁的线程。</strong></p>
-<hr>
-<h2 id="AQS-数据结构"><a href="#AQS-数据结构" class="headerlink" title="AQS 数据结构"></a>AQS 数据结构</h2><p>AQS 使用一个 <code>volatile int</code> 类型的成员变量 <strong>state</strong> 来表示同步状态，通过内置的 FIFO 队列来完成资源获取的排队工作，将每个要去抢占资源的线程封装成一个 Node 节点来实现锁的分配，通过 CAS 操作完成对 state 值的修改。</p>
-<blockquote>
-<p>  AQS 是一个<strong>队列</strong>：</p>
-<ul>
-<li>  private volatile int <strong>state</strong>：同步状态，有 3 种状态。0 表示无人占用，1 表示有线程正在占用，大于 1 表示可重入锁。</li>
-<li>  static final class <strong>Node</strong>：节点是线程的抽象</li>
-<li>  private transient volatile Node <strong>head</strong>：代表头结点 </li>
-<li>  private transient volatile Node <strong>tail</strong>：代表尾节点</li>
-</ul>
-</blockquote>
-<p><img src="/2021/07/16/AQS/image-20210717091946871.png" alt="image-20210717091946871"></p>
-<p><img src="/2021/07/16/AQS/AQS%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.png" alt="AQS数据结构"></p>
-<hr>
-<h2 id="AQS内部体系架构"><a href="#AQS内部体系架构" class="headerlink" title="AQS内部体系架构"></a>AQS内部体系架构</h2><p><img src="/2021/07/16/AQS/AbstractQueuedSynchronizer.png" alt="AbstractQueuedSynchronizer"></p>
-<p>AQS 有两个内部类：ConditionObject 和 Node</p>
-<p>Sync 实现了 AQS，NofairSync 和 FairSync 实现了 Sync，所以说它们两个也实现了 AQS</p>
-<p>Sync、NofairSync 和 FairSync 都是 ReentrantLock 的内部类，也即 Lock 的内部类</p>
-<hr>
-<h2 id="AQS自身"><a href="#AQS自身" class="headerlink" title="AQS自身"></a>AQS自身</h2><ol>
-<li><p>AQS 的 int 变量：AQS 的同步状态 State 成员变量。</p>
-<p> <code>state==0</code> 就是没人，<code>state&gt;=1</code> 就是有线程占用，必须等待</p>
-</li>
-<li><p>AQS 的 CLH 队列</p>
-<p> CLH 队列（三个大牛的名字组成），默认是单向的队列，这里改为了一个双向队列</p>
-</li>
-<li><p>小总结</p>
-<ul>
-<li>  有阻塞就需要排队，实现排队必然需要队列</li>
-<li>  AQS = state 变量 + CLH队列变种的双向队列</li>
-</ul>
-</li>
-</ol>
-<h2 id="内部类Node"><a href="#内部类Node" class="headerlink" title="内部类Node"></a>内部类Node</h2><p><strong>AQS$Node 类源码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 共享</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node SHARED = <span class="keyword">new</span> Node();</span><br><span class="line">        <span class="comment">// 独占</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node EXCLUSIVE = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程被取消了</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED =  <span class="number">1</span>;</span><br><span class="line">       	<span class="comment">// 后继线程需要被唤醒</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIGNAL    = -<span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 等待 Condition 唤醒</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONDITION = -<span class="number">2</span>;</span><br><span class="line">        </span><br><span class="line">    	<span class="comment">// 共享式同步获取状态将会无条件的传播下去</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PROPAGATE = -<span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 初始值是0，状态是上面的几种</span></span><br><span class="line">        <span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 前置节点</span></span><br><span class="line">        <span class="keyword">volatile</span> Node prev;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 后继节点</span></span><br><span class="line">        <span class="keyword">volatile</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * The thread that enqueued this node.  Initialized on</span></span><br><span class="line"><span class="comment">         * construction and nulled out after use.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">volatile</span> Thread thread;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Link to next node waiting on condition, or the special</span></span><br><span class="line"><span class="comment">         * value SHARED.  Because condition queues are accessed only</span></span><br><span class="line"><span class="comment">         * when holding in exclusive mode, we just need a simple</span></span><br><span class="line"><span class="comment">         * linked queue to hold nodes while they are waiting on</span></span><br><span class="line"><span class="comment">         * conditions. They are then transferred to the queue to</span></span><br><span class="line"><span class="comment">         * re-acquire. And because conditions can only be exclusive,</span></span><br><span class="line"><span class="comment">         * we save a field by using special value to indicate shared</span></span><br><span class="line"><span class="comment">         * mode.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Node nextWaiter;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Returns true if node is waiting in shared mode.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">isShared</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> nextWaiter == SHARED;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * Returns previous node, or throws NullPointerException if null.</span></span><br><span class="line"><span class="comment">         * Use when predecessor cannot be null.  The null check could</span></span><br><span class="line"><span class="comment">         * be elided, but is present to help the VM.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span> the predecessor of this node</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">final</span> Node <span class="title">predecessor</span><span class="params">()</span> <span class="keyword">throws</span> NullPointerException </span>&#123;</span><br><span class="line">            Node p = prev;</span><br><span class="line">            <span class="keyword">if</span> (p == <span class="keyword">null</span>)</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node() &#123;    <span class="comment">// Used to establish initial head or SHARED marker</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node(Thread thread, Node mode) &#123;     <span class="comment">// Used by addWaiter</span></span><br><span class="line">            <span class="keyword">this</span>.nextWaiter = mode;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node(Thread thread, <span class="keyword">int</span> waitStatus) &#123; <span class="comment">// Used by Condition</span></span><br><span class="line">            <span class="keyword">this</span>.waitStatus = waitStatus;</span><br><span class="line">            <span class="keyword">this</span>.thread = thread;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>Node 类在 AQS 类的内部</p>
-<p><strong>Node 的 int 变量</strong></p>
-<p>Node 的等待状态 waitState 成员变量</p>
-<p>等待区的其它线程的等待状态。队列中每个排队的个体就是一个 Node</p>
-<h5 id="Node-类的讲解"><a href="#Node-类的讲解" class="headerlink" title="Node 类的讲解"></a>Node 类的讲解</h5><p>Node = waitStatus + 前后指针指向</p>
-<h1 id="从-ReentrantLock-开始解读-AQS"><a href="#从-ReentrantLock-开始解读-AQS" class="headerlink" title="从 ReentrantLock 开始解读 AQS"></a>从 ReentrantLock 开始解读 AQS</h1><p>Lock 接口的实现类，基本都是通过【聚合】了一个【队列同步器】的子类（sync ）完成线程访问控制的。</p>
-<p><img src="/2021/07/16/AQS/ReentrantLock.png" alt="ReentrantLock"></p>
-<p>ReentrantLock 类：</p>
-<ol>
-<li> 实现了 Lock 接口</li>
-<li>包含一个内部抽象类 Sync<ul>
-<li>  Sync 实现了 AbstractQueuedSynchronizer 接口</li>
-<li>  Sync 包含两个实现类 FairSync 和 NonfairSync </li>
-</ul>
-</li>
-</ol>
-<p>对比公平锁和非公平锁的 tryAcquire() 方法的实现代码，其实差别就在于非公平锁获取锁时比公平锁中少一个判断 hasQueuedPredecessors()。该方法中判断了是否需要排队，导致公平锁和非公平锁的差异如下：</p>
-<p>公平锁：公平锁讲究先来后到，线程在获取锁时，如果这个锁的等待队列中已经有线程在等待，那么当前线程就会进入到等待队列之中。</p>
-<p>非公平锁：不管是否有等待队列，如果可以获取锁，就马上占有锁对象。也就是说等待队列中的第一个线程在 unpark() 之后还是需要 竞争锁（存在线程竞争锁的情况）</p>
-<p>整个 ReentrantLock 加锁（非公平）的过程可以分为三个阶段：</p>
-<ol>
-<li> 尝试加锁</li>
-<li> 加锁失败，线程进入AQS队列</li>
-<li> 线程进入队列后，进入阻塞状态</li>
-</ol>
-<blockquote>
-<p>  lock()</p>
-<p>  acquire()</p>
-<p>  tryAcquire(arg)</p>
-<p>  addWaiter(Node.EXCLUSIVE)：将线程节点加入等待队列</p>
-<p>  acquireQueued(addWaiter(Node.EXCLUSIVE)， arg)</p>
-</blockquote>
-<p>acquire(1) 表示占用 1 个</p>
-<blockquote>
-<ol>
-<li> <strong>ReentrantLock 底层源码01</strong></li>
-</ol>
-</blockquote>
-<p><img src="/2021/07/16/AQS/ReentrantLock%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%8101.png" alt="ReentrantLock底层源码01"></p>
-<blockquote>
-<ol start="2">
-<li> <strong>公平锁和非公平锁的 tryAcquire() 方法</strong></li>
-</ol>
-</blockquote>
-<p><img src="/2021/07/16/AQS/fair_nonfair$tryAcquire.png" alt="fair_nonfair$tryAcquire"></p>
-<ul>
-<li>  hasQueuedPredecessors是公平锁加锁时判断等待队列中是否存在有效节点的方法</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用 reentrantLock.lock() 方法</span></span><br><span class="line">reentrantLock.lock();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 底层调用的是 sync.lock(); 方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    sync.lock();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// sync 是 AQS 的一个静态抽象子类，包含两个实现类 FairSync 和 NonfairSync。</span></span><br><span class="line"><span class="comment">// 在 sync 中，lock 方法被声明为一个抽象方法，具体的方法实现包含在子类 FairSync 和 NonfairSync 中，我们以 ReentrantLock 默认的非公平锁 NonfairSync 为例。NonfairSync#lock 方法为：</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>))	</span><br><span class="line">        setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        acquire(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 分支1：CAS 比较  state 的值是否为 0，如果为 0 则更新为 1，并设置锁的占用线程为当前线程。【锁对象空闲时】</span></span><br><span class="line"><span class="comment">// 分支2：在非公平锁中，即使发现锁对象被占用，也会调用 acquire(1) 方法尝试抢占锁。【锁对象已被占用】</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 接下来我们来看一下 acquire() 方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">acquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;	</span><br><span class="line">    <span class="keyword">if</span> (!tryAcquire(arg) &amp;&amp;	</span><br><span class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">        selfInterrupt();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// tryAcquire(1) 方法：返回 true 表示加锁成功，返回 false 表示加锁失败。如果加锁成功，取反后为 false ，则不执行 &amp;&amp; 后面的方法。如果加锁失败，取反后为 true，则还需判断 acquireQueued(addWaiter(Node.EXCLUSIVE), arg)) 方法的执行结果。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// addWaiter(Node.EXCLUSIVE) 方法</span></span><br><span class="line"><span class="comment">// acquireQueued(__, 1)) 方法</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>s</p>
-<p><strong>tryAcquire()</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tryAcquire() 方法是一个顶级方法，具体的实现在其实现类中，我们选择了 NonfairSync#tryAcquire 方法</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> arg)</span> </span>&#123;	 	<span class="comment">// tryAcquire(1)</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NonfairSync#tryAcquire</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;	<span class="comment">// tryAcquire(1)</span></span><br><span class="line">    <span class="keyword">return</span> nonfairTryAcquire(acquires);		<span class="comment">// nonfairTryAcquire(1)</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 返回 true 表示加锁成功，false 表示加锁失败</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Sync#nonfairTryAcquire()</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">nonfairTryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Thread current = Thread.currentThread();</span><br><span class="line">    <span class="keyword">int</span> c = getState();</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, acquires)) &#123;</span><br><span class="line">            setExclusiveOwnerThread(current);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">        <span class="keyword">int</span> nextc = c + acquires;</span><br><span class="line">        <span class="keyword">if</span> (nextc &lt; <span class="number">0</span>) <span class="comment">// overflow</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">&quot;Maximum lock count exceeded&quot;</span>);</span><br><span class="line">        setState(nextc);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 分支1：如果 state==0（代表当前锁无线程占用），就更新 state 为 1，并设置锁对象的占用线程为为当前线程，返回 true；</span></span><br><span class="line"><span class="comment">// 分支2：state!=0，但是当前线程与锁对象绑定的线程相同（可重入锁），就将 state 累加 1，返回 true；</span></span><br><span class="line"><span class="comment">// 分支3：state!=0 &amp;&amp; 加锁线程！=当前线程，则说明加锁失败，返回 false</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p><strong>addWaiter(Node.EXCLUSIVE)</strong>  加强</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、将线程封装成 node 节点</span></span><br><span class="line"><span class="comment">// 2、Node 的</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">addWaiter</span><span class="params">(Node mode)</span> </span>&#123;</span><br><span class="line">    Node node = <span class="keyword">new</span> Node(Thread.currentThread(), mode);</span><br><span class="line">    <span class="comment">// Try the fast path of enq; backup to full enq on failure</span></span><br><span class="line">    Node pred = tail;</span><br><span class="line">    <span class="keyword">if</span> (pred != <span class="keyword">null</span>) &#123;</span><br><span class="line">        node.prev = pred;</span><br><span class="line">        <span class="keyword">if</span> (compareAndSetTail(pred, node)) &#123;</span><br><span class="line">            pred.next = node;</span><br><span class="line">            <span class="keyword">return</span> node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    enq(node);</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/15/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -3011,450 +4178,6 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/10/CAS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/07/10/CAS/" class="post-title-link" itemprop="url">CAS</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-07-10 15:51:36" itemprop="dateCreated datePublished" datetime="2021-07-10T15:51:36+08:00">2021-07-10</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-11 18:08:36" itemprop="dateModified" datetime="2021-08-11T18:08:36+08:00">2021-08-11</time>
-      </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="1-乐观锁和悲观锁"><a href="#1-乐观锁和悲观锁" class="headerlink" title="1    乐观锁和悲观锁"></a>1    乐观锁和悲观锁</h1><p>锁可以从不同的⻆度分类。其中，乐观锁和悲观锁是⼀种分类⽅式。</p>
-<blockquote>
-<p>  悲观锁：</p>
-</blockquote>
-<p>悲观锁就是我们常说的锁。对于悲观锁来说，它总是认为每次访问共享资源时会发⽣冲突，所以必须对每次数据操作加上锁，以保证临界区中的代码同⼀时间只能有⼀个线程在执⾏。</p>
-<blockquote>
-<p>  乐观锁：</p>
-</blockquote>
-<ul>
-<li>  乐观锁⼜称为“⽆锁”，顾名思义，它是乐观派。乐观锁总是假设对共享资源的访问没有冲突，线程可以不停地执⾏，⽆需加锁也⽆需等待。⽽⼀旦多个线程发⽣冲突，<strong>乐观锁通常是使⽤⼀种称为 CAS 的技术来保证线程执⾏的安全性</strong>。</li>
-<li>  由于⽆锁操作中没有锁的存在，因此不可能出现死锁的情况，也就是说<strong>乐观锁天⽣免疫死锁</strong>。乐观锁多⽤于“读多写少“的环境，避免频繁加锁影响性能；⽽悲观锁多⽤于”写多读少“的环境，避免频繁失败和重试影响性能。</li>
-</ul>
-<hr>
-<h1 id="2-CAS"><a href="#2-CAS" class="headerlink" title="2    CAS"></a>2    CAS</h1><h2 id="为什么要有-CAS？"><a href="#为什么要有-CAS？" class="headerlink" title="为什么要有 CAS？"></a>为什么要有 CAS？</h2><p>CAS 是一种思想，可以保证在多线程环境下，不加锁就能保证共享数据的一致性。</p>
-<ul>
-<li>  在 JDK5 之前，Java 语言是靠 synchronized 关键字来保证同步的，也就是加锁。锁机制在同一时间段只允许一个线程来修改变量，一致性得到了保障，但并发性下降；</li>
-<li>  而 CAS 实现了在不加锁的情况下保证共享变量的一致性，并发性高。</li>
-</ul>
-<h2 id="CAS-是什么？"><a href="#CAS-是什么？" class="headerlink" title="CAS 是什么？"></a>CAS 是什么？</h2><blockquote>
-<p>  <strong>CAS；Compare And Swap；比较并交换</strong></p>
-</blockquote>
-<p>​    <strong>在线程从本地内存向主内存写回数据时，如果线程的期望值与主内存的真实值相等，则执行更新（交换）操作；如果线程的期望值与主内存的真实值不相等，不执行更新操作。</strong></p>
-<p>在 CAS 中，有这样三个值：</p>
-<blockquote>
-<ul>
-<li>  <strong>V：要更新的变量(var)</strong></li>
-<li>  <strong>E：期望值(expected)</strong></li>
-<li>  <strong>N：新值(new)</strong></li>
-</ul>
-</blockquote>
-<p>⽐较并交换的过程如下：</p>
-<ul>
-<li>  判断 V 是否等于 E，如果等于，将 V 的值设置为 N；如果不等，说明已经有其它线程更新了 V，则当前线程放弃更新，什么都不做。所以这⾥的预期值 E 本质上指的是“旧值”。</li>
-</ul>
-<h2 id="详细描述"><a href="#详细描述" class="headerlink" title="详细描述"></a>详细描述</h2><ul>
-<li>  CAS 不是真正的加锁，也就是说允许多个线程同时访问一个变量。在 JMM 内存模型中我们已经了解到，线程在工作时不会直接操作主内存中的数据，而是会将主内存中的数据拷贝回线程本地内存中进行操作，操作完成之后再将数据写回主内存中。</li>
-<li>  但是在多线程环境下，这一过程是不满足原子性的。根据 JMM 模型，每个线程操作主内存中的变量都需要经历 <code>从主内存中复制到本地内存 --&gt;&gt; 本地内存中对变量进行运算 --&gt;&gt; 将运算结果写回主内存中</code> 三个步骤。原子性就是这三个步骤<strong>读、更新、写回</strong>是一体的、不可分割的，要么全部执行成功，要么全部执行失败。如果原子性不能得到保证，在多个线程同时操作一份本地变量 X 时，就会出现 T1 线程在经过<code>读、更新</code>后被挂起，然后 T2 线程完整的执行了 <code>读、更新、写回</code> 三个步骤，修改了主内存中的变量 X 为 Y。这时候 T1 线程继续执行，这时候写回主内存的数据是错误的，因为它没有基于主内存中最新的值来进行计算。</li>
-<li>  CAS 的思想就是要求每个线程在拷贝主内存中的数据时在本地内存中保存一份主内存数据的快照，在本地内存中执行完运算任务要写回主内存时，首先会拿着这个快照与当前时刻主内存中数据进行对比，如果快照数据与主内存当前数据一致，则校验成功，再将线程本地内存中的数据写回主内存中；反之，如果校验失败，则不会将本地内存数据写回主内存。而是让线程重新获取主内存中的最新数据，重新运算，重新判断是否可以写回主内存中，直到 CAS 校验成功，将本地内存数据写回主内存中为止。</li>
-</ul>
-<blockquote>
-<ul>
-<li>  线程的期望值</li>
-<li>  主内存中的真实值</li>
-</ul>
-</blockquote>
-<ul>
-<li>  在 CAS 的具体操作中，我们习惯将快照值称为<strong>线程的期望值</strong>，因为多线程中每个线程肯定期望自己在本地内存中运算的这段时间内没有其它线程去更新主内存中的值，这样就不会产生线程不一致。</li>
-<li>  但实际上在多线程环境下，由于多个线程操作同一变量，且每个线程执行的时间长短不一致，时间较短的线程肯定会先于时间较长的线程修改主内存中的共享变量，当长时间的线程执行完线程任务准备将更新后的数据写回主内存中时，这一时刻主内存中的共享变量可能发生了改变，也可能没发生改变，<strong>这个值就叫做主内存中的真实值</strong>。</li>
-<li>  CAS 就是当主内存中的真实值和线程的期望值相同时，才执行交换（即将线程本地内存中值写回主内存）动作；如果真实值和期望值不相同，则拒绝执行交换操作。</li>
-<li>  这优点类似于 Git 或 Svn 中代码的提交，多个人协同办公就相当于多线程，假设最初的时候每个人都拿到了 1.0 版本的代码，之后在这个版本上进行迭代更新，小A每工作一小时就提交一次代码，而小B则是每天下班之前才提交一次代码。当第一天工作结束后，小B直接提交代码时就会报错，因为他没有兼容最新版的代码，只有在拉取最新的代码、并检查与自己的代码无冲突时，它才可以进行提交。</li>
-</ul>
-<hr>
-<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CASTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        AtomicInteger atomicInteger = <span class="keyword">new</span> AtomicInteger(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> b = atomicInteger.compareAndSet(<span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line">        System.out.println(b + <span class="string">&quot;，主内存中的值为：&quot;</span> + atomicInteger.get());</span><br><span class="line">        System.out.println(atomicInteger.compareAndSet(<span class="number">3</span>, <span class="number">7</span>) + <span class="string">&quot;，主内存中的值为：&quot;</span> + atomicInteger.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	输出结果：</span></span><br><span class="line"><span class="comment">		true，主内存中的值为：4</span></span><br><span class="line"><span class="comment">		false，主内存中的值为：4</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    而在下一行代码期望值还为<span class="number">3</span>，但是此时主内存中 atomicInteger的值已经变成了<span class="number">4</span>，所以比较条件不能满足，修改失败</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>  <strong>代码分析</strong></p>
-</blockquote>
-<ol>
-<li> 首先创建了一个 AtomicInteger 对象，该对象保存在主内存中（堆中）。</li>
-<li> 因为 main 线程要操作这个对象，所以先将主内存中的 <code>atomicInteger == 3</code> 拷贝到本地内存中操作，并记录一个快照值。</li>
-<li>  main 线程调用 <code>compareAndSet</code> 方法，在本地内存中更新 <code>atomicInteger == 4</code>；，并打算将更新后的值写回主内存中。</li>
-<li> 在将本地内存写回主内存时，要先进行 CAS 校验，由于当前程序是一个单线程应用，没有其它线程更改主内存中的共享变量，所以此时主内存中的共享变量值也为 3，与快照值相等，所以校验成功，并更新主内存中的值。</li>
-<li> 由于上一步满足了期望值，更新成功了，所以主内存中的共享变量变成了 <code>atomicInteger == 4</code>。</li>
-<li> 此时 main 线程再次将主内存中的 <code>atomicInteger == 4</code> 拷贝到本地内存中，并记录快照值。</li>
-<li> 之后在本地内存中更新 <code>atomicInteger == 7</code> 并要将该值写回主内存中，在 CAS 校验中，由于这时候我们手动设置了 main 线程的期望值是 <code>atomicInteger == 3</code> ，而此时 mian 线程的真实值是 <code>atomicInteger == 4</code>，所以校验失败，不会将 <code>atomicInteger == 7</code> 写回主内存中。</li>
-</ol>
-<h2 id="AtomicInteger-compareAndSet-源码"><a href="#AtomicInteger-compareAndSet-源码" class="headerlink" title="AtomicInteger#compareAndSet 源码"></a><strong>AtomicInteger#compareAndSet 源码</strong></h2><p><img src="/2021/07/10/CAS/image-20210710163343519.png" alt="image-20210710163343519"></p>
-<blockquote>
-<p>  <strong>compareAndSet()：</strong></p>
-</blockquote>
-<p><strong>比较并设置</strong>，该方法用于将线程本地内存中的值写回主内存时进行 CAS 校验，返回值为 boolean 类型。</p>
-<ul>
-<li>  <strong>expect</strong> 是每个线程的期望值。每个线程都期望在自己进下本地运算的时间中没有其它线程修改过主内存中的值，这样可以保证变量的一致性，所以这个值一般都是线程创建时从主内存拷贝过来的那个值。当然这个值也可以自定义，只是用得比较少。</li>
-<li>  <strong>update</strong> 是线程在本地内存中进行运算后要写回主内存中的值。</li>
-</ul>
-<p>只有该方法的返回结果为真，才能将本地内存中的值写回主内存中；如果判断结果为假，则不能将本地内存中的值写回主内存中。</p>
-<hr>
-<h1 id="3-CAS-底层原理"><a href="#3-CAS-底层原理" class="headerlink" title="3    CAS 底层原理"></a>3    CAS 底层原理</h1><blockquote>
-<p>  <strong>CAS 底层原理：自旋锁 + UnSafe类</strong></p>
-</blockquote>
-<h2 id="CAS-保证原子性"><a href="#CAS-保证原子性" class="headerlink" title="CAS 保证原子性"></a>CAS 保证原子性</h2><ol>
-<li>如果有⼀个多个线程共享的变量 i 原本等于5，我现在在线程 A 中，想把它设置为新的值6；</li>
-<li>我们使⽤ CAS 来做这个事情；</li>
-<li>⾸先我们⽤ i 去与 5 对⽐，发现它等于 5 ，说明没有被其它线程改过，那我就把它设置为新的值6，此次CAS成功，i 的值被设置成了6；</li>
-<li>如果不等于5，说明 i 被其它线程改过了（⽐如现在 i 的值为2），那么我就什么也不做，此次 CAS 失败，i 的值仍然为 2。</li>
-</ol>
-<p>在这个例⼦中， i 就是 V，5 就是 E，6 就是 N。那有没有可能我在判断了 i 为 5 之后，正准备更新它的新值的时候，被其它线程更改了 i 的值呢？</p>
-<ul>
-<li>  这是不会发生的，因为 CAS 是⼀种原⼦操作，它是⼀种系统原语，是⼀条 CPU 的原⼦指令，从CPU层⾯保证它的原⼦性。</li>
-<li>  当多个线程同时使⽤ CAS 操作⼀个变量时，只有⼀个会胜出，并成功更新，其余均会失败，但失败的线程并不会被挂起，仅是被告知失败，并且允许再次尝试，当然也允许失败的线程放弃操作。</li>
-</ul>
-<hr>
-<h2 id="AtomicInteger-类"><a href="#AtomicInteger-类" class="headerlink" title="AtomicInteger 类"></a>AtomicInteger 类</h2><blockquote>
-<p>  <strong>问题：AtomicInteger 凭什么能在多线程环境下保证变量的原子性?</strong></p>
-</blockquote>
-<p><img src="/2021/07/10/CAS/image-20210711174059615.png" alt="image-20210711174059615"></p>
-<ol>
-<li><p> <strong>AtomicInteger 是一个 Integer 类型的包装类，构造方法中接收 initialValue 值后用 volatile 修饰该值，保证了多线程操作时改变量在线程间的可见性。</strong></p>
-</li>
-<li><p><strong>valueOffset</strong> 表示当前对象中 value 值的内存偏移量，通过 <strong>unsafe.objectFieldOffset</strong> 方法获取，该方法是一个本地方法，底层是用 C++ 写的。</p>
-<p> <img src="/2021/07/10/CAS/image-20210711174640841.png" alt="image-20210711174640841"></p>
-</li>
-</ol>
-<hr>
-<h2 id="Usafe-类"><a href="#Usafe-类" class="headerlink" title="Usafe 类"></a>Usafe 类</h2><ul>
-<li>  CAS是⼀种原⼦操作，它是⼀种系统原语，从 CPU 层⾯保证操作的原⼦性，而 Java 语言是无法直接访问底层操作系统的，需要通过本地（Native）方法来访问。那么 Java 是怎样使用 CAS 的呢？</li>
-<li>  在 Java 中，CAS 操作的执行依赖于 Unsafe 类中的方法。Unsafe 类中大多数的方法都是 native 修饰的，可以直接调用操作系统的底层资源执行相应的任务。</li>
-<li>  <strong>sun.misc.Unsafe</strong> 类是 CAS 的核心类，该类中含有大量的本地方法，由 C++ 实现，可以直接从操作系统层面操作指定内存位置的数据。</li>
-<li>  <strong>Unsafe 类中的本地方法都具有原子性，因为其底层是采用 CAS 并发原语实现的</strong>。</li>
-</ul>
-<blockquote>
-<p>  <strong>Unsafe类中关于 CAS 的部分方法：</strong></p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapObject</span><span class="params">(Object o, <span class="keyword">long</span> offset,Object expected, Object x)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapInt</span><span class="params">(Object o, <span class="keyword">long</span> offset,<span class="keyword">int</span> expected,<span class="keyword">int</span> x)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">boolean</span> <span class="title">compareAndSwapLong</span><span class="params">(Object o, <span class="keyword">long</span> offset,<span class="keyword">long</span> expected,<span class="keyword">long</span> x)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>  <strong>其它</strong></p>
-</blockquote>
-<ul>
-<li>  当然，Unsafe 类⾥⾯还有其它⽅法⽤于不同的⽤途。⽐如⽀持线程挂起和恢复的 park 和 unpark ， LockSupport类底层就是调⽤了这两个⽅法。</li>
-<li>  还有⽀持反射操作的 allocateInstance() ⽅法。</li>
-</ul>
-<hr>
-<h2 id="CAS-并发原语"><a href="#CAS-并发原语" class="headerlink" title="CAS 并发原语"></a>CAS 并发原语</h2><blockquote>
-<ul>
-<li>  <strong>原语</strong>是由若干条指令组成的、用于完成某个功能的一组指令集，这组指令集的执行顺序是确定的，且在执行过程中不允许被中断，具有原子性。可以直接将原语视为一条大的、执行时间较长的指令。</li>
-<li>  <strong>系统原语</strong>就是操作系统把一些常用的原语直接实现在硬件上，以便遇到时方便调用。</li>
-</ul>
-</blockquote>
-<ul>
-<li>  CAS（Compare-And-Swap）是一条 <strong>CPU 并发原语</strong>。它的功能是判断内存中某个位置的值是否为预期值，如果是则更改为新的值，这个过程是原子的。</li>
-<li>  CAS 并发原语在 Java 中的体现就是 <code>sun.misc.Unsafe</code> 类中的各个本地方法都具有原子性。调用 Unsafe 类的中的本地方法（CAS 方法），JVM 会帮我们实现出 CAS 汇编指令。<strong>CAS 原语能保证原子性则完全依赖于硬件的功能</strong>。再次强调，由于 CAS 是一种系统原语，具有原子性，所以不会造成多线程下数据不一致的问题。</li>
-</ul>
-<hr>
-<h2 id="原⼦操作-AtomicInteger类源码简析"><a href="#原⼦操作-AtomicInteger类源码简析" class="headerlink" title="原⼦操作-AtomicInteger类源码简析"></a>原⼦操作-AtomicInteger类源码简析</h2><p>上⾯介绍了 Unsafe 类的⼏个⽀持 CAS 的⽅法。那 Java 具体是如何使⽤这⼏个⽅法来实现原⼦操作的呢？</p>
-<p>JDK提供了⼀些⽤于原⼦操作的类，在 java.util.concurrent.atomic 包下⾯。在 JDK8 中，有如下16 个类：</p>
-<p><img src="/2021/07/10/CAS/image-20210811165621045.png" alt="image-20210811165621045"></p>
-<p>从名字就可以看得出来这些类⼤概的⽤途：</p>
-<ul>
-<li>  原⼦更新基本类型</li>
-<li>  原⼦更新数组</li>
-<li>  原⼦更新引⽤</li>
-<li>  原⼦更新字段（属性）</li>
-</ul>
-<p>这⾥我们以 AtomicInteger 类的 getAndIncrement() ⽅法为例，来看看Java是如何实现原⼦操作的。</p>
-<hr>
-<h2 id="atomicInteger-getAndIncrement源码"><a href="#atomicInteger-getAndIncrement源码" class="headerlink" title="atomicInteger#getAndIncrement源码"></a>atomicInteger#getAndIncrement源码</h2><ul>
-<li>  在单线程环境下，<code>getAndIncrement()</code> 与 <code>i++</code> 的作用是相同的，但是由于 <code>i++</code> 不能保证原子性，在多线程环境下继续使用 <code>i++</code> 存在线程安全问题。</li>
-<li>  而 <code>atomicInteger#getAndIncrement()</code> 可以实现多线程环境下，不用加锁就可以保证线程的原子性，这里用到了 CAS 的思想，具体的底层源码如下：</li>
-</ul>
-<p><img src="/2021/07/10/CAS/CAS.png" alt="CAS"></p>
-<ol>
-<li><p> <code>new AtomicInteger(100)</code> 这句代码会在主内存中创建出一个 volatile 修饰的整型变量 <code>volatile int value = 100</code></p>
-</li>
-<li><p> 由于此时还运行着一个 main 线程，所以 mian 线程会将主内存中的数据拷贝一份到自己的工作内存中。</p>
-</li>
-<li><p>继续调用 <code>atomicInteger.getAndIncrement()</code> 方法，底层调用的是 <code>unsafe.getAndAddInt(this, valueOffset, 1)</code> 方法。</p>
-<ul>
-<li><p>  <code>this</code> 代表当前对象的引用，即当前对象在内存中的地址；</p>
-</li>
-<li><p><code>valueOffset</code> 代表当前（atomicInteger）对象中 <code>value</code> 变量的内存偏移量。该偏移量通过 <code>Unsafe</code> 类中的一个本地方法获得。</p>
-<p>  通过 <strong>this + valueOffSet</strong>（对象地址 + 对象中 value 变量的偏移地址）的组合可以在内存中唯一确定一个变量的地址。</p>
-</li>
-</ul>
-</li>
-<li><p>继续向下调用 <strong>Unsafe#getAndAddInt</strong> 方法，该方法接收三个参数：①当前对象的内存地址（var1）；②当前对象中 value 变量的内存偏移量（var2）；③value 将要增加的值（var4）。</p>
-<ul>
-<li>  <code>var5 = this.getIntVolatile(var1, var2);</code> 是 Unsafe 类中的一个本地方法（具有原子性），作用是通过当前对象的内存地址和对象中 <code>value</code> 变量的偏移量确定唯一的 <code>value</code> 值并使用 <code>var5</code> 保存，所以此时 <code>var5</code> 的值是一个期望值。</li>
-<li>  <code>this.compareAndSwapInt(var1, var2, var5, var5 + var4)</code> 是 Unsafe 类中的另一个本地方法（具有原子性）。</li>
-<li>  上图中黄色字体前后都是 Unsafe 类中的本地方法，编译成的原语具有原子性，所以在这两个方法中不会发生线程切换的情况。而在这两个方法执行的间隙则是可能会发生线程切换的，假设此时发生了线程切换，由另一个线程执行了 3s 再切回来。 </li>
-<li>接下来要执行 <strong>compareAndSwapInt</strong> 方法了，该方法执行过程中不能被其它线程打断，<ul>
-<li>  该方法首先根据 <strong>var1 + var2</strong> 得到主内存中当前时刻 <code>value</code> 的值；</li>
-<li>   <strong>var5</strong> 是线程的本地内存在创建快照的时刻主内存中 value 的值，即期望值。</li>
-<li>  比较这两个值是否相等，若相等，则执行 <code>var5 + var4</code> 操作，方法返回值为 true，取反之后是 false，退出循环，将更新后的值 var5 写回主内存。（由于该方法对标的是 <code>i++</code>，所以返回的是 <code>i</code> 而不是加一后的 i）</li>
-<li>  若不相等，方法返回值为 false，取反之后为 true，则循环继续执行。重新从 <code>var1 + var2</code> 指向的地址获取主内存中最新的 value 值，重新记录快照值，重新计算，重新判断，直到方法执行结束。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p>  <strong>注意</strong></p>
-</blockquote>
-<ul>
-<li><p>  由于 <code>getIntVolatile</code> 和 <code>compareAndSwapInt</code> 都是 Unsafe 类的本地方法，都使用了原语，所以都具有原子性，但是在这两个方法之间的时刻，可能会 CPU 资源会被其它线程占用。</p>
-</li>
-<li><p>假设线程 A 和线程 B 同时执行 <code>getAndAddInt</code> 操作</p>
-<ol>
-<li> AtomicInteger 里面的 value 原始值为3。即主内存中的 AtomicInteger 的 value 为 3，根据 JMM 模型，线程 A 和线程 B 各自持有一份值为 3 的 value 的副本拷贝到各自的工作内存中；</li>
-<li> 线程 A 通过 <code>getIntVolatile(var1, var2)</code> 拿到 value 的值 3，然后线程A被挂起；</li>
-<li> 线程 B 也通过 <code>getIntVolatile(var1, var2)</code> 拿到 value 的值3，但是线程B没有被挂起，继续执行 <code>compareAndSwapInt</code> 方法比较内存值也为 3，成功修改主内存中的值为 4，线程 B 执行结束。</li>
-<li> 这时线程 A 恢复，执行 <code>compareAndSwapInt</code> 方法比较，发现自己手里的值 3 和主内存中的值 4 不一致（因为变量 value 被 volatile 修饰，所以其它线程对它的修改，线程 A 总是能够看到），说明该值已经被其它线程抢先一步修改过了，那 A 线程本次修改失败，只能再重新从主内存中读取最新的值重新计算一遍了.</li>
-<li> 线程 A 重新获取 value 值，线程A继续执行 <code>compareAndSwapInt</code> 进行比较替换，直到成功。</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>  <strong>一句话总结</strong></p>
-</blockquote>
-<ul>
-<li>  <strong>atomicInteger#getAndIncrement</strong> 方法就是 20000 个线程执行 num++，但是每次执行完要写会主内存时要先经过 CAS 校验，校验成功了就写回去，校验不成功则重写读取主内存中的值，重新执行 num++，重写写回主内存，反复执行，直到成功为止。</li>
-</ul>
-<hr>
-<h1 id="4-CAS-缺点"><a href="#4-CAS-缺点" class="headerlink" title="4    CAS 缺点"></a>4    CAS 缺点</h1><blockquote>
-<ol>
-<li> <strong>循环时间长开销大</strong></li>
-</ol>
-</blockquote>
-<p>​    如果 CAS 失败（数据从线程本地内存写回主内存时一直校验不成功），就会一直进行尝试（自旋）。如果 CAS 长时间一直不成功，可能会给 CPU 带来很大的开销。</p>
-<blockquote>
-<ol start="2">
-<li> <strong>只能保证一个共享变量的原子操作</strong>（源码中就只有一个）</li>
-</ol>
-</blockquote>
-<p>​    当对一个共享变量执行操作时，可以使用 CAS 循环的方式来保证变量的原子性。但是，对于多个共享变量进行操作时，CAS 循环就无法保证操作的原子性，这个时候只能用锁来保证原子性。</p>
-<blockquote>
-<ol start="3">
-<li> <strong>CAS 会导致 ABA 问题</strong></li>
-</ol>
-</blockquote>
-<p>​    CAS 算法只关注头和尾，只要头和尾是正确就判断为真，但是中间数据可能被改过多次。正是因为这样，才会出现由于时间差引起的 ABA 问题。</p>
-<hr>
-<h1 id="5-ABA-问题"><a href="#5-ABA-问题" class="headerlink" title="5    ABA 问题"></a>5    ABA 问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">AtomicInteger&#x2F;乐观锁</span><br><span class="line">--&gt; CAS</span><br><span class="line">--&gt; UnSafe</span><br><span class="line">--&gt; CAS原语 </span><br><span class="line">--&gt; CAS缺点</span><br><span class="line">--&gt; ABA问题 </span><br><span class="line">--&gt; 原子引用更新 </span><br><span class="line">--&gt; 如何规避ABA问题</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="5-1-是什么？"><a href="#5-1-是什么？" class="headerlink" title="5.1    是什么？"></a>5.1    是什么？</h2><p>“狸猫换太子”</p>
-<blockquote>
-<p>  <strong>ABA 问题是什么？</strong></p>
-</blockquote>
-<ul>
-<li>  ABA 问题是 CAS 算法的遗留问题。</li>
-<li>  CAS 算法的一个重要前提是需要取出主内存中某时刻的数据并在当前时刻<strong>比较并替换</strong>，由于当前时刻与某一时刻存在时间差，这个时间差就会导致数据的变化。</li>
-<li>  比如说一个线程 T1 从主内存位置 V 取出 A，这时候另一个线程 T2 也从主内存中取出 A，并且线程 T2 进行了一些操作将值变成了 B，然后线程 T2 又将 V 位置的数据变成 A，这时候线程 T1 再进行 CAS 操作时发现内存中仍然是 A，然后线程 T1 操作成功。<strong>尽管线程 T1 的 CAS 操作成功，但不代表这个过程是没有问题的。</strong></li>
-</ul>
-<hr>
-<h2 id="5-2-代码验证-ABA-的存在性"><a href="#5-2-代码验证-ABA-的存在性" class="headerlink" title="5.2    代码验证 ABA 的存在性"></a>5.2    代码验证 ABA 的存在性</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ABAExist</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> AtomicReference&lt;Integer&gt; atomicReference = <span class="keyword">new</span> AtomicReference&lt;&gt;(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace();&#125;</span><br><span class="line">            <span class="comment">// T1 线程进行一次 ABA 操作（主内存中：100 -&gt; 101 -&gt; 100）</span></span><br><span class="line">            atomicReference.compareAndSet(<span class="number">100</span>, <span class="number">101</span>);</span><br><span class="line">            atomicReference.compareAndSet(<span class="number">101</span>, <span class="number">100</span>);</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="comment">// 保证 T2 线程执行之前，T1 线程已经完成了一次 ABA 操作</span></span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">3000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace();&#125;</span><br><span class="line">            <span class="keyword">boolean</span> b = atomicReference.compareAndSet(<span class="number">100</span>, <span class="number">999</span>);</span><br><span class="line">            System.out.println(b + <span class="string">&quot;\t&quot;</span> + atomicReference.get());</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>  <strong>代码分析</strong></p>
-</blockquote>
-<p><img src="/2021/07/10/CAS/ABA%E5%AD%98%E5%9C%A8.png" alt="ABA存在"></p>
-<ol>
-<li><p> main 线程开始执行</p>
-</li>
-<li><p> 创建 T1 线程，复制主内存中变量 100 到 T1 本地内存空间中，然后让 T1 线程休眠 1s；</p>
-</li>
-<li><p>在 T1 休眠的时间内，创建 T2 线程，复制主内存中变量 100 到 T2 本地内存空间中，然后让 T2 线程休眠 3s；</p>
-<p> （注意：此时 T1 和 T2 本地内存中变量 100 的副本都是粉色变量的副本）</p>
-</li>
-<li><p> T1 在 1s 后醒来，这时 T2 还需睡眠 2s，在这段时间内，T1 在本地内存中将 <code>100-&gt;101</code>，并写回主内存；然后又将 101 读到本地内存中，修改 <code>101-&gt;100</code>，再次写回主内存。此时主内存中的值为黄色的 100。</p>
-</li>
-<li><p> 之后 T2 线程终于睡醒了，将粉色100 修改为 999，然后准备写回主内存中，在进行 CAS 比较时，发现主内存中的值也为 100，与自己的期望值吻合，T2 就高高兴兴地将主内存中的 100 修改为 999 了。</p>
-</li>
-<li><p> 但是我们会发现，T2 的期望值是粉色的 100，而主内存中的实际值是黄色的 100，虽然这二者的值是一样的，但它们并不是同一个对象。这其实是有问题的，也就是我们常说的 “<strong>ABA 问题</strong>“</p>
-</li>
-</ol>
-<hr>
-<h2 id="5-3-如何解决-ABA-问题？"><a href="#5-3-如何解决-ABA-问题？" class="headerlink" title="5.3    如何解决 ABA 问题？"></a>5.3    如何解决 ABA 问题？</h2><blockquote>
-<p>  <strong>时间戳的原子引用</strong></p>
-</blockquote>
-<ul>
-<li>  CAS 算法中，每次线程从本地内存将数据写回主内存中时，只比较线程的期望值与主内存中的当前值是否相同，而不关心主内存中的当前值是否与线程的期望值是不是同一个值，所以会存在 ABA 问题。</li>
-<li>  但是如果我们给每个值都加一个版本号，<strong>在线程从本地内存将数据写回主内存时除了比较数据值还要额外增加版本号的比较</strong>，就可以解决 ABA 问题了。</li>
-</ul>
-<p>我们来看一个简单的加了时间戳原子引用的例子：</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">0s</th>
-<th align="center">2s~4s</th>
-<th align="center"></th>
-<th align="center">4s~6s</th>
-<th align="center"></th>
-<th align="center"></th>
-<th align="center">10s</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">T1</td>
-<td align="center"><code>100（1）</code></td>
-<td align="center"><code>100（1） -&gt; 101（2）</code></td>
-<td align="center"><code>101（2）</code></td>
-<td align="center"><code>101（2）-&gt;100（3）</code></td>
-<td align="center"><code>100（3）</code></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr>
-<td align="center">T2</td>
-<td align="center"><code>100（1）</code></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"></td>
-<td align="center"><code>100（1） -&gt; 990（2）</code></td>
-<td align="center"><code>100(1)？100（3）</code></td>
-</tr>
-</tbody></table>
-<ol>
-<li> 线程 T1、T2 并发执行，都得到了主内存中变量 100（1） 的副本拷贝，并且在拷贝数据时同时将版本号也拷贝到本地内存中。</li>
-<li>由于 T2 执行时间较长（假设为 10s），T1 执行时间较短（假设每次为 2s），在 T1 执行的时间段内，T2 已经完成了：<ul>
-<li>  将 100（1）修改为101（2），更新版本号，写回主内存中；</li>
-<li>  再从主内存中将 101（2）读取到本地内存中；</li>
-<li>  将 101（2）修改为 100（3），更新版本号，写回主内存中。</li>
-</ul>
-</li>
-<li> 又过了 2s ，T2 线程终于执行完毕了，将100（1）更新为  999（2），准备将 999（2）写回主内存中。由于当前数据是加了时间戳原子引用，所以写回主内存前需要经过 CAS 验证（包含时间戳的 CAS 验证），即比较 100（1）和 100（3），发现这时候虽然这两个变量值相等，但是版本号却不同，也即期望版本号与主内存中当前数据的版本号不同，所以验证不能通过，即写回主内存的操作失败，这个线程只能再重新读取主内存中的最新值重新在本地内存中计算了。这就可以很好的解决 ABA 问题。</li>
-</ol>
-<hr>
-<h2 id="5-4-ABA-问题解决方法（代码）"><a href="#5-4-ABA-问题解决方法（代码）" class="headerlink" title="5.4    ABA 问题解决方法（代码）"></a>5.4    ABA 问题解决方法（代码）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ABAResolve</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> AtomicStampedReference&lt;Integer&gt; atomicStampedInteger = <span class="keyword">new</span> AtomicStampedReference&lt;Integer&gt;(<span class="number">100</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程T1</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">1000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第1次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">            <span class="keyword">boolean</span> b1 = atomicStampedInteger.compareAndSet(<span class="number">100</span>, <span class="number">101</span>, atomicStampedInteger.getStamp(), atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第2次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">            <span class="keyword">boolean</span> b2 = atomicStampedInteger.compareAndSet(<span class="number">101</span>, <span class="number">100</span>, atomicStampedInteger.getStamp(), atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;线程T1第3次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">        &#125;, <span class="string">&quot;T1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// main线程睡眠 100ms</span></span><br><span class="line">        <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">100</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 线程T2</span></span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">            <span class="keyword">int</span> stamp = atomicStampedInteger.getStamp();</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2第1次从主内存中获取到的版本号========= &quot;</span> + stamp);</span><br><span class="line">            <span class="keyword">try</span> &#123; Thread.sleep(<span class="number">5000</span>); &#125; <span class="keyword">catch</span> (InterruptedException e) &#123; e.printStackTrace(); &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">boolean</span> result = atomicStampedInteger.compareAndSet(<span class="number">100</span>, <span class="number">999</span>, stamp, atomicStampedInteger.getStamp() + <span class="number">1</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2修改结果========= &quot;</span> + (result?<span class="string">&quot;成功&quot;</span>:<span class="string">&quot;失败&quot;</span>));</span><br><span class="line">            System.out.println(<span class="string">&quot;线程T2第2次从主内存中获取到的版本号========= &quot;</span> + atomicStampedInteger.getStamp());</span><br><span class="line">        &#125;, <span class="string">&quot;T2&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        线程T2第1次从主内存中获取到的版本号========= 1</span></span><br><span class="line"><span class="comment">        线程T1第1次从主内存中获取到的版本号========= 1</span></span><br><span class="line"><span class="comment">        线程T1第2次从主内存中获取到的版本号========= 2</span></span><br><span class="line"><span class="comment">        线程T1第3次从主内存中获取到的版本号========= 3</span></span><br><span class="line"><span class="comment">        线程T2修改结果========= 失败</span></span><br><span class="line"><span class="comment">        线程T2第3次从主内存中获取到的版本号========= 3</span></span><br><span class="line"><span class="comment">    * */</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>代码分析：</strong></p>
-<ol>
-<li> 类加载阶段就创建一个<strong>加了时间戳的原子引用对象 atomicStampedInteger</strong>，初始值为 100，初始版本号为 1。</li>
-<li> mian 线程开始执行，保证先创建线程 T1，T1 在复制主内存中的共享变量 100（1）到本地内存中后挂起 1s；</li>
-<li> 在 T1 挂起的时间段内，T2 线程也复制主内存中的变量 100（1）到本地工作内存中，并挂起 5s。</li>
-<li>由于 T2 的休眠时间比较长，这段时间足够 T1 完成线程中的所有工作任务了：<ul>
-<li>  T1 线程首先经过 CAS 验证（值验证 + 版本号），将 101（1）写回到主内存中；</li>
-<li>  T1 再将主内存中的 101（1）拉取到本地内存中，</li>
-<li>  T1 线程又一次经过 CAS 验证（值验证 + 版本号），将 101（3）写回到主内存中；</li>
-<li>  此时，主内存中保存的值和版本号就是 100（3）了。</li>
-</ul>
-</li>
-<li> 在 T1 线程全部执行完毕后，T2 线程睡醒，将 100（1）改为 999（2），并准备写回到主内存中，在进行 CAS + ABA 校验时，CAS 校验时可以通过的，因为值相等，但 ABA 校验不能通过，因为版本号不一致，T2 线程中版本号为（1），而主内存中版本号则是（3），也就是线程 T2 的期望版本号与主内存中的实际版本号不同，所以导致修改失败。</li>
-</ol>
-<hr>
-<h3 id="5-5-AtomicStampedReference-compareAndSet-源码分析"><a href="#5-5-AtomicStampedReference-compareAndSet-源码分析" class="headerlink" title="5.5    AtomicStampedReference#compareAndSet 源码分析"></a>5.5    AtomicStampedReference#compareAndSet 源码分析</h3><p><img src="/2021/07/10/CAS/image-20210711132742276.png" alt="image-20210711132742276"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* <span class="meta">@param</span> expectedReference 	某个线程期望的主内存中的对象值（对象引用）</span><br><span class="line">* <span class="meta">@param</span> newReference 			要写回主内存中的更新后的对象值（对象引用）</span><br><span class="line">* <span class="meta">@param</span> expectedStamp 		某个线程期望的主内存中对象值的版本号</span><br><span class="line">* <span class="meta">@param</span> newStamp 				要写回主内存中的更新后的版本号</span><br><span class="line">* <span class="meta">@return</span> &#123;<span class="meta">@code</span> <span class="keyword">true</span>&#125; <span class="keyword">if</span> successful	是否可以将更新内容写回主内存中</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>  可以看到，<strong>只有当期望值和期望版本号都与主内存中当前值和当前版本号吻合的时候，才可以将修改值和修改版本号写回主内存中</strong>。</li>
-</ul>
-<hr>
-<h1 id="6-原子引用"><a href="#6-原子引用" class="headerlink" title="6    原子引用"></a>6    原子引用</h1><ul>
-<li>  <strong>原子引用可以让任何一个对象变成具有原子性的对象。</strong></li>
-<li>  <strong>原子性是在多线程环境下才需要研究的，单线程环境不会出现原子性的问题。</strong></li>
-</ul>
-<h2 id="6-1-AtomicReference"><a href="#6-1-AtomicReference" class="headerlink" title="6.1    AtomicReference"></a>6.1    AtomicReference</h2><p>​        在 JUC<code>（java.util.concurrent.atomic）</code> 包中，提供了 AtomicBoolean、AtomicInteger、AtomicLong 等具有原子性的基本数据类型和常见的引用变量类型。</p>
-<p>​        但是对于一些开发人员自定义类型的对象，比如，想让一个自定义的 User、Employee 对象具有原子性应该怎么办？我们可以通过 <strong><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicReference.html">AtomicReference</a></strong> 实现。</p>
-<p>​        如图所示，创建 <code>AtomicReference&lt;V&gt;</code> 对象时可以指定一个任意类型的泛型，如果你想让 User 对象具有原子性就指定泛型为 User 类型，如果想让 Student 对象具有原子性就指定泛型为 Student 类型。</p>
-<p><img src="/2021/07/10/CAS/image-20210710211109304.png" alt="image-20210710211109304"></p>
-<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p><img src="/2021/07/10/CAS/image-20210710221251706.png" alt="image-20210710221251706"></p>
-<ul>
-<li>  我们可以把 AtomicReference 看做是普通对象的包装类，一个普通的对象是不具有原子性的，而在使用 AtomicReference 包装后，它就具有了原子性。</li>
-<li>  AtomicReference 类提供了两个构造函数。我们可以直接在构造函数中包装一个普通对象让其具有原子性；也可以使用无参构造器创建一个 AtomicReference 对象，然后再调用 <strong>AtomicReference#set(V newValue)</strong> 方法让普通对象 V newValue 具有原子性。</li>
-</ul>
-<hr>
-<h3 id="代码演示-1"><a href="#代码演示-1" class="headerlink" title="代码演示"></a>代码演示</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Person&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// zs、ls 不具备原子性，在多线程环境下线程不安全</span></span><br><span class="line">        Person zs = <span class="keyword">new</span> Person(<span class="string">&quot;张三&quot;</span>, <span class="number">13</span>);</span><br><span class="line">        Person ls = <span class="keyword">new</span> Person(<span class="string">&quot;李四&quot;</span>, <span class="number">24</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 让 zs 对象具备原子性</span></span><br><span class="line">        AtomicReference&lt;Object&gt; atomicReference = <span class="keyword">new</span> AtomicReference&lt;&gt;();</span><br><span class="line">        atomicReference.set(zs);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// CAS 验证</span></span><br><span class="line">        System.out.println(atomicReference.compareAndSet(zs, ls) + <span class="string">&quot;\t&quot;</span> + atomicReference.get());</span><br><span class="line">        System.out.println(atomicReference.compareAndSet(zs, ls) + <span class="string">&quot;\t&quot;</span> + atomicReference.get());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">            输出结果：</span></span><br><span class="line"><span class="comment">                true	Person&#123;name=&#x27;李四&#x27;, age=24&#125;</span></span><br><span class="line"><span class="comment">                false	Person&#123;name=&#x27;李四&#x27;, age=24&#125;</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="6-2-AtomicStampedReference"><a href="#6-2-AtomicStampedReference" class="headerlink" title="6.2    AtomicStampedReference"></a>6.2    AtomicStampedReference</h2><blockquote>
-<p>  <strong>可以解决 ABA 问题的原子引用</strong></p>
-</blockquote>
-<p><strong>AtomicStampedReference</strong> 和 <strong>AtomicReference</strong> 的作用类似，都是包装一个普通对象让其具有原子性。在不考虑 ABA 问题的前提下，这两个类是类似的。如果考虑 ABA 问题，则应该使用 <strong>AtomicStampedReference</strong> ，因为它既可以解决原子性问题，也可以解决 ABA 问题。</p>
-<h3 id="构造函数-1"><a href="#构造函数-1" class="headerlink" title="构造函数"></a>构造函数</h3><p><img src="/2021/07/10/CAS/image-20210710222525576.png" alt="image-20210710222525576"></p>
-<ul>
-<li>  <strong>AtomicStampedReference</strong> 没有无参的构造器，所以在创建对象时必须指定要包装的对象和一个 int 类型的版本号。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
@@ -3519,6 +4242,64 @@
 
 
   
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    // window.MathJax = {
+    //   loader: {
+    //
+    //     source: {
+    //       '[tex]/amsCd': '[tex]/amscd',
+    //       '[tex]/AMScd': '[tex]/amscd'
+    //     }
+    //   },
+    //   tex: {
+    //     inlineMath: {'[+]': [['$', '$']]},
+    //
+    //     tags: 'ams'
+    //   },
+    //   options: {
+    //     renderActions: {
+    //       findScript: [10, doc => {
+    //         document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+    //           const display = !!node.type.match(/; *mode=display/);
+    //           const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+    //           const text = document.createTextNode('');
+    //           node.parentNode.replaceChild(text, node);
+    //           math.start = {node: text, delim: '', n: 0};
+    //           math.end = {node: text, delim: '', n: 0};
+    //           doc.math.push(math);
+    //         });
+    //       }, '', false],
+    //       insertedScript: [200, () => {
+    //         document.querySelectorAll('mjx-container').forEach(node => {
+    //           let target = node.parentNode;
+    //           if (target.nodeName.toLowerCase() === 'li') {
+    //             target.parentNode.classList.add('has-jax');
+    //           }
+    //         });
+    //       }, '', false]
+    //     }
+    //   }
+    // };
+    window.MathJax = {
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
 
 
 </body>
