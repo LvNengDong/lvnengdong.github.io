@@ -34,8 +34,11 @@
 <meta property="og:image" content="http://example.com/2021/07/08/JMM/image-20210807154853861.png">
 <meta property="og:image" content="http://example.com/2021/07/08/JMM/JMM%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84.png">
 <meta property="og:image" content="http://example.com/2021/07/08/JMM/ThreadLocal.png">
+<meta property="og:image" content="http://example.com/2021/07/08/JMM/image-20210914163551442.png">
+<meta property="og:image" content="http://example.com/2021/07/08/JMM/image-20210914164909204.png">
+<meta property="og:image" content="http://example.com/2021/07/08/JMM/image-20210914164627172.png">
 <meta property="article:published_time" content="2021-07-08T14:00:54.000Z">
-<meta property="article:modified_time" content="2021-08-09T04:17:09.628Z">
+<meta property="article:modified_time" content="2021-09-14T08:59:49.357Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/07/08/JMM/JMM.png">
@@ -165,13 +168,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">147</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -245,7 +248,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-09 12:17:09" itemprop="dateModified" datetime="2021-08-09T12:17:09+08:00">2021-08-09</time>
+        <time title="Modified: 2021-09-14 16:59:49" itemprop="dateModified" datetime="2021-09-14T16:59:49+08:00">2021-09-14</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -381,24 +384,60 @@
 </ol>
 <hr>
 <h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><h2 id="1-知识点"><a href="#1-知识点" class="headerlink" title="1    知识点"></a>1    知识点</h2><blockquote>
+<p>  <strong>是什么？</strong></p>
+</blockquote>
+<p>ThreadLocal，即线程本地变量 。如果你在堆空间中创建了一个 ThreadLocal 变量，那么访问这个变量的每个线程都会将这个变量的副本拷贝到自己线程的本地内存中，多个线程操作这个变量的时候，实际是操作自己本地内存里面的变量，从而起到线程隔离的作用，避免了线程安全问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个ThreadLocal变量</span></span><br><span class="line"><span class="keyword">static</span> ThreadLocal&lt;String&gt; localVariable = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>  <strong>应用场景</strong></p>
+</blockquote>
+<ul>
+<li>  <strong>数据库连接池</strong>：每个线程都只维护一个独立的与数据库的连接，在线程范围内，连接数据发生的改变与堆内存中的源数据无关。</li>
+<li>  <strong>会话管理中使用</strong>：同上。</li>
+</ul>
+<blockquote>
 <p>  <strong>使用 ThreadLocal 进行线程本地存储</strong></p>
 </blockquote>
 <ul>
 <li>  <strong>ThreadLocal</strong> 是 Java 中提供的<strong>线程本地存储机制</strong>，可以利用该机制将数据缓存在某个线程内部，该线程可以在任意时刻、任意方法中获取缓存中的数据。</li>
-<li>  ThreadLocal 底层是通过 <strong>ThreadLocalMap</strong> 来实现的（ThreadLocalMap是ThreadLocal的一个静态内部类），每个 Thread 对象（注意不是 ThreadLocal 对象）中都存在一个 ThreadLocalMap ，map 的 key 为 ThreadLocal 对象，map 的 value 为需要缓存的值。</li>
-<li>  ThreadLocalMap 的 key 始终为 ThreadLocal 的引用，但其值是一个 Object 类型，可以将其声明为一个 Map 类型，这样就可以存储多对元素了。</li>
+<li>  ThreadLocal 底层是通过 <strong>ThreadLocalMap</strong> 来实现的（<code>ThreadLocalMap</code> 是 <code>ThreadLocal</code> 的一个静态内部类），每个线程对象都会维护一个属于自己的 <code>ThreadLocalMap</code>。</li>
+<li>  ThreadLocalMap 内部维护者一个 <strong>Entry</strong> 数组，每个 Entry 代表一个完整的对象，Entry 是 <code>&lt;K，V&gt;</code> 键值对结构的，key 为 ThreadLocal 对象本身，value 为需要存入的值（数据类型与 ThreadLocal 的泛型值）。</li>
+<li>  ThreadLocalMap 的 key 始终为 ThreadLocal 的引用，value 是一个 Object 类型，可以将其声明为一个 Map 类型，这样就可以存储多对元素了。</li>
 </ul>
 <p><img src="/2021/07/08/JMM/ThreadLocal.png" alt="ThreadLocal"></p>
 <blockquote>
-<p>  <strong>线程池中的 ThreadLocal 存在的内存泄露问题</strong></p>
+<p>  <strong>ThreadLocal 内存结构图</strong></p>
+</blockquote>
+<p><img src="/2021/07/08/JMM/image-20210914163551442.png" alt="image-20210914163551442"></p>
+<p>由结构图是可以看出：</p>
+<ul>
+<li>  <strong>Thread</strong> 对象中持有一个 <strong>ThreadLocal.ThreadLocalMap</strong> 的成员变量。</li>
+<li>  ThreadLocalMap 内部维护了 <strong>Entry 数组</strong>，每个 Entry 代表一个完整的对象，key 是 ThreadLocal 本身，value 是 ThreadLocal 的泛型值。</li>
+</ul>
+<blockquote>
+<p>  <strong>ThreadLocal 内存泄露问题</strong></p>
 </blockquote>
 <ul>
-<li>  如果在线程池中使用 ThreadLocal 会造成内存泄露，因为正常情况下，线程死亡后，需要把线程对象使用过的资源全部释放。即  ThreadLocal 使用完之后，应该要把使用过的 <code>Entry&lt;K, V&gt;</code> 对象进行回收。</li>
-<li>  但是由于线程池中的部分线程是不会被回收的，而线程池中的线程对象通过强引用指向了 ThreadLocalMap，ThreadLocalMap 又通过强引用指向 Entry 对象。所以如果线程对象不被回收的话，Entry 对象也就不会被回收。</li>
-<li>  如果反复使用线程池中线程对象的 ThreadLocalMap 缓存数据，就会导致内存泄露。</li>
-<li>  <strong>解决方法是：在使用完 ThreadLocal 对象后，手动调用 ThreadLocal 中的 remove() 方法，手动清除 Entry 对象。</strong></li>
-<li>  ThreadLocal 经典的应用场景就是连接管理（一个线程持有一个连接，该连接对象可以在不同的方法之间进行传递，线程之间共享一个连接）。</li>
+<li>  ThreadLocal 的引用示意图</li>
 </ul>
+<p><img src="/2021/07/08/JMM/image-20210914164909204.png" alt="image-20210914164909204"></p>
+<ul>
+<li>  查看源码可知，ThreadLocalMap 中使用的 key 为 ThreadLocal 的弱引用，如下：</li>
+</ul>
+<p><img src="/2021/07/08/JMM/image-20210914164627172.png" alt="image-20210914164627172"></p>
+<ul>
+<li>弱引用比较容易被回收，只要垃圾回收机制一运行，不管JVM的内存空间是否充足，都会回收该对象占用的内存。因此，如果ThreadLocal（ThreadLocalMap 的 key）被垃圾回收器回收了，但是因为 ThreadLocalMap 的生命周期和 Thread 是一样的，它这时候如果不被回收，就会出现这种情况：<ul>
+<li>  ThreadLocalMap 的 key 没了，value 还在，这就会<strong>「造成了内存泄漏」</strong>。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>  <strong>如何「解决内存泄漏问题」？</strong></p>
+</blockquote>
+<p>使用完 ThreadLocal 后，及时调用 <code>remove()</code> 方法释放内存空间。</p>
 <h2 id="2-代码验证"><a href="#2-代码验证" class="headerlink" title="2    代码验证"></a>2    代码验证</h2><h3 id="Before：未使用-ThreadLocal-前"><a href="#Before：未使用-ThreadLocal-前" class="headerlink" title="Before：未使用 ThreadLocal 前"></a>Before：未使用 ThreadLocal 前</h3><blockquote>
 <ol>
 <li> <strong>定义一个 Person 类</strong></li>

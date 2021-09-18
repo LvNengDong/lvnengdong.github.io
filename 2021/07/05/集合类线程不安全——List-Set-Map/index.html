@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
   </script>
-<meta name="description" content="ArrayList 线程不安全   带着问题学习：  在 Java8 中，   new ArrayList&lt;&gt;() 的底层数据结构是什么？  new ArrayList&lt;&gt;() 的初始长度是多少？  数组长度一旦初始化就不能再修改了，Java 底层对数组进行扩容使用的方法是什么？  数组扩容的标准是什么？每次扩容多大？  ArrayList 是线程安全的吗？  写一个 Ar">
+<meta name="description" content="ArrayList 线程不安全   带着问题学习：  在 Java8 中，   new ArrayList&lt;&gt;() 的底层数据结构是什么？  new ArrayList&lt;&gt;() 的初始长度是多少？  数组长度一旦初始化就不能再修改了，Java 底层对 ArrayList 扩容的机制是什么？  数组扩容的标准是什么？每次扩容多大？  ArrayList 是线程安全的吗？  写">
 <meta property="og:type" content="article">
 <meta property="og:title" content="集合类线程不安全——List&#x2F;Set&#x2F;Map">
 <meta property="og:url" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="ArrayList 线程不安全   带着问题学习：  在 Java8 中，   new ArrayList&lt;&gt;() 的底层数据结构是什么？  new ArrayList&lt;&gt;() 的初始长度是多少？  数组长度一旦初始化就不能再修改了，Java 底层对数组进行扩容使用的方法是什么？  数组扩容的标准是什么？每次扩容多大？  ArrayList 是线程安全的吗？  写一个 Ar">
+<meta property="og:description" content="ArrayList 线程不安全   带着问题学习：  在 Java8 中，   new ArrayList&lt;&gt;() 的底层数据结构是什么？  new ArrayList&lt;&gt;() 的初始长度是多少？  数组长度一旦初始化就不能再修改了，Java 底层对 ArrayList 扩容的机制是什么？  数组扩容的标准是什么？每次扩容多大？  ArrayList 是线程安全的吗？  写">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705132107889.png">
 <meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705110738072.png">
@@ -59,7 +59,7 @@
 <meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705225457854.png">
 <meta property="og:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705225617057.png">
 <meta property="article:published_time" content="2021-07-05T01:39:29.000Z">
-<meta property="article:modified_time" content="2021-08-02T01:40:17.426Z">
+<meta property="article:modified_time" content="2021-09-12T17:13:36.391Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705132107889.png">
@@ -189,13 +189,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">147</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -269,7 +269,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2021-08-02 09:40:17" itemprop="dateModified" datetime="2021-08-02T09:40:17+08:00">2021-08-02</time>
+        <time title="Modified: 2021-09-13 01:13:36" itemprop="dateModified" datetime="2021-09-13T01:13:36+08:00">2021-09-13</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -298,7 +298,7 @@
 <ol>
 <li> <code>new ArrayList&lt;&gt;()</code> 的底层数据结构是什么？</li>
 <li> <code>new ArrayList&lt;&gt;()</code> 的初始长度是多少？</li>
-<li> 数组长度一旦初始化就不能再修改了，Java 底层对数组进行扩容使用的方法是什么？</li>
+<li> 数组长度一旦初始化就不能再修改了，Java 底层对 ArrayList 扩容的机制是什么？</li>
 <li> 数组扩容的标准是什么？每次扩容多大？</li>
 <li> ArrayList 是线程安全的吗？</li>
 <li> 写一个 ArrayList 不安全的例子？</li>
@@ -310,17 +310,15 @@
 <ol>
 <li><p> ArrayList 底层的数据结构是 Object 数组： <code>Object[] elementData</code>。</p>
 </li>
-<li><p>如果使用无参构造方法，初始的数组长度为 10，即执行 <code>new ArrayList&lt;&gt;()</code> 语句会在内存中创建一个 Object[10] 的数组对象。</p>
-<p> 但这句并不正完全确，应该说：<strong>无参构造器默认不会在内存中创建新数组，而是指向一个在类加载阶段就已经创建好了的容量为 0  的空数组，只有在调用了 add() 方法时，才会在堆空间中创建一个数组对象，并设置数组的初始容量为 10</strong>。</p>
+<li><p> <strong>使用 <code>new ArrayList&lt;&gt;()</code>  不会在内存中创建新的数组对象，而是将引用指向了一个在类加载阶段就已经创建好了的容量为 0 的空数组，只有在调用了 <code>add()</code> 方法时，才会在堆空间中创建一个数组对象，并设置数组的初始容量为 10</strong>。</p>
 </li>
-<li><p>Java 底层对数组进行扩容使用的是 <strong>Arrays.copyOf()</strong> 方法，更深一层是 <strong>System.arraycopy()</strong> 方法（System.arraycopy 是一个本地方法）。</p>
+<li><p>Java 底层对 ArrayList 进行扩容使用的是 <strong>Arrays.copyOf()</strong> 方法，更深一层是 <strong>System.arraycopy()</strong> 方法（System.arraycopy 是一个本地方法）。</p>
 <ul>
-<li>  ArrayList 底层就是用数组实现的，对于数组而言，其容量在只能被指定一次，而数组扩容就是创建一个容量更大的新的数组，将原先数组中的数据全部拷贝到新数组中去。</li>
+<li>  ArrayList 底层是用数组实现的，对于数组而言，其容量只能被指定一次，而 ArrayList 的扩容机制其实就是创建一个容量更大的新的数组，将原先数组中的数据全部拷贝到新数组中去。</li>
 </ul>
 </li>
-<li><ul>
-<li><p>  正常情况下，数组扩容的标准是每次扩张一半，即每次扩张到原来的 1.5 倍。比如，新建一个 ArrayList 数组，数组容量最初为 10，第一次扩容后从 10 扩展到 15，第二次则是从 15 扩展到 22。</p>
-</li>
+<li><p>正常情况下，ArrayList 扩容的标准是每次扩张一半，即数组容量扩大 1.5 倍。比如，新建一个 ArrayList 数组，数组容量最初为 10，第一次扩容后从 10 扩展到 15，第二次则是从 15 扩展到 22。</p>
+<ul>
 <li><p>  但是，如果数组扩容 1.5 倍后仍不够用的话，那么有多少个元素，就把容量到多少，即数组的容量刚好能盛下所有元素；</p>
 </li>
 <li><p>  还有一种情况，数组的容量是有上限的，这个上限值被规定为 <strong>Integer.MAX_VALUE</strong>（因为数组下标是 int 类型的所以最大值不能超出 Integer 的取值范围），达到最大值后再怎么扩容数组容量都不会再变了。</p>
@@ -333,7 +331,7 @@
 </li>
 <li><p> 例子见下文</p>
 </li>
-<li><p>解决 ArrayList 的线程不安全有多种方法，根据实际需要自行选择。本文罗列出来了 3 种。</p>
+<li><p>解决 ArrayList 的线程不安全有多种方法，根据使用场景自行选择。本文罗列出来了 3 种。</p>
 <ul>
 <li>  <code>new Vector()</code></li>
 <li>  <code>Collections.synchronizedList(new ArrayList&lt;&gt;())</code></li>
@@ -361,7 +359,7 @@
 <ul>
 <li>  源码分析（部分）</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">8683452581122892189L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数组默认的容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 类加载阶段就已经创建好了的一个不可变的、共享的、空的 Object[] 数组对象</span></span><br><span class="line"><span class="comment">     *   如果用户创建的数组对象是空的，那么无需在堆中新建一个对象，直接引用这个实例即可。</span></span><br><span class="line"><span class="comment">     *	 好处就是如果程序中存在多个空数组对象，不会浪费更多的内存为每个空数组分配空间，只使用这一个即可</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">	*	主要用于与 EMPTY_ELEMENTDATA 区分开来。二者实现方式相同</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 保存了到达非空数组对象的地址</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">transient</span> Object[] elementData;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 	size 表示 elementData 的长度。</span></span><br><span class="line"><span class="comment">     *  注意 size 是 ArrayList 的一个私有变量，用于记录该 list 集合中有效元素的数量，而不是容量。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  ArrayList 的单参构造函数，构造具有指定初始容量的空列表。创建时需要传递数组长度 initialCapacity</span></span><br><span class="line"><span class="comment">     *      1、数组长度大于0，新建一个 Object[initialCapacity] 数组，并返回地址</span></span><br><span class="line"><span class="comment">     *      2、数组长度等于0，不在堆中新建数组对象，直接让 elementData 指向类加载阶段就创建好的空数组</span></span><br><span class="line"><span class="comment">     *      3、数组长度小于0，抛出异常</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal Capacity: &quot;</span>+</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 空参构造函数。如果是空参构造函数的话，不会在内存中新建对象，而是直接让 elementData 指向</span></span><br><span class="line"><span class="comment">     * DEFAULTCAPACITY_EMPTY_ELEMENTDATA，这是一个空数组。</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 在 ArrayList 实例对象调用 add() 方法的时候，才会真正创建 Object[10] 数组。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">8683452581122892189L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 数组默认的容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 类加载阶段就已经创建好了的一个不可变的、共享的、空的 Object[] 数组对象</span></span><br><span class="line"><span class="comment">     *   如果用户创建的数组对象是空的，那么无需在堆中新建一个对象，直接引用这个实例即可。</span></span><br><span class="line"><span class="comment">     *	 好处就是如果程序中存在多个空数组对象，不会浪费更多的内存为每个空数组分配空间，只使用这一个即可</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">	*	主要用于与 EMPTY_ELEMENTDATA 区分开来。二者实现方式相同</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 保存了到达非空数组对象的地址</span></span><br><span class="line"><span class="comment">     * transient 修饰表示序列化时忽略该字段</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">transient</span> Object[] elementData;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 	size 表示 elementData 的长度。</span></span><br><span class="line"><span class="comment">     *  注意 size 是 ArrayList 的一个私有变量，用于记录该 list 集合中有效元素的数量，而不是容量。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *  ArrayList 的单参构造函数，构造具有指定初始容量的空列表。创建时需要传递数组长度 initialCapacity</span></span><br><span class="line"><span class="comment">     *      1、数组长度大于0，新建一个 Object[initialCapacity] 数组，并返回地址</span></span><br><span class="line"><span class="comment">     *      2、数组长度等于0，不在堆中新建数组对象，直接让 elementData 指向类加载阶段就创建好的空数组</span></span><br><span class="line"><span class="comment">     *      3、数组长度小于0，抛出异常</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Illegal Capacity: &quot;</span>+</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 空参构造函数。如果是空参构造函数的话，不会在内存中新建对象，而是直接让 elementData 指向</span></span><br><span class="line"><span class="comment">     * DEFAULTCAPACITY_EMPTY_ELEMENTDATA，这是一个空数组。</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 在 ArrayList 实例对象调用 add() 方法的时候，才会真正创建 Object[10] 数组。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -387,18 +385,18 @@
 <li><p>  这个构造器用于将一个 Collection 的子类实例对象中的所有元素拷贝到新集合的 elementData 中。</p>
 </li>
 <li><p>Collection 的子类实例对象有两种情况：</p>
-<p>  ① 实例对象为空，则直接复用方法区的空数组即可；</p>
-<p>  ② 实例对象不为空，将原实例对象中的所有元素复制一份到新数组中。</p>
+<p>  ① 如果实例对象为空，则直接复用类加载阶段就已经创建好的空数组即可；</p>
+<p>  ② 如果实例对象不为空，将原实例对象中的所有元素复制一份到新数组中。</p>
 </li>
 </ul>
 <p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705133755514.png" alt="image-20210705133755514"></p>
 <p><code>Collection#toArray()</code> 方法是一个抽象方法，具体的实现过程由实现类决定，该方法的作用是：返回一个包含此集合中所有元素的数组，返回值是 <code>Object[]</code> 数组，并且 <code>Object[]</code> 数组长度与集合中有效元素的个数是一样的。</p>
 <ol>
-<li> 首先将 <strong>Collection c</strong> 转换成一个 <strong>Object[] 数组</strong> ，并让 <strong>elementData</strong> 指向转换后的数组；【此时 elementData 的 length 与有效元素的个数相等，即 Object[] 数组被填满了】</li>
-<li> 获取 elementData 数组的的长度并将其赋值给 size，这里的 size 是一个实例变量，用于记录集合中有效元素个数。</li>
+<li> 首先将 <strong>Collection c</strong> 中的元素全部转添加到 <code>Object[]</code> 类型的 <strong>elementData</strong> 中；</li>
+<li> 获取 elementData 数组的长度 length 并将其赋值给 size， size 用于记录集合中有效元素个数。</li>
 <li>判断：<ul>
-<li>  如果 size 不为 0 ，说明 Collection c 不为空，继续调用 <code>Arrays.copyOf()</code> 方法拷贝 elementData 中的元素到新的内存空间中；</li>
-<li>  否则（Collection c 为空）让 elementData 指向一个类初始化时就已经创建好的空数组对象。</li>
+<li>  如果 size 不为 0，正常情况下，<code>elementData.getClass() == Object[].class</code> 应该是恒成立的，也就不用进入 if 条件的执行体中，如果因为一些其它原因导致 <code>c.toArray</code> 方法没有返回 <code>Object[]</code> 类型，则会进入 if 条件的执行体中调用 <code>Arrays.copyOf()</code> 方法重新执行一遍转换操作。</li>
+<li>  如果 size 不为 0，说明 Collection c 为空，直接让 elementData 指向一个类初始化时就已经创建好的空数组对象。</li>
 </ul>
 </li>
 </ol>
@@ -432,8 +430,8 @@
 <p>源码分析：</p>
 <ol>
 <li> <strong>size</strong> 是当前数组中有效元素的个数（未新增 e 元素之前）。</li>
-<li> 通过 <strong>ensureCapacityInternal</strong> 方法可以保证数组容量不会被撑爆，该方法接收的参数是 <code>size+1</code> ；</li>
-<li> 如果数组容量得到保证后，新增的元素将保存在 <code>size+1</code> 的位置上，并返回结果为真，表示新增成功。</li>
+<li> <strong>ensureCapacityInternal</strong> 方法的作用是保证数组容量不会被撑爆，该方法接收的参数是 <code>size+1</code> ；</li>
+<li> 如果数组容量得到保证后，新增的元素将保存在 <code>size</code> 的位置上（因为数组元素下标从 0 开始），并返回结果为真，表示新增成功。</li>
 </ol>
 <p>接下来进入 <strong>ensureCapacityInternal</strong> 方法查看其具体实现：</p>
 <blockquote>
@@ -449,10 +447,14 @@
 </ol>
 </blockquote>
 <p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705112857905.png" alt="image-20210705112857905"></p>
-<p><strong>参数：</strong></p>
+<p><strong>方法参数：</strong></p>
 <ul>
 <li>  <strong>minCapacity</strong> 是新增元素后需要的最小数组容量<code>[minCapacity = size+1]</code>。</li>
 <li>  <strong>DEFAULT_CAPACITY</strong> 是一个常量 10，表示默认数组的容量。</li>
+</ul>
+<p><strong>返回值</strong>：</p>
+<ul>
+<li>  返回值是一个整形变量，表示添加新元素后数组中元素的个数。也即数组所需的最小容量。</li>
 </ul>
 <p><strong>原理：</strong></p>
 <ol>
@@ -472,8 +474,10 @@
 <p><img src="/2021/07/05/%E9%9B%86%E5%90%88%E7%B1%BB%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E2%80%94%E2%80%94List-Set-Map/image-20210705114523086.png" alt="image-20210705114523086"></p>
 <ol>
 <li> <code>modCount++</code> 是用于在快速失败机制中判断使用的，与本文相关性不大，暂时略过。</li>
-<li> 接下来判断，新增元素后需要的最小容量是否超过了当前数组的容量，如果超过了，则证明需要扩容了。</li>
-<li> 如果是使用无参构造器创建的 <code>ArrayList</code> 对象，在这一步 <code>minCapacity == 10</code>；而 <code>elementData.length</code> 则是 0，必然满足扩容的条件。</li>
+<li>接下来判断，新增元素后元素的个数是否超过了当前数组的容量，如果超过了，则证明需要扩容了。<ul>
+<li>  如果是使用无参构造器创建的 <code>ArrayList</code> 对象，在这一步 <code>minCapacity == 10</code>；而 <code>elementData.length</code> 则是 0，必然满足扩容的条件。</li>
+</ul>
+</li>
 <li> 调用 <strong>grow</strong> 方法进行扩容。</li>
 </ol>
 <blockquote>

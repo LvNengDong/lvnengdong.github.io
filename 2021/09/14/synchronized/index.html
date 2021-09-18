@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+<meta name="description" content="1    synchronized 的底层实现原理   monitor；监听器  synchronized 同步代码块    synchronized 同步代码块是通过 monitorenter 和 monitorexit 指令来实现的，其中 monitorenter 指令指向同步代码块的开始位置，monitorexit 指令则指向同步代码块的结束位置。   当某个线程执行 monitorente">
+<meta property="og:type" content="article">
+<meta property="og:title" content="synchronized">
+<meta property="og:url" content="http://example.com/2021/09/14/synchronized/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1    synchronized 的底层实现原理   monitor；监听器  synchronized 同步代码块    synchronized 同步代码块是通过 monitorenter 和 monitorexit 指令来实现的，其中 monitorenter 指令指向同步代码块的开始位置，monitorexit 指令则指向同步代码块的结束位置。   当某个线程执行 monitorente">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/09/14/synchronized/20190415101813830.png">
+<meta property="article:published_time" content="2021-09-14T02:24:47.000Z">
+<meta property="article:modified_time" content="2021-09-14T06:19:29.640Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/09/14/synchronized/20190415101813830.png">
+
+
+<link rel="canonical" href="http://example.com/2021/09/14/synchronized/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>synchronized | Hexo</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Hexo</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-synchronized-%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">1    synchronized 的底层实现原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-synchronized-%E9%94%81%E5%8D%87%E7%BA%A7"><span class="nav-number">2.</span> <span class="nav-text">2    synchronized 锁升级</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A0%E9%94%81"><span class="nav-number">2.1.</span> <span class="nav-text">无锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E9%94%81"><span class="nav-number">2.2.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">2.3.</span> <span class="nav-text">轻量级锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E6%97%8B%E9%94%81%E4%B8%8E%E8%87%AA%E9%80%82%E5%BA%94%E8%87%AA%E6%97%8B%E9%94%81"><span class="nav-number">2.3.1.</span> <span class="nav-text">自旋锁与自适应自旋锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">2.4.</span> <span class="nav-text">重量级锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%95%E5%85%A5%E5%81%8F%E5%90%91%E9%94%81%E5%92%8C%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E5%BC%80%E9%94%80%E5%A4%A7%EF%BC%9F"><span class="nav-number">2.5.</span> <span class="nav-text">为什么要引入偏向锁和轻量级锁？为什么重量级锁开销大？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-JVM-%E5%AF%B9-synchronized%E7%9A%84%E4%BC%98%E5%8C%96%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">3    JVM 对 synchronized的优化有哪些？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E7%B2%97%E5%8C%96"><span class="nav-number">3.1.</span> <span class="nav-text">锁粗化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E6%B6%88%E9%99%A4"><span class="nav-number">3.2.</span> <span class="nav-text">锁消除</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-synchronized-%E9%94%81%E9%99%8D%E7%BA%A7"><span class="nav-number">4.</span> <span class="nav-text">4    synchronized 锁降级</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-synchronized%E7%9A%84%E7%94%A8%E6%B3%95%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-number">5.</span> <span class="nav-text">5    synchronized的用法有哪些?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-synchronized%E7%9A%84%E4%BD%9C%E7%94%A8%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">6    synchronized的作用有哪些？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-synchronized-%E7%9A%84%E9%9D%9E%E5%85%AC%E5%B9%B3%E4%BD%93%E7%8E%B0%E5%9C%A8%E5%93%AA%E4%BA%9B%E5%9C%B0%E6%96%B9%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">7    synchronized 的非公平体现在哪些地方？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-synchronized-%E5%92%8C-ReentrantLock-%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">8.</span> <span class="nav-text">8    synchronized 和 ReentrantLock 区别是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-synchronized-%E5%92%8C-Lock-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">9.</span> <span class="nav-text">9    synchronized 和 Lock 有什么区别？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-synchronized-%E5%92%8C-volatile-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">10    synchronized 和 volatile 的区别是什么？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/14/synchronized/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          synchronized
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2021-09-14 10:24:47 / Modified: 14:19:29" itemprop="dateCreated datePublished" datetime="2021-09-14T10:24:47+08:00">2021-09-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JUC/" itemprop="url" rel="index"><span itemprop="name">JUC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-synchronized-的底层实现原理"><a href="#1-synchronized-的底层实现原理" class="headerlink" title="1    synchronized 的底层实现原理"></a>1    synchronized 的底层实现原理</h1><blockquote>
+<p>  monitor；监听器</p>
+</blockquote>
+<p><strong>synchronized 同步代码块</strong></p>
+<ul>
+<li>  synchronized <strong>同步代码块</strong>是通过 <strong>monitorenter</strong> 和 <strong>monitorexit</strong> 指令来实现的，其中 monitorenter 指令指向同步代码块的开始位置，monitorexit 指令则指向同步代码块的结束位置。</li>
+<li>  当某个线程执行 monitorenter 指令时，线程就会去尝试获取锁对象对象头中的监听器 monitor 的持有权。（monitor 监听器存在于每个 Java 对象的对象头中，这也是为什么Java中任意对象可以作为锁的原因）</li>
+<li>  监听器 monitor 其内部包含一个计数器，当计数器为 0 则可以成功获取，获取后将锁计数器 +1，相应的在执行 monitorexit 指令后，将锁计数器值 -1，表明锁被释放。</li>
+<li>  如果线程获取对象锁失败，那么当前线程就要阻塞等待，直到锁被另外一个线程释放为止。</li>
+</ul>
+<p><strong>synchronized 同步方法</strong></p>
+<ul>
+<li>  synchronized 修饰的方法并没有 monitorenter 指令和 monitorexit 指令，取而代之的是 <strong>ACC_SYNCHRONIZED</strong> 标识，该标识指明了该方法是一个同步方法，JVM 通过该 ACC_SYNCHRONIZED 访问标志来判断一个方法是否声明为同步方法，从而执行相应的同步调用。</li>
+</ul>
+<h1 id="2-synchronized-锁升级"><a href="#2-synchronized-锁升级" class="headerlink" title="2    synchronized 锁升级"></a>2    synchronized 锁升级</h1><blockquote>
+<p>  <strong>无锁 | 偏向锁 | 轻量级锁 | 重量级锁</strong></p>
+</blockquote>
+<ul>
+<li>  通过 synchronized 关键字加的锁会随着线程争用数量的变化锁状态也发生变化，其锁升级的过程为：<code>无锁 --&gt; 偏向锁 --&gt; 轻量级锁 --&gt; 重量级锁</code>。</li>
+<li>  <strong>锁的升级的目的</strong>：为了提升性能、减少 synchronized 获得锁和释放锁所带来的消耗，在 Java6 之后优化 synchronized 的实现方式，使用了偏向锁升级为轻量级锁再升级到重量级锁的方式，从而减低了锁带来的性能消耗。引入了 4 种<strong>锁状态</strong>：</li>
+<li>  <strong>锁状态是一把锁在不同时刻的状态，本质上锁对象还是这个锁对象，只不过锁对象的状态发生了变换。</strong></li>
+</ul>
+<p><img src="/2021/09/14/synchronized/20190415101813830.png" alt="20190415101813830"></p>
+<h2 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h2><ul>
+<li>  无锁状态是锁对象初始化后的第一个状态，表示当前锁对象没有被任何线程持有过。</li>
+<li>  无锁状态就是将锁对象对象头中 MarkWord 的标志位设置为 <strong>001</strong>。</li>
+</ul>
+<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><ul>
+<li><p>  <strong>功能：减少同一线程获取锁的代价。</strong></p>
+</li>
+<li><p>  <strong>概念</strong>：偏向锁(Biased Locking) 是指它会偏向于第一个访问锁的线程。如果在运行过程中，只有一个线程来获取这个锁对象，不存在多线程竞争的情况，那么此时的锁对象是一个偏向锁对象。</p>
+</li>
+<li><p>  <strong>核心思想</strong>：如果一个线程获得了锁，那么锁就进入<strong>可偏向状态</strong>，当该线程再次请求获取锁时，只需要检查：① 锁对象的对象头中的 MarkWord 锁标志位是偏向锁，② 并且锁对象的对象头中的 MarkWord 中的 ThreadID 等于当前线程 ID 即可。这样就省去了大量有关锁申请的操作。</p>
+</li>
+<li><p><strong>解释说明：</strong></p>
+<ol>
+<li><p>偏向锁的实现是通过控制对象象对象头中的 <strong>Mark Word</strong> 中的标志位来实现的。在 MarkWord 中，有两个重要的参数：</p>
+<p> ① 锁标志位</p>
+<p> ② 偏向锁线程 ID</p>
+</li>
+<li><p> 如果一个锁对象第一次被线程 A 访问（线程 A 的线程 ID 是 <code>xxx001</code>），那么这个锁对象的 MarkWord 中就会记录锁标志位为 <strong>101</strong>，表示当前锁状态为可偏向，并且记录线程A 的线程 ID 到 MarkWord 中。</p>
+</li>
+<li><p> 线程 A 释放锁之后，若线程 A 想要再次获取这个锁对象，假设在线程 A 释放锁的这段时间内没有其它线程获取过这个锁对象，那么锁对象 MarkWord 中的锁标志位还是 101（可偏向），记录的线程 ID 还是 <code>xxx001</code>（线程A的线程ID）。此时，线程 A 获取锁对象的过程非常简单，① 先比较锁标志位是否为 101，② 如果是的话，再比较锁对象MarkWord 中记录的线程ID 是否与当前线程ID 相同，若相同则直接获取锁对象。</p>
+</li>
+<li><p> 如果在线程 A 释放锁之后，另外有一个线程 B 尝试获取锁对象，①首先比较锁标志位为101，②接着会比较锁对象中储存的线程ID是否为当前线程，发现不是（锁对象中存储的线程ID应该是线程A的线程ID），这时候锁的偏向状态就会被破坏，从而升级到轻量级锁。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><ul>
+<li>  轻量级锁是由偏向锁升级而来，当存在第二个线程申请同一个锁对象时，偏向锁就会立即升级为轻量级锁。</li>
+<li>  <strong>轻量级锁的下限</strong>：只要存在第二个线程申请锁，哪怕这个线程没有和之前持有锁的线程产生竞争关系，属于一前一后地交替执行，这时候锁状态也会从偏向锁升级到轻量级锁。</li>
+<li>  <strong>轻量级锁的上限</strong>：如果存在第二个线程申请锁，并且这个线程和第一个线程产生了竞争关系，如果在自旋次数的指定范围内能够获取到锁，那么此时锁对象的状态仍然是轻量级锁，只有当自旋的次数超出了指定范围之后，轻量级锁才会升级到重量级锁。</li>
+<li>  轻量级锁状态下，认为虽然虽然竞争是存在的，但是理想情况下竞争的程度很低，通过 <strong>自旋方式</strong> 等待上一个线程释放锁。</li>
+<li>借用上面的例子就是：<ol>
+<li> 线程 A 先持有锁对象，将锁对象打上了自己的标记，但是线程 A 又释放了锁对象，这时线程 B 尝试占有锁对象，由于线程 A 此时并没有占有锁对象，所以线程 B 是可以抢到锁对象的，但是即便线程 B 抢到了锁对象，锁对象的状态也会从偏向锁升级到轻量级锁。</li>
+<li> 同样，线程A先持有锁对象，此时线程B同时也在尝试获取锁对象，发现锁对象被持有，就先通过自旋的方式等待，如果在很短的时间内，线程A释放了锁对象，线程B成功获取到了锁对象，那么此时锁对象的状态仍然会是轻量级锁。如果线程B自旋的时间超过了一定范围仍没有获取到锁对象，那么锁对象的状态就会升级到重量级锁。</li>
+</ol>
+</li>
+</ul>
+<h3 id="自旋锁与自适应自旋锁"><a href="#自旋锁与自适应自旋锁" class="headerlink" title="自旋锁与自适应自旋锁"></a>自旋锁与自适应自旋锁</h3><ul>
+<li>  轻量级锁失败后，虚拟机为了避免线程真实地在操作系统层面挂起，还会进行一项称为自旋锁的优化手段。</li>
+<li>  <strong>自旋锁</strong>：许多情况下，共享数据的锁定状态持续时间较短，切换线程不值得，就可以通过让线程执行循环来等待锁的释放，而不让出 CPU。如果得到锁，就顺利进入临界区。如果还不能获得锁，这时才会将线程在操作系统层面挂起，这就是自旋锁的优化方式。</li>
+<li>  但是它也存在<strong>缺点</strong>：如果锁被其他线程长时间占用，一直不释放CPU，会带来许多的性能开销。</li>
+<li>  <strong>自适应自旋锁</strong>：这种相当于是对上面自旋锁优化方式的进一步优化，它的自旋的次数不再固定，其自旋的次数由前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定，这就解决了自旋锁带来的缺点。</li>
+</ul>
+<h2 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h2><ul>
+<li>  重量级锁可以由轻量级锁升级而来。</li>
+<li>  重量级锁的<strong>核心思想</strong>是：当<strong>同一时间</strong>有多个线程竞争锁时，并且未持有锁的线程的最大自旋次数超过指定范围后，锁就会被升级成重量级锁，此时申请锁带来的开销也就变大。</li>
+<li>  重量级锁其实就是互斥锁了，一个线程拿到锁，其余线程都会处于阻塞等待状态。</li>
+</ul>
+<h2 id="为什么要引入偏向锁和轻量级锁？为什么重量级锁开销大？"><a href="#为什么要引入偏向锁和轻量级锁？为什么重量级锁开销大？" class="headerlink" title="为什么要引入偏向锁和轻量级锁？为什么重量级锁开销大？"></a>为什么要引入偏向锁和轻量级锁？为什么重量级锁开销大？</h2><ul>
+<li>  重量级锁底层依赖于系统的同步函数来实现，这些底层的同步函数操作会涉及到：操作系统用户态和内核态的切换、进程的上下文切换，而这些操作都是比较耗时的，因此重量级锁操作的开销比较大。</li>
+<li>  然而在很多情况下，可能获取锁时只有一个线程，或者是多个线程交替获取锁，在这种情况下，使用重量级锁就不划算了，因此引入了偏向锁和轻量级锁来降低没有并发竞争时的锁开销。</li>
+</ul>
+<p>​        </p>
+<h1 id="3-JVM-对-synchronized的优化有哪些？"><a href="#3-JVM-对-synchronized的优化有哪些？" class="headerlink" title="3    JVM 对 synchronized的优化有哪些？"></a>3    JVM 对 synchronized的优化有哪些？</h1><blockquote>
+<ol>
+<li> <strong>锁升级</strong>（见上一章）</li>
+<li> <strong>锁粗化</strong></li>
+<li> <strong>锁消除</strong></li>
+<li> <strong>自旋锁与自适应自旋锁</strong>（见上一章）</li>
+</ol>
+</blockquote>
+<ul>
+<li>  <strong>锁升级、锁粗化 和 锁消除</strong> 都是由 JVM 虚拟机在底层帮我们优化的。</li>
+</ul>
+<h2 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a>锁粗化</h2><p><strong>锁粗化</strong> 就是将多个同步块的数量减少，并将单个同步块的作用范围扩大，本质上就是将多次上锁、解锁的请求合并为一次同步请求。</p>
+<blockquote>
+<ol>
+<li> 举个例子，一个循环体中有一个代码同步块，每次循环都会执行加锁解锁操作。</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object LOCK = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">synchronized</span>(LOCK)&#123;</span><br><span class="line">        <span class="comment">// do some things</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li> 经过<code>锁粗化</code>后就变成下面这个样子了：</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">synchronized</span>(LOCK)&#123;</span><br><span class="line">     <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="comment">// do some things</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h2><p><strong>锁消除</strong> 是指虚拟机编译器如果在运行时检测到了多个线程间的共享数据不会产生竞争关系，就会将加在共享数据上的锁进行消除。</p>
+<blockquote>
+<p>  举个例子：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">test</span><span class="params">(String s1, String s2)</span></span>&#123;</span><br><span class="line">    StringBuffer stringBuffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">    stringBuffer.append(s1);</span><br><span class="line">    stringBuffer.append(s2);</span><br><span class="line">    <span class="keyword">return</span> stringBuffer.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  <code>test()</code> 主要用于是将字符串 s1 和字符串 s2 拼接起来。</li>
+<li>  方法中的三个变量 <code>s1、s2、stringBuffer</code> 都是局部变量，保存在栈上。栈是线程私有的，所以就算有多个线程访问 <code>test()</code> 方法也是线程安全的。</li>
+<li>  我们都知道 StringBuffer 是线程安全的，<code>append()</code> 方法是同步方法（被 synchronized 修饰），但是 <code>test()</code> 方法本来就是线程安全的，为了提升效率，虚拟机就会帮我们消除 <code>append()</code> 方法上的同步锁，这个过程就被称为<strong>锁消除</strong>。</li>
+</ul>
+<hr>
+<h1 id="4-synchronized-锁降级"><a href="#4-synchronized-锁降级" class="headerlink" title="4    synchronized 锁降级"></a>4    synchronized 锁降级</h1><ul>
+<li>  synchronized 锁是允许降级的。</li>
+<li><strong>触发时机</strong>：在全局安全点（safepoint）中，执行清理任务的时候会触发尝试降级锁。当锁降级时，主要进行了以下操作：<ol>
+<li> 恢复锁对象的 markword 对象头；</li>
+<li> 重置 ObjectMonitor，然后将该 ObjectMonitor 放入全局空闲列表，等待后续使用。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h1 id="5-synchronized的用法有哪些"><a href="#5-synchronized的用法有哪些" class="headerlink" title="5    synchronized的用法有哪些?"></a>5    synchronized的用法有哪些?</h1><ul>
+<li>  修饰普通方法：作用于当前对象实例，进入同步代码前要获得当前对象实例的锁</li>
+<li>  修饰静态方法:作用于当前类，进入同步代码前要获得当前类对象的锁,synchronized 关键字加到</li>
+<li>  修饰代码块:指定加锁对象，对给定对象加锁，进入同步代码库前要获得给定对象的锁</li>
+</ul>
+<p><strong>注意：</strong></p>
+<ul>
+<li>  static 静态方法和 <code>synchronized(xxx.class)</code> 代码块上都是是给 Class 类上锁</li>
+<li>  如果一个线程A调用一个实例对象的非静态的 synchronized 方法，而线程B需要调用这个实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的是当前对象的对象锁。</li>
+<li>  尽量不要使用 <code>synchronized(String s)</code> ，因为 JVM 中，字符串常量池具有缓冲功能。</li>
+</ul>
+<hr>
+<h1 id="6-synchronized的作用有哪些？"><a href="#6-synchronized的作用有哪些？" class="headerlink" title="6    synchronized的作用有哪些？"></a>6    synchronized的作用有哪些？</h1><ol>
+<li><strong>原子性</strong>：确保多个线程互斥的访问同步代码；</li>
+<li><strong>可见性</strong>：保证共享变量的修改能够及时可见，其实是通过 JMM 中的 “<strong>对一个变量 unlock 操作之前，必须要同步到主内存中；如果对一个变量进行 lock 操作，则将会清空工作内存中此变量的值，在执行引擎使用此变量前，需要重新从主内存中 load 操作或 assign 操作初始化变量值</strong>” 来保证的；</li>
+<li><strong>有序性</strong>：有效解决重排序问题，即 “一个unlock操作先行发生(happen-before)于后面对同一个锁的 lock 操作”。</li>
+</ol>
+<h1 id="7-synchronized-的非公平体现在哪些地方？"><a href="#7-synchronized-的非公平体现在哪些地方？" class="headerlink" title="7    synchronized 的非公平体现在哪些地方？"></a>7    synchronized 的非公平体现在哪些地方？</h1><p>当持有锁的线程释放锁时，该线程会执行以下两个重要操作：</p>
+<ol>
+<li><p>先将锁的持有者 owner 属性赋值为 null</p>
+</li>
+<li><p>唤醒等待队列中的一个线程：</p>
+</li>
+</ol>
+<p>  ① 在线程 A 和线程 B 之间，如果有其他线程刚好在尝试获取锁（例如自旋），则可以马上获取到锁。</p>
+<p>  ② 随机唤醒。当线程尝试获取锁失败，进入阻塞时，加入队列的顺序，和最终被唤醒的顺序是不一致的，也就是说你先进入队列，不代表你就会先被唤醒。</p>
+<hr>
+<h1 id="8-synchronized-和-ReentrantLock-区别是什么？"><a href="#8-synchronized-和-ReentrantLock-区别是什么？" class="headerlink" title="8    synchronized 和 ReentrantLock 区别是什么？"></a>8    synchronized 和 ReentrantLock 区别是什么？</h1><blockquote>
+<ol>
+<li> <strong>两者都是可重入锁</strong></li>
+</ol>
+</blockquote>
+<p>可重入锁指的是在一个线程中可以多次获取同一把锁，比如：一个线程在执行一个带锁的方法，该方法中又调用了另一个需要相同锁的方法，则该线程可以直接执行调用的方法，而无需重新获得锁，两者都是同一个线程每进入一次，锁的计数器都自增1，在释放锁的时候需要等到锁的计数器下降为 0 时才能释放锁。</p>
+<blockquote>
+<ol start="2">
+<li> <strong>synchronized 是在 JVM 层面实现的，而 ReentrantLock 是在 API 层面实现的</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  synchronized 是在 JVM 层面实现的，前面我们也讲到了 虚拟机团队在 JDK1.6 为 synchronized 关键字进行了很多优化，但是这些优化都是在虚拟机层面实现的</li>
+<li>  ReentrantLock 是在 API 层面实现的，需要 <code>lock()</code> 和 <code>unlock()</code> 方法配合 <code>try/finally</code> 语句块来完成</li>
+</ul>
+<blockquote>
+<ol start="3">
+<li> <strong>ReentrantLock 比 synchronized 增加了一些高级功能</strong></li>
+</ol>
+</blockquote>
+<p>相比 synchronized，ReentrantLock增加了一些高级功能。主要来说主要有三点：</p>
+<ol>
+<li> <strong>等待可中断</strong>；通过 <code>lock.lockInterruptibly()</code> 来实现这个机制。也就是说正在等待的线程可以选择放弃等待，从等待队列中出队（AQS 中的 waitStatus 状态码发生改变），改为处理其他事情。</li>
+<li> <strong>可实现公平锁</strong>；ReentrantLock 可以指定是公平锁还是非公平锁。而 synchronized 只能是非公平锁。</li>
+<li> <strong>可实现定点通知</strong>：ReentrantLock 类线程对象可以注册在指定的 Condition中，从而可以有选择性的进行线程通知，在调度线程上更加灵活。 在使用 <code>notify()/notifyAll()</code> 方法进行通知时，被通知的线程是由 JVM 随机选择的，而使用 ReentrantLock 类结 Condition 实例可以实现“定点通知”。</li>
+</ol>
+<blockquote>
+<ol start="4">
+<li> <strong>使用选择</strong></li>
+</ol>
+</blockquote>
+<ul>
+<li>  除非需要使用 ReentrantLock 的高级功能，否则优先使用 synchronized。</li>
+<li>  synchronized 是 JVM 实现的一种锁机制，JVM 原生地支持它，而 ReentrantLock 不是所有的 JDK 版本都支持。并且使用 synchronized 不用担心没有释放锁而导致死锁问题，因为 JVM 会确保锁的释放。</li>
+</ul>
+<hr>
+<h1 id="9-synchronized-和-Lock-有什么区别？"><a href="#9-synchronized-和-Lock-有什么区别？" class="headerlink" title="9    synchronized 和 Lock 有什么区别？"></a>9    synchronized 和 Lock 有什么区别？</h1><ul>
+<li>  synchronized 可以给 <strong>方法和代码块</strong> 加锁；而 lock 只能给<strong>代码块</strong>加锁。</li>
+<li>  synchronized 不需要手动获取锁和释放锁，使用简单，发生异常会自动释放锁，不会造成死锁；而 lock 需要自己加锁和释放锁，如果使用不当没有 unLock() 去释放锁就会造成死锁。</li>
+<li>  通过 Lock 可以知道有没有成功获取锁，而 synchronized 却无法办到。</li>
+</ul>
+<hr>
+<h1 id="10-synchronized-和-volatile-的区别是什么？"><a href="#10-synchronized-和-volatile-的区别是什么？" class="headerlink" title="10    synchronized 和 volatile 的区别是什么？"></a>10    synchronized 和 volatile 的区别是什么？</h1><ol>
+<li> volatile 本质是在告诉 JVM 当前变量在工作内存中的值是不确定的，需要从主存中读取； synchronized 则是锁定当前变量，只有当前线程可以访问该变量，其他线程被阻塞住。</li>
+<li> volatile 仅能使用在变量级别；synchronized 则可以使用在变量和方法级别的</li>
+<li> volatile 仅能实现变量的修改可见性，不能保证原子性；而synchronized 则可以 保证变量的修改可见性和原子性</li>
+<li> volatile 不会造成线程的阻塞；synchronized 可能会造成线程的阻塞。</li>
+<li> volatile 标记的变量不会被编译器优化；synchronized 标记的变量可以被编译器优化。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/06/AQS/" rel="prev" title="AQS">
+                  <i class="fa fa-chevron-left"></i> AQS
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/17/LeetCode-42-%E6%8E%A5%E9%9B%A8%E6%B0%B4/" rel="next" title="LeetCode_42_接雨水">
+                  LeetCode_42_接雨水 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+
+</body>
+</html>
