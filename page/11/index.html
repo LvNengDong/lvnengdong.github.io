@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,6 +194,143 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/09/Bean%E8%BD%AC%E6%8D%A2%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2020/12/09/Bean%E8%BD%AC%E6%8D%A2%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">Bean转换工具</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-09 22:28:40" itemprop="dateCreated datePublished" datetime="2020-12-09T22:28:40+08:00">2020-12-09</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2021-04-06 23:58:12" itemprop="dateModified" datetime="2021-04-06T23:58:12+08:00">2021-04-06</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">开发日记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="1-Bean转换工具"><a href="#1-Bean转换工具" class="headerlink" title="1    Bean转换工具"></a>1    Bean转换工具</h1><p>在开发中经常会遇到一种问题就是：从Dao层拿到的DO实体类对象如下，比如我们从数据库中查出的User实体类包含以下属性：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@ToString</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String gender;</span><br><span class="line">    <span class="keyword">private</span> Integer isDeleted;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>但是我们服务需要返回给前端的VO实体类要包含以下属性，多出了2个额外字段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@ToString</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserVo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String gender;</span><br><span class="line">    <span class="keyword">private</span> Integer isDeleted;</span><br><span class="line">    <span class="keyword">private</span> String nickName;	<span class="comment">// 额外字段1</span></span><br><span class="line">    <span class="keyword">private</span> Date birthday;		<span class="comment">// 额外字段2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显然，VO中包含了DO中的大多数属性，但是并没有完全重合，所以我们最终在返回实体类对象给前端时<strong>必然要把DO对象转换为VO对象</strong>，常规的做法是：</p>
+<ul>
+<li>先new一个Vo对象，然后调用set方法将Do对象的属性逐一添加进去，最后再用set方法添加Vo特有的属性，但是这种方法很不方便。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test09;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TransformDemo</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 模拟从数据库中得到的Do对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UserDo <span class="title">getUserDo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        UserDo userDo = <span class="keyword">new</span> UserDo();</span><br><span class="line">        userDo.setId(<span class="number">1</span>);</span><br><span class="line">        userDo.setName(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        userDo.setAge(<span class="number">19</span>);</span><br><span class="line">        userDo.setGender(<span class="string">&quot;男&quot;</span>);</span><br><span class="line">        userDo.setIsDeleted(<span class="number">1</span>);     <span class="comment">// 是否删除，1是0否</span></span><br><span class="line">        <span class="keyword">return</span> userDo;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 常规方法实现Bean对象之间的转换：Do-&gt;Vo</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UserVo <span class="title">transformDoToVo</span><span class="params">(UserDo userDo)</span></span>&#123;</span><br><span class="line">        UserVo userVo = <span class="keyword">new</span> UserVo();</span><br><span class="line">        userVo.setId(userDo.getId());</span><br><span class="line">        userVo.setName(userDo.getName());</span><br><span class="line">        userVo.setAge(userDo.getAge());</span><br><span class="line">        userVo.setGender(userDo.getGender());</span><br><span class="line">        userVo.setIsDeleted(userDo.getIsDeleted());</span><br><span class="line">        userVo.setNickName(<span class="string">&quot;法外狂徒&quot;</span>);</span><br><span class="line">        userVo.setBirthday(<span class="keyword">new</span> Date());</span><br><span class="line">        <span class="keyword">return</span> userVo;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 测试类</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTransform</span><span class="params">()</span></span>&#123;</span><br><span class="line">        UserDo userDo = <span class="keyword">this</span>.getUserDo();</span><br><span class="line">        UserVo userVo = <span class="keyword">this</span>.transformDoToVo(userDo);</span><br><span class="line">        System.out.println(userDo);</span><br><span class="line">        System.out.println(userVo);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们可以观察到，DO和VO之间有大量重复的字段，我们可以利用这一特点快速的将DO转换为VO。</li>
+</ul>
+<blockquote>
+<p>下面会介绍一款常用的Bean转换工具：<strong>Dozer</strong></p>
+</blockquote>
+<hr>
+<h1 id="2-Dozer"><a href="#2-Dozer" class="headerlink" title="2    Dozer"></a>2    Dozer</h1><h2 id="2-1-Dozer简介"><a href="#2-1-Dozer简介" class="headerlink" title="2.1    Dozer简介"></a>2.1    Dozer简介</h2><p>Dozer是<code>JavaBean -&gt; JavaBean</code>的映射器，它采用递归的方式将一个对象中的数据复制到另一个对象。支持：</p>
+<blockquote>
+<ul>
+<li>简单属性映射</li>
+<li>复杂类型映射</li>
+<li>双向映射</li>
+<li>隐式显式映射</li>
+<li>递归映射</li>
+<li>…</li>
+</ul>
+</blockquote>
+<p>Dozer不仅支持属性名称之间的映射，还支持在类型之间自动转换。大多数的转换方案都是开箱即用的。</p>
+<ol>
+<li>自定映射规则：根据两个实体类中同名的属性进行映射。类似于MyBatis的XML的自动映射规则。</li>
+<li>手动配置映射规则：如果无法进行自动映射（比如在两个实体类中使用属性名映射时对应字段的名称不同），还可以通过XML配置文件的形式配置手动映射规则。类似于在MyBatis的配置文件中配置ResultMap。</li>
+</ol>
+<h2 id="2-2-使用步骤"><a href="#2-2-使用步骤" class="headerlink" title="2.2    使用步骤"></a>2.2    使用步骤</h2><blockquote>
+<ol>
+<li>导入Dozer依赖</li>
+</ol>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>net.sf.dozer<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dozer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.5.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="2">
+<li>自定义BeanMapper工具类</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanMapper</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 持有Dozer单例, 避免重复创建DozerMapper消耗资源.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> DozerBeanMapper dozer = <span class="keyword">new</span> DozerBeanMapper();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 普通对象转换 比如: DO -&gt; VO</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>: [source 源对象, destinationClass 目标对象class]</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>: T</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">map</span><span class="params">(Object source, Class&lt;T&gt; destinationClass)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (source == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dozer.map(source, destinationClass);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * List转换 比如: List&lt;DO&gt; -&gt; List&lt;VO&gt;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>: [sourceList 源对象List, destinationClass 目标对象class]</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>: java.util.List&lt;T&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">List&lt;T&gt; <span class="title">mapList</span><span class="params">(Collection sourceList, Class&lt;T&gt; destinationClass)</span> </span>&#123;</span><br><span class="line">        List&lt;T&gt; destinationList = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        <span class="keyword">if</span> (sourceList == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> destinationList;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (Object sourceObject : sourceList) &#123;</span><br><span class="line">            <span class="keyword">if</span> (sourceObject != <span class="keyword">null</span>) &#123;</span><br><span class="line">                T destinationObject = dozer.map(sourceObject, destinationClass);</span><br><span class="line">                destinationList.add(destinationObject);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> destinationList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 基于Dozer将对象A的值拷贝到对象B中.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">copy</span><span class="params">(Object source, Object destinationObject)</span> </span>&#123;</span><br><span class="line">        dozer.map(source, destinationObject);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol start="3">
+<li>BeanMapper的使用</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.xsyu.test09;</span><br><span class="line"><span class="keyword">import</span> cn.xsyu.test09.util.BeanMapper;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DozerBeanMapperTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UserDo <span class="title">getUserDo</span><span class="params">()</span></span>&#123;</span><br><span class="line">        UserDo userDo = <span class="keyword">new</span> UserDo();</span><br><span class="line">        userDo.setId(<span class="number">1</span>);</span><br><span class="line">        userDo.setName(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">        userDo.setAge(<span class="number">19</span>);</span><br><span class="line">        userDo.setGender(<span class="string">&quot;男&quot;</span>);</span><br><span class="line">        userDo.setIsDeleted(<span class="number">1</span>);     <span class="comment">// 是否删除，1是0否</span></span><br><span class="line">        <span class="keyword">return</span> userDo;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDozer</span><span class="params">()</span></span>&#123;</span><br><span class="line">        UserDo userDo = <span class="keyword">this</span>.getUserDo();</span><br><span class="line">        System.out.println(userDo);</span><br><span class="line"></span><br><span class="line">        UserVo userVo = BeanMapper.map(userDo, UserVo.class);</span><br><span class="line">        userVo.setNickName(<span class="string">&quot;法外狂徒&quot;</span>);</span><br><span class="line">        userVo.setBirthday(<span class="keyword">new</span> Date());</span><br><span class="line">        System.out.println(userVo);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  UserDo(id=1, name=张三, age=19, gender=男, isDeleted=1)</span></span><br><span class="line"><span class="comment">  UserVo(id=1, name=张三, age=19, gender=男, isDeleted=1, nickName=法外狂徒, birthday=Wed Dec 09 21:57:17 CST 2020)</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -2549,474 +2686,6 @@
 </ol>
 </blockquote>
 <h2 id="分布式锁？Redis-分布式锁"><a href="#分布式锁？Redis-分布式锁" class="headerlink" title="分布式锁？Redis 分布式锁"></a>分布式锁？Redis 分布式锁</h2><h2 id="Redis-缓存过期淘汰策略"><a href="#Redis-缓存过期淘汰策略" class="headerlink" title="Redis 缓存过期淘汰策略"></a>Redis 缓存过期淘汰策略</h2><h2 id="Redis-的-LRU-算法"><a href="#Redis-的-LRU-算法" class="headerlink" title="Redis 的 LRU 算法"></a>Redis 的 LRU 算法</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/20/Maven/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2020/11/20/Maven/" class="post-title-link" itemprop="url">Maven</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2020-11-20 09:49:19 / Modified: 16:02:30" itemprop="dateCreated datePublished" datetime="2020-11-20T09:49:19+08:00">2020-11-20</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><p><code>maven, 内行、专家</code></p>
-<h2 id="什么是Maven？"><a href="#什么是Maven？" class="headerlink" title="什么是Maven？"></a>什么是Maven？</h2><p>Maven是一个<strong>项目管理工具</strong>，它包含了：</p>
-<blockquote>
-<ul>
-<li>一个项目对象模型（POM：Project Object Model），</li>
-<li>一组标准集合，</li>
-<li>一个项目的生命周期（Project Lifecycle），</li>
-<li>一个依赖管理系统（Dependency Management System）</li>
-<li>和用来运行定义在生命周期阶段（phase）中插件（plugin）目标（goal）的逻辑。</li>
-</ul>
-</blockquote>
-<h2 id="Maven能解决什么问题？"><a href="#Maven能解决什么问题？" class="headerlink" title="Maven能解决什么问题？"></a>Maven能解决什么问题？</h2><h3 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h3><ol>
-<li>我们在写java代码的时候经常需要引入各种jar包，尤其是较大的工程，引用的jar包往往有几十上百个。每用到一种jar包，都需要手动引入工程目录，每新建一个工程，都需要重新引入一次jar包。而且经常会遇到各种版本冲突的jar包等。非常麻烦。</li>
-<li>如果在一个非集成工作环境中编写java代码，计算机是无法自动编译我们编写的<code>.java</code>文件的，必须要手动将其编译为二进制字节码文件<code>.class</code>文件后才可以在电脑上执行，非常麻烦。</li>
-<li>在日常改bug中，我们一般会使用单元测试模块，但是非常麻烦的是，我们需要对每个类/方法添加<code>@Test</code>注解，逐一测试这些代码。</li>
-<li>当我们完成了代码的开发之后，还需要把代码和相关的配置文件、资源等糅合到一起，打包、发布。非常麻烦</li>
-</ol>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><ul>
-<li>但是，Maven的出现，可以极大程度的简化上面提到的操作。</li>
-<li>Maven可以帮助我们构建工程、管理jar包、编译代码、自动运行单元测试、打包、生成报表，甚至能帮你部署项目，生成web站点。</li>
-</ul>
-<h3 id="Maven的优势举例"><a href="#Maven的优势举例" class="headerlink" title="Maven的优势举例"></a>Maven的优势举例</h3><p>我们已经知道运行一个Web项目就必须把该项目所依赖的一些jar包添加到工程中，否则项目就不能运行。试想一下如果具有相同架构的项目有10个，我们就必须将这一份jar包复制到这10个不同的工程中。我们来看一下一个CRM项目的工程大小。</p>
-<ol>
-<li><p>使用传统Web项目构建的CRM项目内存大小如下：</p>
-<p><img src="/2020/11/20/Maven/image-20200604140446259.png" alt="image-20200604140446259"></p>
-<p>其中绝大部分内存是我们把运行Web项目所需要的jar包复制到工程中占用的内存，因此导致了工程很大。</p>
-</li>
-<li><p>同样的项目，我们使用Maven工程来构建，会发现工程所占的内存会小很多。</p>
-<p><img src="/2020/11/20/Maven/image-20200604140829418.png" alt="image-20200604140829418"></p>
-</li>
-<li><p>小结：可以推断出Maven构建的这个工程内部是没有jar包的。那么，没有jar包的项目是如何运行的呢？</p>
-</li>
-</ol>
-<h2 id="Maven的两个经典作用"><a href="#Maven的两个经典作用" class="headerlink" title="Maven的两个经典作用"></a>Maven的两个经典作用</h2><blockquote>
-<ul>
-<li>Maven的依赖管理</li>
-<li>项目的一键构建</li>
-</ul>
-</blockquote>
-<h3 id="Maven的依赖管理"><a href="#Maven的依赖管理" class="headerlink" title="Maven的依赖管理"></a>Maven的依赖管理</h3><p>Maven的一个核心功能就是<strong>依赖管理</strong>。当我们涉及到多模块项目（包含成百个模块或者子项目），管理依赖就变成了一项困难的任务。Maven展示出了它对处理这种情况的高度控制。    传统的WEB项目中，我们必须将工程所依赖的jar包复制到工程中，导致工程变得臃肿。那么Maven是如何使工程的大小变少的呢？</p>
-<p><img src="/2020/11/20/Maven/%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86.png"></p>
-<ul>
-<li><p>分析：</p>
-<blockquote>
-<ol>
-<li><p>使用Maven创建的工程，不是直接把jar包拷贝到工程中，而是在Maven的<code>pom.xml</code>文件中配置了工程所需要使用的jar包的坐标，而真正的jar包被保存在一个专门存放jar包的仓库（Maven仓库）。</p>
-</li>
-<li><p>当我们的工程需要使用jar包时，首先需要查找<code>pom.xml</code>配置文件中jar包的坐标，再根据坐标从Maven仓库中加载这些jar包。这样就避免了将jar包直接引进WEB工程。</p>
-</li>
-</ol>
-</blockquote>
-</li>
-<li><p>存在的问题：通过<code>pom.xml</code>文件中坐标，再到Maven仓库中找到jar包，会不会很慢，从而影响程序的执行效率？</p>
-<blockquote>
-<p>答：通过<code>pom.xml</code>配置文件引入的jar包的坐标，再读取坐标并到仓库中加载jar包，最后返回给WEB工程使用，确实会影响程序的执行效率。    为了解决这个问题，Maven中也引入了索引的概念，通过建立索引，可以大大提高jar包的加载速度，使得我们认为jar包基本跟从放在本地的工程文件中读取出来的速度是一样的。这个过程就好比我们查阅字典时，为了能够快速查找到内容，书前都会有一个目录（索引），通过目录我们就能很快的定位到我们要查找的内容了；同样在Maven仓库中有了索引就可以加快我们找到jar包的速率。</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="项目的一键构建"><a href="#项目的一键构建" class="headerlink" title="项目的一键构建"></a>项目的一键构建</h2><p>我们的项目，往往都要经过 <strong>编译<code>--&gt;&gt;</code>测试<code>--&gt;&gt;</code>运行<code>--&gt;&gt;</code>打包<code>--&gt;&gt;</code>安装<code>--&gt;&gt;</code>部署</strong>  等一系列过程才能被投入使用。</p>
-<ol>
-<li><p><strong>什么是构建？</strong></p>
-<ul>
-<li><p>没学Maven之前，我们如果要开发一个WEB项目，执行java文件时要用<code>javac</code>编译，测试需要导入<code>Test</code>模块，运行时首先要启动<code>TomCat</code>服务器，打包时需要手动将WEB项目打成<code>war</code>包才能在服务器上运行，还有配置工程路径等等。非常麻烦。</p>
-</li>
-<li><p>利用Maven可以极大的简化这些操作。我们利用maven开发的WEB工程，只需要一行命令[<code>mvn tomcat:run</code>]就可以进行黑盒操作，让Maven帮助我们执行上面的一系列操作，我们只需关注最终的结果即可。</p>
-</li>
-<li><p>构建指的是项目从<strong>编译<code>--&gt;&gt;</code>测试<code>--&gt;&gt;</code>运行<code>--&gt;&gt;</code>打包<code>--&gt;&gt;</code>安装<code>--&gt;&gt;</code>部署</strong>整个过程都交给Maven进行管理，这个过程称为构建。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>一键构建</strong>：指的是整个构建过程，使用Maven中的一个命令就可以轻松完成整个工作。</p>
-</li>
-</ol>
-<p><img src="/2020/11/20/Maven/image-20200604150418926.png" alt="image-20200604150418926"></p>
-<ol start="3">
-<li><p>示例：</p>
-<blockquote>
-<p>已知存在一个用maven开发的WEB项目。</p>
-<ol>
-<li><p>进入项目所在的文件夹</p>
-<p><img src="/2020/11/20/Maven/image-20200604161159259.png" alt="image-20200604161159259"></p>
-</li>
-<li><p>在当前目录下进入cmd窗口</p>
-</li>
-<li><p>执行<code>mvn tomcat:run</code>命令，会自动对你的程序进行打包及发布，并发布web站点。</p>
-</li>
-</ol>
-</blockquote>
-</li>
-</ol>
-<hr>
-<h1 id="Maven的使用"><a href="#Maven的使用" class="headerlink" title="Maven的使用"></a>Maven的使用</h1><h2 id="Maven安装"><a href="#Maven安装" class="headerlink" title="Maven安装"></a>Maven安装</h2><ol>
-<li><p><a target="_blank" rel="noopener" href="https://maven.apache.org/">Maven官网地址</a></p>
-</li>
-<li><p>Maven软件的安装：</p>
-<blockquote>
-<ul>
-<li>下载完成的Maven软件是一个压缩包</li>
-<li>直接将Maven压缩包解压缩到一个没有中文、没有空格的目录下即可完成安装。</li>
-<li>至此我们的Maven软件就可以使用了，前提是你的电脑上之前已经安装并配置好了JDK。</li>
-</ul>
-</blockquote>
-</li>
-<li><p>Maven解压后的目录结构：</p>
-<p><img src="/2020/11/20/Maven/image-20200604152015094.png" alt="image-20200604152015094"></p>
-<blockquote>
-<ol>
-<li><code>bin</code>    存放了Maven命令，比如我们前面用到的<code>mvn tomcat:run</code></li>
-<li><code>boot</code>    存放了一些Maven本身的引导程序，如类加载器等</li>
-<li><code>conf</code>    存放了Maven的一些配置文件，如<code>setting.xml</code>文件</li>
-<li><code>lib</code>    存放了Maven本身运行所需要的一些jar包</li>
-</ol>
-</blockquote>
-</li>
-<li><p>Maven及JDK的全局配置。</p>
-<ul>
-<li><p>提前把JAVA_HOME配置好并添加到环境变量PATH中</p>
-</li>
-<li><p>配置MAVEN_HOME。</p>
-<ol>
-<li>找到存在JAVA_HOME的环境变量。根据自己之前的配置，可能是<code>User_name的用户变量</code>，也可能是<code>系统变量</code>，新建MAVEN_HOME环境变量如下图所示。</li>
-</ol>
-<p><img src="/2020/11/20/Maven/image-20200604152921489.png" alt="image-20200604152921489"></p>
-<ol start="2">
-<li><p>将MAVEN_HOME环境变量添加到对应的PATH中。</p>
-<p>[下图中最后一步出错，<code>\bin</code>应该在<code>%</code>后面，正确格式是：**<code>%MAVEN_HOME%\bin</code>**]</p>
-<p><img src="/2020/11/20/Maven/image-20200604153818728.png" alt="image-20200604153818728"></p>
-</li>
-<li><p>Maven运行时需要java的环境，所以必须确保环境变量中存在JAVA_HOME</p>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><p>Maven软件版本测试</p>
-<ul>
-<li>在cmd窗口输入<code>mvn -v</code>查看版本信息。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="Maven仓库"><a href="#Maven仓库" class="headerlink" title="Maven仓库"></a>Maven仓库</h2><p>Maven工程中没有jar包，只有jar包的坐标，所以Maven工程运行时需要从仓库加载一些jar包。</p>
-<ul>
-<li><p>Maven工程首先从<strong>本地仓库</strong>中去加载需要的jar包，</p>
-</li>
-<li><p>如果本地仓库没有，则默认去远程仓库中下载需要的jar包。远程仓库一般多用于公司或机构的局域网中，如果远程仓库中没有对应的jar包 或 没有配置远程仓库，则直接去<strong>中央仓库</strong>中下载。</p>
-</li>
-<li><p>中央仓库有非常全的开源jar包。从中央仓库下载的jar包会存储到<strong>私服</strong>或本地仓库，下次使用时可以直接到下载的位置去加载。</p>
-</li>
-<li><p>私服中的jar包可以从中央仓库中下载，也可以从本地仓库上传。</p>
-</li>
-</ul>
-<p><img src="/2020/11/20/Maven/maven%E4%BB%93%E5%BA%93%E7%9A%84%E7%A7%8D%E7%B1%BB%E5%92%8C%E5%85%B3%E7%B3%BB-1591370377103.png"></p>
-<h3 id="Maven仓库的分类"><a href="#Maven仓库的分类" class="headerlink" title="Maven仓库的分类"></a>Maven仓库的分类</h3><p>如上图所示，Maven仓库可分为3类：</p>
-<ol>
-<li><p>本地仓库：</p>
-<ul>
-<li>用来存储从远程仓库或中央仓库下载的插件或jar包。</li>
-<li>项目使用的一些插件或jar包，优先从本地仓库加载。</li>
-<li>默认本地仓库的位置在<code>$&#123;user.dir&#125;/m2/repository</code>，<code>$&#123;user.dir&#125;</code>表示本机的用户目录。</li>
-</ul>
-</li>
-<li><p>远程仓库（私服）：</p>
-<ul>
-<li>如果本地仓库中没有需要的插件或jar包，默认去远程仓库下载。</li>
-<li>远程仓库可以在互联网内，也可以在局域网内。</li>
-</ul>
-</li>
-<li><p>中央仓库：</p>
-<ul>
-<li>在Maven软件中内置一个远程仓库地址 <a target="_blank" rel="noopener" href="https://repo1.macen.org/maven2">https://repo1.macen.org/maven2</a> ，叫做中央仓库，服务于整个互联网，里面储存了非常全的jar包。</li>
-</ul>
-</li>
-</ol>
-<h4 id="Maven本地仓库的配置"><a href="#Maven本地仓库的配置" class="headerlink" title="Maven本地仓库的配置"></a>Maven本地仓库的配置</h4><ol>
-<li><p>在Maven的本地安装目录下找到配置文件<code>conf</code>中的<code>settings.xml</code></p>
-<p><img src="/2020/11/20/Maven/image-20200605235824310.png" alt="image-20200605235824310"></p>
-</li>
-<li><p>在<code>settings.xml</code>的49~54行找到如下配置信息，可以修改本地仓库的默认下载位置。默认位置在本地系统盘中，可以自行修改本地仓库的位置。</p>
-<p><img src="/2020/11/20/Maven/image-20200606000635341.png" alt="image-20200606000635341"></p>
-</li>
-<li><p>从远程仓库/中央仓库下载对应的jar包/插件 或 复制离线jar包/插件 到Maven本地仓库。</p>
-</li>
-</ol>
-<hr>
-<h2 id="Maven工程的认识"><a href="#Maven工程的认识" class="headerlink" title="Maven工程的认识"></a>Maven工程的认识</h2><h3 id="Maven标准目录结构"><a href="#Maven标准目录结构" class="headerlink" title="Maven标准目录结构"></a>Maven标准目录结构</h3><p><img src="/2020/11/20/Maven/Maven%E6%A0%87%E5%87%86%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png"></p>
-<p>对于一个Web项目而言，最终需要打包发布后才可以被访问。    一般情况下，我们打包的部分往往只有核心代码部分，这部分代码较为稳定，不需要经常修改。而对于配置文件或测试代码部分等需要经常修改的代码我们往往不会将其打包发布。这就导致了上图中的几部分代码不应该放在同一个目录下。    对于不需要打包的部分，我们往往会自定义一些包名保存这些文件，但由于个人的使用习惯等问题，没有一个统一的标准。而在Maven中为我们制定了一个统一的标准，它提倡(但不强制)我们使用它规定的格式存储代码和配置文件，尽量提高代码的通用性。</p>
-<p><strong>Maven标准目录结构</strong></p>
-<blockquote>
-<ol>
-<li><code>src/main/java</code>    核心代码部分</li>
-<li><code>src/main/rescoures</code>    配置文件部分</li>
-<li><code>src/test/java</code>    测试代码部分</li>
-<li><code>src/test/resources</code>    测试代码的配置文件部分</li>
-<li><code>src/main/webapp</code>    页面资源，js，css，图片等。</li>
-</ol>
-</blockquote>
-<h3 id="Maven工程的运行"><a href="#Maven工程的运行" class="headerlink" title="Maven工程的运行"></a>Maven工程的运行</h3><ol>
-<li>进入Maven的工程目录（当前目录有<code>pom.xml</code>文件）</li>
-<li>在当前文件夹下进入cmd命令窗口页面</li>
-<li>运行<code>tomcat:run</code>命令</li>
-<li>根据运行结果的提示信息，通过浏览器访问对应IP对应端口号下的资源。</li>
-</ol>
-<hr>
-<h1 id="Maven的常用命令"><a href="#Maven的常用命令" class="headerlink" title="Maven的常用命令"></a>Maven的常用命令</h1><blockquote>
-<p>我们可以在cmd中通过一系列的Maven命令来对我们的maven工程进行编译、测试、运行、打包、安装、部署。</p>
-</blockquote>
-<h2 id="Maven常用命令"><a href="#Maven常用命令" class="headerlink" title="Maven常用命令"></a>Maven常用命令</h2><h3 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h3><p><code>compile</code>是maven工程的<strong>编译</strong>命令，作用是将<code>src/main/java</code>目录下的文件编译为<code>.class文件</code>并保存到到target目录下。</p>
-<blockquote>
-<p>步骤：</p>
-<ol>
-<li>在项目目录下，cmd进入命令状态，执行<code>mvn compile</code>，</li>
-<li>提示执行成功后，在当前项目的文件夹下会生成一个target文件夹，里面保存着生成的class文件，表示编译已完成。</li>
-</ol>
-</blockquote>
-<h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p><code>test</code>是maven工程的测试命令，作用是执行<code>src/test/java</code>目录下的单元测试类。</p>
-<blockquote>
-<p>步骤：</p>
-<ol>
-<li><p>在项目目录下，cmd进入命令状态，执行<code>mvn test</code>，</p>
-</li>
-<li><p>提示执行成功后，在当前项目的文件夹下会生成一个target文件夹，里面保存着<code>compile</code>编译好的文件，也保存着执行<code>test</code>命令后生成的class文件。</p>
-</li>
-</ol>
-</blockquote>
-<h3 id="package"><a href="#package" class="headerlink" title="package"></a>package</h3><p><code>package</code>是maven工程的打包命令，对于java工程打成jar包，对于web工程打成war包。</p>
-<blockquote>
-<p>步骤：</p>
-<ol>
-<li>在项目目录下，cmd进入命令状态，执行<code>mvn package</code>，</li>
-<li>提示执行成功后，在当前项目的文件夹下会生成一个target文件夹，里面保存着执行<code>compile、test</code>编译好的文件，也保存着执行<code>package</code>命令生成的<code>jar/war</code>包。</li>
-</ol>
-</blockquote>
-<h3 id="install"><a href="#install" class="headerlink" title="install"></a>install</h3><p><code>install</code>是maven工程的安装命令，执行<code>install</code>将Maven项目打成<code>war/jar</code>包发布到本地仓库。</p>
-<blockquote>
-<p>步骤：</p>
-<ol>
-<li>在项目目录下，cmd进入命令状态，执行<code>mvn install</code>，</li>
-<li>提示执行成功后，在当前项目的文件夹下会生成一个target文件夹，里面保存着执行<code>compile、test、package</code>处理好的文件，同时也会在本地仓库多出一个以当前项目的多级文件名下保存的<code>war/jar</code>包。</li>
-</ol>
-</blockquote>
-<h3 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h3><h3 id="Tip"><a href="#Tip" class="headerlink" title="Tip"></a>Tip</h3><blockquote>
-<p><strong>从运行结果可以看出，当后面的命令执行时，前面的操作过程也都会自动执行</strong></p>
-</blockquote>
-<h3 id="clean"><a href="#clean" class="headerlink" title="clean"></a>clean</h3><p><code>clean</code>是maven工程的清理命令，执行<code>clean</code>命令会删除target目录及内容</p>
-<blockquote>
-<p>步骤：</p>
-<ol>
-<li>在项目目录下，cmd进入命令状态，执行<code>mvn clean</code>，</li>
-<li>提示执行成功后，会删除当前项目的文件夹下的target文件夹（如果存在）。</li>
-</ol>
-</blockquote>
-<blockquote>
-<p>使用场景：</p>
-<ul>
-<li>一般情况下，我们如果接手别人开发的项目，因为每台电脑的配置信息可能存在或大或小的配置上的差异。所以在接手别人的项目后，第一步就应该清空target目录，并在自己的电脑上重新部署。</li>
-</ul>
-</blockquote>
-<h2 id="Maven指令的生命周期"><a href="#Maven指令的生命周期" class="headerlink" title="Maven指令的生命周期"></a>Maven指令的生命周期</h2><p>Maven对项目构建过程可分为<strong>三套</strong>  <strong>相互独立</strong>的生命周期。</p>
-<p>这三套生命周期分别是：</p>
-<blockquote>
-<ul>
-<li><code>清理生命周期：Clean Lifecycle</code>  在进行真正的构建之前进行一些清理工作</li>
-<li><code>默认生命周期：Default Lifecycle</code>  构建的核心部分，编译、测试、打包、部署等等</li>
-<li><code>站点生命周期：Site Lifecycle</code>  生成项目报告，站点，发布站点。</li>
-</ul>
-</blockquote>
-<p><img src="/2020/11/20/Maven/maven%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.png"></p>
-<hr>
-<h2 id="Maven的概念模型"><a href="#Maven的概念模型" class="headerlink" title="Maven的概念模型"></a>Maven的概念模型</h2><p>Maven包含了：</p>
-<blockquote>
-<ul>
-<li><p>依赖管理：</p>
-<blockquote>
-<ul>
-<li>一个项目对象模型（Project Object Model），一组标准集合，</li>
-<li>一个项目生命周期（Project Lifecycle），</li>
-<li>一个依赖管理系统（Dependency Management System），</li>
-</ul>
-</blockquote>
-</li>
-<li><p>一键构建：</p>
-<blockquote>
-<ul>
-<li>和用来运行定义在生命周期阶段（phase）中插件（plugin）目标（goal）的逻辑。</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<p><img src="/2020/11/20/Maven/maven%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B%E5%9B%BE.png"></p>
-<h3 id="项目对象模型（POM）"><a href="#项目对象模型（POM）" class="headerlink" title="项目对象模型（POM）"></a>项目对象模型（POM）</h3><p>一个maven工程有一个<code>pom.xml</code>文件，通过<code>pom.xml</code>文件定义项目的坐标、依赖信息、项目信息、插件目标等。</p>
-<ul>
-<li>项目自身信息</li>
-<li>项目运行所依赖的jar包信息</li>
-<li>项目运行所需要的环境信息，比如：jdk，Tomcat信息等等。</li>
-</ul>
-<p><img src="/2020/11/20/Maven/Maven%E7%9A%84%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B.png"></p>
-<h3 id="依赖管理系统（DMS）"><a href="#依赖管理系统（DMS）" class="headerlink" title="依赖管理系统（DMS）"></a>依赖管理系统（DMS）</h3><ul>
-<li>通过maven的依赖管理对项目所依赖的jar包进行统一管理。</li>
-</ul>
-<h3 id="一个项目的生命周期（PL）"><a href="#一个项目的生命周期（PL）" class="headerlink" title="一个项目的生命周期（PL）"></a>一个项目的生命周期（PL）</h3><ul>
-<li>使用Maven完成项目的构建。项目构建包括：清理、编译、测试、部署等过程，maven将这些过程规范为一个生命周期，</li>
-</ul>
-<h3 id="一组标准集合"><a href="#一组标准集合" class="headerlink" title="一组标准集合"></a>一组标准集合</h3><ul>
-<li>Maven为整个项目管理过程定义一组标准。比如：通过Maven构建工程有标准的目录结构，有标准的声明周期阶段，依赖管理有标准的坐标定义等。</li>
-</ul>
-<h3 id="插件（plugin）目标（goal）"><a href="#插件（plugin）目标（goal）" class="headerlink" title="插件（plugin）目标（goal）"></a>插件（plugin）目标（goal）</h3><ul>
-<li>Maven管理项目生命周期过程都是基于插件完成的。</li>
-</ul>
-<hr>
-<h2 id="IDEA开发Maven项目"><a href="#IDEA开发Maven项目" class="headerlink" title="IDEA开发Maven项目"></a>IDEA开发Maven项目</h2><h3 id="IDEA集成Maven插件"><a href="#IDEA集成Maven插件" class="headerlink" title="IDEA集成Maven插件"></a>IDEA集成Maven插件</h3><ul>
-<li> <strong><code>File--&gt;Settings--&gt;Maven</code></strong></li>
-</ul>
-<p><img src="/2020/11/20/Maven/image-20200612124538580.png" alt="image-20200612124538580"></p>
-<p>​    </p>
-<ul>
-<li><strong>配置优先访问本地仓库</strong>[可选]</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-DarchetypeCatalog&#x3D;internal</span><br></pre></td></tr></table></figure>
-
-<p>​    配置本地仓库优先后，即使在离线条件下，如果本地仓库中有程序所需的依赖，Maven项目也可以正常运行。</p>
-<p><img src="/2020/11/20/Maven/image-20200612124939265.png" alt="image-20200612124939265"></p>
-<hr>
-<h3 id="创建基于Maven的JavaSE工程"><a href="#创建基于Maven的JavaSE工程" class="headerlink" title="创建基于Maven的JavaSE工程"></a>创建基于Maven的JavaSE工程</h3><h4 id="使用模板创建基于Maven的JavaSE工程"><a href="#使用模板创建基于Maven的JavaSE工程" class="headerlink" title="使用模板创建基于Maven的JavaSE工程"></a>使用模板创建基于Maven的JavaSE工程</h4><p><img src="/2020/11/20/Maven/image-20200612130049229.png" alt="image-20200612130049229"></p>
-<ol>
-<li><p>选择创建一个Maven项目。</p>
-</li>
-<li><p>勾选使用模板创建Maven项目。</p>
-</li>
-<li><p>选择要使用的模板，点击下一步。</p>
-<p><img src="/2020/11/20/Maven/image-20200612130341263.png" alt="image-20200612130341263"></p>
-</li>
-<li><p>填写对应的信息，点击下一步</p>
-<p><img src="/2020/11/20/Maven/image-20200612130551355.png" alt="image-20200612130551355"></p>
-</li>
-<li><p>选择填写上述信息，完成Maven工程的创建。</p>
-<p><img src="/2020/11/20/Maven/image-20200612131210777.png" alt="image-20200612131210777"></p>
-</li>
-<li><p>默认情况下，Maven工程不会帮我们创建配置文件目录<code>resources</code>，需要我们手动补齐。</p>
-<p><img src="/2020/11/20/Maven/image-20200612131633499.png" alt="image-20200612131633499"></p>
-<p>​    在当前目录下新建<code>Directory</code>目录，并设置其作为资源文件路径。</p>
-<p><img src="/2020/11/20/Maven/image-20200612131840555.png" alt="image-20200612131840555"></p>
-</li>
-</ol>
-<hr>
-<h4 id="不使用模板创建Maven工程"><a href="#不使用模板创建Maven工程" class="headerlink" title="不使用模板创建Maven工程"></a>不使用模板创建Maven工程</h4><ul>
-<li>只需要不勾选是否使用模板选项即可。</li>
-</ul>
-<hr>
-<h3 id="创建基于Maven的JavaEE工程"><a href="#创建基于Maven的JavaEE工程" class="headerlink" title="创建基于Maven的JavaEE工程"></a>创建基于Maven的JavaEE工程</h3><h4 id="使用模板"><a href="#使用模板" class="headerlink" title="使用模板"></a>使用模板</h4><ul>
-<li>只需要把使用的模板改为<code>***-webapp</code>即可</li>
-</ul>
-<p><img src="/2020/11/20/Maven/image-20200612134707189.png" alt="image-20200612134707189"></p>
-<ul>
-<li><p>创建完成后，目录结构如下：</p>
-<p><img src="/2020/11/20/Maven/image-20200612135331151.png" alt="image-20200612135331151"></p>
-<p>需要手动在<code>main</code>目录下添加<code>java</code>目录并将其设置为资源目录。（参考JavaSE工程修改）</p>
-</li>
-</ul>
-<hr>
-<h4 id="不使用模板"><a href="#不使用模板" class="headerlink" title="不使用模板"></a>不使用模板</h4><ul>
-<li>只需要不勾选是否使用模板选项即可。</li>
-</ul>
-<hr>
-<h1 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h1><h2 id="坐标定义"><a href="#坐标定义" class="headerlink" title="坐标定义"></a>坐标定义</h2><p>在<code>pom.xml</code>中定义坐标，内容包括：<code>groupId</code>、<code>artifacId</code>、<code>version</code>、<code>packaging</code>等。含义分别是：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--项目名称--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">groupId</span>&gt;</span>cn.xsyu.maven<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 模块名称 --&gt;</span>项目名或模块名</span><br><span class="line"><span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-demo<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 当前项目版本号 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 打包类型 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span> ：</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>项目名称：一般为<code>组织名 + 项目名</code>公司或组织域名的倒序</p>
-</li>
-<li><p>当前项目版本号：</p>
-<blockquote>
-<p><code>snapshot</code>为快照版本即非正式版本</p>
-<p><code>release</code>为正式发布版本</p>
-</blockquote>
-</li>
-<li><p>打包类型：</p>
-<blockquote>
-<p><code>jar</code>：执行package命令会打成jar包<br><code>war</code>：执行package命令会打成war包<br><code>pom</code>：用于maven工程的继承，通常父工程设置为pom</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h2><p><code>pom.xml</code>是Maven项目的核心配置文件，位于每个工程的根目录，基本配置如下：</p>
-<p><code>&lt;project&gt;</code> ：文件的根节点 </p>
-<p><code>&lt;modelversion&gt;</code> ： pom.xml使用的对象模型版本 </p>
-<p><code>&lt;groupId&gt; </code>：项目名称，一般写项目的域名 </p>
-<p><code>&lt;artifactId&gt;</code> ：模块名称，子项目名或模块名称</p>
-<p><code> &lt;version&gt;</code> ：产品的版本号 .</p>
-<p><code>&lt;packaging&gt;</code> ：打包类型，一般有jar、war、pom 等 </p>
-<p><code>&lt;name&gt;</code> ：项目的显示名，常用于 Maven 生成的文档。 </p>
-<p><code>&lt;description&gt;</code> ：项目描述，常用于 Maven 生成的文档</p>
-<p><code>&lt;dependencies&gt; </code>：项目依赖构件配置，配置项目依赖构件的坐标</p>
-<p><code>&lt;build&gt;</code> ：项目构建配置，配置编译、运行插件等。</p>
-<ul>
-<li><p>配置编译版本</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1&lt;/version &gt; </span><br><span class="line">            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span> </span><br><span class="line">                <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span> </span><br><span class="line">                <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span> </span><br><span class="line">                <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="依赖范围"><a href="#依赖范围" class="headerlink" title="依赖范围"></a>依赖范围</h2><ul>
-<li>Compile</li>
-<li>Test</li>
-<li>Runtime</li>
-<li>Provided</li>
-</ul>
-
       
     </div>
 
